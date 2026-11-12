@@ -50,6 +50,7 @@ textarea{width:100%;box-sizing:border-box;min-height:56px;border:1px solid var(-
 .music{display:grid;gap:10px}
 .trk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px}
 .trk audio{width:100%}
+.trk a{color:var(--teal);font-weight:700}
 .pick{border:2px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 14px;font-weight:700;cursor:pointer;justify-self:start;font-family:var(--body)}
 .pick.on{border-color:var(--orange);background:#FFF1E3;color:#7A3C0B}
 :root[data-theme="dark"] .pick.on{background:#3A2614;color:#F5B57A}
@@ -79,11 +80,33 @@ textarea{width:100%;box-sizing:border-box;min-height:56px;border:1px solid var(-
     <div class="scenes" id="scenes"></div>
   </section>
   <section class="music" aria-label="曲の案">
-    <h2>曲の案（Gemini の作曲モデル Lyria・歌なし）</h2>
-    <div class="trk"><b>案A：3分</b><audio src="bgm_a.mp3" controls preload="none"></audio><button class="pick" id="pA" type="button">これにする</button></div>
-    <div class="trk"><b>案B：30秒の短い版</b><audio src="bgm_b.mp3" controls preload="none"></audio><button class="pick" id="pB" type="button">これにする</button></div>
-    <p class="note">どちらも違う場合は、下のメモに「もっと〜」と書いてください。選んだ曲は、声のじゃまにならない大きさで、拍の頭で継ぎ目なくくり返します。</p>
-    <textarea id="bgmnote" placeholder="曲についてのメモ（例：もっと明るく）" aria-label="曲についてのメモ"></textarea>
+    <h2>曲の案（ミステリー・探偵っぽく、案B に近いもの）</h2>
+    <p class="note">Gemini の作曲モデル Lyria で作った曲です（歌なし）。それぞれ 3 分の版と 30 秒の版があります。「これにする」を押すか、メモに「もっと〜」と書いてください。</p>
+    <div class="trk"><b>案C：抜き足差し足（ピチカート・ファゴット・マリンバ・指パッチン）</b><audio src="bgm_c_s.mp3" controls preload="none"></audio><audio src="bgm_c.mp3" controls preload="none" aria-label="案C 3分"></audio><button class="pick" data-k="C" type="button">これにする</button></div>
+    <div class="trk"><b>案D：ジャズの探偵（ブラシのドラム・ウッドベース・ビブラフォン）</b><audio src="bgm_d_s.mp3" controls preload="none"></audio><audio src="bgm_d.mp3" controls preload="none" aria-label="案D 3分"></audio><button class="pick" data-k="D" type="button">これにする</button></div>
+    <div class="trk"><b>案E：虫めがねの謎解き（チェレスタ・はじく弦・クラリネット・時計の音）</b><audio src="bgm_e_s.mp3" controls preload="none"></audio><audio src="bgm_e.mp3" controls preload="none" aria-label="案E 3分"></audio><button class="pick" data-k="E" type="button">これにする</button></div>
+    <div class="trk"><b>前の案A（3分）</b><audio src="bgm_a.mp3" controls preload="none"></audio><button class="pick" data-k="A" type="button">これにする</button></div>
+    <div class="trk"><b>前の案B（30秒）</b><audio src="bgm_b.mp3" controls preload="none"></audio><button class="pick" data-k="B" type="button">これにする</button></div>
+    <h2>探して見つけた曲（無料・YouTube の収益化で使える）</h2>
+    <p class="note">どれもリンク先で試聴できます。条件：BGM として使う（曲が主役の動画は不可）・YouTube の Content ID に登録しない。気に入った曲があれば、メモに曲名を書いてください。</p>
+    <div class="trk"><b>OpenTracks（旧 DOVA-SYNDROME）・クレジット不要</b>
+      <ul style="margin:0;padding-left:1.2em">
+        <li><a href="https://opentracks.com/bgm/detail/710" target="_blank" rel="noopener">なんでしょう？</a>（KK）弦のピチカート＋木管。かわいい・怪しい・コメディー</li>
+        <li><a href="https://opentracks.com/bgm/detail/3808" target="_blank" rel="noopener">とある日常</a>（KK）ピチカート＋木管のソロ＋打楽器。ゆるい日常</li>
+        <li><a href="https://opentracks.com/bgm/detail/2738" target="_blank" rel="noopener">ぐだぐだな感じ</a>（yuki）アニメのゆるいギャグ場面。低い木管</li>
+        <li><a href="https://opentracks.com/bgm/detail/4658" target="_blank" rel="noopener">日曜の午後</a>（KK）不思議・怪しい・コメディー</li>
+      </ul></div>
+    <div class="trk"><b>甘茶の音楽工房・クレジット不要</b>
+      <ul style="margin:0;padding-left:1.2em">
+        <li><a href="https://amachamusic.chagasi.com/music_nukiashisashiashi.html" target="_blank" rel="noopener">抜き足差し足</a>（1分52秒）怪しい。ストリングス・木管・打楽器</li>
+        <li><a href="https://amachamusic.chagasi.com/music_koritokanenoodori.html" target="_blank" rel="noopener">氷と鐘の踊り</a>（1分33秒）怪しい。マリンバ×3・鐘・グロッケン</li>
+        <li><a href="https://amachamusic.chagasi.com/music_ukiukilalala.html" target="_blank" rel="noopener">ウキウキららら</a>（1分56秒）コミカル。マリンバ・木管</li>
+      </ul></div>
+    <div class="trk"><b>MusMus・クレジット必要（「BGM:MusMus」）</b>
+      <ul style="margin:0;padding-left:1.2em">
+        <li><a href="https://musmus.main.jp/bgm.html" target="_blank" rel="noopener">Obsidian Case File</a>（watson・4分22秒）探偵のジャズ。ドラムとブラスが入り、声の下には少し強め</li>
+      </ul></div>
+    <textarea id="bgmnote" placeholder="曲についてのメモ（例：案C で、もう少しゆっくり／甘茶の「抜き足差し足」）" aria-label="曲についてのメモ"></textarea>
     <div class="saved" id="bgmsaved"></div>
   </section>
   <section class="checks" aria-label="こちらで点検したこと">
@@ -136,14 +159,12 @@ async function save(id, patch){
 }
 let bgm = {};
 function paintBgm(){
-  document.getElementById("pA").classList.toggle("on", bgm.choice === "A");
-  document.getElementById("pB").classList.toggle("on", bgm.choice === "B");
+  for (const p of document.querySelectorAll(".pick")) p.classList.toggle("on", bgm.choice === p.dataset.k);
   const ta = document.getElementById("bgmnote"); if (document.activeElement !== ta && bgm.note !== undefined) ta.value = bgm.note;
   document.getElementById("bgmsaved").textContent = bgm.at ? "保存しました（" + new Date(bgm.at).toLocaleString("ja-JP") + "）" : "";
 }
 async function saveBgm(p){ bgm = Object.assign({}, bgm, p, {at: Date.now()}); paintBgm(); if (db) try { await db.doc("bgm/"+VER).set(bgm); } catch(e){} }
-document.getElementById("pA").onclick = () => saveBgm({choice: bgm.choice === "A" ? "" : "A"});
-document.getElementById("pB").onclick = () => saveBgm({choice: bgm.choice === "B" ? "" : "B"});
+for (const p of document.querySelectorAll(".pick")) p.onclick = () => saveBgm({choice: bgm.choice === p.dataset.k ? "" : p.dataset.k});
 let bt; document.getElementById("bgmnote").oninput = e => { clearTimeout(bt); bt = setTimeout(() => saveBgm({note: e.target.value}), 800); };
 (async () => {
   const timer = setTimeout(() => { if (!db) document.getElementById("offline").hidden = false; }, 10000);
