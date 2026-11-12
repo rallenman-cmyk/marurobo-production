@@ -1,0 +1,259 @@
+{
+ "PASSENGER 00": {
+  "loc": [
+   1.6,
+   -4.4,
+   0.0
+  ],
+  "rotz": -1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes",
+   "Free shoulder",
+   "Free forearm",
+   "Free hand",
+   "Handheld phone",
+   "Phone casing",
+   "Phone display",
+   "Earbud"
+  ],
+  "mats": [
+   "Hair",
+   "Teal knit"
+  ]
+ },
+ "PASSENGER 01": {
+  "loc": [
+   1.6,
+   -2.2,
+   0.0
+  ],
+  "rotz": -1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.001",
+   "Free shoulder.001",
+   "Free forearm.001",
+   "Free hand.001",
+   "Handheld phone.001",
+   "Phone casing.001",
+   "Phone display.001",
+   "Earbud stem.002"
+  ],
+  "mats": [
+   "Hair",
+   "Indigo jacket",
+   "Warm light skin"
+  ]
+ },
+ "PASSENGER 02": {
+  "loc": [
+   1.6,
+   0.0,
+   0.0
+  ],
+  "rotz": -1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.002",
+   "Free shoulder.002",
+   "Free forearm.002",
+   "Free hand.002",
+   "Handheld phone.002",
+   "Phone casing.002",
+   "Phone display.002",
+   "Earbud stem.004"
+  ],
+  "mats": [
+   "Hair",
+   "Sand cardigan"
+  ]
+ },
+ "PASSENGER 03": {
+  "loc": [
+   1.6,
+   2.2,
+   0.0
+  ],
+  "rotz": -1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.003",
+   "Free shoulder.003",
+   "Free forearm.003",
+   "Free hand.003",
+   "Handheld phone.003",
+   "Phone casing.003",
+   "Phone display.003",
+   "Earbud stem.006"
+  ],
+  "mats": [
+   "Berry knit",
+   "Hair",
+   "Warm light skin"
+  ]
+ },
+ "PASSENGER 04": {
+  "loc": [
+   1.6,
+   4.4,
+   0.0
+  ],
+  "rotz": -1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.004",
+   "Free shoulder.004",
+   "Free forearm.004",
+   "Free hand.004",
+   "Handheld phone.004",
+   "Phone casing.004",
+   "Phone display.004",
+   "Earbud stem.008"
+  ],
+  "mats": [
+   "Hair",
+   "Shirt"
+  ]
+ },
+ "PASSENGER 05": {
+  "loc": [
+   -1.6,
+   -4.4,
+   0.0
+  ],
+  "rotz": 1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.005",
+   "Free shoulder.005",
+   "Free forearm.005",
+   "Free hand.005",
+   "Handheld phone.005",
+   "Phone casing.005",
+   "Phone display.005",
+   "Earbud stem.010"
+  ],
+  "mats": [
+   "Amber status",
+   "Blue daylight windows",
+   "Hair",
+   "Sand cardigan",
+   "Warm light skin"
+  ]
+ },
+ "PASSENGER 06": {
+  "loc": [
+   -1.6,
+   -2.2,
+   0.0
+  ],
+  "rotz": 1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.006",
+   "Free shoulder.006",
+   "Free forearm.006",
+   "Free hand.006",
+   "Handheld phone.006",
+   "Phone casing.006",
+   "Phone display.006",
+   "Earbud stem.012"
+  ],
+  "mats": [
+   "Berry knit",
+   "Hair"
+  ]
+ },
+ "PASSENGER 07": {
+  "loc": [
+   -1.6,
+   0.0,
+   0.0
+  ],
+  "rotz": 1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.007",
+   "Free shoulder.007",
+   "Free forearm.007",
+   "Free hand.007",
+   "Handheld phone.007",
+   "Phone casing.007",
+   "Phone display.007",
+   "Earbud stem.014"
+  ],
+  "mats": [
+   "Hair",
+   "Shirt",
+   "Warm light skin"
+  ]
+ },
+ "PASSENGER 08": {
+  "loc": [
+   -1.6,
+   2.2,
+   0.0
+  ],
+  "rotz": 1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.008",
+   "Free shoulder.008",
+   "Free forearm.008",
+   "Free hand.008",
+   "Handheld phone.008",
+   "Phone casing.008",
+   "Phone display.008",
+   "Earbud stem.016"
+  ],
+  "mats": [
+   "Hair",
+   "Teal knit"
+  ]
+ },
+ "PASSENGER 09": {
+  "loc": [
+   -1.6,
+   4.4,
+   0.0
+  ],
+  "rotz": 1.571,
+  "parent": "TRAIN / fixed carriage",
+  "kids": 8,
+  "has_phone": true,
+  "parts": [
+   "Clothes.009",
+   "Free shoulder.009",
+   "Free forearm.009",
+   "Free hand.009",
+   "Handheld phone.009",
+   "Phone casing.009",
+   "Phone display.009",
+   "Earbud stem.018"
+  ],
+  "mats": [
+   "Hair",
+   "Indigo jacket",
+   "Warm light skin"
+  ]
+ }
+}

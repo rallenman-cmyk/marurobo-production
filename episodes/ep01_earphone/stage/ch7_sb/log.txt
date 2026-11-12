@@ -1,0 +1,54 @@
+EGL Error (0x3009): EGL_BAD_MATCH: Arguments are inconsistent (for example, a valid context requires buffers not supplied by a valid surface).
+EGL Error (0x3009): EGL_BAD_MATCH: Arguments are inconsistent (for example, a valid context requires buffers not supplied by a valid surface).
+Blender 4.3.2 (hash 32f5fdce0a0a built 2024-12-17 01:31:14)
+Read blend: "/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/handoff/bluetooth_handoff_restored/bt_production_v1/output/story.blend"
+Fra:1 Mem:139.52M (Peak 140.86M) | Time:00:04.68 | Rendering 1 / 8 samples
+Fra:1 Mem:139.52M (Peak 140.86M) | Time:00:09.12 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_002.0.png'
+Time: 00:09.20 (Saving: 00:00.07)
+
+Fra:1 Mem:139.50M (Peak 140.92M) | Time:00:02.53 | Rendering 1 / 8 samples
+Fra:1 Mem:139.50M (Peak 140.92M) | Time:00:07.08 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_006.8.png'
+Time: 00:07.12 (Saving: 00:00.02)
+
+Fra:1 Mem:139.50M (Peak 140.92M) | Time:00:02.05 | Rendering 1 / 8 samples
+Fra:1 Mem:139.50M (Peak 140.92M) | Time:00:06.10 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_008.4.png'
+Time: 00:06.14 (Saving: 00:00.02)
+
+Fra:1 Mem:139.64M (Peak 141.04M) | Time:00:03.01 | Rendering 1 / 8 samples
+Fra:1 Mem:139.64M (Peak 141.04M) | Time:00:08.78 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_011.0.png'
+Time: 00:08.83 (Saving: 00:00.03)
+
+Fra:1 Mem:139.64M (Peak 141.05M) | Time:00:02.35 | Rendering 1 / 8 samples
+Fra:1 Mem:139.64M (Peak 141.05M) | Time:00:08.64 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_013.2.png'
+Time: 00:08.70 (Saving: 00:00.03)
+
+Fra:1 Mem:139.64M (Peak 141.05M) | Time:00:02.71 | Rendering 1 / 8 samples
+Fra:1 Mem:139.64M (Peak 141.05M) | Time:00:09.04 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_015.6.png'
+Time: 00:09.08 (Saving: 00:00.02)
+
+Fra:1 Mem:139.52M (Peak 140.94M) | Time:00:02.21 | Rendering 1 / 8 samples
+Fra:1 Mem:139.52M (Peak 140.94M) | Time:00:06.63 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_022.0.png'
+Time: 00:06.66 (Saving: 00:00.02)
+
+Fra:1 Mem:139.52M (Peak 140.94M) | Time:00:01.97 | Rendering 1 / 8 samples
+Fra:1 Mem:139.52M (Peak 140.94M) | Time:00:06.49 | Rendering 8 / 8 samples
+Saved: '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_026.0.png'
+Time: 00:06.54 (Saving: 00:00.03)
+
+FONT_OK True
+TIMING stop=13.45 slide=13.77 release=14.29 enter=14.58 land06=15.28 05end=26.80 06play=27.61
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_002.0.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_006.8.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_008.4.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_011.0.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_013.2.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_015.6.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_022.0.png
+STILL /tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/stage/ch7_sb/buffer_still_026.0.png

@@ -1,0 +1,567 @@
+[
+{
+"t": 9.9484,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 10.2984,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 10.6484,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 10.9984,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 11.8382,
+"kind": "step",
+"strength": 0.288,
+"foot": 1
+},
+{
+"t": 12.2269,
+"kind": "step",
+"strength": 0.702,
+"foot": 0
+},
+{
+"t": 12.5515,
+"kind": "step",
+"strength": 0.971,
+"foot": 1
+},
+{
+"t": 12.8726,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 13.1937,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 13.5147,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 13.8358,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 14.1582,
+"kind": "step",
+"strength": 0.972,
+"foot": 0
+},
+{
+"t": 14.5187,
+"kind": "step",
+"strength": 0.773,
+"foot": 1
+},
+{
+"t": 15.0034,
+"kind": "step",
+"strength": 0.326,
+"foot": 0
+},
+{
+"t": 15.4034,
+"kind": "step",
+"strength": 0.25,
+"foot": 1
+},
+{
+"t": 16.0534,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 16.4034,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 16.7534,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 17.1034,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 17.2934,
+"kind": "beep_yes",
+"strength": 1.0
+},
+{
+"t": 18.8334,
+"kind": "beep_no",
+"strength": 1.0
+},
+{
+"t": 21.557,
+"kind": "takeoff",
+"strength": 0.99
+},
+{
+"t": 21.7589,
+"kind": "land",
+"strength": 0.99
+},
+{
+"t": 21.3834,
+"kind": "beep_surprise",
+"strength": 1.0
+},
+{
+"t": 24.3482,
+"kind": "takeoff",
+"strength": 1.085
+},
+{
+"t": 24.5694,
+"kind": "land",
+"strength": 1.085
+},
+{
+"t": 24.736,
+"kind": "takeoff",
+"strength": 1.085
+},
+{
+"t": 24.9572,
+"kind": "land",
+"strength": 1.085
+},
+{
+"t": 25.1238,
+"kind": "takeoff",
+"strength": 1.085
+},
+{
+"t": 25.345,
+"kind": "land",
+"strength": 1.085
+},
+{
+"t": 23.9834,
+"kind": "beep_happy",
+"strength": 1.0
+},
+{
+"t": 26.995,
+"kind": "beep_think",
+"strength": 0.5
+},
+{
+"t": 27.705,
+"kind": "beep_think",
+"strength": 0.5
+},
+{
+"t": 28.415,
+"kind": "beep_think",
+"strength": 0.5
+},
+{
+"t": 28.745,
+"kind": "ding",
+"strength": 1.0
+},
+{
+"t": 30.645,
+"kind": "zoom",
+"strength": 0.6
+},
+{
+"t": 33.995,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 34.345,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 34.695,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 35.045,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 35.885,
+"kind": "step",
+"strength": 0.258,
+"foot": 0
+},
+{
+"t": 36.2882,
+"kind": "step",
+"strength": 0.678,
+"foot": 1
+},
+{
+"t": 36.601,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 36.8915,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 37.1806,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 37.4697,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 37.7588,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 38.0479,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 38.337,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 38.6261,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 38.9152,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 39.2043,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 39.4952,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 39.8083,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 40.2001,
+"kind": "step",
+"strength": 0.667,
+"foot": 0
+},
+{
+"t": 40.6997,
+"kind": "step",
+"strength": 0.225,
+"foot": 1
+},
+{
+"t": 41.3497,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 41.6997,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 42.0497,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 42.3997,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 43.1397,
+"kind": "sigh",
+"strength": 1.0
+},
+{
+"t": 46.0897,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 46.4397,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 46.7897,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 47.1397,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 48.2853,
+"kind": "takeoff",
+"strength": 3.132
+},
+{
+"t": 48.8211,
+"kind": "land",
+"strength": 2.124
+},
+{
+"t": 50.2711,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 50.6211,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 50.9711,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 51.3211,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 51.9855,
+"kind": "takeoff",
+"strength": 0.99
+},
+{
+"t": 52.1874,
+"kind": "land",
+"strength": 0.99
+},
+{
+"t": 52.3659,
+"kind": "takeoff",
+"strength": 0.99
+},
+{
+"t": 52.5678,
+"kind": "land",
+"strength": 0.99
+},
+{
+"t": 51.6111,
+"kind": "beep_happy",
+"strength": 1.0
+},
+{
+"t": 54.5178,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 54.8678,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 55.2178,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 55.5678,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 56.8058,
+"kind": "takeoff",
+"strength": 1.534
+},
+{
+"t": 57.2651,
+"kind": "land",
+"strength": 2.971
+},
+{
+"t": 60.4149,
+"kind": "step",
+"strength": 0.288,
+"foot": 1
+},
+{
+"t": 60.8036,
+"kind": "step",
+"strength": 0.757,
+"foot": 0
+},
+{
+"t": 61.1282,
+"kind": "step",
+"strength": 0.971,
+"foot": 1
+},
+{
+"t": 61.4493,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 61.7703,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 62.0914,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 62.4125,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 62.7336,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 63.0619,
+"kind": "step",
+"strength": 0.927,
+"foot": 1
+},
+{
+"t": 63.4686,
+"kind": "step",
+"strength": 0.609,
+"foot": 0
+},
+{
+"t": 63.9686,
+"kind": "step",
+"strength": 0.2,
+"foot": 1
+},
+{
+"t": 64.6186,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 64.9686,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 65.3186,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 65.6686,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 66.3086,
+"kind": "unload",
+"strength": 1.0
+},
+{
+"t": 70.8586,
+"kind": "sigh",
+"strength": 1.0
+}
+]

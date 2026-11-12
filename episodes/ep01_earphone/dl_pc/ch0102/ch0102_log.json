@@ -1,0 +1,304 @@
+{
+"fps": 24,
+"frames": 1944,
+"t_drop": 38.2,
+"t_back": 38.8,
+"t_freeze": 59.550000000000004,
+"t_land": 59.45,
+"same": [
+21.75,
+29.878
+],
+"shots": [
+[
+0.0,
+"K1"
+],
+[
+3.708,
+"K2"
+],
+[
+5.917,
+"K3"
+],
+[
+7.625,
+"K4"
+],
+[
+12.708,
+"K5"
+],
+[
+17.125,
+"K6"
+],
+[
+21.625,
+"K7"
+],
+[
+24.917,
+"K7b"
+],
+[
+29.917,
+"K8"
+],
+[
+32.833,
+"K9"
+],
+[
+42.708,
+"K10"
+],
+[
+50.833,
+"K11"
+],
+[
+56.125,
+"K12"
+],
+[
+64.0,
+"K13"
+],
+[
+68.708,
+"K14"
+],
+[
+74.708,
+"K15"
+]
+],
+"events": [
+{
+"t": 50.5252,
+"kind": "step",
+"strength": 0.288,
+"foot": 1
+},
+{
+"t": 50.7496,
+"kind": "step",
+"strength": 0.757,
+"foot": 0
+},
+{
+"t": 50.937,
+"kind": "step",
+"strength": 0.971,
+"foot": 1
+},
+{
+"t": 51.1223,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 51.3077,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 51.4931,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 51.6785,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 51.8639,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 52.0493,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 52.2346,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 52.42,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 52.6054,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 52.7908,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 52.9762,
+"kind": "step",
+"strength": 1.0,
+"foot": 0
+},
+{
+"t": 53.1615,
+"kind": "step",
+"strength": 1.0,
+"foot": 1
+},
+{
+"t": 53.3491,
+"kind": "step",
+"strength": 0.95,
+"foot": 0
+},
+{
+"t": 53.5702,
+"kind": "step",
+"strength": 0.684,
+"foot": 1
+},
+{
+"t": 53.8577,
+"kind": "step",
+"strength": 0.241,
+"foot": 0
+},
+{
+"t": 59.1363,
+"kind": "takeoff",
+"strength": 3.205
+},
+{
+"t": 59.45,
+"kind": "land",
+"strength": 2.124
+},
+{
+"t": 60.4176,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 60.6196,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 69.2675,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 69.4696,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 69.6717,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 69.8738,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 70.0758,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 70.2779,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 70.961,
+"kind": "takeoff",
+"strength": 2.215
+},
+{
+"t": 71.2939,
+"kind": "land",
+"strength": 3.441
+},
+{
+"t": 72.1311,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 72.3332,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 72.5352,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 72.7373,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 78.2298,
+"kind": "step_turn",
+"strength": 0.35,
+"foot": 0
+},
+{
+"t": 78.4146,
+"kind": "step_turn",
+"strength": 0.35,
+"foot": 1
+},
+{
+"t": 78.5993,
+"kind": "step_turn",
+"strength": 0.35,
+"foot": 0
+},
+{
+"t": 78.7841,
+"kind": "step_turn",
+"strength": 0.35,
+"foot": 1
+}
+]
+}

@@ -1,0 +1,4 @@
+file '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/review_page/media/ch0102_check_v3_voice.mp4'
+file '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/review_page/media/ch03_check_v8_voice.mp4'
+file '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/review_page/media/ch04_check_v7.mp4'
+file '/tmp/claude-0/-home-user/7b02fcaa-32db-5c5c-8b6c-1aa9f984eb4a/scratchpad/review_page/media/ch05_check_v2_voice.mp4'

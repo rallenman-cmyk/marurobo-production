@@ -1,0 +1,1458 @@
+{
+ "PASSENGER 00": {
+  "loc": [
+   1.6,
+   -4.4,
+   0.0
+  ],
+  "rot": [
+   0.0,
+   0.0,
+   -1.571
+  ],
+  "scale": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "parts": {
+   "PASSENGER 00": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "TRAIN / fixed carriage",
+    "mats": null
+   },
+   "Calf": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.046,
+      -4.325,
+      0.191
+     ],
+     [
+      1.244,
+      -4.175,
+      0.639
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Calf.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.046,
+      -4.625,
+      0.191
+     ],
+     [
+      1.244,
+      -4.475,
+      0.639
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Passenger upper body": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "PASSENGER 00",
+    "mats": null
+   },
+   "Clothes": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.41,
+      -4.69,
+      0.76
+     ],
+     [
+      1.79,
+      -4.11,
+      1.56
+     ]
+    ],
+    "parent": "Passenger upper body",
+    "mats": [
+     "Teal knit"
+    ]
+   },
+   "Free shoulder": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "Passenger upper body",
+    "mats": null
+   },
+   "Free forearm": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.278,
+      -4.142,
+      1.048
+     ],
+     [
+      1.522,
+      -4.033,
+      1.162
+     ]
+    ],
+    "parent": "Free shoulder",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Free hand": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.205,
+      -4.15,
+      1.048
+     ],
+     [
+      1.355,
+      -4.03,
+      1.152
+     ]
+    ],
+    "parent": "Free shoulder",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Upper sleeve": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.449,
+      -4.194,
+      1.085
+     ],
+     [
+      1.671,
+      -4.011,
+      1.385
+     ]
+    ],
+    "parent": "Free shoulder",
+    "mats": [
+     "Teal knit"
+    ]
+   },
+   "Handheld phone": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "Passenger upper body",
+    "mats": null
+   },
+   "Album disc": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.095,
+      -4.609,
+      1.158
+     ],
+     [
+      1.235,
+      -4.451,
+      1.248
+     ]
+    ],
+    "parent": "Handheld phone",
+    "mats": [
+     "White markings"
+    ]
+   },
+   "Music progress": {
+    "type": "MESH",
+    "bb": [
+     [
+      0.988,
+      -4.63,
+      1.103
+     ],
+     [
+      1.0,
+      -4.43,
+      1.114
+     ]
+    ],
+    "parent": "Handheld phone",
+    "mats": [
+     "Cyan"
+    ]
+   },
+   "Phone casing": {
+    "type": "MESH",
+    "bb": [
+     [
+      0.891,
+      -4.675,
+      0.989
+     ],
+     [
+      1.349,
+      -4.385,
+      1.271
+     ]
+    ],
+    "parent": "Handheld phone",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Phone display": {
+    "type": "MESH",
+    "bb": [
+     [
+      0.928,
+      -4.655,
+      1.048
+     ],
+     [
+      1.311,
+      -4.405,
+      1.273
+     ]
+    ],
+    "parent": "Handheld phone",
+    "mats": [
+     "Petrol aluminium"
+    ]
+   },
+   "Head": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "Passenger upper body",
+    "mats": null
+   },
+   "Ear": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.559,
+      -4.211,
+      1.652
+     ],
+     [
+      1.644,
+      -4.111,
+      1.799
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Ear.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.559,
+      -4.689,
+      1.652
+     ],
+     [
+      1.644,
+      -4.589,
+      1.799
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Earbud": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.546,
+      -4.207,
+      1.669
+     ],
+     [
+      1.635,
+      -4.115,
+      1.769
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Earbud stem": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.566,
+      -4.183,
+      1.586
+     ],
+     [
+      1.622,
+      -4.139,
+      1.696
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Earbud stem.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.566,
+      -4.661,
+      1.586
+     ],
+     [
+      1.622,
+      -4.617,
+      1.696
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Earbud.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.546,
+      -4.685,
+      1.669
+     ],
+     [
+      1.635,
+      -4.593,
+      1.769
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Eye": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.389,
+      -4.341,
+      1.725
+     ],
+     [
+      1.417,
+      -4.299,
+      1.778
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Eye.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.389,
+      -4.501,
+      1.725
+     ],
+     [
+      1.417,
+      -4.459,
+      1.778
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Face": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.394,
+      -4.635,
+      1.461
+     ],
+     [
+      1.806,
+      -4.165,
+      2.019
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Hair cap": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.41,
+      -4.644,
+      1.767
+     ],
+     [
+      1.818,
+      -4.156,
+      2.059
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Hair"
+    ]
+   },
+   "Nose": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.358,
+      -4.435,
+      1.659
+     ],
+     [
+      1.424,
+      -4.365,
+      1.747
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Smile": {
+    "type": "CURVE",
+    "bb": [
+     [
+      1.394,
+      -4.464,
+      1.602
+     ],
+     [
+      1.427,
+      -4.336,
+      1.641
+     ]
+    ],
+    "parent": "Head",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Holding forearm": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.146,
+      -4.757,
+      1.018
+     ],
+     [
+      1.454,
+      -4.533,
+      1.162
+     ]
+    ],
+    "parent": "Passenger upper body",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Holding hand": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.095,
+      -4.645,
+      1.02
+     ],
+     [
+      1.245,
+      -4.515,
+      1.12
+     ]
+    ],
+    "parent": "Passenger upper body",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Holding sleeve": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.368,
+      -4.784,
+      1.067
+     ],
+     [
+      1.662,
+      -4.606,
+      1.403
+     ]
+    ],
+    "parent": "Passenger upper body",
+    "mats": [
+     "Teal knit"
+    ]
+   },
+   "Neck": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.525,
+      -4.475,
+      1.44
+     ],
+     [
+      1.675,
+      -4.325,
+      1.6
+     ]
+    ],
+    "parent": "Passenger upper body",
+    "mats": [
+     "Skin"
+    ]
+   },
+   "Seated hips": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.43,
+      -4.65,
+      0.685
+     ],
+     [
+      1.83,
+      -4.15,
+      0.935
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Shoe": {
+    "type": "MESH",
+    "bb": [
+     [
+      0.82,
+      -4.365,
+      0.035
+     ],
+     [
+      1.24,
+      -4.135,
+      0.205
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Rubber"
+    ]
+   },
+   "Shoe.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      0.82,
+      -4.665,
+      0.035
+     ],
+     [
+      1.24,
+      -4.435,
+      0.205
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Rubber"
+    ]
+   },
+   "Thigh": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.139,
+      -4.35,
+      0.535
+     ],
+     [
+      1.631,
+      -4.15,
+      0.865
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Thigh.001": {
+    "type": "MESH",
+    "bb": [
+     [
+      1.139,
+      -4.65,
+      0.535
+     ],
+     [
+      1.631,
+      -4.45,
+      0.865
+     ]
+    ],
+    "parent": "PASSENGER 00",
+    "mats": [
+     "Trousers"
+    ]
+   }
+  }
+ },
+ "PASSENGER 05": {
+  "loc": [
+   -1.6,
+   -4.4,
+   0.0
+  ],
+  "rot": [
+   0.0,
+   0.0,
+   1.571
+  ],
+  "scale": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "parts": {
+   "PASSENGER 05": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "TRAIN / fixed carriage",
+    "mats": null
+   },
+   "Calf.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.244,
+      -4.625,
+      0.191
+     ],
+     [
+      -1.046,
+      -4.475,
+      0.639
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Calf.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.244,
+      -4.325,
+      0.191
+     ],
+     [
+      -1.046,
+      -4.175,
+      0.639
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Passenger upper body.005": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "PASSENGER 05",
+    "mats": null
+   },
+   "Clothes.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.79,
+      -4.69,
+      0.76
+     ],
+     [
+      -1.41,
+      -4.11,
+      1.56
+     ]
+    ],
+    "parent": "Passenger upper body.005",
+    "mats": [
+     "Sand cardigan"
+    ]
+   },
+   "Free shoulder.005": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "Passenger upper body.005",
+    "mats": null
+   },
+   "Free forearm.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.522,
+      -4.767,
+      1.048
+     ],
+     [
+      -1.278,
+      -4.658,
+      1.162
+     ]
+    ],
+    "parent": "Free shoulder.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Free hand.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.355,
+      -4.77,
+      1.048
+     ],
+     [
+      -1.205,
+      -4.65,
+      1.152
+     ]
+    ],
+    "parent": "Free shoulder.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Upper sleeve.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.671,
+      -4.789,
+      1.085
+     ],
+     [
+      -1.449,
+      -4.606,
+      1.385
+     ]
+    ],
+    "parent": "Free shoulder.005",
+    "mats": [
+     "Sand cardigan"
+    ]
+   },
+   "Handheld phone.005": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "Passenger upper body.005",
+    "mats": null
+   },
+   "Phone casing.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.349,
+      -4.415,
+      0.989
+     ],
+     [
+      -0.891,
+      -4.125,
+      1.271
+     ]
+    ],
+    "parent": "Handheld phone.005",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Phone display.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.311,
+      -4.395,
+      1.048
+     ],
+     [
+      -0.928,
+      -4.145,
+      1.273
+     ]
+    ],
+    "parent": "Handheld phone.005",
+    "mats": [
+     "Blue daylight windows"
+    ]
+   },
+   "Video bouncing ball": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.187,
+      -4.315,
+      1.179
+     ],
+     [
+      -1.108,
+      -4.225,
+      1.228
+     ]
+    ],
+    "parent": "Handheld phone.005",
+    "mats": [
+     "Amber status"
+    ]
+   },
+   "Video frame": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.267,
+      -4.385,
+      1.145
+     ],
+     [
+      -1.074,
+      -4.155,
+      1.26
+     ]
+    ],
+    "parent": "Handheld phone.005",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Video progress": {
+    "type": "MESH",
+    "bb": [
+     [
+      -0.992,
+      -4.37,
+      1.097
+     ],
+     [
+      -0.979,
+      -4.17,
+      1.108
+     ]
+    ],
+    "parent": "Handheld phone.005",
+    "mats": [
+     "White markings"
+    ]
+   },
+   "Head.005": {
+    "type": "EMPTY",
+    "bb": null,
+    "parent": "Passenger upper body.005",
+    "mats": null
+   },
+   "Ear.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.647,
+      -4.689,
+      1.653
+     ],
+     [
+      -1.559,
+      -4.589,
+      1.798
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Ear.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.647,
+      -4.211,
+      1.653
+     ],
+     [
+      -1.559,
+      -4.111,
+      1.798
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Earbud stem.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.637,
+      -4.661,
+      1.585
+     ],
+     [
+      -1.571,
+      -4.617,
+      1.697
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Earbud stem.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.637,
+      -4.183,
+      1.585
+     ],
+     [
+      -1.571,
+      -4.139,
+      1.697
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Earbud.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.637,
+      -4.685,
+      1.668
+     ],
+     [
+      -1.548,
+      -4.593,
+      1.767
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Earbud.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.637,
+      -4.207,
+      1.668
+     ],
+     [
+      -1.548,
+      -4.115,
+      1.767
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Porcelain"
+    ]
+   },
+   "Eye.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.418,
+      -4.501,
+      1.705
+     ],
+     [
+      -1.388,
+      -4.459,
+      1.758
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Eye.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.418,
+      -4.341,
+      1.705
+     ],
+     [
+      -1.388,
+      -4.299,
+      1.758
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Face.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.809,
+      -4.635,
+      1.463
+     ],
+     [
+      -1.391,
+      -4.165,
+      2.017
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Hair cap.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.8,
+      -4.644,
+      1.765
+     ],
+     [
+      -1.395,
+      -4.156,
+      2.062
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Hair"
+    ]
+   },
+   "Nose.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.429,
+      -4.435,
+      1.639
+     ],
+     [
+      -1.362,
+      -4.365,
+      1.726
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Smile.005": {
+    "type": "CURVE",
+    "bb": [
+     [
+      -1.439,
+      -4.464,
+      1.582
+     ],
+     [
+      -1.408,
+      -4.336,
+      1.623
+     ]
+    ],
+    "parent": "Head.005",
+    "mats": [
+     "Graphite"
+    ]
+   },
+   "Holding forearm.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.454,
+      -4.267,
+      1.018
+     ],
+     [
+      -1.146,
+      -4.043,
+      1.162
+     ]
+    ],
+    "parent": "Passenger upper body.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Holding hand.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.245,
+      -4.285,
+      1.02
+     ],
+     [
+      -1.095,
+      -4.155,
+      1.12
+     ]
+    ],
+    "parent": "Passenger upper body.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Holding sleeve.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.662,
+      -4.194,
+      1.067
+     ],
+     [
+      -1.368,
+      -4.016,
+      1.403
+     ]
+    ],
+    "parent": "Passenger upper body.005",
+    "mats": [
+     "Sand cardigan"
+    ]
+   },
+   "Neck.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.675,
+      -4.475,
+      1.44
+     ],
+     [
+      -1.525,
+      -4.325,
+      1.6
+     ]
+    ],
+    "parent": "Passenger upper body.005",
+    "mats": [
+     "Warm light skin"
+    ]
+   },
+   "Seated hips.005": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.83,
+      -4.65,
+      0.685
+     ],
+     [
+      -1.43,
+      -4.15,
+      0.935
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Shoe.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.24,
+      -4.665,
+      0.035
+     ],
+     [
+      -0.82,
+      -4.435,
+      0.205
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Rubber"
+    ]
+   },
+   "Shoe.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.24,
+      -4.365,
+      0.035
+     ],
+     [
+      -0.82,
+      -4.135,
+      0.205
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Rubber"
+    ]
+   },
+   "Thigh.010": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.631,
+      -4.65,
+      0.535
+     ],
+     [
+      -1.139,
+      -4.45,
+      0.865
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Trousers"
+    ]
+   },
+   "Thigh.011": {
+    "type": "MESH",
+    "bb": [
+     [
+      -1.631,
+      -4.35,
+      0.535
+     ],
+     [
+      -1.139,
+      -4.15,
+      0.865
+     ]
+    ],
+    "parent": "PASSENGER 05",
+    "mats": [
+     "Trousers"
+    ]
+   }
+  }
+ },
+ "passengers": {},
+ "seats": {
+  "Long seat": [
+   [
+    -2.05,
+    -6.25,
+    0.54
+   ],
+   [
+    -1.19,
+    6.25,
+    0.76
+   ]
+  ],
+  "Long seat.001": [
+   [
+    1.19,
+    -6.25,
+    0.54
+   ],
+   [
+    2.05,
+    6.25,
+    0.76
+   ]
+  ],
+  "Seat back": [
+   [
+    -2.075,
+    -6.25,
+    0.675
+   ],
+   [
+    -1.925,
+    6.25,
+    1.525
+   ]
+  ],
+  "Seat back.001": [
+   [
+    1.925,
+    -6.25,
+    0.675
+   ],
+   [
+    2.075,
+    6.25,
+    1.525
+   ]
+  ],
+  "Seated hips": [
+   [
+    1.43,
+    -4.65,
+    0.685
+   ],
+   [
+    1.83,
+    -4.15,
+    0.935
+   ]
+  ],
+  "Seated hips.001": [
+   [
+    1.43,
+    -2.45,
+    0.685
+   ],
+   [
+    1.83,
+    -1.95,
+    0.935
+   ]
+  ],
+  "Seated hips.002": [
+   [
+    1.43,
+    -0.25,
+    0.685
+   ],
+   [
+    1.83,
+    0.25,
+    0.935
+   ]
+  ],
+  "Seated hips.003": [
+   [
+    1.43,
+    1.95,
+    0.685
+   ],
+   [
+    1.83,
+    2.45,
+    0.935
+   ]
+  ],
+  "Seated hips.004": [
+   [
+    1.43,
+    4.15,
+    0.685
+   ],
+   [
+    1.83,
+    4.65,
+    0.935
+   ]
+  ],
+  "Seated hips.005": [
+   [
+    -1.83,
+    -4.65,
+    0.685
+   ],
+   [
+    -1.43,
+    -4.15,
+    0.935
+   ]
+  ],
+  "Seated hips.006": [
+   [
+    -1.83,
+    -2.45,
+    0.685
+   ],
+   [
+    -1.43,
+    -1.95,
+    0.935
+   ]
+  ],
+  "Seated hips.007": [
+   [
+    -1.83,
+    -0.25,
+    0.685
+   ],
+   [
+    -1.43,
+    0.25,
+    0.935
+   ]
+  ]
+ },
+ "floors": {
+  "Carriage floor": [
+   [
+    -2.35,
+    -7.5,
+    -0.24
+   ],
+   [
+    2.35,
+    7.5,
+    0.0
+   ]
+  ]
+ }
+}

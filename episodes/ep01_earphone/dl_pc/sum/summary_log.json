@@ -1,0 +1,140 @@
+{
+"fps": 24,
+"frames": 2340,
+"t2": 81.0,
+"ep0": 1078.747,
+"f_sum0": 1945,
+"t_freeze": 59.550000000000004,
+"t_fz": 59.541666666666664,
+"t_land2": 84.84744284849963,
+"t_unfreeze": 84.94744284849962,
+"ramp": 0.5,
+"p_resume": 18.38675054080731,
+"g0": 21.798,
+"t_m9": 82.739,
+"t_m10": 88.551,
+"t_m11": 91.828,
+"shots": [
+[
+0.0,
+"M8"
+],
+[
+1.75,
+"M9"
+],
+[
+7.583,
+"M10"
+],
+[
+10.833,
+"M11"
+]
+],
+"glance": {
+"P1": [
+[
+11.25,
+1.1
+],
+[
+14.7,
+3.2
+]
+],
+"X2": [
+[
+12.35,
+0.95
+],
+[
+14.95,
+3.0
+]
+]
+},
+"events": [
+{
+"t": 80.5218,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 80.7238,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 80.9259,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 81.4929,
+"kind": "beep_yes",
+"strength": 1.0
+},
+{
+"t": 83.2675,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 83.4696,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 83.6717,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 83.8738,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 84.5338,
+"kind": "takeoff",
+"strength": 3.205
+},
+{
+"t": 84.8475,
+"kind": "land",
+"strength": 2.124
+},
+{
+"t": 85.965,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 86.167,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+},
+{
+"t": 86.3691,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 1
+},
+{
+"t": 86.5712,
+"kind": "step_turn",
+"strength": 0.3,
+"foot": 0
+}
+]
+}
