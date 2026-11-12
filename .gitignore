@@ -19,3 +19,5 @@ __pycache__/
 # 鍵
 .env
 *.key
+# 例外：作り直しに手間がかかる声と BGM の元（FLAC・小さい）は入れる
+!episodes/*/media/**/*.flac

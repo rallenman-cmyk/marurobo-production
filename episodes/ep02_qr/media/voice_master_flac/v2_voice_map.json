@@ -1,0 +1,1748 @@
+{
+"02-01": {
+"text": "あっ、スマホをのぞこうとして、まるロボが右下に乗ってしまいました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/02-01.wav",
+"dur": 5.52,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_001.wav"
+},
+"02-01b": {
+"text": "QRコードの一部が、体で隠れています。これでも読めるのでしょうか？",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/02-01b.wav",
+"dur": 5.74,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_002.wav"
+},
+"02-03": {
+"text": "あれ？おかしいですね。隠れているのに、ちゃんと読めています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/02-03.wav",
+"dur": 5.49,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_003.wav"
+},
+"03-01": {
+"text": "慌てて降りようとして、まるロボが、もう一歩奥まで踏み込んでしまいました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/03-01.wav",
+"dur": 4.99,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_004.wav"
+},
+"04-01": {
+"text": "どうして、隠れていても読めたのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-01.wav",
+"dur": 2.62,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_005.wav"
+},
+"04-01b": {
+"text": "そして、どこまで隠したら、読めなくなるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-01b.wav",
+"dur": 4.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_006.wav"
+},
+"04-03": {
+"text": "実は、このQRコードの中で、文字を入れる場所は、3分の1ほどしかありません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-03.wav",
+"dur": 7.11,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_007.wav"
+},
+"04-03.6": {
+"text": "そして、この予備こそが、とても大事な役目を持っています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-03.6.wav",
+"dur": 4.8,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_008.wav"
+},
+"05-03": {
+"text": "縦に21マス、横に21マス。全部で441マスの白と黒が広がる、壮大な世界です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/05-03.wav",
+"dur": 10.83,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_009.wav"
+},
+"06-01": {
+"text": "この441マスは、ばらばらに並んでいるわけではありません。それぞれに、役割があります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-01.wav",
+"dur": 8.01,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_010.wav"
+},
+"06-03.5": {
+"text": "実は文字は、8マスずつのまとまりに分けて、書き込まれています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-03.5.wav",
+"dur": 5.08,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_011.wav"
+},
+"06-04.6": {
+"text": "これが箱です。中に文字を詰めて運ぶ、入れ物です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-04.6.wav",
+"dur": 5.01,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_012.wav"
+},
+"07-02.6c": {
+"text": "文字を入れる箱の数は、QRコードの大きさと、予備の量で決まっているんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.6c.wav",
+"dur": 6.6,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_013.wav"
+},
+"07-02.7b": {
+"text": "ウェブサイトが開くQRコードも、同じ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.7b.wav",
+"dur": 2.79,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_014.wav"
+},
+"07-02.7c": {
+"text": "中には、「https://」で始まるサイトの住所が、1文字ずつ並んでいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.7c.wav",
+"dur": 6.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_015.wav"
+},
+"07-02.7d": {
+"text": "文字がもっと多いときは、QRコードそのものを大きくして、箱を増やします。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.7d.wav",
+"dur": 5.92,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_016.wav"
+},
+"07-02.7e": {
+"text": "長い住所のQRコードのマスが細かいのは、そのためです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.7e.wav",
+"dur": 4.35,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_017.wav"
+},
+"07-02.8b": {
+"text": "よりによって、文字が入っている場所を、隠していたんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.8b.wav",
+"dur": 3.44,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_018.wav"
+},
+"07-02.8bb": {
+"text": "あれ？まるロボが、文字の入っている箱を隠していたのなら、スマホは文字を読めないはずですよね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.8bb.wav",
+"dur": 7.16,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_019.wav"
+},
+"07-03": {
+"text": "その秘密は、文字が入っていない、こちらの17個の箱に隠されています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-03.wav",
+"dur": 5.6,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_020.wav"
+},
+"07-03.5": {
+"text": "その17個のうちの1つを、まるロボに開けてもらいましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-03.5.wav",
+"dur": 4.68,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_021.wav"
+},
+"07-04": {
+"text": "……ここには、文字は入っていません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.wav",
+"dur": 2.75,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_022.wav"
+},
+"07-04.3": {
+"text": "入っているのは、文字の入った箱をもとに、とあるルールで計算した数字です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.3.wav",
+"dur": 6.13,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_023.wav"
+},
+"07-04.3b": {
+"text": "その数字は、「HELLO」の5文字が正しく読めたかを、確かめるためのもの。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.3b.wav",
+"dur": 5.4,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_024.wav"
+},
+"07-04.5": {
+"text": "それだけではありません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.5.wav",
+"dur": 1.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_025.wav"
+},
+"07-04.5b": {
+"text": "もし、文字の入ったあの箱が汚れて、読めなくなっても大丈夫。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.5b.wav",
+"dur": 4.97,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_026.wav"
+},
+"07-04.5c": {
+"text": "この数字を使えば、消えた文字を計算で割り出せるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.5c.wav",
+"dur": 4.67,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_027.wav"
+},
+"07-05": {
+"text": "どちらの箱の話か分かりやすいように、ここで色を分けておきましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-05.wav",
+"dur": 5.11,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_028.wav"
+},
+"07-05b": {
+"text": "文字の入った箱は青、予備の箱は橙で表します。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-05b.wav",
+"dur": 4.55,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_029.wav"
+},
+"09-01": {
+"text": "文字の入った箱が9個に、予備の箱が17個。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/09-01.wav",
+"dur": 4.64,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_030.wav"
+},
+"09-02": {
+"text": "では、予備の数字を使って、どうやって消えた中身を割り出すのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/09-02.wav",
+"dur": 5.72,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_031.wav"
+},
+"09-02c": {
+"text": "まるロボと一緒に、その手順を一つずつ紐解いていきましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/09-02c.wav",
+"dur": 4.49,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_032.wav"
+},
+"10-02": {
+"text": "色の並びは、左から黒・白・黒・白・黒。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-02.wav",
+"dur": 6.57,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_033.wav"
+},
+"10-02b": {
+"text": "幅の比率で見ると、1・1・3・1・1になっています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-02b.wav",
+"dur": 6.25,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_034.wav"
+},
+"10-02c": {
+"text": "真ん中の黒だけが、ほかの3倍の太さなんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-02c.wav",
+"dur": 3.77,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_035.wav"
+},
+"10-03": {
+"text": "まるロボの目の光で、横になぞって、比率を確かめてみましょう。……1・1・3・1・1。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-03.wav",
+"dur": 8.89,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_036.wav"
+},
+"10-04.5": {
+"text": "このように、どの向きからなぞっても、白と黒の比率は同じ、1・1・3・1・1です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-04.5.wav",
+"dur": 8.58,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_037.wav"
+},
+"10-04.7": {
+"text": "では、この比率は、一体何のためにあるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-04.7.wav",
+"dur": 3.79,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_038.wav"
+},
+"10-05": {
+"text": "答えは、スマホに、目印を見つけてもらうためです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-05.wav",
+"dur": 3.89,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_039.wav"
+},
+"10-05b": {
+"text": "スマホは、カメラに写った景色の中から、この1・1・3・1・1を探します。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-05b.wav",
+"dur": 8.3,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_040.wav"
+},
+"10-05c": {
+"text": "比率はどの向きから見ても同じなので、QRコードが傾いていても、回っていても見つけられるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-05c.wav",
+"dur": 7.79,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_041.wav"
+},
+"11-01.5": {
+"text": "ここで、QRコードが生まれたころに戻ってみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-01.5.wav",
+"dur": 3.84,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_042.wav"
+},
+"11-02": {
+"text": "当時、QRコードを開発した人たちは、チラシや雑誌、段ボールに印刷された絵や文字を、白黒に直しました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-02.wav",
+"dur": 9.02,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_043.wav"
+},
+"11-02.6": {
+"text": "いったい、何のためだと思いますか？",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-02.6.wav",
+"dur": 2.47,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_044.wav"
+},
+"11-03": {
+"text": "答えは、世の中の印刷物に、一番出てこない比率を見つけるためです。それが、1・1・3・1・1でした。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-03.wav",
+"dur": 11.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_045.wav"
+},
+"11-04": {
+"text": "つまりこれは、まわりのどんな模様とも見間違えない、特別な印なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-04.wav",
+"dur": 5.96,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_046.wav"
+},
+"12-02.5": {
+"text": "スマホのカメラには、QRコードが、近いと大きく、遠いと小さく写ります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-02.5.wav",
+"dur": 6.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_047.wav"
+},
+"12-02.6": {
+"text": "ですからスマホは、中身を読む前に、まず1マスがどれくらいの大きさで写っているかを知る必要があります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-02.6.wav",
+"dur": 7.91,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_048.wav"
+},
+"12-03": {
+"text": "そこで役に立つのが、この列。いわゆる「マスの物差し」です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-03.wav",
+"dur": 4.96,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_049.wav"
+},
+"12-03b": {
+"text": "定規に目盛りが等間隔に並んでいるように、白と黒が1マスずつ並んでいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-03b.wav",
+"dur": 6.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_050.wav"
+},
+"12-03c": {
+"text": "この目盛りを見れば、1マスの大きさがすぐに分かるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-03c.wav",
+"dur": 4.44,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_051.wav"
+},
+"12-03d": {
+"text": "1マスの大きさが分かれば、QRコード全体の大きさも分かりますね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-03d.wav",
+"dur": 5.44,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_052.wav"
+},
+"12-03e": {
+"text": "縦も横も21マスなので、この1マスの21倍分です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-03e.wav",
+"dur": 5.85,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_053.wav"
+},
+"14-00": {
+"text": "ここまでで、スマホはQRコードを見つけて、向きとマスの大きさも分かりました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-00.wav",
+"dur": 6.4,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_054.wav"
+},
+"14-00b": {
+"text": "いよいよ中身を読む……と言いたいところですが、その前に、もう1つ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-00b.wav",
+"dur": 5.51,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_055.wav"
+},
+"14-01": {
+"text": "実はQRコードの白黒には、上から「柄」が重ねてあるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-01.wav",
+"dur": 5.42,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_056.wav"
+},
+"14-02": {
+"text": "QRコードの中身は、黒いマスと白いマスの並びで書かれています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-02.wav",
+"dur": 5.33,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_057.wav"
+},
+"14-02b": {
+"text": "ただ、中身をそのままマスに書き込むと、たまたま黒ばかりが続いて、大きな黒い塊ができることがあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-02b.wav",
+"dur": 9.01,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_058.wav"
+},
+"14-02c": {
+"text": "こんなふうに、目印にそっくりな形が、偶然できてしまうこともあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-02c.wav",
+"dur": 5.46,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_059.wav"
+},
+"14-02d": {
+"text": "そうなると、スマホが読み間違えたり、ニセの目印に迷ったりしてしまいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-02d.wav",
+"dur": 5.74,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_060.wav"
+},
+"14-03": {
+"text": "そこで、決まった8種類の柄の中から1つを選んで、上から重ねます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-03.wav",
+"dur": 5.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_061.wav"
+},
+"14-03b": {
+"text": "柄を重ねると、黒が続いていた所は白と黒が入れ替わって、塊がなくなるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-03b.wav",
+"dur": 6.65,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_062.wav"
+},
+"14-04": {
+"text": "ただ、柄を重ねたままでは、元の中身は読めません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-04.wav",
+"dur": 4.22,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_063.wav"
+},
+"14-04b": {
+"text": "だからスマホは、読む前にまず柄を外して、元の並びに戻すんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/14-04b.wav",
+"dur": 5.45,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_064.wav"
+},
+"13-01": {
+"text": "では、どの柄が重ねてあるのか、スマホはどうやって知るのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-01.wav",
+"dur": 5.09,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_065.wav"
+},
+"13-01b": {
+"text": "そのヒントが、目印のそばにある、この2本の細い帯です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-01b.wav",
+"dur": 5.71,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_066.wav"
+},
+"13-02a": {
+"text": "おもちゃの箱に入っている、説明書のようなものです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-02a.wav",
+"dur": 3.83,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_067.wav"
+},
+"13-02b": {
+"text": "書いてあるのは、2つだけ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-02b.wav",
+"dur": 1.66,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_068.wav"
+},
+"13-02.5": {
+"text": "1つ目は、予備の箱を何個入れたか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-02.5.wav",
+"dur": 3.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_069.wav"
+},
+"13-02.6": {
+"text": "2つ目は、8種類のうち、どの柄を重ねたか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-02.6.wav",
+"dur": 4.61,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_070.wav"
+},
+"13-03": {
+"text": "この2本の帯には、まったく同じ「読み方」が書いてあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-03.wav",
+"dur": 4.98,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_071.wav"
+},
+"13-03b": {
+"text": "片方が汚れても、もう片方で読めるように。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-03b.wav",
+"dur": 3.39,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_072.wav"
+},
+"13-03c": {
+"text": "読み方にまで、予備が用意してあるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-03c.wav",
+"dur": 2.97,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_073.wav"
+},
+"15-01": {
+"text": "そして今、まるロボが歩いている、この白いフチ。ここにも、役割があります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/15-01.wav",
+"dur": 7.53,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_074.wav"
+},
+"15-02": {
+"text": "QRコードの決まりでは、まわりに4マス分以上の、白い余白をとることになっています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/15-02.wav",
+"dur": 6.93,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_075.wav"
+},
+"15-02b": {
+"text": "スマホは、この白いフチを見て、ここから先はQRコードではないと分かるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/15-02b.wav",
+"dur": 6.6,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_076.wav"
+},
+"15-03": {
+"text": "では、QRコードを見つけるための、あの目印が隠れてしまったら、どうなるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/15-03.wav",
+"dur": 6.39,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_077.wav"
+},
+"16-01b": {
+"text": "まるロボが、小さな箱を目印の真ん中に置きました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-01b.wav",
+"dur": 3.95,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_078.wav"
+},
+"16-02": {
+"text": "冒頭では、まるロボの体で右下が大きく隠れても読めました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-02.wav",
+"dur": 4.89,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_079.wav"
+},
+"16-02b": {
+"text": "では、隠すのがこの小さな箱だけなら、読めると思いますか？",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-02b.wav",
+"dur": 5.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_080.wav"
+},
+"16-03.5": {
+"text": "体で右下を大きく隠したときは読めたのに、目印を小さく隠しただけで、読めない。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-03.5.wav",
+"dur": 7.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_081.wav"
+},
+"16-04": {
+"text": "その違いは、いったい何なのでしょうか。答えは、隠した場所にあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-04.wav",
+"dur": 5.61,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_082.wav"
+},
+"16-04a": {
+"text": "右下で隠れたのは、予備で直せる箱。今回隠したのは、QRコードを見つけるための目印です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-04a.wav",
+"dur": 8.69,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_083.wav"
+},
+"16-04b": {
+"text": "目印が隠れると、スマホは、どこにQRコードがあるのかさえ分かりません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-04b.wav",
+"dur": 5.59,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_084.wav"
+},
+"16-04c": {
+"text": "看板のないお店を探すようなもの。お店がそこにあっても、見つけられないんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-04c.wav",
+"dur": 5.97,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_085.wav"
+},
+"16-05": {
+"text": "予備で直せるのは、QRコードを見つけたあとに読む、箱の中身だけ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-05.wav",
+"dur": 6.16,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_086.wav"
+},
+"16-05b": {
+"text": "見つける前の目印は、予備では直せないんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-05b.wav",
+"dur": 3.63,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_087.wav"
+},
+"18-01": {
+"text": "QRコードを見つけたら、いよいよ箱を開けて、文字を読んでいきます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/18-01.wav",
+"dur": 5.65,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_088.wav"
+},
+"18-02": {
+"text": "まず、読み始めは右下の角です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/18-02.wav",
+"dur": 3.48,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_089.wav"
+},
+"18-02b": {
+"text": "こんなふうに、2列ずつ、上へ、下へと、ジグザグに進んでいきます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/18-02b.wav",
+"dur": 6.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_090.wav"
+},
+"18-03": {
+"text": "今まるロボが通った、この8マス。これで、1つの箱になります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/18-03.wav",
+"dur": 6.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_091.wav"
+},
+"19-01": {
+"text": "では、まるロボに、最初の箱を開けてもらいましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-01.wav",
+"dur": 3.57,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_092.wav"
+},
+"19-01b": {
+"text": "柄を外した箱の中には、0と1が並んでいます。黒いマスが1、白いマスが0です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-01b.wav",
+"dur": 8.81,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_093.wav"
+},
+"19-01c": {
+"text": "この8つの0と1の並びで、数字が1つ表されています。箱1つに、数字が1つ入っているんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-01c.wav",
+"dur": 9.09,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_094.wav"
+},
+"19-02b": {
+"text": "入っていたのは、「ここから、英字と数字が5文字続きます」というお知らせ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-02b.wav",
+"dur": 6.09,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_095.wav"
+},
+"19-02c": {
+"text": "本の目次のように、先に「何が、いくつ入っているか」を書いておくんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-02c.wav",
+"dur": 5.83,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_096.wav"
+},
+"19-02d": {
+"text": "そうすれば、スマホは、どこまで読めばいいかが分かります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-02d.wav",
+"dur": 3.57,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_097.wav"
+},
+"19-03": {
+"text": "そのあとに、文字が続きます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-03.wav",
+"dur": 1.82,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_098.wav"
+},
+"19-03a": {
+"text": "ただし文字は、そのまま入っているわけではありません。箱には、0と1しか書けないからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-03a.wav",
+"dur": 7.64,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_099.wav"
+},
+"19-03b": {
+"text": "そこで、決まった表を使って、文字を数字に置き換えて入れています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-03b.wav",
+"dur": 5.02,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_100.wav"
+},
+"19-03c": {
+"text": "Hは17、Eは14、Lは21、Oは24です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-03c.wav",
+"dur": 7.78,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_101.wav"
+},
+"19-04": {
+"text": "箱の中身を順番に並べると……H、E、L、L、O。「HELLO」になりました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-04.wav",
+"dur": 9.0,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_102.wav"
+},
+"19-04.5": {
+"text": "こちらの残った箱には、まず「文字はここまで」という印。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-04.5.wav",
+"dur": 5.12,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_103.wav"
+},
+"19-04.6": {
+"text": "そのあとは、箱が空っぽにならないように、決まった数字で埋めてあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-04.6.wav",
+"dur": 5.5,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_104.wav"
+},
+"20-01": {
+"text": "では、この箱の一部が壊れたり、冒頭のようにまるロボに隠されたりしたら、どうなるのでしょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/20-01.wav",
+"dur": 7.7,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_105.wav"
+},
+"20-02": {
+"text": "ここで、あそこにある17個の予備の箱の出番です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/20-02.wav",
+"dur": 4.42,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_106.wav"
+},
+"21-00": {
+"text": "予備の箱は、全部で17個。文字の入った箱の、2倍近くもあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-00.wav",
+"dur": 6.62,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_107.wav"
+},
+"21-00b": {
+"text": "なぜ、こんなにたくさん入れてあるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-00b.wav",
+"dur": 3.41,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_108.wav"
+},
+"21-01": {
+"text": "今から32年前、1994年に、QRコードは生まれました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-01.wav",
+"dur": 6.63,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_109.wav"
+},
+"21-01a": {
+"text": "発表したのは、デンソーという会社の部門、今のデンソーウェーブです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-01a.wav",
+"dur": 5.3,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_110.wav"
+},
+"21-01b": {
+"text": "生まれた場所は、ものづくりの工場。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-01b.wav",
+"dur": 2.98,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_111.wav"
+},
+"21-02": {
+"text": "工場の伝票は、こんなふうに、油などで黒く汚れることがよくあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-02.wav",
+"dur": 5.75,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_112.wav"
+},
+"21-02b": {
+"text": "ですからQRコードには、最初から「汚れても読めること」が求められていました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-02b.wav",
+"dur": 6.39,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_113.wav"
+},
+"21-02c": {
+"text": "そして、その課題を解決したのが、この17個の予備の箱なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/21-02c.wav",
+"dur": 5.62,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_114.wav"
+},
+"22-01": {
+"text": "では、予備がどのように働くのか、まずは小さな数字で試してみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-01.wav",
+"dur": 5.77,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_115.wav"
+},
+"22-02": {
+"text": "先ほど箱を開けると、中には数字が1つ入っていましたね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-02.wav",
+"dur": 4.91,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_116.wav"
+},
+"22-02b": {
+"text": "本当の数字は、最大で3ケタもある大きな数字。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-02b.wav",
+"dur": 4.48,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_117.wav"
+},
+"22-02c": {
+"text": "今回は分かりやすく、1ケタの小さな数字に変えて考えます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-02c.wav",
+"dur": 4.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_118.wav"
+},
+"22-03": {
+"text": "箱の中身は、左から2・5・3です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-03.wav",
+"dur": 5.66,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_119.wav"
+},
+"22-03b": {
+"text": "そして、この3つを足した「合計は10」という数を、メモしておきます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-03b.wav",
+"dur": 5.87,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_120.wav"
+},
+"22-03c": {
+"text": "このメモが、QRコードの予備の箱の役目をします。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-03c.wav",
+"dur": 4.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_121.wav"
+},
+"22-04": {
+"text": "では、ここで、真ん中の数字を隠してみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-04.wav",
+"dur": 3.36,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_122.wav"
+},
+"22-05": {
+"text": "見えなくなっても、合計が10だと分かっていれば大丈夫。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-05.wav",
+"dur": 4.25,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_123.wav"
+},
+"22-05b": {
+"text": "これは簡単ですね。見えている2と3を足して5。合計の10になるには、あと5。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-05b.wav",
+"dur": 8.24,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_124.wav"
+},
+"22-05c": {
+"text": "隠れた数字は、5です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-05c.wav",
+"dur": 1.94,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_125.wav"
+},
+"22-06": {
+"text": "このように、消えた場所と、合計の10が分かっていれば、メモ1つで数字を1つ割り出せるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/22-06.wav",
+"dur": 8.75,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_126.wav"
+},
+"23-02": {
+"text": "ただ見えなくなるだけなら、先ほどのように、それほど困りません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-02.wav",
+"dur": 4.83,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_127.wav"
+},
+"23-02a": {
+"text": "困るのは、こんなふうに、白いマスに黒い汚れがついたとき。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-02a.wav",
+"dur": 5.92,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_128.wav"
+},
+"23-02b": {
+"text": "スマホには、それが本物の黒いマスに見えてしまいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-02b.wav",
+"dur": 4.46,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_129.wav"
+},
+"23-02.5": {
+"text": "たとえば、この箱の数字は46。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-02.5.wav",
+"dur": 4.38,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_130.wav"
+},
+"23-02.6": {
+"text": "0と1の並びのうち、1つが0から1に変わるだけで、174になってしまいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-02.6.wav",
+"dur": 8.53,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_131.wav"
+},
+"23-03": {
+"text": "汚れのやっかいなところは、数字を隠すのではなく、別の数字にすり替えてしまうこと。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-03.wav",
+"dur": 6.97,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_132.wav"
+},
+"23-04": {
+"text": "では、さっきの箱で、真ん中の5を7にすり替えてみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-04.wav",
+"dur": 5.58,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_133.wav"
+},
+"23-05.5": {
+"text": "隠されたときは、空いた所を埋める穴埋め問題でしたが、今度は、どこが違うかも分からない間違い探しです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-05.5.wav",
+"dur": 9.48,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_134.wav"
+},
+"24-01": {
+"text": "まずは、1つ目のメモの合計を計算してみると……12になりました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/24-01.wav",
+"dur": 5.55,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_135.wav"
+},
+"24-02": {
+"text": "本当は10のはずなので、どこかの数字が、2大きくなっていることは分かります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/24-02.wav",
+"dur": 6.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_136.wav"
+},
+"24-02b": {
+"text": "でも、それがどの数字なのかまでは、分かりません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/24-02b.wav",
+"dur": 3.38,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_137.wav"
+},
+"25-01": {
+"text": "ここで出番が来るのが、2つ目のメモです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-01.wav",
+"dur": 3.02,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_138.wav"
+},
+"25-02": {
+"text": "2つ目のメモに書くのは、1番目の数字を1倍、2番目を2倍、3番目を3倍して、全部足した数。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-02.wav",
+"dur": 9.07,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_139.wav"
+},
+"25-02b": {
+"text": "つまり、正しい並びの2・5・3で計算すると……",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-02b.wav",
+"dur": 4.67,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_140.wav"
+},
+"25-02c": {
+"text": "2の1倍で2、5の2倍で10、3の3倍で9。足すと21です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-02c.wav",
+"dur": 9.31,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_141.wav"
+},
+"25-03": {
+"text": "では、すり替わったあとの数字で、計算してみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-03.wav",
+"dur": 3.96,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_142.wav"
+},
+"25-03b": {
+"text": "2の1倍で2、7の2倍で14、3の3倍で9。足すと、25。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-03b.wav",
+"dur": 7.07,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_143.wav"
+},
+"25-03c": {
+"text": "本当は21のはずなので、4大きくなっていることが分かりました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-03c.wav",
+"dur": 7.42,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_144.wav"
+},
+"25-04": {
+"text": "1つ目のメモは、本当の合計10に対して12。2大きくなっています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-04.wav",
+"dur": 6.07,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_145.wav"
+},
+"25-04a": {
+"text": "2つ目のメモは、本当の21に対して25。4大きくなっています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-04a.wav",
+"dur": 7.81,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_146.wav"
+},
+"25-04b": {
+"text": "ずれが、ちょうど2倍になっていますね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-04b.wav",
+"dur": 2.9,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_147.wav"
+},
+"25-05": {
+"text": "先ほど、左から順に1倍、2倍、3倍しましたね。2倍にしたのは、ここ、2番目の数字です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-05.wav",
+"dur": 10.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_148.wav"
+},
+"25-05b": {
+"text": "だから、すり替わったのは2番目の数字だと分かります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-05b.wav",
+"dur": 3.91,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_149.wav"
+},
+"25-06": {
+"text": "そして、すり替わった数字は、本当より2大きくなっていました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-06.wav",
+"dur": 5.16,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_150.wav"
+},
+"25-06a": {
+"text": "だから、7から2を引いて、元の数字は5だと分かるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-06a.wav",
+"dur": 5.03,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_151.wav"
+},
+"25-06b": {
+"text": "すり替わった場所も、ずれの大きさも、両方分かりました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/25-06b.wav",
+"dur": 3.88,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_152.wav"
+},
+"26-01": {
+"text": "一度、ここまでをまとめてみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-01.wav",
+"dur": 2.3,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_153.wav"
+},
+"26-01a": {
+"text": "数字が消えた場所が分かっているときは、メモ1つで、1つの数字を割り出せます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-01a.wav",
+"dur": 6.1,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_154.wav"
+},
+"26-01b": {
+"text": "どこがすり替わったか分からないときは、メモが2つ必要です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-01b.wav",
+"dur": 4.36,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_155.wav"
+},
+"26-01c": {
+"text": "すり替わった数字がどこにあるのか。そして、本当の数字からどれだけずれているのか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-01c.wav",
+"dur": 6.8,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_156.wav"
+},
+"26-01c2": {
+"text": "この2つを求めなければならないからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-01c2.wav",
+"dur": 2.62,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_157.wav"
+},
+"26-02": {
+"text": "スマホから見ると、体で隠れたマスも、汚れたマスも、どちらも同じ「すり替わったマス」です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-02.wav",
+"dur": 7.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_158.wav"
+},
+"26-02b": {
+"text": "なぜなら、スマホには、隠れているのか、もともとその色なのか、見分けがつかないから。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-02b.wav",
+"dur": 6.52,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_159.wav"
+},
+"26-03": {
+"text": "先ほどの「HELLO」のQRコードでは、予備の箱は17個でした。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-03.wav",
+"dur": 5.25,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_160.wav"
+},
+"26-03b": {
+"text": "予備の箱2つで、すり替わった箱を1つ直せるので、8個まで直せます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-03b.wav",
+"dur": 5.94,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_161.wav"
+},
+"26-04": {
+"text": "残った1つは、直した結果が本当に正しいかを、確かめるのに使います。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/26-04.wav",
+"dur": 5.83,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_162.wav"
+},
+"27-01": {
+"text": "実際のQRコードの箱には、0から255までの数字が入っています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/27-01.wav",
+"dur": 6.19,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_163.wav"
+},
+"27-01b": {
+"text": "予備の計算は、今の足し算よりずっと複雑。でも、考え方は同じなんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/27-01b.wav",
+"dur": 6.51,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_164.wav"
+},
+"27-02": {
+"text": "予備の箱が多いほど、すり替わった箱が多くても、直すことができます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/27-02.wav",
+"dur": 5.41,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_165.wav"
+},
+"27-02b": {
+"text": "どの箱が、どれだけ変わったのかを、計算で突き止められるからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/27-02b.wav",
+"dur": 5.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_166.wav"
+},
+"27-03b": {
+"text": "CDやデジタル放送、宇宙探査機との通信など、データが傷つきやすい場所で、今も大活躍。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/27-03b.wav",
+"dur": 8.9,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_167.wav"
+},
+"28-02b": {
+"text": "そのうち4個は、「HELLO」の文字が入っていた箱。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-02b.wav",
+"dur": 3.72,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_168.wav"
+},
+"28-02c": {
+"text": "「隠れていたのに、どうして読めたの？」と思った、あの場所です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-02c.wav",
+"dur": 4.78,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_169.wav"
+},
+"28-04.5": {
+"text": "壊れた箱は6個。それに対して、直せる箱は8個まで。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-04.5.wav",
+"dur": 5.71,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_170.wav"
+},
+"28-04.6": {
+"text": "8個までに収まっていたので、読めたんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-04.6.wav",
+"dur": 2.93,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_171.wav"
+},
+"28-05": {
+"text": "紙のQRコードは、今も、まるロボの体で隠れたままです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-05.wav",
+"dur": 4.43,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_172.wav"
+},
+"28-05b": {
+"text": "スマホが、隠れた所の文字を、予備の箱から計算して、元に戻したんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-05b.wav",
+"dur": 6.03,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_173.wav"
+},
+"28-05c": {
+"text": "紙そのものは、何も直っていません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-05c.wav",
+"dur": 2.57,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_174.wav"
+},
+"29-01": {
+"text": "ここで、冒頭のもう1つの疑問に戻りましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/29-01.wav",
+"dur": 3.26,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_175.wav"
+},
+"29-01b": {
+"text": "どこまで隠したら、読めなくなるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/29-01b.wav",
+"dur": 3.19,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_176.wav"
+},
+"29-02": {
+"text": "まるロボが一歩踏み込んで、読めなくなったときを、中から見てみます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/29-02.wav",
+"dur": 5.22,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_177.wav"
+},
+"29-03": {
+"text": "壊れた箱は……10個。直せる8個を、超えていました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/29-03.wav",
+"dur": 4.78,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_178.wav"
+},
+"29-04": {
+"text": "踏み込んだ足が、新しい箱にかかってしまったんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/29-04.wav",
+"dur": 3.89,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_179.wav"
+},
+"29-05": {
+"text": "壊れた箱が8個までなら読めて、8個を超えると読めない。これが境目です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/29-05.wav",
+"dur": 7.36,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_180.wav"
+},
+"30-01": {
+"text": "あっ、まるロボがインクのびんを倒してしまいました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-01.wav",
+"dur": 3.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_181.wav"
+},
+"30-02": {
+"text": "小さなしずくが、白いマスの上に12か所飛んでいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-02.wav",
+"dur": 4.25,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_182.wav"
+},
+"30-02b": {
+"text": "全部合わせても、QRコード全体の、たった3%ほど。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-02b.wav",
+"dur": 5.03,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_183.wav"
+},
+"30-03": {
+"text": "体で大きく隠しても読めたのだから、これくらいなら平気そうですね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-03.wav",
+"dur": 4.79,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_184.wav"
+},
+"30-04.5": {
+"text": "えっ、こんなに小さいのに？",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-04.5.wav",
+"dur": 2.26,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_185.wav"
+},
+"30-05": {
+"text": "中から見てみましょう。12個のしずくが、それぞれ別の箱に落ちています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-05.wav",
+"dur": 5.98,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_186.wav"
+},
+"30-05b": {
+"text": "壊れた箱は、12個。8個を超えていました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-05b.wav",
+"dur": 4.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_187.wav"
+},
+"30-06": {
+"text": "まるロボが乗ったときは、広く隠れても、壊れた箱は6個でした。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-06.wav",
+"dur": 5.26,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_188.wav"
+},
+"30-06b": {
+"text": "隠れた所が1か所にまとまっていて、少ない箱の中に収まっていたからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-06b.wav",
+"dur": 5.46,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_189.wav"
+},
+"30-07": {
+"text": "このように、読めるかどうかを決めるのは、隠した広さではありません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-07.wav",
+"dur": 5.29,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_190.wav"
+},
+"30-07b": {
+"text": "いくつの箱が壊れたか、その数なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-07b.wav",
+"dur": 3.57,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_191.wav"
+},
+"31-00": {
+"text": "このしくみが分かると、身近なQRコードの不思議も解けます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-00.wav",
+"dur": 4.67,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_192.wav"
+},
+"31-01": {
+"text": "お店のチラシなどで、真ん中にロゴが入ったQRコードを見たことはありませんか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-01.wav",
+"dur": 5.88,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_193.wav"
+},
+"31-02": {
+"text": "まるロボも、自分の顔のロゴを真ん中に置いてみました。……読めました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-02.wav",
+"dur": 5.69,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_194.wav"
+},
+"31-02.5": {
+"text": "……まるロボ、ちょっと得意げです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-02.5.wav",
+"dur": 2.08,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_195.wav"
+},
+"31-02.7": {
+"text": "でも、ロゴで模様が隠れているのに、どうして読めるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-02.7.wav",
+"dur": 4.47,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_196.wav"
+},
+"31-03": {
+"text": "ロゴを透かしてみると、下にも模様がちゃんと続いています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-03.wav",
+"dur": 3.88,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_197.wav"
+},
+"31-04": {
+"text": "スマホはロゴを汚れだと思って、予備の箱を使って直しているだけなんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-04.wav",
+"dur": 5.11,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_198.wav"
+},
+"31-05": {
+"text": "つまりロゴ入りのQRコードは、自分でわざと、箱を8個壊しているのと同じ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-05.wav",
+"dur": 6.79,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_199.wav"
+},
+"31-05b": {
+"text": "そうです。直せる、ぎりぎりの数なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-05b.wav",
+"dur": 3.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_200.wav"
+},
+"31-06": {
+"text": "ですから、ここに小さな汚れが1つ加わるだけで……もう読めません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-06.wav",
+"dur": 6.1,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_201.wav"
+},
+"31-06b": {
+"text": "9個目の箱が、壊れてしまったからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-06b.wav",
+"dur": 3.04,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_202.wav"
+},
+"31-07": {
+"text": "ロゴ入りのQRコードは、実は汚れに弱いんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/31-07.wav",
+"dur": 4.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_203.wav"
+},
+"32-01": {
+"text": "では、予備の箱を増やせば、もっと汚れに強くなるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-01.wav",
+"dur": 5.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_204.wav"
+},
+"32-02": {
+"text": "この2枚を比べてみましょう。どちらも中身は「HELLO」で、大きさも同じ21×21マス。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-02.wav",
+"dur": 8.43,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_205.wav"
+},
+"32-02b": {
+"text": "違うのは、予備の箱の数です。左は7個、右は17個。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-02b.wav",
+"dur": 5.68,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_206.wav"
+},
+"32-03": {
+"text": "まるロボが、同じ大きさの紙を、両方の右下に置きます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-03.wav",
+"dur": 4.33,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_207.wav"
+},
+"32-04": {
+"text": "予備の少ない左は読めず、予備の多い右は読めました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-04.wav",
+"dur": 4.37,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_208.wav"
+},
+"32-05": {
+"text": "このように、予備の箱を増やすほど、汚れに強くなります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-05.wav",
+"dur": 4.27,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_209.wav"
+},
+"32-05b": {
+"text": "ただし、箱の数は、QRコードの大きさで決まっています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-05b.wav",
+"dur": 4.35,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_210.wav"
+},
+"32-05b2": {
+"text": "予備を増やせば、そのぶん文字の箱が減ってしまう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-05b2.wav",
+"dur": 3.92,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_211.wav"
+},
+"32-05c": {
+"text": "汚れへの強さと、入れられる文字の数は、天秤のような関係なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-05c.wav",
+"dur": 5.29,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_212.wav"
+},
+"32-06": {
+"text": "QRコードを作るときには、この予備の量を、4段階から選べます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-06.wav",
+"dur": 5.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_213.wav"
+},
+"32-06b": {
+"text": "工場のような汚れやすい場所では多めに、ふだんは中くらいで使われることが多いようです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-06b.wav",
+"dur": 7.46,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_214.wav"
+},
+"32-07": {
+"text": "「QRコードは、30%欠けても読める」。こんな話を、聞いたことはありませんか？",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-07.wav",
+"dur": 6.81,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_215.wav"
+},
+"32-07b": {
+"text": "でも、さきほどのインクのしずくは、たった3%で読めなくなりましたよね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-07b.wav",
+"dur": 5.56,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_216.wav"
+},
+"32-07c": {
+"text": "この30%って、いったい何の30%なのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-07c.wav",
+"dur": 4.59,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_217.wav"
+},
+"32-08": {
+"text": "実はこの30%は、広さではなく、箱の数のこと。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-08.wav",
+"dur": 5.19,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_218.wav"
+},
+"32-08b": {
+"text": "予備を一番多くしたときに、26個のうち8個、だいたい3割の箱まで直せる、という意味です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-08b.wav",
+"dur": 8.13,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_219.wav"
+},
+"32-09": {
+"text": "ですから、同じ広さを隠しても、隠し方によって、読めたり読めなかったりします。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-09.wav",
+"dur": 6.28,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_220.wav"
+},
+"32-09b": {
+"text": "読み取るアプリによっても、粘り強さは少しずつ違います。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/32-09b.wav",
+"dur": 4.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_221.wav"
+},
+"38-01": {
+"text": "それでは、最初の実験に戻ってみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-01.wav",
+"dur": 3.1,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_222.wav"
+},
+"38-01b": {
+"text": "今度は、まるロボが自分から、右下に乗ります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-01b.wav",
+"dur": 3.76,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_223.wav"
+},
+"38-02": {
+"text": "もう一度、スマホの中で起きていることを、順番に見てみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-02.wav",
+"dur": 4.7,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_224.wav"
+},
+"38-03": {
+"text": "まず、角の3つの目印で、QRコードを見つけます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-03.wav",
+"dur": 4.63,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_225.wav"
+},
+"38-03b": {
+"text": "次に、右下からジグザグに、箱を読んでいきます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-03b.wav",
+"dur": 4.12,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_226.wav"
+},
+"38-03c": {
+"text": "まるロボの体で壊れた6個の箱は、17個の予備の箱から計算して、元に戻します。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-03c.wav",
+"dur": 7.63,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_227.wav"
+},
+"38-03d": {
+"text": "壊れたのは6個。直せる8個までに収まっているので……「HELLO」。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-03d.wav",
+"dur": 5.27,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_228.wav"
+},
+"38-04": {
+"text": "これが、かざしたほんの一瞬のうちに、起きているんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/38-04.wav",
+"dur": 3.74,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_229.wav"
+},
+"39-01": {
+"text": "工場で生まれたQRコードは、その後、世界共通の決まり、「国際規格」にもなりました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/39-01.wav",
+"dur": 7.34,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_230.wav"
+},
+"39-02": {
+"text": "開発したデンソーウェーブは、QRコードの特許を持っています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/39-02.wav",
+"dur": 4.91,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_231.wav"
+},
+"39-02.5": {
+"text": "でも、決まりどおりのQRコードには、その権利を使わないと宣言しています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/39-02.5.wav",
+"dur": 5.86,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_232.wav"
+},
+"39-02b": {
+"text": "ですから今では、誰でも自由に、QRコードを作ることができます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/39-02b.wav",
+"dur": 5.13,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_233.wav"
+},
+"39-03": {
+"text": "油で汚れる伝票のために作られた仕組みが、今では世界中のポスターや画面の中で働いています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/39-03.wav",
+"dur": 7.87,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_234.wav"
+},
+"40-01": {
+"text": "最初の疑問は、「QRコードは、欠けてもなぜ読めるのか」でした。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/40-01.wav",
+"dur": 5.22,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_235.wav"
+},
+"40-02": {
+"text": "答えは、QRコードの白と黒の中に、文字だけが入っているわけではないからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/40-02.wav",
+"dur": 6.89,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_236.wav"
+},
+"40-02b": {
+"text": "見つけてもらうための目印と、壊れたときのための予備も、一緒に入っているんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/40-02b.wav",
+"dur": 5.93,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_237.wav"
+},
+"40-03": {
+"text": "そして、どこまでも欠けてよいわけではないのは、予備で直せる箱の数に、限りがあるからです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/40-03.wav",
+"dur": 7.54,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_238.wav"
+},
+"40-04": {
+"text": "次にQRコードを見かけたら、思い出してみてください。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/40-04.wav",
+"dur": 3.88,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_239.wav"
+},
+"40-04b": {
+"text": "その白と黒の中にも、壊れる日にそなえた予備が詰まっています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/40-04b.wav",
+"dur": 5.19,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/v2gen/stage/voice/achernar/line_240.wav"
+},
+"01-01": {
+"text": "これはQRコードです。手前のスマホのカメラで読み取ってみると……「HELLO」と出ました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/01-01.wav",
+"dur": 8.38,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_001.wav"
+},
+"02-02": {
+"text": "（間）……読めました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/02-02.wav",
+"dur": 1.65,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_003.wav"
+},
+"02-03.5": {
+"text": "そういえば、少し汚れたポスターのQRコードでも、ちゃんと読めることがありますよね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/02-03.5.wav",
+"dur": 6.63,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_004b.wav"
+},
+"03-02": {
+"text": "……今度は、読めません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/03-02.wav",
+"dur": 1.81,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_006.wav"
+},
+"04-02": {
+"text": "先に、ひとつだけヒントをお伝えします。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-02.wav",
+"dur": 2.73,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_008.wav"
+},
+"04-03.5": {
+"text": "残りはすべて、壊れたときのための「予備」なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-03.5.wav",
+"dur": 4.08,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_010.wav"
+},
+"04-04": {
+"text": "まるロボと一緒に、この白と黒の中をのぞいてみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/04-04.wav",
+"dur": 4.5,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru/stage/voice/achernar/line_011.wav"
+},
+"05-01": {
+"text": "それでは、スマホのカメラが写した、QRコードの中に入ってみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/05-01.wav",
+"dur": 5.83,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_001.wav"
+},
+"05-02": {
+"text": "ここから先は、スマホが見ている景色です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/05-02.wav",
+"dur": 3.39,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_002.wav"
+},
+"05-02.5": {
+"text": "さっきまで踏んでいたマスが、ずいぶん大きく見えますね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/05-02.5.wav",
+"dur": 4.11,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_002b.wav"
+},
+"06-02": {
+"text": "まず、3つの角にある大きな四角。これは「目印」です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-02.wav",
+"dur": 5.92,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_005.wav"
+},
+"06-03": {
+"text": "では、さきほど読み取った「HELLO」は、この広い白と黒の、どこに書いてあるのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-03.wav",
+"dur": 7.77,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_006.wav"
+},
+"06-04": {
+"text": "この8マスのまとまりを、ここでは「箱」にたとえます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-04.wav",
+"dur": 3.82,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_008.wav"
+},
+"06-04.3": {
+"text": "では、まるロボに、8マスをたたんで、箱にしてもらいましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-04.3.wav",
+"dur": 5.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_009.wav"
+},
+"06-05": {
+"text": "箱は、全部で26個あります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/06-05.wav",
+"dur": 2.97,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_011.wav"
+},
+"07-01": {
+"text": "まるロボが、箱をひとつずつのぞいて探していますね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-01.wav",
+"dur": 3.54,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_012.wav"
+},
+"07-01.5": {
+"text": "「HELLO」は、どの箱に入っているのでしょうか。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-01.5.wav",
+"dur": 2.69,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_013.wav"
+},
+"07-01.7": {
+"text": "ここは……違うみたいです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-01.7.wav",
+"dur": 3.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_014.wav"
+},
+"07-01.7b": {
+"text": "こっちも、違いますね。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-01.7b.wav",
+"dur": 1.92,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_014_5.wav"
+},
+"07-02": {
+"text": "見つかりました。さきほど読み取った「HELLO」が入っているのは、青く光ったこの9個の箱です。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.wav",
+"dur": 7.87,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_015.wav"
+},
+"07-02.5": {
+"text": "441マスもあるのに、文字が入っているのは、ほんの一角なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.5.wav",
+"dur": 5.51,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_016.wav"
+},
+"07-02.6": {
+"text": "それは、「HELLO」が5文字しかないからでしょうか？",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.6.wav",
+"dur": 3.77,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_016_3.wav"
+},
+"07-02.6b": {
+"text": "いいえ、違います。英字を10文字に増やしても、文字を入れる箱は、9個のままです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.6b.wav",
+"dur": 6.75,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_016_5.wav"
+},
+"07-02.7": {
+"text": "中に入っているのは、文字だけ。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.7.wav",
+"dur": 2.17,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_017.wav"
+},
+"07-02.8": {
+"text": "そしてさきほど、まるロボが乗っていたのは……ちょうど、この青い箱のあたりです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-02.8.wav",
+"dur": 5.51,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_019.wav"
+},
+"07-04.7": {
+"text": "だからこの17個は、もしものときの「予備」なんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/07-04.7.wav",
+"dur": 4.62,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_023_7.wav"
+},
+"09-02b": {
+"text": "その答えは、スマホがQRコードを読み取る手順の中に隠れています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/09-02b.wav",
+"dur": 5.41,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_027.wav"
+},
+"09-03": {
+"text": "スマホがQRコードを読み取るとき、最初にすること。それは、QRコードを「見つける」ことです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/09-03.wav",
+"dur": 8.54,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch1/stage/voice/achernar/line_028.wav"
+},
+"10-01": {
+"text": "ここで、角にあるこの印を見てください。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-01.wav",
+"dur": 3.32,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_001.wav"
+},
+"10-04": {
+"text": "今度は、向きを変えて、斜めになぞってみます。……やはり、1・1・3・1・1。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/10-04.wav",
+"dur": 9.32,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_004.wav"
+},
+"11-01": {
+"text": "この比率は、偶然選ばれたものではありません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-01.wav",
+"dur": 3.27,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_007.wav"
+},
+"11-02.5": {
+"text": "そして、その白と黒の比率を、徹底的に調べたんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/11-02.5.wav",
+"dur": 4.81,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_009.wav"
+},
+"12-01": {
+"text": "おっとっと。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-01.wav",
+"dur": 0.56,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_012.wav"
+},
+"12-01b": {
+"text": "まるロボが、よろけてしまいました。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-01b.wav",
+"dur": 1.98,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_013.wav"
+},
+"12-01c": {
+"text": "QRコードが回ってしまうと、どちらが上なのか分からなくなりそうです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-01c.wav",
+"dur": 5.0,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_014.wav"
+},
+"12-01.5": {
+"text": "でも、角をよく見てください。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-01.5.wav",
+"dur": 2.23,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_015.wav"
+},
+"12-01.5b": {
+"text": "目印があるのは3つの角だけで、右下にはありません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-01.5b.wav",
+"dur": 4.6,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_016.wav"
+},
+"12-01.5c": {
+"text": "ですから、目印のない角を探せば、どちらが上なのかが分かるんです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-01.5c.wav",
+"dur": 5.5,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_017.wav"
+},
+"12-02": {
+"text": "次に、あそこでまるロボが跳んでいる列を見てみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-02.wav",
+"dur": 3.89,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_018.wav"
+},
+"12-02b": {
+"text": "目印と目印の間に、黒と白が1マスずつ交互に並んでいます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/12-02b.wav",
+"dur": 6.06,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_019.wav"
+},
+"13-02": {
+"text": "ここには、このQRコードの「読み方」が書いてあります。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/13-02.wav",
+"dur": 4.27,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_023.wav"
+},
+"16-03": {
+"text": "（間）……読めません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/16-03.wav",
+"dur": 0.82,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_039.wav"
+},
+"19-02": {
+"text": "最初の箱から読み始めると、出てきたのは文字ではありませんでした。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/19-02.wav",
+"dur": 5.03,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch3/stage/voice/achernar/line_005.wav"
+},
+"23-01": {
+"text": "ところが、本物の汚れは、もう少しやっかいです。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-01.wav",
+"dur": 3.99,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_011.wav"
+},
+"23-05": {
+"text": "2・7・3。どれがすり替わったのか、見た目では分かりません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/23-05.wav",
+"dur": 7.02,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_015.wav"
+},
+"27-03": {
+"text": "この仕組みは、「リード・ソロモン符号」と呼ばれています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/27-03.wav",
+"dur": 3.79,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_033.wav"
+},
+"28-01": {
+"text": "それでは、まるロボが乗ってしまった、最初のQRコードに戻ってみましょう。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-01.wav",
+"dur": 6.177,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_035.wav"
+},
+"28-02": {
+"text": "まるロボの足もとで、6個の箱が壊れています。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-02.wav",
+"dur": 3.71,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_036.wav"
+},
+"28-03": {
+"text": "17個の予備の箱から手がかりを集めると……壊れた箱の中身が、計算で割り出されていきます。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-03.wav",
+"dur": 7.27,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_037.wav"
+},
+"28-04": {
+"text": "「HELLO」。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/28-04.wav",
+"dur": 0.57,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch4/stage/voice/achernar/line_038.wav"
+},
+"30-04": {
+"text": "（間）……読めません。",
+"wav": "/home/user/qr_plan/parts/voice_v2/master/30-04.wav",
+"dur": 0.82,
+"raw": "/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad/maru_ch2/stage/voice/achernar/line_039.wav"
+}
+}
