@@ -82,3 +82,37 @@ def save(im, name):
 
 SER = "スマホと広告のしくみ"
 made = []
+# A：スマホの中に 見張り番がいた！（門と番犬とまるロボ）
+if os.path.exists(os.path.join(SRC, "gate_0703.png")):
+    im = bg("gate_0703.png", zoom=1.25, cx=0.66, cy=0.52, bri=1.15); im = shade(im, "left", 0.60, 0.85)
+    im = ribbon(im, (90, 80), SER)
+    im, _ = big(im, (100, 330), [("スマホの中に", WHITE)], 180)
+    im, _ = big(im, (100, 590), [("見張り番", YEL)], 300)
+    im, _ = big(im, (100, 960), [("がいた！", WHITE)], 240)
+    made.append(save(im, "thumb_A"))
+# B：話しただけなのに 広告が！？（テントの広告が出たスマホ）
+im = bg("s02_0169.png", zoom=1.45, cx=0.33, cy=0.55); im = shade(im, "left", 0.62, 0.88)
+im = ribbon(im, (90, 80), SER)
+im, _ = big(im, (100, 330), [("話した", WHITE)], 240)
+im, _ = big(im, (100, 600), [("だけなのに", WHITE)], 240)
+im, _ = big(im, (100, 900), [("広告", YEL), ("が！？", WHITE)], 300)
+made.append(save(im, "thumb_B"))
+# C：容疑者は3人（3つの台と探偵のまるロボ）
+im = bg("s05_0056.png", zoom=1.0, cx=0.5, cy=0.5, bri=1.7, con=1.1); im = shade(im, "bottom", 0.45, 0.75)
+im = ribbon(im, (90, 80), SER)
+im, _ = big(im, (W / 2, 960), [("容疑者は ", WHITE), ("3人", YEL)], 300, anchor="c")
+im = qmark(im, (2330, 330), 120)
+made.append(save(im, "thumb_C"))
+# D：テント広告事件 犯人は…？（テントの広告とまるロボ）
+im = bg("s22_0098.png", zoom=1.12, cx=0.42, cy=0.66, bri=1.02); im = shade(im, "top", 0.42, 0.85, col=(40, 30, 20))
+im = ribbon(im, (90, 60), SER)
+im, _ = big(im, (W / 2, 230), [("テント広告", WHITE), ("事件", YEL)], 250, anchor="c")
+im, _ = big(im, (W - 70, 1180), [("犯人は…？", WHITE)], 180, anchor="r")
+made.append(save(im, "thumb_D"))
+# 一覧（大きい・小さい）
+sheet = Image.new("RGB", (1280 * 2 + 30, 720 * 2 + 30), (240, 242, 244))
+for i, p in enumerate(made): sheet.paste(Image.open(p), ((i % 2) * 1290, (i // 2) * 730))
+sheet.resize((sheet.size[0] // 2, sheet.size[1] // 2), Image.LANCZOS).save(OUT + "/sheet_big.jpg", quality=88)
+small = Image.new("RGB", (len(made) * 214 + 10, 140), (255, 255, 255))     # スマホの一覧で見える大きさ（約 210×118）
+for i, p in enumerate(made): small.paste(Image.open(p).resize((210, 118), Image.LANCZOS), (i * 214 + 4, 10))
+small.save(OUT + "/sheet_small.png"); print("\n".join(made))
