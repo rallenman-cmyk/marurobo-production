@@ -11,8 +11,44 @@ exec(_g[_g.index("def closed_eye"):_g.index("def owl")])
 exec(_g[_g.index("def dog"):_g.index("def chip")])
 NAVY, DARK, GOLD = "#2F4A73", "#14243A", "#F2C14E"
 _sc = open(os.path.join(HERE, "scenes.py"), encoding="utf-8").read()
+_sc = _sc.replace("maru((0.0, 1.05, 0.5), face_deg=180", "maru((0.0, 1.05, 0.5), face_deg=0")  # 電車のまるロボは前（見ている人の方）を向く
 exec(_sc[_sc.index("def s2_suspects"):_sc.index("SCENES = dict")])  # 元の場面（部品として使う）
 R = math.radians
+
+
+# ---------------- 決めた見た目（2026-11-12 ユーザー）
+# 人：EP01 の人の道具（iconfig）で「服と肌の色を分けた形」。ハルさん＝青い服・紺のズボン・からし色の帽子、ソラさん＝オレンジの服・茶色のズボン・青緑のマフラー。点の目・口なし
+# 番犬：ぶちの垂れ耳・白い体・紺の見張りの帽子と首輪・金の名札（guards.py の dog に DOG を渡す）
+import sys as _sys
+_sys.path.insert(0, os.path.join(HERE, "..", "..", "ep01_earphone", "stage", "human"))
+HARU_C = dict(top="#3E7CB1", pants="#34486E", accent="#E3AE3A", skin="#F4D2B5")
+SORA_C = dict(top="#E58C5A", pants="#6A4A3A", accent="#2A9D8F", skin="#E9BE9A")
+DOG = dict(fur_c="#F2EBDD", light_c="#FFFFFF", ears="flop", cap=True, patch="#8A5A34")
+_NP = [0]
+
+
+def person(loc, face_deg=0, shirt="#3E7CB1", phone=False, s=1.0, **kw):
+    # 座った人（EP01 の人の道具は座った形で作ってある）。shirt の色でハルさんかソラさんかを決める
+    import iconfig
+    who = SORA_C if shirt.upper() in ("#E58C5A",) else HARU_C
+    _NP[0] += 1
+    nm = "P%d" % _NP[0]
+    ch = iconfig.make_icon(nm, who, outfit="scarf" if who is SORA_C else "cap", look="3d", neck=True, Rh=0.122, hc_z=1.300)
+    arm = ch["arm"]
+    arm.location = loc
+    arm.rotation_euler = (0, 0, math.radians(face_deg + 180))
+    arm.scale = (s, s, s)
+    for o in bpy.data.objects:
+        if o.name.startswith(nm + " eye."):
+            o.hide_render = False
+    if phone:  # 手の前にスマホ（画面はテントの写真）
+        pe = empty((0, -0.36, 0.78))
+        pe.parent = arm
+        pe.rotation_euler = (math.radians(55), 0, 0)
+        cube(mat("phone_body", "#22262B", rough=0.3), (0, 0, 0), (0.09, 0.18, 0.012), bevel=0.008, parent=pe)
+        sc_ = plane(img_mat("phone_tent", os.path.join(HERE, "phone_ad.png"), emit=1.5), (0, 0, 0.007), (0.08, 0.16), parent=pe)
+        sc_.rotation_euler = (0, 0, math.radians(180))
+    return arm
 
 
 # ---------------- 部品
@@ -61,9 +97,8 @@ def hat_on_hook(loc):
 
 
 def person_lie(loc):
-    # ふとんで寝ている人（頭と、ふくらんだ毛布）
-    sphere(mat("skin", "#F1C7A5", rough=0.55), (loc[0], loc[1], loc[2]), 0.2)
-    sphere(mat("hair#2B2220", "#2B2220", rough=0.6), (loc[0], loc[1] + 0.05, loc[2] + 0.04), 0.205)
+    # ふとんで寝ている人（ハルさん：肌の色の頭と、ふくらんだ毛布。顔は見せない向き）
+    sphere(mat("skin_haru", HARU_C["skin"], rough=0.55), (loc[0], loc[1], loc[2]), 0.2)
     sphere(mat("blanket", "#5B7DB8", rough=0.9), (loc[0], loc[1] + 0.75, loc[2] - 0.05), 0.5, scale=(0.9, 1.4, 0.35))
 
 
@@ -242,7 +277,7 @@ def b06():  # S06 スマホの下の小さな穴をのぞく
 def b07():  # S07 マイクの門と、見張り番の番犬（目を閉じて待つ）
     city_floor()
     mic_gate()
-    ear = dog((2.35, 1.0, 0), -40, eyes="closed")
+    ear = dog((2.35, 1.0, 0), -40, eyes="closed", **DOG)
     bubble((0.2, 1.5, 1.6), 0.3, "icon_clock.png")
     bubble((1.05, 1.0, 2.05), 0.3, "icon_car.png")
     burst((1.8, 0.3, 2.45), 0.3, seed=3)
@@ -256,7 +291,7 @@ def b07():  # S07 マイクの門と、見張り番の番犬（目を閉じて�
 def b08():  # S08 本物の合言葉：番犬がぱっと目を開け、門が開いてランプがオレンジ
     city_floor()
     mic_gate(open_=True, lamp=True)
-    dog((2.35, 1.0, 0), -40, eyes="open")
+    dog((2.35, 1.0, 0), -40, eyes="open", **DOG)
     bubble((0.3, 1.4, 1.7), 0.34, None, glow=1.5)
     maru((-1.7, -0.5, 0), face_deg=40, eye_glow=1.6, look_up=14, jump=0.35)
     bpy.data.materials["maru_orange"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 8.0
