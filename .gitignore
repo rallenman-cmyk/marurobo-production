@@ -1,0 +1,21 @@
+# 大きなファイルは入れない（Google ドライブ marurobo_render に置く）
+*.mp4
+*.mov
+*.mkv
+*.wav
+*.m4a
+*.mp3
+*.npy
+*.npz
+*.png
+*.jpg
+*.jpeg
+*.exr
+*.blend
+*.blend1
+*.zip
+__pycache__/
+*.pyc
+# 鍵
+.env
+*.key

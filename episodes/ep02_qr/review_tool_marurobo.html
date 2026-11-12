@@ -1,0 +1,772 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>まるロボ動画レビュー</title>
+<style>
+:root{--bg:#f6f5f2;--panel:#fff;--ink:#1d1d1b;--sub:#5f5d57;--line:#dedbd3;--accent:#1f5fbf;--accent-ink:#fff;--warn:#9a5b00;--warn-bg:#fff4dc;--ok:#1d7a3e;--ok-bg:#e5f5ea;--bad:#b3261e;--bad-bg:#fde8e6;--chip:#eeece6;--video:#000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151514;--panel:#1f1f1d;--ink:#ecebe7;--sub:#a5a39c;--line:#3a3935;--accent:#7fb0ff;--accent-ink:#0b1830;--warn:#f0b54a;--warn-bg:#3a2c10;--ok:#6fd395;--ok-bg:#16301f;--bad:#ff8a80;--bad-bg:#3d1714;--chip:#2c2b28}}
+:root[data-theme="dark"]{--bg:#151514;--panel:#1f1f1d;--ink:#ecebe7;--sub:#a5a39c;--line:#3a3935;--accent:#7fb0ff;--accent-ink:#0b1830;--warn:#f0b54a;--warn-bg:#3a2c10;--ok:#6fd395;--ok-bg:#16301f;--bad:#ff8a80;--bad-bg:#3d1714;--chip:#2c2b28}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;-webkit-text-size-adjust:100%}
+button,select,input,textarea{font:inherit;color:inherit}
+button,select{min-height:44px;min-width:44px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:0 12px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+input[type=text],input[type=search],textarea{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 12px;min-height:44px}
+textarea{min-height:88px;resize:vertical}
+.wrap{overflow-wrap:anywhere;word-break:break-word}
+header.top{display:flex;gap:8px;align-items:center;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header.top h1{font-size:16px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.testbadge{font-size:12px;background:var(--warn-bg);color:var(--warn);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.notice{margin:12px 16px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:14px}
+.list{padding:12px 16px;display:grid;gap:10px;max-width:900px;margin:0 auto}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters>*{flex:1 1 140px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:4px;text-align:left;width:100%;min-height:44px}
+.card .t{font-weight:600}
+.meta{color:var(--sub);font-size:13px;display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--chip);white-space:nowrap}
+.chip.open{background:var(--bad-bg);color:var(--bad)}
+.chip.proposed{background:var(--warn-bg);color:var(--warn)}
+.chip.done{background:var(--ok-bg);color:var(--ok)}
+.review{display:grid;grid-template-columns:1fr}
+.player{position:sticky;top:61px;z-index:4;background:var(--bg);padding:8px 16px 6px;border-bottom:1px solid var(--line)}
+video{width:100%;max-height:34vh;background:var(--video);object-fit:contain;display:block;border-radius:8px}
+.ctrl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.ctrl .now{font-variant-numeric:tabular-nums;font-size:14px;color:var(--sub);margin-left:auto}
+.side{padding:10px 16px 40px;display:grid;gap:12px;align-content:start;min-width:0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px;min-width:0}
+.kinds{display:flex;gap:6px}
+.kinds button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.state{font-size:13px;color:var(--sub)}
+.state.err{color:var(--bad)}
+.err{color:var(--bad);font-size:13px}
+.cm{border-top:1px solid var(--line);padding:10px 0;display:grid;gap:6px}
+.cm:first-child{border-top:0}
+.tbtn{font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent);background:transparent;border-color:var(--accent)}
+.fix{background:var(--chip);border-radius:8px;padding:8px 10px;font-size:14px;display:grid;gap:4px}
+.subs{border-left:3px solid var(--line);padding:2px 0 2px 8px;display:grid;gap:2px}
+.subs .near{color:var(--ink);font-weight:600}
+.small{font-size:13px;color:var(--sub)}
+.approve{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hidden{display:none!important}
+/* 直した所を順番に見る（修正箇所だけ選んで効率よく見られるように） */
+#fixBox{border-color:var(--accent)}
+#fixBox h2{font-size:15px;margin:0}
+.fixnav{display:grid;grid-template-columns:auto 1fr auto;gap:6px}
+.fixrow{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);text-align:left}
+.fixrow:first-child{border-top:0}
+.fixrow.cur{background:var(--warn-bg);border-radius:8px;padding:6px}
+.fixrow .ttl{font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+details summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--accent);font-weight:600}
+label.chk{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-size:14px}
+label.chk input{width:20px;height:20px}
+/* 確認の窓（Artifact の中では confirm() が出せないため、ページの中に出す） */
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:flex;align-items:center;justify-content:center;padding:16px}
+.dlgbox{background:var(--panel);border-radius:14px;padding:16px;max-width:520px;width:100%;display:grid;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+#dlgText{white-space:pre-wrap}
+button.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+/* 作品一覧：動画を消して容量をあける欄と、容量のメーター */
+.pcard{display:grid;gap:4px}
+details.mng{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:0 14px}
+details.mng .row{border-top:1px solid var(--line);padding:4px 0}
+.store{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:grid;gap:6px}
+.meter{height:10px;border-radius:999px;background:var(--chip);overflow:hidden}
+.meter>span{display:block;height:100%;background:var(--accent)}
+.meter.hot>span{background:var(--bad)}
+/* よくある指摘のボタン（押すと入力欄に文が入る。キーボードを出さずに指示できるように） */
+.quick{display:grid;gap:6px}
+.qg{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.qg .ql{font-size:12px;color:var(--sub);min-width:4.5em}
+.qg button{min-height:40px;padding:0 10px;border-radius:999px;font-size:14px}
+.qg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+#sheetClose{display:none}
+/* スマホ（縦）：コメントを書く欄は、画面の下にかぶせて出す（動画の下に隠れて見えないため）。
+   文字を打つ間は、キーボードに隠れないよう上（見出しのすぐ下）に出す。sheet の印は縦長の画面のときだけ JS が付ける */
+#composer.sheet{position:fixed;left:0;right:0;bottom:0;z-index:10;margin:0;border-radius:14px 14px 0 0;gap:6px;
+ max-height:calc(100vh - 61px - 24vh - 64px);min-height:220px;overflow:auto;overscroll-behavior:contain;
+ box-shadow:0 -6px 24px rgba(0,0,0,.25);padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+#composer.sheet.typing{top:61px;bottom:auto;max-height:calc(100vh - 61px);border-radius:0 0 14px 14px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+#composer.sheet.typing .quick{display:none}
+#composer.sheet textarea{min-height:64px}
+#composer.sheet .qg button{min-height:38px;padding:0 9px;font-size:13px}
+#composer.sheet .kinds button{min-height:38px}
+#composer.sheet #sendRow{flex-wrap:nowrap;position:sticky;bottom:calc(-12px - env(safe-area-inset-bottom,0px));background:var(--panel);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));margin-bottom:calc(-12px - env(safe-area-inset-bottom,0px));order:6}
+#composer.sheet #sendRow button{white-space:nowrap;flex:none}
+#composer.sheet .quick{order:5}
+#composer.sheet #cErr{order:7}
+#composer.sheet{grid-template-columns:minmax(0,1fr)}
+#composer.sheet #dstate{flex:1 1 0;min-width:0;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+body.sheeton video{max-height:24vh}
+#composer.sheet #sheetClose{display:inline-flex;align-items:center}
+body.sheeton #hereRow,body.sheeton #fixBar{display:none!important}
+body.sheeton .side{padding-bottom:60vh}
+@media (min-width:900px),(orientation:landscape) and (max-height:600px){
+ .review{grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);align-items:start}
+ .player{top:61px;border-bottom:0;height:calc(100vh - 61px);overflow:auto}
+ video{max-height:calc(100vh - 190px)}
+ .side{height:calc(100vh - 61px);overflow:auto;border-left:1px solid var(--line)}
+}
+</style>
+
+<header class="top">
+ <button id="back" class="hidden" aria-label="作品一覧へ戻る">←</button>
+ <h1 id="title" class="wrap">動画レビュー</h1>
+ <span class="testbadge">まるロボ解説</span>
+ <select id="verSel" class="hidden" aria-label="版を選ぶ"></select>
+</header>
+<div id="msg" class="notice hidden"></div>
+<div id="dlg" class="dlg hidden" role="dialog" aria-modal="true" aria-labelledby="dlgText"><div class="dlgbox"><div id="dlgText" class="wrap"></div>
+ <div class="row"><span style="flex:1"></span><button id="dlgNo">やめる</button><button id="dlgYes" class="primary">はい</button></div></div></div>
+
+<section id="listView" class="list">
+ <div class="filters">
+  <select id="chanSel" aria-label="チャンネル"></select>
+  <input id="projQ" type="search" placeholder="作品を検索" aria-label="作品を検索">
+ </div>
+ <div id="storeBox" class="store hidden"></div>
+ <div id="projList" class="list" style="padding:0"></div>
+</section>
+
+<section id="reviewView" class="review hidden">
+ <div class="player">
+  <video id="vid" playsinline controls preload="metadata"></video>
+  <div class="ctrl">
+   <button id="bk5" aria-label="5秒戻す">−5秒</button>
+   <button id="play" aria-label="再生・停止">▶</button>
+   <button id="fw5" aria-label="5秒送る">＋5秒</button>
+   <select id="rate" aria-label="再生速度">
+    <option>0.5</option><option>0.75</option><option selected>1</option><option>1.25</option><option>1.5</option><option>2</option>
+   </select>
+   <span class="now" id="now">00:00 / --:--</span>
+  </div>
+  <div class="ctrl" id="hereRow"><button id="here" class="primary" style="flex:1">この位置にコメント</button></div>
+  <div class="ctrl hidden" id="fixBar"><button id="fbPrev" aria-label="前の直した所">◀</button>
+   <span id="fbLab" class="small wrap" style="flex:1;min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden"></span>
+   <button id="fbNext" aria-label="次の直した所">直した所 ▶</button></div>
+  <div id="playErr" class="err hidden"></div>
+ </div>
+ <div class="side">
+  <div id="approveBox" class="box"></div>
+  <div id="fixBox" class="box hidden">
+   <div class="row"><h2>直した所を順番に見る</h2><span id="fixCount" class="small"></span></div>
+   <div class="fixnav">
+    <button id="fixPrev" aria-label="前の直した所">◀ 前</button>
+    <button id="fixNext" class="primary">次の直した所へ ▶</button>
+    <button id="fixAgain" aria-label="この所をもう一度">↺</button>
+   </div>
+   <div class="row">
+    <label class="chk"><input type="checkbox" id="fixSkip" checked>確認済みはとばす</label>
+    <label class="chk"><input type="checkbox" id="fixLead" checked>3秒前から流す</label>
+   </div>
+   <div id="fixNow" class="fix"></div>
+   <details id="fixDet"><summary>直した所の一覧</summary><div id="fixList"></div></details>
+  </div>
+  <div class="box" id="composer">
+   <div class="kinds" role="group" aria-label="コメントの種類">
+    <button data-k="point" aria-pressed="true">時点</button>
+    <button data-k="range" aria-pressed="false">区間</button>
+    <button data-k="general" aria-pressed="false">全体</button>
+   </div>
+   <div id="timeRow" class="row"></div>
+   <div id="subsRow"></div>
+   <div id="quick" class="quick" aria-label="よくある指摘"></div>
+   <textarea id="text" placeholder="ボタンで選ぶか、ここに書く" aria-label="コメント"></textarea>
+   <div class="row" id="sendRow"><span id="dstate" class="state">下書きなし</span><span style="flex:1"></span>
+    <button id="sheetClose" aria-label="閉じる（下書きは残る）">閉じる</button><button id="clear">取り消す</button><button id="send" class="primary">送信</button></div>
+   <div id="cErr" class="err hidden"></div>
+  </div>
+  <div class="box">
+   <div class="filters">
+    <select id="sortSel" aria-label="並び順"><option value="time">時刻順</option><option value="new">新着順</option></select>
+    <select id="stSel" aria-label="状態で絞り込み"><option value="">すべての状態</option><option value="open">未解決</option><option value="proposed">修正案提出</option><option value="done">確認済み</option></select>
+    <input id="cq" type="search" placeholder="コメントを検索" aria-label="コメントを検索">
+   </div>
+   <div id="cmList"></div>
+  </div>
+ </div>
+</section>
+
+<script src="hls.min.js"></script>
+<script>
+(async () => {
+const $ = id => document.getElementById(id);
+const S = { projects: [], versions: [], comments: [], fixreports: [], approvals: [],
+  pid: null, vid: null, owner: false, me: null, hls: null, loadedVid: null };
+const fmt = t => { if (t == null || isNaN(t)) return '--:--'; t = Math.max(0, t);
+  const h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = Math.floor(t % 60);
+  return (h ? h + ':' + String(m).padStart(2, '0') : String(m).padStart(2, '0')) + ':' + String(s).padStart(2, '0'); };
+const parseT = v => { v = String(v).trim(); if (!v) return NaN; const p = v.split(':').map(Number);
+  if (p.some(isNaN)) return NaN; return p.reduce((a, b) => a * 60 + b, 0); };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch {} } };
+const say = t => { $('msg').textContent = t; $('msg').classList.toggle('hidden', !t); };
+// 確かめる窓（ページの中に出す。confirm() は Artifact の中では出せず、押しても反応しなかった）
+const askConfirm = (text, yes = 'はい', danger = false) => new Promise(res => {
+  $('dlgText').textContent = text; $('dlgYes').textContent = yes; $('dlgYes').classList.toggle('danger', danger);
+  $('dlgYes').classList.toggle('primary', !danger); $('dlg').classList.remove('hidden');
+  const done = v => { $('dlg').classList.add('hidden'); $('dlgYes').onclick = $('dlgNo').onclick = null; res(v); };
+  $('dlgYes').onclick = () => done(true); $('dlgNo').onclick = () => done(false);
+  $('dlgNo').focus({ preventScroll: true });
+});
+
+const db = await claude.use('db');
+const user = await claude.use('user');
+if (!db) { say('データに接続できません。claude.ai にログインして開いてください。'); return; }
+S.owner = user ? await user.isOwner() : false;
+S.me = user ? await user.id().catch(() => null) : null;
+if (!S.owner) say('閲覧のみです。コメント・確認済み・承認は持ち主だけができます。');
+// 動画のファイル（assets）は持ち主だけが使う。容量をあけるときだけ消す（コメント・修正対応表・承認・版の文書は消さない）
+let AS = null;
+if (S.owner) claude.use('assets').then(a => { AS = a; if (AS) { render(); refreshUsage(); } }).catch(() => {});
+
+const watch = name => db.collection(name).onSnapshot(snap => {
+  S[name] = snap.docs.map(d => ({ id: d.id, ...d.data() })); render();
+}, e => say('読み込みエラー: ' + e.code));
+['projects', 'versions', 'comments', 'fixreports', 'approvals'].forEach(watch);
+
+const playable = v => v && v.status === 'ready' && Array.isArray(v.segments) && v.segments.length === v.segment_count && v.init?.url;
+const versionsOf = pid => S.versions.filter(v => v.project_id === pid).sort((a, b) => a.number - b.number);
+const vById = id => S.versions.find(v => v.id === id);
+const commentsOf = vid => S.comments.filter(c => c.version_id === vid);
+// 修正対応表のうち、このコメントへの最新の項目
+const fixFor = c => { let best = null;
+  for (const r of S.fixreports) for (const it of (r.items || [])) if (it.comment_id === c.id &&
+    (!best || r.created_at > best.r.created_at)) best = { r, it };
+  if (best && c.reopened_at && best.r.created_at < c.reopened_at) return { ...best, stale: true };
+  return best; };
+const statusOf = c => { if (c.status === 'confirmed') return 'done';
+  const f = fixFor(c); return f && !f.stale && f.it.action === 'fixed' ? 'proposed' : 'open'; };
+const ST = { open: ['○ 未解決', 'open'], proposed: ['△ 修正案提出', 'proposed'], done: ['✓ 確認済み', 'done'] };
+
+// ---------- 作品一覧 ----------
+function renderList() {
+  const chans = [...new Set(S.projects.map(p => p.channel || ''))];
+  const cs = $('chanSel'), cur = cs.value;
+  cs.innerHTML = '<option value="">すべてのチャンネル</option>' + chans.map(c => `<option>${esc(c)}</option>`).join('');
+  cs.value = chans.includes(cur) ? cur : '';
+  const q = $('projQ').value.trim().toLowerCase();
+  const ps = S.projects.filter(p => shown(p) && (!cs.value || p.channel === cs.value) &&
+    (!q || (p.title + ' ' + p.key).toLowerCase().includes(q)));
+  $('projList').innerHTML = ps.length ? ps.map(p => {
+    const vs = versionsOf(p.id), ready = vs.filter(playable), last = ready[ready.length - 1];
+    const open = last ? commentsOf(last.id).filter(c => statusOf(c) !== 'done').length : 0;
+    const ap = last && S.approvals.find(a => a.version_id === last.id);
+    return `<div class="pcard"><button class="card" data-p="${esc(p.id)}"><span class="t wrap">${esc(p.title)}</span>
+      <span class="meta"><span>${esc(p.key)}</span><span>${esc(p.channel || '')}</span>
+      <span>最新: ${last ? esc(last.label) : '再生できる版なし'}</span>
+      <span>未確認 ${open} 件</span><span class="chip ${ap ? 'done' : ''}">${ap ? '✓ 承認済み' : '未承認'}</span></span></button>${manageHtml(p, vs)}</div>`;
+  }).join('') : '<p class="small">まだ動画が登録されていません。動画ができると、ここに作品として出ます。</p>';
+  renderStore();
+}
+// 一覧に出す作品：再生できる版がある作品と、消す途中で止まった版がある作品（続きを消せるように）だけ
+const shown = p => versionsOf(p.id).some(v => playable(v) || v.status === 'deleting' || v.status === 'delete_failed');
+
+// ---------- 動画を消して容量をあける（持ち主だけ） ----------
+// 消すのは動画のファイルだけ。版の文書は残して status を deleted（途中で止まったら delete_failed）にする。
+const vbytes = v => (v.segments || []).reduce((a, s) => a + (s.size || 0), 0);
+const MB = b => Math.round(b / 1048576) + 'MB';
+const SZ = b => b >= 1073741824 ? (b / 1073741824).toFixed(1).replace(/\.0$/, '') + 'GB' : MB(b);
+const openMng = new Set();                       // 開いている欄（描き直しても閉じないように）
+const selV = new Set(), queue = []; let running = null;
+const inQ = v => running?.id === v.id || queue.includes(v.id);
+const isApproved = v => S.approvals.some(a => a.version_id === v.id);
+function manageHtml(p, vs) {
+  if (!(S.owner && AS)) return '';
+  const live = vs.filter(v => v.status !== 'deleted');
+  if (!live.length) return '';
+  const tot = live.reduce((a, v) => a + vbytes(v), 0);
+  const stj = { uploading: '登録中', validating: '検証中', ready: '再生可', failed: '失敗',
+    deleting: '消す途中で止まった（選んで消すと続きを消します）', delete_failed: '消す途中で止まった（選んで消すと続きを消します）' };
+  const stOf = v => running?.id === v.id ? '消している途中' : queue.includes(v.id) ? '消す順番を待っている' : (stj[v.status] || v.status);
+  const sel = live.filter(v => selV.has(v.id) && !inQ(v)), sb = sel.reduce((a, v) => a + vbytes(v), 0);
+  return `<details class="mng" data-mp="${esc(p.id)}" ${openMng.has(p.id) ? 'open' : ''}><summary>動画を消して容量をあける（この作品 約${MB(tot)}）</summary>
+    ${live.map((v, i) => `<div class="row"><label class="chk"><input type="checkbox" data-selv="${esc(v.id)}" ${selV.has(v.id) && !inQ(v) ? 'checked' : ''} ${inQ(v) ? 'disabled' : ''}><b>${esc(v.label)}</b></label>
+      <span class="small">${esc(stOf(v))}・約${MB(vbytes(v))}${isApproved(v) ? '・承認済み' : ''}</span><span style="flex:1"></span>
+      ${i > 0 && i < live.length - 1 && !inQ(v) ? `<button data-upto="${esc(v.id)}">${esc(live[0].label)}〜${esc(v.label)} を消す</button>` : ''}</div>`).join('')}
+    <div class="row"><button data-delsel="${esc(p.id)}" ${sel.length ? '' : 'disabled'}>選んだ版を消す${sel.length ? `（${sel.map(v => esc(v.label)).join('・')}・約${MB(sb)}）` : ''}</button><span style="flex:1"></span>
+      ${live.length > 1 ? `<button data-delp="${esc(p.id)}">まとめて消す（${live.length}つの版・約${MB(tot)}）</button>` : ''}</div>
+    <div class="small" style="padding:6px 0">消したい版にチェックを入れて「選んだ版を消す」。消している間も、ほかの版を選んで足せます（順番に消します）。コメント・修正対応表・承認の記録は残ります。消した版は再生できなくなります。元に戻せません。</div></details>`;
+}
+const pause = ms => new Promise(r => setTimeout(r, ms));
+async function delIds(ids, label) {   // 1つずつ消す。混んでいるときは1回だけ待って続ける
+  let done = 0;
+  for (const a of ids) {
+    try { await AS.delete(a); }
+    catch (e) {
+      if (/not.?found|404/i.test(String(e.code || e.message || ''))) { done++; continue; }   // もう消えていたファイル
+      if (e.code !== 'rate_limited' && e.code !== 'store_unavailable') return { done, err: e };
+      await pause(3000);
+      try { await AS.delete(a); } catch (e2) { if (!/not.?found|404/i.test(String(e2.code || e2.message || ''))) return { done, err: e2 }; }
+    }
+    done++; say(`${label}を消しています… ${done}/${ids.length}`);
+  }
+  return { done, err: null };
+}
+// 1つの版の動画を消し、版の文書の status を deleted（途中で止まったら delete_failed）にする
+async function wipeVersion(v) {
+  const ids = [v.init?.id, ...(v.segments || []).map(s => s.id)].filter(Boolean);
+  const ref = db.doc('versions/' + v.id), now = () => new Date().toISOString();
+  try { await ref.update({ status: 'deleting', delete_started_at: now(), updated_at: now() }); }
+  catch (e) { return { done: 0, total: ids.length, err: e }; }
+  const r = await delIds(ids, v.label + ' の動画' + (queue.length > 1 ? `（このあと ${queue.length - 1} つの版）` : ''));
+  try {
+    await ref.update(r.err ? { status: 'delete_failed', delete_note: `${r.done}/${ids.length} 個を消したところで止まりました（${r.err.code || r.err.message}）`, updated_at: now() }
+      : { status: 'deleted', deleted_at: now(), deleted_by: S.me, deleted_files: ids.length, deleted_bytes: vbytes(v), updated_at: now() });
+  } catch {}
+  return { done: r.done, total: ids.length, err: r.err };
+}
+// 選んだ版を消す（確かめるのは1回だけ）。消している途中なら、順番待ちに足す
+async function delMany(list) {
+  list = list.filter(v => v && v.status !== 'deleted' && !inQ(v));
+  if (!list.length || !AS) return;
+  const p = S.projects.find(x => x.id === list[0].project_id);
+  const tot = list.reduce((a, v) => a + vbytes(v), 0);
+  const apd = list.filter(isApproved).map(v => v.label);
+  if (!await askConfirm(`「${p?.title || list[0].project_id}」の ${list.map(v => v.label).join('・')} の動画（${list.length}つの版・約${MB(tot)}）を消します。${apd.length ? '\n承認済みの版（' + apd.join('・') + '）も消えます。' : ''}\n元に戻せません。コメント・修正対応表・承認の記録は残ります。\n消しますか？`, '消す', true)) return;
+  for (const v of list) { if (!inQ(v)) queue.push(v.id); selV.delete(v.id); }
+  renderList(); pump();
+}
+let doneN = 0, failL = [];
+async function pump() {
+  if (running) { say(`消す順番に入れました（いま ${running.label} を消しています。このあと ${queue.length - 1} つの版）。`); return; }
+  while (queue.length) {
+    const v = vById(queue[0]);
+    running = v || null; renderList();
+    const r = v ? await wipeVersion(v) : { err: null };
+    queue.shift(); running = null;
+    if (v) { if (r.err) failL.push(v.label); else doneN++; }
+  }
+  say(failL.length ? `${doneN}つの版の動画を消しました。${failL.join('・')} は途中で止まりました。もう一度選んで消すと、続きを消します。` : `${doneN}つの版の動画を消しました。`);
+  doneN = 0; failL = []; renderList(); refreshUsage();
+}
+// 容量のメーター（一覧のいちばん上）と、どの版にも使われていないファイル
+let USAGE = null, ASSETS = null, ORPH = [], orphBusy = false;
+async function refreshUsage() {
+  if (!(S.owner && AS)) return;
+  try { const r = await AS.list(); USAGE = r.usage; ASSETS = r.assets || []; } catch { USAGE = null; }
+  renderStore();
+}
+function renderStore() {
+  const box = $('storeBox');
+  if (!(S.owner && AS && USAGE)) { box.classList.add('hidden'); return; }
+  const used = new Set();
+  for (const v of S.versions) if (v.status !== 'deleted') { if (v.init?.id) used.add(v.init.id); for (const s of v.segments || []) used.add(s.id); }
+  const day = Date.now() - 864e5;                  // 24時間以内のファイルは、登録の途中かもしれないので数えない
+  ORPH = (ASSETS || []).filter(a => !used.has(a.id) && Date.parse(a.createdAt) < day);
+  const max = USAGE.maxBytes || 0, pct = max ? Math.min(100, USAGE.bytes / max * 100) : 0;
+  const ob = ORPH.reduce((a, x) => a + (x.sizeBytes || 0), 0);
+  box.innerHTML = `<div class="row"><b>容量</b><span class="small">${MB(USAGE.bytes)} / 約${SZ(max)}（${Math.round(pct)}%）・あと約${MB(Math.max(0, max - USAGE.bytes))}</span></div>
+    <div class="meter ${pct >= 85 ? 'hot' : ''}"><span style="width:${pct.toFixed(1)}%"></span></div>
+    ${ORPH.length ? `<div class="row"><span class="small">どの版にも使われていないファイル ${ORPH.length} 個（約${MB(ob)}）</span><span style="flex:1"></span><button data-orph="1" ${orphBusy || running ? 'disabled' : ''}>まとめて消す</button></div>` : ''}`;
+  box.classList.remove('hidden');
+}
+$('storeBox').onclick = async e => {
+  if (!e.target.closest('[data-orph]') || orphBusy || running || !AS) return;
+  const list = ORPH.slice(); if (!list.length) return;
+  const ob = list.reduce((a, x) => a + (x.sizeBytes || 0), 0);
+  if (!await askConfirm(`どの版にも使われていないファイル ${list.length} 個（約${MB(ob)}）を消します。\n元に戻せません。コメント・修正対応表・承認の記録は残ります。\n消しますか？`, '消す', true)) return;
+  orphBusy = true; renderStore();
+  const r = await delIds(list.map(a => a.id), '使われていないファイル');
+  orphBusy = false;
+  say(r.err ? `使われていないファイルを ${r.done}/${list.length} 個消したところで止まりました（${r.err.code || r.err.message}）。もう一度押すと続きを消します。` : `使われていないファイルを ${r.done} 個消しました。`);
+  refreshUsage();
+};
+// 一覧のボタン
+$('projList').onclick = e => {
+  if (e.target.closest('[data-selv]') || e.target.closest('label.chk')) return;
+  const u = e.target.closest('[data-upto]');
+  if (u) { const v = vById(u.dataset.upto); if (!v) return; const live = versionsOf(v.project_id).filter(x => x.status !== 'deleted');
+    delMany(live.slice(0, live.findIndex(x => x.id === v.id) + 1)); return; }
+  const ds = e.target.closest('[data-delsel]'); if (ds) { delMany(versionsOf(ds.dataset.delsel).filter(v => selV.has(v.id))); return; }
+  const dp = e.target.closest('[data-delp]'); if (dp) { delMany(versionsOf(dp.dataset.delp)); return; }
+  const b = e.target.closest('[data-p]'); if (b) openProject(b.dataset.p); };
+$('projList').addEventListener('change', e => { const c = e.target.closest?.('[data-selv]'); if (!c) return;
+  c.checked ? selV.add(c.dataset.selv) : selV.delete(c.dataset.selv); renderList(); });
+$('projList').addEventListener('toggle', e => { const m = e.target.closest?.('[data-mp]'); if (!m) return;
+  m.open ? openMng.add(m.dataset.mp) : openMng.delete(m.dataset.mp); }, true);
+$('chanSel').onchange = $('projQ').oninput = renderList;
+$('back').onclick = () => { location.hash = ''; S.pid = null; S.vid = null; sheetOpen = false; render(); };
+
+function openProject(pid, vid) {
+  S.pid = pid; const ready = versionsOf(pid).filter(playable);
+  S.vid = vid || ready[ready.length - 1]?.id || versionsOf(pid).slice(-1)[0]?.id || null;
+  location.hash = encodeURIComponent(pid) + '/' + encodeURIComponent(S.vid || '');
+  loadDraft(); render();
+}
+
+// ---------- 再生 ----------
+const video = $('vid');
+function loadVideo(v) {
+  if (S.loadedVid === v?.id) return;
+  S.loadedVid = v?.id || null; $('playErr').classList.add('hidden');
+  if (S.hls) { S.hls.destroy(); S.hls = null; }
+  video.removeAttribute('src'); video.load();
+  if (!playable(v)) return;
+  const abs = u => new URL(u, location.href).href;
+  // 版ごとに固定した区切りの実際の長さで、1本の動画として並べる
+  const m3u = ['#EXTM3U', '#EXT-X-VERSION:7', '#EXT-X-PLAYLIST-TYPE:VOD',
+    '#EXT-X-TARGETDURATION:' + Math.ceil(Math.max(...v.segments.map(s => s.dur))),
+    '#EXT-X-MEDIA-SEQUENCE:0', `#EXT-X-MAP:URI="${abs(v.init.url)}"`]
+    .concat(v.segments.flatMap(s => ['#EXTINF:' + s.dur.toFixed(6) + ',', abs(s.url)]), ['#EXT-X-ENDLIST']).join('\n');
+  if (window.Hls && Hls.isSupported()) {
+    const h = new Hls({ enableWorker: false, maxBufferLength: 40, backBufferLength: 60 });
+    S.hls = h; h.loadSource(URL.createObjectURL(new Blob([m3u], { type: 'application/vnd.apple.mpegurl' })));
+    h.attachMedia(video);
+    h.on(Hls.Events.ERROR, (_, d) => { if (d.fatal) { $('playErr').textContent = '再生エラー: ' + d.details; $('playErr').classList.remove('hidden');
+      if (d.type === Hls.ErrorTypes.NETWORK_ERROR) h.startLoad(); else if (d.type === Hls.ErrorTypes.MEDIA_ERROR) h.recoverMediaError(); } });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = 'data:application/vnd.apple.mpegurl;base64,' + btoa(unescape(encodeURIComponent(m3u)));
+  } else { $('playErr').textContent = 'この端末では再生できません。'; $('playErr').classList.remove('hidden'); }
+  video.playbackRate = +$('rate').value;
+}
+const seek = t => { video.currentTime = Math.max(0, Math.min(t, (video.duration || t) - 0.05)); };
+$('bk5').onclick = () => seek(video.currentTime - 5);
+$('fw5').onclick = () => seek(video.currentTime + 5);
+$('play').onclick = () => video.paused ? video.play() : video.pause();
+$('rate').onchange = () => { video.playbackRate = +$('rate').value; };
+video.addEventListener('ratechange', () => { if (video.playbackRate !== +$('rate').value) video.playbackRate = +$('rate').value; });
+const tick = () => { $('now').textContent = fmt(video.currentTime) + ' / ' + fmt(vById(S.vid)?.duration ?? video.duration);
+  $('play').textContent = video.paused ? '▶' : '❚❚'; };
+['timeupdate', 'play', 'pause', 'loadedmetadata', 'seeked'].forEach(e => video.addEventListener(e, tick));
+
+// ---------- 直した所を順番に見る ----------
+// この版を「新しい版」とする修正対応表の項目を、新しい版での時刻の順に並べる。
+// 元のコメント（前の版）の状態も出し、持ち主はここから「確認済み」にできる（コメントの文は変えない）。
+const fkey = () => 'vr-fixpos:' + S.vid;
+let FI = null;   // いま見ている項目（comment_id）
+function fixItems() {
+  const seen = new Map();
+  for (const r of S.fixreports) {
+    if (r.to_version !== S.vid) continue;
+    for (const it of (r.items || [])) {
+      const prev = seen.get(it.comment_id);
+      if (!prev || r.created_at > prev.r.created_at) seen.set(it.comment_id, { r, it });
+    }
+  }
+  return [...seen.values()].map(({ r, it }) => {
+    const c = S.comments.find(x => x.id === it.comment_id);
+    return { r, it, c, st: c ? statusOf(c) : 'open', t: it.new_t };
+  }).sort((a, b) => (a.t ?? 1e9) - (b.t ?? 1e9));
+}
+function fixPlay(x) {
+  if (!x) return;
+  FI = x.it.comment_id; store.set(fkey(), FI);
+  if (x.t != null) {
+    const lead = $('fixLead').checked ? 3 : 0;
+    const go = () => { seek(Math.max(0, x.t - lead)); video.play().catch(() => {}); };
+    if (video.readyState >= 1) go(); else video.addEventListener('loadedmetadata', go, { once: true });
+  }
+  renderFix();
+}
+function fixStep(d) {
+  const all = fixItems(); if (!all.length) return;
+  const cand = $('fixSkip').checked ? all.filter(x => x.st !== 'done' || x.it.comment_id === FI) : all;
+  let i = cand.findIndex(x => x.it.comment_id === FI);
+  if (i < 0) {   // まだどれも見ていない：今の再生位置から次（前）へ
+    const now = video.currentTime || 0;
+    i = d > 0 ? cand.findIndex(x => (x.t ?? 0) > now + 0.5) : cand.map(x => (x.t ?? 0) < now - 0.5).lastIndexOf(true);
+    if (i < 0) i = d > 0 ? 0 : cand.length - 1;
+    return fixPlay(cand[i]);
+  }
+  const list = $('fixSkip').checked ? cand.filter(x => x.st !== 'done' || x.it.comment_id === FI) : cand;
+  let j = i + d;
+  while (j >= 0 && j < list.length && $('fixSkip').checked && list[j].st === 'done') j += d;
+  if (j < 0 || j >= list.length) { say(d > 0 ? '最後の直した所です。' : '最初の直した所です。'); setTimeout(() => say(''), 2500); return; }
+  fixPlay(list[j]);
+}
+function renderFix() {
+  const all = fixItems();
+  $('fixBox').classList.toggle('hidden', !all.length);
+  $('fixBar').classList.toggle('hidden', !all.length);
+  if (!all.length) return;
+  if (FI == null) FI = store.get(fkey());
+  const done = all.filter(x => x.st === 'done').length;
+  const idx = all.findIndex(x => x.it.comment_id === FI);
+  $('fixCount').textContent = `${all.length} 件（確認済み ${done}）` + (idx >= 0 ? ` ・ いま ${idx + 1} 件目` : '');
+  const x = all[idx];
+  $('fbLab').textContent = x ? `直した所 ${idx + 1}/${all.length}：${x.c?.text ?? x.it.original_text}` : `直した所 ${all.length} 件（▶で順番に見る）`;
+  if (!x) {
+    $('fixNow').innerHTML = '<span class="small">「次の直した所へ」を押すと、直した所の少し前から流れます。見て OK なら「確認済みにする」を押してください。「確認済みにする」や、コメントの「送信」を押すと、次の直した所へ自動で進みます。</span>';
+  } else {
+    const fromV = vById(x.r.from_version);
+    const ot = x.it.original_t != null ? `${esc(fromV?.label || '前の版')} の ${fmt(x.it.original_t)}` : `${esc(fromV?.label || '前の版')}・全体へのコメント`;
+    $('fixNow').innerHTML = `<div class="row"><button class="tbtn" data-fseek="${x.t ?? ''}">${fmt(x.t)}</button>
+        <span class="chip ${ST[x.st][1]}">${ST[x.st][0]}</span><span class="small">${ot}</span></div>
+      <div><span class="small">あなたのコメント</span><div class="wrap">${esc(x.c?.text ?? x.it.original_text)}</div></div>
+      <div><span class="small">${x.it.action === 'fixed' ? 'どう直したか' : '直せなかった理由'}</span><div class="wrap">${esc(x.it.explain || x.it.reason || '')}</div></div>
+      ${x.c && x.it.comment_rev !== x.c.rev ? '<div class="err">⚠ 修正中にコメントが変わりました。追加確認が必要です。</div>' : ''}
+      ${S.owner && x.c ? `<div class="row">${x.st === 'done'
+        ? `<button data-fact="reopen" data-id="${esc(x.c.id)}">再オープン</button>`
+        : `<button data-fact="confirm" data-id="${esc(x.c.id)}" class="primary">確認済みにする</button>`}
+        <span class="small">直っていないときは、この位置で「この位置にコメント」</span></div>` : ''}`;
+  }
+  $('fixList').innerHTML = all.map((y, i) => `<button class="fixrow ${y.it.comment_id === FI ? 'cur' : ''}" data-fi="${esc(y.it.comment_id)}" style="width:100%;border:0;background:transparent">
+      <span class="tbtn" style="border:0">${fmt(y.t)}</span><span class="ttl wrap">${i + 1}. ${esc(y.c?.text ?? y.it.original_text)}</span>
+      <span class="chip ${ST[y.st][1]}">${ST[y.st][0].slice(0, 1)}</span></button>`).join('');
+}
+$('fixNext').onclick = $('fbNext').onclick = () => fixStep(1);
+$('fbPrev').onclick = () => fixStep(-1);
+$('fixPrev').onclick = () => fixStep(-1);
+$('fixAgain').onclick = () => { const x = fixItems().find(y => y.it.comment_id === FI); if (x) fixPlay(x); else fixStep(1); };
+$('fixSkip').onchange = $('fixLead').onchange = renderFix;
+$('fixList').onclick = e => { const b = e.target.closest('[data-fi]'); if (!b) return;
+  const x = fixItems().find(y => y.it.comment_id === b.dataset.fi); if (x) { fixPlay(x); $('fixDet').open = false; } };
+$('fixNow').onclick = async e => {
+  const sk = e.target.closest('[data-fseek]'); if (sk && sk.dataset.fseek !== '') { const x = fixItems().find(y => y.it.comment_id === FI); if (x) fixPlay(x); return; }
+  const b = e.target.closest('[data-fact]'); if (!b || !S.owner) return;
+  const c = S.comments.find(x => x.id === b.dataset.id); if (!c) return;
+  const ref = db.doc('comments/' + c.id), now = new Date().toISOString();
+  try {
+    if (b.dataset.fact === 'confirm') await ref.update({ status: 'confirmed', confirmed_at: now, confirmed_by: S.me, updated_at: now });
+    if (b.dataset.fact === 'reopen') await ref.update({ status: 'open', reopened_at: now, updated_at: now });
+  } catch (err) { say('保存できませんでした: ' + (err.code || err.message)); return; }
+  if (b.dataset.fact === 'confirm') fixAuto();   // 確認済みにしたら、次の直した所へ
+};
+// 「確認済みにする」「送信」のあと、次の直した所へ自動で進む。直した所を見ている途中のときだけ。
+function fixAuto() {
+  if (FI == null || !fixItems().length) return;
+  say('次の直した所へ進みます。'); setTimeout(() => say(''), 2000);
+  fixStep(1);
+}
+
+// ---------- コメントの時刻の字幕 ----------
+// おかしい所を見つけてから「この位置にコメント」を押すので、押した時刻の少し前の字幕が直す所のことが多い。
+// 版に subs（字幕の時刻）があれば、その時刻の6秒前までに出ていた字幕を見せ、コメントと一緒に保存する。
+function subsNear(kind, t, tEnd) {
+  const subs = vById(S.vid)?.subs; if (!Array.isArray(subs) || t == null) return [];
+  if (kind === 'range' && tEnd != null) return subs.filter(s => s.t1 >= t && s.t0 <= tEnd).slice(0, 6);
+  // 押す直前（0.8秒以内）に始まった行は、まだ聞いていないので外す
+  return subs.filter(s => s.t0 <= t - 0.8 && s.t1 >= t - 6).slice(-3);
+}
+const subsHtml = (list, label) => list?.length ? `<div class="subs"><span class="small">${label}</span>${list.map((s, i) =>
+  `<div class="small wrap${i === list.length - 1 ? ' near' : ''}">${esc(s.id)} ${esc(s.who)}「${esc(s.text)}」</div>`).join('')}</div>` : '';
+
+// ---------- よくある指摘のボタン ----------
+// これまでのコメント（EP02 v2〜v5、30件）で多かった指摘。押すと入力欄に文が入る（もう一度押すと外れる）。
+// 文は送る前に書き足し・書き換えできる。どのボタンを押したかは tags として一緒に保存し、直す側で種類ごとに数える。
+const QUICK = [
+  ['字幕', [['出るのが遅い', 'cap_late', '字幕（テロップ）の出るのが遅い'], ['出るのが早い', 'cap_early', '字幕（テロップ）の出るのが早い'],
+    ['前の字幕が残ってる', 'cap_stale', '声が変わったのに、前の字幕が残っている'], ['先に答えが出てる', 'cap_spoil', '字幕が先に答えを言ってしまっている（ネタバレ）']]],
+  ['文字', [['小さくて読めない', 'txt_small', '画面の文字・数字が小さすぎて読めない']]],
+  ['間', [['長い間がある', 'gap_long', '長い間がある（詰めて）'], ['画面の切り替わりが早い', 'cut_fast', '画面の切り替わりが早い']]],
+  ['画面', [['揺れている', 'scr_shake', '画面（カメラ）が左右に揺れている'], ['どこを見ればいいか分からない', 'scr_where', 'どこを見せているのか分からない（全体からアップにするなど）'],
+    ['言葉と絵が合っていない', 'scr_mismatch', '言っていることと絵が合っていない・ずれている'], ['絵を足して', 'scr_add', 'ここに絵（場面）を足して見せてほしい']]],
+  ['説明', [['言っている意味が分からない', 'say_unclear', 'この説明（言い方）では意味が分からない'], ['セリフを足して', 'say_add', 'ここにセリフを足してほしい']]],
+  ['音', [['BGMが大きい', 'bgm_loud', 'BGMが大きい'], ['BGMが止まっている', 'bgm_stop', 'BGMが止まっている'], ['効果音と声が重なる', 'se_overlap', '効果音と声が重なって聞きにくい']]],
+];
+const QMAP = Object.fromEntries(QUICK.flatMap(([, items]) => items.map(([lab, key, phrase]) => [key, phrase])));
+function paintQuick() {
+  const on = new Set(D?.tags || []), can = S.owner && playable(vById(S.vid));
+  $('quick').innerHTML = QUICK.map(([g, items]) => `<div class="qg"><span class="ql">${esc(g)}</span>${items.map(([lab, key]) =>
+    `<button type="button" data-q="${key}" aria-pressed="${on.has(key)}" ${can ? '' : 'disabled'}>${esc(lab)}</button>`).join('')}</div>`).join('');
+}
+$('quick').onclick = e => {
+  const b = e.target.closest('[data-q]'); if (!b || b.disabled) return;
+  const key = b.dataset.q, phrase = QMAP[key];
+  if (!D) D = { cmid: uid(), version_id: S.vid, kind: 'point', t: tNow(), t_end: null, text: '', state: 'local' };
+  D.tags = D.tags || [];
+  const parts = (D.text || '').split('、').map(s => s.trim()).filter(Boolean);
+  if (D.tags.includes(key)) { D.tags = D.tags.filter(k => k !== key); const i = parts.indexOf(phrase); if (i >= 0) parts.splice(i, 1); }
+  else { D.tags.push(key); if (!parts.includes(phrase)) parts.push(phrase); }
+  D.text = parts.join('、'); saveDraft('local'); paintComposer(); openSheet();
+};
+// スマホ（縦）のときだけ、書く欄を画面の下にかぶせて出す
+const wideMQ = matchMedia('(min-width:900px),(orientation:landscape) and (max-height:600px)');
+let sheetOpen = false;
+function paintSheet() {
+  const on = sheetOpen && !wideMQ.matches && !!S.pid;
+  $('composer').classList.toggle('sheet', on); document.body.classList.toggle('sheeton', on);
+  if (!on) $('composer').classList.remove('typing');
+}
+const openSheet = () => { sheetOpen = true; paintSheet(); };
+const closeSheet = () => { sheetOpen = false; paintSheet(); };
+wideMQ.addEventListener?.('change', paintSheet);
+$('sheetClose').onclick = () => { $('text').blur(); closeSheet(); };
+// 文字を打つ間は、欄を上に出す（下だとキーボードに隠れる）。離れたら少し待って下へ戻す（押したボタンがずれないように）
+let typingT = null;
+$('text').addEventListener('focus', () => { clearTimeout(typingT); if (!wideMQ.matches) { openSheet(); $('composer').classList.add('typing'); }
+  setTimeout(() => { const x = $('text'), n = x.value.length; if (document.activeElement === x && n) try { x.setSelectionRange(n, n); } catch {} }, 0); });
+$('text').addEventListener('blur', () => { clearTimeout(typingT); typingT = setTimeout(() => $('composer').classList.remove('typing'), 350); });
+
+// ---------- 下書きと送信 ----------
+// 下書きは版ごとに端末へ保存。版を切り替えても別の版へは移らない。
+let D = null;
+const dkey = () => 'vr-draft:' + S.vid;
+function loadDraft() { D = S.vid ? store.get(dkey()) : null; paintComposer(); if (D?.state === 'sending') reconcile(); }
+function saveDraft(state) { if (!D) return; D.state = state; D.saved_at = Date.now();
+  const ok = store.set(dkey(), D); paintState(ok ? null : '端末に保存できません（未送信のまま）'); }
+function newDraft(kind, t) { D = { cmid: uid(), version_id: S.vid, kind, t, t_end: null, text: D?.text || '', tags: D?.tags || [], state: 'local' }; saveDraft('local'); paintComposer(); }
+async function reconcile() { // 送信中に閉じた場合、保存済みかを確かめる
+  try { const s = await db.doc('comments/' + D.cmid).get();
+    if (s.exists) { store.del(dkey()); D = null; paintComposer(); paintState('サーバー保存済み'); }
+    else saveDraft('local'); } catch { saveDraft('error'); } }
+function paintState(override) {
+  const lab = { local: '端末に下書き保存（未送信）', sending: '送信中…', error: '通信エラー（未送信・下書きは残っています）' };
+  $('dstate').textContent = override || (D ? lab[D.state] || '未送信' : '下書きなし');
+  $('dstate').classList.toggle('err', D?.state === 'error');
+}
+function paintComposer() {
+  const k = D?.kind || 'point';
+  document.querySelectorAll('.kinds button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.k === k)));
+  const tr = $('timeRow');
+  if (!D) tr.innerHTML = '<span class="small">動画を止めて下の欄に書くと、止めた時刻へのコメントになります（「この位置にコメント」でも同じ）。動画全体へのコメントは「全体」を押してから書きます。</span>';
+  else if (k === 'general') tr.innerHTML = '<span class="chip">全体コメント（時刻なし）</span>';
+  else if (k === 'point') tr.innerHTML = `<span class="chip">時点 ${fmt(D.t)}</span><span class="small">（固定済み）</span>`;
+  else tr.innerHTML = `<span class="chip">開始 ${fmt(D.t)}</span><label class="row" style="flex:1">終了
+      <input id="tend" type="text" inputmode="numeric" style="width:96px;flex:none" value="${D.t_end != null ? fmt(D.t_end) : ''}" placeholder="mm:ss"></label>
+      <button id="endHere">今の位置を終了に</button>`;
+  $('subsRow').innerHTML = D && k !== 'general' ? subsHtml(subsNear(k, D.t, D.t_end), k === 'range' ? 'この区間の字幕' : 'この少し前に出ていた字幕（太字がいちばん近い）') : '';
+  $('text').value = D?.text || '';
+  paintQuick();
+  const can = S.owner && playable(vById(S.vid));
+  ['here', 'send', 'text'].forEach(id => $(id).disabled = !can);
+  $('cErr').classList.add('hidden'); paintState();
+}
+$('here').onclick = () => { video.pause(); const t = Math.round(video.currentTime * 10) / 10;
+  const kind = D?.kind && D.kind !== 'general' ? D.kind : 'point';
+  if (D && kind === 'range' && D.t != null && D.t_end == null && t > D.t) { D.t_end = t; saveDraft('local'); paintComposer(); }
+  else newDraft(kind, t);
+  if (wideMQ.matches) $('text').focus({ preventScroll: true }); else openSheet(); };
+document.querySelector('.kinds').onclick = e => { const b = e.target.closest('button'); if (!b) return;
+  const k = b.dataset.k;
+  if (!D) { if (k === 'general') { D = { cmid: uid(), version_id: S.vid, kind: 'general', t: null, t_end: null, text: '', state: 'local' }; saveDraft('local'); paintComposer(); }
+    else { video.pause(); newDraft(k, Math.round(video.currentTime * 10) / 10); } openSheet(); return; }
+  if (k === 'general') { D.kind = 'general'; D.t = null; D.t_end = null; }
+  else { if (D.t == null) { video.pause(); D.t = Math.round(video.currentTime * 10) / 10; } D.kind = k; if (k === 'point') D.t_end = null; }
+  saveDraft('local'); paintComposer(); };
+$('timeRow').addEventListener('click', e => { if (e.target.id === 'endHere' && D) { video.pause();
+  D.t_end = Math.round(video.currentTime * 10) / 10; saveDraft('local'); paintComposer(); } });
+$('timeRow').addEventListener('change', e => { if (e.target.id === 'tend' && D) { D.t_end = parseT(e.target.value); if (isNaN(D.t_end)) D.t_end = null; saveDraft('local'); } });
+// 入力欄を押したら、その位置で止めて「時点」のコメントにする。全体へのコメントは「全体」を押したときだけ
+const tNow = () => { video.pause(); return Math.round(video.currentTime * 10) / 10; };
+$('text').addEventListener('focus', () => {
+  if (!S.owner || !playable(vById(S.vid))) return;
+  if (!D) { D = { cmid: uid(), version_id: S.vid, kind: 'point', t: tNow(), t_end: null, text: $('text').value, state: 'local' }; saveDraft('local'); paintComposer(); return; }
+  // まだ何も書いていない「時点」の下書きは、押し直した位置に合わせ直す
+  if (D.kind === 'point' && !D.text.trim()) { const t = tNow(); if (D.t == null || Math.abs(t - D.t) >= 0.5) { D.t = t; saveDraft('local'); paintComposer(); } }
+});
+// いきなり文字を打ったときも同じ（下書きがなければ「時点」で作る）
+$('text').oninput = () => {
+  let fresh = false;
+  if (!D) { D = { cmid: uid(), version_id: S.vid, kind: 'point', t: tNow(), t_end: null, text: '', state: 'local' }; fresh = true; }
+  D.text = $('text').value;
+  if (D.tags?.length) { const n = D.tags.length; D.tags = D.tags.filter(k => D.text.includes(QMAP[k])); if (D.tags.length !== n) paintQuick(); }
+  saveDraft('local');
+  if (fresh) { const pos = $('text').selectionStart; paintComposer(); try { $('text').setSelectionRange(pos, pos); } catch {} } };
+$('clear').onclick = async () => { if (D?.text && !await askConfirm('この下書きを消しますか？', '消す', true)) return; store.del(dkey()); D = null; paintComposer(); closeSheet(); };
+$('send').onclick = async () => {
+  const err = m => { $('cErr').textContent = m; $('cErr').classList.remove('hidden'); };
+  if (!D || !D.text.trim()) return err('コメントを入力してください。');
+  if (D.version_id !== S.vid) return err('この下書きは別の版のものです。');
+  const dur = vById(S.vid)?.duration;
+  if (D.kind !== 'general' && (D.t == null || isNaN(D.t))) return err('時刻がありません。');
+  if (D.kind === 'range' && !(D.t_end > D.t)) return err('区間の終了は開始より後にしてください。');
+  if (D.kind !== 'general' && dur && (D.t > dur || (D.t_end ?? 0) > dur)) return err('動画の長さを超えています。');
+  saveDraft('sending'); $('send').disabled = true;
+  const now = new Date().toISOString();
+  const doc = { project_id: S.pid, version_id: D.version_id, kind: D.kind, text: D.text.trim(),
+    t: D.kind === 'general' ? null : D.t, t_end: D.kind === 'range' ? D.t_end : null,
+    status: 'open', rev: 1, author: S.me, created_at: now, updated_at: now, client_mutation_id: D.cmid };
+  if (D.tags?.length) doc.tags = D.tags.filter(k => QMAP[k]);
+  const near = D.kind === 'general' ? [] : subsNear(D.kind, D.t, D.t_end);
+  if (near.length) doc.subs_at = near.map(s => ({ id: s.id, who: s.who, text: s.text, t0: s.t0, t1: s.t1 }));
+  try { // 文書IDに client_mutation_id を使うので、再送しても二重にならない
+    const ref = db.doc('comments/' + D.cmid);
+    const ex = await ref.get(); if (!ex.exists) await ref.set(doc);
+    const chk = await ref.get(); if (!chk.exists) throw new Error('not saved');
+    store.del(dkey()); D = null; paintComposer(); paintState('サーバー保存済み');
+    $('text').blur(); closeSheet();
+    fixAuto();
+  } catch (e) { saveDraft('error'); err('送信できませんでした。下書きは残っています。もう一度「送信」を押してください。'); }
+  $('send').disabled = !S.owner;
+};
+
+// ---------- コメント一覧 ----------
+function renderComments() {
+  const q = $('cq').value.trim().toLowerCase(), st = $('stSel').value, sort = $('sortSel').value;
+  let cs = commentsOf(S.vid).filter(c => (!st || statusOf(c) === st) && (!q || c.text.toLowerCase().includes(q)));
+  cs.sort(sort === 'new' ? (a, b) => b.created_at.localeCompare(a.created_at)
+    : (a, b) => (a.t ?? -1) - (b.t ?? -1) || a.created_at.localeCompare(b.created_at));
+  $('cmList').innerHTML = cs.length ? cs.map(c => {
+    const s = statusOf(c), f = fixFor(c);
+    const when = c.kind === 'general' ? '<span class="chip">全体</span>'
+      : c.kind === 'range' ? `<button class="tbtn" data-seek="${c.t}">${fmt(c.t)}–${fmt(c.t_end)}</button><span class="small">区間</span>`
+      : `<button class="tbtn" data-seek="${c.t}">${fmt(c.t)}</button><span class="small">時点</span>`;
+    let fx = '';
+    if (f && !f.stale) { const it = f.it, nv = vById(it.new_version_id || f.r.to_version);
+      const revWarn = it.comment_rev !== c.rev ? '<div class="err">⚠ 修正中にコメントが変わりました。追加確認が必要です。</div>' : '';
+      fx = `<div class="fix"><b>${it.action === 'fixed' ? '修正対応' : '対応できないと報告（未解決のまま）'}</b>
+        <div class="wrap">${esc(it.explain || it.reason || '')}</div>
+        ${nv && it.new_t != null ? `<div class="row">新版 ${esc(nv.label)} での位置 <button class="tbtn" data-jv="${esc(nv.id)}" data-jt="${it.new_t}">${fmt(it.new_t)}${it.new_t_end != null ? '–' + fmt(it.new_t_end) : ''}</button></div>` : ''}
+        ${revWarn}</div>`; }
+    const own = S.owner ? (s === 'done'
+      ? `<button data-act="reopen" data-id="${esc(c.id)}">再オープン</button>`
+      : `<button data-act="confirm" data-id="${esc(c.id)}">確認済みにする</button>`) + `<button data-act="edit" data-id="${esc(c.id)}">編集</button>` : '';
+    return `<div class="cm"><div class="row">${when}<span class="chip ${ST[s][1]}">${ST[s][0]}</span>
+      <span class="small">${new Date(c.created_at).toLocaleString('ja-JP')}${c.rev > 1 ? ' ・編集済み' : ''}</span></div>
+      <div class="wrap">${esc(c.text)}</div>${subsHtml(c.subs_at, 'コメントしたときの字幕')}${fx}<div class="row">${own}</div></div>`;
+  }).join('') : (fixItems().length ? '<p class="small">この版へのコメントはまだありません。直した所は、上の「直した所を順番に見る」で見られます。</p>'
+    : '<p class="small">この版のコメントはありません。旧版のコメントは各版を選ぶと見られます。</p>');
+}
+$('cmList').onclick = async e => {
+  const sk = e.target.closest('[data-seek]'); if (sk) { seek(+sk.dataset.seek); return; }
+  const jv = e.target.closest('[data-jv]');
+  if (jv) { const t = +jv.dataset.jt; openProject(S.pid, jv.dataset.jv); video.addEventListener('loadedmetadata', () => seek(t), { once: true }); return; }
+  const b = e.target.closest('[data-act]'); if (!b || !S.owner) return;
+  const c = S.comments.find(x => x.id === b.dataset.id); if (!c) return;
+  const ref = db.doc('comments/' + c.id), now = new Date().toISOString();
+  try {
+    if (b.dataset.act === 'confirm') await ref.update({ status: 'confirmed', confirmed_at: now, confirmed_by: S.me, updated_at: now });
+    if (b.dataset.act === 'reopen') await ref.update({ status: 'open', reopened_at: now, updated_at: now });
+    if (b.dataset.act === 'edit') { const t = prompt('コメントを編集', c.text); if (t == null || !t.trim() || t === c.text) return;
+      await ref.update({ text: t.trim(), rev: (c.rev || 1) + 1, updated_at: now }); }
+  } catch (e) { say('保存できませんでした: ' + (e.code || e.message)); }
+};
+$('cq').oninput = $('stSel').onchange = $('sortSel').onchange = renderComments;
+
+// ---------- 承認 ----------
+function renderApprove() {
+  const v = vById(S.vid), ap = S.approvals.find(a => a.version_id === S.vid);
+  const open = commentsOf(S.vid).filter(c => statusOf(c) !== 'done').length;
+  const st = v ? ({ uploading: '登録中', validating: '検証中', ready: '再生可', failed: '失敗', deleting: '動画を消している途中', delete_failed: '動画を消す途中で止まった', deleted: '動画は消しました' }[v.status] || v.status) : '';
+  $('approveBox').innerHTML = !v ? '<span class="small">版がありません。</span>' : `<div class="approve">
+    <b>${esc(v.label)}</b><span class="chip">${esc(st)}</span><span class="small">尺 ${fmt(v.duration)}</span>
+    <span class="chip ${ap ? 'done' : ''}">${ap ? '✓ この版を承認済み ' + new Date(ap.approved_at).toLocaleDateString('ja-JP') : '未承認'}</span>
+    <span class="small">未確認 ${open} 件</span><span style="flex:1"></span>
+    ${S.owner && !ap && playable(v) ? '<button id="apBtn">この版を最終承認</button>' : ''}</div>
+    ${v.notes ? `<div class="small wrap">${esc(v.notes)}</div>` : ''}`;
+  const b = $('apBtn'); if (b) b.onclick = async () => {
+    if (!await askConfirm(open ? `未確認のコメントが ${open} 件あります。それでもこの版（${v.label}）を承認しますか？` : `この版（${v.label}）を最終承認しますか？`, '承認する')) return;
+    try { await db.doc('approvals/' + v.id).set({ project_id: S.pid, version_id: v.id, approved_at: new Date().toISOString(),
+      approved_by: S.me, open_at_approval: open, source_sha256: v.source?.sha256 || null }); }
+    catch (e) { say('承認を保存できませんでした: ' + (e.code || e.message)); } };
+}
+
+// ---------- 全体 ----------
+$('verSel').onchange = () => openProject(S.pid, $('verSel').value);
+let lastVid = null;
+function render() {
+  if (!S.pid && location.hash.length > 1) { const [p, v] = location.hash.slice(1).split('/').map(decodeURIComponent);
+    if (S.projects.some(x => x.id === p)) { openProject(p, v || undefined); return; } }
+  const inReview = !!S.pid;
+  $('listView').classList.toggle('hidden', inReview); $('reviewView').classList.toggle('hidden', !inReview);
+  $('back').classList.toggle('hidden', !inReview); $('verSel').classList.toggle('hidden', !inReview);
+  if (!inReview) { $('title').textContent = '動画レビュー'; loadVideo(null); renderList(); return; }
+  const p = S.projects.find(x => x.id === S.pid); $('title').textContent = p ? p.title : S.pid;
+  const vs = versionsOf(S.pid);
+  $('verSel').innerHTML = vs.map(v => `<option value="${esc(v.id)}" ${playable(v) ? '' : 'disabled'}>${esc(v.label)}${playable(v) ? '' : '（' + esc(v.status) + '）'}</option>`).join('');
+  $('verSel').value = S.vid || '';
+  if (lastVid !== S.vid) { FI = null; lastVid = S.vid; }
+  loadVideo(vById(S.vid)); renderApprove(); renderFix(); renderComments();
+  if ((D?.version_id || null) !== null && D.version_id !== S.vid) loadDraft();
+  if (!D) paintComposer(); else { const can = S.owner && playable(vById(S.vid)); ['here', 'send', 'text'].forEach(id => $(id).disabled = !can); }
+}
+render();
+})();
+</script>
+
+
+</body></html>

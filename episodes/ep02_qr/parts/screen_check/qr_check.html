@@ -1,0 +1,171 @@
+<title>QR実機チェック</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 画面にQRを1つずつ大きく出し、スマホで読んで結果を残す道具。QRの台はどのテーマでも白 */
+:root{
+  --bg:#eef2f5; --panel:#ffffff; --ink:#28303a; --sub:#5d6875; --line:#d5dde5;
+  --accent:#1e7f86; --accent-ink:#ffffff; --ok:#1f8a4c; --mid:#b7791f; --ng:#c2413a;
+  --font-body:"Noto Sans JP",system-ui,-apple-system,"Hiragino Sans",sans-serif;
+  --font-num:"Space Grotesk","Noto Sans JP",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141a21;--panel:#1d252e;--ink:#e6ecf2;--sub:#a3afbc;--line:#2f3a46;--accent:#4fb8bf;--accent-ink:#0d1418;--ok:#4cc27f;--mid:#e0a64a;--ng:#f0766c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a21;--panel:#1d252e;--ink:#e6ecf2;--sub:#a3afbc;--line:#2f3a46;--accent:#4fb8bf;--accent-ink:#0d1418;--ok:#4cc27f;--mid:#e0a64a;--ng:#f0766c;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 40px;overflow-x:hidden}
+main{max-width:1100px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:22px;margin:4px 0 0;text-wrap:balance}
+.lead{color:var(--sub);margin:0;font-size:14px}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.top label{font-size:14px;color:var(--sub)}
+input[type=text]{font:inherit;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 10px;min-width:0;flex:1 1 220px}
+button{font:inherit;min-height:44px;min-width:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 14px;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media (max-width:820px){.stage{grid-template-columns:minmax(0,1fr)}}
+.qrbox{background:#ffffff;border-radius:16px;padding:12px;display:flex;justify-content:center;border:1px solid var(--line)}
+.qrbox svg{width:min(100%,72vh);height:auto;display:block}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:12px;min-width:0}
+.cnum{font-family:var(--font-num);font-size:13px;color:var(--sub);letter-spacing:.04em}
+.ctitle{font-size:20px;font-weight:700;margin:0}
+.cnote{font-size:14px;color:var(--sub);margin:0}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.res button{font-size:15px;font-weight:700;padding:8px 2px;white-space:nowrap}
+.res button.on{color:var(--accent-ink);border-color:transparent}
+.res .r-ok.on{background:var(--ok)} .res .r-mid.on{background:var(--mid)} .res .r-ng.on{background:var(--ng)}
+.nav{display:flex;gap:8px} .nav button{flex:1}
+.pred{font-size:14px;border-top:1px solid var(--line);padding-top:10px}
+.save{font-size:13px;color:var(--sub);min-height:1.4em}
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{color:var(--sub);font-weight:600}
+tr.cur td{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.mk-ok{color:var(--ok);font-weight:700} .mk-mid{color:var(--mid);font-weight:700} .mk-ng{color:var(--ng);font-weight:700}
+.tips{font-size:14px;color:var(--sub);margin:0;padding-left:1.2em}
+.chip{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--sub)}
+</style>
+
+<main>
+  <header>
+    <h1>QR実機チェック</h1>
+    <p class="lead">パソコンかタブレットでこのページを開き、画面のQRをスマホのカメラで読みます。印刷はいりません。</p>
+  </header>
+  <div class="top">
+    <label for="app">読み取りに使った端末とアプリ</label>
+    <input id="app" type="text" placeholder="例：iPhone 15 カメラ" autocomplete="off">
+  </div>
+  <div class="stage">
+    <div class="qrbox" id="qrbox" aria-live="polite"></div>
+    <aside class="side">
+      <div><div class="cnum" id="cnum"></div><p class="ctitle" id="ctitle"></p><p class="cnote" id="cnote"></p></div>
+      <div class="res" role="group" aria-label="読み取りの結果">
+        <button class="r-ok" data-r="ok">○ 読めた</button>
+        <button class="r-mid" data-r="mid">△ ときどき</button>
+        <button class="r-ng" data-r="ng">× 読めない</button>
+      </div>
+      <div class="save" id="save"></div>
+      <div class="nav"><button id="prev">← 前</button><button id="next">次 →</button></div>
+      <div class="pred" id="pred"></div>
+    </aside>
+  </div>
+  <ul class="tips">
+    <li>画面の明るさを最大に。スマホは画面から20〜30cm、QR全体と白いふちが入るように。</li>
+    <li>○＝1秒くらいで出る　△＝時間がかかる・ときどき出る　×＝10秒待っても出ない。</li>
+    <li>アプリを変えたら上の欄を書き換えて、もう一周。結果はこのページに残ります（Claudeが読みに来ます）。</li>
+    <li>手描きの確認：紙に「MATANE」（最後の条件で表示）を描き写して、スマホで読んでください。方眼でなくても大丈夫です。</li>
+  </ul>
+  <div class="tablewrap"><table id="tbl"></table></div>
+</main>
+
+<script>
+'use strict';
+const D = {"H":["111111101100101111111","100000101111101000001","101110101110001011101","101110100110101011101","101110100000001011101","100000101001101000001","111111101010101111111","000000001001000000000","001110101101011100111","011011001101110101111","100011101110001011001","001101010010011110000","100111111110110010100","000000001011101001011","111111100110010100101","100000100101110001001","101110101001010100100","101110101110001100100","101110101010110010100","100000100011111110101","111111100110100010100"],"L":["111111100100101111111","100000101001001000001","101110100100001011101","101110101001001011101","101110100011101011101","100000101110101000001","111111101010101111111","000000000011100000000","111110111100110101010","101001000000100101111","000000101111010011001","011111010010000110000","011001101111010010100","000000001101111001011","111111101010101100101","100000100111111001001","101110101000100100100","101110101010100100100","101110101001010010100","100000101010000110101","111111101001010010100"],"MATANE":["111111101000001111111","100000100111001000001","101110101011101011101","101110100010101011101","101110101011001011101","100000100010101000001","111111101010101111111","000000001010100000000","000001100111101010101","000101001010100110001","011000101100110100001","100011000010010101101","110101111011110111100","000000001000010001111","111111100011101011000","100000101111100000110","101110100001101010100","101110100111100001100","101110100000010111011","100000100010010001101","111111100011101100100"],"changed":{"finder_box3":[[2,2,0],[2,3,0],[2,4,0],[3,2,0],[3,3,0],[3,4,0],[4,2,0],[4,3,0],[4,4,0]],"content_erase_8":[[9,17,0],[9,18,0],[9,19,0],[9,20,0],[10,17,0],[10,20,0],[12,18,0],[13,17,0],[13,19,0],[13,20,0],[14,15,0],[14,18,0],[14,20,0],[15,17,0],[15,20,0],[16,15,0],[16,18,0],[17,15,0],[17,18,0],[18,16,0],[18,18,0],[19,15,0],[19,16,0],[19,18,0],[19,20,0],[20,16,0],[20,18,0]],"content_erase_9":[[9,15,0],[9,17,0],[9,18,0],[9,19,0],[9,20,0],[10,16,0],[10,17,0],[10,20,0],[11,15,0],[11,16,0],[12,16,0],[12,18,0],[13,17,0],[13,19,0],[13,20,0],[14,15,0],[14,18,0],[14,20,0],[15,17,0],[15,20,0],[16,15,0],[16,18,0],[17,15,0],[17,18,0],[18,16,0],[18,18,0],[19,15,0],[19,16,0],[19,18,0],[19,20,0],[20,16,0],[20,18,0]],"box5_H":[[16,18,0],[17,18,0],[18,16,0],[18,18,0],[19,16,0],[19,18,0],[19,20,0],[20,16,0],[20,18,0]],"box5_L":[[16,18,0],[17,18,0],[18,16,0],[18,18,0],[19,16,0],[19,18,0],[19,20,0],[20,16,0],[20,18,0]]},"drops":[[10,2],[4,12],[7,9],[12,17],[0,11],[19,17],[20,13],[13,16],[9,0],[15,14],[11,19],[12,15]],"drop1":[9,16],"robot":{"stand":16.5,"step":14.323958219997824,"rx":3.923076923076923,"ry":3.5384615384615383},"pred":{"robot_stand":true,"robot_step":false,"square8":true,"square9":false,"finder_box3":false,"content_erase_8":true,"content_erase_9":false,"ink12":false,"logo7":true,"logo7_ink1":false,"box5_H":true,"box5_L":false},"nbad":{"robot_stand":6,"robot_step":10,"square8":8,"square9":14,"finder_box3":0,"content_erase_8":8,"content_erase_9":9,"ink12":12,"logo7":8,"logo7_ink1":9,"box5_H":4,"box5_L":4}};
+const N = 21, Q = 4;
+const C = [
+  {id:'base_H', t:'基準のQR（何もしない）', note:'まずこれが読めるか。', m:'H'},
+  {id:'robot_stand', t:'まるロボが右下に乗る', note:'白い楕円＝まるロボの体を真上から見た形。冒頭の場面。', m:'H', robot:'stand', exp:'robot_stand'},
+  {id:'robot_step', t:'一歩踏み込む', note:'体が内側へ0.40m動いた位置。', m:'H', robot:'step', exp:'robot_step'},
+  {id:'finder_box3', t:'目印の真ん中に小さな箱', note:'左上の目印の黒い3×3マスだけを白で隠す（S16）。', m:'H', ch:'finder_box3', exp:'finder_box3'},
+  {id:'content_erase_8', t:'中身の箱を8個消す', note:'文字の入る箱1〜8番を白に（S31）。', m:'H', ch:'content_erase_8', exp:'content_erase_8'},
+  {id:'content_erase_9', t:'中身の箱を9個消す', note:'1〜9番を白に。', m:'H', ch:'content_erase_9', exp:'content_erase_9'},
+  {id:'ink12', t:'インクのしずく12か所', note:'白いマスに丸いしずく。12個とも別の箱（S32）。', m:'H', drops:'all', exp:'ink12'},
+  {id:'logo7', t:'真ん中にロゴ', note:'7×7マスのロゴ（白地＋うすい顔）（S33）。', m:'H', logo:true, exp:'logo7'},
+  {id:'logo7_ink1', t:'ロゴ＋しずく1つ', note:'ロゴにしずくを1つ足す。', m:'H', logo:true, drops:'one', exp:'logo7_ink1'},
+  {id:'box5_H', t:'予備が多い版（H）の右下に5×5の箱', note:'S34の右側。', m:'H', ch:'box5_H', exp:'box5_H'},
+  {id:'base_L', t:'予備が少ない版（L・何もしない）', note:'同じ文字・同じ大きさ。まずこれが読めるか。', m:'L'},
+  {id:'box5_L', t:'予備が少ない版（L）の右下に5×5の箱', note:'S34の左側。', m:'L', ch:'box5_L', exp:'box5_L'},
+  {id:'matane', t:'手描き用の答え「MATANE」', note:'これを紙に描き写して、紙のほうを読んでください。画面のこれ自体も読めるか一度確認。', m:'MATANE'},
+];
+const $ = s => document.querySelector(s);
+const st = {i:0, db:null, owner:false, rows:{}};
+function load(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}
+function keep(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+st.i = Math.min(C.length-1, Math.max(0, parseInt(load('qrcheck:i','0'),10)||0));
+$('#app').value = load('qrcheck:app','');
+$('#app').addEventListener('input', e => { keep('qrcheck:app', e.target.value); paint(); });
+function appName(){ return ($('#app').value||'').trim() || '（端末未入力）'; }
+function slug(s){ let h=0; for (const ch of s) h=(h*31+ch.codePointAt(0))>>>0; return h.toString(36); }
+
+function matrix(c){
+  const m = D[c.m].map(r => r.split('').map(Number));
+  if (c.ch) for (const [r,cc,v] of D.changed[c.ch]) m[r][cc]=v;
+  return m;
+}
+function svgFor(c){
+  const m = matrix(c), T = N+2*Q; let s = `<svg viewBox="0 0 ${T} ${T}" shape-rendering="crispEdges" role="img" aria-label="${c.t}"><rect width="${T}" height="${T}" fill="#fff"/>`;
+  for (let r=0;r<N;r++) for (let x=0;x<N;x++) if (m[r][x]) s += `<rect x="${x+Q}" y="${r+Q}" width="1.002" height="1.002" fill="#000"/>`;
+  if (c.logo){ s += `<rect x="${7+Q}" y="${7+Q}" width="7" height="7" fill="#fff"/><circle cx="${10.5+Q}" cy="${10.5+Q}" r="2.5" fill="#fafafa" stroke="#96d2ce" stroke-width=".25" shape-rendering="geometricPrecision"/><circle cx="${10.5+Q}" cy="${10.5+Q}" r=".9" fill="#bee6e4" shape-rendering="geometricPrecision"/>`; }
+  const drops = c.drops==='all' ? D.drops : c.drops==='one' ? [D.drop1] : [];
+  for (const [r,x] of drops) s += `<circle cx="${x+Q+.5}" cy="${r+Q+.5}" r=".42" fill="#000" shape-rendering="geometricPrecision"/>`;
+  if (c.robot){ const k = D.robot[c.robot]+Q; s += `<ellipse cx="${k}" cy="${k}" rx="${D.robot.rx}" ry="${D.robot.ry}" fill="#ebebeb" stroke="#757575" stroke-width="${(D.robot.rx*.06).toFixed(2)}" shape-rendering="geometricPrecision"/>`; }
+  return s + '</svg>';
+}
+const MK = {ok:['○','mk-ok'], mid:['△','mk-mid'], ng:['×','mk-ng']};
+function paint(){
+  const c = C[st.i];
+  $('#qrbox').innerHTML = svgFor(c);
+  $('#cnum').textContent = `条件 ${st.i+1} / ${C.length}`; $('#ctitle').textContent = c.t; $('#cnote').textContent = c.note;
+  const mine = st.rows[c.id+'__'+slug(appName())];
+  document.querySelectorAll('.res button').forEach(b => b.classList.toggle('on', !!mine && mine.result===b.dataset.r));
+  const p = c.exp ? (D.pred[c.exp] ? '読める' : '読めない') + `（壊れる箱 ${D.nbad[c.exp]}個）` : (c.id==='matane' ? '読める' : '読める');
+  $('#pred').innerHTML = mine ? `PCのシミュレーションの予想：<b>${p}</b>` : '<span class="chip">予想は、結果を押すと出ます</span>';
+  $('#prev').disabled = st.i===0; $('#next').disabled = st.i===C.length-1;
+  table();
+}
+function table(){
+  const apps = [...new Set(Object.values(st.rows).map(r => r.app))];
+  let h = `<thead><tr><th>条件</th><th>予想</th>${apps.map(a=>`<th></th>`).join('')}</tr></thead><tbody>`;
+  h = `<thead><tr><th>条件</th><th>予想</th>${apps.map(()=>'<th class="ah"></th>').join('')}</tr></thead><tbody>`;
+  C.forEach((c,k) => {
+    const p = c.exp ? (D.pred[c.exp]?'読める':'読めない') : '読める';
+    h += `<tr class="${k===st.i?'cur':''}"><td><button class="jump" data-k="${k}" style="min-height:32px;padding:2px 8px">${k+1}</button> ${c.t}</td><td>${p}</td>`;
+    for (const a of apps){ const r = st.rows[c.id+'__'+slug(a)]; h += `<td>${r?`<span class="${MK[r.result][1]}">${MK[r.result][0]}</span>`:''}</td>`; }
+    h += '</tr>';
+  });
+  $('#tbl').innerHTML = h + '</tbody>';
+  $('#tbl').querySelectorAll('th.ah').forEach((th,j) => th.textContent = apps[j]);
+  $('#tbl').querySelectorAll('.jump').forEach(b => b.onclick = () => go(+b.dataset.k));
+}
+function go(k){ st.i = Math.max(0, Math.min(C.length-1, k)); keep('qrcheck:i', String(st.i)); paint(); window.scrollTo({top:0}); }
+$('#prev').onclick = () => go(st.i-1); $('#next').onclick = () => go(st.i+1);
+document.addEventListener('keydown', e => { if (e.target.tagName==='INPUT') return; if (e.key==='ArrowRight') go(st.i+1); if (e.key==='ArrowLeft') go(st.i-1); });
+document.querySelectorAll('.res button').forEach(b => b.onclick = async () => {
+  const c = C[st.i], app = appName(), id = c.id+'__'+slug(app);
+  const rec = {cond:c.id, title:c.t, app, result:b.dataset.r, pred: c.exp ? D.pred[c.exp] : true, at:new Date().toISOString()};
+  st.rows[id] = rec; paint();
+  if (!st.db){ $('#save').textContent = 'この画面にだけ記録しました（保存場所に接続できません）'; return; }
+  if (!st.owner){ $('#save').textContent = '見るだけの権限なので、保存はされません'; return; }
+  try { await st.db.doc('results/'+id).set(rec); $('#save').textContent = '保存しました'; }
+  catch(e){ $('#save').textContent = '保存できませんでした。もう一度押してください'; }
+});
+paint();
+(async () => {
+  try {
+    const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+    st.db = db; st.owner = user ? await user.isOwner() : false;
+    if (!db) return;
+    db.collection('results').onSnapshot(s => { s.docs.forEach(d => { st.rows[d.id] = d.data(); }); paint(); }, () => {});
+  } catch(e) {}
+})();
+</script>

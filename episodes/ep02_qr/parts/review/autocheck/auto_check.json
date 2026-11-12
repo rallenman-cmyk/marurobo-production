@@ -1,0 +1,466 @@
+{
+ "A": [],
+ "B": [],
+ "C": [
+  {
+   "id": "12-01",
+   "at": "7:46.9",
+   "dur": 0.56,
+   "cps": 8.9,
+   "text": "おっとっと。"
+  },
+  {
+   "id": "16-03",
+   "at": "11:49.4",
+   "dur": 0.81,
+   "cps": 7.4,
+   "text": "（間）……読めません。"
+  },
+  {
+   "id": "28-04",
+   "at": "22:00.4",
+   "dur": 0.57,
+   "cps": 8.8,
+   "text": "「HELLO」。"
+  },
+  {
+   "id": "30-04",
+   "at": "23:22.4",
+   "dur": 0.82,
+   "cps": 7.3,
+   "text": "（間）……読めません。"
+  }
+ ],
+ "D": [
+  {
+   "fig": "重ねる札/メモ（c4）",
+   "at": "18:17.7",
+   "text": "（字幕の帯に重なる絵）",
+   "y": null,
+   "size": null,
+   "sub": "2つ目のメモに書くのは、1番目の数字を1倍、2番"
+  }
+ ],
+ "E": [
+  {
+   "fig": "c1_url",
+   "text": "1文字ずつ、箱に入れる",
+   "size": 54,
+   "first": "3:35.4",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c1_bigger",
+   "text": "21×21マス・箱26個",
+   "size": 50,
+   "first": "3:42.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c1_bigger",
+   "text": "45×45マス・箱が多い",
+   "size": 50,
+   "first": "3:43.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c2_ruler",
+   "text": "定規の目盛りのように、1マスずつ",
+   "size": 54,
+   "first": "8:41.0",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c2_three",
+   "text": "✓",
+   "size": 24.8105117766545,
+   "first": "9:05.6",
+   "kind": "字"
+  },
+  {
+   "fig": "c2_mask",
+   "text": "決まった8種類の柄",
+   "size": 46,
+   "first": "9:51.6",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c2_mask",
+   "text": "この中から1つを選ぶ",
+   "size": 46,
+   "first": "9:53.6",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c2_shop",
+   "text": "？",
+   "size": 1.0,
+   "first": "12:19.9",
+   "kind": "字"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "0",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "0",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "1",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "1",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "2",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "2",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "3",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "3",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "4",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "4",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "5",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "5",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "6",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "6",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "7",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "7",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "8",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "8",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "9",
+   "size": 48,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "9",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "10",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "11",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "12",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "13",
+   "size": 46,
+   "first": "14:00.8",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "14",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "15",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "16",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "17",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "18",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "19",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "20",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "21",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "22",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "23",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "24",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "25",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "26",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "27",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "28",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "29",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "30",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "31",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "32",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "33",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "34",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c3_alnum",
+   "text": "35",
+   "size": 46,
+   "first": "14:01.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c4_bits",
+   "text": "汚れで 0→1",
+   "size": 52,
+   "first": "17:15.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c4_summary",
+   "text": "→",
+   "size": 52,
+   "first": "19:52.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c4_summary",
+   "text": "メモ1つ",
+   "size": 52,
+   "first": "19:52.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c4_summary",
+   "text": "で1つ直る",
+   "size": 48,
+   "first": "19:52.2",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c4_summary",
+   "text": "メモ2つ",
+   "size": 52,
+   "first": "20:01.7",
+   "kind": "数字・式"
+  },
+  {
+   "fig": "c4_summary",
+   "text": "予備2つで1つ直す × 8",
+   "size": 52,
+   "first": "20:44.8",
+   "kind": "数字・式"
+  }
+ ]
+}

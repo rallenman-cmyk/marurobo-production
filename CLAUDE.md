@@ -1,0 +1,9 @@
+# このリポジトリで作業する Claude へ
+
+- ユーザーへの返事は日本語で。専門用語を避けた、短い文で。
+- 作業を始める前に `skill/marurobo-video-production/SKILL.md` を読み、その決まりで進める（新しい回でも、直しでも）。
+- 直しを受けたら、`skill/marurobo-video-production/references/feedback_log.md` に、指摘と直し方を書き足す。新しくできた決まりは `SKILL.md` にも書く。
+- 見てもらう前に必ず自分で点検する（`episodes/ep02_qr/parts/review/autocheck/auto_check.py` と、字のある場面を幅 390px で目で見る）。点検をユーザーに任せない。
+- 道具を直したら、ここ（`skill/.../scripts/` か各回のフォルダ）に入れて push する。作業場所（クラウドの container）は片づけられると消えるので、残すものは必ずここへ。
+- 動画・声・画像・npy などの大きなファイルは入れない（`.gitignore`）。鍵・メールアドレスなどの個人の情報も入れない。
+- 3D の本番描画はユーザーの PC。PC 用の手順やキットは、ユーザーに頼まれてから作って送る。
