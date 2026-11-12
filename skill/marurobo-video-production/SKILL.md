@@ -14,7 +14,7 @@ description: まるロボ解説チャンネル（デジタル機器のしくみ�
 
 ## 0. 新しいセッションでの始め方
 1. 作業フォルダを決めて `export MARU_WORK=<スクラッチパッド>/maru`。道具はこの下の `stage/…`（台本・声・フォント・章）を見る。
-2. `mkdir -p $MARU_WORK && cp -r <このスキル>/scripts $MARU_WORK/tools`。章の組み立ての見本は `assets/templates/ep01/`（中のパスは EP01 のセッションのもの。`$MARU_WORK` に読み替える）。PC 用の描画キットは `assets/pc_kit/`（v11 の写し）。
+2. `mkdir -p $MARU_WORK && cp -r <このスキル>/scripts $MARU_WORK/tools`。章の組み立ての見本は `assets/templates/ep01/`（中のパスは EP01 のセッションのもの。`$MARU_WORK` に読み替える）。PC 用の描画キットは `assets/pc_kit/`（このリポジトリでは `episodes/ep01_earphone/stage/marurobo_tools/`）（v11 の写し）。
 3. 字のフォント（Noto Sans CJK JP の japanese.ttc）を `$MARU_WORK/stage/av/fonts/` に置く。無ければ置き場所は `references/assets_and_links.md`。
 4. 声を作るときは環境の秘密の設定に `GEMINI_API_KEY` が要る（値は表に出さない。無ければユーザーに設定を頼む）。
 
