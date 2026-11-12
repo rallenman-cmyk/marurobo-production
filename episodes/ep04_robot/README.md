@@ -8,6 +8,7 @@
 | `構成案_v1_1.md` | 構成案 v1.1（決めたこと：1〜4 OK・GPT-4 の話を入れる・パソコンに変更） |
 | `台本_v0_1.md` | 台本 v0.1（108 本・約2,700字・です・ます 74%） |
 | `台本_v0_2.md` | 台本 v0.2（名前を出す・決めたこと 1〜3） |
+| `台本_v0_3.md` | 台本 v0.3（コメント 10 件を反映） |
 | `review_tool/` | 台本レビューツールに入れるデータ（`build_from_md.py` で md から作る）。作品 MARU-ROBOT |
 
 - 台本レビューツール：https://claude.ai/artifact/3kj4tZtaZWwbvig7GmEs4c（作品 MARU-ROBOT）
