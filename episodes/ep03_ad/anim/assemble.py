@@ -110,7 +110,11 @@ ov(s("07-02") + 0.3, s("07-02b", 1), "s07_guard", [("tag", "見張り番", 1100,
 ov(s("07-04") + 0.5, s("07-04", 1) + 0.3, "s07_word", [("tag", "Hey Siri", 640, 110, None, True), ("tag", "OK Google", 640, 230)])
 ov(s("08-08") - 1.3, s("08-08") + 2.5, "s08_similar", [("tag", "Hey, Siri-al（ヘイ、シリアル）", 640, 110)])
 ov(s("08-11") - 1.3, s("08-11") + 2.5, "s08_real", [("tag", "Hey Siri", 640, 110, None, True)])
-ov(s("08-14") + 0.4, s("08-15", 1), "s08_dot", [("ring", 760, 210, 80, 80)])
+_dot = None
+for _d in DIRS:
+    _p = os.path.join(_d, "phone_log.json")
+    if os.path.exists(_p): _dot = json.load(open(_p)).get("dot2d") or None; break
+if _dot: ov(s("08-14") + 0.4, s("08-15", 1), "s08_dot", [("ring", _dot[0], _dot[1], 70, 70)])   # 3D で計算した点の位置
 ov(s("10-05"), s("10-05", 1), "s10_drop", [("tag", "いた場所", 640, 110)])
 ov(s("10-06"), s("10-06", 1), "s10_square", [("tag", "見たページ", 640, 110)])
 ov(s("10-07"), s("10-07", 1), "s10_two", [("tag", "一緒にいた人", 640, 110)])

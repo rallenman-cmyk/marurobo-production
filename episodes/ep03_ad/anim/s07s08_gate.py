@@ -117,6 +117,7 @@ EAR = (1.75, 0.45, 2.35)        # 番犬の耳の前（泡が消える所）
 GATE_IN = (0.0, 2.6, 1.5)       # 門の向こう（泡が入ってくる所）
 _nb = [0]
 EVENTS = []   # 効果音を付ける出来事（通しの秒, 種類）
+DOT2D = []    # 外のスマホの画面のオレンジの点の位置（2D の丸用）
 STEPS = []
 
 
@@ -301,8 +302,12 @@ def scene_phone():
     area((-2, -3, 3), (0, 0, 0), 250, 3, "#BFD9FF")
     cam = camera((0.0, -1.2, 2.6), (0.0, 0.1, 0.0), lens=40)
     key(cam, "location", 0, (0.0, -1.2, 2.6), "LINEAR")
-    key(cam, "location", f(s("08-14")) - 8, (0.25, -0.2, 1.4), "LINEAR")
-    key(cam, "location", f(T1), (0.3, 0.1, 1.25), "LINEAR")
+    key(cam, "location", f(s("08-14")) - 8, (0.25, -0.2, 1.4), "BEZIER")   # 点を見せる所で止める（2D の丸を重ねるため）
+    key(cam, "location", f(T1), (0.25, -0.2, 1.4), "CONSTANT")
+    from bpy_extras.object_utils import world_to_camera_view
+    sc_ = bpy.context.scene; sc_.frame_set(f(s("08-14")) + 6)
+    v = world_to_camera_view(sc_, cam, dot.matrix_world.translation)
+    DOT2D.extend([round(v.x * 1280), round((1 - v.y) * 720)])   # 1280×720 の画面での点の位置
 
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -326,7 +331,7 @@ sc.render.resolution_x, sc.render.resolution_y = RESX, RESY
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = os.path.join(OUTDIR, MODE + "_")
-json.dump(dict(mode=MODE, t0=T0, t1=T1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS)), open(os.path.join(OUTDIR, MODE + "_log.json"), "w"))
+json.dump(dict(mode=MODE, t0=T0, t1=T1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS), dot2d=DOT2D), open(os.path.join(OUTDIR, MODE + "_log.json"), "w"))
 print("FRAMES", sc.frame_start, sc.frame_end, "T0", T0)
 if "--blend" in ARGS:
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUTDIR, MODE + ".blend"))
