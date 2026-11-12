@@ -1,9 +1,10 @@
 # 台本の台詞の語尾を調べる：「です・ます」で終わる文が何本続いているかを出す。
-# python3 desumasu_check.py 台本.md [続いてよい本数=2]
+# 使い分けの決まりは SKILL.md §4（説明は です・ます、反応はくだけて）。これは続きすぎを見つける手助けだけ。
+# python3 desumasu_check.py 台本.md [続いてよい本数=5]
 # 台詞の行は「**番号** 文」の形。章（## ）をまたいでも続けて数える（声は続くので）。
 import re, sys
 path = sys.argv[1]
-limit = int(sys.argv[2]) if len(sys.argv) > 2 else 2
+limit = int(sys.argv[2]) if len(sys.argv) > 2 else 5
 POLITE = re.compile(r'(です|ます|でした|ました|ません|でしょう|ましょう|ください)(か|ね|よ|けど|けどね|よね)?[。？！?!]*$')
 rows = []
 for ln in open(path, encoding='utf-8'):
