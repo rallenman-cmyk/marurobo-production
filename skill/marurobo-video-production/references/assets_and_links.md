@@ -4,6 +4,7 @@
 
 ## リンク
 - 制作バイブル（Claude Docs）：https://claude.ai/artifact/H9g24qNzjBPUeafePMgxoz — 決めたことの元帳。【指示】【コンテキスト】【絵コンテ】の節。
+- 3本目（会話と広告の回）の確認ページ（Artifact）：https://claude.ai/artifact/JCZiLxFCQ9QDY8fRuvJMz4 — db の reviews（場面ごとの OK/NG・メモ）・bgm（曲の選択）。
 - EP01 の確認ページ（Artifact）：https://claude.ai/artifact/DFSHG8vdWK4rRq9zHuYYYi — 章の状態・OK/NG（db: reviews）・直した所の確認動画・サムネ案・チャンネル案。
 
 ## ユーザーの PC（Windows）
@@ -20,6 +21,7 @@
 
 ## クラウドのセッションで要るもの
 - フォント `japanese.ttc`：上の PC か引き継ぎ ZIP から。無いときはユーザーに、引き継ぎ ZIP の 1 つ目か PC のファイルを上げてもらう。
+- BGM の作り方（2026-11-12）：Gemini の作曲モデル Lyria（`models/lyria-3.5`・`lyria-3-clip-preview`、generateContent に英語の指示、mp3 が返る。GEMINI_API_KEY で使える）。vidIQ は使わない（ユーザー）。
 - BGM：EP01 は Codex 版の曲（`stage/human/audio/song_mono.wav`、39MB）。40.04 秒からの 3.08 秒（8 拍）を継ぎ目なくくり返す。ユーザーは「BGM は変えたい」と言っている（未決定）。新しい曲にするときは継ぎ目のないループを作り直す。
 - 声：`GEMINI_API_KEY`（環境の秘密の設定。値をファイルや画面に出さない）。
 - まるロボのモデル：PC の `maru_opening.blend`。クラウドで確認用に描くときは、ユーザーにそのファイルを上げてもらう（または PC の Remote Control）。

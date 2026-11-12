@@ -1,0 +1,159 @@
+<title>テント広告事件 確認</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<style>
+/* 現場の確認シート：上に「いまの状態」、動画、場面の札を時刻順に並べる。札は OK／NG とメモ */
+:root{
+  --bg:#F3F6F7; --panel:#FFFFFF; --ink:#16243A; --sub:#55657A; --line:#D6DEE5;
+  --teal:#1F8C84; --tealsoft:#DCF1EE; --orange:#E8731C; --ok:#2E8B57; --oksoft:#E1F2E8; --ng:#C8402F; --ngsoft:#F8E3DF;
+  --display:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",system-ui,sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1724; --panel:#172234; --ink:#E7EEF5; --sub:#9DB0C4; --line:#2A3A52;
+  --teal:#4CC3B8; --tealsoft:#173B3B; --orange:#F59A4C; --ok:#5BC48A; --oksoft:#173627; --ng:#F07B6A; --ngsoft:#3C1F1D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1724; --panel:#172234; --ink:#E7EEF5; --sub:#9DB0C4; --line:#2A3A52;
+  --teal:#4CC3B8; --tealsoft:#173B3B; --orange:#F59A4C; --ok:#5BC48A; --oksoft:#173627; --ng:#F07B6A; --ngsoft:#3C1F1D; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+h1{font-family:var(--display);font-weight:800;font-size:1.6rem;line-height:1.3;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-size:1.15rem;margin:0}
+.eyebrow{font-size:.8rem;letter-spacing:.08em;color:var(--sub)}
+.status{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.pill{font-weight:700;border-radius:999px;padding:3px 12px;font-size:.85rem;background:var(--tealsoft);color:var(--teal)}
+.pill.wait{background:#FFF1E3;color:#A4520F}
+:root[data-theme="dark"] .pill.wait{background:#3A2614;color:#F5B57A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.wait{background:#3A2614;color:#F5B57A}}
+.status p{margin:0;flex:1 1 280px;min-width:0}
+.vids{display:grid;gap:14px}
+.vid{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:8px}
+.vid video{width:100%;max-width:100%;aspect-ratio:16/9;background:#000;border-radius:8px}
+.vid .cap{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.85rem;color:var(--sub)}
+.vid .cap b{color:var(--ink);font-family:var(--display)}
+.note{font-size:.88rem;color:var(--sub);margin:0}
+.scenes{display:grid;gap:10px}
+.sc{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:8px}
+.sc.ok{border-left-color:var(--ok)} .sc.ng{border-left-color:var(--ng)}
+.sc .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.t{font-variant-numeric:tabular-nums;font-weight:700;color:var(--teal);background:var(--tealsoft);border:0;border-radius:8px;padding:4px 10px;font-size:.95rem;cursor:pointer;font-family:var(--body)}
+.t:focus-visible,.b:focus-visible,textarea:focus-visible,.pick:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.sid{font-family:var(--display);font-weight:800;color:var(--sub);font-size:.85rem}
+.nm{font-weight:700;min-width:0;flex:1 1 160px}
+.tag{font-size:.75rem;border:1px solid var(--line);border-radius:6px;padding:0 6px;color:var(--sub)}
+.btns{display:flex;gap:8px}
+.b{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 14px;font-weight:700;cursor:pointer;font-family:var(--body)}
+.b.okon{background:var(--ok);border-color:var(--ok);color:#fff}
+.b.ngon{background:var(--ng);border-color:var(--ng);color:#fff}
+textarea{width:100%;box-sizing:border-box;min-height:56px;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:.95rem}
+.saved{font-size:.78rem;color:var(--sub);min-height:1em}
+.music{display:grid;gap:10px}
+.trk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px}
+.trk audio{width:100%}
+.pick{border:2px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 14px;font-weight:700;cursor:pointer;justify-self:start;font-family:var(--body)}
+.pick.on{border-color:var(--orange);background:#FFF1E3;color:#7A3C0B}
+:root[data-theme="dark"] .pick.on{background:#3A2614;color:#F5B57A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pick.on{background:#3A2614;color:#F5B57A}}
+.checks{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.checks ul{margin:6px 0 0;padding-left:1.2em}
+.offline{font-size:.85rem;color:var(--sub)}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+</style>
+<div class="wrap">
+  <header style="display:grid;gap:4px">
+    <div class="eyebrow">まるロボ解説チャンネル・3本目</div>
+    <h1>さっき話した物が、なぜ広告に出る？</h1>
+  </header>
+  <section class="status" aria-label="いまの状態">
+    <span class="pill wait">はじめての確認待ち</span>
+    <p>試しの通し v1（15分29秒）。3D はクラウドで小さく描いた試し（1秒4枚）で、本番は PC で描き直します。曲はまだ入っていません。</p>
+  </section>
+  <section class="vids" aria-label="動画">
+    <div class="vid"><div class="cap"><b>前半</b><span>0:00〜7:45</span></div><video id="v0" src="vid_a.mp4" controls playsinline preload="metadata"></video></div>
+    <div class="vid"><div class="cap"><b>後半</b><span>7:45〜15:29（動画の 0:00 = 通しの 7:45）</span></div><video id="v1" src="vid_b.mp4" controls playsinline preload="metadata"></video></div>
+    <p class="note">場面の時刻を押すと、その場所から再生します。直してほしい所は、場面の NG を押してメモに書いてください（時刻は通しの時刻で）。</p>
+  </section>
+  <section style="display:grid;gap:10px" aria-label="場面">
+    <h2>場面ごとの確認</h2>
+    <div id="offline" class="offline" hidden>OK／NG は保存できない状態です（サインインしていないなど）。ボタンは押せますが、記録は残りません。</div>
+    <div class="scenes" id="scenes"></div>
+  </section>
+  <section class="music" aria-label="曲の案">
+    <h2>曲の案（Gemini の作曲モデル Lyria・歌なし）</h2>
+    <div class="trk"><b>案A：3分</b><audio src="bgm_a.mp3" controls preload="none"></audio><button class="pick" id="pA" type="button">これにする</button></div>
+    <div class="trk"><b>案B：30秒の短い版</b><audio src="bgm_b.mp3" controls preload="none"></audio><button class="pick" id="pB" type="button">これにする</button></div>
+    <p class="note">どちらも違う場合は、下のメモに「もっと〜」と書いてください。選んだ曲は、声のじゃまにならない大きさで、拍の頭で継ぎ目なくくり返します。</p>
+    <textarea id="bgmnote" placeholder="曲についてのメモ（例：もっと明るく）" aria-label="曲についてのメモ"></textarea>
+    <div class="saved" id="bgmsaved"></div>
+  </section>
+  <section class="checks" aria-label="こちらで点検したこと">
+    <h2>こちらで点検したこと</h2>
+    <ul>
+      <li>長い間（2.2 秒以上）・すぐ消える字幕（1.0 秒未満）・札と字幕の重なり：なし</li>
+      <li>字は幅 390px に縮めても読める</li>
+      <li>効果音が声と重なる所 20 か所（まるロボの電子音・跳ぶ音・門が開く音など。声の間は 6dB 下げている）</li>
+      <li>直した所：描く細かさの設定の上書き・場面のつなぎ・S06 の飛び込み・S04／S05／S07／S08／S10／S21 の動きとカメラ・スマホの画面の向き・S09 の札の位置</li>
+    </ul>
+  </section>
+</div>
+<script>
+const SCENES = [{"id": "S00", "t": 0, "name": "いきなり夜", "star": false, "kind": "3D"}, {"id": "S01", "t": 7.19, "name": "電車の中", "star": false, "kind": "3D"}, {"id": "S02", "t": 21.94, "name": "その夜", "star": false, "kind": "3D"}, {"id": "S03", "t": 47.31, "name": "あるある", "star": false, "kind": "2D"}, {"id": "S04", "t": 58.82, "name": "探偵になる", "star": false, "kind": "3D"}, {"id": "S05", "t": 78.65, "name": "容疑者をならべる", "star": false, "kind": "3D"}, {"id": "S06", "t": 116.91, "name": "マイクの穴から、スマホの中へ", "star": true, "kind": "3D"}, {"id": "S07", "t": 150.73, "name": "マイクの門と見張り番", "star": false, "kind": "3D"}, {"id": "S08", "t": 222.35, "name": "実験：外から話しかけてみる", "star": false, "kind": "3D"}, {"id": "S09", "t": 311.04, "name": "1万7千本のアプリを調べた", "star": false, "kind": "2D"}, {"id": "S10", "t": 396.49, "name": "出ていく荷物", "star": false, "kind": "3D"}, {"id": "S11", "t": 464.98, "name": "箱を追う", "star": false, "kind": "3D"}, {"id": "S12", "t": 478.97, "name": "一瞬の競り", "star": true, "kind": "3D"}, {"id": "S13", "t": 540.08, "name": "伏線の回収①　ソラさんのスマホ", "star": false, "kind": "3D"}, {"id": "S14", "t": 580.2, "name": "伏線の回収②　季節", "star": false, "kind": "3D"}, {"id": "S15", "t": 640.28, "name": "問題です", "star": false, "kind": "3D"}, {"id": "S16", "t": 692.55, "name": "広告の山と記憶の箱", "star": false, "kind": "3D"}, {"id": "S17", "t": 740.4, "name": "売り込み", "star": false, "kind": "3D"}, {"id": "S18", "t": 760.31, "name": "調べてみると", "star": false, "kind": "3D"}, {"id": "S19", "t": 798.85, "name": "3人の容疑者に戻る", "star": false, "kind": "3D"}, {"id": "S20", "t": 852.95, "name": "現実に戻る", "star": false, "kind": "2D"}, {"id": "S21", "t": 869.59, "name": "その夜", "star": false, "kind": "3D"}, {"id": "S22", "t": 901.93, "name": "次の朝", "star": false, "kind": "3D"}];
+const SPLIT = 465;
+const VER = "v1";
+function fmt(t){t=Math.floor(t);return Math.floor(t/60)+":"+String(t%60).padStart(2,"0")}
+function seek(t){
+  const i = t < SPLIT ? 0 : 1, v = document.getElementById("v"+i);
+  v.currentTime = i ? t - SPLIT : t;
+  v.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"center"});
+  v.play().catch(()=>{});
+}
+const state = {}; let db = null, me = null;
+const box = document.getElementById("scenes");
+for (const s of SCENES){
+  const el = document.createElement("div"); el.className = "sc"; el.id = "sc-"+s.id;
+  el.innerHTML = '<div class="top"><button class="t" type="button">'+fmt(s.t)+'</button><span class="sid">'+s.id+'</span><span class="nm"></span><span class="tag">'+s.kind+'</span><span class="btns"><button class="b ok" type="button">OK</button><button class="b ng" type="button">NG</button></span></div><textarea id="note-'+s.id+'" placeholder="直してほしいこと（例：3:45 の〜）" aria-label="'+s.id+' のメモ"></textarea><div class="saved"></div>';
+  el.querySelector(".nm").textContent = s.name + (s.star ? "（見せ場）" : "");
+  el.querySelector(".t").onclick = () => seek(s.t);
+  el.querySelector(".ok").onclick = () => setV(s.id, "ok");
+  el.querySelector(".ng").onclick = () => setV(s.id, "ng");
+  let tm; el.querySelector("textarea").oninput = e => { clearTimeout(tm); tm = setTimeout(() => save(s.id, {note: e.target.value}), 800); };
+  box.appendChild(el);
+}
+function paint(id){
+  const el = document.getElementById("sc-"+id), r = state[id] || {};
+  el.classList.toggle("ok", r.verdict === "ok"); el.classList.toggle("ng", r.verdict === "ng");
+  el.querySelector(".b.ok").classList.toggle("okon", r.verdict === "ok");
+  el.querySelector(".b.ng").classList.toggle("ngon", r.verdict === "ng");
+  const ta = el.querySelector("textarea"); if (document.activeElement !== ta && r.note !== undefined) ta.value = r.note;
+  el.querySelector(".saved").textContent = r.at ? "保存しました（" + new Date(r.at).toLocaleString("ja-JP") + "）" : "";
+}
+function setV(id, v){ const cur = (state[id]||{}).verdict; save(id, {verdict: cur === v ? "" : v}); }
+async function save(id, patch){
+  state[id] = Object.assign({}, state[id], patch, {at: Date.now()}); paint(id);
+  if (!db) return;
+  try { await db.doc("reviews/"+VER+"_"+id).set(Object.assign({version: VER, scene: id, by: me || ""}, state[id])); }
+  catch(e){ document.getElementById("sc-"+id).querySelector(".saved").textContent = "保存できませんでした（" + (e && e.code || "error") + "）"; }
+}
+let bgm = {};
+function paintBgm(){
+  document.getElementById("pA").classList.toggle("on", bgm.choice === "A");
+  document.getElementById("pB").classList.toggle("on", bgm.choice === "B");
+  const ta = document.getElementById("bgmnote"); if (document.activeElement !== ta && bgm.note !== undefined) ta.value = bgm.note;
+  document.getElementById("bgmsaved").textContent = bgm.at ? "保存しました（" + new Date(bgm.at).toLocaleString("ja-JP") + "）" : "";
+}
+async function saveBgm(p){ bgm = Object.assign({}, bgm, p, {at: Date.now()}); paintBgm(); if (db) try { await db.doc("bgm/"+VER).set(bgm); } catch(e){} }
+document.getElementById("pA").onclick = () => saveBgm({choice: bgm.choice === "A" ? "" : "A"});
+document.getElementById("pB").onclick = () => saveBgm({choice: bgm.choice === "B" ? "" : "B"});
+let bt; document.getElementById("bgmnote").oninput = e => { clearTimeout(bt); bt = setTimeout(() => saveBgm({note: e.target.value}), 800); };
+(async () => {
+  const timer = setTimeout(() => { if (!db) document.getElementById("offline").hidden = false; }, 10000);
+  db = window.claude ? await window.claude.use("db") : null;
+  clearTimeout(timer);
+  if (!db) { document.getElementById("offline").hidden = false; return; }
+  try { const u = await window.claude.use("user"); me = u ? await u.id() : null; } catch(e){}
+  db.collection("reviews").where("version", "==", VER).onSnapshot(snap => {
+    for (const d of snap.docs) { const r = d.data(); if (r && r.scene) { state[r.scene] = r; paint(r.scene); } }
+  }, () => {});
+  db.doc("bgm/"+VER).onSnapshot(d => { const r = d && d.data ? d.data() : null; if (r) { bgm = r; paintBgm(); } }, () => {});
+})();
+</script>
