@@ -25,7 +25,7 @@ def sfx_events(x, thr=0.03):
             ev.append((i * 0.02, j * 0.02, float(e[i:j].max()))); i = j
         else: i += 1
     return ev
-for kind, d, idx in ([] if os.environ.get("ONLY_DE") else (('v7', V2 + '/animatic', '/home/user/qr_plan/parts/review/qr_review_v7_index.json'), ('final', V2 + '/final', V2 + '/final/qr_ep02_final_test_index.json'))):
+for kind, d, idx in ([] if os.environ.get("ONLY_DE") else ((os.environ.get('VER', 'v8'), V2 + '/animatic', '/home/user/qr_plan/parts/review/qr_review_' + os.environ.get('VER', 'v8') + '_index.json'), ('final', V2 + '/final', V2 + '/final/qr_ep02_final_test_index.json'))):
     off = json.load(open(idx))['offsets']; off = dict(off) if isinstance(off, list) else off
     for tag in TAGS:
         P = json.load(open(os.path.join(d, tag + '_P.json'))); iv = voice_iv(P); o = off[tag]
@@ -39,9 +39,9 @@ for kind, d, idx in ([] if os.environ.get("ONLY_DE") else (('v7', V2 + '/animati
                 R['A'].append(dict(kind=kind, ch=tag, t=round(o + a, 2), at=fmt(o + a), dur=round(b - a, 2), peak=round(pk, 2), how='重なり' if hit else '近すぎ', line=v[2], text=v[3][:30]))
         for (a0, b0, i0, t0), (a1, b1, i1, t1) in zip(iv, iv[1:]):
             g = a1 - b0
-            if g > 2.2 and kind == 'v7': R['B'].append(dict(ch=tag, t=round(o + b0, 2), at=fmt(o + b0), gap=round(g, 2), after=i0, before=i1, text=t1[:30]))
+            if g > 2.2 and kind != 'final': R['B'].append(dict(ch=tag, t=round(o + b0, 2), at=fmt(o + b0), gap=round(g, 2), after=i0, before=i1, text=t1[:30]))
 # C 字幕：短すぎ（1.0秒未満）・速すぎ（1秒に9文字より多い）
-for kind, idx in (('v7', '/home/user/qr_plan/parts/review/qr_review_v7_index.json'),):
+for kind, idx in ((os.environ.get('VER', 'v8'), '/home/user/qr_plan/parts/review/qr_review_' + os.environ.get('VER', 'v8') + '_index.json'),):
     for s in json.load(open(idx))['subs']:
         n = len(re.sub(r'[\s、。！？…「」（）・]', '', s['text'])); du = s['t1'] - s['t0']
         if du < 1.0 or n / max(du, 0.01) > 9.0: R['C'].append(dict(id=s['id'], at=fmt(s['t0']), dur=round(du, 2), cps=round(n / max(du, 0.01), 1), text=s['text']))
