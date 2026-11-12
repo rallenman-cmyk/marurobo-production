@@ -113,6 +113,16 @@ textarea{width:100%;box-sizing:border-box;min-height:56px;border:1px solid var(-
     <textarea id="bgmnote" placeholder="曲についてのメモ（例：案C で、もう少しゆっくり／甘茶の「抜き足差し足」）" aria-label="曲についてのメモ"></textarea>
     <div class="saved" id="bgmsaved"></div>
   </section>
+  <section class="music" aria-label="サムネの案">
+    <h2>サムネの案</h2>
+    <p class="note">絵はクラウドで描いた仮の 3D です。決まったら、PC で描いた本番の絵に差し替えます。スマホの一覧の大きさに縮めても読めることを確かめました。</p>
+    <div class="trk"><b>A：スマホの中に 見張り番がいた！</b><img src="thumb_A.jpg" alt="サムネ案A" style="width:100%;border-radius:8px"><button class="tpick pick" data-t="A" type="button">これにする</button></div>
+    <div class="trk"><b>B：話しただけなのに 広告が！？</b><img src="thumb_B.jpg" alt="サムネ案B" style="width:100%;border-radius:8px"><button class="tpick pick" data-t="B" type="button">これにする</button></div>
+    <div class="trk"><b>C：容疑者は 3人</b><img src="thumb_C.jpg" alt="サムネ案C" style="width:100%;border-radius:8px"><button class="tpick pick" data-t="C" type="button">これにする</button></div>
+    <div class="trk"><b>D：テント広告事件 犯人は…？</b><img src="thumb_D.jpg" alt="サムネ案D" style="width:100%;border-radius:8px"><button class="tpick pick" data-t="D" type="button">これにする</button></div>
+    <textarea id="thnote" placeholder="サムネについてのメモ（例：A の絵で、字は B の言葉）" aria-label="サムネについてのメモ"></textarea>
+    <div class="saved" id="thsaved"></div>
+  </section>
   <section class="checks" aria-label="こちらで点検したこと">
     <h2>こちらで点検したこと</h2>
     <ul>
@@ -163,13 +173,22 @@ async function save(id, patch){
 }
 let bgm = {};
 function paintBgm(){
-  for (const p of document.querySelectorAll(".pick")) p.classList.toggle("on", bgm.choice === p.dataset.k);
+  for (const p of document.querySelectorAll(".pick:not(.tpick)")) p.classList.toggle("on", bgm.choice === p.dataset.k);
   const ta = document.getElementById("bgmnote"); if (document.activeElement !== ta && bgm.note !== undefined) ta.value = bgm.note;
   document.getElementById("bgmsaved").textContent = bgm.at ? "保存しました（" + new Date(bgm.at).toLocaleString("ja-JP") + "）" : "";
 }
 async function saveBgm(p){ bgm = Object.assign({}, bgm, p, {at: Date.now()}); paintBgm(); if (db) try { await db.doc("bgm/"+VER).set(bgm); } catch(e){} }
-for (const p of document.querySelectorAll(".pick")) p.onclick = () => saveBgm({choice: bgm.choice === p.dataset.k ? "" : p.dataset.k});
+for (const p of document.querySelectorAll(".pick:not(.tpick)")) p.onclick = () => saveBgm({choice: bgm.choice === p.dataset.k ? "" : p.dataset.k});
 let bt; document.getElementById("bgmnote").oninput = e => { clearTimeout(bt); bt = setTimeout(() => saveBgm({note: e.target.value}), 800); };
+let th = {};
+function paintTh(){
+  for (const p of document.querySelectorAll(".tpick")) p.classList.toggle("on", th.choice === p.dataset.t);
+  const ta = document.getElementById("thnote"); if (document.activeElement !== ta && th.note !== undefined) ta.value = th.note;
+  document.getElementById("thsaved").textContent = th.at ? "保存しました（" + new Date(th.at).toLocaleString("ja-JP") + "）" : "";
+}
+async function saveTh(p){ th = Object.assign({}, th, p, {at: Date.now()}); paintTh(); if (db) try { await db.doc("thumb/"+VER).set(th); } catch(e){} }
+for (const p of document.querySelectorAll(".tpick")) p.onclick = () => saveTh({choice: th.choice === p.dataset.t ? "" : p.dataset.t});
+let tt; document.getElementById("thnote").oninput = e => { clearTimeout(tt); tt = setTimeout(() => saveTh({note: e.target.value}), 800); };
 (async () => {
   const timer = setTimeout(() => { if (!db) document.getElementById("offline").hidden = false; }, 10000);
   db = window.claude ? await window.claude.use("db") : null;
@@ -179,6 +198,7 @@ let bt; document.getElementById("bgmnote").oninput = e => { clearTimeout(bt); bt
   db.collection("reviews").where("version", "==", VER).onSnapshot(snap => {
     for (const d of snap.docs) { const r = d.data(); if (r && r.scene) { state[r.scene] = r; paint(r.scene); } }
   }, () => {});
+  db.doc("thumb/"+VER).onSnapshot(d => { const r = d && d.data ? d.data() : null; if (r) { th = r; paintTh(); } }, () => {});
   db.doc("bgm/"+VER).onSnapshot(d => { const r = d && d.data ? d.data() : null; if (r) { bgm = r; paintBgm(); } }, () => {});
 })();
 </script>

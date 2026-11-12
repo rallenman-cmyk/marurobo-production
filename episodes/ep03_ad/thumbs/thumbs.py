@@ -84,11 +84,10 @@ SER = "スマホと広告のしくみ"
 made = []
 # A：スマホの中に 見張り番がいた！（門と番犬とまるロボ）
 if os.path.exists(os.path.join(SRC, "gate_0703.png")):
-    im = bg("gate_0703.png", zoom=1.25, cx=0.66, cy=0.52, bri=1.15); im = shade(im, "left", 0.60, 0.85)
-    im = ribbon(im, (90, 80), SER)
-    im, _ = big(im, (100, 330), [("スマホの中に", WHITE)], 180)
-    im, _ = big(im, (100, 590), [("見張り番", YEL)], 300)
-    im, _ = big(im, (100, 960), [("がいた！", WHITE)], 240)
+    im = bg("gate_0703.png", zoom=1.15, cx=0.5, cy=0.38, bri=1.15); im = shade(im, "top", 0.50, 0.88)
+    im = ribbon(im, (90, 60), SER)
+    im, _ = big(im, (W / 2, 190), [("スマホの中に", WHITE)], 150, anchor="c")
+    im, _ = big(im, (W / 2, 370), [("見張り番", YEL), ("がいた！", WHITE)], 220, anchor="c")
     made.append(save(im, "thumb_A"))
 # B：話しただけなのに 広告が！？（テントの広告が出たスマホ）
 im = bg("s02_0169.png", zoom=1.45, cx=0.33, cy=0.55); im = shade(im, "left", 0.62, 0.88)
