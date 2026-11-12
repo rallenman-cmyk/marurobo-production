@@ -5,6 +5,7 @@
 ## リンク
 - 制作バイブル（Claude Docs）：https://claude.ai/artifact/H9g24qNzjBPUeafePMgxoz — 決めたことの元帳。【指示】【コンテキスト】【絵コンテ】の節。
 - 3本目（会話と広告の回）の確認ページ（Artifact）：https://claude.ai/artifact/JCZiLxFCQ9QDY8fRuvJMz4 — db の reviews（場面ごとの OK/NG・メモ）・bgm（曲の選択）。
+- 動画レビューツール：https://claude.ai/artifact/S3dTcoRuFr2n7Eg99RiJWi — 作品 MARU-EP02（QR回）・MARU-EP03（会話と広告の回。v1＝通し 15:29）。区切って上げる手順は scripts/vr_version.py。
 - EP01 の確認ページ（Artifact）：https://claude.ai/artifact/DFSHG8vdWK4rRq9zHuYYYi — 章の状態・OK/NG（db: reviews）・直した所の確認動画・サムネ案・チャンネル案。
 
 ## ユーザーの PC（Windows）
