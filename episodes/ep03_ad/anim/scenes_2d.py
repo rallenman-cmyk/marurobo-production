@@ -30,6 +30,7 @@ def prog(t, a, b): return ease((t - a) / max(1e-6, b - a))
 
 def tag(d, text, cx, cy, font=TAGF, bg=(255, 255, 255)):
     bb = d.textbbox((0, 0), text, font=font); w, th = bb[2] - bb[0], bb[3] - bb[1]; h = th + 30
+    assert cy + h / 2 < H - 196, ('札が字幕の帯にかかる', text)
     d.rounded_rectangle([cx - w / 2 - 22, cy - h / 2, cx + w / 2 + 22, cy + h / 2], 18, fill=bg, outline=NAVY, width=4)
     d.text((cx - w / 2 - bb[0], cy - th / 2 - bb[1]), text, font=font, fill=NAVY)
 
@@ -107,24 +108,24 @@ def f09(t):
         d.line([(mx + 50, my + 50), (mx + 120, my + 120)], fill=(242, 193, 78), width=22)
     # 09-03b：音の印（〜）がついた四角は一つもない → 大きな × ではなく「0」の札
     if s("09-03b") + 1.5 <= t < s("09-04"):
-        tag(d, "0本", 640, 590, font=ImageFont.truetype(FONT, 64))  # 数だけ（字幕と同じ文は書かない）
+        tag(d, "0本", 640, 330, font=ImageFont.truetype(FONT, 72))  # 数だけ（字幕と同じ文は書かない）
     # 09-06b〜e：まとめ（これまでの絵を 3 つ並べて、一つずつ光らせる）
     if t >= s("09-06") - 0.2:
         d.rectangle([0, 0, W, H], fill=(22, 30, 46))
         for k, (idn, label) in enumerate((("09-06b", "見張り番"), ("09-06c", "ランプと画面の点"), ("09-06d", "1万7千本"))):
             on = t >= s(idn)
             x0 = 90 + k * 380
-            d.rounded_rectangle([x0, 160, x0 + 330, 470], 24, fill=(48, 62, 86) if on else (36, 46, 64), outline=(242, 193, 78) if on else (70, 84, 110), width=6)
+            d.rounded_rectangle([x0, 130, x0 + 330, 400], 24, fill=(48, 62, 86) if on else (36, 46, 64), outline=(242, 193, 78) if on else (70, 84, 110), width=6)
             if k == 0:   # 番犬の顔（白い丸に茶色の垂れ耳・閉じた目）
-                cx = x0 + 165; d.ellipse([cx - 70, 230, cx + 70, 370], fill=(242, 235, 221)); d.ellipse([cx - 105, 250, cx - 55, 360], fill=(138, 90, 52)); d.ellipse([cx + 55, 250, cx + 105, 360], fill=(138, 90, 52))
-                d.arc([cx - 45, 280, cx - 15, 300], 0, 180, fill=NAVY, width=5); d.arc([cx + 15, 280, cx + 45, 300], 0, 180, fill=NAVY, width=5)
+                cx = x0 + 165; d.ellipse([cx - 70, 195, cx + 70, 335], fill=(242, 235, 221)); d.ellipse([cx - 105, 215, cx - 55, 325], fill=(138, 90, 52)); d.ellipse([cx + 55, 215, cx + 105, 325], fill=(138, 90, 52))
+                d.arc([cx - 45, 245, cx - 15, 265], 0, 180, fill=NAVY, width=5); d.arc([cx + 15, 245, cx + 45, 265], 0, 180, fill=NAVY, width=5)
             elif k == 1:  # オレンジのランプと点
-                cx = x0 + 165; d.ellipse([cx - 60, 250, cx + 60, 370], fill=(255, 122, 0))
+                cx = x0 + 165; d.ellipse([cx - 60, 205, cx + 60, 325], fill=(255, 122, 0))
             else:         # 四角の列
                 for rr in range(3):
                     for cc in range(4):
-                        d.rounded_rectangle([x0 + 45 + cc * 62, 220 + rr * 62, x0 + 95 + cc * 62, 270 + rr * 62], 8, fill=APPC[(rr + cc) % 5])
-            tag(d, label, x0 + 165, 540)
+                        d.rounded_rectangle([x0 + 45 + cc * 62, 180 + rr * 62, x0 + 95 + cc * 62, 230 + rr * 62], 8, fill=APPC[(rr + cc) % 5])
+            tag(d, label, x0 + 165, 455)
         if t >= s("09-06e"):                              # 1 人目の容疑者：マイク → 容疑はひとまず晴れた
             tag(d, "①マイク", 560, 80, bg=(255, 244, 214))
             d.line([(690, 80), (715, 105), (765, 50)], fill=(93, 187, 99), width=14)  # 容疑が晴れた印（字の代わりにチェック）

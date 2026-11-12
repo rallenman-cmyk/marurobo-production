@@ -245,7 +245,7 @@ for i, (a, b, pth, _) in enumerate(OVERLAYS):
 fl.append("[v%d]subtitles=%s:fontsdir=%s[vout]" % (len(OVERLAYS), tmp + "/subs.ass", FONTS))
 inputs += ["-i", tmp + "/mix.wav"]
 cmd = ["ffmpeg", "-v", "error", "-y"] + inputs + ["-filter_complex", ";".join(fl), "-map", "[vout]", "-map", "%d:a" % (len(OVERLAYS) + 1),
-       "-c:v", "libx264", "-preset", "veryfast", "-crf", "27", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-t", "%.2f" % END, OUT]
+       "-c:v", "libx264", "-preset", "medium", "-crf", os.environ.get("CRF", "27"), "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", os.environ.get("ABR", "128k"), "-t", "%.2f" % END, OUT]
 subprocess.run(cmd, check=True)
 
 # ---------------- 点検
