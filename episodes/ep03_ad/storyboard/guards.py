@@ -10,9 +10,12 @@ NAVY, DARK, GOLD = "#2F4A73", "#14243A", "#F2C14E"
 
 
 def closed_eye(m, x, y, z, w=0.13, parent=None):
-    # 閉じた目：下向きの弧（細い円柱を 3 本）
-    for dx, dz, a in ((-w * 0.33, 0.012, 20), (0, -0.004, 0), (w * 0.33, 0.012, -20)):
-        cyl(m, (x + dx, y, z + dz), 0.011, w * 0.4, rot=(0, math.radians(90 + a), 0), parent=parent)
+    # 閉じた目：下向きの弧（細い円柱を 3 本）。作った物を返す
+    return [cyl(m, (x + dx, y, z + dz), 0.011, w * 0.4, rot=(0, math.radians(90 + a), 0), parent=parent)
+            for dx, dz, a in ((-w * 0.33, 0.012, 20), (0, -0.004, 0), (w * 0.33, 0.012, -20))]
+
+
+DOG_PARTS = {}  # eyes="anim" のとき：動かすための部品（頭・開いた目・閉じた目・耳）
 
 
 def owl(loc, face):
@@ -62,13 +65,18 @@ def dog(loc, face, eyes="closed", ear_up=True, fur_c="#D9A35B", light_c="#F5E6CC
     sphere(fur, (0, 0, 0), 0.5, scale=(1, 0.95, 0.9), parent=hd)
     sphere(light, (0, -0.48, -0.12), 0.25, scale=(0.95, 1.35, 0.72), parent=hd)  # 前へ出た鼻先（犬らしく）
     sphere(dark, (0, -0.8, -0.05), 0.08, scale=(1.2, 0.8, 0.9), parent=hd)  # 鼻
+    anim = eyes == "anim"
+    if anim:
+        DOG_PARTS.clear(); DOG_PARTS.update(head=hd, root=g, open=[[], []], closed=[[], []], ears=[])
     for i, x in enumerate((-0.2, 0.2)):
-        if eyes == "open" or (eyes == "one" and i == 1):
-            sphere(mat("d_eyew", "#FFFFFF", rough=0.2), (x, -0.43, 0.12), 0.085, scale=(1, 0.5, 1.1), parent=hd)
-            sphere(mat("d_pupil", "#1A0F06", rough=0.1), (x, -0.475, 0.12), 0.05, scale=(1, 0.45, 1), parent=hd)
-            sphere(mat("d_hl", "#FFFFFF", rough=0.1, emit=1.5), (x + 0.02, -0.5, 0.15), 0.015, parent=hd)
-        else:
-            closed_eye(dark, x, -0.44, 0.12, 0.15, parent=hd)
+        if anim or eyes == "open" or (eyes == "one" and i == 1):
+            ob = [sphere(mat("d_eyew", "#FFFFFF", rough=0.2), (x, -0.43, 0.12), 0.085, scale=(1, 0.5, 1.1), parent=hd),
+                  sphere(mat("d_pupil", "#1A0F06", rough=0.1), (x, -0.475, 0.12), 0.05, scale=(1, 0.45, 1), parent=hd),
+                  sphere(mat("d_hl", "#FFFFFF", rough=0.1, emit=1.5), (x + 0.02, -0.5, 0.15), 0.015, parent=hd)]
+            if anim: DOG_PARTS["open"][i] += ob
+        if anim or not (eyes == "open" or (eyes == "one" and i == 1)):
+            ob = closed_eye(dark, x, -0.44, 0.12, 0.15, parent=hd)
+            if anim: DOG_PARTS["closed"][i] += ob
     if patch:  # 片目のまわりのぶち
         sphere(mat("d_patch" + patch, patch, rough=0.7), (-0.2, -0.3, 0.14), 0.2, scale=(1, 0.6, 0.9), parent=hd)
     if fluffy:  # ふわふわの首まわり
@@ -84,6 +92,7 @@ def dog(loc, face, eyes="closed", ear_up=True, fur_c="#D9A35B", light_c="#F5E6CC
             add(bpy.ops.mesh.primitive_cone_add, ear_in, (0, -0.06, 0.17), radius1=0.14, radius2=0.02, depth=0.32, vertices=32, scale=(1, 0.2, 1), parent=e)
         else:  # 垂れた耳
             e2 = empty((sx * 0.4, 0, 0.15)); e2.parent = hd; e2.rotation_euler = (0, math.radians(-35 * sx), 0)
+            if anim: DOG_PARTS["ears"].append(e2)
             big = ears == "flop"
             sphere(mat("d_earflop" + (patch or fur_c), patch or fur_c, rough=0.6) if big else fur, (0, 0, -0.18 - (0.08 if big else 0)), 0.2 if big else 0.17, scale=(0.55, 0.45, 1.9 if big else 1.5), parent=e2)
     if cap:  # 見張りの帽子
