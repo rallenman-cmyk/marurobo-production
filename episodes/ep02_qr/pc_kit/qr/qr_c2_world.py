@@ -47,7 +47,7 @@ def hide(ob, spans):
     for a, b in spans: keys += [(max(2, fr_of(a)), True), (fr_of(b), False)]
     for f, h in keys: ob.hide_render = h; ob.keyframe_insert('hide_render', frame=f)
     interp(ob, 'CONSTANT', only='hide')
-ZB = QW.TILE_H + 0.78                                   # 目の光の高さ
+ZB = 0.80                                                # 目の光の高さ（白いフチに立ったまるロボの目）
 
 # ================================================================ 大地（1章の終わりの色：目印＝赤・中身＝青・予備＝橙）
 Wd = QW.build(); coll = Wd['coll']; QW.lights_c(sc, coll)

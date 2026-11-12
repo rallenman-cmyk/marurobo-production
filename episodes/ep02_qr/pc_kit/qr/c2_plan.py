@@ -3,6 +3,7 @@
 import math, json, os
 import numpy as np
 import marumotion as mm
+import plan_util as U
 HERE = os.path.dirname(os.path.abspath(__file__))
 FPS = 24
 _J = json.load(open(os.path.join(HERE, 'c2_v20_times.json'), encoding='utf-8'))
@@ -85,13 +86,14 @@ def at(p, t, fn, name=''):
     gap = t - p.t
     if gap > 3.2: p.idle(gap - 0.4, shifts=True, glance=True)
     p.wait(max(0.0, t - p.t)); fn(p)
-def cut(p, t, pos, heading):
-    """カット（場面の切り替え）で置き直す。前の動きが残っていれば待つ"""
-    at(p, t, lambda q: q.teleport(pos, heading), 'cut %.1f' % t)
+QZ_TOP = U.QZ_TOP                                         # 白いフチ（マスより低い）
+def cut(p, t, pos, heading, z=TILE_TOP):
+    """カット（場面の切り替え）で置き直す。立つ高さ z（マスの上 TILE_TOP／白いフチ QZ_TOP）"""
+    at(p, t, lambda q: U.teleport_z(q, pos, heading, z), 'cut %.1f' % t)
 
 def plan():
     LATE.clear()
-    p = mm.Plan(pos=P0, heading=-90, ground=TILE_TOP)
+    p = mm.Plan(pos=P0, heading=-90, ground=QZ_TOP)          # 左上の目印の左の白いフチ
     at(p, s('10-01', 1.0), lambda q: q.look(-20, 8, hold=1.2, body=False, label='目印を見る'), 'look_fin')
     at(p, T_BEAM_ROW[0] - 0.3, lambda q: q.look(0, -6, hold=2.6, body=False, label='目の光で横になぞる'), 'beam_row')
     at(p, T_LIFT + 0.2, lambda q: q.look(0, 20, hold=1.6, body=True, label='浮いた帯を見上げる'), 'look_band')
@@ -112,7 +114,7 @@ def plan():
     at(p, T_HOPS, hops, 'hops')
     cut(p, 174.8, P30, -90)
     at(p, T_TICK[0] - 0.4, lambda q: q.look(-40, -12, hold=3.0, body=True, label='目盛りを見る'), 'ticks')
-    cut(p, 217.6, P40, -90)
+    cut(p, 217.6, P40, -90, QZ_TOP)
     at(p, T_UNMASK[0] - 0.2, lambda q: q.look(-10, 10, hold=2.0, body=False, label='柄が外れるのを見る'), 'unmask')
     cut(p, 276.2, P31, hd(P31, rc(8, 4)))
     at(p, T_FORMAT - 0.2, lambda q: q.look(0, -10, hold=1.6, body=True, label='紫の帯を見る'), 'format')
@@ -120,10 +122,10 @@ def plan():
     at(p, T_TAG2, lambda q: q.nod(n=1, amp=10.0, label='2つ目'), 'tag2')
     at(p, T_DIRTY + 0.3, lambda q: q.surprise(label='片方が汚れた'), 'dirty')
     at(p, T_DIRTY + 2.6, lambda q: q.nod(n=2, amp=8.0, label='もう片方で読める'), 'dirty_ok')
-    cut(p, 321.3, P34A, 180)
+    cut(p, 321.3, P34A, 180, QZ_TOP)
     at(p, s('15-01', 0.5), lambda q: q.walk_to(P34B, speed=1.2, label='白いフチを歩く'), 'quiet_walk')
     at(p, T_QTICK + 0.3, lambda q: q.look(60, -14, hold=2.0, body=True, label='目盛りを見る'), 'qtick')
-    cut(p, 344.0, P0, -90)
+    cut(p, 344.0, P0, -90, QZ_TOP)
     at(p, s('15-03', 1.0), lambda q: q.look(-20, 8, hold=1.4, body=False, label='目印を見る'), 'look_fin2')
     p.wait(max(0.0, 352.2 - p.t))
     return p

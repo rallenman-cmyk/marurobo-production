@@ -3,6 +3,7 @@
 #     powershell -ExecutionPolicy Bypass -File C:\marurobo\marurobo_tools\run_pc_render.ps1
 #   同時に描く本数：最後に -Workers 2 のように付ける（1 なら 1 本ずつ。既定 3、多くても 4）
 #   一部だけ描く：最後に -Only ch07,ch08 のように付ける（ch03・ch0102・ch04・ch07・ch08・ch06・sum をカンマで区切る）
+#   2026-11-12 v20：既定は qrc1,qrc2,qrc3（3章を足した。中の世界 qrc3w_、3D の場面だけ 3 か所・28 本）
 #   2026-11-12 v19：既定は qrc1,qrc2（1章のあとに 2章）。2章は中の世界 qrc2w_（3D の場面だけ 6 か所・55 本）と卓上 qrc2t_（2 か所・16 本）
 #   2026-11-12 v18：台本 v2.0。既定は qrc1（1章だけ）。卓上 qrc1t2_（1〜252）・中の世界 qrc1w5_（253〜6559）・スマホで探す qrc1s2_（222 コマ）。3D の中の字（21・HELLO・予備の数字）はなし（組み立てで 2D の札を重ねる）
 #   2026-11-10 夜 v17：台本 v1.4。1章の中の世界を qrc1w4_（248〜5324 コマ）で描く（「違うみたいです」のあとの間を 3 秒にしたので時刻が変わった）
@@ -16,7 +17,7 @@
 #   同時に描くときは、描き手ごとに小さな窓（最小化）が開く。止めるときは、この窓と「まるロボ 描き手」の窓をぜんぶ閉じる
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
 #   終わると、送るファイルだけを C:\marurobo\marurobo_render にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
-param([string]$Only = "qrc1,qrc2", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
+param([string]$Only = "qrc1,qrc2,qrc3", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
 $ErrorActionPreference = "Continue"
 $tools = $PSScriptRoot
 $root = Split-Path -Parent $tools
@@ -215,6 +216,11 @@ function Run-Jobs {
     $targs = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c2_table.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc2t_")
     foreach ($r in @(@(8428, 9567), @(9697, 10003))) { Render-Chunks "QR回 2章（卓上）" $r[1] $outc "qrc2t_" $targs $r[0] }
   }
+  if ($jobs -contains "qrc3") {
+    $outc = Join-Path $root "render_qrc3"
+    $wargs = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c3_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc3w_")
+    foreach ($r in @(@(1, 1514), @(1737, 2010), @(2315, 3211))) { Render-Chunks "QR回 3章（中の世界）" $r[1] $outc "qrc3w_" $wargs $r[0] }
+  }
   if ($jobs -contains "ch06") {
     $out6 = Join-Path $root "render_ch06_1080"
     Render-Chunks "第6章" 1933 $out6 "ch06_stage_" @("-b", "$src\output\story.blend", "--python-exit-code", "1", "--python", "$tools\ch03\ch06_stage.py", "--", "--out", $out6, "--res", "1920", "1080", "--samples", "32")
@@ -259,6 +265,7 @@ if ($jobs -contains "op") { $okc["op"] = Collect "op" @("$root\render_ch0102r\ch
 if ($jobs -contains "qrop") { $okc["qrop"] = Collect "qrop" @("$root\render_qrop\qrop2_0001-0100.mp4", "$root\render_qrop\qrop2_0101-0200.mp4", "$root\render_qrop\qrop2_0201-0300.mp4", "$root\render_qrop\qrop2_0301-0400.mp4", "$root\render_qrop\qrop2_0401-0500.mp4", "$root\render_qrop\qrop2_0501-0600.mp4", "$root\render_qrop\qrop2_0601-0700.mp4", "$root\render_qrop\qrop3_*.mp4", "$root\render_qrop\qrop_log.json") 20 }
 if ($jobs -contains "qrc1") { $okc["qrc1"] = Collect "qrc1" @("$root\render_qrc1\qrc1t2_*.mp4", "$root\render_qrc1\qrc1w5_*.mp4", "$root\render_qrc1\qrc1s2_*.mp4", "$root\render_qrc1\qrc1t_log.json", "$root\render_qrc1\qrc1w_log.json") 70 }
 if ($jobs -contains "qrc2") { $okc["qrc2"] = Collect "qrc2" @("$root\render_qrc2\qrc2w_*.mp4", "$root\render_qrc2\qrc2t_*.mp4", "$root\render_qrc2\qrc2w_log_*.json", "$root\render_qrc2\qrc2t_log_*.json") 71 }
+if ($jobs -contains "qrc3") { $okc["qrc3"] = Collect "qrc3" @("$root\render_qrc3\qrc3w_*.mp4", "$root\render_qrc3\qrc3w_log_*.json") 28 }
 if ($jobs -contains "ch06") { $okc["ch06"] = Collect "ch06" @("$root\render_ch06_1080\ch06_stage_*.mp4", "$root\render_ch06_1080\ch06_log.json") 20 }
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
 if ($g) {
