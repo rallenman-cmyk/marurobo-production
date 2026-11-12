@@ -44,11 +44,11 @@ def owl(loc, face):
     return (loc[0] - 0.5, loc[1] - 0.7, 2.35)  # 耳の前（泡が消える所）
 
 
-def dog(loc, face, eyes="closed", ear_up=True):
+def dog(loc, face, eyes="closed", ear_up=True, fur_c="#D9A35B", light_c="#F5E6CC", ears="one_up", cap=False, fluffy=False, patch=None):
     # 番犬：名前を呼ばれたときだけ起きる。片耳だけ立てて、寝ながらも聞いている
     g = empty(loc, math.radians(face), 1.0)
-    fur = mat("d_fur", "#D9A35B", rough=0.6, coat=0.1)
-    light = mat("d_light", "#F5E6CC", rough=0.6)
+    fur = mat("d_fur" + fur_c, fur_c, rough=0.95 if fluffy else 0.6, coat=0.0 if fluffy else 0.1)
+    light = mat("d_light" + light_c, light_c, rough=0.9 if fluffy else 0.6)
     dark = mat("d_dark", "#3A2614", rough=0.4)
     collar = mat("d_collar", "#2F4A73", rough=0.4)
     gold = mat("d_gold", GOLD, rough=0.25, metal=0.8, emit=0.3)
@@ -60,8 +60,8 @@ def dog(loc, face, eyes="closed", ear_up=True):
     sphere(fur, (0.45, 0.85, 0.35), 0.12, scale=(0.8, 2.2, 0.8), parent=g)  # しっぽ
     hd = empty((0, -0.25, 1.75)); hd.parent = g
     sphere(fur, (0, 0, 0), 0.5, scale=(1, 0.95, 0.9), parent=hd)
-    sphere(light, (0, -0.42, -0.12), 0.26, scale=(1, 1.0, 0.75), parent=hd)  # 口のまわり
-    sphere(dark, (0, -0.66, -0.06), 0.08, scale=(1.2, 0.8, 0.9), parent=hd)  # 鼻
+    sphere(light, (0, -0.48, -0.12), 0.25, scale=(0.95, 1.35, 0.72), parent=hd)  # 前へ出た鼻先（犬らしく）
+    sphere(dark, (0, -0.8, -0.05), 0.08, scale=(1.2, 0.8, 0.9), parent=hd)  # 鼻
     for i, x in enumerate((-0.2, 0.2)):
         if eyes == "open" or (eyes == "one" and i == 1):
             sphere(mat("d_eyew", "#FFFFFF", rough=0.2), (x, -0.43, 0.12), 0.085, scale=(1, 0.5, 1.1), parent=hd)
@@ -69,12 +69,27 @@ def dog(loc, face, eyes="closed", ear_up=True):
             sphere(mat("d_hl", "#FFFFFF", rough=0.1, emit=1.5), (x + 0.02, -0.5, 0.15), 0.015, parent=hd)
         else:
             closed_eye(dark, x, -0.44, 0.12, 0.15, parent=hd)
-    # 右の耳は大きく立てる（聞いている）、左の耳は垂れる
-    e = empty((0.34, 0, 0.3)); e.parent = hd; e.rotation_euler = (math.radians(-15), math.radians(-30), 0)
-    sphere(fur, (0, 0, 0.22), 0.24, scale=(0.95, 0.35, 1.25), parent=e)
-    sphere(mat("d_ear_in", "#E59AA0", rough=0.6), (0, -0.07, 0.2), 0.17, scale=(0.8, 0.2, 1.05), parent=e)
-    e2 = empty((-0.4, 0, 0.15)); e2.parent = hd; e2.rotation_euler = (0, math.radians(35), 0)
-    sphere(fur, (0, 0, -0.18), 0.17, scale=(0.6, 0.4, 1.5), parent=e2)
+    if patch:  # 片目のまわりのぶち
+        sphere(mat("d_patch" + patch, patch, rough=0.7), (-0.2, -0.3, 0.14), 0.2, scale=(1, 0.6, 0.9), parent=hd)
+    if fluffy:  # ふわふわの首まわり
+        for k in range(10):
+            a = math.radians(k * 36)
+            sphere(light, (0.42 * math.cos(a), -0.15 + 0.3 * math.sin(a) * 0.5, 1.28 + 0.05 * math.sin(a * 2)), 0.2, parent=g)
+    ear_in = mat("d_ear_in", "#E59AA0", rough=0.6)
+    for sx in (1, -1):
+        up = ears == "both_up" or (ears == "one_up" and sx == 1)
+        if up:  # 立てた耳（聞いている）
+            e = empty((sx * 0.34, 0, 0.3)); e.parent = hd; e.rotation_euler = (math.radians(-15), math.radians(-30 * sx), 0)
+            add(bpy.ops.mesh.primitive_cone_add, fur, (0, 0, 0.2), radius1=0.22, radius2=0.03, depth=0.46, vertices=32, scale=(1, 0.4, 1), parent=e)
+            add(bpy.ops.mesh.primitive_cone_add, ear_in, (0, -0.06, 0.17), radius1=0.14, radius2=0.02, depth=0.32, vertices=32, scale=(1, 0.2, 1), parent=e)
+        else:  # 垂れた耳
+            e2 = empty((sx * 0.4, 0, 0.15)); e2.parent = hd; e2.rotation_euler = (0, math.radians(-35 * sx), 0)
+            big = ears == "flop"
+            sphere(mat("d_earflop" + (patch or fur_c), patch or fur_c, rough=0.6) if big else fur, (0, 0, -0.18 - (0.08 if big else 0)), 0.2 if big else 0.17, scale=(0.55, 0.45, 1.9 if big else 1.5), parent=e2)
+    if cap:  # 見張りの帽子
+        cyl(mat("d_cap", NAVY, rough=0.4), (0, 0.02, 0.45), 0.3, 0.16, parent=hd)
+        cyl(mat("d_cap", NAVY, rough=0.4), (0, -0.2, 0.39), 0.25, 0.03, rot=(math.radians(-10), 0, 0), scale=(1, 0.75, 1), parent=hd)
+        cyl(mat("d_gold", GOLD, rough=0.25, metal=0.8, emit=0.3), (0, -0.29, 0.48), 0.05, 0.02, rot=(math.radians(90), 0, 0), parent=hd)
     cyl(collar, (0, -0.2, 1.3), 0.36, 0.1, rot=(math.radians(-15), 0, 0), parent=g)  # 首輪
     cyl(gold, (0, -0.56, 1.18), 0.09, 0.03, rot=(math.radians(90), 0, 0), parent=g)  # 名札
     return (loc[0] - 0.55, loc[1] - 0.7, 2.45)
