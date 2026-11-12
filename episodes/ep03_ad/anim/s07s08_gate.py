@@ -9,7 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SB = os.path.join(HERE, "..", "storyboard")
 ARGS = sys.argv[sys.argv.index("--") + 1:]  # 部品を読むと argv が上書きされるので別の名前
 MODE, OUTDIR = ARGS[0], ARGS[1]
-SAMPLES = int(ARGS[2]) if len(ARGS) > 2 and ARGS[2].isdigit() else 32
+N_SAMPLES = int(ARGS[2]) if len(ARGS) > 2 and ARGS[2].isdigit() else 32
 def opt(name, n, default):
     return [type(d)(ARGS[ARGS.index(name) + 1 + k]) for k, d in enumerate(default)] if name in ARGS else default
 RESX, RESY = opt("--res", 2, [1920, 1080])
@@ -302,8 +302,14 @@ sc.frame_end = FR[1] if FR[1] else f(T1) - 1
 sc.frame_step = STEP
 sc.render.fps = FPS
 sc.render.engine = 'CYCLES'
-sc.cycles.samples = SAMPLES
+sc.cycles.samples = N_SAMPLES
 sc.cycles.use_denoising = True
+sc.render.use_persistent_data = True  # コマごとに舞台を組み直さない（速くなる）
+if "--fast" in ARGS:  # 試し描き用：光の跳ね返りを減らす（本番の PC では使わない）
+    c = sc.cycles
+    c.max_bounces, c.diffuse_bounces, c.glossy_bounces, c.transmission_bounces, c.transparent_max_bounces = 3, 1, 1, 2, 4
+    c.caustics_reflective = c.caustics_refractive = False
+    c.use_adaptive_sampling = True
 sc.cycles.device = 'CPU'
 sc.render.resolution_x, sc.render.resolution_y = RESX, RESY
 sc.view_settings.view_transform = 'AgX'
