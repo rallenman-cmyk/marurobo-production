@@ -25,3 +25,13 @@ d.polygon([(110, 760), (270, 470), (430, 760)], fill='#E9692C')
 d.polygon([(235, 760), (270, 650), (305, 760)], fill='#7A2E12')
 d.rounded_rectangle([150, 880, 390, 950], 30, fill='#2BB3A6')
 im2.save(os.path.join(out, 'phone_ad.png'))
+
+# ニュースの画面（テントの広告が出る前）：字は書かず、見出しの帯と写真の四角だけ
+im3 = Image.new('RGB', (540, 1080), '#F4F6F8'); d = ImageDraw.Draw(im3)
+d.rectangle([0, 0, 540, 120], fill='#DDE3EA')
+for k in range(4):
+    y = 170 + k * 220
+    d.rounded_rectangle([30, y, 200, y + 160], 16, fill=('#9BC4E2', '#C9E4B4', '#F6B8C8', '#FFE3A3')[k])
+    for j in range(3):
+        d.rounded_rectangle([220, y + 15 + j * 45, 510 - j * 60, y + 40 + j * 45], 8, fill='#CBD3DC')
+im3.save(os.path.join(out, 'phone_news.png'))

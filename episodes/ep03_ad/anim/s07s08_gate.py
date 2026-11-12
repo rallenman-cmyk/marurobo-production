@@ -94,6 +94,8 @@ def gate_anim():
 
 
 def bars_lift(bars, t_up, t_top, t_down=None, t_bottom=None):
+    EVENTS.append((round(t_up, 3), "gate_up"))
+    if t_down: EVENTS.append((round(t_down, 3), "gate_down"))
     key(bars, ("location", 2), f(t_up), 0.0)
     key(bars, ("location", 2), f(t_top), 2.2)
     if t_down:
@@ -102,6 +104,7 @@ def bars_lift(bars, t_up, t_top, t_down=None, t_bottom=None):
 
 
 def lamps_on(lamps, lights, t, on=True):
+    if on: EVENTS.append((round(t, 3), "lamp"))
     for m, L in zip(lamps, lights):
         matkey(m, f(t) - 1, strength=0.0 if on else 2.5)
         matkey(m, f(t) + 3, strength=2.5 if on else 0.0)
@@ -113,6 +116,8 @@ def lamps_on(lamps, lights, t, on=True):
 EAR = (1.75, 0.45, 2.35)        # 番犬の耳の前（泡が消える所）
 GATE_IN = (0.0, 2.6, 1.5)       # 門の向こう（泡が入ってくる所）
 _nb = [0]
+EVENTS = []   # 効果音を付ける出来事（通しの秒, 種類）
+STEPS = []
 
 
 def sound_bubble(t_in, t_pop, icon=None, r=0.3, glow=0.0, path=None, burst_at=None, pop=True):
@@ -126,7 +131,9 @@ def sound_bubble(t_in, t_pop, icon=None, r=0.3, glow=0.0, path=None, burst_at=No
     key(b, "scale", f(t_in) + 6, (1.0,) * 3)
     key(b, "location", f((t_in + t_pop) / 2), mid)
     key(b, "location", f(t_pop), z)
+    EVENTS.append((round(t_in, 3), "bubble_in"))
     if pop:
+        EVENTS.append((round(t_pop, 3), "pop"))
         key(b, "scale", f(t_pop), (1.0,) * 3)
         key(b, "scale", f(t_pop) + 3, (0.001,) * 3)
         bs = empty(burst_at or z)  # はじけるしずく（burst の物を、ここを中心に大きさを動かす）
@@ -156,6 +163,7 @@ class Maru:
         if look is not None: key(self.body, ("rotation_euler", 0), f(t), R(-look), interp)
 
     def hop(self, t, h=0.3, d=0.45):
+        if h >= 0.25: EVENTS.append((round(t, 3), "jump")); EVENTS.append((round(t + d, 3), "land"))
         key(self.body, ("location", 2), f(t), self.z0)
         key(self.body, ("location", 2), f(t + d / 2), self.z0 + h)
         key(self.body, ("location", 2), f(t + d), self.z0)
@@ -315,7 +323,7 @@ sc.render.resolution_x, sc.render.resolution_y = RESX, RESY
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = os.path.join(OUTDIR, MODE + "_")
-json.dump(dict(mode=MODE, t0=T0, t1=T1, fps=FPS, frames=sc.frame_end + 1), open(os.path.join(OUTDIR, MODE + "_log.json"), "w"))
+json.dump(dict(mode=MODE, t0=T0, t1=T1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS)), open(os.path.join(OUTDIR, MODE + "_log.json"), "w"))
 print("FRAMES", sc.frame_start, sc.frame_end, "T0", T0)
 if "--blend" in ARGS:
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUTDIR, MODE + ".blend"))
