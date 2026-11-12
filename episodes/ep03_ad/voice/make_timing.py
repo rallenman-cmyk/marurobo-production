@@ -1,16 +1,21 @@
 # 声の長さ（lines.json）から、台本 json の start/end を作り直す（narration.py がこの時刻に置く）
-# 間の決まり（SKILL §3）：場面が変わる文の前 0.8 秒／「……」で始まる文の前 0.7 秒／前の文が「？」「……」で終わるとき 0.6 秒／ほか 0.4 秒
+# 間の決まり（SKILL §3）：合言葉の「ピー」の前 1.6 秒／短い声のあと 0.8 秒／場面が変わる文の前 0.8 秒／「……」で始まる文の前 0.7 秒／前の文が「？」「……」で終わるとき 0.6 秒／ほか 0.4 秒
 # MARU_WORK=<作業フォルダ> python3 make_timing.py
 import os, json, re
 W = os.environ["MARU_WORK"]
 P = W + "/stage/script/script_v2_timed.json"
 L = json.load(open(P, encoding="utf-8"))
 V = json.load(open(W + "/stage/voice/achernar/lines.json", encoding="utf-8"))
+BEEP = {"08-08": 1.6, "08-11": 1.6}  # この文の前で「ピー」（0.7 秒）を鳴らす
 t, prev = 0.5, None
 for e in L:
     d = V[str(e["no"])]["dur"]
     if prev is None:
         g = 0.0
+    elif e["id"] in BEEP:
+        g = BEEP[e["id"]]  # 合言葉（声に出さない）を「ピー」で鳴らす時間＋見張り番の反応
+    elif V[str(prev["no"])]["dur"] < 1.0:
+        g = 0.8  # 短い声（「……一瞬！」など）のあとは、字幕が 1 秒以上出るように
     elif e["scene"] != prev["scene"]:
         g = 0.8
     elif e["text"].startswith("……"):

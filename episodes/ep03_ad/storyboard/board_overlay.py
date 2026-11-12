@@ -256,6 +256,7 @@ for key, text, extra in S:
                 assert a[2] < b[0] or b[2] < a[0] or a[3] < b[1] or b[3] < a[1], ('札が重なる', a, b)
     elif extra:
         extra(im)
+    im.save('board/%s_nosub.png' % key)  # 字幕なし（札だけ）：アニマティックで声に合わせた字幕を重ねる用
     sub(im, text)
     im.save('board/%s.png' % key)
     im.resize((390, 219), Image.LANCZOS).save('board/%s_390.png' % key)
