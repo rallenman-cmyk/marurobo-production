@@ -22,7 +22,22 @@ def load(p, sr):
     return np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
 
 
+B_LONG = os.environ.get("BGM_B", "")      # "B1"・"B3"：B の長い版（3 分）を使う（確認ページで選ばれたら）
+
+
+def b_long(n, sr, first):
+    # 長い版：頭の 0〜5 秒は最初の 1 回だけ、5 秒〜(終わり-12 秒) を 2 秒かけて重ねながらくり返す
+    x = load(os.path.join(SRC, "bgm_%s.mp3" % B_LONG.lower()), sr)
+    a, e, k = int(5 * sr), len(x) - int(12 * sr), int(2 * sr)
+    body = x[a:e]; out = x[:e].copy() if first else body.copy()
+    while len(out) < n:
+        o = out.copy(); o[-k:] = o[-k:] * np.linspace(1, 0, k) + body[:k] * np.linspace(0, 1, k)
+        out = np.concatenate([o, body[k:]])
+    return out[:n]
+
+
 def b_stream(n, sr, first):
+    if B_LONG: return b_long(n, sr, first)
     x = load(os.path.join(SRC, "bgm_b.mp3"), sr)
     a, L = int(B_LOOP[0] * sr), int(round(B_LOOP[1] * sr))
     # 継ぎ目：ループの終わりの 40ms を、頭の 40ms と重ねる

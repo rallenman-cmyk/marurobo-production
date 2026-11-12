@@ -67,7 +67,7 @@ textarea{width:100%;box-sizing:border-box;min-height:56px;border:1px solid var(-
   </header>
   <section class="status" aria-label="いまの状態">
     <span class="pill wait">はじめての確認待ち</span>
-    <p>試しの通し v1（15分29秒）。3D はクラウドで小さく描いた試し（1秒4枚）で、本番は PC で描き直します。曲はまだ入っていません。</p>
+    <p>試しの通し v1（15分29秒）。3D はクラウドで小さく描いた試し（1秒4枚）で、本番は PC で描き直します。<b>曲を入れた v2 は「まるロボ動画レビュー」（作品 MARU-EP03）で見られます</b>（このページの動画は曲なしの v1）。</p>
   </section>
   <section class="vids" aria-label="動画">
     <div class="vid"><div class="cap"><b>前半</b><span>0:00〜7:45</span></div><video id="v0" src="vid_a.mp4" controls playsinline preload="metadata"></video></div>
@@ -80,6 +80,10 @@ textarea{width:100%;box-sizing:border-box;min-height:56px;border:1px solid var(-
     <div class="scenes" id="scenes"></div>
   </section>
   <section class="music" aria-label="曲の案">
+    <h2>曲：B を基本に、場面で C・D（決まり・v2 に入れた）</h2>
+    <p class="note">B は 30 秒しかないので、v2 では同じ 30 秒をくり返しています。長い所（9:00〜12:20 など）でくり返しが気になるときのために、B と同じ作り方で 3 分の曲を作りました。B に近いほうを選んでください（選ばなければ、今の B のくり返しのまま）。</p>
+    <div class="trk"><b>B の長い版 1（B と同じ速さ・96）</b><audio src="bgm_b1.mp3" controls preload="none"></audio><button class="pick" data-k="B1" type="button">これにする</button></div>
+    <div class="trk"><b>B の長い版 2（音の感じが B にいちばん近い・少し速い 99）</b><audio src="bgm_b3.mp3" controls preload="none"></audio><button class="pick" data-k="B3" type="button">これにする</button></div>
     <h2>曲の案（ミステリー・探偵っぽく、案B に近いもの）</h2>
     <p class="note">Gemini の作曲モデル Lyria で作った曲です（歌なし）。それぞれ 3 分の版と 30 秒の版があります。「これにする」を押すか、メモに「もっと〜」と書いてください。</p>
     <div class="trk"><b>案C：抜き足差し足（ピチカート・ファゴット・マリンバ・指パッチン）</b><audio src="bgm_c_s.mp3" controls preload="none"></audio><audio src="bgm_c.mp3" controls preload="none" aria-label="案C 3分"></audio><button class="pick" data-k="C" type="button">これにする</button></div>
