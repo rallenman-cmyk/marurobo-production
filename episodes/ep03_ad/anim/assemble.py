@@ -3,6 +3,8 @@
 #   場面の順：PARTS。足りない場面は、絵コンテの絵（storyboard/board/bXX_nosub.png）で埋める
 #   札：OVERLAYS（台詞の番号で出す時刻を決める）。字は 44 以上、字幕の帯（下から 196px）にかけない
 #   効果音：各場面の log.json の events・steps から合成（sfx.py）。声のある所は 6 dB 下げる
+#   BGM：bgm/bgm_bus.py（曲B を基本に、場面に合わせて曲C・D）。声のある所は 6 dB 下げる
+#   REMUX=<前に作った通し.mp4> を付けると、絵は作り直さずに、その絵に新しい音（声・効果音・BGM）だけを付け直す
 #   出力と一緒に <出力>_check.txt（点検の結果）を書く
 import os, sys, json, glob, subprocess, math, wave
 import numpy as np
@@ -182,6 +184,8 @@ for a, b, pth in allrows:
         runs[-1][2] = b; runs[-1][3].append((a, b, pth))
     else:
         runs.append([grp, a, b, [(a, b, pth)]])
+REMUX = os.environ.get("REMUX")
+if REMUX: runs = []
 seg_list = os.path.join(tmp, "segs.txt")
 with open(seg_list, "w") as fs_:
     for i, (grp, a, b, items) in enumerate(runs):
@@ -195,7 +199,7 @@ with open(seg_list, "w") as fs_:
                         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", sp], check=True)
         fs_.write("file '%s'\n" % sp)
 lst = os.path.join(tmp, "video.mp4")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", seg_list, "-c", "copy", lst], check=True)
+if not REMUX: subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", seg_list, "-c", "copy", lst], check=True)
 
 # ---------------- 効果音
 sys.path.insert(0, HERE)
@@ -221,7 +225,11 @@ env = np.ones_like(sfx_bus)
 for p in P:
     a, b = int((p["start"] - 0.12) * sr), int((p["end"] + 0.35) * sr); env[max(0, a):b] = 10 ** (-6 / 20)
 k = int(0.05 * sr); env = np.convolve(env, np.ones(k) / k, mode="same")
-mix = voice + sfx_bus * env * 0.5
+# BGM（声のある所は 6 dB 下げる。効果音と同じ下げ方）
+sys.path.insert(0, os.path.join(EP, "bgm"))
+import bgm_bus
+music = bgm_bus.make(END, SCST, sr)[:len(voice)]
+mix = voice + sfx_bus * env * 0.5 + music * env
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 with wave.open(tmp + "/mix.wav", "wb") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes((mix * 32767).astype(np.int16).tobytes())
@@ -246,6 +254,9 @@ fl.append("[v%d]subtitles=%s:fontsdir=%s[vout]" % (len(OVERLAYS), tmp + "/subs.a
 inputs += ["-i", tmp + "/mix.wav"]
 cmd = ["ffmpeg", "-v", "error", "-y"] + inputs + ["-filter_complex", ";".join(fl), "-map", "[vout]", "-map", "%d:a" % (len(OVERLAYS) + 1),
        "-c:v", "libx264", "-preset", "medium", "-crf", os.environ.get("CRF", "27"), "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", os.environ.get("ABR", "128k"), "-t", "%.2f" % END, OUT]
+if REMUX:
+    cmd = ["ffmpeg", "-v", "error", "-y", "-i", REMUX, "-i", tmp + "/mix.wav", "-map", "0:v", "-map", "1:a", "-c:v", "copy",
+           "-c:a", "aac", "-b:a", os.environ.get("ABR", "128k"), "-t", "%.2f" % END, OUT]
 subprocess.run(cmd, check=True)
 
 # ---------------- 点検
