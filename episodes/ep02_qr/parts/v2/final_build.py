@@ -131,6 +131,7 @@ def build(tag):
             if any(a <= t < b for a, b, *_ in segs): continue
             sh = next((x for x in ch.SHOTS if x[0] <= t < x[1]), None)
             if sh is None or PCR.own_prefix(tag, sh[2], t) != pre: continue
+            if not PCX.src(pre).has(PCR.fr_of(t)): continue          # 描画がまだ無い所（絵コンテの静止画）では鳴らさない
             if kind == 'land': sfx.append((t, SX.hop_land(0.07)))
             elif kind != 'takeoff': sfx.append((t, SX.step(0.05 if kind == 'step' else 0.04)))
     ch.SFX = sfx
