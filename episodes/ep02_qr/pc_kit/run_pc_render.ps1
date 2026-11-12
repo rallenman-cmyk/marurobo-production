@@ -3,6 +3,7 @@
 #     powershell -ExecutionPolicy Bypass -File C:\marurobo\marurobo_tools\run_pc_render.ps1
 #   同時に描く本数：最後に -Workers 2 のように付ける（1 なら 1 本ずつ。既定 3、多くても 4）
 #   一部だけ描く：最後に -Only ch07,ch08 のように付ける（ch03・ch0102・ch04・ch07・ch08・ch06・sum をカンマで区切る）
+#   2026-11-12 v21：既定は qrc1〜qrc4（4章を足した。工場 qrc4f_・数字の空間 qrc4c_・中の世界 qrc4w_、合わせて 95 本。T35・T28 は冒頭の描画を使い回すので描かない）
 #   2026-11-12 v20：既定は qrc1,qrc2,qrc3（3章を足した。中の世界 qrc3w_、3D の場面だけ 3 か所・28 本）
 #   2026-11-12 v19：既定は qrc1,qrc2（1章のあとに 2章）。2章は中の世界 qrc2w_（3D の場面だけ 6 か所・55 本）と卓上 qrc2t_（2 か所・16 本）
 #   2026-11-12 v18：台本 v2.0。既定は qrc1（1章だけ）。卓上 qrc1t2_（1〜252）・中の世界 qrc1w5_（253〜6559）・スマホで探す qrc1s2_（222 コマ）。3D の中の字（21・HELLO・予備の数字）はなし（組み立てで 2D の札を重ねる）
@@ -17,7 +18,7 @@
 #   同時に描くときは、描き手ごとに小さな窓（最小化）が開く。止めるときは、この窓と「まるロボ 描き手」の窓をぜんぶ閉じる
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
 #   終わると、送るファイルだけを C:\marurobo\marurobo_render にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
-param([string]$Only = "qrc1,qrc2,qrc3", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
+param([string]$Only = "qrc1,qrc2,qrc3,qrc4", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
 $ErrorActionPreference = "Continue"
 $tools = $PSScriptRoot
 $root = Split-Path -Parent $tools
@@ -221,6 +222,15 @@ function Run-Jobs {
     $wargs = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c3_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc3w_")
     foreach ($r in @(@(1, 1514), @(1737, 2010), @(2315, 3211))) { Render-Chunks "QR回 3章（中の世界）" $r[1] $outc "qrc3w_" $wargs $r[0] }
   }
+  if ($jobs -contains "qrc4") {
+    $outc = Join-Path $root "render_qrc4"
+    $a4 = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_factory.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc4f_")
+    foreach ($r in @(@(279, 1006))) { Render-Chunks "QR回 4章（工場）" $r[1] $outc "qrc4f_" $a4 $r[0] }
+    $a4 = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_crates.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc4c_")
+    foreach ($r in @(@(1146, 1319), @(1666, 3076), @(3655, 7234), @(8611, 9582))) { Render-Chunks "QR回 4章（数字の空間）" $r[1] $outc "qrc4c_" $a4 $r[0] }
+    $a4 = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc4w_")
+    foreach ($r in @(@(1, 303), @(982, 1170), @(1295, 1448), @(3052, 3347), @(7796, 8184), @(9724, 10568))) { Render-Chunks "QR回 4章（中の世界）" $r[1] $outc "qrc4w_" $a4 $r[0] }
+  }
   if ($jobs -contains "ch06") {
     $out6 = Join-Path $root "render_ch06_1080"
     Render-Chunks "第6章" 1933 $out6 "ch06_stage_" @("-b", "$src\output\story.blend", "--python-exit-code", "1", "--python", "$tools\ch03\ch06_stage.py", "--", "--out", $out6, "--res", "1920", "1080", "--samples", "32")
@@ -266,6 +276,7 @@ if ($jobs -contains "qrop") { $okc["qrop"] = Collect "qrop" @("$root\render_qrop
 if ($jobs -contains "qrc1") { $okc["qrc1"] = Collect "qrc1" @("$root\render_qrc1\qrc1t2_*.mp4", "$root\render_qrc1\qrc1w5_*.mp4", "$root\render_qrc1\qrc1s2_*.mp4", "$root\render_qrc1\qrc1t_log.json", "$root\render_qrc1\qrc1w_log.json") 70 }
 if ($jobs -contains "qrc2") { $okc["qrc2"] = Collect "qrc2" @("$root\render_qrc2\qrc2w_*.mp4", "$root\render_qrc2\qrc2t_*.mp4", "$root\render_qrc2\qrc2w_log_*.json", "$root\render_qrc2\qrc2t_log_*.json") 71 }
 if ($jobs -contains "qrc3") { $okc["qrc3"] = Collect "qrc3" @("$root\render_qrc3\qrc3w_*.mp4", "$root\render_qrc3\qrc3w_log_*.json") 28 }
+if ($jobs -contains "qrc4") { $okc["qrc4"] = Collect "qrc4" @("$root\render_qrc4\qrc4*_*.mp4", "$root\render_qrc4\qrc4*_log_*.json") 95 }
 if ($jobs -contains "ch06") { $okc["ch06"] = Collect "ch06" @("$root\render_ch06_1080\ch06_stage_*.mp4", "$root\render_ch06_1080\ch06_log.json") 20 }
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
 if ($g) {
