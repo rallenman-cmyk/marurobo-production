@@ -2,7 +2,7 @@
 #   ・図の静止画 → fig_anim の動く図（同じ図が続く所は1つの動きにつなぐ）
 #   ・札・メーター → fig_anim の札・メーター（1080 で描く）
 #   ・効果音 → sfx_qr の部品（札が出る・メーターの目盛り・あふれる・たたむ・しずく など）
-#   ・3D の所 → 今は絵コンテの静止画を拡大。PC の描画が届いたら RENDERS[章][絵の名前] に mp4 を入れると差し替わる
+#   ・3D の所 → PC の描画（pc_render.py：PC_RENDER のフォルダの mp4）。無い所は絵コンテの静止画を拡大（PC=0 で全部静止画）
 #   CLEAN=タグ python3 final_build.py TAG → final/TAG_clean.mp4・TAG_sfx.npy・TAG_P.json（通しは through_review.py で FINAL=1）
 import os, sys, json, subprocess
 import numpy as np
@@ -13,7 +13,33 @@ import fig_anim as FA, sfx_qr as SX
 import chapters as CH
 from PIL import Image
 W, H, FPS, SR = 1920, 1080, 24, 48000
-RENDERS = {}          # 例：{'c1': {'K03': '/path/to/qrc1w4_render.mp4'}}（PC の描画が届いたら入れる）
+import pc_render as PCR
+PCX = PCR.PC((W, H)) if os.environ.get('PC', '1') != '0' else None
+class _Info:
+    """章ごとの絵の置き場所（使い回しの元の章）と、絵の最初の区間"""
+    def __init__(s): s.c = {}
+    def get(s, tag):
+        if tag not in s.c:
+            cap = {}; orig = A.Chapter
+            class Cap(orig):
+                def __init__(self, tag_, ids, GAP, IMG, SHOTS, *a, **k): cap['img'] = dict(IMG); orig.__init__(self, tag_, ids, GAP, IMG, SHOTS, *a, **k)
+            A.Chapter = Cap
+            try: ch = CH.build(tag)
+            finally: A.Chapter = orig
+            ch.IMG = {}; s.c[tag] = (ch, cap['img'])
+        return s.c[tag]
+    def home_of(s, tag, k):
+        p = s.get(tag)[1].get(k)
+        if not p: return None
+        rel = os.path.relpath(os.path.dirname(p), CH.P).replace(os.sep, '/')
+        return PCR.HOME.get(rel)
+    def first_span(s, tag, k):
+        for x in s.get(tag)[0].SHOTS:
+            if x[2] == k: return x[0], x[1]
+        return None, None
+    def c1_scan0(s): return s.get('c1')[0].ST['09-03'] - 0.3       # c1_timeline.T_SCAN[0]
+INFO = _Info()
+STEPS = json.load(open(os.path.join(HERE, 'robot_events.json'))) if os.path.exists(os.path.join(HERE, 'robot_events.json')) else {}
 # 札・メーターを 1080 版に（chapters.py の card/meter を差し替えてから組む）
 _cards, _meters = [], []
 def card(text, size=60, xy=(640, 150), col=None, pad=None):
@@ -56,7 +82,6 @@ def fig_segments(ch):
 def build(tag):
     _cards.clear(); _meters.clear(); ch = CH.build(tag); segs = fig_segments(ch)
     base_frame = ch.frame
-    vids = {k: v for k, v in RENDERS.get(tag, {}).items()}
     def frame(t):
         for a, b, name, cue in segs:
             if a <= t < b:
@@ -64,6 +89,19 @@ def build(tag):
                 ov = [(x, y, f) for x, y, f in ch.OVER if x <= t < y]
                 for x, y, f in ov: im.alpha_composite(f(t, x, y))
                 return im.convert('RGB')
+        if PCX:
+            sh = next((x for x in ch.SHOTS if x[0] <= t < x[1]), ch.SHOTS[-1])
+            a, b, k, z0, z1 = sh[:5]; cx, cy = (sh[5], sh[6]) if len(sh) > 6 else (0.5, 0.5)
+            im, reuse = PCX.frame(tag, k, t, a, b, INFO)
+            if im is not None:
+                if reuse:                                           # 使い回し：絵コンテと同じくゆっくり寄る（止まったコマでも動きが出る）
+                    u = min(max((t - a) / max(b - a, 1e-6), 0), 1); im = ch.kb(im, z0 + (z1 - z0) * u, cx, cy)
+                ov = [(x, y, f) for x, y, f in ch.OVER if x <= t < y]
+                if ov:
+                    im = im.convert('RGBA')
+                    for x, y, f in ov: im.alpha_composite(f(t, x, y))
+                    im = im.convert('RGB')
+                return im
         return base_frame(t)
     ch.frame = frame
     # 効果音：札が出る（ポン）・メーター（ピッ／ブブー）・元の効果音
@@ -87,6 +125,14 @@ def build(tag):
         if sh[2] in ('C6a',): sfx.append((sh[1] - 0.05, SX.drop()))
         if sh[2] == 'B28b': sfx.append((sh[0] + 0.2, SX.gather()))
         if sh[2] == 'B28c': sfx.append((sh[0], SX.assemble()))
+    # まるロボの足音（3D と同じ予定の一歩ずつ。robot_events.json）：その描画が映っている所だけ。小さく（声の下でも邪魔にならない）
+    if PCX:
+        for t, kind, pre in STEPS.get(tag, []):
+            if any(a <= t < b for a, b, *_ in segs): continue
+            sh = next((x for x in ch.SHOTS if x[0] <= t < x[1]), None)
+            if sh is None or PCR.own_prefix(tag, sh[2], t) != pre: continue
+            if kind == 'land': sfx.append((t, SX.hop_land(0.07)))
+            elif kind != 'takeoff': sfx.append((t, SX.step(0.05 if kind == 'step' else 0.04)))
     ch.SFX = sfx
     return ch
 if __name__ == '__main__':
@@ -97,3 +143,4 @@ if __name__ == '__main__':
         sh.save(A.SP + '/final_sheet_%s.png' % tag); print('sheet', tag)
     else:
         os.environ.setdefault('CLEAN', tag); ch.run(out)
+        if PCX: json.dump(PCX.report(), open(os.path.join(out, tag + '_pc.json'), 'w'), ensure_ascii=False, indent=1); print('pc', tag, PCX.report()['used'], 'missing', PCX.report()['missing'])
