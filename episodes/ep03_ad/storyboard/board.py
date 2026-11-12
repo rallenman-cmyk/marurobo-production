@@ -58,8 +58,7 @@ def phone(loc, rz=0.0, screen="phone_ad.png", glow=2.5, s=1.0, holes=True, lie=T
         e.rotation_euler = (R(90 - tilt), 0, R(rz))
     cube(mat("ph_body", "#22262B", rough=0.3, metal=0.2), (0, 0, 0.02), (0.36, 0.74, 0.04), bevel=0.03, parent=e)
     if screen:
-        p = plane(img_mat("ph_" + screen, os.path.join(HERE, screen), emit=glow), (0, 0, 0.041), (0.32, 0.66), parent=e)
-        p.rotation_euler = (0, 0, R(180))
+        p = plane(img_mat("ph_" + screen, os.path.join(HERE, screen), emit=glow), (0, 0, 0.041), (0.32, 0.66), parent=e)  # 絵の上がスマホの上（+y、穴の反対側）
     else:
         plane(mat("ph_off", "#0B0E12", rough=0.15, coat=1.0), (0, 0, 0.041), (0.32, 0.66), parent=e)
     if holes:  # 下の端のマイクの穴（6 つ）

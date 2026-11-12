@@ -25,27 +25,33 @@ def _noise(dur, sr, lo=200, hi=4000, a=0.003, d=0.05):
     return x * _env(n, a, d, sr)
 
 
+def _mx(*xs):
+    n = max(len(x) for x in xs); o = np.zeros(n)
+    for x in xs: o[:len(x)] += x
+    return o
+
+
 def make(kind, sr=48000):
     if kind == "step":
-        return 0.25 * (_noise(0.07, sr, 150, 1500, d=0.018) + 0.5 * _tone(180, 120, 0.06, sr, d=0.02))
+        return 0.25 * _mx(_noise(0.07, sr, 150, 1500, d=0.018), 0.5 * _tone(180, 120, 0.06, sr, d=0.02))
     if kind == "jump":
         return 0.3 * _tone(300, 900, 0.18, sr, d=0.12)
     if kind == "land":
-        return 0.35 * (_noise(0.12, sr, 80, 900, d=0.035) + _tone(120, 70, 0.12, sr, d=0.04))
+        return 0.35 * _mx(_noise(0.12, sr, 80, 900, d=0.035), _tone(120, 70, 0.12, sr, d=0.04))
     if kind == "pi":
         return 0.3 * _tone(1800, 1800, 0.09, sr, d=0.05)
     if kind == "pipo":
         a = _tone(1500, 1500, 0.1, sr, d=0.06); b = _tone(1000, 1000, 0.14, sr, d=0.08)
         return 0.28 * np.concatenate([a, np.zeros(int(0.03 * sr)), b])
     if kind == "pop":
-        return 0.35 * (_noise(0.06, sr, 1500, 9000, d=0.012) + 0.6 * _tone(900, 1500, 0.05, sr, d=0.015))
+        return 0.35 * _mx(_noise(0.06, sr, 1500, 9000, d=0.012), 0.6 * _tone(900, 1500, 0.05, sr, d=0.015))
     if kind == "bubble_in":
         return 0.12 * _tone(500, 700, 0.25, sr, a=0.05, d=0.15)
     if kind in ("gate_up", "gate_down", "rise"):
         n = int(1.0 * sr); m = _noise(1.0, sr, 60, 500, a=0.1, d=0.8) * (0.7 + 0.3 * np.sin(2 * np.pi * 30 * np.arange(n) / sr))
         return 0.3 * m
     if kind == "lamp":
-        return 0.3 * (_tone(660, 660, 0.25, sr, d=0.2) + _tone(990, 990, 0.25, sr, d=0.2) * 0.6)
+        return 0.3 * _mx(_tone(660, 660, 0.25, sr, d=0.2), _tone(990, 990, 0.25, sr, d=0.2) * 0.6)
     if kind == "pop_ui":
         return 0.22 * _tone(1200, 1600, 0.06, sr, d=0.03)
     if kind == "towel":
@@ -53,13 +59,13 @@ def make(kind, sr=48000):
     if kind == "hat":
         return 0.35 * _noise(0.1, sr, 100, 1200, d=0.03)
     if kind == "dive":
-        return 0.3 * (_tone(400, 1400, 0.35, sr, a=0.02, d=0.25) + 0.4 * _noise(0.35, sr, 2000, 8000, a=0.05, d=0.2))
+        return 0.3 * _mx(_tone(400, 1400, 0.35, sr, a=0.02, d=0.25), 0.4 * _noise(0.35, sr, 2000, 8000, a=0.05, d=0.2))
     if kind in ("spot", "spot_off"):
-        return 0.35 * (_noise(0.05, sr, 1000, 6000, d=0.01) + _tone(90, 60, 0.15, sr, d=0.06))
+        return 0.35 * _mx(_noise(0.05, sr, 1000, 6000, d=0.01), _tone(90, 60, 0.15, sr, d=0.06))
     if kind == "win":
         return 0.3 * np.concatenate([_tone(880, 880, 0.12, sr, d=0.1), _tone(1320, 1320, 0.25, sr, d=0.2)])
     if kind == "whoosh":
         return 0.35 * _noise(0.35, sr, 300, 6000, a=0.08, d=0.15)
     if kind == "clatter":
-        return 0.4 * (_noise(0.3, sr, 800, 7000, d=0.06) + 0.5 * _tone(400, 300, 0.2, sr, d=0.05))
+        return 0.4 * _mx(_noise(0.3, sr, 800, 7000, d=0.06), 0.5 * _tone(400, 300, 0.2, sr, d=0.05))
     return None

@@ -135,6 +135,12 @@ for k in PARTS:
         if os.path.exists(p) and glob.glob(os.path.join(d, k + "_[0-9]*.png")):
             lg = json.load(open(p)); lg["dir"] = d; break
     logs[k] = lg
+SCST = {}
+for p in P:
+    SCST.setdefault(SID[p["no"]]["scene"], max(0.0, p["start"] - 0.4))
+SCST["S00"] = 0.0
+_sk = list(SCST)
+SCEND = {k: (SCST[_sk[i + 1]] if i + 1 < len(_sk) else END) for i, k in enumerate(_sk)}
 t_prev = 0.0
 missing = []
 for k in PARTS:
@@ -143,10 +149,11 @@ for k in PARTS:
         missing.append(k); continue
     fs = sorted(glob.glob(os.path.join(lg["dir"], k + "_[0-9]*.png")))
     nums = [int(os.path.basename(x)[len(k) + 1:-4]) for x in fs]
+    lim = min(lg["t1"], SCEND["S%02d" % BOARD[k]] if k != "gate" else SCEND["S08"])   # 場面の終わり（次の場面の始まり）で切る
     for i, (pth, n) in enumerate(zip(fs, nums)):
         a = lg["t0"] + n / 24
-        b = lg["t0"] + (nums[i + 1] / 24 if i + 1 < len(nums) else lg["frames"] / 24)
-        rows.append((a, b, pth))
+        b = min(lim, lg["t0"] + (nums[i + 1] / 24 if i + 1 < len(nums) else lg["frames"] / 24))
+        if a < lim - 1e-6: rows.append((a, b, pth))
 rows.sort()
 # 足りない場面・すき間は絵コンテの絵で埋める
 fill, cur = [], 0.0
@@ -155,16 +162,36 @@ for p in P:
     sc_ = SID[p["no"]]["scene"]
     SC.setdefault(sc_, p["start"] - 0.4)
 for a, b, pth in rows + [(END, END, None)]:
-    if a - cur > 0.05:
-        sc_ = max([k for k, v in SC.items() if v <= cur + 0.01] or ["S00"], key=lambda k: SC[k])
-        fill.append((cur, a, os.path.join(SB, "board", "b%02d_nosub.png" % int(sc_[1:]))))
+    while a - cur > 0.05:                                    # すき間を場面の境目ごとに分けて、その場面の絵コンテで埋める
+        sc_ = max([k for k, v in SCST.items() if v <= cur + 0.01] or ["S00"], key=lambda k: SCST[k])
+        e = min(a, SCEND[sc_])
+        fill.append((cur, e, os.path.join(SB, "board", "b%02d_nosub.png" % int(sc_[1:]))))
+        cur = e
     cur = max(cur, b)
 allrows = sorted(rows + fill)
-lst = os.path.join(tmp, "frames.txt")
-with open(lst, "w") as fo:
-    for a, b, pth in allrows:
-        fo.write("file '%s'\nduration %.4f\n" % (pth, b - a))
-    fo.write("file '%s'\n" % allrows[-1][2])
+# 大きさの違う絵（3D の試し描き・2D・絵コンテ）を一度に並べると時刻がずれるので、続いている同じ場面ごとに
+# 1280×720・24 コマ/秒の短い動画にしてから、つなぐ
+runs = []
+for a, b, pth in allrows:
+    grp = os.path.dirname(pth) + "|" + os.path.basename(pth).split("_")[0]
+    if runs and runs[-1][0] == grp and abs(runs[-1][2] - a) < 1e-3:
+        runs[-1][2] = b; runs[-1][3].append((a, b, pth))
+    else:
+        runs.append([grp, a, b, [(a, b, pth)]])
+seg_list = os.path.join(tmp, "segs.txt")
+with open(seg_list, "w") as fs_:
+    for i, (grp, a, b, items) in enumerate(runs):
+        l = os.path.join(tmp, "seg_%03d.txt" % i); sp = os.path.join(tmp, "seg_%03d.mp4" % i)
+        with open(l, "w") as fo:
+            for a2, b2, pth in items: fo.write("file '%s'\nduration %.4f\n" % (pth, b2 - a2))
+            fo.write("file '%s'\n" % items[-1][2])
+        n = round((b - a) * 24)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", l,
+                        "-vf", "scale=1280:720,setsar=1,fps=24,format=yuv420p", "-frames:v", str(n),
+                        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", sp], check=True)
+        fs_.write("file '%s'\n" % sp)
+lst = os.path.join(tmp, "video.mp4")
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", seg_list, "-c", "copy", lst], check=True)
 
 # ---------------- 効果音
 sys.path.insert(0, HERE)
@@ -206,7 +233,7 @@ for a, c, t in ev: ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c
 open(tmp + "/subs.ass", "w", encoding="utf-8").write("\n".join(ass) + "\n")
 
 # ---------------- 組み立て（絵 → 札 → 字幕、声と効果音）
-inputs = ["-f", "concat", "-safe", "0", "-i", lst]
+inputs = ["-i", lst]
 fl = ["[0:v]scale=1280:720,fps=24,setsar=1[v0]"]
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
     inputs += ["-i", pth]

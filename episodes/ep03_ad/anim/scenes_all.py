@@ -31,8 +31,7 @@ def night_lamp(loc, e=60, col="#CFEFFF"):
 
 def phone_screen(ph, img, glow):
     """スマホの画面を足す（切り替え用に、画面の板を返す）"""
-    p = plane(img_mat("scr_" + img, os.path.join(HERE, img), emit=glow), (0, 0, 0.042), (0.32, 0.66), parent=ph)
-    p.rotation_euler = (0, 0, R(180))
+    p = plane(img_mat("scr_" + img, os.path.join(HERE, img), emit=glow), (0, 0, 0.042), (0.32, 0.66), parent=ph)  # 絵の上がスマホの上
     return p
 
 
@@ -43,10 +42,10 @@ def s00():
     ph = phone((0.35, -0.9, 0.0), 10, screen=None)
     ad = phone_screen(ph, "phone_ad.png", 2.5)
     L = night_lamp((0.35, -0.9, 0.6), 0)
-    lightkey(L, 0, 0); lightkey(L, f(0.4), 60)
-    show([ad], 0, False); show([ad], f(0.35), True); ev(0.35, "pop_ui")
+    lightkey(L, 0, 60)
+    show([ad], 0, True)                                                   # 声（0.5 秒〜）の前に、びくっと跳ねる
     mr = Maru((-0.25, -1.0, 0), 40, s=0.42, hat=False, eye_glow=1.6)
-    mr.hop(0.6, 0.25, 0.4); ev(0.6, "pi"); mr.at(0.6, look=-5); mr.at(1.0, look=-14)
+    mr.hop(0.05, 0.25, 0.4); ev(0.05, "pi"); mr.at(0.05, look=-5); mr.at(0.45, look=-14)
     area((-3, 2, 3), (0, 0, 0), 120, 2, "#7F9CFF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [(t0, t1, (0.5, -3.3, 1.4), (0.1, -0.8, 0.3), (0.35, -2.7, 1.2), (0.1, -0.85, 0.32), 40)])
