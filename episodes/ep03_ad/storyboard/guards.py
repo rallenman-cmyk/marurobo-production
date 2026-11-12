@@ -44,7 +44,7 @@ def owl(loc, face):
     return (loc[0] - 0.5, loc[1] - 0.7, 2.35)  # 耳の前（泡が消える所）
 
 
-def dog(loc, face):
+def dog(loc, face, eyes="closed", ear_up=True):
     # 番犬：名前を呼ばれたときだけ起きる。片耳だけ立てて、寝ながらも聞いている
     g = empty(loc, math.radians(face), 1.0)
     fur = mat("d_fur", "#D9A35B", rough=0.6, coat=0.1)
@@ -62,8 +62,13 @@ def dog(loc, face):
     sphere(fur, (0, 0, 0), 0.5, scale=(1, 0.95, 0.9), parent=hd)
     sphere(light, (0, -0.42, -0.12), 0.26, scale=(1, 1.0, 0.75), parent=hd)  # 口のまわり
     sphere(dark, (0, -0.66, -0.06), 0.08, scale=(1.2, 0.8, 0.9), parent=hd)  # 鼻
-    for x in (-0.2, 0.2):
-        closed_eye(dark, x, -0.44, 0.12, 0.15, parent=hd)
+    for i, x in enumerate((-0.2, 0.2)):
+        if eyes == "open" or (eyes == "one" and i == 1):
+            sphere(mat("d_eyew", "#FFFFFF", rough=0.2), (x, -0.43, 0.12), 0.085, scale=(1, 0.5, 1.1), parent=hd)
+            sphere(mat("d_pupil", "#1A0F06", rough=0.1), (x, -0.475, 0.12), 0.05, scale=(1, 0.45, 1), parent=hd)
+            sphere(mat("d_hl", "#FFFFFF", rough=0.1, emit=1.5), (x + 0.02, -0.5, 0.15), 0.015, parent=hd)
+        else:
+            closed_eye(dark, x, -0.44, 0.12, 0.15, parent=hd)
     # 右の耳は大きく立てる（聞いている）、左の耳は垂れる
     e = empty((0.34, 0, 0.3)); e.parent = hd; e.rotation_euler = (math.radians(-15), math.radians(-30), 0)
     sphere(fur, (0, 0, 0.22), 0.24, scale=(0.95, 0.35, 1.25), parent=e)
