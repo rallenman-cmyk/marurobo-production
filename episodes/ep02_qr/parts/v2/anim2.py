@@ -13,6 +13,8 @@ SP = '/tmp/claude-0/-home-user/8cc26183-437c-5f90-a7e9-3b23d7f91ab2/scratchpad'
 VOICE = json.load(open(SP + '/v2_voice_map.json', encoding='utf-8'))     # ID → {text, wav, dur}
 def wav_dur(p):
     with wave.open(p) as w: return w.getnframes() / w.getframerate()
+_LP = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'voice_lock.json')
+LOCK = json.load(open(_LP, encoding='utf-8'))['lock'] if os.path.exists(_LP) else {}
 def timeline(ids, GAP, scene_of, lead=0.8, tail=2.0):
     ST, EN = {}, {}; t = lead; prev = None
     for i in ids:
@@ -25,8 +27,63 @@ def timeline(ids, GAP, scene_of, lead=0.8, tail=2.0):
                 elif pt.endswith('？') or nt.startswith(('では', 'ところが', 'それでは', 'まず', '次に', 'そして今', 'ここで')): g = 0.8
                 else: g = 0.45
             t = EN[prev] + g
+            if i in LOCK and LOCK[i] >= EN[prev] + 0.25: t = LOCK[i]      # 作り直した声の次の文は前と同じ時刻（voice_lock.json）
         ST[i] = t; EN[i] = t + v['dur']; prev = i
     return ST, EN, EN[ids[-1]] + tail
+_YM = None
+def _ylen(t):
+    global _YM
+    if _YM is None:
+        import importlib.util
+        sp = importlib.util.spec_from_file_location('yomi_qr', '/home/user/qr_plan/parts/voice_v2/yomi.py'); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); _YM = m.yomi
+    return sum(1 for ch in _YM(t) if ch not in '、。？！…「」（）・ 　')
+def _segments(wav, gap=0.12):
+    import numpy as np
+    with wave.open(wav) as w: sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
+    h = int(sr * 0.01); n = len(x) // h; db = 20 * np.log10(np.sqrt((x[:n * h].reshape(n, h) ** 2).mean(1) + 1e-12)); on = db > db.max() - 38
+    segs = []; j = 0
+    while j < n:
+        if on[j]:
+            q = j
+            while q < n and on[q]: q += 1
+            if segs and j * 0.01 - segs[-1][1] < gap: segs[-1] = (segs[-1][0], q * 0.01)
+            else: segs.append((j * 0.01, q * 0.01))
+            j = q
+        else: j += 1
+    return [g for g in segs if g[1] - g[0] >= 0.05]
+_WT = {}
+def word_time(i, frag):
+    """文 i の声の中で、言葉 frag を言い始める時刻（声の頭からの秒）。
+    文を読点・句点のまとまりに分け、声の出ている区間（0.12 秒以上の間で区切る）に順に当てはめる（読みの長さと区間の長さが合うように）。QR回 v11"""
+    import re, math
+    v = VOICE[i]; t = v['text']; k = t.find(frag)
+    if k < 0: raise KeyError('%s に「%s」がない' % (i, frag))
+    if i not in _WT:
+        cut = [0] + [m.end() for m in re.finditer(r'[、。？！]+|……', t)] + [len(t)]
+        ch = []
+        for a, b in zip(cut, cut[1:]):
+            if b > a and _ylen(t[a:b]) > 0: ch.append((a, b))
+            elif ch and b > a: ch[-1] = (ch[-1][0], b)
+        segs = _segments(v['wav']); L = [max(1, _ylen(t[a:b])) for a, b in ch]
+        rate = sum(g1 - g0 for g0, g1 in segs) / sum(L); nC, nS = len(ch), len(segs); INF = 1e18
+        if nS < nC:
+            _WT[i] = None
+        else:
+            D = [[INF] * (nS + 1) for _ in range(nC + 1)]; B = [[None] * (nS + 1) for _ in range(nC + 1)]; D[0][0] = 0
+            for c in range(1, nC + 1):
+                for sj in range(c, nS - (nC - c) + 1):
+                    for sp in range(c - 1, sj):
+                        if D[c - 1][sp] >= INF: continue
+                        dur = segs[sj - 1][1] - segs[sp][0]; cost = D[c - 1][sp] + math.log(max(dur, 0.05) / (L[c - 1] * rate)) ** 2
+                        if cost < D[c][sj]: D[c][sj] = cost; B[c][sj] = sp
+            asg = []; sj = nS
+            for c in range(nC, 0, -1): sp = B[c][sj]; asg.append((segs[sp][0], segs[sj - 1][1])); sj = sp
+            _WT[i] = (ch, asg[::-1])
+    if _WT[i] is None: return v['dur'] * _ylen(t[:k]) / max(1, _ylen(t))
+    ch, asg = _WT[i]
+    for (a, b), (g0, g1) in zip(ch, asg):
+        if a <= k < b: return g0 + (g1 - g0) * _ylen(t[a:k]) / max(1, _ylen(t[a:b]))
+    return asg[-1][0]
 class Chapter:
     def __init__(s, tag, ids, GAP, IMG, SHOTS, OVER=(), SFX=(), scene_of=lambda i: i.split('-')[0], lead=0.8, tail=2.0):
         s.tag, s.ids = tag, ids
@@ -34,11 +91,15 @@ class Chapter:
         s.IMG = {k: Image.open(p).convert('RGB').resize((W_, H_), Image.LANCZOS) for k, p in IMG.items()}
         def cue(c):
             if isinstance(c, (int, float)): return float(c)
-            i, se, off = c; return (s.ST if se == 's' else s.EN)[i] + off
+            i, se, off = c
+            if se == 'w': frag, o2 = off if isinstance(off, tuple) else (off, 0.0); return s.ST[i] + word_time(i, frag) + o2      # w(ID, 言葉, ずらし)
+            return (s.ST if se == 's' else s.EN)[i] + off
         s.cue = cue
         sh = sorted([(cue(x[0]),) + tuple(x[1:]) for x in SHOTS], key=lambda x: x[0])
         s.SHOTS = [(a, (sh[k + 1][0] if k + 1 < len(sh) else s.T_END)) + tuple(x[1:]) for k, x in enumerate(sh) for a in [x[0]]]
         s.OVER = [(cue(a), cue(b), f) for a, b, f in OVER]
+        for _a, _b, _f in s.OVER:
+            if hasattr(_f, 'bind'): _f.bind(cue)          # 声の中の言葉の時刻（w()）を、重ね絵に渡す
         s.SFX = [(cue(c), x) for c, x in SFX]
     def kb(s, im, z, cx=0.5, cy=0.5):
         w, h = W_ / z, H_ / z; x = min(max(cx * W_ - w / 2, 0), W_ - w); y = min(max(cy * H_ - h / 2, 0), H_ - h)

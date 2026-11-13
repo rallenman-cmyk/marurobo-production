@@ -13,7 +13,7 @@ def fr_of(t): return int(round(t * FPS)) + 1
 C2_DESK = {'K41', 'K42', 'K43'}
 def c4_stage(k): return 'crates' if k[0] in 'CR' else ('factory' if k[0] == 'F' else ('reuse' if k[0] == 'T' else 'world'))
 def own_prefix(tag, k, t):
-    if tag == 'op': return None if k in ('poster', 'title') else 'qrop4_'
+    if tag == 'op': return None if k == 'poster' else 'qrop4_'          # 題（title）も 3D の上に重ねる（v11 #2）
     if tag == 'c1':
         if k == 'R_scan': return 'qrc1s2_'
         return 'qrc1t2_' if fr_of(t) <= 252 else 'qrc1w5_'
@@ -24,7 +24,7 @@ def own_prefix(tag, k, t):
     return None
 # よその章の絵（使い回し）：絵コンテの置き場所（chapters.py の IMG）で決まる
 HOME = {'opening/sb2': 'op', 'ch1/sb': 'c1', 'ch2/sb': 'c2', 'ch3/sb': 'c3', 'ch4/sb': 'c4', 'c5/sb': 'c5'}
-ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello')}      # 絵コンテが冒頭の絵と同じもの
+ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30')}   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
 # ---------------------------------------------------------------- 描画のファイル
 class Src:
     """頭の名前ごとの mp4 のかたまり（コマの範囲 → ファイル）。読むのは ffmpeg で順に（飛んだら開き直す）"""
@@ -39,6 +39,8 @@ class Src:
         ch = next(((a, b, p) for a, b, p in s.chunks if a <= f <= b), None)
         if ch is None: return None
         a, b, p = ch
+        if s.cur and s.cur['p'] == p and s.cur['next'] == f + 1 and s.cur['last'] is not None:      # 同じコマをもう一度（つなぎの重ね用）
+            return Image.frombuffer('RGB', size, s.cur['last'], 'raw', 'RGB', 0, 1).copy()
         if s.cur is None or s.cur['p'] != p or s.cur['next'] > f or f - s.cur['next'] > 48:
             if s.cur: s.cur['proc'].kill()
             ss = (f - a) / FPS

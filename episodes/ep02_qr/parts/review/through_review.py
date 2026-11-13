@@ -36,7 +36,8 @@ for o, x in sfx_parts:
     i = int(round(o * SR)); m = min(len(x), n - i); sfx[i:i + m] += x[:m]
 r = subprocess.run(['ffmpeg', '-v', 'error', '-i', BGM, '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True, check=True)
 bed = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
-music = np.tile(bed, n // len(bed) + 1)[:n]
+sys.path.insert(0, '/home/user/qr_plan/parts/sfx_qr'); import sfx_qr as _SX
+music = _SX.bgm_loop(bed, n, 4.0)            # v11：くり返しの継ぎ目を 4 秒かけて重ねる（前は 3 分ごとにぶつっと頭へ戻っていた）
 music *= 0.04 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる
 mix = NA.mix_voice(music + sfx, 0.0, P=P, bus_peak=0.38, duck_db=9)
 aw = os.path.join(tmp, 'audio.wav')
@@ -46,7 +47,7 @@ ev = []
 for k, p in enumerate(P):
     nxt = P[k + 1]['start'] if k + 1 < len(P) else p['end'] + 1.0
     end = min(max(p['end'] + 0.35, p['start'] + 1.0), nxt - 0.05)
-    ev += SJ.events(p['start'], end, p['text'], wav=p.get('wav'), speed=1.0)
+    ev += SJ.events_v(p['start'], end, p['text'], wav=p.get('wav'), speed=1.0)
 # 台本の指示（（間）など）は字幕に出さない。短すぎる字幕（1.2秒未満）は、次の字幕の前まで延ばす
 import re as _re
 ev = [(a, c, _re.sub(r'（間）|\(間\)', '', txt).strip()) for a, c, txt in ev]
