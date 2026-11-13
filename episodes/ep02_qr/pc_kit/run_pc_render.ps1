@@ -226,7 +226,7 @@ function Run-Jobs {
   if ($jobs -contains "qrc4") {
     $outc = Join-Path $root "render_qrc4"
     $a4 = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_factory.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc4f_")
-    foreach ($r in @(@(279, 1006))) { Render-Chunks "QR回 4章（工場）" $r[1] $outc "qrc4f_" $a4 $r[0] }
+    foreach ($r in @(,@(279, 1006)))     # 範囲が 1 つのときは「,」が要る（ないと PowerShell が平らにして 279 と 1006 を別々に回し、何も描かない） { Render-Chunks "QR回 4章（工場）" $r[1] $outc "qrc4f_" $a4 $r[0] }
     $a4 = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_crates.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc4c_")
     foreach ($r in @(@(1146, 1319), @(1666, 3076), @(3655, 7234), @(8611, 9582))) { Render-Chunks "QR回 4章（数字の空間）" $r[1] $outc "qrc4c_" $a4 $r[0] }
     $a4 = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $outc, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc4w_")
