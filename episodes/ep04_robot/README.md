@@ -10,6 +10,11 @@
 | `台本_v0_2.md` | 台本 v0.2（名前を出す・決めたこと 1〜3） |
 | `台本_v0_3.md` | 台本 v0.3（コメント 10 件を反映） |
 | `台本_v0_4.md` | 台本 v0.4（コメント 26 件を反映・同じ語尾 3 連続 0） |
+| `台本_v1_0.md` | 台本 v1.0（確定） |
+| `voice/` | 声づくり（台本 json・読み・間・置き場所） |
+| `storyboard/` | 絵コンテ（3D の静止画・2D の札と場面） |
+| `animatic/` | 確認用の通し（静止画＋声＋字幕） |
 | `review_tool/` | 台本レビューツールに入れるデータ（`build_from_md.py` で md から作る）。作品 MARU-ROBOT |
 
 - 台本レビューツール：https://claude.ai/artifact/3kj4tZtaZWwbvig7GmEs4c（作品 MARU-ROBOT）
+- 動画レビュー：https://claude.ai/artifact/S3dTcoRuFr2n7Eg99RiJWi（作品 MARU-EP04）
