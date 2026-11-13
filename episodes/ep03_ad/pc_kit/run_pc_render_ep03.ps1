@@ -69,6 +69,18 @@ if (-not (Test-Path $blender)) {
        @(Get-ChildItem "C:\Program Files\Blender Foundation" -Filter blender.exe -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match "4\.3" }) | Select-Object -First 1
   if ($c) { $blender = $c.FullName }
 }
+if (-not (Test-Path $blender) -and $Worker -eq 0) {
+  # Blender 4.3 が無ければ、持ち運び版（入れなくても動く zip）を C:\marurobo に落として広げる
+  Note "Blender 4.3 が見つかりません。持ち運び版を落とします（約 300MB。初回だけ・数分）"
+  $zip = Join-Path $root "blender-4.3.2-windows-x64.zip"
+  try {
+    if (-not (Test-Path $zip)) { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile("https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.zip", $zip) }
+    Note "広げています…"
+    Expand-Archive -Path $zip -DestinationPath $root -Force
+    $c = Get-ChildItem $root -Directory -Filter "blender-4.3*" -ErrorAction SilentlyContinue | ForEach-Object { Get-ChildItem $_.FullName -Recurse -Depth 1 -Filter blender.exe -ErrorAction SilentlyContinue } | Select-Object -First 1
+    if ($c) { $blender = $c.FullName; Note ("Blender を用意しました：{0}" -f $blender) }
+  } catch { Note ("Blender を落とせませんでした（{0}）。手で入れてください：https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.msi" -f $_.Exception.Message) }
+}
 if (-not (Test-Path $blender)) { Note "Blender 4.3 が見つかりません。https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.msi を入れてから、もう一度走らせてください"; exit 1 }
 if (-not (Test-Path (Join-Path $anim "scenes_all.py"))) { Note "見つかりません：$anim\scenes_all.py（marurobo_ep03.zip を C:\marurobo に展開し直してください）"; exit 1 }
 

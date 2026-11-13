@@ -2,9 +2,9 @@
 
 3D の 21 場面（合わせて 19,564 コマ・約 13 分半）を、1920×1080 で描きます。2D の場面（S03・S09・S20）は、こちら（クラウド）で作るので描かなくて大丈夫です。
 
-## やること
-1. 届いた `marurobo_ep03.zip` を右クリック →「すべて展開」→ 展開先を `C:\marurobo` にする。`C:\marurobo\marurobo_ep03` ができれば OK（前の回のフォルダはそのままで大丈夫）。
-2. PowerShell を開いて、次の 1 行を貼って Enter：
+## やること（2つだけ）
+1. 届いた `marurobo_ep03.zip` を右クリック →「すべて展開」→ 展開先を `C:\marurobo` にする。`C:\marurobo\marurobo_ep03` ができれば OK。
+2. PowerShell を開いて、次の 1 行を貼って Enter。あとは放っておくだけ（Blender が入っていなければ、自動で持ち運び版を落として使います）：
 
 ```powershell
 $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep03.ps1 | Select-Object -First 1; if ($f) { powershell -ExecutionPolicy Bypass -File $f.FullName } else { "見つかりません：marurobo_ep03.zip を C:\marurobo に展開し直してください" }
