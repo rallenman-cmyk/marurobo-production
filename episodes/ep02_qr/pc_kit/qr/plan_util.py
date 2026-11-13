@@ -24,7 +24,7 @@ def cut(p, t, pos, heading, z=TILE_TOP):
 def start(pos, heading, z):
     p = mm.Plan(pos=pos, heading=heading, ground=z)
     return p
-def stagger(p, n=3, side=0.16, roll=15.0, label=None):
+def stagger(p, n=3, side=0.16, roll=22.0, label=None):
     """よろける（v12 #24）：反応の遅れ→目を見開く→横へ小さく跳ぶ（左右交互に n 回、だんだん小さく）。体は左右に大きく傾いて揺れ、踏んばって止まる"""
     lid = p._lb(label)
     t0 = p.t + 0.12
@@ -39,7 +39,7 @@ def stagger(p, n=3, side=0.16, roll=15.0, label=None):
         t = seg.t1; sgn = -sgn
     T = t - t0 + 0.9
     p.layer(t0, t0 + T, lambda tt, t0=t0, T=T: {
-        "roll": roll * math.exp(-(tt - t0) / (0.45 * T)) * math.sin(2 * math.pi * 1.55 * (tt - t0)) * min(1.0, (t0 + T - tt) / 0.3),
+        "roll": roll * math.exp(-(tt - t0) / (0.7 * T)) * math.sin(2 * math.pi * 1.55 * (tt - t0)) * min(1.0, (t0 + T - tt) / 0.3),
         "pitch": -6.0 * math.exp(-(tt - t0) / 0.5) * math.sin(math.pi * min(1.0, (tt - t0) / 0.5)),
         "light": 2.5 * math.exp(-(tt - t0) / 0.3)})
     p.t = t0 + T; p._lb_end(lid); return p
