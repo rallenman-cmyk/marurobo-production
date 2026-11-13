@@ -38,7 +38,7 @@ r = subprocess.run(['ffmpeg', '-v', 'error', '-i', BGM, '-ac', '1', '-ar', str(S
 bed = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
 sys.path.insert(0, '/home/user/qr_plan/parts/sfx_qr'); import sfx_qr as _SX
 music = _SX.bgm_loop(bed, n, 4.0)            # v11：くり返しの継ぎ目を 4 秒かけて重ねる（前は 3 分ごとにぶつっと頭へ戻っていた）
-music *= 0.04 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる
+music *= 0.034 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる
 mix = NA.mix_voice(music + sfx, 0.0, P=P, bus_peak=0.38, duck_db=9)
 aw = os.path.join(tmp, 'audio.wav')
 with wave.open(aw, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(mix, -1, 1) * 32767).astype(np.int16).tobytes())
