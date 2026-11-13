@@ -149,8 +149,8 @@ else {
   Write-Host "描き手 $Workers 人が描いています（タスクバーの「まるロボ 描き手」の窓）。進み具合は、この窓にも出ます"
   while (@($procs | Where-Object { -not $_.HasExited }).Count -gt 0) {
     Start-Sleep -Seconds 15
-    $all = @(Get-Content $log -Encoding UTF8)
-    if ($all.Count -gt $n0) { $all[$n0..($all.Count - 1)] | ForEach-Object { Write-Host $_ }; $n0 = $all.Count }
+    $all = @(Get-Content $log -Encoding UTF8 -ErrorAction SilentlyContinue)   # 描き手が書いている最中は読めないことがある（次の回に読む）
+    if ($all.Count -gt $n0 -and $all.Count -gt 0) { $all[$n0..($all.Count - 1)] | ForEach-Object { Write-Host $_ }; $n0 = $all.Count }
   }
 }
 # 送るファイルをまとめる（mp4 と、場面ごとの記録 *_log.json）
