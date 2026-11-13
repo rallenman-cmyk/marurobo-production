@@ -49,6 +49,10 @@ def qr(d, mtx, x0, y0, m, quiet=2, a=1.0):
             if mtx[r][c]: d.rect((x0 + (c + quiet) * m, y0 + (r + quiet) * m, x0 + (c + quiet + 1) * m - 0.4, y0 + (r + quiet + 1) * m - 0.4), fill=BLACK, a=a)
     return lambda r, c: (x0 + (c + quiet + 0.5) * m, y0 + (r + quiet + 0.5) * m)
 def C(cue, k, v): return cue.get(k, v) if cue else v
+def tint_box(d, cc, mtx, b, m, a=1.0):
+    """箱 b のマスを橙で塗る（黒いマス→濃い橙、白いマス→薄い橙。柄は見えたまま）"""
+    for (r, c) in A['boxes'][str(b)]:
+        x, y = cc(r, c); d.rect((x - m / 2, y - m / 2, x + m / 2 - 0.4, y + m / 2 - 0.4), fill=(196, 104, 24) if mtx[r][c] else (252, 214, 170), a=a)
 # ---------------- 画面いっぱいの図
 def url(t, dur, cue=None):
     im, d = canvas(); s = 'https://example.com/qr'; w = 54; x0 = 640 - len(s) * w / 2
@@ -103,7 +107,8 @@ def three(t, dur, cue=None):
     robot(im, look=t); return im
 def manual(t, dur, cue=None):
     im, d = canvas(); a = ease(t / 0.4); d.rect((350, 50, 930, 420), fill=WHITE, outline=(190, 195, 200), width=3, r=18, a=a); d.text((640, 115), '説明書', 64, INK, a=a)
-    for k, s in enumerate(('1．予備の箱の数', '2．重ねた柄の番号')): d.text((400, 225 + k * 100), s, 56, INK, a=ease((t - C(cue, 'line', 0.8) - 0.8 * k) / 0.4), anchor='lm')
+    for k in range(2):                                            # v11：中身（予備の数・柄の番号）は、言う場面で上の札に出す。ここでは「2つ」だけ
+        a2 = ease((t - C(cue, 'line', 0.8) - 0.5 * k) / 0.4); d.text((400, 225 + k * 100), '%d．' % (k + 1), 56, INK, a=a2, anchor='lm'); d.rect((470, 205 + k * 100, 860, 245 + k * 100), fill=(226, 230, 234), r=10, a=a2)
     d.text((640, 480), 'QRコードの「読み方」', 54, GRAY, a=a); robot(im, look=t); return im
 def shop(t, dur, cue=None):
     im, d = canvas()
@@ -117,9 +122,10 @@ def shop(t, dur, cue=None):
         d.text((cx, 475), '看板がある' if sign else '看板がない', 56, INK, a=a)
     return im
 def toc(t, dur, cue=None):
-    im, d = canvas(); a = ease(t / 0.4); d.rect((340, 90, 940, 500), fill=WHITE, outline=(190, 195, 200), width=3, r=18, a=a); d.text((640, 155), '目次', 64, INK, a=a)
-    b = ease((t - C(cue, 'row', 0.6)) / 0.4); d.text((400, 270), '英字と数字', 58, INK, a=b, anchor='lm'); d.text((880, 270), '5文字', 58, BLUE, a=b, anchor='rm')
-    d.line((400, 325, 880, 325), (210, 214, 218), 2, a=b); d.text((640, 410), 'ここまで読めばいい', 54, GRAY, a=ease((t - C(cue, 'note', 2.0)) / 0.4)); robot(im, look=t); return im
+    im, d = canvas(); a = ease(t / 0.4); d.rect((290, 110, 990, 420), fill=WHITE, outline=(190, 195, 200), width=3, r=18, a=a); d.text((640, 175), '目次', 64, INK, a=a)
+    b = ease((t - C(cue, 'row', 0.6)) / 0.4); d.text((330, 300), '英字と数字', 58, INK, a=b, anchor='lm'); d.text((950, 300), '5文字', 66, BLUE, a=b, anchor='rm')
+    for k in range(9): d.ell((630 + k * 13 - 3, 310 - 3, 630 + k * 13 + 3, 310 + 3), (160, 166, 172), a=b)      # 本の目次の点線。右端にページ数のかわりに文字数
+    robot(im, look=t); return im
 def alnum(t, dur, cue=None):
     im, d = canvas(); chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; w = 100; h = 70; d.text((640, 42), '英字と数字の表', 52, INK)
     hl = {'H': C(cue, 'H', 9e9), 'E': C(cue, 'E', 9e9), 'L': C(cue, 'L', 9e9), 'O': C(cue, 'O', 9e9)}
@@ -137,7 +143,8 @@ def bignum(t, dur, cue=None):
     for k, (x, lab, s, sub) in enumerate(((380, '本当の数字', '0〜255', '最大3ケタ'), (900, '今回', '0〜9', '1ケタ'))):
         a = ease((t - k * C(cue, 'small', 1.6)) / 0.4)
         if a <= 0: continue
-        d.text((x, 130), lab, 56, INK, a=a); d.rect((x - 200, 200, x + 200, 400), fill=BLUE_L, outline=BLUE, width=4, r=24, a=a); d.text((x, 300), s, 72, INK, a=a); d.text((x, 470), sub, 58, GRAY, a=a)
+        d.text((x, 130), lab, 56, INK, a=a); d.rect((x - 200, 200, x + 200, 400), fill=BLUE_L, outline=BLUE, width=4, r=24, a=a); d.text((x, 300), s, 72, INK, a=a)
+        d.text((x, 470), sub, 58, GRAY, a=min(a, ease((t - C(cue, 'sub%d' % (k + 1), 0.0)) / 0.4)))      # v11 #58：「最大3ケタ」「1ケタ」は言ってから
     if t > C(cue, 'small', 1.6): d.text((640, 300), '→', 80, GRAY, a=ease((t - C(cue, 'small', 1.6)) / 0.3))
     robot(im, look=t); return im
 def bits(t, dur, cue=None):
@@ -182,7 +189,7 @@ def drops_table(t, dur, cue=None):
         u = ease((t - tb - 0.5 - 0.08 * k) / 0.15)
         if u <= 0: continue
         x, y = cc(r, c); d.ell((x - 9 * u, y - 8 * u, x + 9 * u, y + 8 * u), (10, 14, 40))
-    d.rect((330, 8, 950, 76), fill=PANEL, r=16, a=ease((t - C(cue, 'note', 2.5)) / 0.4) * 0.92); d.text((640, 42), '12か所・全体のたった3%', 56, INK, a=ease((t - C(cue, 'note', 2.5)) / 0.4)); robot(im, x=60, y=450, h=200, look=t); return im
+    d.rect((330, 24, 950, 94), fill=PANEL, r=16, a=ease((t - C(cue, 'note', 2.5)) / 0.4) * 0.92); d.text((640, 59), '12か所・全体のたった3%', 56, INK, a=ease((t - C(cue, 'note', 2.5)) / 0.4)); robot(im, x=60, y=450, h=200, look=t); return im
 def logo_qr(t, dur, cue=None):
     im, d = canvas(); d.rect((0, 0, 1280, 720), fill=(214, 196, 170)); m = 20; ox = 640 - 12.5 * m; oy = 360 - 12.5 * m; cc = qr(d, H_, ox, oy, m)
     u = ease((t - C(cue, 'logo', 0.4)) / 0.5); x, y = cc(10, 10)
@@ -199,7 +206,9 @@ def two_qr(t, dur, cue=None):
     for k, (mtx, lab, nb) in enumerate(((L_, '予備 7個', 19), (H_, '予備 17個', 9))):
         a = ease((t - 0.5 * k) / 0.4); cx = 330 + k * 620; ox = cx - 12.5 * m; cc = qr(d, mtx, ox, 130, m, a=a)
         w = 300; d.rect((cx - w / 2, 70, cx - w / 2 + w * nb / 26, 102), fill=BLUE, a=a); d.rect((cx - w / 2 + w * nb / 26, 70, cx + w / 2, 102), fill=ORANGE, a=a)
-        d.text((cx, 480), lab, 58, INK, a=a)
+        sp = [b for b in range(nb + 1, 27)]                    # 予備の箱（置く順で、文字の箱のあと）
+        for b in sp: tint_box(d, cc, mtx, b, m, a)
+        d.text((cx - 20, 480), '予備', 58, ORANGE, a=a, anchor='rm'); d.text((cx - 10, 480), lab.replace('予備 ', ''), 58, INK, a=a, anchor='lm')
         u = ease((t - tb - 0.4 * k) / 0.3)
         if u > 0: x, y = cc(18, 18); d.rect((x - 2.5 * m, y - 2.5 * m - (1 - u) * 60, x + 2.5 * m, y + 2.5 * m - (1 - u) * 60), fill=(240, 240, 240), outline=GRAY, width=2)
         v = ease((t - tr - 0.6 * k) / 0.3)
@@ -216,13 +225,54 @@ def balance(t, dur, cue=None):
     if tilt: d.text((640, 60), '予備を増やすと…', 56, INK, a=ease((t - C(cue, 'tilt', 1.0)) / 0.4))
     return im
 def thirty(t, dur, cue=None):
+    """v11（#86 わかりにくい）：一度に全部出さず、声に合わせて 1 つずつ。①「30%＝広さではなく箱の数」→ ②予備がいちばん多いとき → ③26個のうち8個が灰色 → ④だいたい3割"""
     im, d = canvas(); n = 26; w = 38; g = 8; x0 = (1280 - (n * w + (n - 1) * g)) / 2
-    for k in range(n):
-        gray = k < 8 and t >= C(cue, 'gray', 0.8) + 0.15 * k
-        d.rect((x0 + k * (w + g), 90, x0 + k * (w + g) + w, 90 + w), fill=(138, 144, 151) if gray else (205, 210, 216), r=6)
-    d.text((640, 210), '26個のうち 8個 → 約31%', 64, INK, a=ease((t - C(cue, 'pct', 2.2)) / 0.4))
-    for k, s in enumerate(('L 約7%', 'M 約15%', 'Q 約25%', 'H 約30%')): d.text((205 + k * 290, 320), s, 56, RED if k == 3 else GRAY, a=ease((t - C(cue, 'levels', 3.0) - 0.2 * k) / 0.3))
-    d.text((640, 440), '「30%」は、広さではなく 箱の数', 56, INK, a=ease((t - C(cue, 'note', 4.0)) / 0.4)); robot(im, x=40, y=470, h=200, look=t); return im
+    a0 = ease(t / 0.4); d.rect((210, 30, 1070, 110), fill=WHITE, outline=(200, 205, 210), width=2, r=16, a=a0)
+    d.text((640, 70), '「30%」＝ 広さ ではなく 箱の数', 52, INK, a=a0)
+    tb = C(cue, 'boxes', 2.5); ab = ease((t - tb) / 0.4)
+    if ab > 0:
+        d.text((640, 170), '予備を一番多くしたとき', 48, ORANGE, a=ab)
+        for k in range(n):
+            gray = k < 8 and t >= C(cue, 'gray', tb + 1.0) + 0.15 * k
+            d.rect((x0 + k * (w + g), 230, x0 + k * (w + g) + w, 230 + w), fill=(110, 116, 123) if gray else (205, 210, 216), r=6, a=ab)
+        d.text((640, 330), '26個のうち 8個まで 直せる', 60, INK, a=ease((t - C(cue, 'gray', tb + 1.0) - 1.2) / 0.4))
+        d.text((640, 430), '8 ÷ 26 ＝ だいたい 3割（30%）', 60, RED, a=ease((t - C(cue, 'pct', tb + 3.0)) / 0.4))
+    robot(im, x=40, y=470, h=200, look=t); return im
+def levels(t, dur, cue=None):
+    """v11（#83）：予備の量は 4 段階（L・M・Q・H）。棒の橙が予備の多さ。32-06b で「工場は多め・ふだんは中くらい」"""
+    im, d = canvas(); d.text((640, 60), '予備の量は　4段階から選べる', 58, INK, a=ease(t / 0.4))
+    for k, (lv, p, nm) in enumerate((('L', 7, '少なめ'), ('M', 15, '中くらい'), ('Q', 25, '多め'), ('H', 30, '一番多い'))):
+        a = ease((t - 0.4 - 0.3 * k) / 0.35)
+        if a <= 0: continue
+        cx = 205 + k * 290; d.rect((cx - 120, 130, cx + 120, 470), fill=WHITE, outline=(200, 205, 210), width=2, r=18, a=a)
+        d.text((cx, 180), lv, 66, INK, a=a); hh = 220; d.rect((cx - 40, 230, cx + 40, 230 + hh), fill=(222, 236, 252), r=8, a=a)
+        d.rect((cx - 40, 230 + hh * (1 - p / 30 * 0.9), cx + 40, 230 + hh), fill=ORANGE, r=8, a=a); d.text((cx, 505), nm, 46, GRAY, a=a)
+    tf = C(cue, 'use', 9e9); u = ease((t - tf) / 0.4)
+    if u > 0:
+        for k, lab in ((3, '工場'), (1, 'ふだん')):
+            cx = 205 + k * 290; d.rect((cx - 125, 125, cx + 125, 475), outline=RED if k == 3 else TEAL, width=6, r=20, a=u)
+            d.rect((cx - 80, 555, cx + 80, 610), fill=RED if k == 3 else TEAL, r=14, a=u); d.text((cx, 582), lab, 46, WHITE, a=u)
+    return im
+def boxbar(t, dur, cue=None):
+    """v11（#82 まだ天秤の話ではない）：箱は全部で 26 個（大きさで決まる）→ 予備を増やすと、文字の箱が減る"""
+    im, d = canvas(); n = 26; w = 38; g = 8; x0 = (1280 - (n * w + (n - 1) * g)) / 2
+    d.text((640, 90), '箱は 全部で 26個（QRコードの大きさで決まる）', 52, INK, a=ease(t / 0.4))
+    tm = C(cue, 'more', 9e9); u = ease((t - tm) / 1.2); nb = round(9 - 4 * u)       # 文字の箱 9 → 5
+    for k in range(n): d.rect((x0 + k * (w + g), 230, x0 + k * (w + g) + w, 230 + 60), fill=BLUE if k < nb else ORANGE, r=8, a=ease((t - 0.3 - 0.02 * k) / 0.3))
+    d.text((x0, 340), '文字の箱 %d個' % nb, 54, BLUE, a=ease((t - 0.8) / 0.4), anchor='lm'); d.text((1280 - x0, 340), '予備 %d個' % (n - nb), 54, ORANGE, a=ease((t - 0.8) / 0.4), anchor='rm')
+    if u > 0: d.text((640, 450), '予備を増やす　→　文字の箱が減る', 56, RED, a=min(1, u * 2))
+    robot(im, x=40, y=470, h=200, look=t); return im
+def end_parts(t, dur, cue=None):
+    """v11（#91 話と絵が合っていない）：QR の中に、目印（赤）と予備（橙）も入っている"""
+    im, d = canvas(); m = 17; ox = 640 - 12.5 * m; oy = 70; cc = qr(d, H_, ox, oy, m)
+    a1 = ease((t - C(cue, 'finder', 0.3)) / 0.4)
+    for (r0, c0) in ((0, 0), (0, 14), (14, 0)):
+        x, y = cc(r0, c0); d.rect((x - m / 2 - 6, y - m / 2 - 6, x + 6.5 * m + 6, y + 6.5 * m + 6), outline=RED, width=8, r=10, a=a1)
+    d.rect((ox - 330, 120, ox - 40, 200), fill=RED, r=16, a=a1); d.text((ox - 185, 160), '見つける目印', 46, WHITE, a=a1)
+    a2 = ease((t - C(cue, 'spare', 2.0)) / 0.4)
+    for b in range(10, 27): tint_box(d, cc, H_, b, m, a2)
+    d.rect((ox + 25 * m + 30, 330, ox + 25 * m + 370, 410), fill=ORANGE, r=16, a=a2); d.text((ox + 25 * m + 200, 370), '直すための予備', 46, WHITE, a=a2)
+    return im
 def world_icons(t, dur, cue=None):
     im, d = canvas(); items = ['工場', 'ポスター', 'レシート', '駅', 'スマホ']; d.text((640, 90), '工場から、世界中へ', 60, INK, a=ease(t / 0.4))
     for k, s in enumerate(items):
@@ -255,7 +305,9 @@ def mask_fig(t, dur, cue=None):
     if uf > 0:   # 目印の真ん中（黒い3×3）と、塊の中の黒い3×3
         for r0, c0 in ((2, 2), (12, 13)):
             x, y = X0 + (c0 + 1) * m, Y0 + (r0 + 1) * m; d.rect((x - 5, y - 5, x + 3 * m + 5, y + 3 * m + 5), outline=ORANGE, width=6, r=6, a=uf)
-        d.text((880, 170), '目印の真ん中', 56, INK, a=uf); d.text((880, 250), '＝', 64, ORANGE, a=uf); d.text((880, 330), '塊の中の黒い四角', 56, INK, a=uf)
+        d.text((880, 170), '目印の真ん中', 56, INK, a=uf); d.text((880, 330), '塊の中の黒い四角', 56, INK, a=uf)
+        for dx in (-9, 9): d.line((880 + dx, 222, 880 + dx, 278), ORANGE, 7, a=uf)            # v11（#30）：上下に並べて比べるので、等号も縦に
+        d.line((X0 + 6.5 * m, Y0 + 3.5 * m, 690, 170), ORANGE, 4, a=uf * 0.9); d.line((X0 + 17 * m, Y0 + 14.5 * m, 636, 330), ORANGE, 4, a=uf * 0.9)   # どこのことか線でつなぐ
         d.text((880, 440), 'そっくり！ 迷う', 64, RED, a=ease((t - tf - 3.0) / 0.4) * (1 - up))
     if up > 0:   # 8種類の柄（青が「白黒を入れ替える所」）
         uo = ease((t - to) / 0.5); a = up * (1 - uo)
@@ -325,8 +377,8 @@ def printed(t, dur, cue=None):
 def chart(t, dur, cue=None):
     """印刷物に出てきた比率の回数（イメージ）。1:1:3:1:1 はほとんど出てこない"""
     im, d = canvas(); vals = [0.95, 0.82, 0.71, 0.60, 0.50, 0.41, 0.33, 0.25, 0.015]; th = C(cue, 'mark', 9e9)
-    d.text((80, 55), '印刷物に出てきた比率の回数', 54, INK, anchor='lm'); d.text((1240, 55), '（イメージ）', 40, GRAY, anchor='rm')
-    x0, y0, bw, gap, Hh = 110, 440, 92, 34, 320; d.line((x0 - 20, y0, x0 + 9 * (bw + gap), y0), GRAY, 3)
+    d.text((80, 55), '白と黒の並び方ごとの、見つかった回数', 52, INK, anchor='lm'); d.text((1240, 55), '（イメージ）', 40, GRAY, anchor='rm')
+    x0, y0, bw, gap, Hh = 110, 440, 92, 34, 320; d.line((x0 - 20, y0, x0 + 9 * (bw + gap), y0), GRAY, 3); d.text((x0, y0 + 40), '並び方（比率）いろいろ →', 42, GRAY, anchor='lm')
     for k, v in enumerate(vals):
         u = ease((t - 0.3 - 0.08 * k) / 0.4)
         if u <= 0: continue
@@ -335,7 +387,101 @@ def chart(t, dur, cue=None):
     v = ease((t - th) / 0.4)
     if v > 0:
         x = x0 + 8 * (bw + gap) + bw / 2; d.d.ellipse([(x - 70) * K, (y0 - 60) * K, (x + 70) * K, (y0 + 60) * K], outline=(*TEAL, int(255 * v)), width=int(6 * K))
-        d.text((1250, y0 - 150), '一番少ない', 60, TEAL, a=v, anchor='rm'); d.text((1250, 495), '1 : 1 : 3 : 1 : 1', 58, TEAL, a=v, anchor='rm')
+        d.text((1250, y0 - 150), '一番少ない', 60, TEAL, a=v, anchor='rm'); d.text((1250, 520), '1 : 1 : 3 : 1 : 1', 58, TEAL, a=v, anchor='rm')
+    return im
+
+# ---------------- v11 の重ね絵（声に合わせて出す）
+def ratio_bars(t, dur, cue=None):
+    """1:1:3:1:1 を、幅の違う 5 本の棒で（下の字幕と同じ字を出さず、目で比べられる形に。v10 #15 #18）。
+    cue：mid＝真ん中だけ光る（3倍）、run1・run2＝声に合わせて 1 本ずつ光る"""
+    im, d = clear(); al = min(1.0, t / 0.3, (dur - t) / 0.3)
+    if al <= 0: return im
+    u = 66; ws = (1, 1, 3, 1, 1); tot = sum(ws) * u; x0 = 640 - tot / 2; y0, y1 = 36, 112
+    d.rect((x0 - 30, y0 - 18, x0 + tot + 30, y1 + 78), fill=PANEL, r=18, a=al * 0.94)
+    lit = set(); tm = C(cue, 'mid', 9e9)
+    for key in ('run1', 'run2'):
+        tr = C(cue, key, 9e9)
+        for k in range(5):
+            if tr + 0.42 * k <= t < tr + 0.42 * 5 + 1.2: lit.add(k)
+    x = x0
+    for k, wv in enumerate(ws):
+        on = k in lit or (k == 2 and tm <= t < C(cue, 'mid_end', 9e9))
+        d.rect((x, y0, x + wv * u, y1), fill=BLACK if k % 2 == 0 else WHITE, outline=TEAL if on else (150, 158, 166), width=6 if on else 2, a=al)
+        d.text((x + wv * u / 2, y1 + 38), str(wv), 50, TEAL if on else INK, a=al); x += wv * u
+    if tm <= t < C(cue, 'mid_end', 9e9): d.text((x0 + tot + 70, (y0 + y1) / 2), '3倍', 54, RED, a=al * ease((t - tm) / 0.3), anchor='lm')
+    return im
+def arrows(pts):
+    """3D の上に矢印と短いラベル。pts：[(x, y, ラベル, cue のキー, 向き 'down'|'up'|'left'|'right')]（座標は 1280×720）"""
+    def f(t, dur, cue=None):
+        im, d = clear()
+        for x, y, lab, key, dr in pts:
+            t0 = C(cue, key, 0.0); a = min(ease((t - t0) / 0.25), (dur - t) / 0.3)
+            if a <= 0: continue
+            bob = 6 * math.sin((t - t0) * 6) * (1 - min(1, (t - t0) / 1.5))
+            vx, vy = {'down': (0, 1), 'up': (0, -1), 'left': (-1, 0), 'right': (1, 0)}[dr]; L = 70
+            tx, ty = x - vx * (12 + bob), y - vy * (12 + bob); sx, sy = tx - vx * L, ty - vy * L
+            d.line((sx, sy, tx - vx * 20, ty - vy * 20), RED, 12, a=a)
+            px, py = -vy, vx; d.poly([(tx, ty), (tx - vx * 30 + px * 22, ty - vy * 30 + py * 22), (tx - vx * 30 - px * 22, ty - vy * 30 - py * 22)], RED, a=a)
+            if lab:
+                lx, ly = sx - vx * 34, sy - vy * 34; w = 22 + 30 * len(lab)
+                d.rect((lx - w / 2, ly - 30, lx + w / 2, ly + 30), fill=RED, r=14, a=a); d.text((lx, ly), lab, 44, WHITE, a=a)
+        return im
+    return f
+def patterns8(t, dur, cue=None):
+    """右上に、さっきの 8 種類の柄（小さく）。2 本の帯に書いてあるのは「どの柄を重ねたか」（v10 #35）"""
+    im, d = clear(); al = min(1.0, t / 0.3, (dur - t) / 0.3)
+    if al <= 0: return im
+    pats, fn, k = _MK['pats'], _MK['func'], _MK['mask']; mm = 3.2; gw = 21 * mm
+    d.rect((770, 22, 1260, 22 + 2 * (gw + 16) + 70), fill=PANEL, r=16, a=al * 0.95); d.text((1015, 52), '8種類の柄', 40, INK, a=al)
+    for j in range(8):
+        gx, gy = 790 + (j % 4) * (gw + 52), 84 + (j // 4) * (gw + 16); sel = j == k and t > C(cue, 'sel', 1.0)
+        d.rect((gx - 3, gy - 3, gx + gw + 3, gy + gw + 3), fill=WHITE, outline=BLUE if sel else (200, 205, 210), width=5 if sel else 1, a=al)
+        for r in range(21):
+            for c in range(21):
+                if not fn[r][c] and pats[j][r][c]: d.rect((gx + c * mm, gy + r * mm, gx + (c + 1) * mm, gy + (r + 1) * mm), fill=BLUE, a=al)
+        d.text((gx + gw / 2, gy + gw + 2), '', 10, INK, a=0)
+    return im
+def insets(items):
+    """左右に 2 枚の小さな画面（前の場面の切り抜き）と見出し。items：[(PIL 画像, 見出し, cue のキー)]"""
+    def f(t, dur, cue=None):
+        im, d = clear()
+        for k, (pic, lab, key) in enumerate(items):
+            a = min(ease((t - C(cue, key, 0.0)) / 0.35), (dur - t) / 0.3)
+            if a <= 0: continue
+            cx = 330 + k * 620; w, h = 520, 292; x0, y0 = cx - w / 2, 150
+            d.rect((x0 - 10, y0 - 10, x0 + w + 10, y0 + h + 10), fill=WHITE, r=16, a=a)
+            p = pic.resize((int(w * K), int(h * K)), Image.LANCZOS).convert('RGBA'); p.putalpha(int(255 * a)); im.alpha_composite(p, (int(x0 * K), int(y0 * K)))
+            d.rect((cx - 220, y0 + h + 24, cx + 220, y0 + h + 90), fill=PANEL, r=14, a=a * 0.95); d.text((cx, y0 + h + 57), lab, 46, INK, a=a)
+        return im
+    return f
+def pip(pic, label):
+    """左上に、前の場面の切り抜き（小さな画面）。「さきほど」「体で隠れた」などと言うときに（v10 #8 #14 #40 #69 #74）"""
+    def f(t, dur, cue=None):
+        im, d = clear(); a = min(ease(t / 0.3), (dur - t) / 0.3)
+        if a <= 0: return im
+        w, h = 400, 225; x0, y0 = 28, 26
+        d.rect((x0 - 8, y0 - 8, x0 + w + 8, y0 + h + 64), fill=WHITE, r=14, a=a)
+        p = pic.resize((int(w * K), int(h * K)), Image.LANCZOS).convert('RGBA'); p.putalpha(int(255 * a)); im.alpha_composite(p, (int(x0 * K), int(y0 * K)))
+        d.text((x0 + w / 2, y0 + h + 30), label, 36, INK, a=a); return im
+    return f
+def seq_card(parts, size=64, xy=(640, 150)):
+    """札の言葉を、声に合わせて少しずつ足す（v10 #50 #52）。parts：[(言葉, cue のキー)]"""
+    def f(t, dur, cue=None):
+        im, d = clear(); al = min(1.0, (dur - t) / 0.3)
+        shown = [(s_, ease((t - C(cue, k, 0.0)) / 0.25)) for s_, k in parts if t >= C(cue, k, 0.0)]
+        if not shown or al <= 0: return im
+        txt = ''.join(s_ for s_, _ in shown); x0, y0, x1, y1 = d.d.textbbox((xy[0] * K, xy[1] * K), txt, font=F(size), anchor='mm'); p = 28 * K
+        d.d.rounded_rectangle((x0 - p, y0 - p * 0.7, x1 + p, y1 + p * 0.7), 20 * K, fill=(*PANEL, int(240 * al)))
+        x = x0
+        for s_, a in shown:
+            d.d.text((x, (y0 + y1) / 2), s_, font=F(size), fill=(*INK, int(255 * al * a)), anchor='lm'); x += d.d.textlength(s_, font=F(size))
+        return im
+    return f
+def title_card(t, dur, cue=None):
+    """冒頭の題（v10 #2）：3D の上に、真ん中ぞろえで大きく。地を少し暗くして字を立たせる"""
+    im, d = clear(); a = min(ease(t / 0.5), 1.0)
+    d.rect((0, 0, 1280, 720), fill=(10, 16, 24), a=0.45 * a)
+    d.text((640, 300), 'QRコードは', 72, WHITE, a=a); d.text((640, 410), '欠けても なぜ読める？', 96, (120, 220, 230), a=ease((t - 0.25) / 0.5))
     return im
 # ---------------- 重ねる札・メーター（透明つき）
 def card(text, size=60, xy=(640, 150)):
@@ -356,7 +502,7 @@ def meter(n, start=0.4, step_=0.18):
         if k: d.text((1018, 156), '壊れた箱 %d個%s' % (k, '　あふれた' if over else ''), 28, RED if over else (90, 96, 104), a=al)
         return im
     return f
-FIG = dict(c1_url=url, c1_bigger=bigger, c2_nearfar=nearfar, c2_ruler=ruler, c2_times21=times21, c2_three=three, c2_manual=manual, c2_shop=shop, c3_toc=toc,
+FIG = dict(c5_levels=levels, c5_boxbar=boxbar, end_parts=end_parts, c1_url=url, c1_bigger=bigger, c2_nearfar=nearfar, c2_ruler=ruler, c2_times21=times21, c2_three=three, c2_manual=manual, c2_shop=shop, c3_toc=toc,
            c3_alnum=alnum, c4_bignum=bignum, c4_bits=bits, c4_summary=summary, c5_drops=drops_table, c5_logo=logo_qr, c5_two=two_qr, c5_balance=balance,
            c5_thirty=thirty, end_world=world_icons, c2_mask=mask_fig, c2_finder=finder, c2_print=printed, c2_chart=chart)
 if __name__ == '__main__':
@@ -374,7 +520,12 @@ if __name__ == '__main__':
         sheet.paste(f(5.5, dur, cue).convert('RGB').resize((480, 270)), ((j % 4) * 480, (j // 4) * 270))
     sheet.save(os.path.join(out, 'sheet.png')); print('ok', len(names))
 # ---------------- 4章の数字の空間：右半分のメモ（3D の看板の小さな字の代わり。スマホでも読める大きさ）
-def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False):
+P1, P2, P3 = (52, 120, 210), (222, 118, 24), (34, 146, 84)     # 1番目・2番目・3番目の箱の色（メモの数字と箱の下の札をそろえる。v10 #63）
+def _segs(d, xy, segs, size, a):
+    """[(字, 色)] を真ん中ぞろえで並べて描く"""
+    tw = sum(d.d.textlength(t_, font=F(size)) for t_, _ in segs); x = xy[0] * K - tw / 2
+    for t_, col in segs: d.d.text((x, xy[1] * K), t_, font=F(size), fill=(*col, int(255 * a)), anchor='lm'); x += d.d.textlength(t_, font=F(size))
+def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False):
     """m1・m2：(見出し, 1行目, 2行目 or None, 2行目の色)。extra：下に出す大きな一行。xlab：箱の下に ×1 ×2 ×3"""
     def f(t, dur, cue=None):
         im, d = clear(); al = min(1.0, (t / 0.3) if fade else 1.0, (dur - t) / 0.25 if dur - t < 0.25 else 1.0)
@@ -384,10 +535,15 @@ def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False):
             y0 = 30 + k * 250; title, l1, l2, c2 = (list(m) + [None, None])[:4]
             d.rect((700, y0, 1255, y0 + 228), fill=(253, 240, 224), outline=ORANGE, width=4, r=20, a=al * 0.97)
             d.text((728, y0 + 36), title, 34, (150, 90, 30), a=al, anchor='lm')
-            d.text((978, y0 + 110), l1, 58 if len(l1) < 12 else 48, INK, a=al)
+            if isinstance(l1, list): _segs(d, (978, y0 + 110), l1, 58 if sum(len(x) for x, _ in l1) < 12 else 48, al)
+            else: d.text((978, y0 + 110), l1, 58 if len(l1) < 12 else 48, INK, a=al)
             if l2: d.text((978, y0 + 182), l2, 44, c2 or RED, a=al)
         if extra: d.rect((700, 520 - 0, 1255, 580), fill=PANEL, r=16, a=al * 0.95); d.text((978, 550), extra, 44, RED, a=al)
         if xlab:
-            for k, x in enumerate((115, 330, 535)): d.text((x, 514), '×%d' % (k + 1), 48, RED if (glow2 and k == 1) else INK, a=al)
+            for k, x in enumerate((115, 330, 535)):
+                col = (P1, P2, P3)[k]; d.rect((x - 90, 522, x + 90, 532), fill=col, r=4, a=al)
+                d.text((x, 562), '×%d' % (k + 1), 48, RED if (glow2 and k == 1) else col, a=al)
+        if diff:                                                       # v10 #64：ずれ（2大きい → 4大きい）がちょうど2倍、を線で結ぶ
+            d.line((688, 212, 676, 212, 676, 462, 688, 462), RED, 5, a=al); d.text((640, 337), '2倍', 50, RED, a=al)
         return im
     return f

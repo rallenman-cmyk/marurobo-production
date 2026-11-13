@@ -86,8 +86,28 @@ def step(amp=0.10, soft=1.0):
     return norm(body + tick, amp)
 def hop_land(amp=0.16):
     x = place(1.0)[: int(0.12 * SR)].copy(); s = step(1.0); x[:len(s)] += s; return norm(x, amp)
+def jump(amp=0.10):
+    """まるロボが跳ぶ「ぴょん」（上がる音・短く）"""
+    t = _t(0.22); f = 300 + 700 * (t / t[-1]) ** 1.5; ph = 2 * math.pi * np.cumsum(f) / SR
+    return norm(np.sin(ph) * np.minimum(t / 0.01, 1) * np.exp(-t / 0.09), amp)
+def dive(amp=0.09):
+    """画面に飛び込む「とぷん」（水面に入るような短い音）"""
+    t = _t(0.45); f = 900 * np.exp(-t / 0.12) + 180; ph = 2 * math.pi * np.cumsum(f) / SR
+    return norm(np.sin(ph) * np.minimum(t / 0.005, 1) * np.exp(-t / 0.15) + _lp(_rng.normal(0, 1, len(t)), 1200) * np.exp(-t / 0.06) * 0.3, amp)
+def bgm_loop(bed, n, xf=4.0):
+    """BGM を n サンプルまでのばす。くり返しの継ぎ目は xf 秒かけて重ねる（ぶつっと頭に戻らない。QR回 v10「BGMの切り替わりに違和感」）"""
+    k = int(xf * SR); L = len(bed)
+    if L >= n: return bed[:n].copy()
+    out = np.zeros(n + L, np.float32); fi = np.sin(np.linspace(0, math.pi / 2, k)) ** 2; fo = 1 - fi
+    pos = 0; first = True
+    while pos < n:
+        seg = bed.copy()
+        if not first: seg[:k] *= fi
+        seg[-k:] *= fo
+        out[pos:pos + L] += seg; pos += L - k; first = False
+    return out[:n]
 LIB = {'fold': fold, 'place': place, 'lid_open': lid_open, 'drop': drop, 'drops12': drops, 'chime': chime, 'gather': gather, 'assemble': assemble,
-       'meter_tick': meter_tick, 'overflow': overflow, 'beam': beam, 'step': step, 'hop_land': hop_land}
+       'meter_tick': meter_tick, 'overflow': overflow, 'beam': beam, 'step': step, 'hop_land': hop_land, 'jump': jump, 'dive': dive}
 def write(path, x):
     with wave.open(path, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
 if __name__ == '__main__':

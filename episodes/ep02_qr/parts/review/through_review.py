@@ -36,8 +36,9 @@ for o, x in sfx_parts:
     i = int(round(o * SR)); m = min(len(x), n - i); sfx[i:i + m] += x[:m]
 r = subprocess.run(['ffmpeg', '-v', 'error', '-i', BGM, '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True, check=True)
 bed = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
-music = np.tile(bed, n // len(bed) + 1)[:n]
-music *= 0.04 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる
+sys.path.insert(0, '/home/user/qr_plan/parts/sfx_qr'); import sfx_qr as _SX
+music = _SX.bgm_loop(bed, n, 4.0)            # v11：くり返しの継ぎ目を 4 秒かけて重ねる（前は 3 分ごとにぶつっと頭へ戻っていた）
+music *= 0.034 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる
 mix = NA.mix_voice(music + sfx, 0.0, P=P, bus_peak=0.38, duck_db=9)
 aw = os.path.join(tmp, 'audio.wav')
 with wave.open(aw, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(mix, -1, 1) * 32767).astype(np.int16).tobytes())
@@ -46,7 +47,7 @@ ev = []
 for k, p in enumerate(P):
     nxt = P[k + 1]['start'] if k + 1 < len(P) else p['end'] + 1.0
     end = min(max(p['end'] + 0.35, p['start'] + 1.0), nxt - 0.05)
-    ev += SJ.events(p['start'], end, p['text'], wav=p.get('wav'), speed=1.0)
+    ev += SJ.events_v(p['start'], end, p['text'], wav=p.get('wav'), speed=1.0)
 # 台本の指示（（間）など）は字幕に出さない。短すぎる字幕（1.2秒未満）は、次の字幕の前まで延ばす
 import re as _re
 ev = [(a, c, _re.sub(r'（間）|\(間\)', '', txt).strip()) for a, c, txt in ev]
@@ -55,8 +56,11 @@ ass = O2.ASS_HEAD[:] + ['Dialogue: 0,%s,%s,Main,,0,0,0,,%s' % (O2.ts(a), O2.ts(c
 labels = {'op': '冒頭', 'c1': '1章', 'c2': '2章', 'c3': '3章', 'c4': '4章', 'c5': '5章', 'end': '結び'}
 VER = os.environ.get('VER', 'v5')
 FINAL = bool(os.environ.get('FINAL'))   # 本番の組み立て：-14 LUFS・画質を上げる・確認用の札は「組み立ての試し」
+def _pcmiss(d, tag):
+    try: return bool(json.load(open(os.path.join(d, tag + '_pc.json')))['missing'])
+    except Exception: return False
 for (d, tag), o in zip(PARTS, offs):
-    ass.append('Dialogue: 1,%s,%s,Shot,,0,0,0,,%s' % (O2.ts(o), O2.ts(o + 4.0), ('本番の組み立ての試し %s：%s（3Dは仮の静止画）' if FINAL else '確認用 通し %s：%s（仮のまるロボの静止画・本番はPCの3D）') % (VER, labels.get(tag, tag))))
+    ass.append('Dialogue: 1,%s,%s,Shot,,0,0,0,,%s' % (O2.ts(o), O2.ts(o + 4.0), (((('本番の組み立て %s：%s（3D は PC の描画・まだ届いていない所は絵コンテ）' if _pcmiss(d, tag) else '本番の組み立て %s：%s（3D は PC の描画）')) if os.environ.get('PC3D') else '本番の組み立ての試し %s：%s（3Dは仮の静止画）') if FINAL else '確認用 通し %s：%s（仮のまるロボの静止画・本番はPCの3D）') % (VER, labels.get(tag, tag))))
 ap = os.path.join(tmp, 'subs.ass'); open(ap, 'w', encoding='utf-8').write('\n'.join(ass) + '\n')
 json.dump(dict(offsets={tag: o for (d, tag), o in zip(PARTS, offs)}, total=T, subs=[dict(id=p.get('id', str(p['no'])), text=_re.sub(r'（間）', '', p['text']).strip(), t0=round(p['start'], 2), t1=round(p['end'], 2), chapter=p['chapter']) for p in P]),
           open(os.path.splitext(OUT)[0] + '_index.json', 'w'), ensure_ascii=False, indent=0)

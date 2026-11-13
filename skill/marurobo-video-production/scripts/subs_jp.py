@@ -226,6 +226,67 @@ def events(a, c, t, wav=None, speed=None):
     return out
 
 
+_YOMI = None
+def _ylen(p):
+    """読みの長さ（数字・英字をかなに直した字数。声の長さにほぼ比例する）"""
+    global _YOMI
+    s = p.replace("\\N", "")
+    if _YOMI is None:
+        try:
+            import importlib.util
+            sp = importlib.util.spec_from_file_location("yomi_qr", "/home/user/qr_plan/parts/voice_v2/yomi.py"); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); _YOMI = m.yomi
+        except Exception: _YOMI = lambda x: x
+    r = _YOMI(s)
+    return max(1.0, sum(1 for ch in r if ch not in "、。？！…「」（）・ 　"))
+
+
+def plan_tame(t):
+    """「……」でためてから言う答え（「……読めました。」「……10個。」）は、必ず次の字幕に分ける（答えを先に見せない。QR回 v10 のコメント）"""
+    import re
+    m = [k.end() for k in re.finditer("……", t) if 4 <= k.start() and len(t) - k.end() >= 2]
+    if not m: return plan(t)
+    out = []; j = 0
+    for k in m + [len(t)]:
+        seg = t[j:k]
+        if seg: out += plan(seg)
+        j = k
+    return out
+
+
+def events_v(a, c, t, wav=None, speed=None):
+    """events の改良（QR回 v11、2026-11-13）：切り替わりを「声が出ている時間」の割合で選ぶ。
+    字数の割合で選ぶと、間の多い文（「あれ？……」「……1・1・3・1・1」）で、実際の声より何秒も遅れて替わった"""
+    ps = plan_tame(t)
+    if len(ps) == 1: return [(a, c, ps[0])]
+    p = _placement().get(t)
+    if wav is None and p is not None: wav = p.get("wav") or os.path.join(VOICE, "line_%03d.wav" % p["no"])
+    sp = speed or (p["speed"] if p is not None else 1.0)
+    try: runs, dur = gaps(wav, sp)
+    except Exception: return events(a, c, t, wav, speed)
+    mr = []
+    for g0, g1 in runs:
+        if mr and g0 - mr[-1][1] < 0.15: mr[-1] = (mr[-1][0], g1)
+        else: mr.append((g0, g1))
+    cand = [(g0, g1) for g0, g1 in mr if g1 - g0 >= 0.12 and 0.3 <= g0 and g1 <= dur - 0.2]
+    if len(cand) < len(ps) - 1: return events(a, c, t, wav, speed)
+    sil_before = lambda x: sum(min(g1, x) - g0 for g0, g1 in mr if g0 < x)
+    vtot = dur - sil_before(dur)
+    w = [_ylen(x) for x in ps]; tot = sum(w)
+    tgt = [vtot * sum(w[:k + 1]) / tot for k in range(len(ps) - 1)]
+    import itertools
+    best = None
+    for combo in itertools.combinations(cand, len(ps) - 1):
+        cost = sum(abs((g0 - sil_before(g0)) - tg) for (g0, g1), tg in zip(combo, tgt)) - 0.15 * sum(min(g1 - g0, 1.0) for g0, g1 in combo)
+        if best is None or cost < best[0]: best = (cost, combo)
+    out = []; t0 = a
+    for i in range(len(ps) - 1):
+        g0, g1 = best[1][i]; t1 = a + max(g0 + 0.05, g1 - 0.15)
+        t1 = min(max(t1, t0 + 0.6), c - 0.6 * (len(ps) - 1 - i) - 0.4)
+        out.append((t0, t1, ps[i])); t0 = t1
+    out.append((t0, c, ps[-1]))
+    return out
+
+
 def check(a, c, t, wav, speed=1.0):
     """分けた字幕の切り替わりが、どれも声の切れ目の中にあるか → [(切り替わりの秒, 入っているか)]"""
     ev = events(a, c, t, wav=wav, speed=speed); runs, dur = gaps(wav, speed); res = []

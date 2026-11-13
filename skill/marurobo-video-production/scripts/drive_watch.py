@@ -29,7 +29,7 @@ while want and time.time() < t_end:
             if not (os.path.exists(dst) and os.path.getsize(dst) > 1000):
                 subprocess.run(["curl", "-sSL", "--max-time", "600", "-o", dst, "https://drive.usercontent.google.com/download?id=%s&export=download&confirm=t" % fid])
             if name.endswith(".mp4"):
-                m = re.search(r"_(\d{4})-(\d{4})\.mp4$", name); info = frames(dst)
+                m = re.search(r"_(\d{4,})-(\d{4,})\.mp4$", name); info = frames(dst)
                 if not m or not info.startswith("1920,1080,") or int(info.split(",")[2]) != int(m.group(2)) - int(m.group(1)) + 1: bad.append((name, info))
         if bad:
             print(time.strftime("%H:%M"), ch, "BAD", bad[:5], flush=True)
