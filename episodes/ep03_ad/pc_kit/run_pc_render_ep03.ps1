@@ -118,6 +118,15 @@ if ($Worker -gt 0) { Run-Jobs; exit 0 }
 Add-Type -Namespace Maru -Name Power -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint esFlags);'
 [void][Maru.Power]::SetThreadExecutionState([uint32]2147483649)
 Get-ChildItem $done -Filter "*.lock" -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+# ほかの回（QR回など）の描画が動いているあいだは待つ（同じグラフィックボードを取り合うと、どちらも遅くなる）
+$waited = $false
+while ($true) {
+  $busy = @(Get-CimInstance Win32_Process -Filter "Name='blender.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '\s-b\s' })
+  if ($busy.Count -eq 0) { break }
+  if (-not $waited) { Note ("ほかの回の描画（Blender {0} 本）が動いています。終わるのを待ってから、3本目を描き始めます（このままで大丈夫です）" -f $busy.Count); $waited = $true }
+  Start-Sleep -Seconds 300
+}
+if ($waited) { Note "ほかの回の描画が終わったので、3本目を描き始めます" }
 $total = (AllChunks).Count
 Note ("はじめます：{0} 場面・{1} 本（100 コマずつ）。残り {2} 本。同時に {3} 本。Blender：{4}" -f $JOBS.Count, $total, (Left), $Workers, $blender)
 $tAll = Get-Date
