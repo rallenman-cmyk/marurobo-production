@@ -9,6 +9,7 @@
 | `台本_v0_1.md` | 台本 v0.1（108 本・約2,700字・です・ます 74%） |
 | `台本_v0_2.md` | 台本 v0.2（名前を出す・決めたこと 1〜3） |
 | `台本_v0_3.md` | 台本 v0.3（コメント 10 件を反映） |
+| `台本_v0_4.md` | 台本 v0.4（コメント 26 件を反映・同じ語尾 3 連続 0） |
 | `review_tool/` | 台本レビューツールに入れるデータ（`build_from_md.py` で md から作る）。作品 MARU-ROBOT |
 
 - 台本レビューツール：https://claude.ai/artifact/3kj4tZtaZWwbvig7GmEs4c（作品 MARU-ROBOT）
