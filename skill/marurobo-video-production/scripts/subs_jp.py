@@ -243,7 +243,7 @@ def _ylen(p):
 def plan_tame(t):
     """「……」でためてから言う答え（「……読めました。」「……10個。」）は、必ず次の字幕に分ける（答えを先に見せない。QR回 v10 のコメント）"""
     import re
-    m = [k.end() for k in re.finditer("……", t) if 4 <= k.start() and len(t) - k.end() >= 2]
+    m = [k.end() for k in re.finditer("……[。、]?", t) if 4 <= k.start() and len(t) - k.end() >= 2]   # 「……。」の「。」は前の字幕に付ける（3本目で「。見渡すかぎり」が出た）
     if not m: return plan(t)
     out = []; j = 0
     for k in m + [len(t)]:

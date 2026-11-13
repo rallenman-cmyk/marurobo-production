@@ -20,6 +20,8 @@ P = json.load(open(os.path.join(EP, "voice", "placement.json"), encoding="utf-8"
 SID = {e["no"]: e for e in json.load(open(os.path.join(EP, "voice", "script_v1_0.json"), encoding="utf-8"))}
 T = {SID[p["no"]]["id"]: (p["start"], p["end"]) for p in P}
 def s(i, k=0): return T[i][k]
+sys.path.insert(0, HERE); import wordtime as _wt
+def W(i, frag, o=0.0): return _wt.W(i, frag, o)    # 答えの札は、その言葉を言う瞬間に（QR回 v10 の指摘の横展開）
 END = P[-1]["end"] + 2.0
 PARTS = ["s00", "s01", "s02", "s03", "s04", "s05", "s06a", "s06b", "gate", "phone", "s09", "s10", "s11", "s12",
          "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s20", "s21", "s22"]
@@ -35,7 +37,7 @@ def tag_png(name, items):
     for it in items:
         kind = it[0]
         if kind == "tag":
-            _, text, cx, cy, tail, big = (list(it) + [None, False])[:6]
+            _, text, cx, cy, tail, big, col = (list(it) + [None, False, None])[:7]   # col：ふちの色（容疑者の色：赤・橙・紫）
             font = BIGF if big else TAGF
             bb = d.textbbox((0, 0), text, font=font); w, th = bb[2] - bb[0], bb[3] - bb[1]; h = th + 30
             cx = min(max(cx, w / 2 + 30), 1250 - w / 2)
@@ -43,7 +45,7 @@ def tag_png(name, items):
             if tail:
                 by = y1 - 2 if tail[1] > cy else y0 + 2
                 d.polygon([(cx - 16, by), (cx + 16, by), tail], fill="white", outline=NAVY)
-            d.rounded_rectangle([x0, y0, x1, y1], 18, fill="white", outline=NAVY, width=4)
+            d.rounded_rectangle([x0, y0, x1, y1], 18, fill="white", outline=col or NAVY, width=8 if col else 4)
             d.text((x0 + 22 - bb[0], cy - th / 2 - bb[1]), text, font=font, fill=NAVY)
             boxes.append((text, x0, y0, x1, y1, font.size))
         elif kind == "ring":
@@ -95,6 +97,7 @@ def night_inset():
     p = os.path.join(tmp, "inset22.png"); im.save(p); return p
 
 
+SUS = ((229, 72, 77), (242, 153, 58), (140, 100, 200))   # 容疑者の色（台本：赤＝①マイク・橙＝②・紫＝③）。札のふちも同じ色に
 OVERLAYS = []   # (始まり, 終わり, png, 札の箱)
 def ov(a, b, name, items): p, bx = tag_png(name, items); OVERLAYS.append((a, b, p, bx))
 def ovp(a, b, pb): OVERLAYS.append((a, b, pb[0], pb[1]))
@@ -104,33 +107,41 @@ ov(s("01-01") + 0.8, s("01-02") + 1.0, "s01_a", [("tag", "今度、キャンプ�
 ov(s("01-02") + 0.6, s("01-03") + 0.2, "s01_b", [("tag", "いいね！", 900, 150, (880, 260))])
 ovp(s("01-03"), s("01-03", 1) + 0.3, picbubble("s01_tent", 760, 300, 70, tent))
 ov(s("04-04"), s("04-04", 1) + 0.3, "s04_title", [("tag", "さっき話した物が、なぜ広告に出る？", 640, 110, None, False)])
-ov(s("05-02"), s("05-06", 1), "s05_1", [("tag", "①マイク", 230, 70)])
-ov(s("05-03"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", 627, 165)])
-ov(s("05-04b"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", 1040, 70)])
-ov(s("06-02") + 0.5, s("06-02", 1), "s06_ring", [("ring", 830, 392, 200, 62)])
-ov(s("07-02") + 0.3, s("07-02b", 1), "s07_guard", [("tag", "見張り番", 1100, 120)])
-ov(s("07-04") + 0.5, s("07-04", 1) + 0.3, "s07_word", [("tag", "Hey Siri", 640, 110, None, True), ("tag", "OK Google", 640, 230)])
+ov(W("05-02", "マイク"), s("05-06", 1), "s05_1", [("tag", "①マイク", 230, 70, None, False, SUS[0])])
+ov(W("05-03", "出ていく"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", 627, 165, None, False, SUS[1])])
+ov(W("05-04b", "わたしたち"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", 1040, 70, None, False, SUS[2])])
+ov(W("06-02", "この小さな穴"), s("06-02", 1), "s06_ring", [("ring", 830, 392, 200, 62)])
+ov(W("07-02", "見張り番"), s("07-02b", 1), "s07_guard", [("tag", "見張り番", 1100, 120)])
+ov(W("07-04", "あの合言葉"), s("07-04", 1) + 0.3, "s07_word", [("tag", "Hey Siri", 640, 110, None, True), ("tag", "OK Google", 640, 230)])
 ov(s("08-08") - 1.3, s("08-08") + 2.5, "s08_similar", [("tag", "Hey, Siri-al（ヘイ、シリアル）", 640, 110)])
 ov(s("08-11") - 1.3, s("08-11") + 2.5, "s08_real", [("tag", "Hey Siri", 640, 110, None, True)])
 _dot = None
 for _d in DIRS:
     _p = os.path.join(_d, "phone_log.json")
     if os.path.exists(_p): _dot = json.load(open(_p)).get("dot2d") or None; break
-if _dot: ov(s("08-14") + 0.4, s("08-15", 1), "s08_dot", [("ring", _dot[0], _dot[1], 70, 70)])   # 3D で計算した点の位置
-ov(s("10-05"), s("10-05", 1), "s10_drop", [("tag", "いた場所", 640, 110)])
-ov(s("10-06"), s("10-06", 1), "s10_square", [("tag", "見たページ", 640, 110)])
-ov(s("10-07"), s("10-07", 1), "s10_two", [("tag", "一緒にいた人", 640, 110)])
+if _dot: ov(W("08-14", "同じ色の点"), s("08-15", 1), "s08_dot", [("ring", _dot[0], _dot[1], 70, 70)])   # 3D で計算した点の位置
+ov(W("10-05", "いた場所"), s("10-05", 1), "s10_drop", [("tag", "いた場所", 640, 110)])
+ov(W("10-06", "見たページ"), s("10-06", 1), "s10_square", [("tag", "見たページ", 640, 110)])
+ov(W("10-07", "一緒にいた人"), s("10-07", 1), "s10_two", [("tag", "一緒にいた人", 640, 110)])
 ov(s("12-04") + 1.5, s("12-05b", 1), "s12_cards", [("tag", "いた場所", 330, 110), ("tag", "見たページ", 640, 110), ("tag", "一緒にいた人", 960, 110)])
-ov(s("13-03"), s("13-04", 1), "s13_phone", [("img", os.path.join(SB, "phone_ad.png"), 1010, 170, 160), ("tag", "ソラさんのスマホ", 1060, 90)])
-ov(s("13-05") + 0.3, s("13-06", 1), "s13_wifi", [("wifi", 640, 150, ((300, 380), (900, 380)))])
-ovp(s("14-01"), s("14-01b") + 1.0, picbubble("s14_leaf", 760, 300, 70, leaf))
+ov(s("13-03"), s("13-04", 1), "s13_phone", [("tag", "ソラさんのスマホ", 1060, 90)])
+ov(W("13-03", "テントの写真"), s("13-04", 1), "s13_photo", [("img", os.path.join(SB, "phone_ad.png"), 1010, 170, 160)])   # 写真（答え）は言う瞬間に
+ov(W("13-05", "同じ電車"), s("13-06", 1), "s13_wifi", [("wifi", 640, 150, ((300, 380), (900, 380)))])
+ovp(W("14-01b", "紅葉"), s("14-01b", 1) + 1.0, picbubble("s14_leaf", 760, 300, 70, leaf))
 ov(s("15-03") + 2.0, s("15-04", 1), "s15_q", [("tag", "？枚", 640, 300, None, True)])
 for k, x in enumerate((70, 640, 1210)):
-    ov(s("15-05") + 1.4 * k, s("15-06", 1), "s15_%d" % k, [("ring", x, 300, 80, 90), ("tag", str(k + 1), x, 170, None, True)])
-ov(s("16-06"), s("16-06", 1), "s16", [("tag", "当たり", 470, 150), ("tag", "外れ", 1050, 330)])
-ov(s("18-03"), s("18-03", 1) + 0.5, "s18", [("tag", "メールアドレスの名簿", 900, 110)])
+    ov(W("15-05", "%d枚" % (k + 1)), s("15-06", 1), "s15_%d" % k, [("ring", x, 300, 80, 90), ("tag", str(k + 1), x, 170, None, True)])
+ov(W("16-06", "外れ"), s("16-06", 1), "s16b", [("tag", "外れ", 1050, 330)])
+ov(W("16-06", "当たり"), s("16-06", 1), "s16a", [("tag", "当たり", 470, 150)])
+ov(W("18-03", "メールアドレス"), s("18-03", 1) + 0.5, "s18", [("tag", "メールアドレスの名簿", 900, 110)])
 ov(s("21-02"), s("21-02", 1), "s21", [("tag", "ピポ、ピポ", 980, 170)])
-ov(s("22-03"), s("22-03", 1), "s22_inset", [("img", night_inset(), 820, 60, 420)])
+ov(W("22-03", "キャンプの動画"), s("22-03", 1), "s22_inset", [("img", night_inset(), 820, 60, 420)])
+
+# 前の場面のことを言う所は、その場面の切り抜きを左上に小さく（QR回 v10 の指摘の横展開）。(出す始まり, 終わり, 元の時刻, 名前)
+PIPS = [(W("07-01", "柱の穴"), s("07-01", 1) + 0.3, W("06-02", "この小さな穴") + 1.0, "さきほどの穴"),
+        (W("12-03", "あの枠"), s("12-03", 1) + 0.3, 29.0, "ハルさんの画面"),
+        (W("15-01b", "あの鏡"), s("15-01b", 1) + 0.3, 101.0, "あの鏡")]
+
 
 # ---------------- 絵の並び（場面ごとのコマ。間引いたコマは長さで埋める）
 logs, rows = {}, []
@@ -175,6 +186,18 @@ for a, b, pth in rows + [(END, END, None)]:
         cur = e
     cur = max(cur, b)
 allrows = sorted(rows + fill)
+def _frame_at(t):
+    for a, b, pth in allrows:
+        if a <= t < b: return pth
+    return allrows[-1][2]
+for k, (a, b, tsrc, label) in enumerate(PIPS):
+    im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    sub = Image.open(_frame_at(tsrc)).convert("RGB").resize((400, 225), Image.LANCZOS)
+    d.rounded_rectangle([24, 24, 24 + 412, 24 + 237], 14, fill="white", outline=NAVY, width=4); im.paste(sub, (30, 30))
+    bb = d.textbbox((0, 0), label, font=TAGF); w = bb[2] - bb[0]; th = bb[3] - bb[1]
+    d.rounded_rectangle([30, 272, 30 + w + 40, 272 + th + 26], 14, fill=NAVY); d.text((50 - bb[0], 285 - bb[1]), label, font=TAGF, fill="white")
+    pp = os.path.join(tmp, "pip_%d.png" % k); im.save(pp)
+    OVERLAYS.append((a, b, pp, [(label, 24, 24, 436, 272 + th + 26, TAGF.size)]))
 # 大きさの違う絵（3D の試し描き・2D・絵コンテ）を一度に並べると時刻がずれるので、続いている同じ場面ごとに
 # 1280×720・24 コマ/秒の短い動画にしてから、つなぐ
 runs = []
@@ -245,14 +268,36 @@ for a, c, t in ev: ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c
 open(tmp + "/subs.ass", "w", encoding="utf-8").write("\n".join(ass) + "\n")
 
 # ---------------- 組み立て（絵 → 札 → 字幕、声と効果音）
+# 場面のつなぎを重ねる（QR回 v10 の指摘「ぶつっと変わる」の横展開）：前の場面の最後の絵を、次の場面の頭に重ねて消していく。
+#   3D どうしは 0.35 秒、スマホの外と中・2D の場面との境目は 0.65 秒。声と字幕の時刻は変えない
+XIN = {"S03", "S04", "S06b", "S09", "S10", "S11", "S20", "S21"}           # 前後で世界が変わる所（2D・スマホの中へ／外へ）
+XF = [(t, 0.65 if k in XIN else 0.35) for k, t in SCST.items() if k != "S00"]
+XF.append((298.26, 0.65))                                                    # 門の町（スマホの中）→ 外から見たスマホの画面
+XF = sorted(x for x in XF if 0.5 < x[0] < END - 1)
 inputs = ["-i", lst]
-fl = ["[0:v]scale=1280:720,fps=24,setsar=1[v0]"]
+# 同じ絵が長く続く所は、ゆっくり寄る（QR回 v10「変わり映えしない」の横展開。動きの少ない所を測って選んだ：S05・S08 の門・S09・S14・S17〜S19・S20）。
+#   3D の中の物に合わせた輪（S06 の穴・S08 の画面の点・S15 のつり広告）がある所は寄らない（輪がずれるため）
+ZOOM = [(SCST["S05"], SCST["S06"]), (SCST["S08"], 298.26), (SCST["S09"], SCST["S10"]), (SCST["S14"], SCST["S15"]),
+        (SCST["S17"], SCST["S19"]), (SCST["S19"], SCST["S20"]), (SCST["S20"], SCST["S21"])]
+_zt = "(in/24)"
+_ze = "+".join("between(%s,%.3f,%.3f)*0.06*((%s-%.3f)/%.3f)" % (_zt, a, b, _zt, a, b - a) for a, b in ZOOM)
+fl = ["[0:v]scale=1280:720,fps=24,setsar=1,zoompan=z='1+%s':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24[v0]" % _ze]
+cur = "v0"; nin = 1
+for j, (T, dd) in enumerate(XF):
+    _src = _frame_at(T - 0.03); _z = 1 + sum(0.06 * (T - 0.03 - a) / (b - a) for a, b in ZOOM if a <= T - 0.03 <= b)
+    if _z > 1.001:                                                       # 寄っている場面の終わりは、重ねる絵も同じだけ寄せる（ずれて見えないように）
+        _im = Image.open(_src).convert("RGB").resize((1280, 720), Image.LANCZOS); cw, ch = 1280 / _z, 720 / _z
+        _im = _im.crop(((1280 - cw) / 2, (720 - ch) / 2, (1280 + cw) / 2, (720 + ch) / 2)).resize((1280, 720), Image.LANCZOS)
+        _src = os.path.join(tmp, "xf_%d.png" % j); _im.save(_src)
+    inputs += ["-loop", "1", "-t", "%.3f" % dd, "-i", _src]
+    fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=out:st=0:d=%.3f:alpha=1,setpts=PTS+%.3f/TB[x%d]" % (nin, dd, T, j))
+    fl.append("[%s][x%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[c%d]" % (cur, j, T, T + dd, j)); cur = "c%d" % j; nin += 1
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
     inputs += ["-i", pth]
-    fl.append("[v%d][%d:v]overlay=0:0:enable='between(t,%.3f,%.3f)'[v%d]" % (i, i + 1, a, b, i + 1))
-fl.append("[v%d]subtitles=%s:fontsdir=%s[vout]" % (len(OVERLAYS), tmp + "/subs.ass", FONTS))
+    fl.append("[%s][%d:v]overlay=0:0:enable='between(t,%.3f,%.3f)'[o%d]" % (cur, nin, a, b, i)); cur = "o%d" % i; nin += 1
+fl.append("[%s]subtitles=%s:fontsdir=%s[vout]" % (cur, tmp + "/subs.ass", FONTS))
 inputs += ["-i", tmp + "/mix.wav"]
-cmd = ["ffmpeg", "-v", "error", "-y"] + inputs + ["-filter_complex", ";".join(fl), "-map", "[vout]", "-map", "%d:a" % (len(OVERLAYS) + 1),
+cmd = ["ffmpeg", "-v", "error", "-y"] + inputs + ["-filter_complex", ";".join(fl), "-map", "[vout]", "-map", "%d:a" % nin,
        "-c:v", "libx264", "-preset", "medium", "-crf", os.environ.get("CRF", "27"), "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", os.environ.get("ABR", "128k"), "-t", "%.2f" % END, OUT]
 if REMUX:
     cmd = ["ffmpeg", "-v", "error", "-y", "-i", REMUX, "-i", tmp + "/mix.wav", "-map", "0:v", "-map", "1:a", "-c:v", "copy",

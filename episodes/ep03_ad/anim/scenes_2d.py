@@ -24,6 +24,8 @@ for p in P:
 ks = list(SCN)
 for i, k in enumerate(ks): SCN[k][1] = SCN[ks[i + 1]][0] if i + 1 < len(ks) else P[-1]["end"] + 2
 def s(i, k=0): return T[i][k]
+sys.path.insert(0, HERE); import wordtime as _wt
+def WT(i, frag, o=0.0): return _wt.W(i, frag, o)    # 札は、その言葉を言う瞬間に（W は絵の幅なので別の名前）
 def ease(x): x = min(1, max(0, x)); return x * x * (3 - 2 * x)
 def prog(t, a, b): return ease((t - a) / max(1e-6, b - a))
 
@@ -85,13 +87,13 @@ RED = {(1, 3), (3, 9), (2, 12)}
 
 def f09(t):
     im = Image.new("RGB", (W, H), (30, 42, 60)); d = ImageDraw.Draw(im)
-    tg = s("09-02") + 0.5
-    if t >= tg: tag(d, "1万7千本以上のアプリ", 470, 60); tag(d, "2018年", 1000, 60)
+    if t >= WT("09-02", "1万7千本"): tag(d, "1万7千本以上のアプリ", 470, 60)
+    if t >= WT("09-02", "2018年"): tag(d, "2018年", 1000, 60)
     for r in range(5):
         for c in range(14):
             x, y = 80 + c * 80, 130 + r * 80
             col = APPC[(r + c) % 5]
-            red = (r, c) in RED and t >= s("09-04") + 0.6
+            red = (r, c) in RED and t >= WT("09-04", "スマホの画面を")
             if red:
                 col = (229, 72, 77)
             d.rounded_rectangle([x, y, x + 60, y + 60], 12, fill=col)
@@ -107,7 +109,7 @@ def f09(t):
         d.ellipse([mx - 70, my - 70, mx + 70, my + 70], outline=(242, 193, 78), width=14)
         d.line([(mx + 50, my + 50), (mx + 120, my + 120)], fill=(242, 193, 78), width=22)
     # 09-03b：音の印（〜）がついた四角は一つもない → 大きな × ではなく「0」の札
-    if s("09-03b") + 1.5 <= t < s("09-04"):
+    if WT("09-03b", "一つも") <= t < s("09-04"):
         tag(d, "0本", 640, 330, font=ImageFont.truetype(FONT, 72))  # 数だけ（字幕と同じ文は書かない）
     # 09-06b〜e：まとめ（これまでの絵を 3 つ並べて、一つずつ光らせる）
     if t >= s("09-06") - 0.2:
@@ -126,7 +128,7 @@ def f09(t):
                     for cc in range(4):
                         d.rounded_rectangle([x0 + 45 + cc * 62, 180 + rr * 62, x0 + 95 + cc * 62, 230 + rr * 62], 8, fill=APPC[(rr + cc) % 5])
             tag(d, label, x0 + 165, 455)
-        if t >= s("09-06e"):                              # 1 人目の容疑者：マイク → 容疑はひとまず晴れた
+        if t >= WT("09-06e", "容疑は"):                              # 1 人目の容疑者：マイク → 容疑はひとまず晴れた
             tag(d, "①マイク", 560, 80, bg=(255, 244, 214))
             d.line([(690, 80), (715, 105), (765, 50)], fill=(93, 187, 99), width=14)  # 容疑が晴れた印（字の代わりにチェック）
     return im
