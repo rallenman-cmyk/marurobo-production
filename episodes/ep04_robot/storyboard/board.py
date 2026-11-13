@@ -1,6 +1,6 @@
 # ロボットではありません回：台本 v1.0 の絵コンテ（3D の場面を 1 枚ずつ。字のない 3D。字・札は board_overlay.py で 2D に重ねる）
 # blender -b --factory-startup --python board.py -- <場面> <out.png> [samples] [--tex <絵のフォルダ>]
-#   場面：b01 b02 b03 b04a b04b b05a b05b b08 b12 b13 b14 b15 b16 b17 b18 b21 b22 b23
+#   場面：b01 b02 b03 b04a b04b b05a b05b b08 b12 b13 b13e b13h b14 b15 b16 b17 b17n b18 b21 b22 b23（e＝足あとなし、h＝私の足あとだけ、n＝まだ選んでいない）
 #   一緒に <out>.json：札を重ねる場所（3D の点を画面の座標にしたもの）
 # 部品は 3本目（ep03_ad/storyboard）のもの：まるロボ（仮のモデル）・番犬（門番に使う）・光・材質
 # 決まり：3D の中に字を書かない。まるロボは喋らない（腕はない。マウスは体で押す）
@@ -205,13 +205,17 @@ def b12():
     camera((0.8, -5.5, 2.4), (0.3, 7.0, 1.4), 30)
 
 
-def b13():
+def b13(human=True, robot=True):
     screen_world()
-    steps(path_human(), "#FF8A2A", "h")
-    steps(path_robot(), "#21C1B3", "r")
+    if human: steps(path_human(), "#FF8A2A", "h")
+    if robot: steps(path_robot(), "#21C1B3", "r")
     maru((4.4, -1.6, 0), face_deg=200, s=0.8, hat=False, eye_glow=0.6, look_up=-15)
     anchor("human_path", (-2.6, 2.0, 0.3)); anchor("robot_path", (2.2, 3.5, 0.3))
     camera((0, -7.5, 11.5), (0, 4.0, 0), 28)
+
+
+def b13e(): b13(False, False)
+def b13h(): b13(True, False)
 
 
 def b14():
@@ -242,6 +246,12 @@ def b16():
 def b17():
     street_floor(selected=((2, 0), (2, 1)))
     maru((0.75, 5.5, 0.03), face_deg=180, s=0.7, hat=False, eye_glow=1.0, look_up=-10)
+    camera((0, -4.2, 7.2), (0, 4.0, 0), 34)
+
+
+def b17n():
+    street_floor(selected=())
+    maru((-2.6, 0.2, 0.03), face_deg=170, s=0.7, hat=False, eye_glow=1.0, look_up=-10)
     camera((0, -4.2, 7.2), (0, 4.0, 0), 34)
 
 

@@ -40,12 +40,18 @@ for s in shots:
     seq.append((max(0.0, t), os.path.join(SH, s["img"])))
 seq.sort()
 seq[0] = (0.0, seq[0][1])
-lst = []
+# v2（コメント「同じ映像で変わり映えしない」）：どの絵もゆっくり寄る（3%。2 倍に広げてから寄せるので、動きは 1 ピクセルより細かい）
+clips = []
 for i, (t0, img) in enumerate(seq):
     t1 = seq[i + 1][0] if i + 1 < len(seq) else END
-    lst.append("file '%s'\nduration %.3f" % (img, t1 - t0))
-lst.append("file '%s'" % seq[-1][1])
-open(tmp + "/list.txt", "w").write("\n".join(lst) + "\n")
+    n = max(1, round(t1 * 24) - round(t0 * 24))   # 区切りを通しのコマ番号で決める（1 枚ずつ丸めると、ずれがたまる）
+    c = tmp + "/clip_%03d.mp4" % i
+    z = "1+0.03*on/%d" % max(1, n - 1)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", img, "-frames:v", str(n),
+                    "-vf", "scale=2560:1440,zoompan=z='%s':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24" % z,
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", c], check=True)
+    clips.append(c)
+open(tmp + "/list.txt", "w").write("".join("file '%s'\n" % c for c in clips))
 
 # 声
 sr = 24000
@@ -92,7 +98,7 @@ open(os.path.splitext(OUT)[0] + "_check.txt", "w", encoding="utf-8").write("\n".
 print("\n".join(chk))
 
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", tmp + "/list.txt", "-i", tmp + "/voice.wav",
-                "-vf", "scale=1280:720,fps=24,subtitles=%s:fontsdir=%s" % (tmp + "/subs.ass", FONTS),
-                "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-tune", "stillimage", "-pix_fmt", "yuv420p",
+                "-vf", "subtitles=%s:fontsdir=%s" % (tmp + "/subs.ass", FONTS),
+                "-c:v", "libx264", "-preset", "veryfast", "-crf", "32", "-pix_fmt", "yuv420p",
                 "-c:a", "aac", "-b:a", "96k", "-shortest", OUT], check=True)
 print("字幕 %d 枚・絵 %d 枚・%.1f 秒 → %s（%.1f MB）" % (len(ev), len(seq), END, OUT, os.path.getsize(OUT) / 1e6))
