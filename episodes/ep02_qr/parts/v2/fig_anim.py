@@ -282,7 +282,7 @@ def levels(t, dur, cue=None):
     if u > 0:
         for k, lab in ((3, '工場'), (1, 'ふだん')):
             cx = 205 + k * 290; d.rect((cx - 125, 125, cx + 125, 475), outline=RED if k == 3 else TEAL, width=6, r=20, a=u)
-            d.rect((cx - 80, 555, cx + 80, 610), fill=RED if k == 3 else TEAL, r=14, a=u); d.text((cx, 582), lab, 46, WHITE, a=u)
+            d.rect((cx - 78, 100, cx + 78, 148), fill=RED if k == 3 else TEAL, r=14, a=u); d.text((cx, 124), lab, 44, WHITE, a=u)     # 札は箱の上の縁に（字幕の帯にかけない）
     return im
 def boxbar(t, dur, cue=None):
     """v11（#82 まだ天秤の話ではない）：箱は全部で 26 個（大きさで決まる）→ 予備を増やすと、文字の箱が減る"""
@@ -578,6 +578,6 @@ def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False
                 col = (P1, P2, P3)[k]; d.rect((x - 46, 482, x + 46, 528), fill=RED if (glow2 and k == 1) else col, r=14, a=al)   # 箱の下に色の札（字幕の帯にかけない）
                 d.text((x, 505), '×%d' % (k + 1), 42, WHITE, a=al)
         if diff:                                                       # v10 #64：ずれ（2大きい → 4大きい）がちょうど2倍、を線で結ぶ
-            d.line((688, 206, 676, 206, 676, 431, 688, 431), RED, 5, a=al); d.text((640, 318), '2倍', 50, RED, a=al)
+            d.line((688, 206, 676, 206, 676, 431, 688, 431), RED, 5, a=al); d.rect((572, 222, 668, 282), fill=WHITE, outline=RED, width=3, r=10, a=al); d.text((620, 252), '2倍', 44, RED, a=al)      # 白い札にのせて、箱の角と重ならないように
         return im
     return f
