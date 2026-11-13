@@ -31,3 +31,4 @@
 - 通し：`bluetooth_full_1080.mp4`（18分10秒・1920×1080・-14 LUFS）— チャットで送付済み。
 - YouTube の章：0:00 電車の中の二つの疑問／1:21 音楽を届ける、小さな旅／2:55 届くことと、再生することは違う／7:06 途切れる理由と、周波数を変える工夫／10:45 送り直す（再送）／12:09 先に受け取って待たせる（バッファ）／15:01 ためれば解決？（遅れとの両立）／16:59 まとめ
 - サムネ案 6・チャンネル案 3 組（`references/branding.md`）— zip でチャットに送付済み。
+- 3本目の PC 用一式：`episodes/ep03_ad/pc_kit/`（`make_kit.sh` → `marurobo_ep03.zip`。PC では `C:\marurobo\marurobo_ep03`、出力は `C:\marurobo\render_ep03` → `marurobo_render\ep03`）。場面の道具に `--gpu --video` を付けると、グラフィックボードで描いて mp4 で書く（`anim/pc_out.py`）。

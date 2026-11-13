@@ -331,6 +331,7 @@ sc.render.resolution_x, sc.render.resolution_y = RESX, RESY
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = os.path.join(OUTDIR, MODE + "_")
+exec(open(os.path.join(_ANIM_HERE, "pc_out.py"), encoding="utf-8").read())  # PC：--gpu・--video
 json.dump(dict(mode=MODE, t0=T0, t1=T1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS), dot2d=DOT2D), open(os.path.join(OUTDIR, MODE + "_log.json"), "w"))
 print("FRAMES", sc.frame_start, sc.frame_end, "T0", T0)
 if "--blend" in ARGS:

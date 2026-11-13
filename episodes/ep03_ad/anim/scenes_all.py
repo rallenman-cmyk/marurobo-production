@@ -560,6 +560,7 @@ sc.render.resolution_x, sc.render.resolution_y = RESX, RESY
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = os.path.join(OUTDIR, KEY + "_")
+exec(open(os.path.join(_ANIM_HERE, "pc_out.py"), encoding="utf-8").read())  # PC：--gpu・--video
 os.makedirs(OUTDIR, exist_ok=True)
 json.dump(dict(mode=KEY, t0=t0, t1=t1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS)),
           open(os.path.join(OUTDIR, KEY + "_log.json"), "w"), ensure_ascii=False)
