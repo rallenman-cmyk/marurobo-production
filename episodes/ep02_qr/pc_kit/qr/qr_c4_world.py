@@ -173,7 +173,7 @@ for k, b in enumerate(SRC):
     p0 = Vector((CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.4)); p1 = Vector((tgt.x, tgt.y, Z0 + WALL_H + 0.3))
     sg = W.box('src glow %d' % b, (BOXW * 0.86, BOXW * 0.86, 0.05), gm, bevel=0.1); sg.location = (CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.16); sg.visible_shadow = False
     keys(sg, 'scale', [(t0 - 0.25, (0.3, 0.3, 1)), (t0, (1.1, 1.1, 1)), (t0 + 0.5, (0.9, 0.9, 1))]); show(sg, [(t0 - 0.25, CP.T_RESTORE + 0.6)])
-    for j, (sz, lag) in enumerate(((0.55, 0.0), (0.38, 0.05), (0.26, 0.10), (0.17, 0.15))):
+    for j, (sz, lag) in enumerate(((0.78, 0.0), (0.54, 0.05), (0.38, 0.10), (0.25, 0.15))):     # 試し描きで小さかった → 大きく
         o = W.box('gather orb %d %d' % (b, j), (sz, sz, sz), om, bevel=sz / 2, seg=4); o.visible_shadow = False
         for f in range(fr_of(t0 + lag), fr_of(t0 + lag + TRAVEL) + 1):
             u = min(1.0, max(0.0, ((f - 1) / FPS - t0 - lag) / TRAVEL)); o.location = p0.lerp(p1, ease(u)) + Vector((0, 0, 2.6 * math.sin(math.pi * u))); o.keyframe_insert('location', frame=f)
@@ -218,7 +218,7 @@ else:
 # ================================================================ カメラ
 C = lambda *v: Vector(v)
 X, rp = CP.ROW_X, CP.row_pos; r0 = Vector((*rp(0), 0)); wx, wy = CP.W23_XY; ct = Vector((*CP.CTR, 0))
-VIEWS = {'G9': (C(X + 6.5, rp(4)[1] - 5.0, 4.6), C(*rc(9, 9), 0.0), 20), 'G6': (r0 + C(1.2, -5.4, 2.4), r0 + C(-0.2, 0.2, 1.3), 30),
+VIEWS = {'G9': (C(X + 6.5, rp(4)[1] - 5.0, 4.6), C(*rc(9, 9), 0.0), 20), 'G6': (r0 + C(0.45, -5.9, 2.5), r0 + C(-0.3, 0.2, 1.45), 30),   # v12 #46：3章と同じ、板がほぼ正面に並ぶ角度
          'W23': (C(wx + 2.6, wy - 6.4, 3.6), C(wx + 0.6, wy + 0.3, 0.3), 30), 'W26': (C(H * 0.25, -H * 1.25, 27), C(H * 0.2, -H * 0.12, 0), 26)}
 for k in ('B28a', 'B28b', 'B28c', 'B28d'): VIEWS[k] = (ct + C(9.0, -15.0, 10.0), ct + C(-4.0, 3.0, 0.5), 24)
 SH = [(a, b, k) for a, b, k in CP.SHOTS if k in VIEWS]
