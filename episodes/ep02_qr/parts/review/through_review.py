@@ -55,8 +55,11 @@ ass = O2.ASS_HEAD[:] + ['Dialogue: 0,%s,%s,Main,,0,0,0,,%s' % (O2.ts(a), O2.ts(c
 labels = {'op': '冒頭', 'c1': '1章', 'c2': '2章', 'c3': '3章', 'c4': '4章', 'c5': '5章', 'end': '結び'}
 VER = os.environ.get('VER', 'v5')
 FINAL = bool(os.environ.get('FINAL'))   # 本番の組み立て：-14 LUFS・画質を上げる・確認用の札は「組み立ての試し」
+def _pcmiss(d, tag):
+    try: return bool(json.load(open(os.path.join(d, tag + '_pc.json')))['missing'])
+    except Exception: return False
 for (d, tag), o in zip(PARTS, offs):
-    ass.append('Dialogue: 1,%s,%s,Shot,,0,0,0,,%s' % (O2.ts(o), O2.ts(o + 4.0), (('本番の組み立て %s：%s（3D は PC の描画）' if os.environ.get('PC3D') else '本番の組み立ての試し %s：%s（3Dは仮の静止画）') if FINAL else '確認用 通し %s：%s（仮のまるロボの静止画・本番はPCの3D）') % (VER, labels.get(tag, tag))))
+    ass.append('Dialogue: 1,%s,%s,Shot,,0,0,0,,%s' % (O2.ts(o), O2.ts(o + 4.0), (((('本番の組み立て %s：%s（3D は PC の描画・まだ届いていない所は絵コンテ）' if _pcmiss(d, tag) else '本番の組み立て %s：%s（3D は PC の描画）')) if os.environ.get('PC3D') else '本番の組み立ての試し %s：%s（3Dは仮の静止画）') if FINAL else '確認用 通し %s：%s（仮のまるロボの静止画・本番はPCの3D）') % (VER, labels.get(tag, tag))))
 ap = os.path.join(tmp, 'subs.ass'); open(ap, 'w', encoding='utf-8').write('\n'.join(ass) + '\n')
 json.dump(dict(offsets={tag: o for (d, tag), o in zip(PARTS, offs)}, total=T, subs=[dict(id=p.get('id', str(p['no'])), text=_re.sub(r'（間）', '', p['text']).strip(), t0=round(p['start'], 2), t1=round(p['end'], 2), chapter=p['chapter']) for p in P]),
           open(os.path.splitext(OUT)[0] + '_index.json', 'w'), ensure_ascii=False, indent=0)
