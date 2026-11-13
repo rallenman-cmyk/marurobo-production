@@ -33,13 +33,15 @@ def hd(a, b): return math.degrees(math.atan2(-(b[0] - a[0]), b[1] - a[1]))
 TL, TR, BL, BR = rc(3, 3), rc(3, 17), rc(17, 3), rc(17, 17)
 P0 = rc(3, -2.2)                                         # 左上の目印の左の白いフチ（目印の方＝右を向く）
 P1 = rc(-2.2, -2.2)                                      # 左上の目印の斜め外（斜めになぞる）
-P24 = rc(10, 14)
+P24 = rc(4.6, 4.6)                                         # v12 #19：カットで置き直さず、走って行く先（左上の目印のそば）
+P1J = rc(-0.55, -0.55)                                   # 大地のマスの手前の白いフチ（ここから跳び乗る）
 P27 = rc(10, 12)
 P29 = [rc(6, c) for c in (8, 10, 12, 14)]                # 黒白交互の列の黒いマス
 P30 = rc(6, 13.2)
 P40 = rc(10, -2.5)
 P31 = rc(10, 9)
-P34A, P34B = (H + 2.0 * MOD, -H + 9.0), (H + 2.0 * MOD, -H + 0.5)
+P34A, P34B = (H + 2.0 * MOD, -H + 11.5), (H + 2.0 * MOD, -H + 0.5)   # v12 #38：歩きながら画面に入る（カットの前から歩き出している）
+P31X = (rc(10, 9)[0] + 0.2, rc(10, 9)[1] - 3.3)          # v12 #38：2本の帯の場面の終わりに、カメラの手前へ走って画面の外へ
 # ---- 出来事の時刻（3D の動き）
 T_BEAM_ROW = (s('10-02', 0.8), s('10-02', 3.4))          # 「左から黒・白・黒・白・黒」：目の光で横になぞる
 T_LIFT = s('10-02b', 0.1)                                 # 通ったマスが浮き上がって帯になる（左から順に）
@@ -64,7 +66,10 @@ T_LINK = s('13-03', 0.6)                                   # 2 本の帯は同�
 T_DIRTY = s('13-03b', 0.3)                                 # 片方が汚れても、もう片方で
 T_BORDER = s('15-02', 0.3)                                 # QR の境目の線
 T_QTICK = s('15-02', 1.6)                                  # 4 マスの目盛り
-T_UNMASK = (s('14-04b', 0.6), s('14-04b', 2.4))             # 柄を外す（光の線が通った所から、元の並びに）
+T_UNMASK = (s('14-04b', 0.5), s('14-04b', 3.3))             # 柄を外す（v12 #31：柄のシートを右の端からめくる）
+T_EXIT = 315.8                                            # v12 #38：2本の帯の場面の終わりに画面の外へ走る
+T_IN34 = 321.3                                            # 白いフチの場面：奥から歩いて来る（カットの瞬間に歩き出す。遠くて小さい）
+T_PHONE = s('15-02b', -0.25)                              # v12 #39：スマホから見た角度（真上から少し傾けた手持ち）
 
 def rot_frame(f, ang):
     """大地ごと回るとき：まるロボの姿勢を、原点まわりに ang（度）回す"""
@@ -100,12 +105,14 @@ def plan():
     at(p, T_BEAM_AGAIN[0] - 0.2, lambda q: q.look(0, 14, hold=2.2, body=False, label='帯をなぞる'), 'beam_again')
     at(p, T_WALK_DIAG, lambda q: (q.run_to(P1, label='斜めの位置へ走る'), q.turn_to(heading=-135)), 'walk_diag')
     at(p, T_BEAM_DIAG[0] - 0.3, lambda q: q.look(0, -6, hold=2.4, body=False, label='斜めになぞる'), 'beam_diag')
-    at(p, T_BEAMS4[0] - 0.2, lambda q: q.look_around(label='いろいろな向きから'), 'beams4')
-    cut(p, 53.3, P24, 200)
+    at(p, T_BEAMS4[0] - 0.2, lambda q: (q.look(32, 2, hold=0.45, label='いろいろな向きから'), q.look(-32, 6, hold=0.45), q.look(0, 0, hold=0.1)), 'beams4')
+    # v12 #19：53.3 のカットで瞬間移動しない。カットの前から歩き出し、白いフチ → マスへ跳び乗り → 走ってカットをまたぐ
+    at(p, 47.4, lambda q: (q.run_to(P1J, label='マスの手前へ'), q.jump_to(rc(0.25, 0.25), z1=TILE_TOP, label='マスに跳び乗る'),
+                           q.run_to(P24, label='目印のそばへ走る'), q.turn_to(heading=200)), 'to_center')
     at(p, T_RINGS[0] - 0.4, lambda q: q.look(-30, 6, hold=1.4, body=True, label='目印が光る方を見る'), 'rings')
     cut(p, 124.9, P27, hd(P27, TL))
-    at(p, T_SPIN[0] + 0.15, lambda q: q.surprise(label='おっとっと'), 'spin')
-    at(p, s('12-01b', 0.9), lambda q: q.confused(label='よろける・どっちが上？'), 'confused')
+    at(p, T_SPIN[0] + 0.1, lambda q: U.stagger(q, label='おっとっと（よろける・アップ）'), 'spin')     # v12 #24
+    at(p, s('12-01b', 1.6), lambda q: q.confused(label='どっちが上？'), 'confused')
     at(p, T_LSHAPE + 0.2, lambda q: q.turn_to(toward=TL, label='左上の目印を見る'), 'see_L')
     at(p, T_CORNER + 0.1, lambda q: q.turn_to(toward=BR, label='目印のない右下の角を見る'), 'see_BR')
     cut(p, 148.4, P29[0], -90)
@@ -121,9 +128,9 @@ def plan():
     at(p, T_TAG1, lambda q: q.nod(n=1, amp=10.0, label='1つ目'), 'tag1')
     at(p, T_TAG2, lambda q: q.nod(n=1, amp=10.0, label='2つ目'), 'tag2')
     at(p, T_DIRTY + 0.3, lambda q: q.surprise(label='片方が汚れた'), 'dirty')
-    at(p, T_DIRTY + 2.6, lambda q: q.nod(n=2, amp=8.0, label='もう片方で読める'), 'dirty_ok')
-    cut(p, 321.3, P34A, 180, QZ_TOP)
-    at(p, s('15-01', 0.5), lambda q: q.walk_to(P34B, speed=1.2, label='白いフチを歩く'), 'quiet_walk')
+    at(p, T_EXIT, lambda q: (q.turn_to(toward=P31X, label='カメラの方へ向く'), q.run_to(P31X, label='カメラの手前へ走る（カットをまたいで白いフチへ）')), 'exit31')      # v12 #38
+    cut(p, T_IN34, P34A, 180, QZ_TOP)
+    at(p, T_IN34, lambda q: q.walk_to(P34B, speed=1.2, label='白いフチを歩いて画面に入る'), 'quiet_walk')
     at(p, T_QTICK + 0.3, lambda q: q.look(60, -14, hold=2.0, body=True, label='目盛りを見る'), 'qtick')
     cut(p, 344.0, P0, -90, QZ_TOP)
     at(p, s('15-03', 1.0), lambda q: q.look(-20, 8, hold=1.4, body=False, label='目印を見る'), 'look_fin2')
@@ -155,7 +162,7 @@ def desk_plan():
     at(p, s('16-02b', 0.6), lambda q: q.look(0, 22, hold=2.0, body=True, label='スマホを見上げる'), 'd_phone')
     at(p, e('16-03', 0.2), lambda q: q.shake(amp=13.0), 'd_no')
     at(p, s('16-03.5', 1.0), lambda q: q.confused(label='読めない？'), 'd_conf')
-    at(p, s('16-04', 0.6), lambda q: q.think(dur=2.4, label='考える'), 'd_think')
+    at(p, s('16-04', 0.6), lambda q: U.tilt(q, deg=16.0, hold=2.0, label='首をかしげる'), 'd_think')      # v12 #41
     at(p, s('16-04a', 0.4), lambda q: (q.walk_to(D_NEAR, speed=1.1, label='箱の近くへ'), q.turn_to(heading=0)), 'd_near')
     at(p, s('16-04a', 6.6), lambda q: q.look(0, -24, hold=1.6, body=True, label='箱の下の目印を見る'), 'd_lookbox')
     at(p, s('16-04b', 0.8), lambda q: q.look(-40, 18, hold=1.8, body=True, label='スマホの方を見る'), 'd_lookphone')

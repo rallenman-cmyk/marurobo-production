@@ -61,9 +61,10 @@ C_SPAN = [(0.0, T_R1)]                                   # 数字の箱（C）�
 
 # ================================================================ C：青い箱 3 つ（数字は顔に大きく）
 crate_m = W.mat('crate', W.srgb(BLUE), rough=0.45)
+CRATE_COL = ('#3478D2', '#DE7618', '#229254')            # v12 #63：1番目・2番目・3番目の箱を、メモの数字・×1×2×3 の札と同じ色に（青・橙・緑）
 CR = []
 for k in range(3):
-    root = W.link(O.new('Crate %d' % k, None)); b = W.box('crate%d body' % k, (2.4, 2.0, 2.4), crate_m, bevel=0.08); b.parent = root
+    root = W.link(O.new('Crate %d' % k, None)); b = W.box('crate%d body' % k, (2.4, 2.0, 2.4), W.mat('crate %d' % k, W.srgb(CRATE_COL[k]), rough=0.45), bevel=0.08); b.parent = root
     CR.append(dict(root=root, body=b))
 NUM = {}
 for k, n in enumerate('253'): NUM[(k, n)] = number(n, '#FFFFFF', 2.3, CR[k]['root'], (0, -1.03, 0.0))

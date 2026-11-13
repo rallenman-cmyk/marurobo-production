@@ -54,7 +54,7 @@ FAMILY = {'c3_alnum': ('c3_alnum', None), 'c3_alnum_hl': ('c3_alnum', 'hl'), 'c4
           'c5_balance0': ('c5_balance', None), 'c5_balance1': ('c5_balance', 'tilt'),
           'D1': ('c2_finder', None), 'K25a': ('c2_print', None), 'K25': ('c2_print', 'scan'), 'K26a': ('c2_chart', None), 'K26b': ('c2_chart', 'mark'),
           'c2_mask': ('c2_mask', None), 'c2_mask_fake': ('c2_mask', 'fake'), 'c2_mask_pats': ('c2_mask', 'pats'), 'c2_mask_over': ('c2_mask', 'over')}
-SINGLE = ['c5_levels', 'c5_boxbar', 'end_parts', 'c1_url', 'c1_bigger', 'c2_nearfar', 'c2_ruler', 'c2_times21', 'c2_three', 'c2_manual', 'c2_shop', 'c3_toc', 'c4_bignum', 'c5_drops', 'c5_thirty', 'end_world']
+SINGLE = ['c5_blank', 'c5_levels', 'c5_boxbar', 'end_parts', 'c1_url', 'c1_bigger', 'c2_nearfar', 'c2_ruler', 'c2_times21', 'c2_three', 'c2_manual', 'c2_shop', 'c3_toc', 'c4_bignum', 'c5_drops', 'c5_thirty', 'end_world']
 def fig_segments(ch):
     """SHOTS の図の所を、動く図の区間 [(a, b, 図の名前, cue)] にまとめる"""
     segs = []; cur = None
@@ -82,13 +82,30 @@ def fig_segments(ch):
     return segs
 W_ = CH.w
 CUEW = {('c3', 'c3_alnum'): dict(H=W_('19-03c', 'Hは'), E=W_('19-03c', 'Eは'), L=W_('19-03c', 'Lは'), O=W_('19-03c', 'Oは')),     # v11 #49
-        ('c4', 'c4_bignum'): dict(sub1=W_('22-02b', '最大'), small=CH.s('22-02c'), sub2=W_('22-02c', '1ケタ')),          # #58
+        ('c2', 'c2_nearfar'): dict(cell=W_('12-02.6', '1マス')),                                                          # v11 #27
+        ('c5', 'c5_logo'): dict(logo=W_('31-02', '真ん中'), proud=CH.s('31-02.5'), drop=W_('31-06', '小さな汚れ')),     # #75 #78
+                ('c4', 'c4_bignum'): dict(sub1=W_('22-02b', '最大'), small=CH.s('22-02c'), sub2=W_('22-02c', '1ケタ')),          # #58
         ('c5', 'c5_thirty'): dict(boxes=CH.s('32-08b'), gray=W_('32-08b', '26個'), pct=W_('32-08b', 'だいたい3割')),     # #86
         ('c5', 'c5_levels'): dict(use=CH.s('32-06b')), ('c5', 'c5_boxbar'): dict(more=CH.s('32-05b2')),                  # #83 #82
         ('end', 'end_parts'): dict(finder=W_('40-02b', '目印'), spare=W_('40-02b', '予備'))}                             # #91
 PREV = {'c1': 'op', 'c2': 'c1', 'c3': 'c2', 'c4': 'c3', 'c5': 'c4', 'end': 'c5'}
 OUTSIDE = ('qrop4_', 'qrc1t2_', 'qrc2t_', 'qrc1s2_')          # スマホの外（机の上）の描画
 D_CUT, D_SPACE, D_CH = 0.35, 0.7, 0.6                         # v11 #42 #45 #92：つなぎの重ね（同じ所のカット／外と中が入れ替わる／章の変わり目）
+# v11（#1 #12 #20 #43 #57 #60 #70 #77）：長く動かない 3D の場面は、組み立てでゆっくり寄る・横へ移る（本当の動きは v12 で 3D を描き直す）
+#   (章, 絵の名前) → [(場面の中の割合 0〜1, 寄り, 中心 x, 中心 y)]
+PUSH = {('op', 'S11_face'): [(0, 1.0, .5, .5), (.55, 1.32, .58, .42), (1, 1.32, .58, .42)],
+        ('c1', 'R_number'): [(0, 1.0, .5, .5), (.3, 1.45, .33, .57), (.55, 1.45, .33, .57), (.8, 1.3, .72, .45), (1, 1.12, .6, .5)],
+        ('c2', 'K24'): [(0, 1.0, .5, .5), (.35, 1.3, .8, .3), (.65, 1.3, .25, .72), (1, 1.05, .5, .5)],
+        ('c2', 'K41'): [(0, 1.0, .5, .5), (1, 1.35, .52, .6)],
+        ('c4', 'F1'): [(0, 1.0, .5, .5), (.5, 1.4, .45, .58), (1, 1.35, .66, .45)],
+        ('c4', 'C2'): [(0, 1.0, .5, .5), (1, 1.2, .4, .6)],
+        ('c4', 'B28a'): [(0, 1.0, .5, .5), (1, 1.35, .45, .5)],
+        ('c5', 'W31'): [(0, 1.0, .5, .5), (.5, 1.3, .5, .47), (1, 1.3, .5, .47)]}
+def push_at(kf, u):
+    for (u0, z0, x0, y0), (u1, z1, x1, y1) in zip(kf, kf[1:]):
+        if u0 <= u <= u1:
+            v = ease((u - u0) / max(u1 - u0, 1e-6)); return z0 + (z1 - z0) * v, x0 + (x1 - x0) * v, y0 + (y1 - y0) * v
+    return kf[-1][1:]
 def build(tag, _prev=True):
     pim0 = None
     if _prev and PCX and tag in PREV:                         # 前の章の最後のコマ（章の頭で重ねる）
@@ -103,10 +120,12 @@ def build(tag, _prev=True):
         im, reuse = PCX.frame(tag, k, t, a, b, INFO)
         if im is not None and reuse:                            # 使い回し：絵コンテと同じくゆっくり寄る
             u = min(max((t - a) / max(b - a, 1e-6), 0), 1); im = ch.kb(im, z0 + (z1 - z0) * u, cx, cy)
+        elif im is not None and (tag, k) in PUSH:
+            z, x_, y_ = push_at(PUSH[(tag, k)], min(max((t - a) / max(b - a, 1e-6), 0), 1)); im = ch.kb(im, z, x_, y_)
         return im
     def space(sh):
         k = sh[2]; st, sk = tag, k; home = INFO.home_of(tag, k)
-        if (tag, k) in PCR.ALIAS: st, sk = PCR.ALIAS[(tag, k)]
+        if (tag, k) in PCR.ALIAS: st, sk = PCR.ALIAS[(tag, k)][:2]
         elif home and home != tag and not (tag == 'c1' and k == 'S10_low'): st, sk = home, k
         pre = PCR.own_prefix(st, sk, sh[0]); return 'out' if pre in OUTSIDE else ('in' if pre else None)
     def frame(t):

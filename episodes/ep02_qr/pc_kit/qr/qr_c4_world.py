@@ -70,8 +70,8 @@ def role(b): return 'data' if b in DATA else 'spare'
 def tiles_alpha(boxes, t, alpha):
     for b in boxes:
         for rc_ in BOX_CELLS[b]: tl = TILES[rc_]; c = list(QW.color_for(tl['v'], role(b))); c[3] = alpha; color_at(t, tl, c, 0.02)
-tiles_alpha(DATA, 0.0, 0.22)                             # 前半：中身の 9 個は箱になって右のフチへ（マスは跡）
-tiles_alpha(DATA, T_LAND - 0.05, 1.0)                    # 平らな大地
+tiles_alpha(DATA + SPARE, 0.0, 0.22)                     # 前半：中身の 9 個は箱になって右のフチへ・予備の 17 個はその場で箱（v12 #54。マスは跡）
+tiles_alpha(DATA + SPARE, T_LAND - 0.05, 1.0)             # 平らな大地
 tiles_alpha(DATA + SPARE, T_B28 - 0.05, 0.22)            # 26 個すべてが箱（マスは跡）
 
 # ================================================================ 箱 26 個（8 枚の板＋床＋ふた）
@@ -115,19 +115,19 @@ for b in BOX_CELLS:
     inplace = Vector((CEN[b].x, CEN[b].y, Z0))
     if b in DATA:
         k = DATA.index(b); rp = CP.row_pos(k); pose(b, 1.0, 0.0, Vector((rp[0], rp[1], ROWZ)))
-    else: pose(b, 0.0, 0.0, inplace)
+    else: pose(b, 1.0, 0.0, inplace)                     # v12 #54：予備は「箱」の形で光らせる（マスではなく）
     pose(b, 0.0, T_LAND - 0.05, inplace)
     pose(b, 1.0, T_B28 - 0.05, inplace)
 for B in BX.values():
     for ob in [B['root']] + B['pans']: interp(ob, 'CONSTANT')
 # 前半：最初の箱のふたは開いたまま。B28 では閉じる
 h1 = BX[DATA[0]]['hinge']; keys(h1, 'rotation_euler', [(0.0, (math.radians(-112), 0, math.radians(-90))), (T_B28 - 0.05, (0, 0, math.radians(-90)))], kind='CONSTANT')
-# 前半：予備の 17 個（橙のマス）がゆっくり光る（G9）
-gm = W.mat_emit('spare glow', W.srgb('#FFE2B0'), 6.0)
-for (r, c) in QW.cells_of(Wd, 'spare'):
-    g = W.box('sg %d-%d' % (r, c), (MOD * 0.7, MOD * 0.7, 0.06), gm); x, y = rc(r, c); g.location = (x, y, QW.TILE_H + 0.12); g.visible_shadow = False
+# 前半：予備の 17 個の箱が、ふたの上でゆっくり光る（G9。v12 #54：17 個と数が合うよう、1 箱に 1 つの光）
+gm = W.mat_emit('spare glow', W.srgb('#FFD29A'), 5.0)
+for b in SPARE:
+    g = W.box('sg box %d' % b, (BOXW * 0.86, BOXW * 0.86, 0.05), gm, bevel=0.1); g.location = (CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.16); g.visible_shadow = False
     for k in range(int(G9_SPANS[-1][1])):
-        g.scale = (0.6, 0.6, 1); g.keyframe_insert('scale', frame=fr_of(k * 1.0)); g.scale = (1.0, 1.0, 1); g.keyframe_insert('scale', frame=fr_of(k * 1.0 + 0.5))
+        g.scale = (0.75, 0.75, 1); g.keyframe_insert('scale', frame=fr_of(k * 1.0)); g.scale = (1.0, 1.0, 1); g.keyframe_insert('scale', frame=fr_of(k * 1.0 + 0.5))
     show(g, G9_SPANS)
 # 前半：0 と 1 の板（G6。字なし）
 bits = format(SYM['box_bytes'][0], '08b'); c0 = Vector((*CP.row_pos(0), ROWZ))
@@ -164,13 +164,26 @@ for k, (xy, R) in enumerate(((CP.CTR, 6.2), ((sx, sy), 2.8))):
 for b in CP.BAD:
     for p in BX[b]['pans']: color_at(T_B28 - 0.05, p, panel_color(p['v'], 'broken'), 0.02); color_at(CP.T_RESTORE, p, panel_color(p['v'], 'restored'), 0.6)
     color_at(T_B28 - 0.05, BX[b]['lid'], lid_color('broken'), 0.02); color_at(CP.T_RESTORE, BX[b]['lid'], lid_color('restored'), 0.6)
-lk = W.mat_emit('gather', W.srgb('#FFB060'), 3.0)
-for k, b in enumerate(SPARE):
-    tgt = CEN[CP.BAD[k % len(CP.BAD)]]; p0 = Vector((CEN[b].x, CEN[b].y, 1.2)); p1 = Vector((tgt.x, tgt.y, 1.2)); dv = p1 - p0
-    t0 = CP.T_BEAMS28[0] + (CP.T_BEAMS28[1] - CP.T_BEAMS28[0] - 0.5) * k / (len(SPARE) - 1)
-    bm_ = W.cyl('gather %d' % b, 0.06, 1.0, lk, seg=8); bm_.rotation_euler = dv.to_track_quat('Z', 'Y').to_euler(); bm_.visible_shadow = False
-    keys(bm_, 'location', [(t0, p0), (t0 + 0.5, p0 + dv / 2)], kind='LINEAR'); keys(bm_, 'scale', [(t0, (1, 1, 0.001)), (t0 + 0.5, (1, 1, dv.length))], kind='LINEAR')
-    show(bm_, [(t0, CP.T_RESTORE + 0.4)])
+# v12 #89：線の星形をやめた。予備の箱が順に光って、そこから光の玉（尾つき）が壊れた箱へ飛ぶ。玉が着くたびに壊れた箱が光る
+om = W.mat_emit('gather orb', W.srgb('#FFC27A'), 9.0); SRC = [b for b in SPARE if b not in CP.BAD]; TRAVEL = 0.85
+fl_m = W.mat_emit('bad flash', W.srgb('#BFF6FF'), 6.0); arrive = {b: [] for b in CP.BAD}
+for k, b in enumerate(SRC):
+    tgt_b = CP.BAD[k % len(CP.BAD)]; tgt = CEN[tgt_b]
+    t0 = CP.T_BEAMS28[0] + (CP.T_BEAMS28[1] - CP.T_BEAMS28[0] - TRAVEL + 0.3) * k / (len(SRC) - 1)
+    p0 = Vector((CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.4)); p1 = Vector((tgt.x, tgt.y, Z0 + WALL_H + 0.3))
+    sg = W.box('src glow %d' % b, (BOXW * 0.86, BOXW * 0.86, 0.05), gm, bevel=0.1); sg.location = (CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.16); sg.visible_shadow = False
+    keys(sg, 'scale', [(t0 - 0.25, (0.3, 0.3, 1)), (t0, (1.1, 1.1, 1)), (t0 + 0.5, (0.9, 0.9, 1))]); show(sg, [(t0 - 0.25, CP.T_RESTORE + 0.6)])
+    for j, (sz, lag) in enumerate(((0.55, 0.0), (0.38, 0.05), (0.26, 0.10), (0.17, 0.15))):
+        o = W.box('gather orb %d %d' % (b, j), (sz, sz, sz), om, bevel=sz / 2, seg=4); o.visible_shadow = False
+        for f in range(fr_of(t0 + lag), fr_of(t0 + lag + TRAVEL) + 1):
+            u = min(1.0, max(0.0, ((f - 1) / FPS - t0 - lag) / TRAVEL)); o.location = p0.lerp(p1, ease(u)) + Vector((0, 0, 2.6 * math.sin(math.pi * u))); o.keyframe_insert('location', frame=f)
+        show(o, [(t0 + lag, t0 + lag + TRAVEL)])
+    arrive[tgt_b].append(t0 + TRAVEL)
+for b, ts_ in arrive.items():                                   # 玉が着いた瞬間、壊れた箱のふたがぱっと光る
+    fo = W.box('bad flash %d' % b, (BOXW * 0.9, BOXW * 0.9, 0.05), fl_m, bevel=0.1); fo.location = (CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.18); fo.visible_shadow = False
+    pts = []
+    for ta in sorted(ts_): pts += [(ta - 0.02, (0.2, 0.2, 1)), (ta + 0.12, (1.15, 1.15, 1)), (ta + 0.45, (0.2, 0.2, 1))]
+    keys(fo, 'scale', pts); show(fo, [(min(ts_) - 0.05, max(ts_) + 0.5)])
 bpy.ops.mesh.primitive_cylinder_add(radius=1.0, depth=0.02, location=(CP.CTR[0], CP.CTR[1], 0.9)); sh = bpy.context.object; sh.name = 'robot shadow'; sh.scale = (5.9, 5.3, 1)
 shm = W.mat('shadow', (0.0, 0.0, 0.0), rough=1.0); shm.node_tree.nodes['Principled BSDF'].inputs['Alpha'].default_value = 0.25; sh.data.materials.append(shm)
 try: shm.surface_render_method = 'DITHERED'
