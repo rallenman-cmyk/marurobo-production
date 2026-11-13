@@ -193,6 +193,8 @@ def _frame_at(t):
 for k, (a, b, tsrc, label) in enumerate(PIPS):
     im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     sub = Image.open(_frame_at(tsrc)).convert("RGB").resize((400, 225), Image.LANCZOS)
+    if label == "さきほどの穴":                                              # 切り抜きにも、さきほどの穴の輪（06-02 と同じ所）を描く
+        ImageDraw.Draw(sub).ellipse([(830 - 200) * 400 / 1280, (392 - 62) * 225 / 720, (830 + 200) * 400 / 1280, (392 + 62) * 225 / 720], outline=(255, 138, 42), width=4)
     d.rounded_rectangle([24, 24, 24 + 412, 24 + 237], 14, fill="white", outline=NAVY, width=4); im.paste(sub, (30, 30))
     bb = d.textbbox((0, 0), label, font=TAGF); w = bb[2] - bb[0]; th = bb[3] - bb[1]
     d.rounded_rectangle([30, 272, 30 + w + 40, 272 + th + 26], 14, fill=NAVY); d.text((50 - bb[0], 285 - bb[1]), label, font=TAGF, fill="white")
@@ -277,7 +279,7 @@ XF = sorted(x for x in XF if 0.5 < x[0] < END - 1)
 inputs = ["-i", lst]
 # 同じ絵が長く続く所は、ゆっくり寄る（QR回 v10「変わり映えしない」の横展開。動きの少ない所を測って選んだ：S05・S08 の門・S09・S14・S17〜S19・S20）。
 #   3D の中の物に合わせた輪（S06 の穴・S08 の画面の点・S15 のつり広告）がある所は寄らない（輪がずれるため）
-ZOOM = [(SCST["S05"], SCST["S06"]), (SCST["S08"], 298.26), (SCST["S09"], SCST["S10"]), (SCST["S14"], SCST["S15"]),
+ZOOM = [(SCST["S05"], SCST["S06"]), (s("06-02", 1) + 0.1, 140.1), (SCST["S08"], 298.26), (SCST["S09"], SCST["S10"]), (SCST["S14"], SCST["S15"]),
         (SCST["S17"], SCST["S19"]), (SCST["S19"], SCST["S20"]), (SCST["S20"], SCST["S21"])]
 _zt = "(in/24)"
 _ze = "+".join("between(%s,%.3f,%.3f)*0.06*((%s-%.3f)/%.3f)" % (_zt, a, b, _zt, a, b - a) for a, b in ZOOM)

@@ -31,6 +31,18 @@ for k, p in enumerate(P):
             ev.append((a, c, t))
 ev = [(a, c, re.sub(r"（間）|\(間\)", "", t).strip()) for a, c, t in ev]
 ev = [e for e in ev if e[2]]
+# 1 秒もたない短い字幕（「そう。」など）は、次の字幕の頭につなげる（2 行・25 字に収まるとき）
+ev2 = []; k = 0
+while k < len(ev):
+    a, c, t = ev[k]
+    if k + 1 < len(ev) and ev[k + 1][0] - a < 1.0 and len(t.replace("\\N", "")) <= 4:
+        a2, c2, t2 = ev[k + 1]; flat = t2.replace("\\N", "")
+        if "\\N" not in t2 and len(t) + len(flat) <= 25: ev2.append((a, c2, t + flat)); k += 2; continue
+        if "\\N" not in t2: ev2.append((a, c2, t + "\\N" + t2)); k += 2; continue
+        ls = t2.split("\\N")
+        if len(t) + len(ls[0]) <= 25: ls[0] = t + ls[0]; ev2.append((a, c2, "\\N".join(ls))); k += 2; continue
+    ev2.append((a, c, t)); k += 1
+ev = ev2
 ev = [(a, min(max(c, a + 1.2), ev[k + 1][0] - 0.05) if k + 1 < len(ev) else max(c, a + 1.2), t) for k, (a, c, t) in enumerate(ev)]
 json.dump([[round(a, 3), round(c, 3), t] for a, c, t in ev], open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 print(len(ev), "枚")
