@@ -61,6 +61,11 @@ function Release([string]$tag) { Remove-Item (Join-Path $done "$tag.lock") -Forc
 function AllChunks() { $c = @(); foreach ($j in $JOBS) { for ($a = 0; $a -lt $j[1]; $a += 100) { $c += ,@($j[0], $a, [Math]::Min($a + 99, $j[1] - 1), $j[2]) } }; return ,$c }
 function Left() { $n = 0; foreach ($c in (AllChunks)) { $tag = "{0}_{1:D4}-{2:D4}" -f $c[0], $c[1], $c[2]; if (-not (Test-Path (Join-Path $done "$tag.ok"))) { $n++ } }; return $n }
 
+# Google ドライブ（パソコン版）の場所。1 本できるたびに、そこへすぐコピーする（こちらで進み具合を見られるように）
+$gdrive = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
+$gep = $null
+if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep03"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
+
 # ---------------------------------------------------------------- Blender 4.3 を探す
 $blender = $Blender
 if (-not $blender -or -not (Test-Path $blender)) { $blender = "C:\Program Files\Blender Foundation\Blender 4.3\blender.exe" }
@@ -103,6 +108,7 @@ function Run-Jobs {
     $code = $LASTEXITCODE; $dt = (Get-Date) - $t0
     if ($code -eq 0 -and (Test-Path $mp4) -and ((Get-Item $mp4).Length -gt 10000)) {
       New-Item -ItemType File -Force -Path $mark | Out-Null
+      if ($gep) { Copy-Item $mp4 $gep -Force -ErrorAction SilentlyContinue; Copy-Item (Join-Path $out "$($key)_log.json") $gep -Force -ErrorAction SilentlyContinue }
       $times += $dt.TotalSeconds; $avg = ($times | Measure-Object -Average).Average; $n = Left
       Note ("{0}：{1}〜{2} できました（{3}）。残り {4} 本、およそ {5}" -f $key, $a, $b, (Fmt $dt), $n, (Fmt ([TimeSpan]::FromSeconds($avg * $n / $Workers))))
     } else {
@@ -127,6 +133,7 @@ while ($true) {
   Start-Sleep -Seconds 300
 }
 if ($waited) { Note "ほかの回の描画が終わったので、3本目を描き始めます" }
+if ($gep) { Get-ChildItem $out -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -eq ".mp4" -or $_.Name -like "*_log.json" } | ForEach-Object { if (-not (Test-Path (Join-Path $gep $_.Name))) { Copy-Item $_.FullName $gep -Force -ErrorAction SilentlyContinue } } }
 $total = (AllChunks).Count
 Note ("はじめます：{0} 場面・{1} 本（100 コマずつ）。残り {2} 本。同時に {3} 本。Blender：{4}" -f $JOBS.Count, $total, (Left), $Workers, $blender)
 $tAll = Get-Date
