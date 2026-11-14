@@ -1,0 +1,957 @@
+# 5本目（ロボット掃除機）：3D の場面を声の時刻に合わせて動かして描く
+# blender -b --factory-startup --python scenes.py -- <クリップ> <出力フォルダ> [--samples 8] [--res 480 270] [--step 3] [--stills 秒,秒] [--track] [--tex <絵のフォルダ>]
+#   PC の本番：... -- <クリップ> <出力> --samples 48 --res 1920 1080 --frames 0 99 --gpu --video --tex <絵のフォルダ>（run_pc_render_ep05.ps1 が呼ぶ）
+#   クリップの一覧は下の CLIPS（名前 → 場面の組み立て・始め・終わり）。始め・終わりは声の時刻（voice/placement.json）から出す
+#   場面の組み立て（b_*）は、まるロボと先輩の動きをクリップに関係なく全部作り、カメラだけをクリップごとに選ぶ
+#   （カットの前後で、まるロボや先輩の場所が飛ばないように。SKILL §5「カットで置き直さない」）
+#   部品は kit.py、時刻と動きの共通は core.py、間取りは plan.py
+#   決まり（SKILL・制作バイブル）：3D の中に字を書かない／まるロボと先輩は喋らない（電子音と身ぶり）／
+#     動きは言い終えてから／瞬間移動に見せない（歩いて移る）／カメラはいつもゆっくり動かす／
+#     光の点は青緑で最後まで同じ表し方／通った道の線は黄色／いま見えている形は白っぽい点
+import os, sys
+KIT_HERE = os.path.dirname(os.path.abspath(__file__))
+_argv = sys.argv[sys.argv.index("--") + 1:]
+import bpy
+bpy.ops.wm.read_factory_settings(use_empty=True)
+exec(open(os.path.join(KIT_HERE, "kit.py"), encoding="utf-8").read())
+exec(open(os.path.join(KIT_HERE, "core.py"), encoding="utf-8").read())
+CLIPNAME, OUTDIR = _argv[0], _argv[1]
+
+
+def _opt(name, n=1, default=None):
+    if name in _argv:
+        i = _argv.index(name); v = _argv[i + 1:i + 1 + n]
+        return v if n > 1 else v[0]
+    return default
+
+
+SAMPLES = int(_opt("--samples", 1, 8)); RES = tuple(int(x) for x in _opt("--res", 2, ("480", "270"))); STEP = int(_opt("--step", 1, 3))
+STILLS = [float(x) for x in _opt("--stills", 1, "").split(",") if x]
+TEX = _opt("--tex", 1, os.environ.get("MARU_TEX", os.path.join(KIT_HERE, "tex")))
+TRACK_ONLY = "--track" in _argv
+YELLOW = "#FFD24A"
+DOCKP = (0.3, 2.12)                 # 充電の台にいるときの光の物差しの先輩（前＝-y を部屋に向ける）
+DOCK2 = (2.75, 1.2)                 # カメラの先輩の台（右の壁、机とベッドの間）
+DESK_Z = 0.755
+MARU_DESK = (1.95, 2.0, DESK_Z)
+PHONE_DESK = (1.55, 1.93, DESK_Z)
+
+
+def tex(n): return os.path.join(TEX, n)
+
+
+def cut(cl, name): return cl == name
+
+
+# ======================================================================== S01〜S05：誰も教えていないのに、地図が出た／先輩に会う
+def b_open(cl):
+    room(); door_leaf(False)
+    sp = Sp(senpai_lidar(DOCKP, 0)); sp.spin(0, 100, 0.6)
+    t0 = s("01-01") + 0.3
+    dr = plan.Drive([(0.3, 0.6), (0.3, 1.7)], t0, v=0.36, face0=180)
+    sp.drive(dr)
+    t1 = dr.t1
+    sp.place(t1 + 0.05, 0.3, 1.7, 180); sp.place(t1 + 1.3, 0.3, 1.7, 360); sp.place(t1 + 2.2, 0.3, DOCKP[1], 360)
+    ev(t1 + 2.2, "motor_off", 0.5)
+    sp.pi(s("01-02"), n=1, sound=False); ev(s("01-02"), "chime", 0.7)            # 「ピロリン」は声と同時に
+    m = Maru(MARU_DESK, face=face_to(MARU_DESK, (0.3, 1.5)))
+    m.at(s("01-01"), look=-8); m.at(s("01-03") + 0.3, look=-14)
+    ph, scr = phone(PHONE_DESK, rot_z=-10, tex=tex("phone_off.png"), glow=0.0)
+    ph2, scr2 = phone(PHONE_DESK, rot_z=-10, tex=tex("phone_map.png"), glow=1.6)
+    show_between(ph2, e("02-01") - 0.3)                                          # 「何かが……」で画面がつく
+    ev(e("02-01") - 0.3, "notify", 0.6)
+    # 02：スマホに地図 → まるロボがのぞきこむ
+    fp = face_to(MARU_DESK, PHONE_DESK); f0 = face_to(MARU_DESK, (0.3, 1.5))
+    m.at(s("02-01") + 0.2, face=fp, look=-25); m.hop(e("02-01") - 0.1, 0.08, 0.3)
+    r = ring_marker(DOCKP, 0.24, YELLOW); show_between(r, s("02-05") + 0.2, s("03-01")); scale_pop(r, s("02-05") + 0.2); ev(s("02-05") + 0.2, "pop", 0.5)
+    m.at(s("02-05") + 0.2, face=f0, look=-14)
+    # 03：感心 → 待って → 見回す → 首をかしげる
+    m.at(s("03-01") - 0.3, face=fp, look=-25); m.at(s("03-01") + 0.6, face=f0, look=-12)
+    for k in range(2):
+        key(m.body, ("rotation_euler", 0), w("03-01", "偉い") + k * 0.45, R(18)); key(m.body, ("rotation_euler", 0), w("03-01", "偉い") + k * 0.45 + 0.22, R(4))
+    m.at(s("03-02") + 0.1, look=0); m.blink(s("03-02") + 0.15)
+    m.at(s("03-03") + 0.2, face=f0 - 60); m.at(s("03-03") + 1.6, face=f0 + 50); m.at(s("03-03") + 3.0, face=fp)
+    m.at(s("03-04") + 0.2, face=fp, look=-25); m.at(s("03-04") + 2.0, face=f0, look=-10); m.tilt(s("03-04") + 2.2, 14); m.tilt(e("03-04") + 0.3, 0)
+    m.hop(s("03-05") + 0.5, 0.12, 0.35)
+    # 04：机から降りて、先輩の前へ。あいさつ
+    ta = s("04-01")
+    m.at(ta - 0.2, loc=MARU_DESK, face=face_to(MARU_DESK, (1.55, 1.45)), look=-12)
+    key(m.root, "location", ta + 0.3, (1.85, 1.82, DESK_Z), "LINEAR"); key(m.root, "location", ta + 0.62, (1.7, 1.62, DESK_Z + 0.18))
+    key(m.root, "location", ta + 1.0, (1.55, 1.45, 0.0)); ev(ta + 0.3, "jump", 0.6); ev(ta + 1.0, "land", 0.7)
+    m._last["loc"] = (ta + 1.0, (1.55, 1.45, 0.0))
+    m.walk(ta + 1.3, ta + 2.6, (0.3, 1.5, 0.0)); m.at(ta + 2.9, face=180, look=5)
+    ev(s("04-02") + 0.35, "pipo", 0.6); m.hop(s("04-02") + 0.35, 0.06, 0.25, sound=False)
+    sp.pi(w("04-02", "短い") + 0.6, n=2)
+    m.hop(s("04-04") + 0.6, 0.12, 0.35); m.hop(s("04-04") + 1.2, 0.12, 0.35)
+    # 05：先輩の体をぐるりと（まるロボは左へ歩いて、カメラの通り道をあける）
+    mp = (-0.3, 1.65, 0.0)
+    m.walk(e("04-04") + 0.1, e("04-04") + 1.2, mp); m.at(e("04-04") + 1.6, face=face_to(mp, DOCKP), look=10)
+    d = sp.d
+    lr = ring_marker((0.3, 2.155), 0.075, YELLOW, w=0.004, z=d["top_z"] + 0.03); show_between(lr, s("05-02") + 0.1, e("05-02") + 0.6); scale_pop(lr, s("05-02") + 0.1); ev(s("05-02") + 0.1, "pop", 0.4)
+    bm = bpy.data.materials["sp_bumper"]; bm.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = srgb(YELLOW)
+    emit_key(bm, s("05-03") + 0.2, 0.0); emit_key(bm, s("05-03") + 0.5, 1.6); emit_key(bm, e("05-03") + 0.4, 1.6); emit_key(bm, e("05-03") + 0.8, 0.0)
+    th = w("05-03", "へこむ")
+    key(d["bumper"], ("location", 1), th, 0.0); key(d["bumper"], ("location", 1), th + 0.2, 0.012); key(d["bumper"], ("location", 1), th + 0.5, 0.0); ev(th + 0.2, "click", 0.4)
+    bl = d["belly"].data.materials[0]; bl.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = srgb(YELLOW)
+    emit_key(bl, s("05-04") + 0.2, 0.0); emit_key(bl, s("05-04") + 0.6, 14.0); emit_key(bl, e("05-04") + 0.5, 14.0); emit_key(bl, e("05-04") + 0.9, 0.0)
+    m.at(s("05-04") + 0.2, look=-25); m.tilt(s("05-04") + 0.3, -18); m.tilt(e("05-04") + 0.5, 0)
+    t3 = w("05-05", "3つ")
+    le = bpy.data.materials["lid_eye"]
+    emit_key(le, t3, 4.0); emit_key(le, t3 + 0.2, 14.0); emit_key(le, t3 + 0.8, 4.0)
+    emit_key(bm, t3 + 0.5, 0.0); emit_key(bm, t3 + 0.7, 1.6); emit_key(bm, t3 + 1.3, 0.0)
+    emit_key(bl, t3 + 1.0, 0.0); emit_key(bl, t3 + 1.2, 14.0); emit_key(bl, t3 + 1.8, 0.0)
+    for k in range(3): ev(t3 + k * 0.5, "pi", 0.3)
+    m.hop(e("05-05") - 0.3, 0.1, 0.3)
+    # カメラ
+    if cut(cl, "S01a"):
+        c, tg = cam_rig((-1.4, -1.6, 1.15), (0.5, 1.7, 0.25), 30)
+        cam_move(c, tg, s("01-01"), e("01-02") + 0.5, (-1.4, -1.6, 1.15), (-0.9, -1.0, 1.0), (0.5, 1.7, 0.25), (0.45, 1.9, 0.25))
+    elif cut(cl, "S01b"):
+        c, tg = cam_rig((2.6, 0.9, 1.25), (1.95, 2.0, 0.9), 40)
+        cam_move(c, tg, s("01-03") - 0.6, e("01-03") + 0.5, (2.75, 0.85, 1.3), (2.55, 1.05, 1.18), (1.9, 2.0, 0.92), (1.9, 2.0, 0.9)); dof(c, m.root, 3.0)
+    elif cut(cl, "S02a"):
+        c, tg = cam_rig((1.95, 1.2, 1.1), (1.72, 1.97, 0.82), 36)
+        cam_move(c, tg, s("02-01") - 0.8, e("02-01") + 1.4, (2.0, 1.15, 1.12), (1.85, 1.35, 1.02), (1.72, 1.97, 0.84), (1.65, 1.95, 0.8))
+    elif cut(cl, "S02b"):
+        c, tg = cam_rig((-0.4, 0.6, 0.7), (0.3, 2.1, 0.12), 34)
+        cam_move(c, tg, s("02-05") - 0.6, e("02-05") + 0.6, (-0.45, 0.55, 0.72), (-0.2, 0.9, 0.55), (0.3, 2.1, 0.12), (0.3, 2.12, 0.1))
+    elif cut(cl, "S03a"):
+        c, tg = cam_rig((2.0, 0.6, 1.0), (1.4, 2.0, 0.6), 30)
+        cam_move(c, tg, s("03-01") - 0.8, e("03-05") + 2.5, (2.2, 0.55, 1.05), (1.6, 0.4, 0.95), (1.5, 2.0, 0.62), (1.2, 2.0, 0.55)); dof(c, m.root, 5.6)
+    elif cut(cl, "S04a"):
+        c, tg = cam_rig((1.6, -0.3, 0.9), (1.4, 1.8, 0.55), 28)
+        cam_move(c, tg, s("04-01") - 0.6, s("04-01") + 1.2, (1.7, -0.4, 0.95), (1.55, -0.1, 0.85), (1.6, 1.8, 0.6), (1.3, 1.7, 0.3))
+        cam_move(c, tg, s("04-01") + 1.2, e("04-02") + 0.4, (1.55, -0.1, 0.85), (1.2, 0.3, 0.55), (1.3, 1.7, 0.3), (0.5, 1.9, 0.15))
+        cam_move(c, tg, e("04-02") + 0.4, e("04-04") + 0.5, (1.2, 0.3, 0.55), (1.0, 0.75, 0.32), (0.5, 1.9, 0.15), (0.4, 1.85, 0.12)); dof(c, m.root, 4.0)
+    elif cut(cl, "S05a"):
+        c, tg = cam_rig((1.2, 1.0, 0.6), (0.3, 2.1, 0.08), 38)
+        cam_move(c, tg, s("05-01") - 0.8, e("05-02") + 0.3, (1.25, 1.05, 0.6), (0.65, 1.25, 0.55), (0.3, 2.12, 0.1), (0.3, 2.15, 0.12), 38, 46)
+        cam_move(c, tg, e("05-02") + 0.3, e("05-03") + 0.3, (0.65, 1.25, 0.55), (0.75, 1.45, 0.2), (0.3, 2.15, 0.12), (0.3, 1.98, 0.06), 46, 46)
+        cam_move(c, tg, e("05-03") + 0.3, e("05-04") + 0.3, (0.75, 1.45, 0.2), (0.55, 1.6, 0.03), (0.3, 1.98, 0.06), (0.3, 2.0, 0.01), 46, 50)
+        cam_move(c, tg, e("05-04") + 0.3, e("05-05") + 0.6, (0.55, 1.6, 0.03), (0.85, 1.05, 0.5), (0.3, 2.0, 0.01), (0.1, 2.0, 0.1), 50, 32)
+    track("maru", m.root, 0.42); track("senpai", sp.root, 0.15)
+
+
+# ======================================================================== S06：昔の先輩（2002 年ごろ。セピアは組み立てで付ける）
+def b_old(cl):
+    room(front_wall=cut(cl, "S06b")); door_leaf(False)
+    op = Sp(senpai_old((0.0, -0.4), 0))
+    # まっすぐ → ぶつかったら向きを変える。06-07「押されます」で、ちょうどぶつかるように時刻をずらす
+    pts, hits = plan.bounce_path((0.0, 0.3), 120, 9, 297, r=0.21)   # 並びは、部屋の奥まで広く走るものを選んだ（手前の壁ぎわばかりだと映らない）
+    t_hit = w("06-07", "押されます") + 0.1
+    dr = plan.Drive(pts, 0.0, v=0.3, turn=110)
+    arr = [k[0] for k in dr.keys if any(abs(k[1] - p[0]) < 1e-6 and abs(k[2] - p[1]) < 1e-6 for p in pts[1:])]
+    def open_wall(p):
+        for k in ("sofa", "desk", "bed", "shelf"):
+            x0_, y0_, x1_, y1_ = plan.FURN[k][:4]
+            if x0_ - 0.3 < p[0] < x1_ + 0.3 and y0_ - 0.3 < p[1] < y1_ + 0.3: return False
+        x0_, y0_, x1_, y1_ = plan.ROOM
+        return min(p[0] - x0_, x1_ - p[0], p[1] - y0_, y1_ - p[1]) < 0.3      # 部屋の壁にぶつかる所
+    hit_pts = {round(k[0], 4): (k[1], k[2]) for k in dr.keys if any(abs(k[1] - p[0]) < 1e-6 and abs(k[2] - p[1]) < 1e-6 for p in pts[1:])}
+    cand = [a for a in arr if t_hit - a <= s("06-01") - 0.5 and open_wall(hit_pts[round(a, 4)])]
+    shift = t_hit - min(cand) if cand else s("06-01")
+    dr = plan.Drive(pts, shift, v=0.3, turn=110)
+    t_end_rand = min(dr.t1, s("06-09") - 0.4)
+    op.drive(dr, max(dr.t0, s("06-01") - 2), t_end_rand, motor=False)
+    hit_ts = [k[0] for k in dr.keys if any(abs(k[1] - p[0]) < 1e-6 and abs(k[2] - p[1]) < 1e-6 for p in pts[1:])]
+    for th in hit_ts:
+        if s("06-01") - 1 < th < t_end_rand:
+            key(op.d["bumper"], ("location", 1), th - 0.06, 0.0); key(op.d["bumper"], ("location", 1), th, 0.014); key(op.d["bumper"], ("location", 1), th + 0.35, 0.0)
+            ev(th, "bonk_soft", 0.35 if abs(th - t_hit) > 0.2 else 0.6)
+    ev(t_hit, "click", 0.7)
+    # バンパーの中のスイッチ（押された瞬間に光る小さな印）
+    sw = sphere(glow_mat("switch", YELLOW, 0.0), (0, -0.155, 0.075), 0.012, parent=op.root)
+    swm = sw.data.materials[0]
+    emit_key(swm, t_hit - 0.05, 0.0); emit_key(swm, t_hit + 0.05, 18.0); emit_key(swm, t_hit + 0.9, 18.0); emit_key(swm, t_hit + 1.3, 0.0)
+    # 06-09〜06-10：上からの絵。ぐるぐる（らせん）→ 壁ぞい → また進む（ここだけ早回し）。通った道を黄色い線で
+    x0, y0, a0 = dr.pose(t_end_rand)
+    ts = s("06-09") - 0.3
+    spiral = [(x0, y0)]
+    cx, cy = -0.4, 0.0
+    spiral.append((cx, cy))
+    for k in range(1, 50):
+        a = k * 0.36; rr = 0.08 + 0.022 * k
+        spiral.append((cx + rr * math.cos(a), cy + rr * math.sin(a)))
+    wall = [spiral[-1], (-2.35, 1.2), (-0.95, 1.25), (0.0, 1.95), (1.0, 1.95), (1.0, 1.4), (2.6, 1.4), (2.6, 0.2)]
+    dr2 = plan.Drive(spiral + wall[1:], ts, v=1.1, turn=600)
+    op.drive(dr2, ts, min(dr2.t1, e("06-10") + 1.5), motor=False)
+    poly = [(k[1], k[2]) for k in dr2.keys]
+    ln = line_path("oldpath", poly, YELLOW, 0.014, emit=3.0)
+    L = [0.0]
+    for i in range(1, len(poly)): L.append(L[-1] + math.dist(poly[i - 1], poly[i]))
+    for k in dr2.keys:
+        i = dr2.keys.index(k)
+        ln.data.bevel_factor_end = L[i] / max(1e-6, L[-1]); ln.data.keyframe_insert("bevel_factor_end", frame=f(k[0]))
+    show_between(ln, ts)
+    if cut(cl, "S06a"):
+        c, tg = cam_rig((-1.6, -3.6, 2.6), (0.0, 0.0, 0.0), 22)
+        cam_move(c, tg, s("06-01") - 0.8, s("06-07"), (-1.7, -3.7, 2.7), (-1.2, -3.4, 2.4), (0.0, 0.0, 0.0), (0.0, -0.2, 0.0))
+        con = tg.constraints.new('COPY_LOCATION'); con.target = op.root; con.influence = 0.45   # 先輩を半分だけ追う
+    elif cut(cl, "S06b"):
+        # ぶつかる所のアップ（横から、少し引いて。壁とバンパーが両方入るように）
+        xh, yh, ah = dr.pose(t_hit)
+        fwd = (math.sin(R(ah)), -math.cos(R(ah))); side = (math.cos(R(ah)), math.sin(R(ah)))
+        def inside_furn(p_):
+            for k in ("sofa", "desk", "bed", "shelf", "dock"):
+                x0_, y0_, x1_, y1_ = plan.FURN[k][:4]
+                if x0_ - 0.15 < p_[0] < x1_ + 0.15 and y0_ - 0.15 < p_[1] < y1_ + 0.15: return True
+            return False
+        cpos = None
+        for da in (100, -100, 120, -120, 140, -140, 160, -160, 180):      # 横〜後ろから。部屋の中で、家具の中でない所
+            a_ = math.atan2(fwd[1], fwd[0]) + math.radians(da)
+            p_ = (xh + 1.0 * math.cos(a_), yh + 1.0 * math.sin(a_), 0.42)
+            if plan.ROOM[0] + 0.25 < p_[0] < plan.ROOM[2] - 0.25 and plan.ROOM[1] + 0.25 < p_[1] < plan.ROOM[3] - 0.25 and not inside_furn(p_): cpos = p_; break
+        if cpos is None: cpos = (xh - fwd[0] * 1.0, yh - fwd[1] * 1.0, 0.5)
+        tgt = (xh + fwd[0] * 0.18, yh + fwd[1] * 0.18, 0.06)
+        c, tg = cam_rig(cpos, tgt, 34)
+        cam_move(c, tg, s("06-07") - 0.8, e("06-08") + 0.4, cpos, (cpos[0] + (tgt[0] - cpos[0]) * 0.15, cpos[1] + (tgt[1] - cpos[1]) * 0.15, cpos[2] - 0.05), tgt, tgt)
+    else:
+        c = cam_top((-0.2, 0.15, 7.6), 32)
+        cam_top_move(c, s("06-09") - 0.8, e("06-10") + 0.8, (-0.2, 0.15, 7.6), (-0.2, 0.15, 7.1))
+    track("senpai", op.root, 0.15)
+
+
+# ======================================================================== S07〜S08：まるロボ、目の光を消して「ぶつかったら曲がる」
+def blind_route():
+    A = (-1.9, 0.9); B = (-2.87, 0.9); Cp = (-2.64, 1.42)
+    # 08：B→C のあと、早回しで部屋を回る（左手前のすみには行かない）。行かない並びを探す
+    best = None
+    for sd in range(1, 300):
+        pts, hits = plan.bounce_path(Cp, 140, 22, sd, r=0.15)
+        samp = []
+        for i in range(len(pts) - 1):
+            (xa, ya), (xb, yb) = pts[i], pts[i + 1]; n = max(1, int(math.dist((xa, ya), (xb, yb)) / 0.05))
+            samp += [(xa + (xb - xa) * k / n, ya + (yb - ya) * k / n) for k in range(n)]
+        if any(x < -2.0 and y < -1.5 for x, y in samp): continue
+        center = sum(1 for x, y in samp if -1 < x < 1 and -1 < y < 1)
+        if best is None or center > best[0]: best = (center, pts)
+    return [A, B, Cp] + best[1][1:]
+
+
+def b_blind(cl):
+    room(); door_leaf(False)
+    route = blind_route()
+    A, B, Cp = route[0], route[1], route[2]
+    m = Maru((A[0], A[1], 0), face=-90)
+    m.at(s("07-01") - 1.0, loc=(A[0], A[1], 0), face=-90, look=0)
+    m.hop(e("07-01") - 0.6, 0.1, 0.3)
+    tg_off = w("07-02", "消しました")
+    m.glow(tg_off - 0.1, 0.0, d=0.4, g0=0.9); ev(tg_off, "power_down", 0.5)
+    th1 = w("07-03", "ゴツン") + 0.05
+    m.walk(s("07-03") + 0.1, th1, (B[0] + 0.03, B[1], 0), turn=False)
+    m.at(th1 + 0.12, loc=(B[0] + 0.12, B[1], 0)); m.tilt(th1, 16, 0.1); m.tilt(th1 + 0.25, -8, 0.15); m.tilt(th1 + 0.5, 0, 0.2)
+    ev(th1, "bonk", 0.8)
+    th2 = w("07-04", "ゴツン") + 0.05
+    m.at(s("07-04") + 0.1, face=-90); m.at(s("07-04") + 0.6, face=-90 + ((face_to(B, Cp) + 90 + 180) % 360 - 180))
+    m._last["loc"] = (th1 + 0.12, (B[0] + 0.12, B[1], 0))
+    m.walk(s("07-04") + 0.7, th2, (Cp[0], Cp[1] - 0.02, 0), turn=False)
+    m.at(th2 + 0.12, loc=(Cp[0] - 0.03, Cp[1] - 0.1, 0)); m.tilt(th2, -16, 0.1); m.tilt(th2 + 0.25, 8, 0.15); m.tilt(th2 + 0.5, 0, 0.2)
+    ev(th2, "bonk", 0.8)
+    m.wobble(s("07-05") + 0.2, e("07-05") + 0.2, 9, 0.6)
+    # 08：上から。早回しで部屋じゅうを回り、通った道を黄色い線で
+    ts = s("08-01") + 0.4; te = e("08-02") + 0.2
+    rest = route[2:]
+    Ls = [0.0]
+    for i in range(1, len(rest)): Ls.append(Ls[-1] + math.dist(rest[i - 1], rest[i]))
+    tot = Ls[-1]
+    m._last["loc"] = (th2 + 0.12, (Cp[0] - 0.03, Cp[1] - 0.1, 0))
+    m.at(ts - 0.1, loc=(Cp[0], Cp[1] - 0.1, 0), interp="LINEAR")
+    for i, p in enumerate(rest[1:], 1):
+        t = ts + (te - ts) * Ls[i] / tot
+        m.at(t, loc=(p[0], p[1], 0), interp="LINEAR", hold=False)
+        m.at(t - 0.02, face=face_to(rest[i - 1], p), hold=False)
+        ev(t, "bonk_soft", 0.18)
+    full = [A, B] + rest
+    ln = line_path("marupath", full, YELLOW, 0.016, emit=3.0)
+    Lf = [0.0]
+    for i in range(1, len(full)): Lf.append(Lf[-1] + math.dist(full[i - 1], full[i]))
+    key(ln.data, "bevel_factor_end", s("07-03"), 0.0, "LINEAR") if False else None
+    ln.data.bevel_factor_end = 0.0; ln.data.keyframe_insert("bevel_factor_end", frame=f(s("07-03") + 0.1))
+    ln.data.bevel_factor_end = Lf[1] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(th1))
+    ln.data.bevel_factor_end = Lf[2] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(th2))
+    for i in range(3, len(full)):
+        ln.data.bevel_factor_end = Lf[i] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(ts + (te - ts) * (Lf[i] - Lf[2]) / (Lf[-1] - Lf[2])))
+    for fc in ln.data.animation_data.action.fcurves:
+        for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
+    show_between(ln, s("08-01") - 0.5)
+    corner = ring_marker((-2.45, -1.95), 0.42, YELLOW, w=0.02); show_between(corner, s("08-03") + 0.1); scale_pop(corner, s("08-03") + 0.1); ev(s("08-03") + 0.1, "pop", 0.5)
+    m.at(te + 0.6, face=face_to(rest[-2], rest[-1]) + 30); m.tilt(te + 0.6, 10); m.tilt(e("08-06"), 0)
+    if cut(cl, "S07a"):
+        c, tg = cam_rig((-0.6, -1.4, 1.0), (-2.2, 0.9, 0.2), 30)
+        cam_move(c, tg, s("07-01") - 0.8, e("07-05") + 0.6, (-0.5, -1.5, 1.05), (-0.9, -1.0, 0.85), (-2.0, 0.9, 0.2), (-2.5, 1.1, 0.2)); dof(c, m.root, 5.0)
+    else:
+        c = cam_top((0.0, 0.0, 8.3), 30)
+        cam_top_move(c, s("08-01") - 0.8, e("08-06") + 0.8, (0.0, 0.0, 8.3), (-0.4, -0.2, 7.4))
+    track("maru", m.root, 0.42); track("corner", corner, 0.0)
+
+
+# ======================================================================== S09〜S12：今の先輩。光の物差しで点を描く
+MAP_PATH = [(-1.3, 0.95), (-0.4, 0.4), (0.3, 0.75), (1.9, 0.75), (2.45, 1.35), (2.5, 0.05), (0.8, -0.15), (0.8, -1.95), (-1.0, -2.1), (-2.2, -1.9), (-2.25, -0.9), (-2.25, 0.95), (-1.3, 0.95)]
+
+
+def lidar_drives():
+    """09〜12 の先輩の走り（一つの流れ）。09：真ん中から走り出し、壁の手前で曲がる → 10：止まる → 11〜12：部屋をひと回り"""
+    t9 = e("09-01") + 0.1
+    d9 = plan.Drive([(-1.6, 0.2), (-2.38, 0.2), (-2.38, 0.95), (-1.3, 0.95)], t9, v=0.55, turn=200)
+    t11 = s("11-03") - 0.6
+    cut_i = 6
+    d11 = plan.Drive(MAP_PATH[:cut_i + 1], t11, v=0.32, turn=160)
+    t12 = s("12-01") - 0.2
+    d12 = plan.Drive(MAP_PATH[cut_i:], max(d11.t1, t12 - 6.0), v=1.6, turn=500, face0=d11.pose(d11.t1)[2])
+    return d9, d11, d12
+
+
+def full_map_points():
+    """出来上がった地図の点（09〜12 と同じ走りで光を回したもの）。生まれた秒つき"""
+    d9, d11, d12 = lidar_drives()
+    a = plan.scan_drive(d11, d11.t0, d11.t1, rot_per_s=1.0, rays=200, seed=2)
+    b = plan.scan_drive(d12, d12.t0, d12.t1, rot_per_s=4.0, rays=200, seed=3)
+    return a + b, d9, d11, d12
+
+
+def b_lidar(cl):
+    room(); door_leaf(False)
+    sp = Sp(senpai_lidar((-1.6, 0.2), plan.face_deg(-1, 0)))
+    pts, d9, d11, d12 = full_map_points()
+    sp.place(s("09-01") - 1.0, -1.6, 0.2, plan.face_deg(-1, 0))
+    sp.drive(d9); sp.spin(s("09-01") - 1, e("12-05") + 2, 0.6)
+    m = Maru((-1.0, -0.4, 0), face=face_to((-1.0, -0.4), (-1.6, 0.2)))
+    m.at(s("09-01") - 1.0, loc=(-1.0, -0.4, 0)); m.at(s("09-02") + 0.1, face=face_to((-1.0, -0.4), (-2.38, 0.3)))
+    m.hop(s("09-02") + 0.3, 0.1, 0.3)
+    m.walk(e("09-02") + 0.1, e("09-03"), (-1.5, 0.55, 0))
+    # 09-04 ふたが光る
+    le = bpy.data.materials["lid_eye"]
+    emit_key(le, w("09-04", "頭の上") - 0.1, 4.0); emit_key(le, w("09-04", "頭の上") + 0.3, 16.0); emit_key(le, e("09-04") + 0.6, 6.0)
+    lr = ring_marker((0, 0), 0.075, YELLOW, w=0.004, z=0.0); lr.parent = sp.root; lr.location = (0, 0.035, sp.d["top_z"] + 0.03)
+    show_between(lr, w("09-04", "丸いふた"), e("09-04") + 0.8); scale_pop(lr, w("09-04", "丸いふた")); ev(w("09-04", "丸いふた"), "pop", 0.4)
+    # 10：まるロボが先輩の上にぴょん（先輩の子にして、上に乗せる）
+    tj = w("10-01", "ぴょん")
+    m.walk(e("09-04") + 0.2, tj - 0.4, (-1.3, 0.62, 0))
+    m.at(tj - 0.3, face=0)
+    ride = empty((0, 0, 0)); ride.parent = sp.root
+    # まるロボを先輩の上に移す：跳ぶ弧は世界の座標で打ち、着いた瞬間から先輩の子にする（子の場所は先輩の上）
+    mr = Maru((0, 0, 0), face=0); mr.root.parent = sp.root
+    mr.root.location = (0, -0.085, sp.d["top_z"] + 0.004); mr.root.rotation_euler = (0, 0, R(180))
+    show_between(mr.root, tj + 0.5); hide_key(m.root, s("09-01") - 1.5, False); hide_key(m.root, tj + 0.5, True)
+    key(m.root, "location", tj, (-1.3, 0.62, 0.0)); key(m.root, "location", tj + 0.25, (-1.25, 0.8, 0.24)); key(m.root, "location", tj + 0.5, (-1.215, 0.95, sp.d["top_z"] + 0.004))
+    ev(tj, "jump", 0.5); ev(tj + 0.5, "land", 0.35)
+    mr.at(tj + 0.6, look=-30); mr.tilt(tj + 0.8, 10); mr.tilt(e("10-01") + 0.5, 0)
+    # ふたを透かす
+    for nm in ("lid_glass", "lid_base", "lid_cap"):
+        mm = [x for x in bpy.data.materials if x.name.startswith(nm)][0]
+        b = mm.node_tree.nodes["Principled BSDF"]
+        try: mm.blend_method = 'BLEND'
+        except Exception: pass
+        alpha_key(mm, w("10-02", "透かして"), 1.0); alpha_key(mm, w("10-02", "透かして") + 0.9, 0.12)
+        alpha_key(mm, s("11-01"), 0.12); alpha_key(mm, s("11-01") + 1.0, 1.0)
+    ev(w("10-02", "透かして"), "rise", 0.35)
+    # 光の物差しの光（回る頭の前へ伸びる線）。長さは、その向きで壁までの距離（plan.ray）
+    bm_ = beam(sp.d["spin"], 1.0, TEAL, 0.004, 8.0)
+    tip = sphere(glow_mat("tip", TEAL, 12.0), (0, -1.0, 0), 0.02, parent=bm_)
+    rps_slow = 0.35
+    sp_obj = sp.d["spin"]
+    ta, tb = s("10-03") - 0.4, s("11-01")
+    key(sp_obj, ("rotation_euler", 2), s("09-01") - 1, (s("09-01") - 1) * 0.6 * 2 * math.pi, "LINEAR")
+    key(sp_obj, ("rotation_euler", 2), ta, ta * 0.6 * 2 * math.pi, "LINEAR")
+    key(sp_obj, ("rotation_euler", 2), tb, ta * 0.6 * 2 * math.pi + (tb - ta) * rps_slow * 2 * math.pi, "LINEAR")
+    key(sp_obj, ("rotation_euler", 2), e("12-05") + 2, ta * 0.6 * 2 * math.pi + (tb - ta) * rps_slow * 2 * math.pi + (e("12-05") + 2 - tb) * 1.2 * 2 * math.pi, "LINEAR")
+    S_ = plan.segments(); xs, ys, angs = -1.3, 0.95, d9.pose(d9.t1)[2]
+    t = ta
+    while t < tb:
+        spin_a = ta * 0.6 * 2 * math.pi + (t - ta) * rps_slow * 2 * math.pi
+        wa = R(angs) + spin_a                    # 頭の前（-y）の、世界での向き（前＝-y を 0 とする角度）
+        dirx, diry = math.sin(wa), -math.cos(wa)
+        h = plan.ray(xs + dirx * 0.0, ys + diry * 0.0, math.atan2(diry, dirx), S_)
+        L = (h[0] if h else 3.0)
+        key(bm_, ("scale", 1), t, L, "LINEAR"); t += 1 / FPS * 2
+    show_between(bm_, s("10-03") - 0.3, s("11-01") + 0.2)
+    # 10-04：光が出て、返ってくる（光の玉が行って戻る）
+    pulse = sphere(glow_mat("pulse", "#FFFFFF", 20.0), (0, 0, 0), 0.03, parent=bm_)
+    for k in range(2):
+        tp = w("10-04", "返ってきた") - 1.0 + k * 1.4
+        key(pulse, ("location", 1), tp, 0.0, "LINEAR"); key(pulse, ("location", 1), tp + 0.5, -1.0, "LINEAR"); key(pulse, ("location", 1), tp + 1.0, 0.0, "LINEAR")
+    show_between(pulse, w("10-04", "返ってきた") - 1.0, w("10-04", "返ってきた") + 1.9)
+    # 10-05：速く回ると、まわり全部（光の円盤）
+    fan = cyl(flat_mat("fan", TEAL, 0.0), (0, 0, 0), 1.0, 0.002, parent=sp.d["spin"], verts=64)
+    fm = fan.data.materials[0]
+    fn = fm.node_tree.nodes["Emission"]
+    mix = fm.node_tree.nodes.new("ShaderNodeMixShader"); tr = fm.node_tree.nodes.new("ShaderNodeBsdfTransparent")
+    out = fm.node_tree.nodes["Material Output"]
+    fm.node_tree.links.new(tr.outputs[0], mix.inputs[1]); fm.node_tree.links.new(fn.outputs[0], mix.inputs[2]); fm.node_tree.links.new(mix.outputs[0], out.inputs[0])
+    mix.inputs[0].default_value = 0.0; mix.inputs[0].keyframe_insert("default_value", frame=f(w("10-05", "何回も") - 0.2))
+    mix.inputs[0].default_value = 0.35; mix.inputs[0].keyframe_insert("default_value", frame=f(w("10-05", "何回も") + 0.5))
+    mix.inputs[0].default_value = 0.35; mix.inputs[0].keyframe_insert("default_value", frame=f(e("10-05") + 0.2))
+    mix.inputs[0].default_value = 0.0; mix.inputs[0].keyframe_insert("default_value", frame=f(e("10-05") + 0.8))
+    fn.inputs["Strength"].default_value = 2.0
+    fan.scale = (3.5, 3.5, 1); fan.visible_shadow = False
+    show_between(fan, w("10-05", "何回も") - 0.3, e("10-05") + 1.0); ev(w("10-05", "何回も"), "whoosh", 0.4)
+    ring1 = [(round(h_[1][0], 3), round(h_[1][1], 3), w("10-05", "何回も") + 0.3) for h_ in [plan.ray(xs, ys, R(a_), S_) for a_ in range(0, 360, 2)] if h_]
+    rp, rm = point_cloud("ring1", ring1, life=e("10-05") + 0.6 - w("10-05", "何回も") - 0.3, t_offset=CLOCK["T0"])
+    # 11：明かりを落とす → 走りながら点を置く（まるロボは上に乗ったまま）
+    lights_off(s("11-02") + 0.3, s("11-02") + 2.4, sky=0.03, world_s=0.02)
+    sp.drive(d11); sp.drive(d12)
+    xe, ye, ae = d12.pose(d12.t1); sp.place(e("12-05") + 2, xe, ye, ae)
+    pc, pm = point_cloud("map", pts, t_offset=CLOCK["T0"])
+    mr.at(s("11-07") - 0.2, look=-35); mr.tilt(s("11-07"), 12); mr.tilt(e("11-07") + 0.8, -6); mr.tilt(e("11-07") + 1.6, 0)
+    # 11-05「ここは壁。ここは、ソファの足」（点の上に輪）
+    rw = ring_marker((-3.0, -0.2), 0.22, YELLOW, w=0.012, z=plan.LIDAR_Z); rw.rotation_euler = (0, R(90), 0)
+    show_between(rw, w("11-05", "壁"), e("11-05") + 0.8); scale_pop(rw, w("11-05", "壁")); ev(w("11-05", "壁"), "pop", 0.4)
+    lx, ly = plan.legs("sofa")[0]
+    rs = ring_marker((lx, ly), 0.12, YELLOW, w=0.01, z=plan.LIDAR_Z)
+    show_between(rs, w("11-05", "ソファ"), e("11-05") + 0.8); scale_pop(rs, w("11-05", "ソファ")); ev(w("11-05", "ソファ"), "pop", 0.4)
+    # 12-03〜12-04：スマホの地図を上から重ねる（同じ間取りから描いた絵なので、ぴったり重なる）
+    bx0, by0, bx1, by1 = plan.ROOM[0] - 0.15, plan.ROOM[1] - 0.15, plan.ROOM[2] + 0.15, plan.ROOM[3] + 0.15   # map_tex.world_box と同じ
+    mpl = plane(img_mat("mapplane", tex("map_plane.png"), emit=2.0), ((bx0 + bx1) / 2, (by0 + by1) / 2, 0.9), (bx1 - bx0, by1 - by0))
+    mpm = mpl.data.materials[0]; mpm.blend_method = 'BLEND'
+    nt = mpm.node_tree; b = nt.nodes["Principled BSDF"]; tx_ = [n for n in nt.nodes if n.type == 'TEX_IMAGE'][0]
+    mul = nt.nodes.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; nt.links.new(tx_.outputs["Alpha"], mul.inputs[0]); nt.links.new(mul.outputs[0], b.inputs["Alpha"])
+    mul.inputs[1].default_value = 0.0; mul.inputs[1].keyframe_insert("default_value", frame=f(w("12-03", "比べて") - 0.4))
+    mul.inputs[1].default_value = 0.85; mul.inputs[1].keyframe_insert("default_value", frame=f(w("12-03", "比べて") + 0.3))
+    key(mpl, ("location", 2), w("12-03", "比べて"), 0.9); key(mpl, ("location", 2), s("12-04") - 0.1, plan.LIDAR_Z + 0.004)
+    emit_key(mpm, s("12-04") - 0.05, 2.0); emit_key(mpm, s("12-04") + 0.25, 7.0); emit_key(mpm, s("12-04") + 1.0, 2.0)
+    show_between(mpl, w("12-03", "比べて") - 0.5); ev(s("12-04"), "snap", 0.6)
+    # カメラ
+    if cut(cl, "S09a"):
+        c, tg = cam_rig((-0.4, -1.6, 0.8), (-2.0, 0.4, 0.1), 30)
+        cam_move(c, tg, s("09-01") - 0.8, e("09-03"), (-0.3, -1.7, 0.85), (-0.8, -1.2, 0.7), (-1.9, 0.3, 0.1), (-2.2, 0.7, 0.1))
+        cam_move(c, tg, e("09-03"), e("09-04") + 0.6, (-0.8, -1.2, 0.7), (-1.05, 0.35, 0.42), (-2.2, 0.7, 0.1), (-1.3, 0.95, 0.12), 30, 44)
+    elif cut(cl, "S10a"):
+        c, tg = cam_rig((-0.7, 0.2, 0.55), (-1.3, 0.95, 0.15), 34)
+        cam_move(c, tg, s("10-01") - 0.8, e("10-02") + 0.8, (-0.65, 0.15, 0.55), (-0.95, 0.55, 0.36), (-1.3, 0.9, 0.18), (-1.3, 0.95, 0.12), 34, 50)
+        cam_move(c, tg, e("10-02") + 0.8, e("10-04"), (-0.95, 0.55, 0.36), (0.2, -0.6, 1.4), (-1.3, 0.95, 0.12), (-1.5, 1.0, 0.0), 50, 24)
+        cam_move(c, tg, e("10-04"), e("10-05") + 0.6, (0.2, -0.6, 1.4), (0.4, -1.4, 2.2), (-1.5, 1.0, 0.0), (-1.2, 0.6, 0.0), 24, 22)
+    elif cut(cl, "S11a"):
+        c, tg = cam_rig((1.6, -3.4, 3.4), (-0.6, 0.6, 0.0), 24)
+        cam_move(c, tg, s("11-01") - 0.8, e("11-07") + 0.6, (1.7, -3.5, 3.5), (0.6, -3.6, 3.9), (-0.6, 0.6, 0.0), (-0.3, 0.2, 0.0))
+    else:
+        c = cam_top((0.1, 0.0, 8.0), 30)
+        cam_top_move(c, s("12-01") - 0.8, e("12-05") + 0.8, (0.1, -0.1, 8.0), (0.0, 0.0, 8.6))
+    track("senpai", sp.root, 0.15); track("maru", mr.root, 0.5)
+
+
+# ======================================================================== S13〜S15：暗い地図。自分はどこ？ → 「だいたい」から「ぴったり」へ
+SP13 = (-1.62, -0.2)
+
+
+def dark_map(split_x=0.3):
+    """暗くした部屋と、出来上がった地図（右側＝x > split_x は、13-08 で「まだ描いていない所」として消せるよう別にする）"""
+    room(); door_leaf(False)
+    lights_off(CLOCK["T0"] - 2.0, CLOCK["T0"] - 1.0, sky=0.03, world_s=0.02)
+    pts = [(x, y, -10.0) for x, y in plan.map_points()]
+    left = [p for p in pts if p[0] <= split_x]; right = [p for p in pts if p[0] > split_x]
+    a, am = point_cloud("mapL", left, pop=0.0, t_offset=CLOCK["T0"])
+    b, bm = point_cloud("mapR", right, pop=0.0, t_offset=CLOCK["T0"])
+    return am, bm, right
+
+
+def pts_glow(m, t, v):
+    n = [x for x in m.node_tree.nodes if x.type == 'MATH' and x.operation == 'MULTIPLY_ADD'][0]
+    n.inputs[2].default_value = v; n.inputs[2].keyframe_insert("default_value", frame=f(t))
+
+
+def b_dark(cl):
+    am, bm, right = dark_map()
+    sp = Sp(senpai_lidar(SP13, plan.face_deg(-1, 0))); sp.spin(CLOCK["T0"] - 2, e("15-10") + 3, 0.6)
+    m = Maru((-1.25, -0.62, 0), face=face_to((-1.25, -0.62), SP13), glow=1.2)
+    # 13-02〜13-03：光の線を 1 本、本棚まで
+    b1 = beam(empty((SP13[0] - 0.035, SP13[1], 0.127)), 1.0, TEAL, 0.004, 9.0); b1.rotation_euler = (0, 0, R(plan.face_deg(-1, 0)))
+    h = plan.ray(SP13[0], SP13[1], math.pi, plan.segments()); L1 = h[0]
+    key(b1, ("scale", 1), w("13-02", "どの向き") - 0.05, 0.01); key(b1, ("scale", 1), w("13-02", "どの向き") + 0.6, L1)
+    show_between(b1, w("13-02", "どの向き") - 0.1, e("13-03") + 0.5); ev(w("13-02", "どの向き"), "whoosh", 0.3)
+    hit = sphere(glow_mat("hit13", TEAL, 14.0), (h[1][0], h[1][1], plan.LIDAR_Z), 0.03); show_between(hit, w("13-02", "どの向き") + 0.6, e("13-05") + 0.5)
+    anchor13 = empty(((SP13[0] + h[1][0]) / 2, SP13[1], plan.LIDAR_Z + 0.12)); track("onemeter", anchor13)
+    # 13-04：「ここ」が分からない → 先輩が消え、点が宙に浮く／13-05：先輩が戻り、点が置かれる
+    tq = w("13-04", "「ここ」")
+    hide_key(sp.root, s("13-01") - 1.5, False); hide_key(sp.root, tq, True); hide_key(sp.root, s("13-05") + 0.3, False)
+    ghost = sphere(glow_mat("ghost13", WHITE_PT, 12.0), (h[1][0], h[1][1], 0.5), 0.035)
+    for k in range(5):
+        key(ghost, "location", tq + 0.2 + k * 0.8, (h[1][0] + 0.25 * math.sin(k * 1.7), h[1][1] + 0.25 * math.cos(k * 1.3), 0.45 + 0.1 * (k % 2)))
+    key(ghost, "location", s("13-05") + 0.6, (h[1][0], h[1][1], 0.45)); key(ghost, "location", s("13-05") + 1.1, (h[1][0], h[1][1], plan.LIDAR_Z))
+    show_between(ghost, tq + 0.1, s("13-05") + 1.3); ev(s("13-05") + 1.1, "snap", 0.4)
+    track("ghost", ghost, 0.12); track("senpai", sp.root, 0.18)
+    # 13-07 地図が光る、13-08 右の半分は「まだ描いていない」→ 消える
+    pts_glow(am, w("13-07", "地図") - 0.05, 2.2); pts_glow(am, w("13-07", "地図") + 0.3, 6.0); pts_glow(am, e("13-07") + 0.2, 2.2)
+    pts_glow(bm, w("13-07", "地図") - 0.05, 2.2); pts_glow(bm, w("13-07", "地図") + 0.3, 6.0); pts_glow(bm, e("13-07") + 0.2, 2.2)
+    pts_glow(bm, w("13-08", "途中") - 0.2, 2.2); pts_glow(bm, w("13-08", "途中") + 0.8, 0.0)
+    # 14：まるロボ、こんがらがる
+    fc = face_to((-1.25, -0.62), (-0.75, -1.4))            # 14：カメラの方（見ている人の方）を向いて、こんがらがる
+    m.at(s("14-01") - 0.5, look=10, face=fc)
+    for k in range(6):
+        m.at(s("14-01") + k * 1.1, face=fc + (25 if k % 2 else -25))
+    m.at(e("14-05") + 0.3, face=face_to((-1.25, -0.62), SP13))
+    m.glow(s("14-04"), 2.4, 0.3, g0=1.2); m.wobble(s("14-04") + 0.2, e("14-04") + 0.3, 14, 0.5); m.glow(e("14-04") + 0.4, 1.2)
+    # 15：車輪を数える（アップ）→ 「だいたい」の丸 → いま見えている形（白い点）を地図と重ねる → 「ぴったり」
+    t_go = w("15-02", "車輪") - 0.2
+    sp.place(t_go - 0.5, SP13[0], SP13[1], plan.face_deg(-1, 0))
+    d15 = plan.Drive([SP13, (-0.75, -0.2)], t_go, v=0.11, face0=plan.face_deg(-1, 0), turn=120)
+    sp.drive(d15, wheel_scale=1.0)
+    PX = (-0.75, -0.2)
+    # 「だいたい」の丸（本当の場所から少しずれた所に、大きくぼんやり）
+    off = (0.16, 0.12)
+    disc = cyl(flat_mat("guess", YELLOW, 0.0), (PX[0] + off[0], PX[1] + off[1], 0.02), 0.45, 0.004, verts=64)
+    gm = disc.data.materials[0]; gn = gm.node_tree.nodes["Emission"]
+    mix = gm.node_tree.nodes.new("ShaderNodeMixShader"); tr = gm.node_tree.nodes.new("ShaderNodeBsdfTransparent"); out = gm.node_tree.nodes["Material Output"]
+    gm.node_tree.links.new(tr.outputs[0], mix.inputs[1]); gm.node_tree.links.new(gn.outputs[0], mix.inputs[2]); gm.node_tree.links.new(mix.outputs[0], out.inputs[0])
+    gn.inputs["Strength"].default_value = 1.2; disc.visible_shadow = False
+    def dalpha(t, a): mix.inputs[0].default_value = a; mix.inputs[0].keyframe_insert("default_value", frame=f(t))
+    td = w("15-04", "だいたいここ"); dalpha(td - 0.2, 0.0); dalpha(td + 0.3, 0.3)
+    scale_pop(disc, td); ev(td, "pop", 0.5)
+    for k in range(4):   # 15-05：ふらふらとずれる
+        key(disc, "location", s("15-05") + 0.3 + k * 0.9, (PX[0] + off[0] + 0.06 * math.sin(k * 2.1), PX[1] + off[1] + 0.06 * math.cos(k * 1.7), 0.02))
+    track("disc", disc, 0.0)
+    # いま見えている形（白い点）：思っている場所（ずれ）で置いた点 → 15-07 で動いて、地図の点に重なる
+    S_ = plan.segments(); cur = []
+    for a_ in range(0, 360, 2):
+        hh = plan.ray(PX[0], PX[1], R(a_), S_)
+        if hh and math.dist(hh[1], PX) < 2.2: cur.append((hh[1][0], hh[1][1], 0.0))
+    wpt = empty((PX[0], PX[1], 0.0))
+    cpt, cm = point_cloud("cur", [(x - PX[0], y - PX[1], t) for x, y, t in cur], col=WHITE_PT, radius=0.02, z=plan.LIDAR_Z + 0.01, pop=0.0, base=3.0, t_offset=1e5)
+    cpt.parent = wpt
+    tw = w("15-06", "いま見えている")
+    show_between(cpt, tw); ev(tw + 0.2, "pop", 0.4)
+    th_err = 9.0
+    key(wpt, "location", tw, (PX[0] + off[0], PX[1] + off[1], 0)); key(wpt, ("rotation_euler", 2), tw, R(th_err))
+    t7 = s("15-07") + 0.3
+    seq = [(off[0] * 0.3, -0.12, 4.0), (-0.1, 0.05, -5.0), (0.05, 0.03, 2.0), (0.0, 0.0, 0.0)]
+    for k, (ox, oy, oa) in enumerate(seq):
+        tt = t7 + (k + 1) * (w("15-08", "ぴったり") - t7) / len(seq)
+        key(wpt, "location", tt, (PX[0] + ox, PX[1] + oy, 0)); key(wpt, ("rotation_euler", 2), tt, R(oa))
+    tp = w("15-08", "ぴったり")
+    ev(tp, "snap", 0.6); pts_glow(am, tp - 0.05, 2.2); pts_glow(am, tp + 0.2, 7.0); pts_glow(am, tp + 0.9, 2.2)
+    key(disc, "location", tp - 0.3, (PX[0] + off[0] * 0.2, PX[1] + off[1] * 0.2, 0.02)); key(disc, "location", tp + 0.2, (PX[0], PX[1], 0.02))
+    key(disc, "scale", tp - 0.3, (1, 1, 1)); key(disc, "scale", tp + 0.2, (0.12, 0.12, 1))
+    # 15-09：白い点を消して、まだ描いていなかった右側の点が生まれる（地図を広げる）
+    hide_key(cpt, w("15-09", "新しい点"), True)
+    tg9 = w("15-09", "新しい点")
+    newp = [(x, y, tg9 + 0.2 + 3.5 * (x - 0.3) / 2.7) for x, y, _ in right]
+    np_, nm = point_cloud("grow", newp, t_offset=CLOCK["T0"]); ev(tg9 + 0.2, "rise", 0.35)
+    # 15-10：また少し進んで、だいたい → ぴったり（丸が大きく → 小さく、を 2 回）
+    d15b = plan.Drive([PX, (0.2, -0.45)], s("15-10") + 0.2, v=0.2)
+    sp.drive(d15b)
+    for k in range(2):
+        tk = s("15-10") + 1.0 + k * 3.0
+        xk, yk, _ = d15b.pose(tk)
+        key(disc, "location", tk, (xk + 0.1, yk + 0.08, 0.02)); key(disc, "scale", tk, (0.9, 0.9, 1)); ev(tk, "pop", 0.25)
+        key(disc, "location", tk + 1.3, (xk, yk, 0.02)); key(disc, "scale", tk + 1.3, (0.12, 0.12, 1)); ev(tk + 1.3, "snap", 0.3)
+    dalpha(e("15-10") + 0.3, 0.35); dalpha(e("15-10") + 0.9, 0.0)
+    m.walk(s("15-02") - 0.5, s("15-02") + 1.4, (-1.15, 0.3, 0)); m.at(s("15-04"), face=face_to((-1.15, 0.3), PX)); m.at(s("15-08") + 0.5, look=15)
+    key(m.body, ("rotation_euler", 0), tp + 0.2, R(20)); key(m.body, ("rotation_euler", 0), tp + 0.6, R(0)); key(m.body, ("rotation_euler", 0), tp + 1.0, R(20)); key(m.body, ("rotation_euler", 0), tp + 1.4, R(-15))
+    if cut(cl, "S13a"):
+        c, tg = cam_rig((-0.6, -2.4, 1.5), (-2.0, -0.2, 0.1), 28)
+        cam_move(c, tg, s("13-01") - 0.8, e("13-05"), (-0.5, -2.5, 1.55), (-1.2, -2.1, 1.25), (-2.0, -0.2, 0.1), (-2.1, -0.2, 0.15))
+        cam_move(c, tg, e("13-05"), e("13-08") + 0.8, (-1.2, -2.1, 1.25), (1.2, -3.9, 4.0), (-2.1, -0.2, 0.15), (-0.2, 0.2, 0.0), 28, 24)
+    elif cut(cl, "S14a"):
+        c, tg = cam_rig((-0.7, -1.35, 0.42), (-1.3, -0.55, 0.3), 40)
+        cam_move(c, tg, s("14-01") - 0.8, e("14-05") + 0.6, (-0.75, -1.4, 0.44), (-0.85, -1.2, 0.38), (-1.27, -0.6, 0.3), (-1.25, -0.62, 0.3)); dof(c, m.root, 2.8)
+    elif cut(cl, "S15b"):
+        c, tg = cam_rig((-1.5, -0.85, 0.1), (-1.3, -0.2, 0.03), 40)
+        con = tg.constraints.new('COPY_LOCATION'); con.target = sp.root
+        cam_move(c, tg, s("15-02") - 0.5, e("15-03") + 0.6, (-1.55, -0.85, 0.1), (-0.95, -0.85, 0.1))
+    else:
+        c, tg = cam_rig((0.6, -3.4, 3.3), (-0.6, -0.2, 0.0), 26)
+        if cut(cl, "S15a"):
+            cam_move(c, tg, s("15-01") - 0.8, e("15-01") + 0.6, (0.7, -3.5, 3.4), (0.5, -3.3, 3.2), (-0.8, -0.2, 0.0), (-0.9, -0.2, 0.0))
+        else:
+            cam_move(c, tg, s("15-04") - 0.8, e("15-08"), (0.3, -2.6, 2.4), (0.0, -2.2, 2.1), (-0.7, -0.15, 0.0), (-0.75, -0.2, 0.0))
+            cam_move(c, tg, e("15-08"), e("15-10") + 0.8, (0.0, -2.2, 2.1), (1.0, -3.4, 3.4), (-0.75, -0.2, 0.0), (0.0, 0.1, 0.0))
+    track("maru", m.root, 0.42)
+
+
+# ======================================================================== S16〜S17：じゅうたんで、すべる → 一周して戻ると、ぴたっ
+DRIFT = dict(c=(-0.2, 0.0), th=7.0, d=(0.22, -0.12))
+
+
+def rug_drive():
+    t0 = e("16-02") + 0.2
+    P = plan.RUG_PATH
+    # じゅうたんの上はゆっくり（すべる）。前後はふつう
+    i_on = 2; i_off = 3   # (−0.2, 0.2) → (−1.9, −0.5) の区間がじゅうたん
+    d1 = plan.Drive(P[:i_on + 1], t0, v=0.3)
+    d2 = plan.Drive(P[i_on:i_off + 1], d1.t1, v=0.09, face0=d1.pose(d1.t1)[2])
+    d3 = plan.Drive(P[i_off:], d2.t1, v=0.3, face0=d2.pose(d2.t1)[2])
+    return d1, d2, d3
+
+
+def drift_at(t, d2):
+    k = 0.0 if t <= d2.t0 else (1.0 if t >= d2.t1 else (t - d2.t0) / (d2.t1 - d2.t0))
+    return k
+
+
+def drift_points(dr, t0, t1, d2, rot=1.0, rays=200, seed=5):
+    """思っている場所で置いた点（じゅうたんでずれたぶん、地図全体が回って動いている）"""
+    S_ = plan.segments(); out = []
+    c = DRIFT["c"]; th = DRIFT["th"]; dx, dy = DRIFT["d"]
+    raw = plan.scan_drive(dr, t0, t1, rot_per_s=rot, rays=rays, seed=seed)
+    for x, y, t in raw:
+        k = drift_at(t, d2)
+        if k <= 0: continue
+        a = math.radians(th * k); ca, sa = math.cos(a), math.sin(a)
+        rx, ry = x - c[0], y - c[1]
+        out.append((round(c[0] + rx * ca - ry * sa + dx * k, 3), round(c[1] + rx * sa + ry * ca + dy * k, 3), t))
+    return out
+
+
+def b_rug(cl):
+    room(rug=True); door_leaf(False)
+    rug = RUGOBJ[-1]
+    tr_ = w("16-02", "じゅうたん")
+    key(rug, "scale", tr_ - 0.3, (0.001, 0.001, 1)); key(rug, "scale", tr_ + 0.25, (1.08, 1.08, 1)); key(rug, "scale", tr_ + 0.45, (1, 1, 1)); ev(tr_, "pop", 0.5)
+    sp = Sp(senpai_lidar((0.3, 1.95), 0)); sp.spin(CLOCK["T0"] - 2, e("17-11") + 3, 0.6)
+    d1, d2, d3 = rug_drive()
+    sp.place(s("16-01") - 1.5, 0.3, 1.95, plan.face_deg(0, -1))
+    sp.drive(d1); sp.drive(d2, wheel_scale=4.0); sp.drive(d3)
+    xe, ye, ae = d3.pose(d3.t1); sp.place(e("17-11") + 3, xe, ye, ae)
+    m = Maru((0.9, -0.3, 0), face=face_to((0.9, -0.3), (-0.6, 0.0)))
+    m.at(s("16-01") - 1.5, loc=(0.9, -0.3, 0)); m.hop(tr_ + 0.5, 0.1, 0.3)
+    m.at(s("16-03") + 1.0, face=face_to((0.9, -0.3), (-1.0, -0.2)))
+    m.tilt(s("16-06") + 0.1, 18, 0.35); m.tilt(e("16-06") + 0.8, 0)
+    m.walk(s("17-01") + 0.2, s("17-02"), (0.9, 0.9, 0)); m.at(s("17-02") + 0.4, face=face_to((0.9, 0.9), (0.3, 2.0)))
+    # 16-05 から暗い地図：もとの地図（青緑）＋ ずれて置かれた新しい点（青緑）→ 壁が二重
+    tdark = s("16-05") - 0.25
+    lights_off(tdark, tdark + 0.25, sky=0.03, world_s=0.02)
+    base = [(x, y, -10.0) for x, y in plan.map_points()]
+    first = [p for p in base if p[1] > 2.3 and -1.0 < p[0] < 1.4]
+    restb = [p for p in base if not (p[1] > 2.3 and -1.0 < p[0] < 1.4)]
+    bo, bom = point_cloud("base", restb, pop=0.0, t_offset=CLOCK["T0"])
+    fo, fom = point_cloud("first", first, pop=0.0, t_offset=CLOCK["T0"])
+    for o, mm in ((bo, bom), (fo, fom)):
+        show_between(o, tdark); pts_glow(mm, tdark - 0.1, 0.0); pts_glow(mm, tdark + 0.4, 2.2)
+    dp = drift_points(d2, d2.t0, d2.t1, d2) + drift_points(d3, d3.t0, d3.t1, d2, seed=6)
+    dp = [(x, y, max(t, tdark + 0.3)) for x, y, t in dp]
+    hold = empty((0, 0, 0))
+    do, dom = point_cloud("drift", dp, t_offset=CLOCK["T0"]); do.parent = hold
+    # 17-03：いま見えている（最初の壁の前で）形を白い点で
+    xs, ys, _ = d3.pose(d3.t1)
+    S_ = plan.segments(); cur = []
+    a = math.radians(DRIFT["th"]); ca, sa = math.cos(a), math.sin(a); c = DRIFT["c"]
+    for a_ in range(0, 360, 2):
+        hh = plan.ray(xs, ys, R(a_), S_)
+        if hh and hh[1][1] > 2.3:
+            rx, ry = hh[1][0] - c[0], hh[1][1] - c[1]
+            cur.append((c[0] + rx * ca - ry * sa + DRIFT["d"][0], c[1] + rx * sa + ry * ca + DRIFT["d"][1], 0.0))
+    tw = w("17-03", "いま見えている")
+    co, com = point_cloud("cur17", cur, col=WHITE_PT, radius=0.022, z=plan.LIDAR_Z + 0.01, pop=0.0, base=3.5, t_offset=1e5); co.parent = hold
+    show_between(co, tw); ev(tw, "pop", 0.4)
+    # 17-05：いちばん最初に描いた壁が光る／17-06 先輩「ピッ」
+    t5 = w("17-05", "あの壁")
+    pts_glow(fom, t5 - 0.1, 2.2); pts_glow(fom, t5 + 0.3, 9.0); pts_glow(fom, e("17-05") + 0.4, 9.0); pts_glow(fom, e("17-05") + 1.0, 3.5)
+    sp.pi(w("17-06", "気づいた"), n=1)
+    # 17-08：ずれていた地図全体を引き戻す（回転の中心 c、ずれ d を打ち消す動き）
+    tA = w("17-08", "ぐっと"); tB = s("17-09") + 0.15
+    th = -math.radians(DRIFT["th"]); ct, st_ = math.cos(th), math.sin(th)
+    cx, cy = DRIFT["c"]; dx, dy = DRIFT["d"]
+    Lx = cx - (ct * (cx + dx) - st_ * (cy + dy)); Ly = cy - (st_ * (cx + dx) + ct * (cy + dy))
+    key(hold, "location", tA, (0, 0, 0)); key(hold, ("rotation_euler", 2), tA, 0.0)
+    key(hold, "location", tB, (Lx, Ly, 0)); key(hold, ("rotation_euler", 2), tB, th)
+    ev(tA, "whoosh", 0.4); ev(tB, "snap", 0.8)
+    for mm in (dom, fom, com, bom):
+        pts_glow(mm, tB - 0.05, 2.2 if mm is not com else 3.5); pts_glow(mm, tB + 0.2, 8.0); pts_glow(mm, tB + 1.2, 2.2 if mm is not com else 3.5)
+    hide_key(co, e("17-10"), True)
+    m.hop(tB + 0.2, 0.15, 0.4)
+    if cut(cl, "S16a"):
+        c_, tg = cam_rig((1.6, -2.6, 1.6), (-0.4, 0.4, 0.0), 28)
+        cam_move(c_, tg, s("16-01") - 0.8, e("16-02") + 0.8, (1.7, -2.7, 1.65), (1.3, -2.3, 1.45), (-0.4, 0.4, 0.0), (-0.5, 0.2, 0.0))
+    elif cut(cl, "S16b"):
+        c_ = cam_follow(sp.root, (0.12, -0.42, 0.09), 0.03, 38)     # 先輩の横について行き、車輪を見る
+    elif cut(cl, "S16c"):
+        c_ = cam_top((-0.4, 0.1, 8.0), 30)
+        cam_top_move(c_, s("16-05") - 0.8, e("16-06") + 0.8, (-0.4, 0.1, 8.0), (-0.6, 0.1, 7.6))
+    elif cut(cl, "S17a"):
+        c_, tg = cam_rig((1.2, -2.8, 3.0), (-0.6, 0.8, 0.0), 26)
+        cam_move(c_, tg, s("17-01") - 0.8, e("17-02") + 0.4, (1.2, -2.8, 3.0), (1.4, -1.6, 2.6), (-0.6, 0.8, 0.0), (0.2, 1.7, 0.0))
+    else:
+        c_, tg = cam_rig((0.4, 0.4, 2.2), (0.3, 2.3, 0.0), 30)
+        cam_move(c_, tg, s("17-03") - 0.8, e("17-09"), (0.45, 0.45, 2.2), (0.35, 0.75, 2.0), (0.3, 2.3, 0.0), (0.3, 2.35, 0.0))
+        cam_move(c_, tg, e("17-09"), e("17-11") + 0.8, (0.35, 0.75, 2.0), (0.0, -2.0, 6.0), (0.3, 2.35, 0.0), (0.0, 0.3, 0.0), 30, 28)
+    track("senpai", sp.root, 0.15); track("maru", m.root, 0.42)
+
+
+# ======================================================================== S18〜S21：カメラの先輩
+CAMP = (-1.2, 0.95)
+LIDP = (-0.55, 0.95)
+
+
+def b_cam(cl):
+    pov = cut(cl, "S19a"); dark_ceiling = cut(cl, "S21a")
+    room(ceiling=(pov or dark_ceiling)); door_leaf(False)
+    cs = Sp(senpai_camera((-1.9, 2.0), plan.face_deg(0.5, -1)))
+    ls = Sp(senpai_lidar(DOCKP, 0)); ls.spin(CLOCK["T0"] - 2, e("21-03") + 3, 0.6)
+    m = Maru((-0.3, 0.3, 0), face=180)
+    # 18-01：ソファの下から、カメラの先輩が出てくる。光の先輩も台から出て、横に並ぶ
+    t1 = w("18-01", "もう1台") - 0.2
+    dc = plan.Drive([(-1.9, 2.0), (-1.6, 1.3), CAMP], t1, v=0.35, face0=plan.face_deg(0.5, -1))
+    cs.place(s("18-01") - 1.5, -1.9, 2.0, plan.face_deg(0.5, -1)); cs.drive(dc)
+    cs.place(dc.t1 + 0.6, CAMP[0], CAMP[1], 0)
+    dl = plan.Drive([DOCKP, (0.3, 1.5), (-0.55, 1.35), LIDP], s("18-02"), v=0.4)
+    ls.place(s("18-01") - 1.5, DOCKP[0], DOCKP[1], 0); ls.drive(dl); ls.place(dl.t1 + 0.5, LIDP[0], LIDP[1], 0)
+    m.at(s("18-01") - 1.5, loc=(-0.3, 0.3, 0), face=180)
+    m.at(t1 + 0.2, face=face_to((-0.3, 0.3), (-1.6, 1.3))); m.hop(t1 + 0.8, 0.12, 0.35)
+    m.at(s("18-03"), face=face_to((-0.3, 0.3), CAMP)); m.at(s("18-03") + 1.6, face=face_to((-0.3, 0.3), LIDP)); m.at(s("18-03") + 3.0, face=face_to((-0.3, 0.3), CAMP))
+    m.walk(e("18-04") + 0.1, s("19-01") + 0.6, (0.75, 0.75, 0)); m.at(s("19-01") + 1.0, face=face_to((0.75, 0.75), (0.0, -0.3)))   # 先輩の通り道をあける
+    cr = bpy.data.materials["cam_ring"]
+    emit_key(cr, w("18-04", "カメラ") - 0.1, 1.2); emit_key(cr, w("18-04", "カメラ") + 0.3, 8.0); emit_key(cr, e("18-04") + 0.6, 1.2); ev(w("18-04", "カメラ"), "pi", 0.35)
+    # 19：天井の照明を見ながら進む（カメラの先輩から見た絵）。目印＝光る点（線で結ばない）
+    t19 = e("19-02") - 0.6
+    d19 = plan.Drive([CAMP, (-0.4, 0.55), (0.0, -0.9)], s("19-01") - 0.2, v=0.25)
+    cs.drive(d19, s("19-01") - 0.2, t19)
+    d19b = plan.Drive([d19.pose(t19)[:2], (0.0, 1.4)], t19, v=0.32, face0=d19.pose(t19)[2])
+    cs.drive(d19b)
+    x9, y9, a9 = d19b.pose(d19b.t1)
+    cs.place(s("19-05"), x9, y9, a9); cs.place(s("19-06") + 0.4, x9, y9, a9); cs.place(e("19-06") - 0.3, x9, y9, a9 - 70)
+    marks = []
+    def mark(p, t, r=0.05):
+        o = sphere(glow_mat("mark%d" % len(marks), YELLOW, 10.0), p, r); o.visible_shadow = False; show_between(o, t); scale_pop(o, t); marks.append(o); ev(t, "pi", 0.3); return o
+    H = plan.CEIL
+    lamp_mark = mark((0.0, 0.2, H - 0.075), w("19-01", "照明"), 0.07)
+    x0, y0, x1, y1 = plan.ROOM
+    t6 = w("19-06", "天井の角")
+    mark((x0 + 0.05, y1 - 0.05, H - 0.06), t6); mark((x1 - 0.05, y1 - 0.05, H - 0.06), t6 + 0.15)
+    sx0, sy0, sx1, sy1 = plan.FURN["shelf"][:4]
+    mark((sx1, sy1, 0.9), w("19-06", "本棚の角")); mark((sx1, sy0, 0.9), w("19-06", "本棚の角") + 0.15)
+    # 20：電気を消す → 光の先輩は進む、カメラの先輩はくるくる
+    toff = e("20-01") + 0.15
+    if not pov:
+        lights_off(toff, toff + 0.12, sky=0.02, world_s=0.012); ev(toff, "switch", 0.8)
+    xl, yl, al = LIDP[0], LIDP[1], 0.0
+    d20 = plan.Drive([LIDP, (0.4, 0.3), (1.6, 0.3), (1.6, -1.2)], s("20-02") + 0.3, v=0.3)
+    ls.drive(d20)
+    xc, yc, ac = d19b.pose(d19b.t1); ac = ac - 70
+    cs.place(s("20-04") + 0.3, xc, yc, ac)
+    for k in range(1, 9):
+        cs.place(s("20-04") + 0.3 + k * 0.9, xc, yc, ac + k * 80)
+    ev(s("20-04") + 0.3, "motor_on", 0.3)
+    m.at(e("19-07"), loc=(0.75, 0.75, 0))
+    m.walk(s("20-05"), s("20-05") + 2.0, (xc + 0.45, yc - 0.35, 0)); m.at(s("20-06"), face=face_to((xc + 0.45, yc - 0.35), (xc, yc)))
+    m.at(s("21-01") + 0.3, look=40)
+    # 21：まるロボが目の光で天井を照らす → 目印がまた見える → カメラの先輩が動き出す
+    tp = w("21-01", "ぱっ")
+    m.glow(tp - 0.1, 9.0, 0.15, g0=1.0); ev(tp, "light_on", 0.6)
+    bpy.ops.object.light_add(type='SPOT', location=(0, 0, 0)); spl = bpy.context.object
+    spl.parent = m.body; spl.location = (0, -0.5, 0.05); spl.rotation_euler = (R(-90), 0, 0)
+    spl.data.spot_size = R(40); spl.data.spot_blend = 0.5; spl.data.color = srgb("#BFFFF6")[:3]
+    spl.data.energy = 0.0; spl.data.keyframe_insert("energy", frame=f(tp - 0.1)); spl.data.energy = 1400.0; spl.data.keyframe_insert("energy", frame=f(tp + 0.15))
+    bpy.ops.mesh.primitive_cone_add(radius1=0.0, radius2=0.9, depth=2.2, vertices=48, location=(0, 0, 0)); cone = bpy.context.object
+    cone.parent = m.body; cone.location = (0, -0.5 - 1.1, 0.05); cone.rotation_euler = (R(-90), 0, 0)   # 目の光の筋（うすい光の円すい）
+    cm_ = bpy.data.materials.new("eyecone"); cm_.use_nodes = True; nt_ = cm_.node_tree
+    for n_ in list(nt_.nodes): nt_.nodes.remove(n_)
+    o_ = nt_.nodes.new("ShaderNodeOutputMaterial"); em_ = nt_.nodes.new("ShaderNodeEmission"); tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); mx_ = nt_.nodes.new("ShaderNodeMixShader")
+    em_.inputs["Color"].default_value = srgb("#BFFFF6"); em_.inputs["Strength"].default_value = 0.6
+    nt_.links.new(tr_.outputs[0], mx_.inputs[1]); nt_.links.new(em_.outputs[0], mx_.inputs[2]); nt_.links.new(mx_.outputs[0], o_.inputs[0])
+    mx_.inputs[0].default_value = 0.12; cone.data.materials.append(cm_); cone.visible_shadow = False
+    show_between(cone, tp)
+    for o in marks:
+        hide_key(o, toff, True); hide_key(o, tp + 0.4, False)
+    cs.place(s("21-02") + 0.6, xc, yc, ac + 8 * 80)
+    d21 = plan.Drive([(xc, yc), (xc - 0.6, yc - 0.8)], s("21-02") + 1.0, v=0.25, face0=ac + 8 * 80)
+    cs.drive(d21)
+    hl = cs.d["headlight"].data.materials[0]
+    emit_key(hl, w("21-03", "ライト") - 0.1, 0.0); emit_key(hl, w("21-03", "ライト") + 0.2, 30.0)
+    bpy.ops.object.light_add(type='SPOT', location=(0, 0, 0)); hs = bpy.context.object
+    hs.parent = cs.root; hs.location = (0.04, -0.16, 0.06); hs.rotation_euler = (R(-80), 0, 0); hs.data.spot_size = R(70); hs.data.energy = 0.0
+    hs.data.keyframe_insert("energy", frame=f(w("21-03", "ライト") - 0.1)); hs.data.energy = 60.0; hs.data.keyframe_insert("energy", frame=f(w("21-03", "ライト") + 0.2))
+    if cut(cl, "S18a"):
+        c, tg = cam_rig((-0.9, -1.0, 0.7), (-1.2, 1.1, 0.1), 30)
+        cam_move(c, tg, s("18-01") - 0.8, e("18-02") + 0.4, (-0.85, -1.05, 0.72), (-0.9, -0.5, 0.5), (-1.5, 1.4, 0.1), (-0.9, 1.0, 0.1))
+        cam_move(c, tg, e("18-02") + 0.4, e("18-04") + 0.6, (-0.9, -0.5, 0.5), (-1.15, 0.35, 0.3), (-0.9, 1.0, 0.1), (-1.2, 0.95, 0.07), 30, 48)
+    elif pov:
+        cam = bpy.data.objects.new("povcam", bpy.data.cameras.new("povcam")); bpy.context.collection.objects.link(cam)
+        cam.parent = cs.root; cam.location = (0, -0.1, 0.12); cam.rotation_euler = (R(150), 0, R(180)); cam.data.lens = 14
+        bpy.context.scene.camera = cam
+    elif cut(cl, "S20a"):
+        c, tg = cam_rig((0.6, -3.2, 2.2), (-0.3, 0.4, 0.0), 26)
+        cam_move(c, tg, s("20-01") - 0.8, e("20-06") + 0.6, (0.7, -3.3, 2.25), (0.1, -2.6, 1.6), (-0.3, 0.4, 0.0), (-0.2, 0.1, 0.0))
+    else:
+        c, tg = cam_rig((1.6, -0.9, 0.7), (0.4, 1.1, 1.0), 22)
+        cam_move(c, tg, s("21-01") - 0.8, e("21-02"), (1.6, -0.9, 0.7), (1.4, -0.7, 0.6), (0.4, 1.1, 1.1), (0.3, 1.0, 0.6))
+        cam_move(c, tg, e("21-02"), e("21-03") + 0.6, (1.4, -0.7, 0.6), (0.9, 0.0, 0.35), (0.3, 1.0, 0.6), (-0.1, 0.9, 0.08), 22, 32)
+    track("cam", cs.root, 0.12); track("lidar", ls.root, 0.15); track("maru", m.root, 0.42)
+
+
+# ======================================================================== S22〜S23：段差（光の物差しの先輩）
+def b_step(cl):
+    room(hall_walls=(True, not cut(cl, "S23a"))); door_leaf(True)
+    ls = Sp(senpai_lidar((-2.3, -1.75), plan.face_deg(-1, 0))); ls.spin(CLOCK["T0"] - 2, e("23-02") + 3, 0.6)
+    cs = Sp(senpai_camera((-2.2, -1.15), plan.face_deg(-1, 0)))
+    m = Maru((-1.7, -2.05, 0), face=plan.face_deg(-1, 0))
+    ls.place(s("22-01") - 1.5, -2.3, -1.75, plan.face_deg(-1, 0)); cs.place(s("22-01") - 1.5, -2.2, -1.15, plan.face_deg(-1, 0))
+    m.at(s("22-01") - 1.5, loc=(-1.7, -2.05, 0))
+    edge = plan.STEP_X + 0.19
+    d22 = plan.Drive([(-2.3, -1.75), (edge, -1.75)], w("22-04", "ぴたっ") - (abs(edge + 2.3) / 0.3), v=0.3)
+    ls.drive(d22)
+    tst = w("22-04", "ぴたっ")
+    ls.place(tst + 0.05, edge, -1.75, plan.face_deg(-1, 0)); ls.place(tst + 1.2, edge, -1.75, plan.face_deg(1, 0) - 360)
+    ev(tst, "stop", 0.5)
+    # まるロボは横の列を歩いて、そのまま段差の先へ → ころん
+    tf = w("22-05", "ころん")
+    m.walk(s("22-05") - 0.6, tf - 0.45, (plan.STEP_X + 0.05, -2.05, 0))
+    key(m.root, "location", tf - 0.45, (plan.STEP_X + 0.05, -2.05, 0.0)); key(m.root, "location", tf - 0.2, (plan.STEP_X - 0.12, -2.05, -0.04))
+    key(m.root, "location", tf, (plan.STEP_X - 0.25, -2.05, -plan.STEP_H)); ev(tf, "land", 0.9)
+    m.tilt(tf - 0.2, 35, 0.2); m.tilt(tf + 0.3, 70, 0.3)
+    m._last["loc"] = (tf, (plan.STEP_X - 0.25, -2.05, -plan.STEP_H))
+    m.blink(s("22-06") + 0.2); m.blink(s("22-06") + 0.6)
+    m.tilt(s("23-01") + 1.0, 0, 0.5); m.at(s("23-01") + 1.5, face=plan.face_deg(1, 0), look=25)
+    # 23：おなかの下の光（体を少し透かして見せる）。床では行って返る、段差の上では返ってこない
+    for nm in ("sp_top_#F3F5F7", "sp_side_#DDE2E6", "sp_bumper"):
+        mm = bpy.data.materials[nm]; mm.blend_method = 'BLEND'
+        alpha_key(mm, s("23-01") - 0.5, 1.0); alpha_key(mm, s("23-01") + 0.3, 0.25)
+    # 窓と床のすき間（実物は 1 cm たらず）を、この場面だけ少し広げて見せる（体を上げ、車輪は床のまま）
+    key(ls.root, ("location", 2), s("23-01") - 0.6, 0.0); key(ls.root, ("location", 2), s("23-01") + 0.2, 0.035)
+    for wl in ls.d["wheels"]: key(wl, ("location", 2), s("23-01") - 0.6, 0.03); key(wl, ("location", 2), s("23-01") + 0.2, -0.005)
+    bb = beam(ls.root, 1.0, YELLOW, 0.006, 9.0); bb.location = (0, -0.13, 0.006); bb.rotation_euler = (R(90), 0, 0)
+    pulse = sphere(glow_mat("bpulse", "#FFFFFF", 20.0), (0, 0, 0), 0.012, parent=bb)
+    bb.scale = (1, 0.045, 1)
+    t1_ = w("23-01", "光が出ている") - 0.3
+    show_between(bb, t1_ - 0.2)
+    for k in range(3):
+        tk = t1_ + k * 0.9
+        key(pulse, ("location", 1), tk, 0.0, "LINEAR"); key(pulse, ("location", 1), tk + 0.3, -1.0, "LINEAR"); key(pulse, ("location", 1), tk + 0.6, 0.0, "LINEAR")
+    # 23-02：少し前へ → 窓が段差の上に出る → 光は下へ落ちて、返ってこない → 止まって下がる
+    t2 = s("23-02") - 0.2
+    ls.place(t2, edge, -1.75, plan.face_deg(1, 0) - 360)
+    ls.place(t2 + 0.8, edge, -1.75, plan.face_deg(-1, 0) - 360 - 360 + 360)
+    ls.place(t2 + 1.6, edge - 0.09, -1.75, plan.face_deg(-1, 0) - 360 - 360 + 360)
+    key(bb, ("scale", 1), t2 + 1.5, 0.045); key(bb, ("scale", 1), t2 + 1.7, 0.4)
+    for k in range(2):
+        tk = t2 + 1.8 + k * 1.1
+        key(pulse, ("location", 1), tk, 0.0, "LINEAR"); key(pulse, ("location", 1), tk + 0.7, -1.0, "LINEAR"); key(pulse, ("location", 1), tk + 0.71, 0.0, "CONSTANT")
+    ev(w("23-02", "返ってこなければ"), "pi_low", 0.5)
+    tb = w("23-02", "止まれる")
+    ls.place(tb, edge - 0.09, -1.75, -450); ls.place(tb + 0.8, edge + 0.05, -1.75, -450)
+    key(bb, ("scale", 1), tb + 0.6, 0.4); key(bb, ("scale", 1), tb + 0.8, 0.045)
+    if cut(cl, "S22a"):     # 部屋の中から、出入り口の方を
+        c, tg = cam_rig((-1.0, -0.4, 0.9), (-3.3, -1.9, 0.0), 26)
+        cam_move(c, tg, s("22-01") - 0.8, e("22-03") + 0.4, (-0.9, -0.3, 0.95), (-1.5, -0.9, 0.55), (-3.0, -1.7, 0.0), (-3.0, -1.8, 0.05))
+    elif cut(cl, "S22b"):   # 廊下のつきあたりから、段差と部屋の方をふり返る
+        c, tg = cam_rig((-4.5, -1.5, 0.42), (-3.4, -1.9, 0.0), 24)
+        cam_move(c, tg, s("22-04") - 0.8, e("22-06") + 0.6, (-4.5, -1.5, 0.42), (-4.48, -1.55, 0.34), (-3.4, -1.85, 0.0), (-3.7, -2.0, -0.1))
+    else:                   # 23：横から（廊下の片側の壁を外して）
+        c, tg = cam_rig((-3.55, -0.85, 0.06), (-3.6, -1.75, 0.02), 42)
+        cam_move(c, tg, s("23-01") - 0.8, e("23-02") + 0.6, (-3.5, -0.85, 0.06), (-3.62, -0.95, 0.05), (-3.58, -1.75, 0.03), (-3.62, -1.75, 0.0))
+    track("lidar", ls.root, 0.15); track("maru", m.root, 0.42)
+
+
+# ======================================================================== S24〜S25：よける（カメラの先輩）
+SOCK = (-0.55, -1.15); CORD = [(0.15, -1.55), (0.25, -1.25), (0.1, -0.95), (0.3, -0.7)]; POOP = (0.9, -0.55)
+
+
+def b_avoid(cl):
+    room(); door_leaf(False)
+    cs = Sp(senpai_camera((-1.8, -1.15), plan.face_deg(1, 0)))
+    m = Maru((-0.4, -0.25, 0), face=face_to((-0.4, -0.25), SOCK))
+    sock((SOCK[0], SOCK[1], 0.0), 30); cord(CORD)
+    # 24：靴下・コードの手前でよける
+    t3 = s("24-02") + 0.5
+    route = [(-1.8, -1.15), (-1.05, -1.15), (-0.75, -1.55), (-0.25, -1.6), (-0.15, -1.95), (0.55, -2.0), (0.6, -1.3), (0.75, -1.1)]
+    d24 = plan.Drive(route, t3, v=0.3)
+    cs.place(s("24-01") - 1.5, -1.8, -1.15, plan.face_deg(1, 0)); cs.drive(d24)
+    def frame_box(cx, cy, wx, wy, t0, t1):
+        bx = empty((cx, cy, 0.03))
+        for (px, py, sx, sy) in ((0, wy / 2, wx, 0.012), (0, -wy / 2, wx, 0.012), (wx / 2, 0, 0.012, wy), (-wx / 2, 0, 0.012, wy)):
+            o = cube(flat_mat("frm", TEAL, 4.0), (px, py, 0), (sx, sy, 0.012), parent=bx); o.visible_shadow = False
+        show_between(bx, t0, t1); scale_pop(bx, t0); ev(t0, "pi", 0.35); return bx
+    frame_box(SOCK[0] + 0.02, SOCK[1] - 0.03, 0.34, 0.34, w("24-02", "靴下"), e("24-04") + 0.5)
+    frame_box(0.2, -1.12, 0.36, 0.95, w("24-02", "コード"), e("24-04") + 0.5)
+    m.at(s("24-01") - 1.5, loc=(-0.4, -0.25, 0)); m.at(s("24-03"), face=face_to((-0.4, -0.25), (0.0, -1.8))); m.at(s("24-04"), face=face_to((-0.4, -0.25), (0.6, -1.3)))
+    # 25：うんちがぽん → カメラの先輩が見分けて、手前でよける
+    pe = poop((POOP[0], POOP[1], 0.0)); tpo = w("25-02", "うんち")
+    show_between(pe, tpo - 0.05); scale_pop(pe, tpo); ev(tpo, "pop", 0.6)
+    m.at(tpo + 0.1, face=face_to((-0.4, -0.25), POOP)); m.hop(tpo + 0.15, 0.12, 0.3)
+    frame_box(POOP[0], POOP[1], 0.26, 0.26, s("25-03") + 0.6, s("25-04") + 0.5)
+    x24, y24, a24 = d24.pose(d24.t1)
+    d25 = plan.Drive([(x24, y24), (0.75, -0.85), (0.45, -0.75), (0.35, -0.2), (0.8, 0.15)], max(d24.t1, s("25-03") - 0.2), v=0.28, face0=a24)
+    cs.drive(d25)
+    # 25-07：まるロボ、のけぞって後ろへ跳ぶ → 足がうんちのすぐ横に（アップでは踏んだように見える）
+    mp1 = (0.62, -0.32); mp2 = (POOP[0] - 0.13, POOP[1] + 0.05)
+    m.walk(s("25-04") + 0.5, s("25-05"), mp1); m.at(s("25-05") + 0.3, face=face_to(mp1, (0.0, 0.6)))
+    tj = s("25-07") + 0.2
+    m.at(tj, look=-35); key(m.root, "location", tj, (mp1[0], mp1[1], 0)); key(m.root, "location", tj + 0.25, ((mp1[0] + mp2[0]) / 2, (mp1[1] + mp2[1]) / 2, 0.18)); key(m.root, "location", tj + 0.5, (mp2[0], mp2[1], 0))
+    ev(tj, "jump", 0.6); ev(tj + 0.5, "squish", 0.8)
+    m._last["loc"] = (tj + 0.5, (mp2[0], mp2[1], 0)); m.at(tj + 0.9, look=-5)
+    m.glow(s("25-08") + 0.2, 0.3, 0.3, g0=0.9)
+    m.at(e("25-08") + 0.2, look=-40); m.glow(e("25-08") + 0.5, 1.6, 0.2, g0=0.3); m.hop(e("25-08") + 0.6, 0.1, 0.3)
+    if cut(cl, "S24a"):
+        c, tg = cam_rig((-1.8, -2.6, 1.3), (-0.3, -1.2, 0.0), 30)
+        cam_move(c, tg, s("24-01") - 0.8, e("24-04") + 0.5, (-1.9, -2.7, 1.35), (-0.6, -2.9, 1.1), (-0.6, -1.2, 0.0), (0.1, -1.3, 0.0))
+    elif cut(cl, "S25a"):
+        c, tg = cam_rig((-0.4, -1.9, 1.0), (0.7, -0.45, 0.05), 30)
+        cam_move(c, tg, s("25-01") - 0.8, e("25-06") + 0.4, (-0.45, -2.0, 1.05), (-0.1, -1.7, 0.75), (0.7, -0.45, 0.05), (0.8, -0.5, 0.05))
+        cam_move(c, tg, e("25-06") + 0.4, e("25-08") - 0.2, (-0.1, -1.7, 0.75), (0.5, -0.95, 0.1), (0.8, -0.5, 0.05), (0.82, -0.48, 0.04), 30, 48)
+    else:   # 25-08 の終わり：上から見ると、ちゃんと横
+        c = cam_top((0.8, -0.5, 1.0), 40)
+        cam_top_move(c, e("25-08") - 0.6, e("25-09") + 0.6, (0.8, -0.5, 1.0), (0.8, -0.45, 1.25))
+    track("cam", cs.root, 0.12); track("maru", m.root, 0.42); track("poop", pe, 0.1)
+
+
+# ======================================================================== S26〜S27：まとめ・オチ
+def b_end(cl):
+    room(); door_leaf(False)
+    ls = Sp(senpai_lidar((0.9, 0.2), 0)); ls.spin(CLOCK["T0"] - 2, e("27-05") + 3, 0.6)
+    cs = Sp(senpai_camera((1.6, -0.5), 90))
+    cube(mat("dock2", "#E9ECEF", rough=0.3, coat=0.4), (2.93, 1.2, 0.07), (0.08, 0.5, 0.14), bevel=0.02)
+    ph, scr = phone(PHONE_DESK, rot_z=-10, tex=tex("phone_map.png"), glow=1.6)
+    # 26：2 台が台へ戻る
+    dl = plan.Drive([(0.9, 0.2), (0.3, 1.0), (0.3, 1.7)], s("26-01") - 0.2, v=0.3)
+    ls.place(s("26-01") - 1.5, 0.9, 0.2, 0); ls.drive(dl)
+    ls.place(dl.t1 + 0.1, 0.3, 1.7, 180); ls.place(dl.t1 + 1.2, 0.3, 1.7, 360); ls.place(dl.t1 + 2.0, 0.3, DOCKP[1], 360)
+    dc = plan.Drive([(1.6, -0.5), (2.3, 1.2), (2.55, 1.2)], s("26-02"), v=0.3, face0=90)
+    cs.place(s("26-01") - 1.5, 1.6, -0.5, 90); cs.drive(dc); cs.place(dc.t1 + 1.0, 2.55, 1.2, 90)
+    m = Maru((0.2, -0.3, 0), face=face_to((0.2, -0.3), (0.3, 1.5)))
+    m.at(s("26-01") - 1.5, loc=(0.2, -0.3, 0)); m.at(s("26-03"), face=face_to((0.2, -0.3), (2.5, 1.2))); m.at(s("26-05"), face=face_to((0.2, -0.3), (0.3, 2.0)))
+    m.hop(e("26-05") - 0.8, 0.12, 0.35)
+    # 27：次の日。まるロボは部屋の真ん中で見守る。光の先輩がまわりを掃除してよけて通る → 台へ
+    MC = (0.0, 0.2)
+    T27 = s("27-01")
+    m.walk(T27 - 0.3, T27 + 0.5, (MC[0], MC[1], 0)); m.at(T27 + 0.8, face=0, look=0)
+    ring = [(MC[0] + 0.45 * math.cos(a), MC[1] + 0.45 * math.sin(a)) for a in [math.radians(-90 + k * 30) for k in range(13)]]
+    d27 = plan.Drive([DOCKP, (0.3, -0.25)] + ring[1:] + [(0.3, -0.25), (0.3, 1.7)], T27 + 0.8, v=0.45, turn=260, face0=360)
+    ls.drive(d27, T27 + 0.8, d27.t1)
+    a27 = d27.pose(d27.t1)[2]; ls.place(d27.t1 + 0.1, 0.3, 1.7, a27); ls.place(d27.t1 + 1.2, 0.3, 1.7, a27 + 180); ls.place(d27.t1 + 2.0, 0.3, DOCKP[1], a27 + 180)
+    for k in range(3): m.at(T27 + 1.5 + k * 1.5, face=(k * 120) % 360)
+    m.at(s("27-03") + 0.2, face=face_to(MC, (1.55, 1.93)), look=-10)
+    m.at(s("27-04") + 0.2, look=-40)
+    m.glow(w("27-05", "家具") - 0.2, 0.25, 0.6, g0=0.9); key(m.body, ("rotation_euler", 0), w("27-05", "家具"), R(25)); m.tilt(w("27-05", "家具") + 0.3, -6, 0.5)
+    ev(w("27-05", "家具") + 0.2, "pi_low", 0.5)
+    if cut(cl, "S26a"):
+        c, tg = cam_rig((1.8, -3.0, 2.4), (0.4, 0.8, 0.0), 26)
+        cam_move(c, tg, s("26-01") - 0.8, e("26-05") + 0.6, (1.9, -3.1, 2.45), (1.2, -3.3, 2.1), (0.4, 0.8, 0.0), (0.6, 0.6, 0.0))
+    else:
+        c, tg = cam_rig((1.4, -2.2, 1.6), (0.0, 0.4, 0.1), 28)
+        cam_move(c, tg, s("27-01") - 0.8, e("27-02"), (1.5, -2.3, 1.7), (1.1, -1.9, 1.3), (0.0, 0.4, 0.1), (0.0, 0.3, 0.15))
+        cam_move(c, tg, e("27-02"), e("27-05") + 1.5, (1.1, -1.9, 1.3), (0.55, -0.75, 0.55), (0.0, 0.3, 0.15), (0.0, 0.2, 0.25), 28, 40)
+        dof(c, m.root, 4.0)
+    track("maru", m.root, 0.42); track("lidar", ls.root, 0.15)
+
+
+# ======================================================================== クリップの一覧
+#   CUTS：カットの名前・組み立て・切り替わる時刻。切り替わる時刻＝その文の字幕が出る時刻（声の頭）
+#   （4本目 v10「メインのテロップとそれ以外の切り替わりがズレてる」：絵は字幕と同じコマで替える。声より先に替えない）
+#   組み立てでは、切り替わる時刻から 0.35 秒（章の変わり目は 0.6 秒）で溶かしてつなぐ。そのぶん前のカットを長めに描いておく
+CUTS = [
+    ("S01a", b_open, 0.0), ("S01b", b_open, s("01-03")), ("S02a", b_open, s("02-01")), ("S02b", b_open, s("02-05")),
+    ("S03a", b_open, s("03-01")), ("S04a", b_open, s("04-01")), ("S05a", b_open, s("05-01")),
+    ("S06a", b_old, s("06-01")), ("S06b", b_old, s("06-07")), ("S06c", b_old, s("06-09")),
+    ("S07a", b_blind, s("07-01")), ("S08a", b_blind, s("08-01")),
+    ("S09a", b_lidar, s("09-01")), ("S10a", b_lidar, s("10-01")), ("S11a", b_lidar, s("11-01")), ("S12a", b_lidar, s("12-01")),
+    ("S13a", b_dark, s("13-01")), ("S14a", b_dark, s("14-01")), ("S15a", b_dark, s("15-01")), ("S15b", b_dark, s("15-02")), ("S15c", b_dark, s("15-04")),
+    ("S16a", b_rug, s("16-01")), ("S16b", b_rug, s("16-03")), ("S16c", b_rug, s("16-05")), ("S17a", b_rug, s("17-01")), ("S17b", b_rug, s("17-03")),
+    ("S18a", b_cam, s("18-01")), ("S19a", b_cam, s("19-01")), ("S20a", b_cam, s("20-01")), ("S21a", b_cam, s("21-01")),
+    ("S22a", b_step, s("22-01")), ("S22b", b_step, s("22-04")), ("S23a", b_step, s("23-01")),
+    ("S24a", b_avoid, s("24-01")), ("S25a", b_avoid, s("25-01")), ("S25b", b_avoid, s("25-09")),
+    ("S26a", b_end, s("26-01")), ("S27a", b_end, s("27-01")),
+]
+END_T = e("27-05") + 2.5
+CLIPS = {}
+for i, (nm, fn, tc) in enumerate(CUTS):
+    t0 = max(0.0, tc - 0.1)
+    t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
+    CLIPS[nm] = (fn, t0, t1)
+
+if __name__ == "__main__" or True:
+    if CLIPNAME == "--list":
+        print(json.dumps({k: [round(v[1], 3), round(v[2], 3), round(c[2], 3)] for (k, v), c in zip(CLIPS.items(), CUTS)}))
+    else:
+        fn, t0, t1 = CLIPS[CLIPNAME]
+        CLOCK["T0"] = t0
+        fn(CLIPNAME)
+        FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None     # PC：--frames 0 99（この範囲だけ、1 コマずつ）
+        render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)
