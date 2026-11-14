@@ -204,8 +204,8 @@ def build(tag, _prev=True):
     for sh in ch.SHOTS:
         # v11：「F1」は 1章（たたむ）と 4章・結び（工場）で別の絵。たたむ音・ふたの音は 1章の 3D の時刻（c1_world_events.json）で鳴らす
         if sh[2] in ('C6a',): sfx.append((sh[1] - 0.05, SX.drop()))
-        if tag == 'c5' and sh[2] == 'D5a' and sh[0] < CH.s('30-02'):                  # v14：机の場面（びんが倒れる・しずく）
-            tt = CH.s('30-01', -0.35); sfx += [(tt + 0.30, SX.place(0.14)), (tt + 0.55, SX.drops(amp=0.09))]
+        if tag == 'c5' and sh[2] == 'D5a' and sh[0] < ch.cue(CH.s('30-02')):          # v14：机の場面（びんが倒れる・しずく）
+            tt = ch.cue(CH.s('30-01', -0.35)); sfx += [(tt + 0.30, SX.place(0.14)), (tt + 0.55, SX.drops(amp=0.09))]
         if tag == 'c5' and sh[2] == 'L5a': sfx += [(106.72 + 0.7, SX.place(0.10))]
         if tag == 'c5' and sh[2] == 'L5c': sfx += [(140.46, SX.drop(0.10))]
         if sh[2] == 'B28b': sfx.append((sh[0] + 0.2, SX.gather(amp=0.08)))         # v11：大きすぎた（0.16 → 0.08）
