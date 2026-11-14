@@ -56,9 +56,12 @@ def b_open(cl):
     sp.pi(s("01-02"), n=1, sound=False); ev(s("01-02"), "chime", 0.7)            # 「ピロリン」は声と同時に
     m = Maru(MARU_DESK, face=face_to(MARU_DESK, (0.3, 1.5)))
     m.at(s("01-01"), look=-8); m.at(s("01-03") + 0.3, look=-14)
-    ph, scr = phone(PHONE_DESK, rot_z=-10, tex=tex("phone_off.png"), glow=0.0)
-    ph2, scr2 = phone(PHONE_DESK, rot_z=-10, tex=tex("phone_map.png"), glow=1.6)
-    show_between(ph2, e("02-01") - 0.3)                                          # 「何かが……」で画面がつく
+    # スマホ（横向き）：「何かが……」で画面がつく → 言うたびに家具が光る → いまいる場所に輪（2D の大きなスマホの絵はやめた）
+    ph, scr = phone_seq(PHONE_DESK, -95, [(0, tex("phone3d_off.png")), (e("02-01") - 0.3, tex("phone3d_base.png")),
+        (w("02-03", "ソファ"), tex("phone3d_sofa.png")), (w("02-03", "机"), tex("phone3d_desk.png")), (w("02-03", "ベッド"), tex("phone3d_bed.png")),
+        (e("02-03") + 0.2, tex("phone3d_base.png")), (w("02-04", "この点"), tex("phone3d_ring.png"))])
+    for wd in ("ソファ", "机", "ベッド"): ev(w("02-03", wd), "pi", 0.18)
+    ev(w("02-04", "この点"), "pop", 0.4)
     ev(e("02-01") - 0.3, "notify", 0.6)
     # 02：スマホに地図 → まるロボがのぞきこむ
     fp = face_to(MARU_DESK, PHONE_DESK); f0 = face_to(MARU_DESK, (0.3, 1.5))
@@ -109,9 +112,12 @@ def b_open(cl):
     elif cut(cl, "S01b"):
         c, tg = cam_rig((2.6, 0.9, 1.25), (1.95, 2.0, 0.9), 40)
         cam_move(c, tg, s("01-03") - 0.6, e("01-03") + 0.5, (2.75, 0.85, 1.3), (2.55, 1.05, 1.18), (1.9, 2.0, 0.92), (1.9, 2.0, 0.9)); dof(c, m.root, 3.0)
-    elif cut(cl, "S02a"):
+    elif cut(cl, "S02a"):     # 机の上 → スマホに寄って、画面の地図を大きく（3D のまま）
         c, tg = cam_rig((1.95, 1.2, 1.1), (1.72, 1.97, 0.82), 36)
-        cam_move(c, tg, s("02-01") - 0.8, e("02-01") + 1.4, (2.0, 1.15, 1.12), (1.85, 1.35, 1.02), (1.72, 1.97, 0.84), (1.65, 1.95, 0.8))
+        cam_move(c, tg, s("02-01") - 0.8, e("02-01") + 0.3, (2.0, 1.15, 1.12), (1.85, 1.35, 1.02), (1.72, 1.97, 0.84), (1.65, 1.95, 0.8))
+        cam_move(c, tg, e("02-01") + 0.3, s("02-03"), (1.85, 1.35, 1.02), (1.57, 1.70, 1.0), (1.65, 1.95, 0.8), (1.55, 1.97, 0.70), 36, 44)
+        cam_move(c, tg, s("02-03"), e("02-04") + 1.2, (1.57, 1.70, 1.0), (1.555, 1.73, 0.97), (1.55, 1.97, 0.70), (1.55, 1.97, 0.705), 44, 46)
+        dof(c, ph, 5.6)
     elif cut(cl, "S02b"):
         c, tg = cam_rig((-0.4, 0.6, 0.7), (0.3, 2.1, 0.12), 34)
         cam_move(c, tg, s("02-05") - 0.6, e("02-05") + 0.6, (-0.45, 0.55, 0.72), (-0.2, 0.9, 0.55), (0.3, 2.1, 0.12), (0.3, 2.12, 0.1))
@@ -667,7 +673,7 @@ LIDP = (-0.55, 0.95)
 
 def b_cam(cl):
     pov = cut(cl, "S19a"); dark_ceiling = cut(cl, "S21a")
-    room(ceiling=(pov or dark_ceiling)); door_leaf(False)
+    room(ceiling=(pov or dark_ceiling), front_wall=(pov or dark_ceiling)); door_leaf(False)   # 見上げる絵は手前の壁も（灰色のすき間を見せない）
     cs = Sp(senpai_camera((-1.9, 2.0), plan.face_deg(0.5, -1)))
     ls = Sp(senpai_lidar(DOCKP, 0)); ls.spin(CLOCK["T0"] - 2, e("21-03") + 3, 0.6)
     m = Maru((-0.3, 0.3, 0), face=180)
@@ -763,7 +769,7 @@ def b_cam(cl):
 
 # ======================================================================== S22〜S23：段差（光の物差しの先輩）
 def b_step(cl):
-    room(hall_walls=(True, not cut(cl, "S23a"))); door_leaf(True)
+    room(hall_walls=(True, not cut(cl, "S23a")), front_wall=cut(cl, "S22a")); door_leaf(True)
     ls = Sp(senpai_lidar((-2.3, -1.75), plan.face_deg(-1, 0))); ls.spin(CLOCK["T0"] - 2, e("23-02") + 3, 0.6)
     cs = Sp(senpai_camera((-2.2, -1.15), plan.face_deg(-1, 0)))
     m = Maru((-1.7, -2.05, 0), face=plan.face_deg(-1, 0))
@@ -851,6 +857,32 @@ def b_avoid(cl):
     show_between(pe, tpo - 0.05); scale_pop(pe, tpo); ev(tpo, "pop", 0.6)
     m.at(tpo + 0.1, face=face_to((-0.4, -0.25), POOP)); m.hop(tpo + 0.15, 0.12, 0.3)
     frame_box(POOP[0], POOP[1], 0.26, 0.26, s("25-03") + 0.6, s("25-04") + 0.5)
+    # 25-05〜06：約束（2026-11-14 v2：2D のカードをやめ、3D で見せる）。「よけられなかったら」でうんちの上に赤い×、
+    #   「新品」で、リボンの付いた新しい箱がぽん（きらっと光る）。のけぞる前に消す
+    t2 = w("25-06", "よけられなかったら") + 0.3; t3 = w("25-06", "新品"); tg_ = s("25-07") - 0.25
+    cpos = (-0.1, -1.7)
+    xe = empty((POOP[0], POOP[1], 0.24)); xe.rotation_euler = (0, 0, math.atan2(cpos[1] - POOP[1], cpos[0] - POOP[0]))
+    xr = mat("xred", "#D93A30", rough=0.4, emit=0.9)
+    for sg in (1, -1): cube(xr, (0, 0, 0), (0.02, 0.2, 0.035), rot=(R(45 * sg), 0, 0), bevel=0.008, parent=xe)
+    show_between(xe, t2, tg_ + 0.2); scale_pop(xe, t2); ev(t2, "bonk_soft", 0.5)
+    key(xe, "scale", tg_, (1, 1, 1)); key(xe, "scale", tg_ + 0.2, (0.001, 0.001, 0.001))
+    BOX = (1.11, -0.62)
+    bx = empty((BOX[0], BOX[1], 0.0)); bx.rotation_euler = (0, 0, R(20))
+    bs = 0.22
+    cube(noise_mat("cardboard", "#C99A62", "#BE8E57", 30, 0.8), (0, 0, bs / 2), (bs, bs, bs), bevel=0.006, parent=bx)
+    cube(mat("boxlid", "#D3A66C", rough=0.75), (0, 0, bs + 0.012), (bs + 0.02, bs + 0.02, 0.03), bevel=0.006, parent=bx)
+    rb = mat("ribbon", "#E24C42", rough=0.35, coat=0.4)
+    cube(rb, (0, 0, bs / 2 + 0.01), (0.035, bs + 0.024, bs + 0.04), parent=bx); cube(rb, (0, 0, bs / 2 + 0.01), (bs + 0.024, 0.035, bs + 0.04), parent=bx)
+    for sx in (-1, 1): sphere(rb, (sx * 0.035, 0, bs + 0.045), 0.03, scale=(1.3, 0.6, 0.8), parent=bx)
+    stars = []
+    for k, (dx, dy, dz) in enumerate(((-0.17, 0.0, 0.32), (0.16, 0.05, 0.28), (-0.05, -0.1, 0.4), (0.1, -0.12, 0.18))):
+        sm_ = mat("spark%d" % k, "#FFD24A", rough=0.3, emit=0.0)
+        o = sphere(sm_, (dx, dy, dz), 0.016, parent=bx, seg=12); stars.append(sm_)
+        for j in range(3):
+            tt = t3 + 0.15 + k * 0.12 + j * 0.55
+            emit_key(sm_, tt, 0.0); emit_key(sm_, tt + 0.12, 9.0); emit_key(sm_, tt + 0.35, 0.0)
+    show_between(bx, t3, tg_ + 0.2); scale_pop(bx, t3, d=0.35); ev(t3, "chime", 0.5)
+    key(bx, "scale", tg_, (1, 1, 1)); key(bx, "scale", tg_ + 0.2, (0.001, 0.001, 0.001))
     x24, y24, a24 = d24.pose(d24.t1)
     d25 = plan.Drive([(x24, y24), (0.75, -0.85), (0.45, -0.75), (0.35, -0.2), (0.8, 0.15)], max(d24.t1, s("25-03") - 0.2), v=0.28, face0=a24)
     cs.drive(d25)
@@ -882,7 +914,10 @@ def b_end(cl):
     ls = Sp(senpai_lidar((0.9, 0.2), 0)); ls.spin(CLOCK["T0"] - 2, e("27-05") + 3, 0.6)
     cs = Sp(senpai_camera((1.6, -0.5), 90))
     cube(mat("dock2", "#E9ECEF", rough=0.3, coat=0.4), (2.93, 1.2, 0.07), (0.08, 0.5, 0.14), bevel=0.02)
-    ph, scr = phone(PHONE_DESK, rot_z=-10, tex=tex("phone_map.png"), glow=1.6)
+    # スマホ：26 章はきのうの地図 → 次の日の頭で消える → 「スマホにまた地図が」でつく（まるロボの丸い形つき）→「丸い形」で輪
+    ph, scr = phone_seq(PHONE_DESK, -95, [(0, tex("phone3d_base.png")), (s("27-01"), tex("phone3d_off.png")),
+        (w("27-02", "スマホ"), tex("phone3d_maru.png")), (w("27-03", "丸い形"), tex("phone3d_maru_ring.png"))])
+    ev(w("27-02", "スマホ"), "notify", 0.6); ev(w("27-03", "丸い形"), "pop", 0.45)
     # 26：2 台が台へ戻る
     dl = plan.Drive([(0.9, 0.2), (0.3, 1.0), (0.3, 1.7)], s("26-01") - 0.2, v=0.3)
     ls.place(s("26-01") - 1.5, 0.9, 0.2, 0); ls.drive(dl)
@@ -908,6 +943,10 @@ def b_end(cl):
     if cut(cl, "S26a"):
         c, tg = cam_rig((1.8, -3.0, 2.4), (0.4, 0.8, 0.0), 26)
         cam_move(c, tg, s("26-01") - 0.8, e("26-05") + 0.6, (1.9, -3.1, 2.45), (1.2, -3.3, 2.1), (0.4, 0.8, 0.0), (0.6, 0.6, 0.0))
+    elif cut(cl, "S27b"):     # スマホに寄る（3D のまま。2D の大きなスマホの絵はやめた）
+        c, tg = cam_rig((1.57, 1.70, 1.0), (1.55, 1.97, 0.70), 44)
+        cam_move(c, tg, s("27-02") - 0.2, e("27-04") + 1.0, (1.58, 1.68, 1.02), (1.565, 1.70, 1.0), (1.55, 1.97, 0.69), (1.55, 1.97, 0.69), 44, 45.5)
+        dof(c, ph, 5.6)
     else:
         c, tg = cam_rig((1.4, -2.2, 1.6), (0.0, 0.4, 0.1), 28)
         cam_move(c, tg, s("27-01") - 0.8, e("27-02"), (1.5, -2.3, 1.7), (1.1, -1.9, 1.3), (0.0, 0.4, 0.1), (0.0, 0.3, 0.15))
@@ -931,7 +970,7 @@ CUTS = [
     ("S18a", b_cam, s("18-01")), ("S19a", b_cam, s("19-01")), ("S20a", b_cam, s("20-01")), ("S21a", b_cam, s("21-01")),
     ("S22a", b_step, s("22-01")), ("S22b", b_step, s("22-04")), ("S23a", b_step, s("23-01")),
     ("S24a", b_avoid, s("24-01")), ("S25a", b_avoid, s("25-01")), ("S25b", b_avoid, s("25-09")),
-    ("S26a", b_end, s("26-01")), ("S27a", b_end, s("27-01")),
+    ("S26a", b_end, s("26-01")), ("S27a", b_end, s("27-01")), ("S27b", b_end, s("27-02")), ("S27c", b_end, s("27-05")),
 ]
 END_T = e("27-05") + 2.5
 CLIPS = {}

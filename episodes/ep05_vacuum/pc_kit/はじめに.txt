@@ -7,8 +7,8 @@
 
 $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-Object -First 1; if ($f) { powershell -ExecutionPolicy Bypass -File $f.FullName } else { "marurobo_ep05.zip を C:\marurobo に展開し直してください" }
 
-・小さな窓がいくつか開いて、順番に絵を描きます（38 カット・18,272 コマ。半日〜1日くらい）。
+・小さな窓がいくつか開いて、順番に絵を描きます（40 カット・18,313 コマ。半日〜1日くらい）。
 ・途中で止まっても、同じ1行をもう一度貼れば、続きから描きます。
 ・描いている間、パソコンはスリープしません（画面は消えてOK。ノートは電源につないで、ふたは開けたまま）。
-・終わると Google ドライブの marurobo_render\ep05_v1 に自動で入ります。終わったらチャットで教えてください。
+・終わると Google ドライブの marurobo_render\ep05_v2 に自動で入ります。終わったらチャットで教えてください。
 ・うまくいかないときは、C:\marurobo\render_log_ep05.txt をチャットに貼ってください。

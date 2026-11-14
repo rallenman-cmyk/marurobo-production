@@ -20,8 +20,7 @@ def ev_list():
     E = []
     add = lambda *a: E.append(a)
     # 02：スマホに地図（大きく）。言うたびに家具が光る・いまいる場所の点に輪
-    add(s("02-02") - 0.15, s("02-05") + 0.35, "phone",   # 次のカット（字幕の切り替わり）の溶かしが終わるまで残す（前の場面をのぞかせない）
-         dict(hl=[(w("02-03", "ソファ"), "sofa"), (w("02-03", "机"), "desk"), (w("02-03", "ベッド"), "bed"), (e("02-03") + 0.2, None)], ring=w("02-04", "この点")))
+    # （2026-11-14 v2：大きな 2D のスマホの絵はやめ、3D のスマホに寄る。家具が光る・輪も 3D の画面の中で。scenes.py の phone_seq）
     add(e("02-01") - 0.2, s("02-02") - 0.15, "bubble", dict(obj="maru", icon="!", side=-1))     # スマホがついて、びくっ（大きなスマホの絵より前に）
     # 03：題名の前の「？」
     add(w("03-04", "いったい"), e("03-04") + 0.2, "bubble", dict(obj="maru", icon="?", side=-1))
@@ -42,7 +41,7 @@ def ev_list():
     add(w("11-05", "壁"), e("11-05") + 0.8, "ring2d", dict(obj="wallpt", r=34))
     add(w("11-05", "ソファ"), e("11-05") + 0.8, "ring2d", dict(obj="sofaleg", r=26))
     # 12：さきほどのスマホの地図（小窓）
-    add(w("12-03", "さきほど"), e("12-05") + 0.2, "phone_pip", {})
+    add(w("12-03", "さきほど"), e("12-05") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))   # 3D のスマホの寄りの絵（v2）
     # 13：1 メートル・「？」
     add(w("13-03", "1メートル"), e("13-03") + 0.4, "tag", dict(text="1メートル", obj="onemeter", dy=-70, size=56))
     add(w("13-04", "「ここ」"), s("13-05") + 1.0, "bubble", dict(obj="ghost", icon="?", side=1))
@@ -63,14 +62,14 @@ def ev_list():
     # 20：迷子
     add(w("20-04", "くるくる"), e("20-05") + 0.3, "bubble", dict(obj="cam", icon="?", side=1, track_clip="S20a"))
     # 25：約束（2021 年・絵だけのカード。文は下の字幕にあるので、カードは絵で）
-    add(w("25-05", "2021年"), e("25-06") + 0.3, "promise", dict(t2=w("25-06", "よけられなかったら"), t3=w("25-06", "新品")))
+    #   （v2：カードはやめ、3D の赤い×と新しい箱で見せる。年だけ札で）
+    add(w("25-05", "2021年"), s("25-07") - 0.1, "tag", dict(text="2021年", pos=(640, 110), size=56))
     add(s("25-07") + 0.25, s("25-07") + 1.6, "bubble", dict(obj="maru", icon="!", side=-1, track_clip="S25a"))
     # 26：前の場面の小窓（「ぶつかって曲がるだけだった」→ 昔の先輩）
     add(w("26-05", "ぶつかって"), e("26-05") + 0.2, "pip_clip", dict(clip="S06c", src_t=s("06-09") + 2.5, sepia=True))
-    add(s("26-02"), e("26-04") + 0.2, "phone_pip", {})
+    add(s("26-02"), e("26-04") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
     # 27：オチの地図
-    add(e("27-02") - 0.5, s("27-05") - 0.2, "phone", dict(maru=True, ring_maru=w("27-03", "丸い形")))
-    add(s("27-05") - 0.2, e("27-05") + 2.0, "phone_pip", dict(maru=True))
+    add(s("27-05"), e("27-05") + 2.0, "pip_clip", dict(clip='S27b', src_t=e("27-04") - 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
     return sorted(E, key=lambda x: x[0])
 
 
@@ -274,9 +273,13 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "arrow":
             base.alpha_composite(arrow_sprite(p["p0"], p["p1"]))
         elif kind == "pip_clip" and frame_of:
-            im = frame_of(p["clip"], p["src_t"] + (t - t0))
+            im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
-            im = im.convert("RGB").resize((400, 225), Image.LANCZOS)
+            im = im.convert("RGB")
+            if p.get("crop"):     # 3D のスマホの寄りの絵から、スマホのまわりだけ切り出す（16:9 のまま）
+                cx0, cy0, cx1, cy1 = p["crop"]; W_, H_ = im.size
+                im = im.crop((int(cx0 * W_), int(cy0 * H_), int(cx1 * W_), int(cy1 * H_)))
+            im = im.resize((400, 225), Image.LANCZOS)
             if p.get("sepia"): im = sepia(im)
             fr = Image.new("RGBA", (412, 237), (255, 255, 255, 255)); fr.paste(im, (6, 6))
             _paste(base, fr, 230, 150, k, a)

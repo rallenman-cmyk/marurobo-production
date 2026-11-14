@@ -1,6 +1,6 @@
 # まるロボ 5本目「ロボット掃除機は、どうやって部屋の形を覚える？」　PC の本番描画
 
-3D の 38 カット（合わせて 18,272 コマ・約 12 分半）を、1920×1080 で描きます。字幕・札・スマホの地図の大きな絵・音は、こちら（クラウド）で重ねるので、描かなくて大丈夫です。
+3D の 40 カット（合わせて 18,313 コマ・約 12 分半）を、1920×1080 で描きます。字幕・札・音は、こちら（クラウド）で重ねるので、描かなくて大丈夫です。
 
 ## やること（2つだけ）
 1. 届いた `marurobo_ep05.zip` を右クリック →「すべて展開」→ 展開先を `C:\marurobo` にする。`C:\marurobo\marurobo_ep05` ができれば OK。
@@ -14,7 +14,7 @@ $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-
    - 描き手ごとに小さな窓（「まるロボ 描き手 1〜3」、最小化）が開きます。進み具合は最初の窓と `C:\marurobo\render_log_ep05.txt` に出ます。
    - 止めるときは、最初の窓と描き手の窓をぜんぶ閉じる。同じ 1 行をもう一度走らせれば、できている所は飛ばして続きから描きます。
    - ほかの回の描画が動いていたら、それが終わるのを待ってから描き始めます。
-4. 終わると `C:\marurobo\marurobo_render\ep05_v1` にまとまり、Google ドライブ（パソコン版）があれば `marurobo_render\ep05_v1` へ自動でコピーされます。終わったらチャットで知らせてください。
+4. 終わると `C:\marurobo\marurobo_render\ep05_v2` にまとまり、Google ドライブ（パソコン版）があれば `marurobo_render\ep05_v2` へ自動でコピーされます。終わったらチャットで知らせてください。
 5. 止まった所があれば、`render_log_ep05.txt` と、そこに書いてある `blender_log*.txt` の最後の 20 行をチャットに貼ってください。
 
 ## 最初に 1 カットだけ試すとき（おすすめ）
@@ -24,7 +24,7 @@ $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-
 $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-Object -First 1; if ($f) { powershell -ExecutionPolicy Bypass -File $f.FullName -Only S11a } else { "見つかりません" }
 ```
 
-`C:\marurobo\render_ep05_v1\S11a_0000-0099.mp4` を開いて見る。よければ、上の「やること」の 2 の 1 行で残りを描く（S11a は飛ばされます）。
+`C:\marurobo\render_ep05_v2\S11a_0000-0099.mp4` を開いて見る。よければ、上の「やること」の 2 の 1 行で残りを描く（S11a は飛ばされます）。
 
 ## 付けられるもの（1 行の最後に足す）
 - ` -Workers 2`：同時に描く本数（1〜4。既定 3）。パソコンが重いときは減らす。

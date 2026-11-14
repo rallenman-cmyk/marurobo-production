@@ -3,6 +3,7 @@
 #   phone_map.png        ：スマホの画面（縦長）。部屋の地図＋掃除機のいる場所の点
 #   phone_map_maru.png   ：オチ。部屋の真ん中に、まるい「動かない物」
 #   phone_off.png        ：画面が消えている
+#   phone3d_*.png        ：3D のスマホの画面（横向きの地図を 90 度回したもの。家具が光る・輪・オチ）
 #   map_plane.png        ：上から見た地図だけ（透明の地。3D の板に貼ると、点の地図とぴったり重なる。1 ピクセル＝1 cm）
 # ほかの道具から：import map_tex; map_tex.draw_map(im, box, ...)
 import os, sys, math
@@ -101,10 +102,33 @@ def map_plane(cm=1.0):
     return im
 
 
+def land_ring(im, xy, r, col=(255, 210, 74), wdt=10):
+    """横向きの画面に、地図の場所 xy を囲む輪（3D のスマホの画面用）"""
+    P = draw_map(Image.new("RGBA", im.size), LAND_BOX, dot=False)
+    cx, cy = P(*xy); d = ImageDraw.Draw(im)
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=col + (255,), width=wdt)
+    return im
+
+
+def phone3d_textures(out):
+    """3D のスマホに貼る画面（横向きの画面を 90 度回して、縦長の板に貼る）。
+    phone3d_base／_sofa／_desk／_bed（言うたびに家具が光る）／_ring（いまいる場所に輪）／_maru／_maru_ring（オチ）／_off"""
+    S = {}
+    S["base"] = phone_screen_land()
+    for k in ("sofa", "desk", "bed"): S[k] = phone_screen_land(hl=k)
+    S["ring"] = land_ring(phone_screen_land(), DOCK, 72, wdt=14)
+    S["maru"] = phone_screen_land(maru=True)
+    S["maru_ring"] = land_ring(phone_screen_land(maru=True), (0.0, 0.2), 80, wdt=14)
+    S["off"] = Image.new("RGBA", (1480, 720), (11, 14, 18, 255))
+    for k, im in S.items():
+        im.rotate(90, expand=True).save(os.path.join(out, "phone3d_%s.png" % k))
+
+
 if __name__ == "__main__":
     out = sys.argv[1]; os.makedirs(out, exist_ok=True)
     phone_screen().save(os.path.join(out, "phone_map.png"))
     phone_screen(maru=True, dot=True).save(os.path.join(out, "phone_map_maru.png"))
     Image.new("RGBA", (720, 1480), (11, 14, 18, 255)).save(os.path.join(out, "phone_off.png"))
     map_plane().save(os.path.join(out, "map_plane.png"))
+    phone3d_textures(out)
     print("ok", out)
