@@ -244,10 +244,15 @@ SHEET = peel_sheet(*CP.T_UNMASK)
 tile_state(DATA_C, 'data', 276.2 - 0.05, 0.02); tile_state(SPARE_C, 'spare', 276.2 - 0.05, 0.02)     # v12 #26：タイミングの列は緑にしない
 # ---------------------------------------------------------------- 13：読み方の帯（紫）2本。札（字なし）→ 同じ中身（弧）→ 片方が汚れても、もう片方が光る
 tile_state(FMT, 'format', CP.T_FORMAT, 0.5)
-def tag(name, rr, t0, t1):
-    pl = W.box(name, (6.6, 2.2, 0.08), W.mat_emit(name, W.srgb('#8C55B8'), 1.4)); pl.location = (rc(rr, 3.5)[0], rc(rr, 3.5)[1], QW.TILE_H + 0.22); pl.rotation_euler = (math.radians(25), 0, 0)
-    show(pl, [(t0, t1)])
-tag('tag1', 10.6, CP.T_TAG1, 307.8); tag('tag2', 12.8, CP.T_TAG2, 307.8)
+# v13 #36：浮いた板はやめた。紫の帯の本物のマスを光らせる（1つ目＝予備の量 2 マス・2つ目＝柄の番号 3 マス。横の帯の左から）
+def tag(name, cells, t0, t1, col):
+    for k, (r_, c_) in enumerate(cells):
+        pl = W.box('%s %d' % (name, k), (MOD - 0.10, MOD - 0.10, 0.05), W.mat_emit('%s %d' % (name, k), W.srgb(col), 3.0), bevel=0.04)
+        pl.location = (rc(r_, c_)[0], rc(r_, c_)[1], QW.TILE_H + 0.035); pl.visible_shadow = False
+        for f, z in ((fr_of(t0), 0.2), (fr_of(t0) + 4, 1.25), (fr_of(t0) + 8, 1.0)):
+            pl.scale = (z, z, 1.0); pl.keyframe_insert('scale', frame=f)
+        show(pl, [(t0, t1)])
+tag('tag1', [(8, 0), (8, 1)], CP.T_TAG1, 307.8, '#C77DFF'); tag('tag2', [(8, 2), (8, 3), (8, 4)], CP.T_TAG2, 307.8, '#C77DFF')
 for k in range(2):                                                  # v12 #36：上へ出る線はやめた。2本が同時に光る（同じ中身）
     tile_state(FMT, 'restored', CP.T_LINK + 0.9 * k, 0.12); tile_state(FMT, 'format', CP.T_LINK + 0.9 * k + 0.45, 0.25)
 tile_state(FMT_A, 'broken', CP.T_DIRTY, 0.3)
@@ -307,7 +312,7 @@ VIEWS.update({
     'K34phone': (C(1.2, -5.0, 78.0), C(0, 0, 0), 32, 3.0),                       # #39：スマホから見た角度（真上から少し傾けた手持ち）
 })
 SPLIT = {
-    'K27': [(124.9, 125.85, 'K27'), (125.85, 130.8, 'K27u'), (130.8, 134.4, 'K27')],      # #24：よろけるのをアップで
+    'K27': [(124.9, 130.8, 'K27u'), (130.8, 134.4, 'K27')],      # #24：よろけるのをアップで（v13：場面の頭からアップ。大地が回るのはアップの中だけ）
     'K38': [(269.6, 276.2, 'K38peel')],
     'K34': [(321.3, CP.T_PHONE, 'K34'), (CP.T_PHONE, 344.0, 'K34phone')],
 }
@@ -332,7 +337,7 @@ def root_at(t): return Vector(FR[min(len(FR) - 1, max(0, int(round(t * FPS))))][
 for n_, (t0, t1, k) in enumerate(SH):
     if k in FOLLOW:
         off, hz, lens = FOLLOW[k]; cd = bpy.data.cameras.new('Cam %02d %s' % (n_, k)); cd.lens = lens; cd.clip_end = 900; cd.sensor_fit = 'HORIZONTAL'; cd.sensor_width = 36
-        cam = W.link(O.new('Cam %02d %s' % (n_, k), cd)); sm = None
+        cam = W.link(O.new('Cam %02d %s' % (n_, k), cd)); sm = root_at(t0 + 2.0 / FPS)          # v13：場面の頭のまるロボから追い始める（前の場面の位置から寄らない）
         for f in range(fr_of(t0) - 1, fr_of(t1) + 2):
             rt = root_at((f - 1) / FPS); sm = rt if sm is None else sm.lerp(rt, 0.35)        # 少し遅れて追う（揺れをやわらげる）
             T = sm + Vector((0, 0, hz)); L = T + off; cam.location = L; cam.rotation_euler = look_q(L, T, 0.0)

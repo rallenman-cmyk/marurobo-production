@@ -123,6 +123,30 @@ def build(tag, _prev=True):
         elif im is not None and (tag, k) in PUSH:
             z, x_, y_ = push_at(PUSH[(tag, k)], min(max((t - a) / max(b - a, 1e-6), 0), 1)); im = ch.kb(im, z, x_, y_)
         return im
+    EDGE = {}
+    def edge(ki, sh):
+        """v13：3D の中のカメラの切り替わりが、組み立ての場面の切り替わりと 1〜3 コマずれていると、1 コマだけ別の場面が映る（点滅）。
+        場面の頭と終わりの 5 コマで、急に絵が変わるコマを探し、その外側は使わない（いちばん近いよいコマで止める）"""
+        if ki in EDGE: return EDGE[ki]
+        a, b = sh[0], sh[1]; lo, hi = a, b - 1.0 / FPS
+        def small(t):
+            im = base3d(t, sh)
+            return None if im is None else np.asarray(im.convert('L').resize((96, 54)), dtype=np.float32)
+        if b - a > 12.0 / FPS:
+            ts = [b - k / FPS for k in range(5, 0, -1)]; ims = [small(t) for t in ts]
+            if all(x is not None for x in ims):
+                ds = [float(np.abs(ims[i + 1] - ims[i]).mean()) for i in range(4)]
+                for i in range(4):
+                    calm = min(ds[:i]) if i else (min(ds[1:]) if ds[1:] else ds[0])
+                    if ds[i] > 12 and ds[i] > 4 * (calm + 1): hi = ts[i]; break
+            ts = [a + k / FPS for k in range(0, 5)]; ims = [small(t) for t in ts]
+            if all(x is not None for x in ims):
+                ds = [float(np.abs(ims[i + 1] - ims[i]).mean()) for i in range(4)]
+                for i in range(3, -1, -1):
+                    calm = min(ds[i + 1:]) if i < 3 else min(ds[:3])
+                    if ds[i] > 12 and ds[i] > 4 * (calm + 1): lo = ts[i + 1]; break
+        if (lo, hi) != (a, b - 1.0 / FPS): print('edge', tag, sh[2], round(a, 2), round(b, 2), '->', round(lo, 3), round(hi, 3), flush=True)
+        EDGE[ki] = (lo, hi); return EDGE[ki]
     def space(sh):
         k = sh[2]; st, sk = tag, k; home = INFO.home_of(tag, k)
         if (tag, k) in PCR.ALIAS: st, sk = PCR.ALIAS[(tag, k)][:2]
@@ -138,12 +162,13 @@ def build(tag, _prev=True):
         if PCX:
             ki = next((j for j, x in enumerate(ch.SHOTS) if x[0] <= t < x[1]), len(ch.SHOTS) - 1); sh = ch.SHOTS[ki]
             a, b, k = sh[:3]
-            im = base3d(t, sh)
+            lo, hi = edge(ki, sh)
+            im = base3d(min(max(t, lo), hi), sh)
             if im is not None:
                 if ki > 0 and not any(x0 <= ch.SHOTS[ki - 1][1] - 0.05 < x1 for x0, x1, *_ in segs):   # つなぎ：前の 3D の最後のコマから重ねる
                     pv = ch.SHOTS[ki - 1]; Dd = D_SPACE if space(pv) != space(sh) else D_CUT
                     if t - a < Dd:
-                        if ki not in pcache: pcache[ki] = base3d(pv[1] - 1.0 / FPS, pv)
+                        if ki not in pcache: pcache[ki] = base3d(edge(ki - 1, pv)[1], pv)
                         if pcache[ki] is not None:
                             u = ease((t - a) / Dd)
                             if Dd == D_SPACE: im = ch.kb(im, 1.06 - 0.06 * u)

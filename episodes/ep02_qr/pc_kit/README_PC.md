@@ -553,8 +553,6 @@ foreach ($j in $jobs) {
 | ch08_game.py | 第8章の図（時間の帯・てんびん・ゲームのパンチ・流れ・棒）。2D なので PC で描く必要はない |
 | overlay2d.py | 札・印・字幕・効果音の共通の道具（こちらで使う） |
 
-## 2026-11-14 v24b を「いまの描画のあと」に自動で続ける（PC から離れるとき）
-- `marurobo_next_v24b.zip` を `C:\marurobo` に展開する（いまの `marurobo_tools` には触らない）。
-- 新しい PowerShell の窓に次の1行を貼る（いま描いている窓は閉じない）。
-  `$f = Get-ChildItem C:\marurobo -Recurse -Filter run_after.ps1 | Select-Object -First 1; powershell -ExecutionPolicy Bypass -File $f.FullName`
-- `run_after.ps1` は、いまの描画が終わるのを待つ → いまのキットのフォルダに新しいキットを上書き（robocopy）→ 新しいキットで描く（そろわなければもう1回）→ 4時間スリープさせない（アップロードのため）。
+## 2026-11-14 v25（動画レビュー v12 の直し・2章の 5 本だけ）
+- `C:\marurobo\marurobo_tools` を消して、`marurobo_tools_v25.zip` を `C:\marurobo` に展開し、いつもの 1 行を貼る。
+- 描くのは 2章の `qrc2w3_` 5 本（よろけるアップを場面の頭から／紫の帯の本物のマスを光らせる）。終わると `marurobo_render\qrc2v13` にまとまり、Google ドライブへコピーされる。
