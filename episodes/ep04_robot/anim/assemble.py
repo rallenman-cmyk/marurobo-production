@@ -50,10 +50,11 @@ while k < N:
     t = k / fps; si = shot_i(t); s_ = shots[si]; name = s_["img"][:-4]
     tn = shots[si + 1]["t"] if si + 1 < len(shots) else END
     if s_.get("base") and name not in FULL:
-        c = clip_at(t)
+        # 絵の切り替えを字幕にそろえて動かした分（t_old との差）は、そのショットのクリップの中で、端のコマで埋める
+        c = clip_at(s_["t_old"] + 0.05) or clip_at(t)
         if not c:
             miss.append(round(t, 2)); q = os.path.join(SH, s_["img"]); seq.append((t, q)); k += 1; continue
-        kk = round((t - c["t0"]) * c["fps"]); j = bisect.bisect_right(c["ks"], kk) - 1; j = max(0, j)
+        kk = round((min(max(t, c["t0"]), c["t1"] - 1e-3) - c["t0"]) * c["fps"]); j = bisect.bisect_right(c["ks"], kk) - 1; j = max(0, j)
         key_ = (name, c["name"], c["ks"][j])
         if key_ not in cache:
             im = Image.open(c["fs"][j]).convert("RGB").resize((1280, 720), Image.LANCZOS).convert("RGBA")

@@ -133,6 +133,7 @@ def render(name, t0, t1, outdir, samples, res, step, fr=None):
     sc.render.fps = FPS
     sc.render.use_persistent_data = True          # コマごとに舞台を作り直さない（速くなる）
     n = round((t1 - t0) * FPS)
+    if not fr and os.environ.get("FR"): fr = tuple(int(x) for x in os.environ["FR"].split())   # 試し：FR="48 48" でそのコマだけ
     a, b = (fr if fr else (0, n - 1))
     os.makedirs(outdir, exist_ok=True)
     from bpy_extras.object_utils import world_to_camera_view

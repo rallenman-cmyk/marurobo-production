@@ -40,6 +40,11 @@ for p in P:
     prev = L[p["no"]]["scene"]
 shots = json.load(open(os.path.join(LY, "shots.json"), encoding="utf-8"))
 for s_ in shots: s_["t"] = ID[s_["id"]]["start"] - (0.4 if s_["id"] in first else 0.15) + s_.get("dt", 0.0)
+# v11（ユーザー「メインのテロップとテロップ以外の切り替わりがズレてる」）：絵の切り替えを、いちばん近い字幕の切り替わりと同じコマにそろえる
+_SUBT = sorted(e[0] for e in json.load(open(os.path.join(HERE, "..", "animatic", "subs_events.json"), encoding="utf-8")))
+for s_ in shots:
+    s_["t_old"] = s_["t"]; near = min(_SUBT, key=lambda x: abs(x - s_["t"]))
+    if abs(near - s_["t"]) < 0.8: s_["t"] = near
 shots.sort(key=lambda s_: s_["t"])
 ev = json.load(open(os.path.join(HERE, "..", "animatic", "subs_events.json"), encoding="utf-8"))
 SR = 48000
