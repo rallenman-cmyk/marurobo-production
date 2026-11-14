@@ -22,7 +22,7 @@ V = W + "/stage/voice/achernar"
 P = json.load(open(V + "/placement.json", encoding="utf-8"))
 L = {e["no"]: e for e in json.load(open(W + "/stage/script/script_v2_timed.json", encoding="utf-8"))}
 ID = {L[p["no"]]["id"]: p for p in P}
-END = P[-1]["end"] + 2.5
+END = max(P[-1]["end"] + 0.5, float(os.environ.get("END_AT", P[-1]["end"] + 2.5)))   # v3：動画の終わり（ユーザー「10分42.5秒くらいで終わらせて」→ END_AT=642.5）
 tmp = W + "/animatic_tmp"; os.makedirs(tmp, exist_ok=True)
 
 # 絵の並び
@@ -36,17 +36,17 @@ shots = json.load(open(SH + "/shots.json", encoding="utf-8"))
 seq = []
 for s in shots:
     p = ID[s["id"]]
-    t = p["start"] - (0.4 if s["id"] in first_of_scene else 0.15)
+    t = p["start"] - (0.4 if s["id"] in first_of_scene else 0.15) + s.get("dt", 0.0)
     seq.append((max(0.0, t), os.path.join(SH, s["img"])))
 seq.sort()
 seq[0] = (0.0, seq[0][1])
-# v2（コメント「同じ映像で変わり映えしない」）：どの絵もゆっくり寄る（3%。2 倍に広げてから寄せるので、動きは 1 ピクセルより細かい）
+# v3（コメント「少しずつ拡大して戻って…のカメラの動きはやめて」）：寄る動きはやめ、絵は止めて置く（ZOOM=0.03 で前の寄る形）
 clips = []
 for i, (t0, img) in enumerate(seq):
     t1 = seq[i + 1][0] if i + 1 < len(seq) else END
     n = max(1, round(t1 * 24) - round(t0 * 24))   # 区切りを通しのコマ番号で決める（1 枚ずつ丸めると、ずれがたまる）
     c = tmp + "/clip_%03d.mp4" % i
-    z = "1+0.03*on/%d" % max(1, n - 1)
+    z = "1+%s*on/%d" % (os.environ.get("ZOOM", "0"), max(1, n - 1))
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", img, "-frames:v", str(n),
                     "-vf", "scale=2560:1440,zoompan=z='%s':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24" % z,
                     "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", c], check=True)
@@ -73,7 +73,9 @@ for k, p in enumerate(P):
     nxt = P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.0
     end = max(p["end"] + 0.35, p["start"] + 1.2)
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
-ev = SJ.expand(lines)
+ev = []   # v3：分けた字幕は、声の出ている時間の割合で替える（events_v。前の events は「OpenAIが」の後で替わって遅れた・20-04 で早く替わった）
+for a, c, t in lines:
+    ev += SJ.events_v(a, c, t)
 def ts(x): return "%d:%02d:%05.2f" % (x // 3600, x % 3600 // 60, x % 60)
 style = SJ.STYLE_MAIN.replace("Noto Sans CJK JP", "Noto Sans JP")
 ass = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720", "", "[V4+ Styles]",

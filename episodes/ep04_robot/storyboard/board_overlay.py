@@ -36,7 +36,8 @@ def tag(im, shot, text, cx, cy, size=48, bg=WHITE, fg=NAVY, tail=None):
     x0, y0, x1, y1 = cx - w / 2 - 24, cy - th / 2 - 16, cx + w / 2 + 24, cy + th / 2 + 16
     if tail:
         by = y1 - 2 if tail[1] > cy else y0 + 2
-        d.polygon([(cx - 18, by), (cx + 18, by), tail], fill=bg, outline=NAVY)
+        bx = min(max(tail[0], x0 + 40), x1 - 40) if abs(tail[0] - cx) > w / 2 else cx
+        d.polygon([(bx - 34, by), (bx + 34, by), tail], fill=bg, outline=NAVY)
     d.rounded_rectangle([x0, y0, x1, y1], 18, fill=bg, outline=NAVY, width=4)
     d.text((x0 + 24 - bb[0], cy - th / 2 - bb[1]), text, font=f, fill=fg)
     check_band(shot, (x0, y0, x1, y1), size)
@@ -64,7 +65,9 @@ def check_card(im, shot, cx=640, cy=110, state='empty', size=52, show_text=True)
 def pic_bubble(im, cx, cy, r, draw):
     d = ImageDraw.Draw(im)
     d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=WHITE, outline=NAVY, width=5)
-    d.ellipse([cx - r * 0.75, cy + r * 0.85, cx - r * 0.75 + 26, cy + r * 0.85 + 26], fill=WHITE, outline=NAVY, width=3)
+    tx, ty = cx - r * 0.55, cy + r * 0.8
+    d.polygon([(tx - r * 0.28, ty - 6), (tx + r * 0.28, ty - 6), (tx - r * 0.45, ty + r * 0.7)], fill=WHITE, outline=NAVY)
+    d.line([(tx - r * 0.25, ty - 4), (tx + r * 0.25, ty - 4)], fill=WHITE, width=8)
     draw(d, cx, cy, r)
 
 
@@ -129,11 +132,19 @@ def warp_word(word, size=150, seed=1):
     return img
 
 
+def chat_icon(d, cx, cy, s=1.0, col=TEAL):
+    """AI の印（自作。チャットの吹き出しの形に 3 つの点。本物のロゴに似せない）"""
+    d.rounded_rectangle([cx - 90 * s, cy - 75 * s, cx + 90 * s, cy + 55 * s], int(36 * s), fill=col)
+    d.polygon([(cx - 50 * s, cy + 50 * s), (cx - 10 * s, cy + 50 * s), (cx - 60 * s, cy + 95 * s)], fill=col)
+    for k in (-1, 0, 1): d.ellipse([cx + k * 45 * s - 13 * s, cy - 23 * s, cx + k * 45 * s + 13 * s, cy + 3 * s], fill=WHITE)
+
+
 SHOTS = []
-def save(im, name, start_id):
+def save(im, name, start_id, dt=0.0):
+    """dt：その台詞の頭から何秒あとに替えるか（ふらふらのように、1 つの台詞の中で絵を替えるとき）"""
     im.save(os.path.join(OUT, name + '.png'))
     im.resize((390, 219), Image.LANCZOS).save(os.path.join(OUT, name + '_390.png'))
-    SHOTS.append(dict(id=start_id, img=name + '.png'))
+    SHOTS.append(dict(id=start_id, img=name + '.png', **({'dt': dt} if dt else {})))
 
 
 # v2（動画レビュー v1 のコメント）：札・数字・答えは、声で言う瞬間に出す（先に絵でネタバレさせない）。同じ絵が長く続く所は途中で絵を変える
@@ -246,12 +257,12 @@ def compare(shot, labels=False, prog=False, human=False):
         d.rounded_rectangle([x, 140, x + 520, 500], 26, fill=WHITE, outline=col, width=8)
         if labels: tag(im, shot, who, x + 260, 140, size=52)
         if (k == 1 and prog) or (k == 0 and human):
-            f = font(64)
-            d.text((x + 280, 270), acc, font=f, fill=NAVY, anchor='mm'); LOG.append(dict(shot=shot, size=64))
-            d.text((x + 280, 410), sec, font=f, fill=NAVY, anchor='mm')
-            hx = x + 70
-            d.polygon([(hx - 25, 370), (hx + 25, 370), (hx, 410)], fill=(240, 190, 80) if k == 0 else (200, 200, 200))
-            d.polygon([(hx - 25, 450), (hx + 25, 450), (hx, 410)], fill=(240, 190, 80))
+            f = font(58); fs = font(46)
+            for yy, lab, val in ((270, '正解', acc), (410, '時間', sec)):
+                d.rounded_rectangle([x + 30, yy - 34, x + 150, yy + 34], 14, fill=(232, 238, 246))
+                d.text((x + 90, yy), lab, font=fs, fill=NAVY2, anchor='mm')
+                d.text((x + 335, yy), val, font=f, fill=NAVY, anchor='mm')
+            LOG.append(dict(shot=shot, size=46))
     tag(im, shot, '2023年', 640, 55, size=56)
     return im
 save(compare('s10a'), 's10a', '10-01')
@@ -289,8 +300,8 @@ pic_bubble(im, 300, 170, 80, lambda d, x, y, r: (light_icon(d, x - 15, y, 0.9), 
 # ---------------- ⑥ AI（2D）
 def chat(shot, n, head=True, person=True):
     im = Image.new('RGB', (1280, 720), (232, 238, 246)); d = ImageDraw.Draw(im)
-    d.rounded_rectangle([50, 170, 230, 350], 34, fill=TEAL); d.ellipse([100, 220, 180, 300], fill=WHITE)
-    tag(im, shot, 'AI', 140, 420, size=48)
+    chat_icon(d, 140, 255, 1.0)
+    tag(im, shot, 'GPT-4', 140, 420, size=48)
     if person:
         d.ellipse([1070, 160, 1190, 280], fill=(244, 210, 181)); d.rounded_rectangle([1040, 280, 1220, 400], 46, fill=(62, 124, 177))
         tag(im, shot, '頼まれた人', 1110, 450, size=46)
@@ -323,18 +334,21 @@ def ai_screen(shot, card=False, checked=False):
         d.text((405, 295), '人間かどうかを確かめます', font=font(46), fill=NAVY, anchor='lm'); LOG.append(dict(shot=shot, size=46))
     else:   # 作業中の画面（字のない行）
         for k in range(4): d.rounded_rectangle([300, 180 + k * 60, 300 + (560 if k % 2 == 0 else 420), 210 + k * 60], 10, fill=(196, 206, 218))
-    tag(im, shot, '2025年  ChatGPT', 640, 50, size=50)
+    chat_icon(ImageDraw.Draw(im), 150, 300, 0.8); tag(im, shot, 'ChatGPT', 150, 430, size=46)
+    tag(im, shot, '2025年', 640, 50, size=50)
     return im
 save(ai_screen('s20b'), 's20b', '20-02')
 save(ai_screen('s20c', card=True), 's20c', '20-02c')
 save(ai_screen('s20d', card=True, checked=True), 's20d', '20-04')
-save(load('b21'), 's21', '21-03')
+im = load('b21i'); a21 = anch('b21i'); m = a21.get('meter_top', [900, 200]); tag(im, 's21', 'チェック欄なし', 400, 90, size=50, bg=(255, 236, 214)); tag(im, 's21', '人らしさ', m[0], max(60, m[1] - 50), size=48, tail=(m[0], m[1] + 10)); save(im, 's21', '21-03')
 
 # ---------------- ⑦ まとめ・オチ
 im = load('b22'); check_card(im, 's22', cy=96); d = ImageDraw.Draw(im)
 wavy(d, 1000, 470, 1180, 230, ORANGE, amp=30, n=30, dot=6); straight(d, 100, 470, 260, 230, TEAL, n=14, dot=6)
 save(im, 's22', '22-01')
 im = load('b23'); check_card(im, 's23', cy=96); save(im, 's23a', '23-01')
+for k, side in enumerate(('l', 'r', 'l', 'r')):
+    im = load('b23' + side); check_card(im, 's23', cy=96); save(im, 's23w%d' % k, '23-02', dt=0.7 * k)
 im = load('b23'); check_card(im, 's23', cy=96, state='checked'); d = ImageDraw.Draw(im); wavy(d, 1180, 480, 900, 200, ORANGE, amp=30, n=30, dot=6); save(im, 's23b', '23-03')
 
 
@@ -375,23 +389,31 @@ a13 = anch('b13'); h = a13.get('human_path', [400, 300]); r = a13.get('robot_pat
 im = load('b13'); tag(im, 's13e', '私', h[0] - 120, min(h[1], 470), size=56, bg=(255, 236, 214)); ring_on(im, h[0], h[1] - 40, 150, 120); save(im, 's13e', '13-06')
 im = load('b13'); tag(im, 's13f', 'まるロボ', r[0] + 170, min(r[1], 470), size=52, bg=(214, 247, 243)); ring_on(im, r[0], r[1] - 40, 130, 150, TEAL); save(im, 's13f', '13-07')
 # 15-02c〜15-02e：ふだんの記録（いろいろなスタンプ）→ 同じスタンプが何百も
+def icon(d, kind, x, y, col, r=46):
+    d.ellipse([x - r, y - r, x + r, y + r], fill=WHITE, outline=col, width=7)
+    if kind == 'news':
+        d.rectangle([x - 24, y - 18, x + 24, y + 18], outline=col, width=5); d.line([(x - 14, y - 4), (x + 14, y - 4)], fill=col, width=4); d.line([(x - 14, y + 6), (x + 8, y + 6)], fill=col, width=4)
+    elif kind == 'cart':
+        d.line([(x - 26, y - 16), (x - 16, y + 12), (x + 20, y + 12), (x + 26, y - 10), (x - 20, y - 10)], fill=col, width=5)
+        d.ellipse([x - 14, y + 16, x - 6, y + 24], fill=col); d.ellipse([x + 10, y + 16, x + 18, y + 24], fill=col)
+    elif kind == 'video':
+        d.polygon([(x - 12, y - 20), (x - 12, y + 20), (x + 20, y)], fill=col)
+
+
 def page(shot, same=False):
+    """これまでの記録：ふだん（いろいろなことをしてきた）／怪しい（同じことを何百回）"""
     im = Image.new('RGB', (1280, 720), (238, 232, 220)); d = ImageDraw.Draw(im)
-    d.rounded_rectangle([170, 60, 1110, 500], 24, fill=(250, 246, 236), outline=NAVY2, width=6); d.line([(640, 70), (640, 490)], fill=(200, 190, 170), width=5)
-    random.seed(11)
-    icons = ['news', 'cart', 'video', 'map', 'mail', 'cart', 'news', 'video']
-    for k in range(40 if same else 8):
-        if same: x = 230 + (k % 8) * 110; y = 110 + (k // 8) * 85; kind = 'same'
-        else: x = 260 + (k % 4) * 110 + (k // 4) * 470; y = 150 + ((k % 4) % 2) * 160 + (k // 4) * 40; kind = icons[k]
-        col = (220, 80, 70) if same else [(220, 80, 70), (47, 74, 115), (33, 160, 150)][k % 3]
-        d.ellipse([x - 38, y - 38, x + 38, y + 38], outline=col, width=7)
-        if kind == 'news': d.rectangle([x - 18, y - 14, x + 18, y + 14], outline=col, width=5)
-        elif kind == 'cart': d.line([(x - 18, y - 12), (x - 10, y + 10), (x + 16, y + 10), (x + 20, y - 8)], fill=col, width=5)
-        elif kind == 'video': d.polygon([(x - 10, y - 15), (x - 10, y + 15), (x + 16, y)], fill=col)
-        elif kind == 'map': d.ellipse([x - 12, y - 18, x + 12, y + 6], fill=col)
-        elif kind == 'mail': d.rectangle([x - 18, y - 12, x + 18, y + 12], outline=col, width=5)
-        else: d.ellipse([x - 12, y - 12, x + 12, y + 12], fill=col)
-    tag(im, shot, 'これまでの記録', 640, 50, size=50)
+    d.rounded_rectangle([140, 110, 1140, 500], 24, fill=(250, 246, 236), outline=NAVY2, width=6)
+    if same:
+        for k in range(36):
+            x = 220 + (k % 12) * 76; y = 170 + (k // 12) * 110
+            icon(d, 'cart', x, y, (220, 80, 70), r=32)
+        tag(im, shot, '同じことを何百回も', 640, 460, size=48, bg=(255, 236, 214))
+    else:
+        for k, (kind, lab, col) in enumerate((('news', 'ニュース', NAVY2), ('cart', '買い物', (220, 80, 70)), ('video', '動画', (33, 160, 150)))):
+            x = 340 + k * 300; icon(d, kind, x, 250, col, r=70)
+            tag(im, shot, lab, x, 390, size=48)
+    tag(im, shot, 'これまでの記録', 640, 55, size=50)
     return im
 save(page('s15c'), 's15c', '15-02c')
 save(page('s15d', same=True), 's15d', '15-02e')
@@ -402,8 +424,8 @@ lock(ImageDraw.Draw(im), 1000, 200, 1.4); tag(im, 's16c', '公開されていな
 # 18-05・18-06：選び方も手がかり → まるロボの行ったり来たり
 a18 = anch('b18'); e = a18.get('edge', [900, 250])
 im = load('b18'); d = ImageDraw.Draw(im); d.ellipse([e[0] - 110, e[1] - 80, e[0] + 110, e[1] + 80], outline=ORANGE, width=9)
-for k in range(3): wavy(d, e[0] - 260 + k * 20, e[1] + 180, e[0] - 40 + k * 20, e[1] + 60, TEAL, amp=25, n=24, dot=6)
-tag(im, 's18c', '選び方も見ている', 360, 90, size=48); save(im, 's18c', '18-05')
+d.rounded_rectangle([60, 140, 130, 470], 16, fill=NAVY2); d.rounded_rectangle([75, 300, 115, 455], 10, fill=TEAL)
+tag(im, 's18c', '人らしさ', 200, 110, size=48); tag(im, 's18c', '選び方も見ている', 560, 110, size=48, bg=(255, 236, 214)); save(im, 's18c', '18-05')
 # 19-03：AI は自分では解けない（テストの絵に ✕）
 im = chat('s19f', 0, person=False); d = ImageDraw.Draw(im)
 for r in range(3):
@@ -416,22 +438,29 @@ im = chat('s19h', 2); d = ImageDraw.Draw(im)
 d.ellipse([340, 380, 420, 460], fill=(244, 210, 181)); d.rounded_rectangle([320, 455, 440, 510], 30, fill=(240, 240, 240), outline=NAVY2, width=4)
 tag(im, 's19h', '研究者が手伝った試験', 700, 440, size=46, bg=(255, 236, 214)); save(im, 's19h', '19-08')
 # 21：このように → ふるまい全体を見る → チェック欄さえ出さない
-im = load('b12'); save(im, 's21a', '21-01')
-im = load('b14'); save(im, 's21b', '21-02')
-# 22：問い → 動き方 → 記録 → 昔と今 → AI が賢く → 残り少ない（暗く）
-im = load('b13'); tag(im, 's22b', '動き方', 640, 70, size=56); save(im, 's22b', '22-02')
-im = page('s22c'); save(im, 's22c', '22-03')
-im = Image.new('RGB', (1280, 720), BG); d = ImageDraw.Draw(im)
-w = warp_word('morning', 80, 3); im.paste(Image.new('RGB', w.size, (60, 60, 70)), (120, 230), w)
-wavy(d, 1100, 430, 780, 180, ORANGE, amp=40, n=36, dot=8)
-tag(im, 's22d', '昔', 330, 110, size=56); tag(im, 's22d', '今', 950, 110, size=56); d.line([(640, 150), (640, 470)], fill=NAVY2, width=5)
-save(im, 's22d', '22-04')
-im = Image.new('RGB', (1280, 720), BG); d = ImageDraw.Draw(im)
-for k, sz in enumerate((90, 140, 200)):
-    x = 300 + k * 330; d.rounded_rectangle([x - sz / 2, 300 - sz / 2, x + sz / 2, 300 + sz / 2], sz // 5, fill=TEAL); d.ellipse([x - sz / 4, 300 - sz / 4, x + sz / 4, 300 + sz / 4], fill=WHITE)
-tag(im, 's22e', 'AI', 960, 90, size=52); save(im, 's22e', '22-05')
-im = load('b21'); im = Image.eval(im, lambda v: int(v * 0.55)); save(im, 's22f', '22-06')
-
+save(load('b20d'), 's20e', '20-05')
+im = load('b21w'); save(im, 's21b', '21-02')
+# 22（v3 コメント「表現が分かりにくい」）：問い → 動き方 → 記録 → 昔と今 → AI が賢く → 見分け方が残り少ない
+im = load('b22'); check_card(im, 's22a', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r)); save(im, 's22a', '22-01')
+a13 = anch('b13'); h = a13.get('human_path', [400, 300]); r = a13.get('robot_path', [850, 300])
+im = load('b13'); tag(im, 's22b', '私', h[0] - 120, min(h[1], 470), size=56, bg=(255, 236, 214)); tag(im, 's22b', 'まるロボ', r[0] + 170, min(r[1], 470), size=52, bg=(214, 247, 243)); tag(im, 's22b', '動き方', 640, 70, size=56); save(im, 's22b', '22-02')
+im = load('b15'); a15 = anch('b15'); b = a15.get('book', [800, 250]); tag(im, 's22c', 'これまでの記録', b[0], max(70, b[1] - 120), size=52, tail=(b[0], b[1] - 40)); save(im, 's22c', '22-03')
+im = Image.new('RGB', (1280, 720), BG)
+im.paste(old_test('x').resize((560, 315)), (50, 170)); im.paste(load('b13').resize((560, 315)), (670, 170))
+tag(im, 's22d', '昔：文字を読めるか', 330, 100, size=46); tag(im, 's22d', '今：ふるまい', 950, 100, size=46); save(im, 's22d', '22-04')
+im = Image.new('RGB', (1280, 720), BG); d = ImageDraw.Draw(im); chat_icon(d, 640, 290, 1.5)
+for x in (400, 880): d.polygon([(x - 40, 330), (x + 40, 330), (x, 230)], fill=ORANGE); d.rectangle([x - 15, 330, x + 15, 400], fill=ORANGE)
+tag(im, 's22e', 'AI は ますます賢く', 640, 80, size=50); save(im, 's22e', '22-05')
+im = Image.new('RGB', (1280, 720), (40, 48, 64)); d = ImageDraw.Draw(im)
+for k, lab in enumerate(('ゆがんだ文字', '絵のテスト', 'ふるまい')):
+    x = 230 + k * 410
+    d.rounded_rectangle([x - 170, 160, x + 170, 420], 24, fill=(214, 222, 232) if k < 2 else WHITE, outline=NAVY2, width=5)
+    tag(im, 's22f', lab, x, 220, size=46)
+    if k < 2:
+        d.line([(x - 110, 270), (x + 110, 400)], fill=(220, 70, 60), width=18); d.line([(x + 110, 270), (x - 110, 400)], fill=(220, 70, 60), width=18)
+    else:
+        d.text((x, 340), '？', font=font(110), fill=ORANGE, anchor='mm')
+tag(im, 's22f', '見分ける方法', 640, 80, size=50); save(im, 's22f', '22-06')
 json.dump(SHOTS, open(os.path.join(OUT, 'shots.json'), 'w'), ensure_ascii=False, indent=0)
 json.dump(LOG, open(os.path.join(OUT, 'tags_log.json'), 'w'), ensure_ascii=False, indent=0)
 small = [l for l in LOG if l.get('size', 99) < 44]

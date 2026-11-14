@@ -1,5 +1,6 @@
 # ロボットではありません回：台本 v1.0 の絵コンテ（3D の場面を 1 枚ずつ。字のない 3D。字・札は board_overlay.py で 2D に重ねる）
 # blender -b --factory-startup --python board.py -- <場面> <out.png> [samples] [--tex <絵のフォルダ>]
+#   v3 で足した場面：b20d（門番が伏せて半ばあきらめる）・b21w（まっすぐ歩くまるロボ）・b21i（門のない床。遠くで門番が見ている）・b23l・b23r（ふらふら）
 #   場面：b01 b02 b03 b04a b04b b05a b05b b08 b12 b13 b13e b13h b14 b15 b16 b17 b17n b18 b21 b22 b23（e＝足あとなし、h＝私の足あとだけ、n＝まだ選んでいない）
 #   一緒に <out>.json：札を重ねる場所（3D の点を画面の座標にしたもの）
 # 部品は 3本目（ep03_ad/storyboard）のもの：まるロボ（仮のモデル）・番犬（門番に使う）・光・材質
@@ -10,6 +11,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 EP03 = os.path.join(HERE, "..", "..", "ep03_ad", "storyboard")
 _a = sys.argv[sys.argv.index("--") + 1:]
 TEX = _a[_a.index("--tex") + 1] if "--tex" in _a else os.path.join(HERE, "tex")
+RICH = "--rich" in _a                                      # 舞台を作り込んだ版（rich.py）
+_a = [x for x in _a if x != "--rich"]
 sys.argv = [sys.argv[0], "--"] + [x for i, x in enumerate(_a) if x != "--tex" and (i == 0 or _a[i - 1] != "--tex")]
 _src = open(os.path.join(EP03, "scenes.py"), encoding="utf-8").read()
 exec(_src.split("# ---------------- 場面\n")[0])          # mat・sphere・cyl・cube・plane・maru・world・area・spot・camera・ground（SCENE, OUT, SAMPLES もここで決まる）
@@ -67,7 +70,7 @@ def mouse(loc, rz=0.0):
     return e
 
 
-def screen_world(gate_alpha=1.0, gatekeeper=True):
+def screen_world(gate_alpha=1.0, gatekeeper=True, dog_down=False, gate=True):
     """画面の中：明るい広い床。奥にチェック欄の門（四角い枠）と、横に門番（番犬）"""
     world("#DCE8F2", 0.9)
     ground("#EEF3F7", size=60, rough=0.5)
@@ -77,6 +80,11 @@ def screen_world(gate_alpha=1.0, gatekeeper=True):
         cube(line, (0, k * 1.5 + 6, 0.004), (36, 0.03, 0.004))
     fr = mat("gate_frame", "#2F4A73", rough=0.35, alpha=gate_alpha)
     gx, gy = 0.0, 9.0
+    if not gate:
+        sun((55, 0, 25), 3.2)
+        if gatekeeper:
+            dog((5.5, 16, 0), 200, eyes="open", **DOG); anchor("dog", (5.5, 15.8, 2.6))
+        return
     for sx in (-1, 1):
         cube(fr, (gx + sx * 1.35, gy, 1.4), (0.3, 0.3, 2.8), bevel=0.04)
     cube(fr, (gx, gy, 2.95), (3.0, 0.3, 0.3), bevel=0.04)
@@ -85,7 +93,18 @@ def screen_world(gate_alpha=1.0, gatekeeper=True):
     cube(mat("gate_box_in", "#FFFFFF", rough=0.3, alpha=gate_alpha), (gx, gy - 0.085, 1.55), (0.82, 0.02, 0.82))
     anchor("gate", (gx, gy, 3.3))
     sun((55, 0, 25), 3.2)
-    if gatekeeper:
+    if gatekeeper and dog_down:   # 伏せて、半ばあきらめている（体を低く、頭を前に下げ、目を閉じる）
+        before = set(bpy.data.objects)
+        dog((2.4, gy - 0.4, 0), 15, eyes="closed", **DOG)
+        new = [o for o in set(bpy.data.objects) - before if o.parent is None]
+        for o in new:
+            if o.type == 'EMPTY':
+                o.scale = (1.15, 1.3, 0.55); o.location.z = -0.05
+                for c in o.children:
+                    if c.type == 'EMPTY' and c.location.z > 1.5:
+                        c.location.z = 1.05; c.location.y -= 0.35; c.rotation_euler[0] = R(25); c.scale = (0.9, 0.9, 1.6)
+        anchor("dog", (2.4, gy - 0.6, 1.4))
+    elif gatekeeper:
         dog((2.4, gy - 0.4, 0), 15, eyes="open", **DOG)
         anchor("dog", (2.4, gy - 0.6, 2.6))
 
@@ -268,9 +287,39 @@ def b21():
     camera((0.8, -4.5, 2.6), (0.3, 7.0, 1.4), 30)
 
 
+def b20d():
+    screen_world(dog_down=True)
+    maru((-0.8, 4.0, 0), face_deg=200, s=0.8, hat=False, eye_glow=0.8, look_up=10)
+    camera((3.2, 1.2, 2.2), (1.6, 8.6, 0.8), 32)
+
+
+def b21w():
+    screen_world()
+    steps(path_robot(), "#21C1B3", "r")
+    maru((2.0, 3.5, 0), face_deg=200, s=0.8, hat=False, eye_glow=1.0, look_up=0)
+    anchor("maru", (2.0, 3.5, 1.4))
+    camera((5.6, -2.5, 3.0), (1.2, 5.5, 0.6), 30)
+
+
+def b21i():
+    screen_world(gate=False)
+    maru((0, 3.0, 0), face_deg=180, s=0.9, hat=False, eye_glow=0.9, look_up=5)
+    meter((4.2, 15.0, 0), 0.75)
+    camera((0.8, -4.5, 2.6), (1.5, 9.0, 1.2), 30)
+
+
+def b23l(): room_shot("scr_check", maru_loc=(0.55, 0.15, 0.75), face=-10, look=-8, tilt=-16, glow=0.3, mouse_loc=(0.45, 0.32, 0.75))
+def b23r(): room_shot("scr_check", maru_loc=(0.68, 0.18, 0.75), face=-30, look=-8, tilt=16, glow=0.3, mouse_loc=(0.5, 0.32, 0.75))
+
+
+if RICH:
+    exec(open(os.path.join(HERE, "rich.py"), encoding="utf-8").read())
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 globals()[SCENE]()
+if RICH and not sc.camera.data.dof.use_dof:
+    for k in ("maru", "book", "edge", "gate", "dog"):
+        if k in ANCH: focus_on(tuple(ANCH[k]), 4.0); break
 sc.render.engine = 'CYCLES'
 sc.cycles.samples = SAMPLES
 sc.cycles.use_denoising = True
