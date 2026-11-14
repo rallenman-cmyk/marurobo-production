@@ -23,6 +23,7 @@ def _load(name):
 g = {"__name__": "ov", "__file__": os.path.join(HERE, "..", "storyboard", "board_overlay.py")}
 src = src.replace("\ndef anch(name):", "\n_load_real = load\nload = __LOAD__\ndef anch(name):", 1)
 src = src.replace("def save(im, name, start_id, dt=0.0):\n", "def save(im, name, start_id, dt=0.0):\n    __BASE__[name] = im.info.get('base')\n", 1)
+src = src.replace("def cell_line(im):", "def cell_line(im):\n    return   # 動く版：ふちどりは 3D で描く（まるロボより奥）\ndef _cell_line_old(im):", 1)
 g["__LOAD__"] = _load; g["__BASE__"] = BASE
 exec(compile(src, "board_overlay.py", "exec"), g)
 sh = json.load(open(os.path.join(OUT, "shots.json"), encoding="utf-8"))

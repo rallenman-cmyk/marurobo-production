@@ -131,6 +131,7 @@ def render(name, t0, t1, outdir, samples, res, step, fr=None):
     sc.render.resolution_x, sc.render.resolution_y = res
     sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Punchy'
     sc.render.fps = FPS
+    sc.render.use_persistent_data = True          # コマごとに舞台を作り直さない（速くなる）
     n = round((t1 - t0) * FPS)
     a, b = (fr if fr else (0, n - 1))
     os.makedirs(outdir, exist_ok=True)
