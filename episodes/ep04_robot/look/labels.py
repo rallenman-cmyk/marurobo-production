@@ -80,7 +80,7 @@ def s08x_labels():
 def s09_labels():
     t_g, t_998 = said("2014年、このテスト"), said("今のAIは")
     return [P("2014年", (500, 62), t_g, size=50, col="or"),
-            P("Google", (720, 62), t_g + 2.0, size=50, col="nv"),
+            P("Google", (820, 62), t_g + 2.0, size=50, col="nv"),
             P("99.8%", "tube_top", t_998 + 2.6, d=(0, -40), solid=True, col="te", size=60, quiet=True)]
 
 
