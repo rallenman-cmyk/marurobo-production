@@ -11,6 +11,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 EP03 = os.path.join(HERE, "..", "..", "ep03_ad", "storyboard")
 _a = sys.argv[sys.argv.index("--") + 1:]
 TEX = _a[_a.index("--tex") + 1] if "--tex" in _a else os.path.join(HERE, "tex")
+MARU_ONLY = "--maru-only" in _a                            # まるロボだけを、透明な背景で描く（2D の印より手前に重ねるため）
+_a = [x for x in _a if x != "--maru-only"]
 RICH = "--rich" in _a                                      # 舞台を作り込んだ版（rich.py）
 _a = [x for x in _a if x != "--rich"]
 sys.argv = [sys.argv[0], "--"] + [x for i, x in enumerate(_a) if x != "--tex" and (i == 0 or _a[i - 1] != "--tex")]
@@ -330,6 +332,11 @@ sc.render.resolution_x, sc.render.resolution_y = RES
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = OUT
+if MARU_ONLY:   # まるロボ以外は「穴」（何も写らない）にして、背景も透明に。影や照り返しは本番の絵の方にある
+    sc.render.film_transparent = True
+    for o in bpy.data.objects:
+        if o.type == 'MESH' and not any(m and m.name.startswith(("maru_", "hat_")) for m in o.data.materials):
+            o.is_holdout = True
 bpy.context.view_layer.update()
 from bpy_extras.object_utils import world_to_camera_view
 pos = {}

@@ -323,6 +323,9 @@ def cell_line(im):   # まるロボが乗っている端っこのマスを、マ
     d = ImageDraw.Draw(im)
     if CELL: d.line(CELL + [CELL[0]], fill=ORANGE, width=9, joint='curve')
     else: d.ellipse([e[0] - 110, e[1] - 80, e[0] + 110, e[1] + 80], outline=ORANGE, width=9)
+    mp = os.path.join(SRC, 'b18_maru.png')   # まるロボはふちどりより手前（v6 コメント）：まるロボだけの絵を上に重ねる
+    if os.path.exists(mp):
+        m = Image.open(mp).convert('RGBA').resize(im.size); im.paste(m, (0, 0), m)
 BUB = (mr[0] - 330, max(110, mr[1] - 60))
 im = load('b18'); pic_bubble(im, BUB[0], BUB[1], 80, lambda d, x, y, r: (light_icon(d, x - 15, y, 0.9), q_mark(d, x + 38, y, r * 0.55)), to=(mr[0] - 40, mr[1])); save(im, 's18a', '18-01')
 im = load('b18'); cell_line(im)
