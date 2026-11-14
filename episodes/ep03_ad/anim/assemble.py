@@ -146,6 +146,15 @@ PIPS = [(W("07-01", "柱の穴"), s("07-01", 1) + 0.3, W("06-02", "この小さ�
         (W("10-02", "さきほどと同じ"), s("10-02", 1), 158.0, "さきほどのスマホの中")]
 
 
+# 場面の始まり（差し込みの表でも使うので先に）
+SCST = {}
+for p in P:
+    SCST.setdefault(SID[p["no"]]["scene"], max(0.0, p["start"] - 0.4))
+SCST["S00"] = 0.0
+_sk = list(SCST)
+SCEND = {k: (SCST[_sk[i + 1]] if i + 1 < len(_sk) else END) for i, k in enumerate(_sk)}
+
+
 # 言っている内容の場面を差し込む（v4「まるロボをただ映すのではなく、その内容のシーンを差し込んで」7:41 ほか）。
 #   (始まり, 終わり, 種類, 中身)：clip＝別の時刻の 3D をそのまま流す（中身＝元の時刻）／still＝その時刻の絵を止めて／img＝差し込みの 2D（inserts_2d.py の名前）
 #   前後 0.25 秒で溶かす。字幕は上に重なる
@@ -202,12 +211,6 @@ for k in PARTS:
         if os.path.exists(p) and glob.glob(os.path.join(d, k + "_[0-9]*.png")):
             lg = json.load(open(p)); lg["dir"] = d; break
     logs[k] = lg
-SCST = {}
-for p in P:
-    SCST.setdefault(SID[p["no"]]["scene"], max(0.0, p["start"] - 0.4))
-SCST["S00"] = 0.0
-_sk = list(SCST)
-SCEND = {k: (SCST[_sk[i + 1]] if i + 1 < len(_sk) else END) for i, k in enumerate(_sk)}
 t_prev = 0.0
 missing = []
 for k in PARTS:
