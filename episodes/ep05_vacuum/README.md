@@ -9,6 +9,7 @@
 | `台本_v0_2.md` | 台本 v0.2（コメント 13 件を反映・148 本） |
 | `台本_v0_3.md` | 台本 v0.3（コメント 6 件を反映・です・ます 6 本以上続く所 0） |
 | `台本_v0_4.md` | 台本 v0.4（台本 OK のあと、読点を 1 行 2 つまでに） |
+| `台本_v1_0.md` | **台本 v1.0（確定）**。【確認】を資料で確かめた結果の表つき |
 | `review_tool/` | 台本レビューツールに入れるデータ（`build_from_md.py` で md から作る）。作品 MARU-VACUUM |
 
 - 台本レビューツール：https://claude.ai/artifact/3kj4tZtaZWwbvig7GmEs4c（作品 MARU-VACUUM）
