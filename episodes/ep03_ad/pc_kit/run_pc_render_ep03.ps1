@@ -5,7 +5,7 @@
 #   描く細かさ：-Samples 48（既定）。大きくすると、きれいになるが時間がかかる
 #   途中で止まったり窓を閉じたりしても、同じ行をもう一度走らせれば、できている所は飛ばして続きから描く
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
-#   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep03 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
+#   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep03_v6 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
 param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 48)
 $ErrorActionPreference = "Continue"
 $kit = Split-Path -Parent $PSScriptRoot                      # ...\marurobo_ep03
@@ -36,7 +36,7 @@ $JOBS = @(
   @("s22", 643, "scenes_all.py")
 )
 if ($Only) { $want = @($Only.Split(",") | ForEach-Object { $_.Trim() }); $sel = New-Object System.Collections.ArrayList; foreach ($j in $JOBS) { if ($want -contains $j[0]) { [void]$sel.Add($j) } }; $JOBS = $sel.ToArray() }
-$out = Join-Path $root "render_ep03"
+$out = Join-Path $root "render_ep03_v6"                  # v6（2026-11-14 確定版）。前に止めた描画（render_ep03）は古いので使わない
 $log = Join-Path $root "render_log_ep03.txt"
 $done = Join-Path $out "_done"
 New-Item -ItemType Directory -Force -Path $done | Out-Null
@@ -64,7 +64,7 @@ function Left() { $n = 0; foreach ($c in (AllChunks)) { $tag = "{0}_{1:D4}-{2:D4
 # Google ドライブ（パソコン版）の場所。1 本できるたびに、そこへすぐコピーする（こちらで進み具合を見られるように）
 $gdrive = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
 $gep = $null
-if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep03"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
+if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep03_v6"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
 
 # ---------------------------------------------------------------- Blender 4.3 を探す
 $blender = $Blender
@@ -154,14 +154,14 @@ else {
   }
 }
 # 送るファイルをまとめる（mp4 と、場面ごとの記録 *_log.json）
-$dst = Join-Path $root "marurobo_render\ep03"
+$dst = Join-Path $root "marurobo_render\ep03_v6"
 New-Item -ItemType Directory -Force -Path $dst | Out-Null
 Get-ChildItem $out -File | Where-Object { $_.Extension -eq ".mp4" -or $_.Name -like "*_log.json" } | ForEach-Object { Copy-Item $_.FullName $dst -Force }
 $left = Left
 $mb = [Math]::Round(((Get-ChildItem $dst -File | Measure-Object Length -Sum).Sum) / 1MB)
 Note ("送るファイルを {0} にまとめました（{1} MB）" -f $dst, $mb)
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
-if ($g) { $gd = Join-Path $g "marurobo_render"; New-Item -ItemType Directory -Force -Path $gd | Out-Null; Copy-Item $dst $gd -Recurse -Force; Note ("Google ドライブ（{0}\ep03）にコピーしました" -f $gd) }
+if ($g) { $gd = Join-Path $g "marurobo_render"; New-Item -ItemType Directory -Force -Path $gd | Out-Null; Copy-Item $dst $gd -Recurse -Force; Note ("Google ドライブ（{0}\ep03_v6）にコピーしました" -f $gd) }
 [void][Maru.Power]::SetThreadExecutionState([uint32]2147483648)
 if ($left -gt 0) { Note ("終わりました（{0}）。まだ {1} 本そろっていません。同じ行をもう一度走らせると、足りない所だけ描きます" -f (Fmt ((Get-Date) - $tAll)), $left) }
 elseif ($g) { Note ("ぜんぶ終わりました（{0}）。Google ドライブへのアップロードは自動で進みます（終わるまで PC は入れたままに）。チャットで知らせてください" -f (Fmt ((Get-Date) - $tAll))) }

@@ -1,14 +1,16 @@
 まるロボ 3本目：パソコンで本番の絵を描く（やることは2つだけ）
 
+⓪ 前の描画の窓が開いていたら、全部閉じる。C:\marurobo\marurobo_ep03 フォルダ（前のキット）があれば、消す（中身が古いため）。
+   前に描いた絵（C:\marurobo\render_ep03）は使わないので、消してかまいません。
 ① この marurobo_ep03.zip を右クリック →「すべて展開」→ 展開先を  C:\marurobo  にする。
 ② PowerShell を開いて、下の1行をコピーして貼り、Enter を押す。あとは放っておくだけ。
 
 $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep03.ps1 | Select-Object -First 1; if ($f) { powershell -ExecutionPolicy Bypass -File $f.FullName } else { "marurobo_ep03.zip を C:\marurobo に展開し直してください" }
 
-・小さな窓がいくつか開いて、順番に絵を描きます（半日〜1日くらい）。
-・QR回の描画がまだ動いていたら、それが終わるのを自動で待ってから描き始めます。
+・小さな窓がいくつか開いて、順番に絵を描きます（全部描き直すので、半日〜1日くらい）。
+・ほかの回の描画がまだ動いていたら、それが終わるのを自動で待ってから描き始めます。
 ・途中で止まっても、同じ1行をもう一度貼れば、続きから描きます。
 ・描いている間、パソコンはスリープしません（画面は消えてOK。ノートは電源につないで、ふたは開けたまま）。
-・終わると Google ドライブの marurobo_render\ep03 に自動で入ります。終わったらチャットで教えてください。
+・終わると Google ドライブの marurobo_render\ep03_v6 に自動で入ります。終わったらチャットで教えてください。
 ・うまくいかないときは、C:\marurobo\render_log_ep03.txt をチャットに貼ってください。
 
