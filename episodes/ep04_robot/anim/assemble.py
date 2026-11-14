@@ -35,6 +35,23 @@ def clip_at(t):
         if c["t1"] - 1e-6 <= t < c["t1"] + 0.1: return c
 
 
+# 図の場面の 3D（look/compose3d.py の出力。札も入っている）：この時刻はショットの絵の代わりにこれを使う（2026-11-14 図の場面も 3D に）
+LCL = []
+_SUB0 = sorted(e[0] for e in ev)
+for d in [x for x in os.environ.get("LOOK_DIRS", "").split(":") if x]:
+    for lg in glob.glob(os.path.join(d, "L*_log.json")):
+        nm = os.path.basename(lg)[:-9]; L_ = json.load(open(lg))
+        fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].png")))
+        if not fs: continue
+        t0 = L_["t0"]; near = min(_SUB0, key=lambda x: abs(x - t0))
+        if abs(near - t0) < 0.8: t0 = near                 # 絵の切り替わりは字幕の切り替わりと同じコマに
+        LCL.append(dict(name=nm, t0=t0, t00=L_["t0"], t1=L_["t0"] + L_["frames"] / L_["fps"], fps=L_["fps"], ks=[int(p[-8:-4]) for p in fs], fs=fs, log=L_))
+LCL.sort(key=lambda c: c["t0"])
+def lclip_at(t):
+    for c in LCL:
+        if c["t0"] - 1e-6 <= t < c["t1"] - 1e-6: return c
+
+
 def shot_i(t):
     i = 0
     for j, s_ in enumerate(shots):
@@ -47,7 +64,13 @@ seq, miss = [], []
 fps = 24; N = round(END * fps); k = 0
 cache = {}
 while k < N:
-    t = k / fps; si = shot_i(t); s_ = shots[si]; name = s_["img"][:-4]
+    t = k / fps
+    lc = lclip_at(t)
+    if lc:
+        kk = round((t - lc["t00"]) * lc["fps"]); j = max(0, bisect.bisect_right(lc["ks"], kk) - 1)
+        if not seq or seq[-1][1] != lc["fs"][j]: seq.append((t, lc["fs"][j]))
+        k += 1; continue
+    si = shot_i(t); s_ = shots[si]; name = s_["img"][:-4]
     tn = shots[si + 1]["t"] if si + 1 < len(shots) else END
     if s_.get("base") and name not in FULL:
         # 絵の切り替えを字幕にそろえて動かした分（t_old との差）は、そのショットのクリップの中で、端のコマで埋める
@@ -68,6 +91,7 @@ while k < N:
         if not seq or seq[-1][1] != cache[key_]: seq.append((t, cache[key_]))
         k += 1
     else:
+        tn = min([tn] + [c["t0"] for c in LCL if c["t0"] > t + 1e-6])   # 次の図の場面の頭で止める
         seq.append((t, os.path.join(SH, s_["img"]))); k = max(k + 1, round(tn * fps))
 lst = os.path.join(tmp, "list.txt")
 with open(lst, "w") as fo:
@@ -97,10 +121,11 @@ def talking(t, d):
             a_ = max(0, int((t - p["start"]) / hs)); b_ = int((t + d - p["start"]) / hs) + 1
             if (e[a_:b_] > 0.02).any(): return True
     return False
-for c in CL:
+for c in CL + LCL:
     hits = [tuple(e) for e in c["log"]["events"]] + [(t_, "step", 0.6) for t_ in c["log"]["steps"]]
     for t_, kind, g in hits:
         if not (c["t0"] <= t_ < c["t1"]): continue
+        if c not in LCL and lclip_at(t_): continue           # 図の場面の時刻は、その場面の音だけ
         x = sfx.make(kind, SR)
         if x is None: nos.add(kind); continue
         if kind in ("click", "pop_ui", "pi") and talking(t_, len(x) / SR):
