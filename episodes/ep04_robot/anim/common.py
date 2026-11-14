@@ -147,6 +147,8 @@ def render(name, t0, t1, outdir, samples, res, step, fr=None):
     json.dump(dict(t0=t0, t1=t1, fps=FPS, frames=n, steps=STEPS, events=EVENTS, track=track), open(os.path.join(outdir, name + "_log.json"), "w"))
     if TRACK_ONLY: return
     for k in range(a, b + 1, step):
+        fp = os.path.join(outdir, "%s_%04d.png" % (name, k))
+        if os.environ.get("RESUME") and os.path.exists(fp): continue   # 止まった続きから描く（RESUME=1）
         sc.frame_set(k)
-        sc.render.filepath = os.path.join(outdir, "%s_%04d.png" % (name, k))
+        sc.render.filepath = fp
         bpy.ops.render.render(write_still=True)
