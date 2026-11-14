@@ -150,8 +150,10 @@ d.ellipse([x0 + 150, y0 + 115, x0 + 240, y0 + 205], fill=(95, 170, 210))
 d.polygon([(x0 + 195, y0 + 190), (x0 + 172, y0 + 150), (x0 + 218, y0 + 150)], fill=WHITE); d.ellipse([x0 + 180, y0 + 132, x0 + 210, y0 + 162], fill=WHITE)
 for k in range(3): d.rounded_rectangle([x0 + 60, y0 + 230 + k * 34, x1 - 60 - (60 if k == 2 else 0), y0 + 248 + k * 34], 8, fill=(205, 212, 220))
 d.rounded_rectangle([x0 + 50, y1 - 150, x0 + 175, y1 - 95], 14, fill=(225, 230, 236)); d.rounded_rectangle([x1 - 175, y1 - 150, x1 - 50, y1 - 95], 14, fill=TEAL)
-f = F(46); d.text((x1 - 165, y1 - 155), "許可", font=f, fill=WHITE)
-d.ellipse([x1 - 150, y1 - 110, x1 - 90, y1 - 50], outline=YEL, width=8)
+# v5「まるの位置ずれてる」(7:42)：字はボタンのまん中に、丸はボタンをかこむ形に（中心をボタンにそろえる）
+_bx0, _by0, _bx1, _by1 = x1 - 175, y1 - 150, x1 - 50, y1 - 95; _cx, _cy = (_bx0 + _bx1) / 2, (_by0 + _by1) / 2
+f = F(40); _bb = d.textbbox((0, 0), "許可", font=f); d.text((_cx - (_bb[0] + _bb[2]) / 2, _cy - (_bb[1] + _bb[3]) / 2), "許可", font=f, fill=WHITE)
+d.ellipse([_cx - 95, _cy - 52, _cx + 95, _cy + 52], outline=YEL, width=8)
 save(im, "permission")
 
 # ---------------- 役所が調べる（18-00・18-01）：役所の建物から、虫めがねが会社を調べる

@@ -105,8 +105,9 @@ def ovp(a, b, pb): OVERLAYS.append((a, b, pb[0], pb[1]))
 ov(6.2, 7.19, "s00_6h", [("dark",), ("tag", "6時間前", 640, 300, None, True)])
 # v4：冒頭の絵を引いた（テント 3 枚が見える）ので、名札・吹き出しの場所を合わせた
 ov(s("01-01"), s("01-03", 1), "s01_names", [("tag", "ハルさん", 290, 470, None, False, (62, 124, 177)), ("tag", "ソラさん", 1010, 470, None, False, (229, 140, 90))])   # v4「どっちがハルでどっちがソラか」：服の色のふちの名札
-ov(s("01-01") + 0.8, s("01-02") + 1.0, "s01_a", [("tag", "今度、キャンプ行きたいね", 330, 80, (470, 370))])
-ov(s("01-02") + 0.6, s("01-03") + 0.2, "s01_b", [("tag", "いいね！", 1010, 80, (810, 370))])
+# v5「吹き出しの位置高すぎる」(0:11)：吹き出しを下げて、話す人の頭のすぐ上に
+ov(s("01-01") + 0.8, s("01-02") + 1.0, "s01_a", [("tag", "今度、キャンプ行きたいね", 360, 230, (480, 375))])
+ov(s("01-02") + 0.6, s("01-03") + 0.2, "s01_b", [("tag", "いいね！", 990, 230, (800, 380))])
 ovp(s("01-03"), s("01-03", 1) + 0.3, picbubble("s01_tent", 760, 330, 70, tent))
 ov(s("04-04"), s("04-04", 1) + 0.3, "s04_title", [("tag", "さっき話した物が、なぜ広告に出る？", 640, 110, None, False)])
 ov(W("05-02", "マイク"), s("05-06", 1), "s05_1", [("tag", "①マイク", 160, 70, None, False, SUS[0])])
@@ -261,8 +262,11 @@ for k, (a, b, tsrc, label) in enumerate(PIPS):
 INSD = os.path.join(tmp, "ins"); subprocess.run([sys.executable, os.path.join(HERE, "inserts_2d.py"), INSD, FONT], check=True, capture_output=True)
 def _clip(name, src, dur):
     """src 秒からの dur 秒ぶんの絵（別の場面のコマ）を、1280×720・24 コマ/秒の短い動画に"""
-    items = [(max(a, src), min(b, src + dur), pth) for a, b, pth in allrows if b > src and a < src + dur]
+    # v5「一瞬せりのシーンを映す」：元の場面の終わりで止める（足りない分は最後の絵で待つ）。次の場面が混ざらないように
+    lim = min([T for T in SCENE_TS if T > src + 0.05] + [END]) - 0.15
+    items = [(max(a, src), min(b, src + dur, lim), pth) for a, b, pth in allrows if b > src and a < min(src + dur, lim)]
     if not items: items = [(src, src + dur, _frame_at(src))]
+    if items[-1][1] < src + dur: items.append((items[-1][1], src + dur, items[-1][2]))
     l = os.path.join(tmp, "ins_%s.txt" % name); o = os.path.join(tmp, "ins_%s.mp4" % name)
     with open(l, "w") as fo:
         for a, b, pth in items: fo.write("file '%s'\nduration %.4f\n" % (pth, b - a))
@@ -270,12 +274,34 @@ def _clip(name, src, dur):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", l, "-vf", "scale=1280:720,setsar=1,fps=24,format=yuv420p",
                     "-frames:v", str(max(1, round(dur * 24))), "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", o], check=True)
     return o
-INSV = []   # (始まり, 終わり, ファイル, 動画か)
-for k, (a, b, kind, arg) in enumerate(INS):
-    if b - a < 0.3: continue
-    if kind == "clip": INSV.append((a, b, _clip("c%d" % k, arg, b - a + 0.1), True))
-    elif kind == "still": INSV.append((a, b, _frame_at(arg), False))
-    else: INSV.append((a, b, os.path.join(INSD, "ins_%s.png" % arg), False))
+# v5「差し込みの間に前の場面が一瞬映る」：差し込みどうし・差し込みと場面の切り替わりの間に、元の場面が短く（INS_GAP 秒未満）
+#   のぞく所をなくす。①近い差し込みはつなぐ（前の差し込みは消さずに、次をその上に重ねて出す）
+#   ②場面の始まり・終わりの近くの差し込みは、切り替わりまでのばす（切り替わりは差し込みの中で済ませ、元の場面の重ねは使わない）
+INS_GAP, INS_FD = 2.0, 0.3
+SCENE_TS = sorted(set([t for k, t in SCST.items() if k != "S00"] + [298.26]))
+_ins = sorted([list(x) for x in INS if x[1] - x[0] >= 0.3], key=lambda x: x[0])
+for _ in range(4):
+    for x in _ins:
+        for T in SCENE_TS:
+            if -INS_FD < x[0] - T < INS_GAP: x[0] = T - INS_FD                   # 場面の始まりから少しだけ元の場面 → 切り替わりから差し込み
+            if -INS_FD < T - x[1] < INS_GAP: x[1] = T + INS_FD               # 切り替わりの直後に終わる差し込みも（v5「会場の後に前の場面が一瞬」）                   # 差し込みのあと少しだけ元の場面 → 切り替わりまで差し込み
+    for i in range(len(_ins) - 1):
+        if _ins[i + 1][0] - _ins[i][1] < INS_GAP: _ins[i][1] = max(_ins[i][1], _ins[i + 1][0])
+INS_COVER = [(x[0], x[1]) for x in _ins]
+def _covered(t): return any(a + 0.01 < t < b - 0.01 for a, b in INS_COVER)
+if os.environ.get("INS_DRY"):                                            # 差し込みの並びだけ見る
+    for x in _ins: print("%6.2f %6.2f %-5s %s" % (x[0], x[1], x[2], x[3]))
+    _c = sorted(set([0.0, END] + SCENE_TS + [a for a, b in INS_COVER] + [b for a, b in INS_COVER]))
+    for a, b in zip(_c, _c[1:]):
+        if b - a < INS_GAP and not any(a2 <= (a + b) / 2 <= b2 for a2, b2 in INS_COVER): print("PEEK %.2f-%.2f" % (a, b))
+    sys.exit(0)
+INSV = []   # (始まり, 終わり, ファイル, 動画か, 消え方)  消え方 True＝最後に溶けて消える／False＝次の差し込みが上に重なる
+for k, (a, b, kind, arg) in enumerate(_ins):
+    nxt = k + 1 < len(_ins) and _ins[k + 1][0] <= b + 1e-3
+    if nxt: b = _ins[k + 1][0] + INS_FD                                     # 次が出きるまで残す
+    if kind == "clip": INSV.append((a, b, _clip("c%d" % k, arg, b - a + 0.1), True, not nxt))
+    elif kind == "still": INSV.append((a, b, _frame_at(arg), False, not nxt))
+    else: INSV.append((a, b, os.path.join(INSD, "ins_%s.png" % arg), False, not nxt))
 # 大きさの違う絵（3D の試し描き・2D・絵コンテ）を一度に並べると時刻がずれるので、続いている同じ場面ごとに
 # 1280×720・24 コマ/秒の短い動画にしてから、つなぐ
 runs = []
@@ -351,7 +377,7 @@ open(tmp + "/subs.ass", "w", encoding="utf-8").write("\n".join(ass) + "\n")
 XIN = {"S03", "S04", "S06b", "S09", "S10", "S11", "S20", "S21"}           # 前後で世界が変わる所（2D・スマホの中へ／外へ）
 XF = [(t, 0.65 if k in XIN else 0.35) for k, t in SCST.items() if k != "S00"]
 XF.append((298.26, 0.65))                                                    # 門の町（スマホの中）→ 外から見たスマホの画面
-XF = sorted(x for x in XF if 0.5 < x[0] < END - 1)
+XF = sorted(x for x in XF if 0.5 < x[0] < END - 1 and not _covered(x[0]))   # 差し込みの中の切り替わりは重ねない（差し込みで隠れている）
 inputs = ["-i", lst]
 # 同じ絵が長く続く所は、ゆっくり寄る（QR回 v10「変わり映えしない」の横展開。動きの少ない所を測って選んだ：S05・S08 の門・S09・S14・S17〜S19・S20）。
 #   3D の中の物に合わせた輪（S06 の穴・S08 の画面の点・S15 のつり広告）がある所は寄らない（輪がずれるため）
@@ -371,10 +397,11 @@ for j, (T, dd) in enumerate(XF):
     T0 = T - 2 / 24                                                       # 2 コマ前から重ね始める（v4「15:03 切り替わる時点滅」：1 コマ遅れて次の場面がそのまま見えていた）
     fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=out:st=%.3f:d=%.3f:alpha=1,setpts=PTS+%.3f/TB[x%d]" % (nin, 2 / 24, dd, T0, j))
     fl.append("[%s][x%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[c%d]" % (cur, j, T0, T + dd, j)); cur = "c%d" % j; nin += 1
-for j, (a, b, pth, mv) in enumerate(INSV):
+for j, (a, b, pth, mv, fo_) in enumerate(INSV):
     dd = b - a
     inputs += (["-i", pth] if mv else ["-loop", "1", "-t", "%.3f" % dd, "-i", pth])
-    fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=in:st=0:d=0.25:alpha=1,fade=t=out:st=%.3f:d=0.25:alpha=1,setpts=PTS+%.3f/TB[n%d]" % (nin, max(0, dd - 0.25), a, j))
+    _fo = (",fade=t=out:st=%.3f:d=%.3f:alpha=1" % (max(0, dd - INS_FD), INS_FD)) if fo_ else ""
+    fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=in:st=0:d=%.3f:alpha=1%s,setpts=PTS+%.3f/TB[n%d]" % (nin, INS_FD, _fo, a, j))
     fl.append("[%s][n%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[d%d]" % (cur, j, a, b, j)); cur = "d%d" % j; nin += 1
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
     inputs += ["-i", pth]
@@ -403,6 +430,16 @@ for i, (a, b, *_r) in enumerate(OVERLAYS):
                 for t2_ in _r2[1]:
                     if not (t1_[3] < t2_[1] or t2_[3] < t1_[1] or t1_[4] < t2_[2] or t2_[4] < t1_[2]):
                         chk.append("札どうしが重なる：%s と %s" % (t1_[0], t2_[0]))
+# v5：元の場面が短く（INS_GAP 秒未満）のぞく所。差し込み・場面の切り替わりで区切って測る
+_cuts = sorted(set([0.0, END] + SCENE_TS + [a for a, b in INS_COVER] + [b for a, b in INS_COVER]))
+_peek = []
+for a, b in zip(_cuts, _cuts[1:]):
+    m = (a + b) / 2
+    if b - a < INS_GAP and not _covered(m) and not any(a2 <= m <= b2 for a2, b2 in INS_COVER):
+        if a > 0.5 and b < END - 0.5: _peek.append("%d:%04.1f（%.1f 秒）" % (a // 60, a % 60, b - a))
+chk.append("元の場面が一瞬のぞく所：%s" % ("／".join(_peek) or "なし"))
+_ovi = ["%s（%.1f）" % (bx[0][0], a) for a, b, pth, bx in OVERLAYS if bx and any(a < b2 - 0.3 and a2 + 0.3 < b for a2, b2 in INS_COVER)]
+chk.append("差し込みの上に出る札：%s" % ("／".join(_ovi) or "なし"))
 ov_sfx = []
 for t, kd in ev_all:
     for p in P:

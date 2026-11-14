@@ -130,9 +130,20 @@ def s04():
     mr.hop(tj, 0.75, 0.8); ev(tj, "jump"); ev(tj + 0.8, "land")
     key(hat_e, "location", f(tj + 0.3), (1.4, 1.73, 1.6))
     key(hat_e, "location", f(tj + 0.4), (HX, HY + 0.02, 1.36))        # 頭の上（跳んだいちばん上）
-    key(hat_e, "location", f(tj + 0.8), (HX, HY + 0.02, 0.6)); ev(tj + 0.45, "hat")
-    show([o for o in bpy.data.objects if o.parent == hat_e] + [hat_e], f(tj + 0.8), False)
-    show(real_hat, f(tj + 0.8), True)                                 # ここから本物の帽子（いっしょに動く）
+    ev(tj + 0.45, "hat")
+    _hm = [o for o in real_hat if o.type == "MESH" and o.active_material.name.startswith("hat_plaid")]
+    if _hm:                                                           # 届く所は、そのときの本物の帽子の場所ぴったりに
+        _hm = max(_hm, key=lambda o: o.dimensions.x * o.dimensions.y)
+        bpy.context.scene.frame_set(f(tj + 0.4)); bpy.context.view_layer.update()
+        key(hat_e, "location", f(tj + 0.4), tuple(_hm.matrix_world.translation))
+        key(hat_e, "rotation_euler", f(tj + 0.4), tuple(_hm.matrix_world.to_euler()))
+        bpy.context.scene.frame_set(0)
+    # v5「帽子が最初引っかかってない」(1:06)：落ちた帽子は、頭に届いた瞬間（跳んだいちばん上）に本物の帽子へ入れかえる。
+    #   前は届いてから 0.4 秒、まっすぐ下がる帽子と、弧を描いて下りるまるロボがずれて、ななめに引っかかって見えた
+    _fh = [o for o in bpy.data.objects if o.parent == hat_e] + [hat_e]
+    show(_fh, 0, True)                                                # 掛かっている・落ちてくる帽子は見せる（v4 は最初から隠れていて、急に頭に出た）
+    show(_fh, f(tj + 0.4), False)
+    show(real_hat, f(tj + 0.4), True)                                 # ここから本物の帽子（いっしょに動く）
     mr.at(tj + 1.0, face=180, look=0); mr.at(tj + 1.8, face=10)       # かぶったら、こちらを向く
     mr.at(s("04-03") + 0.3, look=12); mr.glow(s("04-03") + 0.3, 0.3, 6.0); ev(s("04-03") + 0.3, "pipo")   # 胸を張る
     sun((50, 0, 200), 2.0)
