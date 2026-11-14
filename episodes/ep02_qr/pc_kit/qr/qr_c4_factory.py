@@ -44,9 +44,9 @@ for dx in (-2.6, 2.6):
         lg = W.box('leg', (0.14, 0.14, 2.0), W.mat('steel', W.srgb('#59616A'), metal=0.6, rough=0.4)); lg.location = (dx, dy, 1.0)
 img = bpy.data.images.load(os.path.join(HERE, 'qr_paper.png'))
 def slip(x, y, rz, s=0.75):
-    m = bpy.data.materials.new('slip'); m.use_nodes = True; nt = m.node_tree; bs = nt.nodes['Principled BSDF']; tx = nt.nodes.new('ShaderNodeTexImage'); tx.image = img; tx.interpolation = 'Closest'
+    m = bpy.data.materials.new('slip'); m.use_nodes = True; nt = m.node_tree; bs = nt.nodes['Principled BSDF']; tx = nt.nodes.new('ShaderNodeTexImage'); tx.image = img; tx.interpolation = 'Linear'      # v12 #56：Closest は遠くでちらつく
     nt.links.new(tx.outputs['Color'], bs.inputs['Base Color']); bs.inputs['Roughness'].default_value = 0.7
-    bpy.ops.mesh.primitive_plane_add(size=s, location=(x, y, 2.1)); o = bpy.context.object; o.rotation_euler = (0, 0, rz); o.data.materials.append(m)
+    bpy.ops.mesh.primitive_plane_add(size=s, location=(x, y, 2.103)); o = bpy.context.object      # v12 #56：紙の上面（2.1）と同じ高さで重なってちらついていた → 3mm 浮かす; o.rotation_euler = (0, 0, rz); o.data.materials.append(m)
     pa = W.box('paper', (s * 1.25, s * 1.6, 0.01), W.mat('paper', W.srgb('#F4F2EC'), rough=0.8)); pa.location = (x, y + s * 0.18, 2.095); pa.rotation_euler = (0, 0, rz)
     return o
 for k, (x, col) in enumerate(((-1.9, '#3F86DD'), (-0.6, '#3E9E62'), (0.7, '#F0953A'))):

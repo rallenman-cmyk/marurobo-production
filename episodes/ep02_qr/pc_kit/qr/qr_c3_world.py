@@ -18,6 +18,7 @@ ap.add_argument('--blend', default=''); ap.add_argument('--out', default='/tmp/q
 ap.add_argument('--res', nargs=2, type=int, default=[1920, 1080]); ap.add_argument('--samples', type=int, default=32)
 ap.add_argument('--video', type=int, default=0); ap.add_argument('--vprefix', default='qrc3w_'); ap.add_argument('--standin', type=int, default=0)
 ap.add_argument('--font', default=''); ap.add_argument('--still', default=''); ap.add_argument('--save', default='')
+ap.add_argument('--probe', default='')                   # v12 #46：0 と 1 の板の画面の位置を json に書くだけ（描かない）
 A = ap.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else [])
 os.makedirs(A.out, exist_ok=True)
 F0, F1 = map(int, A.frames.split(':'))
@@ -87,19 +88,21 @@ def panel_targets():
         for k in (-1, 1): out.append((n * (BOXW / 2) + tv * (PANEL / 2 * k) + Vector((0, 0, WALL_H / 2)), math.atan2(ny, nx) - math.pi / 2))
     return out
 PT_ = panel_targets()
-def panel_color(v):
-    base = W.srgb(QW.COL['black'] if v else QW.COL['white']); tint = W.srgb(QW.COL['data'])
+SPARE = list(SYM['spare_boxes'])
+def panel_color(v, state='data'):
+    base = W.srgb(QW.COL['black'] if v else QW.COL['white']); tint = W.srgb(QW.COL[state])
     return (*QW.mixc(base, tint, 0.45 if v else 0.62), 1.0)
 floor_m = W.mat('Box floor', (0.30, 0.32, 0.35), rough=0.6); lid_m = W.mat('Box lid', QW.mixc((0.86, 0.88, 0.90), W.srgb(QW.COL['data']), 0.7), rough=0.5)
-BX = {}; CEN = {b: Vector((*CP.box_c(b), 0.0)) for b in range(1, 10)}
-for b in range(1, 10):
+lid_s = W.mat('Box lid spare', QW.mixc((0.86, 0.88, 0.90), W.srgb(QW.COL['spare']), 0.7), rough=0.5)
+BX = {}; CEN = {b: Vector((*CP.box_c(b), 0.0)) for b in list(range(1, 10)) + SPARE}
+for b in list(range(1, 10)) + SPARE:                     # v12 #54：予備の 17 個も箱にできるように
     root = W.link(O.new('BoxRoot %d' % b, None)); root.location = (CEN[b].x, CEN[b].y, Z0)
     pans = []
     for i, (r, c) in enumerate(CP.BOX_CELLS[b]):
-        p = W.box('Box %d panel %d' % (b, i), (1, 1, 1), TM, bevel=0.0, seg=1); p.parent = root; p['v'] = TILES[(r, c)]['v']; p.color = panel_color(p['v']); pans.append(p)
+        p = W.box('Box %d panel %d' % (b, i), (1, 1, 1), TM, bevel=0.0, seg=1); p.parent = root; p['v'] = TILES[(r, c)]['v']; p.color = panel_color(p['v'], 'data' if b < 10 else 'spare'); pans.append(p)
     fl = W.box('Box %d floor' % b, (BOXW, BOXW, 0.04), floor_m); fl.parent = root; fl.location = (0, 0, 0.02)
     hinge = W.link(O.new('Box %d hinge' % b, None)); hinge.parent = root; hinge.location = (BOXW / 2, 0, WALL_H); hinge.rotation_euler = (0, 0, math.radians(-90))   # 蝶番は右（奥）。ふたは左（まるロボの側）が持ち上がる
-    lid = W.box('Box %d lid' % b, (BOXW + 0.05, BOXW + 0.05, 0.08), lid_m, bevel=0.02); lid.parent = hinge; lid.location = (0, -(BOXW + 0.05) / 2, 0.04)
+    lid = W.box('Box %d lid' % b, (BOXW + 0.05, BOXW + 0.05, 0.08), lid_m if b < 10 else lid_s, bevel=0.02); lid.parent = hinge; lid.location = (0, -(BOXW + 0.05) / 2, 0.04)
     BX[b] = dict(root=root, pans=pans, floor=fl, hinge=hinge, lid=lid)
 def pose_panels(b, u, f):
     B = BX[b]; c = CEN[b]
@@ -121,7 +124,7 @@ def head_top(f):
     psi = f['psi']; Rr = Matrix.Rotation(psi, 3, 'Z') @ Matrix.Rotation(math.radians(-f['pitch']), 3, 'X')
     c = Vector(f['root']) + Vector((0, 0, mm.TORSO_Z)); return c + Rr @ Vector((0, -0.02, 0.50)), psi, math.radians(-f['pitch'])
 ROWZ = CP.QZ_TOP - 0.01
-for b in range(1, 10):
+for b in list(range(1, 10)) + SPARE:
     pose_panels(b, 0.0, 1); key_root(b, 1, (CEN[b].x, CEN[b].y, Z0))
 # 1：通った 8 マスが起き上がって箱に（18-03）→ 早回しで右の白いフチの 1 番目へ
 for f in range(fr_of(CP.T_FOLD1[0]) - 1, fr_of(CP.T_FOLD1[1]) + 2): pose_panels(1, min(1.0, max(0.0, ((f - 1) / FPS - CP.T_FOLD1[0]) / (CP.T_FOLD1[1] - CP.T_FOLD1[0]))), f)
@@ -147,17 +150,22 @@ bits = format(SYM['box_bytes'][0], '08b'); c0 = Vector((*CP.C0R, ROWZ))
 gl = W.box('Glow', (1.2, 1.2, 0.05), W.mat_emit('Glow m', W.srgb('#9CC8FF'), 5.0)); gl.location = c0 + Vector((0, 0, 0.4)); show(gl, [(T_OPEN + 0.2, 9e3)])
 bm = {'1': W.mat('bit black', W.srgb(QW.COL['black']), rough=0.5), '0': W.mat_emit('bit white', W.srgb('#E9EEF2'), 1.2)}
 G6_SPANS = [(CP.T_BITS, CP.shot_start('G7', 50.0)), (CP.shot_start('G6', 75.0), CP.shot_start('c3_alnum'))]
+BITS_OBJ = []
 for k, bch in enumerate(bits):
-    pl = W.box('bit %d' % k, (0.54, 0.06, 0.66), bm[bch]); x = c0.x - 3.5 * 0.62 + k * 0.62; ta = CP.T_BITS + 0.12 * k
+    pl = W.box('bit %d' % k, (0.54, 0.06, 0.66), bm[bch]); BITS_OBJ.append(pl); x = c0.x - 3.5 * 0.62 + k * 0.62; ta = CP.T_BITS + 0.12 * k
     for t, loc in ((ta, (c0.x, c0.y, 0.5)), (ta + 0.7, (x, c0.y + 0.2, 2.35))): pl.location = loc; pl.keyframe_insert('location', frame=fr_of(t))
     show(pl, [(ta, G6_SPANS[0][1]), G6_SPANS[1]])
-# 20-02：予備の 17 個（橙のマス）がゆっくり光る
-gm = W.mat_emit('spare glow', W.srgb('#FFE2B0'), 6.0)
-for (r, c) in QW.cells_of(Wd, 'spare'):
-    g = W.box('sg %d-%d' % (r, c), (MOD * 0.7, MOD * 0.7, 0.06), gm); x, y = rc(r, c); g.location = (x, y, QW.TILE_H + 0.12); g.visible_shadow = False
-    for k in range(6):
-        t = CP.T_SPARE + 1.0 * k; g.scale = (0.6, 0.6, 1); g.keyframe_insert('scale', frame=fr_of(t)); g.scale = (1.0, 1.0, 1); g.keyframe_insert('scale', frame=fr_of(t + 0.5))
-    show(g, [(CP.T_SPARE, 9e3)])
+# 20-02：予備の 17 個が、1 つずつ箱に起き上がって、ふたの上が光る（v12 #54：マスではなく箱で 17 個。数えられる速さで）
+gm = W.mat_emit('spare glow', W.srgb('#FFD29A'), 5.0)
+cam_xy = Vector((CP.ROW_X + 6.5, CP.row_pos(4)[1] - 5.0, 0))
+for k, b in enumerate(sorted(SPARE, key=lambda b: (CEN[b] - cam_xy).length)):      # 手前（カメラに近い方）から順に
+    ta = CP.T_SPARE + 0.2 * k; FOLD = 0.9
+    for f in range(fr_of(ta) - 1, fr_of(ta + FOLD) + 2): pose_panels(b, min(1.0, max(0.0, ((f - 1) / FPS - ta) / FOLD)), f)
+    for rc_ in CP.BOX_CELLS[b]: tl = TILES[rc_]; color_at(ta, tl, (*QW.color_for(tl['v'], 'spare')[:3], 0.22), 0.2)
+    g = W.box('sg box %d' % b, (BOXW * 0.86, BOXW * 0.86, 0.05), gm, bevel=0.1); g.location = (CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.16); g.visible_shadow = False
+    tg = ta + FOLD
+    for j in range(8): g.scale = (0.75, 0.75, 1); g.keyframe_insert('scale', frame=fr_of(tg + 1.0 * j)); g.scale = (1.0, 1.0, 1); g.keyframe_insert('scale', frame=fr_of(tg + 1.0 * j + 0.5))
+    show(g, [(tg, 9e3)])
 bake_colors()
 
 # ================================================================ まるロボ
@@ -192,7 +200,7 @@ VIEWS = {
     'G3a': (c0v + C(5.2, -6.8, 3.4), c0v + C(0.6, 0.6, 0.6), 30), 'G3': (c0v + C(5.2, -6.8, 3.4), c0v + C(0.6, 0.6, 0.6), 30),
     'G4': (C(X + 5.0, rp(0)[1] - 6.0, 3.0), C(X - 0.6, rp(2)[1], 0.8), 26),
     'G5': (C(X + 6.5, rp(0)[1] - 7.5, 5.0), C(X - 1.0, rp(5)[1], 0.4), 22),
-    'G6a': (r0 + C(1.2, -5.4, 2.4), r0 + C(-0.2, 0.2, 1.3), 30), 'G6': (r0 + C(1.2, -5.4, 2.4), r0 + C(-0.2, 0.2, 1.3), 30),
+    'G6a': (r0 + C(0.45, -5.9, 2.5), r0 + C(-0.3, 0.2, 1.45), 30), 'G6': (r0 + C(0.45, -5.9, 2.5), r0 + C(-0.3, 0.2, 1.45), 30),   # v12 #46：板がほぼ正面に並ぶ（2D の数字を板の下にそろえる）
     'G7': (C(X - 6.0, rp(0)[1] - 6.0, 1.6), C(X + 1.0, rp(5)[1], 3.6), 22),
     'G8': (C(X + 6.5, rp(4)[1] - 5.0, 4.6), C(*rc(9, 9), 0.0), 20), 'G9': (C(X + 6.5, rp(4)[1] - 5.0, 4.6), C(*rc(9, 9), 0.0), 20),
 }
@@ -212,6 +220,19 @@ if A.save: bpy.ops.wm.save_as_mainfile(filepath=A.save)
 def cam_at(f):
     for m in sorted(sc.timeline_markers, key=lambda m: m.frame):
         if m.frame <= f: sc.camera = m.camera
+if A.probe:                                              # 組み立ての 2D の数字を、板の真下に置くための位置（画面の左上 0,0・右下 1,1）
+    from bpy_extras.object_utils import world_to_camera_view
+    out = {}
+    for a_, b_ in G6_SPANS:
+        for f in range(fr_of(a_), fr_of(b_) + 1):
+            sc.frame_set(f); cam_at(f); row = []
+            for pl in BITS_OBJ:
+                c = pl.matrix_world.translation; bot = c - Vector((0, 0, 0.33)); top = c + Vector((0, 0, 0.33))
+                pc = world_to_camera_view(sc, sc.camera, c); pb = world_to_camera_view(sc, sc.camera, bot); pt = world_to_camera_view(sc, sc.camera, top)
+                row.append([round(pc.x, 4), round(1 - pc.y, 4), round(1 - pb.y, 4), round(1 - pt.y, 4)])
+            out[f] = row
+    json.dump(dict(fps=FPS, note='frame -> 8 plates [x, y_center, y_bottom, y_top] (0..1, top-left origin)', pos=out), open(A.probe, 'w'))
+    print('PROBE', A.probe, len(out)); sys.exit(0)
 if A.still:
     for f in [int(x) for x in A.still.split(',')]:
         sc.frame_set(f); cam_at(f); sc.render.filepath = os.path.join(A.out, 'w3_%04d.png' % f); bpy.ops.render.render(write_still=True)

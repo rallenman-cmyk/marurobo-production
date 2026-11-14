@@ -137,9 +137,13 @@ for k, key in enumerate(CP.BEAM_ORDER):
 
 # ================================================================ 8マスずつのまとまり：読む順に、1つずつ光って消える → 箱 14 だけ光ったまま
 order = [b for b in AS['read_order']] if 'read_order' in AS and isinstance(AS['read_order'][0], int) else list(range(1, 27))
+GRP_COL = (W.srgb('#7FE3F0'), W.srgb('#FFD27A'))                # v12 #4：まとまりが見えるよう 2 色を交互に。言い終わるまで光ったまま
 for k, b in enumerate(order):
-    ta = V[7][0] + 0.5 + k * 0.11
-    tile_state(BOXES[b], 'restored', ta, ramp=0.08); tile_state(BOXES[b], None, ta + 0.45, ramp=0.25)
+    ta = V[7][0] + 0.4 + k * 0.17
+    for rc in BOXES[b]:
+        tl = TILES[tuple(rc)]; base = QW.color_for(tl['v'], None)
+        color_at(ta, tl, (*QW.mixc(base[:3], GRP_COL[k % 2], 0.55 if not tl['v'] else 0.42), 1.0), 0.12)
+        color_at(V[8][0] - 0.1, tl, base, 0.4)
 tile_state(BOXES[CP.FOLD_B], 'restored', V[8][0] + 0.3, ramp=0.3)
 
 # ================================================================ 箱：8枚の板（マスの白黒のまま）＋床＋ふた。箱ごとに根元の空の物（BoxRoot）
@@ -263,9 +267,16 @@ t_open8 = T_OPEN_DATA; lid_move(CP.OPEN_DATA, t_open8, 0, 112, 0.35)
 _tb = MK['beam8']; _f = frame_at(_tb + 0.15); _e0 = eye_pos(_f); _e1 = Vector((CEN[CP.OPEN_DATA].x, CEN[CP.OPEN_DATA].y, Z0 + WALL_H + 0.1)); _dv = _e1 - _e0
 bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.07, depth=1.0, location=(0, 0, 0.5)); b8 = bpy.context.object; b8.name = 'Eye beam box8'
 bpy.ops.object.transform_apply(location=True); b8.data.materials.append(bmat); b8.visible_shadow = False; b8.location = _e0; b8.rotation_euler = _dv.to_track_quat('Z', 'Y').to_euler()
-for ff in range(fr_of(_tb) - 1, fr_of(_tb + 0.35) + 1):
-    u = min(1.0, max(0.0, ((ff - 1) / FPS - _tb) / 0.3)); b8.scale = (1, 1, max(0.001, _dv.length * u)); b8.keyframe_insert('scale', frame=ff)
-for ff, h in ((1, True), (fr_of(_tb), False), (fr_of(t_open8 + 0.7), True)): b8.hide_render = h; b8.keyframe_insert('hide_render', frame=ff)
+_ts = _tb - 1.1                                                     # v12 #7：向きを変えながら光でなでて探す → 箱 8 で止まる
+for ff in range(fr_of(_ts) - 1, fr_of(_tb + 0.35) + 1):
+    t_ = (ff - 1) / FPS; fr_ = frame_at(t_); e0 = eye_pos(fr_); c_, R_ = torso_frame(fr_)
+    if t_ < _tb:
+        fwd = (e0 - c_); fwd.z = 0; fwd = fwd.normalized() if fwd.length > 1e-6 else Vector((0, 1, 0)); L_ = min(_dv.length, 3.0 + 6.0 * min(1, (t_ - _ts) / 0.5))
+        d_ = fwd * L_ + Vector((0, 0, -0.6))
+    else: d_ = _e1 - e0
+    b8.location = e0; b8.rotation_euler = d_.to_track_quat('Z', 'Y').to_euler(); b8.scale = (1, 1, max(0.001, d_.length))
+    b8.keyframe_insert('location', frame=ff); b8.keyframe_insert('rotation_euler', frame=ff); b8.keyframe_insert('scale', frame=ff)
+for ff, h in ((1, True), (fr_of(_ts), False), (fr_of(t_open8 + 0.7), True)): b8.hide_render = h; b8.keyframe_insert('hide_render', frame=ff)
 t_open20 = MK['open20'] + 0.22; lid_move(CP.OPEN_SPARE, t_open20, 0, 112, 0.35); lid_move(CP.OPEN_SPARE, T_BLUE - 0.6, 112, 0, 0.4)
 lid_move(CP.OPEN_DATA, V[16][0] + 0.5, 112, 0, 0.4)
 for b in BOXES:
@@ -288,8 +299,7 @@ others = sorted([b for b in DATA if b != CP.OPEN_DATA], key=lambda b: (CEN[b] - 
 for k, b in enumerate(others):
     ta = T_SPREAD[0] + (T_SPREAD[1] - T_SPREAD[0]) * k / (len(others) - 1)
     glow_at(b, ta, (*BLUE[:3], 0.9), 0.12); glow_at(b, ta + 0.5, OFF, 0.5); box_state(b, 'data', ta)
-    # ふたが一瞬ぽんと浮く
-    lid_move(b, ta - 0.02, 0, 18, 0.12); lid_move(b, ta + 0.18, 18, 0, 0.2)
+    # v12 #7：ほかの箱のふたは開けない（光が届いて青くなるだけ）
     BX[b]['glow'].location.z = WALL_H + 0.12
 glow_at(CP.OPEN_DATA, V[16][0] + 0.6, OFF, 0.4)
 for b in DATA: glow_at(b, T_BOX9, (*BLUE[:3], 0.85), 0.12); glow_at(b, T_BOX9 + 0.7, OFF, 0.5)     # 「箱の数は…」：9 個の箱がぱっと光る
@@ -352,7 +362,7 @@ if FONT:
         for ob in (num, card): ob.hide_render = h; ob.keyframe_insert('hide_render', frame=f)
 # 中身の 9 個の箱から予備の箱へ、細い光の線（計算して作った数字だと分かるように）
 lm9 = W.mat_emit('Calc line', W.srgb('#9CC8FF'), 2.5)
-for k, b in enumerate(DATA):
+for k, b in []:                                                      # v12 #11：線はやめた（下の光の玉に）
     a_ = Vector((CEN[b].x, CEN[b].y, Z0 + WALL_H + 0.2)); b_ = Vector((CEN[CP.OPEN_SPARE].x, CEN[CP.OPEN_SPARE].y, Z0 + WALL_H + 0.6)); dv = b_ - a_
     bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.05, depth=1.0, location=(0, 0, 0.5)); ln = bpy.context.object; ln.name = 'Calc line %d' % b
     bpy.ops.object.transform_apply(location=True); ln.data.materials.append(lm9); ln.visible_shadow = False; ln.location = a_; ln.rotation_euler = dv.to_track_quat('Z', 'Y').to_euler()
@@ -360,6 +370,20 @@ for k, b in enumerate(DATA):
     for f in range(fr_of(t0) - 1, fr_of(t0 + 0.7) + 1):
         u = min(1.0, max(0.0, ((f - 1) / FPS - t0) / 0.6)); ln.scale = (1, 1, max(0.001, dv.length * ease(u))); ln.keyframe_insert('scale', frame=f)
     for f, h in ((1, True), (fr_of(t0), False), (fr_of(T_NUMBER + 2.4), True)): ln.hide_render = h; ln.keyframe_insert('hide_render', frame=f)
+
+# v12 #11：中身の 9 個の箱から、光の玉が予備の箱 20 へ順に流れ込む（「文字の箱をもとに計算した数字」）。着くたびに箱 20 が橙に光る
+om20 = W.mat_emit('Orb20', W.srgb('#9CC8FF'), 8.0); c20 = CEN[CP.OPEN_SPARE]
+TRAVEL = 0.95                                                      # 試し描きで玉が小さく見えにくかった → 大きく・ゆっくり・尾（遅れて追う小さな玉 3 つ）
+for k, b in enumerate(DATA):
+    t0 = T_NUMBER - 2.0 + 0.16 * k; src = CEN[b]
+    glow_at(b, t0 - 0.05, (*W.srgb('#9CC8FF'), 0.85), 0.08); glow_at(b, t0 + 0.5, OFF, 0.4)     # 玉が出る箱がぱっと光る
+    for j, (sz, lag) in enumerate(((0.62, 0.0), (0.42, 0.05), (0.30, 0.10), (0.20, 0.15))):
+        orb = W.box('Orb to 20 %d %d' % (b, j), (sz, sz, sz), om20, bevel=sz / 2, seg=4); orb.visible_shadow = False
+        for f in range(fr_of(t0 + lag), fr_of(t0 + lag + TRAVEL) + 1):
+            u = min(1, max(0, ((f - 1) / FPS - t0 - lag) / TRAVEL))
+            orb.location = Vector((src.x, src.y, Z0 + 1.0)).lerp(Vector((c20.x, c20.y, Z0 + 0.8)), ease(u)) + Vector((0, 0, 2.8 * math.sin(math.pi * u))); orb.keyframe_insert('location', frame=f)
+        for f, h in ((1, True), (fr_of(t0 + lag), False), (fr_of(t0 + lag + TRAVEL) + 1, True)): orb.hide_render = h; orb.keyframe_insert('hide_render', frame=f)
+glow_at(CP.OPEN_SPARE, T_NUMBER - 0.9, (*W.srgb('#F0953A'), 0.9), 0.4); glow_at(CP.OPEN_SPARE, T_NUMBER + 2.6, OFF, 0.6)
 # ---------------------------------------------------------------- 予備の箱 20：開けると空っぽ（「予備」で中がうすく橙に）
 ORG = (*W.srgb('#F0953A'), 1.0)
 glow_at(CP.OPEN_SPARE, V[23][0] + 3.6, (*ORG[:3], 0.55), 0.5); glow_at(CP.OPEN_SPARE, T_BLUE - 0.6, OFF, 0.4)
@@ -430,7 +454,7 @@ VIEWS = {
 TE = T_TABLE_END
 SHOTS_W = [(TE, T_LAND + 0.7, 'dive', 0, 0), (T_LAND + 0.7, V[2.5][0] + 0.2, 'land', 0.0, 0.04), (V[2.5][0] + 0.2, V[3][0], 'tile', 0.0, 0.06), (V[3][0], T_BEAM[0] - 1.2, 'top', 0.0, 0.04),
            (T_BEAM[0] - 1.2, T_BEAM[2] + 1.2, 'beam', 0.0, 0.05), (T_BEAM[2] + 1.2, V[6][0], 'top2', 0.0, 0.03), (V[6][0], V[7][0], 'look', 0.0, 0.08),
-           (V[7][0], V[8][0] + 0.3, 'groups', 0.0, 0.04), (V[8][0] + 0.3, T_CARRY[0] - 0.4, 'fold', 0.0, 0.10), (T_CARRY[0] - 0.4, T_WAVE0, 'carry', 0.0, 0.06),
+           (V[7][0], V[8][0] + 0.3, 'groups', 0.0, 0.04), (V[8][0] + 0.3, MK['catch'] + 0.6, 'fold', 0.0, 0.10), (MK['catch'] + 0.6, T_WAVE0, 'carry', 0.0, 0.06),     # v12 #5：跳び乗るのを引きで見せてから
            (T_WAVE0, T_WAVE0 + 1.0, 'wave', 0.0, 0.03), (T_WAVE0 + 1.0, V[12][0] + 0.6, 'wave2', 0.0, 0.06), (V[12][0] + 0.6, T_PEEK[0] - 0.8, 'peek0', 0.0, 0.06), (T_PEEK[0] - 0.8, t_open8 + 0.45, 'row', 0.0, 0.07),
            (t_open8 + 0.45, T_SPREAD[0] + 0.1, 'open', 0.0, 0.05), (T_SPREAD[0] + 0.1, V[16][0], 'hello', 0.0, 0.05), (V[16][0], V[19][0], 'high', 0.0, 0.05),
            (V[19][0], V[21][0], 'shadow', 0.0, 0.08), (V[21][0], t_open20 - 1.0, 'follow', 0, 0), (t_open20 - 1.0, T_NUMBER - 1.0, 'spare', 0.0, 0.06), (T_NUMBER - 1.0, T_BLUE - 0.8, 'number', 0.0, 0.05),

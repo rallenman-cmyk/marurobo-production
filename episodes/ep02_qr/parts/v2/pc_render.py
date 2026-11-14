@@ -24,7 +24,7 @@ def own_prefix(tag, k, t):
     return None
 # よその章の絵（使い回し）：絵コンテの置き場所（chapters.py の IMG）で決まる
 HOME = {'opening/sb2': 'op', 'ch1/sb': 'c1', 'ch2/sb': 'c2', 'ch3/sb': 'c3', 'ch4/sb': 'c4', 'c5/sb': 'c5'}
-ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30')}   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
+ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30'), ('c1', 'K14top'): ('c5', 'W30', 0.4)}   # K14top：1章で「箱が9個に、予備が17個」を上から（5章の上からの 3D、しずくが落ちる前）   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
 # ---------------------------------------------------------------- 描画のファイル
 class Src:
     """頭の名前ごとの mp4 のかたまり（コマの範囲 → ファイル）。読むのは ffmpeg で順に（飛んだら開き直す）"""
@@ -54,11 +54,14 @@ class Src:
             s.cur['last'] = buf; s.cur['next'] += 1
         if s.cur['last'] is None: return None
         return Image.frombuffer('RGB', size, s.cur['last'], 'raw', 'RGB', 0, 1).copy()
+# v12：直した所だけ新しい頭の名前で描き直す。新しい描画にそのコマがあればそれを、無ければ前の描画を使う（前の → 新しい の順に上書き）
+NEWER = {'qrc1w5_': 'qrc1w6_', 'qrc2w_': 'qrc2w2_', 'qrc2t_': 'qrc2t2_', 'qrc3w_': 'qrc3w2_', 'qrc4c_': 'qrc4c2_', 'qrc4w_': 'qrc4w2_'}
 class PC:
     def __init__(s, size=(1920, 1080)):
         s.size = size; s.srcs = {}; s.missing = {}; s.used = {}
         s.folders = {'qrop4_': 'qrop4', 'qrc1t2_': 'qrc1', 'qrc1w5_': 'qrc1', 'qrc1s2_': 'qrc1', 'qrc2w_': 'qrc2', 'qrc2t_': 'qrc2', 'qrc3w_': 'qrc3',
-                     'qrc4c_': 'qrc4', 'qrc4f_': 'qrc4', 'qrc4w_': 'qrc4', 'qrc5w_': 'qrc5'}
+                     'qrc4c_': 'qrc4', 'qrc4f_': 'qrc4', 'qrc4w_': 'qrc4', 'qrc5w_': 'qrc5',
+                     'qrc1w6_': 'qrc1v12', 'qrc2w2_': 'qrc2v12', 'qrc2t2_': 'qrc2v12', 'qrc3w2_': 'qrc3v12', 'qrc4c2_': 'qrc4v12', 'qrc4w2_': 'qrc4v12'}   # v12 の描き直し（ドライブの別のフォルダ）
     def src(s, prefix):
         if prefix not in s.srcs: s.srcs[prefix] = Src(os.path.join(ROOT, s.folders[prefix]), prefix)
         return s.srcs[prefix]
@@ -68,16 +71,18 @@ class PC:
         """章 tag の t 秒（絵 k、区間 a〜b）の 3D の絵。無ければ None。使い回しなら (絵, True)"""
         reuse = False; src_tag, src_k, tt = tag, k, t
         home = chapters.home_of(tag, k)
-        if (tag, k) in ALIAS: src_tag, src_k = ALIAS[(tag, k)]
+        hold = None
+        if (tag, k) in ALIAS: src_tag, src_k = ALIAS[(tag, k)][:2]; hold = ALIAS[(tag, k)][2] if len(ALIAS[(tag, k)]) > 2 else None
         elif home and home != tag and not (tag == 'c1' and k == 'S10_low'): src_tag, src_k = home, k
         if src_tag != tag:
             reuse = True; sa, sb = chapters.first_span(src_tag, src_k)
             if sa is None: return None, reuse
-            tt = min(sa + (t - a), sb - 1.0 / FPS)
+            tt = min(sa + (t - a), sb - 1.0 / FPS) if hold is None else sa + hold      # hold：その場面の 1 コマを止めて使う
         pre = own_prefix(src_tag, src_k, tt)
         if pre is None: return None, reuse
         f = fr_of(tt)
         if pre == 'qrc1s2_': f = fr_of(tt - chapters.c1_scan0())
+        if pre in NEWER and s.src(NEWER[pre]).has(f): pre = NEWER[pre]          # v12：描き直した所
         sr = s.src(pre); f = next((g for g in (f, f - 1, f + 1, f - 2, f + 2) if sr.has(g)), f)   # 区切りの端の 1〜2 コマは隣で
         im = sr.get(f, s.size) if sr.has(f) else None
         key = (tag, k, pre); s.last = (pre, f)

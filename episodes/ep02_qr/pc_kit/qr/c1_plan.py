@@ -127,7 +127,12 @@ def world_plan():
     at(p, T_NUMBER, lambda q: q.look(0, 26, hold=2.2, body=True, label='浮かんだ数字を見上げる'), name='number')
     at(p, VX['07-04.3b'][0] + 0.6, lambda q: q.nod(n=1, amp=10.0, label='確かめ：うなずく'), name='nod_check')
     at(p, VX['07-04.5'][0] + 0.1, lambda q: q.look(0, 14, hold=1.0, body=False, label='「それだけではありません」で顔を上げる'), name='look_more')
-    at(p, V[23.5][0] + 1.0, lambda q: q.nod(n=2, amp=8.0, label='うなずく'), name='nod_spare')
+    # v12 #12（07-04.5b〜c で動きがない）：青い箱 8 の方を向いて心配 →「大丈夫」で跳ねる → 予備の箱 20 へ向き直って示す → 考えて、ひらめく
+    at(p, V[23.5][0] + 0.2, lambda q: q.turn_to(toward=box_c(OPEN_DATA), step=0.24, gap=0.03, label='文字の入った青い箱を見る'), name='see8')
+    at(p, V[23.5][0] + 2.2, lambda q: q.shake(amp=10.0, label='汚れて読めなくなったら…'), name='worry')
+    at(p, V[23.5][0] + 4.1, lambda q: q.hops(n=1, label='大丈夫'), name='okay')
+    at(p, VX['07-04.5c'][0] + 0.1, lambda q: (q.turn_to(toward=C20, step=0.24, gap=0.03, label='予備の箱20へ向き直る'), q.look(0, -12, hold=0.5, label='この数字（予備の箱）を見る')), name='show20')
+    at(p, VX['07-04.5c'][0] + 2.3, lambda q: q.think(dur=1.7, label='計算で割り出す → ひらめく'), name='calc')
     # 「どうやって取り戻す？」→「見つける」：左上の目印へ走る（2章へ）
     at(p, V[26][0] + 0.8, lambda q: q.think(dur=2.4, label='考える'), name='think')
     at(p, VX['09-02c'][0] + 0.5, lambda q: q.nod(n=2, amp=8.0, label='一緒に紐解こう：うなずく'), name='nod_go')
