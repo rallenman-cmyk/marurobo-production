@@ -63,6 +63,19 @@ for p in P:
     x *= 10 ** (-20 / 20) / r
     i = int(p["start"] * sr)
     mix[i:i + len(x)] += x[:len(mix) - i]
+# BGM（v8：ユーザー「なんで BGM ないの」→ 3 本目と同じ B・C・D を場面で切り替え。BGM=0 で入れない）
+if os.environ.get("BGM", "1") != "0":
+    sys.path.insert(0, os.path.join(HERE, "..", "bgm"))
+    import bgm_bus
+    SCST = {}
+    for p in P: SCST.setdefault(L[p["no"]]["scene"], p["start"])
+    music = bgm_bus.make(END, SCST, sr, W)[:len(mix)]
+    # 声が出ている間は 6 dB 下げる（0.15 秒で下げ、0.4 秒で戻す）
+    on = np.zeros(len(mix), np.float32)
+    for p in P: on[int(p["start"] * sr):int(p["end"] * sr)] = 1
+    g = np.where(on > 0, 10 ** (-6 / 20), 1.0).astype(np.float32)
+    k = int(0.4 * sr); g = np.convolve(np.pad(g, (k, k), mode="edge"), np.ones(k) / k, mode="same")[k:-k]
+    mix[:len(music)] += music * g[:len(music)]
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 with wave.open(tmp + "/voice.wav", "wb") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes((mix * 32767).astype(np.int16).tobytes())
