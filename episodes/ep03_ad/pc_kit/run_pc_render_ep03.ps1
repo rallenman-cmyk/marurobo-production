@@ -103,7 +103,7 @@ function Run-Jobs {
     Note ("{0}：{1}〜{2} コマ目を描いています" -f $key, $a, $b)
     $t0 = Get-Date
     $blog = Join-Path $out ("blender_log{0}.txt" -f $Worker)
-    $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $anim $py), "--", $key, $out, "$Samples", "--res", "1920", "1080", "--frames", "$a", "$b", "--gpu", "--video")
+    $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $anim $py), "--", $key, $out, "$Samples", "--res", "1920", "1080", "--frames", "$a", "$b", "--gpu", "--video", "--fast")
     & $blender @argv *>> $blog
     $code = $LASTEXITCODE; $dt = (Get-Date) - $t0
     if ($code -eq 0 -and (Test-Path $mp4) -and ((Get-Item $mp4).Length -gt 10000)) {

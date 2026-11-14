@@ -356,7 +356,7 @@ sc.render.engine = 'CYCLES'
 sc.cycles.samples = N_SAMPLES
 sc.cycles.use_denoising = True
 sc.render.use_persistent_data = True  # コマごとに舞台を組み直さない（速くなる）
-if "--fast" in ARGS:  # 試し描き用：光の跳ね返りを減らす（本番の PC では使わない）
+if "--fast" in ARGS:  # 光の跳ね返りを減らす。見た目はほぼ同じで 1.5〜2 倍速い（2026-11-14 ユーザー「速くするやり方ないの」→ 本番の PC でも使う）
     c = sc.cycles
     c.max_bounces, c.diffuse_bounces, c.glossy_bounces, c.transmission_bounces, c.transparent_max_bounces = 3, 1, 1, 2, 4
     c.caustics_reflective = c.caustics_refractive = False
