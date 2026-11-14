@@ -24,7 +24,7 @@ def own_prefix(tag, k, t):
     return None
 # よその章の絵（使い回し）：絵コンテの置き場所（chapters.py の IMG）で決まる
 HOME = {'opening/sb2': 'op', 'ch1/sb': 'c1', 'ch2/sb': 'c2', 'ch3/sb': 'c3', 'ch4/sb': 'c4', 'c5/sb': 'c5'}
-ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30'), ('c1', 'K14top'): ('c5', 'W30', 0.4)}   # K14top：1章で「箱が9個に、予備が17個」を上から（5章の上からの 3D、しずくが落ちる前）   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
+ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30', 12.0), ('c1', 'K14top'): ('c5', 'W30', 0.4)}   # K14top：1章で「箱が9個に、予備が17個」を上から（5章の上からの 3D、しずくが落ちる前）   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
 # ---------------------------------------------------------------- 描画のファイル
 class Src:
     """頭の名前ごとの mp4 のかたまり（コマの範囲 → ファイル）。読むのは ffmpeg で順に（飛んだら開き直す）"""
@@ -74,7 +74,7 @@ class PC:
         hold = None
         if (tag, k) in ALIAS: src_tag, src_k = ALIAS[(tag, k)][:2]; hold = ALIAS[(tag, k)][2] if len(ALIAS[(tag, k)]) > 2 else None
         elif home and home != tag and not (tag == 'c1' and k == 'S10_low'): src_tag, src_k = home, k
-        if src_tag != tag:
+        if src_tag != tag or src_k != k:                                        # 同じ章の中の使い回し（5章 W30b → W30）も時刻を移す
             reuse = True; sa, sb = chapters.first_span(src_tag, src_k)
             if sa is None: return None, reuse
             tt = min(sa + (t - a), sb - 1.0 / FPS) if hold is None else sa + hold      # hold：その場面の 1 コマを止めて使う
