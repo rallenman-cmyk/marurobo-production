@@ -11,6 +11,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 EP03 = os.path.join(HERE, "..", "..", "ep03_ad", "storyboard")
 _a = sys.argv[sys.argv.index("--") + 1:]
 TEX = _a[_a.index("--tex") + 1] if "--tex" in _a else os.path.join(HERE, "tex")
+RICH = "--rich" in _a                                      # 舞台を作り込んだ版（rich.py）
+_a = [x for x in _a if x != "--rich"]
 sys.argv = [sys.argv[0], "--"] + [x for i, x in enumerate(_a) if x != "--tex" and (i == 0 or _a[i - 1] != "--tex")]
 _src = open(os.path.join(EP03, "scenes.py"), encoding="utf-8").read()
 exec(_src.split("# ---------------- 場面\n")[0])          # mat・sphere・cyl・cube・plane・maru・world・area・spot・camera・ground（SCENE, OUT, SAMPLES もここで決まる）
@@ -310,9 +312,14 @@ def b23l(): room_shot("scr_check", maru_loc=(0.55, 0.15, 0.75), face=-10, look=-
 def b23r(): room_shot("scr_check", maru_loc=(0.68, 0.18, 0.75), face=-30, look=-8, tilt=16, glow=0.3, mouse_loc=(0.5, 0.32, 0.75))
 
 
+if RICH:
+    exec(open(os.path.join(HERE, "rich.py"), encoding="utf-8").read())
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 globals()[SCENE]()
+if RICH and not sc.camera.data.dof.use_dof:
+    for k in ("maru", "book", "edge", "gate", "dog"):
+        if k in ANCH: focus_on(tuple(ANCH[k]), 4.0); break
 sc.render.engine = 'CYCLES'
 sc.cycles.samples = SAMPLES
 sc.cycles.use_denoising = True
