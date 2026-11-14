@@ -55,13 +55,13 @@ class Src:
         if s.cur['last'] is None: return None
         return Image.frombuffer('RGB', size, s.cur['last'], 'raw', 'RGB', 0, 1).copy()
 # v12：直した所だけ新しい頭の名前で描き直す。新しい描画にそのコマがあればそれを、無ければ前の描画を使う（前の → 新しい の順に上書き）
-NEWER = {'qrc1w5_': 'qrc1w6_', 'qrc2w_': 'qrc2w2_', 'qrc2t_': 'qrc2t2_', 'qrc3w_': 'qrc3w2_', 'qrc4c_': 'qrc4c2_', 'qrc4w_': 'qrc4w2_'}
+NEWER = {'qrc1w5_': 'qrc1w6_', 'qrc2w_': 'qrc2w2_', 'qrc2t_': 'qrc2t2_', 'qrc3w_': 'qrc3w2_', 'qrc4c_': 'qrc4c2_', 'qrc4w_': 'qrc4w2_', 'qrc4f_': 'qrc4f2_'}
 class PC:
     def __init__(s, size=(1920, 1080)):
         s.size = size; s.srcs = {}; s.missing = {}; s.used = {}
         s.folders = {'qrop4_': 'qrop4', 'qrc1t2_': 'qrc1', 'qrc1w5_': 'qrc1', 'qrc1s2_': 'qrc1', 'qrc2w_': 'qrc2', 'qrc2t_': 'qrc2', 'qrc3w_': 'qrc3',
                      'qrc4c_': 'qrc4', 'qrc4f_': 'qrc4', 'qrc4w_': 'qrc4', 'qrc5w_': 'qrc5',
-                     'qrc1w6_': 'qrc1v12', 'qrc2w2_': 'qrc2v12', 'qrc2t2_': 'qrc2v12', 'qrc3w2_': 'qrc3v12', 'qrc4c2_': 'qrc4v12', 'qrc4w2_': 'qrc4v12'}   # v12 の描き直し（ドライブの別のフォルダ）
+                     'qrc1w6_': 'qrc1v12', 'qrc2w2_': 'qrc2v12', 'qrc2t2_': 'qrc2v12', 'qrc3w2_': 'qrc3v12', 'qrc4c2_': 'qrc4v12', 'qrc4w2_': 'qrc4v12', 'qrc4f2_': 'qrc4v12'}   # v12 の描き直し（ドライブの別のフォルダ）
     def src(s, prefix):
         if prefix not in s.srcs: s.srcs[prefix] = Src(os.path.join(ROOT, s.folders[prefix]), prefix)
         return s.srcs[prefix]

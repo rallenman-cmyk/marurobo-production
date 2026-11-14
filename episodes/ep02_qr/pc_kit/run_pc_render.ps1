@@ -19,7 +19,7 @@
 #   同時に描くときは、描き手ごとに小さな窓（最小化）が開く。止めるときは、この窓と「まるロボ 描き手」の窓をぜんぶ閉じる
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
 #   終わると、送るファイルだけを C:\marurobo\marurobo_render にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
-#   2026-11-13 v24：既定は v12（動画レビュー v10 の 3D の直し）。直した所だけ新しい名前で描く：1章 qrc1w6_ 26 本・2章 qrc2w2_ 55 本＋卓上 qrc2t2_ 3 本・3章 qrc3w2_ 11 本・4章 数字の空間 qrc4c2_ 53 本＋中の世界 qrc4w2_ 17 本（合わせて 165 本）。まとめ先は qrc1v12〜qrc4v12
+#   2026-11-13 v24：既定は v12（動画レビュー v10 の 3D の直し）。直した所だけ新しい名前で描く：1章 qrc1w6_ 26 本・2章 qrc2w2_ 55 本＋卓上 qrc2t2_ 3 本・3章 qrc3w2_ 11 本・4章 数字の空間 qrc4c2_ 53 本＋中の世界 qrc4w2_ 17 本（合わせて 165 本）。v24b：4章の工場 qrc4f2_ 8 本を足した（合わせて 173 本）。まとめ先は qrc1v12〜qrc4v12
 param([string]$Only = "v12", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
 $ErrorActionPreference = "Continue"
 $tools = $PSScriptRoot
@@ -252,6 +252,9 @@ function Run-Jobs {
     foreach ($r in @(@(1146, 1319), @(1666, 3076), @(3655, 7234))) { Render-Chunks "v12 4章（数字の空間）" $r[1] $o "qrc4c2_" $a $r[0] }
     $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc4w2_")
     foreach ($r in @(@(1, 303), @(982, 1170), @(1295, 1448), @(9724, 10568))) { Render-Chunks "v12 4章（中の世界）" $r[1] $o "qrc4w2_" $a $r[0] }
+    # v24b：4章の工場（机の上の紙の QR がちらつく #56）。紙と QR の板が同じ高さで重なっていた → 浮かせて描き直す
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_factory.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc4f2_")
+    foreach ($r in @(,@(279, 1006))) { Render-Chunks "v12 4章（工場）" $r[1] $o "qrc4f2_" $a $r[0] }
   }
   if ($jobs -contains "qrc5") {
     $outc = Join-Path $root "render_qrc5"
@@ -314,7 +317,7 @@ if ($jobs -contains "v12") {
   $okc["qrc1v12"] = Collect "qrc1v12" @("$root\render_qrc1v12\qrc1w6_*.mp4", "$root\render_qrc1v12\qrc1w_log.json") 26
   $okc["qrc2v12"] = Collect "qrc2v12" @("$root\render_qrc2v12\qrc2w2_*.mp4", "$root\render_qrc2v12\qrc2t2_*.mp4", "$root\render_qrc2v12\qrc2w_log_*.json", "$root\render_qrc2v12\qrc2t_log_*.json") 58
   $okc["qrc3v12"] = Collect "qrc3v12" @("$root\render_qrc3v12\qrc3w2_*.mp4", "$root\render_qrc3v12\qrc3w_log_*.json") 11
-  $okc["qrc4v12"] = Collect "qrc4v12" @("$root\render_qrc4v12\qrc4*2_*.mp4", "$root\render_qrc4v12\qrc4*_log_*.json") 70
+  $okc["qrc4v12"] = Collect "qrc4v12" @("$root\render_qrc4v12\qrc4*2_*.mp4", "$root\render_qrc4v12\qrc4*_log_*.json") 78
 }
 if ($jobs -contains "ch06") { $okc["ch06"] = Collect "ch06" @("$root\render_ch06_1080\ch06_stage_*.mp4", "$root\render_ch06_1080\ch06_log.json") 20 }
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
