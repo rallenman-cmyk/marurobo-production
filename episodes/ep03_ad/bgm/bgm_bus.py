@@ -2,7 +2,7 @@
 #   B（30 秒の短い曲）：2.6 秒から 25.01 秒（40 拍・96 BPM）を継ぎ目なくくり返す。頭の 2.6 秒は最初の 1 回だけ
 #   C（抜き足差し足）：S10〜S12 データの箱・広告の売り場（にぎやかに調べる所）
 #   D（ジャズの探偵）：S07〜S08 スマホの中の門・見張り番を試す（はらはらする所）、S17〜S18 新しい容疑者・会社を調べる
-#   切り替えは場面の境目で 1.6 秒かけて入れかえる（境目の 0.8 秒前から 0.8 秒後）。最後は 3 秒で消える
+#   切り替えは場面の境目で、前の曲を 0.8 秒で消し、次の曲を 0.8 秒で入れる（重ねない。v4）。最後は 3 秒で消える
 #   曲の大きさは RMS でそろえる（声の下に入れる。声の間はさらに下げるのは組み立ての側）
 #   使い方：import bgm_bus; music = bgm_bus.make(END, SCST, sr)   SCST＝場面ごとの始まりの秒（assemble.py と同じ）
 #   曲の mp3 は review_page/bgm_b.mp3・bgm_c.mp3・bgm_d.mp3（git には入れない）
@@ -13,8 +13,8 @@ SRC = os.path.join(HERE, "..", "review_page")
 PLAN = [("B", "S00"), ("D", "S07"), ("B", "S09"), ("C", "S10"), ("B", "S13"), ("D", "S17"), ("B", "S19")]
 OFFSET = {("D", "S17"): 40.0}           # 2 回目の D は 40 秒目から（1 回目と同じ所を聞かせない）
 B_LOOP = (2.6, 25.01)
-XF = 1.6
-RMS = 0.030          # 声より 15 dB ほど下（声の間はさらに 6 dB 下げる）。QR回 v11 で「BGM を少し下げて」→ 3本目も 1.3 dB 下げた
+XF = 0.8          # 切り替わりの消える・入る長さ（重ねない）
+RMS = 0.024          # v4「BGM が大きい」（2:39）→ さらに 2 dB 下げた（声より約 17 dB 下。声の間はさらに 6 dB 下げる）
 
 
 def load(p, sr):
@@ -54,7 +54,7 @@ def make(END, SCST, sr):
     music = np.zeros(n, np.float32)
     starts = [SCST[s] for _, s in PLAN] + [END]
     for i, (k, sc) in enumerate(PLAN):
-        a = max(0.0, starts[i] - (XF / 2 if i else 0)); b = min(END, starts[i + 1] + XF / 2)
+        a = starts[i]; b = min(END, starts[i + 1])     # v4「BGM が 2 つ重なってる？」（12:28）→ 重ねずに、前の曲を消してから次の曲を入れる
         m = int((b - a) * sr)
         if k == "B":
             x = b_stream(m, sr, first=(i == 0))

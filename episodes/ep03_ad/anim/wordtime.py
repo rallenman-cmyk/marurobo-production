@@ -65,3 +65,32 @@ def rel(i, frag):
 def W(i, frag, o=0.0):
     """本編の秒：文 i で frag を言い始める時刻（＋ずらし o）"""
     return V[i]["start"] + rel(i, frag) + o
+
+
+def dump(path):
+    """PC の Blender でも言葉の時刻を使えるように、文ごとの「まとまり → 声の区間」を JSON に書く（声のファイルなしで W が出せる）"""
+    out = {}
+    for i, v in V.items():
+        rel(i, v["text"][:1])
+        out[i] = dict(text=v["text"], start=v["start"], end=v["end"], speed=v["speed"] or 1.0, wt=_WT[i])
+    json.dump(out, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+
+
+def load_table(path):
+    """dump した表から W を作る（Blender の中で使う）。返り値：W(i, frag, o=0.0)"""
+    tb = json.load(open(path, encoding="utf-8"))
+    def Wt(i, frag, o=0.0):
+        v = tb[i]; t = v["text"]; k = t.find(frag)
+        if k < 0: raise KeyError("%s に「%s」がない" % (i, frag))
+        sp = v["speed"]
+        if v["wt"] is None: return v["start"] + (v["end"] - v["start"]) * _ylen(t[:k]) / max(1, _ylen(t)) + o
+        ch, asg = v["wt"]
+        for (a, b), (g0, g1) in zip(ch, asg):
+            if a <= k < b: return v["start"] + (g0 + (g1 - g0) * _ylen(t[a:k]) / max(1, _ylen(t[a:b]))) / sp + o
+        return v["start"] + asg[-1][0] / sp + o
+    return Wt
+
+
+if __name__ == "__main__":
+    import sys
+    dump(sys.argv[1] if len(sys.argv) > 1 else os.path.join(VO, "word_times.json")); print("ok")

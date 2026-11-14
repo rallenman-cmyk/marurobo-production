@@ -16,7 +16,25 @@ for k, p in enumerate(P):
     nxt = P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.0
     end = min(max(p["end"] + 0.35, p["start"] + 1.0), nxt - 0.05)
     wav = os.path.join(V, "line_%03d.wav" % p["no"])
-    for a, c, t in SJ.events_v(p["start"], end, p["text"], wav=wav, speed=p.get("speed", 1.0)):
+    evl = SJ.events_v(p["start"], end, p["text"], wav=wav, speed=p.get("speed", 1.0))
+    if len(evl) > 1:
+        # v4「字幕の出るのが早い／遅い」（7:06・7:14・14:50）：切り替わりを、声の間のうち「長い間」と「文の終わり（。？！……）」を重く見て選び直す
+        #   字数の割合だけで選ぶと、「しずくの印の箱は、」の後の短い間で替わり、「いた場所」を言う前に次の文が出ていた
+        sil, dur = SJ.gaps(wav, p.get("speed", 1.0)); sil = [(g0, g1) for g0, g1 in sil if g1 - g0 >= 0.08]
+        L = [max(1, SJ._ylen(t)) for _, _, t in evl]; tot = sum(L)
+        talk = lambda x: x - sum(min(g1, x) - g0 for g0, g1 in sil if g0 < x)
+        vt = talk(dur); prev = 0.0; cuts = []
+        for k in range(len(evl) - 1):
+            tgt = vt * sum(L[:k + 1]) / tot
+            endp = evl[k][2].rstrip("」").endswith(("。", "？", "！", "……"))
+            cand = [(g0, g1) for g0, g1 in sil if prev + 0.4 <= g0 <= dur - 0.5 * (len(evl) - 1 - k)]
+            if not cand: cuts = None; break
+            g0, g1 = max(cand, key=lambda g: min(g[1] - g[0], 1.2) * (1.6 if endp else 1.0) - 0.5 * abs(talk(g[0]) - tgt))
+            cuts.append(g1 - 0.12); prev = g1
+        if cuts:
+            tt = [p["start"]] + [p["start"] + x for x in cuts] + [end]
+            evl = [(tt[k], tt[k + 1], evl[k][2]) for k in range(len(evl))]
+    for a, c, t in evl:
         # events_v で分けきれなかった「……答え」（ためが 3 字以下・声の間が短い）も、ここで必ず次の字幕に分ける
         flat = t.replace("\\N", "")
         k = flat.find("……")

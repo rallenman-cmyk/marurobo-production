@@ -60,23 +60,32 @@ def icon(d, k, x, y, s=1.0):
 
 
 def f03(t):
+    """v4「ここ表現わかりにくい」(0:52)：「話した物 → あとで → スマホの広告に同じ物」を 3 行の表で。1 行ずつ、話す → 時計 → 広告の順に出る"""
     im = Image.new("RGB", (W, H), (238, 244, 247)); d = ImageDraw.Draw(im)
-    d.ellipse([60, 100, 440, 400], fill="white", outline=NAVY, width=6)
-    d.polygon([(150, 380), (210, 380), (120, 470)], fill="white", outline=NAVY)
-    d.ellipse([110, 470, 210, 570], fill=(244, 210, 181)); d.pieslice([90, 540, 230, 700], 180, 360, fill=(62, 124, 177))
-    phone(im, 860, 50, 300, 560, NEWS)
-    starts = [s("03-02") + 0.2, s("03-02") + 1.4, s("03-02") + 2.6]
-    for k, (x0, y0) in enumerate(((150, 260), (250, 200), (340, 270))):
-        p = prog(t, starts[k], starts[k] + 1.0)
-        if p >= 1:
-            continue
-        x, y = x0 + (1010 - x0) * p, y0 + (300 - y0) * p - 120 * math.sin(math.pi * p)
-        icon(d, k, x, y, 1.0 - 0.3 * p)
-    shown = sum(t >= a + 1.0 for a in starts)
-    if shown:                                            # 届いた物の広告が画面に出る（最後はテント）
-        im.paste(AD.resize((272, 532)), (874, 64)) if shown >= 3 else None
-        if shown < 3:
-            d.rounded_rectangle([890, 360, 1130, 560], 18, fill=("#FFE3A3", "#BFE3F2")[shown - 1]); icon(d, shown - 1, 1010, 460, 1.4)
+    tag(d, "話した物", 250, 50); tag(d, "あとで出た広告", 960, 50)
+    starts = [s("03-01") + 0.6, WT("03-02", "話しただけ"), WT("03-02", "あとで")]
+    for k, t0 in enumerate(starts):
+        if t < t0: continue
+        y = 165 + k * 120; pa = prog(t, t0, t0 + 0.4)
+        # 話す人と吹き出し（中に物）
+        d.ellipse([60, y - 40, 120, y + 20], fill=(244, 210, 181)); d.pieslice([40, y + 15, 140, y + 95], 180, 360, fill=((62, 124, 177), (229, 140, 90), (90, 160, 150))[k])
+        d.rounded_rectangle([160, y - 50, 400, y + 40], 26, fill="white", outline=NAVY, width=4); d.polygon([(170, y + 10), (150, y + 25), (182, y + 30)], fill="white")
+        icon(d, k, 280, y - 5, 0.85 * pa + 0.15)
+        # あとで（矢印と時計）
+        pb = prog(t, t0 + 0.5, t0 + 1.1)
+        if pb > 0:
+            x1 = 450 + 260 * pb; d.line([(450, y), (x1, y)], fill=(242, 153, 58), width=12)
+            if pb >= 1:
+                d.polygon([(730, y), (700, y - 22), (700, y + 22)], fill=(242, 153, 58))
+                d.ellipse([560, y - 34, 628, y + 34], fill="white", outline=NAVY, width=4); d.line([(594, y), (594, y - 22)], fill=NAVY, width=5); d.line([(594, y), (612, y + 8)], fill=NAVY, width=5)
+        # スマホの広告に同じ物
+        pc = prog(t, t0 + 1.1, t0 + 1.5)
+        d.rounded_rectangle([760, y - 55, 1160, y + 55], 18, fill=(34, 38, 43)); d.rounded_rectangle([772, y - 45, 1148, y + 45], 12, fill="white")
+        for q in range(2): d.rectangle([790, y - 30 + q * 22, 900, y - 22 + q * 22], fill=(203, 211, 220))
+        if pc > 0:
+            d.rounded_rectangle([930, y - 40, 1140, y + 40], 12, fill=("#FFE3A3", "#BFE3F2", "#D7EFD0")[k]); icon(d, k, 1035, y - 2, 0.7 * pc + 0.1)
+    if t >= s("03-03"):
+        d.text((1180, 420), "!?", font=ImageFont.truetype(FONT, 72), fill=(229, 72, 77))
     return im
 
 
@@ -85,52 +94,99 @@ APPC = [(110, 140, 180), (90, 160, 150), (160, 130, 190), (190, 150, 110), (120,
 RED = {(1, 3), (3, 9), (2, 12)}
 
 
+def gate2d(d, cx, cy, sc=1.0, open_=0.0):
+    """門（2 本の柱と、上下する格子）。open_：0 閉じ・1 開き"""
+    d.rectangle([cx - 150 * sc, cy - 170 * sc, cx - 110 * sc, cy + 110 * sc], fill=(225, 228, 233), outline=NAVY, width=4)
+    d.rectangle([cx + 110 * sc, cy - 170 * sc, cx + 150 * sc, cy + 110 * sc], fill=(225, 228, 233), outline=NAVY, width=4)
+    d.rectangle([cx - 160 * sc, cy - 200 * sc, cx + 160 * sc, cy - 165 * sc], fill=(225, 228, 233), outline=NAVY, width=4)
+    lift = 250 * sc * open_
+    for k in range(6):
+        x = cx - 95 * sc + k * 38 * sc
+        d.line([(x, cy - 160 * sc - lift * 0.0), (x, cy + 105 * sc - lift)], fill=(120, 130, 150), width=int(8 * sc))
+
+
+def dogface(d, cx, cy, sc=1.0):
+    d.ellipse([cx - 70 * sc, cy - 70 * sc, cx + 70 * sc, cy + 70 * sc], fill=(242, 235, 221))
+    d.ellipse([cx - 105 * sc, cy - 50 * sc, cx - 55 * sc, cy + 60 * sc], fill=(138, 90, 52)); d.ellipse([cx + 55 * sc, cy - 50 * sc, cx + 105 * sc, cy + 60 * sc], fill=(138, 90, 52))
+    d.arc([cx - 45 * sc, cy - 20 * sc, cx - 15 * sc, cy], 0, 180, fill=NAVY, width=5); d.arc([cx + 15 * sc, cy - 20 * sc, cx + 45 * sc, cy], 0, 180, fill=NAVY, width=5)
+    d.ellipse([cx - 14 * sc, cy + 12 * sc, cx + 14 * sc, cy + 32 * sc], fill=NAVY)
+    d.chord([cx - 60 * sc, cy - 95 * sc, cx + 60 * sc, cy - 35 * sc], 180, 360, fill=(52, 72, 110))
+
+
+def sneaky_app(d, cx, cy, sc=1.0):
+    """こっそり音を拾うアプリ（黒っぽい四角に、目かくしの帯とマイク）"""
+    d.rounded_rectangle([cx - 60 * sc, cy - 60 * sc, cx + 60 * sc, cy + 60 * sc], int(22 * sc), fill=(60, 50, 80), outline=NAVY, width=4)
+    d.rounded_rectangle([cx - 52 * sc, cy - 28 * sc, cx + 52 * sc, cy - 4 * sc], 8, fill=(20, 20, 30))
+    for k in (-1, 1): d.ellipse([cx + k * 24 * sc - 7 * sc, cy - 23 * sc, cx + k * 24 * sc + 7 * sc, cy - 9 * sc], fill="white")
+    d.rounded_rectangle([cx - 9 * sc, cy + 8 * sc, cx + 9 * sc, cy + 38 * sc], int(9 * sc), fill=(229, 72, 77))
+
+
 def f09(t):
     im = Image.new("RGB", (W, H), (30, 42, 60)); d = ImageDraw.Draw(im)
+    # 09-01（v4「表現わかりにくい」5:19）：合言葉を言っていないのに、こっそりアプリが門を開けて、外の音（話し声の泡）が入ってくる
+    if t < s("09-02"):
+        op = prog(t, WT("09-01", "こっそり"), WT("09-01", "こっそり") + 1.2)
+        gate2d(d, 640, 330, 1.0, op)
+        sneaky_app(d, 920, 380, 1.0)
+        if op > 0.3:
+            for k in range(4):
+                ph = ((t - WT("09-01", "こっそり")) * 0.6 + k * 0.25) % 1.0
+                x = 180 + ph * 460; y = 300 + 30 * math.sin(k * 1.7)
+                d.ellipse([x - 26, y - 26, x + 26, y + 26], outline=(180, 220, 255), width=5)
+                d.arc([x - 12, y - 10, x + 12, y + 10], 200, 340, fill=(180, 220, 255), width=4)
+        return im
     if t >= WT("09-02", "1万7千本"): tag(d, "1万7千本以上のアプリ", 470, 60)
     if t >= WT("09-02", "2018年"): tag(d, "2018年", 1000, 60)
+    t_red = WT("09-04", "スマホの画面を"); REDL = [(1, 3), (2, 12), (3, 9)]
     for r in range(5):
         for c in range(14):
             x, y = 80 + c * 80, 130 + r * 80
             col = APPC[(r + c) % 5]
-            red = (r, c) in RED and t >= WT("09-04", "スマホの画面を")
-            if red:
-                col = (229, 72, 77)
+            red = (r, c) in REDL and t >= t_red + 0.8 * REDL.index((r, c))
+            if red: col = (229, 72, 77)
             d.rounded_rectangle([x, y, x + 60, y + 60], 12, fill=col)
-            if red:
-                d.rectangle([x + 16, y + 12, x + 44, y + 48], outline="white", width=4); d.ellipse([x + 26, y + 24, x + 34, y + 32], fill="white")
-    # 虫めがね：09-03 で端から端へ（行ごとに）
+            if red: d.rectangle([x + 16, y + 12, x + 44, y + 48], outline="white", width=4); d.ellipse([x + 26, y + 24, x + 34, y + 32], fill="white")
+    # 虫めがね：09-03 で行ごとに調べる。09-04（v4「虫めがねと見つけたアプリの位置が合ってない」5:52）：赤くなるアプリへ順に動いて止まる
+    mpos = None
     p = prog(t, s("09-03"), s("09-03b") + 0.6)
-    if 0 < p < 1 or (s("09-04") <= t < s("09-05")):
-        if s("09-04") <= t:
-            p = prog(t, s("09-04"), s("09-04") + 1.5)
-        row = min(4, int(p * 5)); fx = (p * 5) % 1
-        mx, my = 110 + fx * 1040, 160 + row * 80
+    if 0 < p < 1:
+        row = min(4, int(p * 5)); fx = (p * 5) % 1; mpos = (110 + fx * 1040, 160 + row * 80)
+    if s("09-04") <= t < s("09-06"):
+        k = 0
+        for q in range(3):
+            if t >= t_red + 0.8 * q - 0.4: k = q
+        r, c = REDL[k]; tx, ty = 80 + c * 80 + 30, 130 + r * 80 + 30
+        if t < t_red - 0.4: tx, ty = 640, 330
+        mpos = (tx, ty)
+    if mpos:
+        mx, my = mpos
         d.ellipse([mx - 70, my - 70, mx + 70, my + 70], outline=(242, 193, 78), width=14)
         d.line([(mx + 50, my + 50), (mx + 120, my + 120)], fill=(242, 193, 78), width=22)
-    # 09-03b：音の印（〜）がついた四角は一つもない → 大きな × ではなく「0」の札
     if WT("09-03b", "一つも") <= t < s("09-04"):
-        tag(d, "0本", 640, 330, font=ImageFont.truetype(FONT, 72))  # 数だけ（字幕と同じ文は書かない）
-    # 09-06b〜e：まとめ（これまでの絵を 3 つ並べて、一つずつ光らせる）
-    if t >= s("09-06") - 0.2:
+        tag(d, "0本", 640, 330, font=ImageFont.truetype(FONT, 72))
+    # まとめ（09-06b〜）。v4「まだまとめてないのにネタバレ」(6:04)：前置き（09-06）の間はマイクのアップを差し込み（組み立て）、
+    #   ここでは、言った物から 1 枚ずつ出す（先に枠を並べない）。v4「アイコン分かりやすく」(6:18)：門・スマホの点・虫めがねの絵で
+    if t >= s("09-06b"):
         d.rectangle([0, 0, W, H], fill=(22, 30, 46))
         for k, (idn, label) in enumerate((("09-06b", "見張り番"), ("09-06c", "ランプと画面の点"), ("09-06d", "1万7千本"))):
-            on = t >= s(idn)
-            x0 = 90 + k * 380
-            d.rounded_rectangle([x0, 130, x0 + 330, 400], 24, fill=(48, 62, 86) if on else (36, 46, 64), outline=(242, 193, 78) if on else (70, 84, 110), width=6)
-            if k == 0:   # 番犬の顔（白い丸に茶色の垂れ耳・閉じた目）
-                cx = x0 + 165; d.ellipse([cx - 70, 195, cx + 70, 335], fill=(242, 235, 221)); d.ellipse([cx - 105, 215, cx - 55, 325], fill=(138, 90, 52)); d.ellipse([cx + 55, 215, cx + 105, 325], fill=(138, 90, 52))
-                d.arc([cx - 45, 245, cx - 15, 265], 0, 180, fill=NAVY, width=5); d.arc([cx + 15, 245, cx + 45, 265], 0, 180, fill=NAVY, width=5)
-            elif k == 1:  # オレンジのランプと点
-                cx = x0 + 165; d.ellipse([cx - 60, 205, cx + 60, 325], fill=(255, 122, 0))
-            else:         # 四角の列
+            if t < s(idn): continue
+            x0 = 90 + k * 380; cx = x0 + 165
+            d.rounded_rectangle([x0, 130, x0 + 330, 400], 24, fill=(48, 62, 86), outline=(242, 193, 78), width=6)
+            if k == 0:
+                gate2d(d, cx + 60, 300, 0.45, 0.0); dogface(d, cx - 70, 300, 0.6)
+            elif k == 1:
+                d.rounded_rectangle([cx - 70, 170, cx + 70, 380], 20, fill=(34, 38, 43)); d.rounded_rectangle([cx - 58, 184, cx + 58, 366], 12, fill=(235, 240, 245))
+                d.ellipse([cx + 30, 192, cx + 50, 212], fill=(255, 122, 0)); d.ellipse([cx + 18, 180, cx + 62, 224], outline=(255, 122, 0), width=4)
+                d.ellipse([cx - 135, 180, cx - 95, 220], fill=(255, 122, 0))
+            else:
                 for rr in range(3):
                     for cc in range(4):
                         d.rounded_rectangle([x0 + 45 + cc * 62, 180 + rr * 62, x0 + 95 + cc * 62, 230 + rr * 62], 8, fill=APPC[(rr + cc) % 5])
+                d.ellipse([cx - 10, 210, cx + 110, 330], outline=(242, 193, 78), width=12); d.line([(cx + 92, 312), (cx + 140, 360)], fill=(242, 193, 78), width=16)
             tag(d, label, x0 + 165, 455)
-        if t >= WT("09-06e", "容疑は"):                              # 1 人目の容疑者：マイク → 容疑はひとまず晴れた
+        if t >= WT("09-06e", "容疑は"):
             tag(d, "①マイク", 560, 80, bg=(255, 244, 214))
-            d.line([(690, 80), (715, 105), (765, 50)], fill=(93, 187, 99), width=14)  # 容疑が晴れた印（字の代わりにチェック）
+            d.line([(690, 80), (715, 105), (765, 50)], fill=(93, 187, 99), width=14)
     return im
 
 
@@ -148,7 +204,7 @@ def f20(t):
     phone(im, 490, 40, 300, 600, scr)
     if t >= s("20-01"):
         tag(d, "広告の設定", 1010, 330)
-        d.ellipse([643, 254 + 14, 803, 344 + 14], outline=(255, 138, 42), width=8)
+        d.ellipse([715 - 52, 335 - 30, 715 + 52, 335 + 30], outline=(255, 138, 42), width=7)   # v4「丸の位置ずれてる」：3 つ目のスイッチ（画面の y=278〜312 → 319〜351）に合わせた
     return im
 
 

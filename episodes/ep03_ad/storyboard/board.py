@@ -148,15 +148,11 @@ def box(loc, kind, s=1.0, rz=0.0):
     # 手がかりの荷物（橙の箱）：drop＝いた場所／square＝見たページ／two＝一緒にいた人
     e = empty(loc, R(rz), s)
     cube(mat("boxc", "#F2D6A2", rough=0.6), (0, 0, 0.19), (0.38, 0.38, 0.38), bevel=0.03, parent=e)
-    mk = mat("mark2", "#F2A93B", rough=0.35, emit=0.6)
-    if kind == "drop":
-        sphere(mk, (0, -0.2, 0.19), 0.08, scale=(1, 0.3, 1), parent=e)
-        add(bpy.ops.mesh.primitive_cone_add, mk, (0, -0.2, 0.28), (R(0), 0, 0), radius1=0.07, radius2=0.0, depth=0.12, vertices=24, scale=(1, 0.3, 1), parent=e)
-    elif kind == "square":
-        cube(mk, (0, -0.2, 0.19), (0.15, 0.03, 0.15), parent=e)
-    else:
-        for dx in (-0.06, 0.06):
-            sphere(mk, (dx, -0.2, 0.19), 0.06, scale=(1, 0.3, 1), parent=e)
+    # v4「箱のイラストもう少し分かるように」(7:21)：前と上に、白い札（場所のピン／見たページ／二人）を貼る
+    png = os.path.join(HERE, {"drop": "box_pin.png", "square": "box_page.png"}.get(kind, "box_two.png"))
+    m = bpy.data.materials.get("boxcard_" + kind) or img_mat("boxcard_" + kind, png, emit=0.5)
+    plane(m, (0, -0.193, 0.19), (0.3, 0.3), rot=(R(90), 0, 0), parent=e)
+    plane(m, (0, 0, 0.383), (0.3, 0.3), parent=e)
     return e
 
 
@@ -205,8 +201,10 @@ def train_windows():
         cube(mat("frame_wf", "#B8B2A6", metal=0.6, rough=0.3), (x, 1.485, 1.6), (1.9, 0.02, 0.95))
         cube(outside if x < 0 else outside2, (x, 1.47, 1.5), (1.75, 0.02, 0.55))
         cube(mat("sky_of", "#BFE3F2", emit=1.4), (x, 1.47, 1.92), (1.75, 0.02, 0.25))
-        for k in range(5):  # 紅葉の木（丸）
-            sphere(mat("leaf%d" % (k % 2), ("#D9472B", "#F2A93B")[k % 2], rough=0.8, emit=1.2), (x - 0.7 + k * 0.35, 1.455, 1.62 + 0.06 * (k % 2)), 0.16, scale=(1, 0.1, 1))
+        for k in range(6):  # 紅葉の木（v4「紅葉も分かりやすいように」9:51：大きく、幹をつけて、赤と黄をはっきり）
+            xx = x - 0.72 + k * 0.29
+            cube(mat("trunk_w", "#6B4A2E", rough=0.8), (xx, 1.458, 1.38), (0.04, 0.01, 0.2))
+            sphere(mat("leafw%d" % (k % 3), ("#E0301E", "#F5A623", "#C2410C")[k % 3], rough=0.8, emit=1.6), (xx, 1.455, 1.6 + 0.07 * (k % 2)), 0.19, scale=(1, 0.1, 1.05))
 
 
 def train(hat=False, maru_window=False, wifi=False, sora_phone_zoom=False):

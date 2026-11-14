@@ -91,7 +91,18 @@ class Maru:
         self.ant = bpy.data.materials["maru_orange"]
         self.lens = bpy.data.materials["maru_lens"]
 
-    def at(self, t, loc=None, face=None, look=None, interp="BEZIER"):
+    def at(self, t, loc=None, face=None, look=None, interp="BEZIER", hold=True):
+        # v4「まるロボ徐々に動いてひっくり返ってる」(3:57)：前の置き場所から何秒も離れた時刻に次を置くと、その間ずっとゆっくり動き続けていた。
+        #   1 秒より離れているときは、動き出す 0.8 秒前まで前の場所・向きのまま止めておく（hold=False で、ゆっくり動かすことも）
+        last = self.__dict__.setdefault("_last", {})
+        for ch, v in (("loc", loc), ("face", face), ("look", look)):
+            if v is None: continue
+            if hold and ch in last and t - last[ch][0] > 1.0:
+                th = max(last[ch][0], t - 0.8); pv = last[ch][1]
+                if ch == "loc": key(self.root, "location", f(th), pv, interp)
+                elif ch == "face": key(self.root, ("rotation_euler", 2), f(th), R(pv), interp)
+                else: key(self.body, ("rotation_euler", 0), f(th), R(-pv), interp)
+            last[ch] = (t, v)
         if loc is not None: key(self.root, "location", f(t), loc, interp)
         if face is not None: key(self.root, ("rotation_euler", 2), f(t), R(face), interp)
         if look is not None: key(self.body, ("rotation_euler", 0), f(t), R(-look), interp)
@@ -103,7 +114,7 @@ class Maru:
 
     def walk(self, t0, t1, a, b, face=None, h=0.06, step=0.32):
         """a から b へ歩く（小さく弾む。足音は組み立てで、この弾みの着地に付ける）"""
-        self.at(t0, a, face); self.at(t1, b, face)
+        self.at(t0, a, face); self.at(t1, b, face, hold=False)
         n = max(1, int((t1 - t0) / step))
         for k in range(n):
             self.hop(t0 + k * step, h, step)

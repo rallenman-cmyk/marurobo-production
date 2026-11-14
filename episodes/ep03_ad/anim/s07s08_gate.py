@@ -158,7 +158,18 @@ class Maru:
         self.z0 = self.body.location.z
         self.ant = bpy.data.materials["maru_orange"]
 
-    def at(self, t, loc=None, face=None, look=None, interp="BEZIER"):
+    def at(self, t, loc=None, face=None, look=None, interp="BEZIER", hold=True):
+        # v4「まるロボ徐々に動いてひっくり返ってる」(3:57)：前の置き場所から何秒も離れた時刻に次を置くと、その間ずっとゆっくり動き続けていた。
+        #   1 秒より離れているときは、動き出す 0.8 秒前まで前の場所・向きのまま止めておく（hold=False で、ゆっくり動かすことも）
+        last = self.__dict__.setdefault("_last", {})
+        for ch, v in (("loc", loc), ("face", face), ("look", look)):
+            if v is None: continue
+            if hold and ch in last and t - last[ch][0] > 1.0:
+                th = max(last[ch][0], t - 0.8); pv = last[ch][1]
+                if ch == "loc": key(self.root, "location", f(th), pv, interp)
+                elif ch == "face": key(self.root, ("rotation_euler", 2), f(th), R(pv), interp)
+                else: key(self.body, ("rotation_euler", 0), f(th), R(-pv), interp)
+            last[ch] = (t, v)
         if loc is not None: key(self.root, "location", f(t), loc, interp)
         if face is not None: key(self.root, ("rotation_euler", 2), f(t), R(face), interp)
         if look is not None: key(self.body, ("rotation_euler", 0), f(t), R(-look), interp)
@@ -184,6 +195,25 @@ def shots(cam, tgt, S):
         key(cam, "location", a, l0, "LINEAR"); key(tgt, "location", a, g0, "LINEAR")
         key(cam.data, "lens", a, lens, "CONSTANT")
         key(cam, "location", b, l1, "CONSTANT"); key(tgt, "location", b, g1, "CONSTANT")
+
+
+def _load_wt(path):
+    # 言葉を言う瞬間の表（voice/word_times.json。wordtime.py の load_table と同じ。PC のキットでも動くよう、ここに置く）
+    tb = json.load(open(path, encoding="utf-8"))
+    yl = lambda t: max(0, sum(1 for ch in t if ch not in "、。？！…「」（）・ 　"))
+    def Wt(i, frag, o=0.0):
+        v = tb[i]; t = v["text"]; k = t.find(frag)
+        if k < 0: raise KeyError("%s に「%s」がない" % (i, frag))
+        if v["wt"] is None: return v["start"] + (v["end"] - v["start"]) * yl(t[:k]) / max(1, yl(t)) + o
+        ch, asg = v["wt"]
+        for (a, b), (g0, g1) in zip(ch, asg):
+            if a <= k < b: return v["start"] + (g0 + (g1 - g0) * yl(t[a:k]) / max(1, yl(t[a:b]))) / v["speed"] + o
+        return v["start"] + asg[-1][0] / v["speed"] + o
+    return Wt
+
+
+Wt = _load_wt(os.path.join(_ANIM_HERE, "..", "voice", "word_times.json"))   # v4：泡は声に合わせて出す
+OUTSIDE = (0.0, 2.25, 1.5)      # 門の外のすぐ前（閉じた門では、泡はここで止まってはじける。v4「泡が門を通り過ぎてから消える」）
 
 
 def scene_gate():
@@ -216,22 +246,25 @@ def scene_gate():
     mr.at(s("07-02") + 0.4, (-0.8, -1.0, 0), 55, 18)             # 番犬の方を向く
     ear_twitch(s("07-02b") + 0.8)                                 # 音を聞く係
     # 07-04b：合言葉の泡が来たときだけ格子が上がる（予告。すぐ下りる）
-    pb = sound_bubble(s("07-04b") + 0.3, s("07-04b") + 2.0, None, r=0.32, glow=1.5, path=(GATE_IN, (0.2, 0.6, 1.4)), pop=False)
-    key(pb, "location", f(s("07-04b") + 2.6), (0.2, -1.5, 1.4)); key(pb, "scale", f(s("07-04b") + 2.4), (1.0,) * 3); key(pb, "scale", f(s("07-04b") + 2.8), (0.001,) * 3)  # 門を通って中へ消える
-    bars_lift(bars, s("07-04b") + 1.6, s("07-04b") + 2.6, s("07-04b", 1) + 0.2, s("07-04b", 1) + 1.0)
-    lamps_on(lamps, lights, s("07-04b") + 2.0)
+    #   v4「門を通ってから門が開いてる」：泡は門の外で待つ → 格子が上がりきってから → 中へ通る
+    t4 = Wt("07-04b", "この合言葉")
+    pb = sound_bubble(t4 + 0.1, t4 + 1.1, None, r=0.32, glow=1.5, path=(GATE_IN, (0.2, 2.25, 1.4)), pop=False)
+    key(pb, "location", f(t4 + 2.2), (0.2, 2.25, 1.4)); key(pb, "location", f(t4 + 2.9), (0.2, -1.5, 1.4))
+    key(pb, "scale", f(t4 + 2.7), (1.0,) * 3); key(pb, "scale", f(t4 + 3.0), (0.001,) * 3)
+    bars_lift(bars, t4 + 1.2, t4 + 2.1, s("07-04b", 1) + 0.2, s("07-04b", 1) + 1.0)
+    lamps_on(lamps, lights, t4 + 1.7)
     lamps_on(lamps, lights, s("07-04b", 1) + 0.6, on=False)
     # 07-05：外の音の泡（時計・車）が流れてきて、番犬の耳の前で消える
     icons = ["icon_clock.png", "icon_car.png", "icon_sleep.png", "icon_car.png", "icon_clock.png", "icon_sleep.png"]
-    tt = s("07-05") + 0.5
+    tt = Wt("07-05", "この泡")
     for k in range(6):
-        sound_bubble(tt, tt + 2.6, icons[k])
-        ear_twitch(tt + 2.5)
+        sound_bubble(tt, tt + 2.0, icons[k], path=(GATE_IN, (-0.6 + 0.24 * k, 2.25, 1.25 + 0.12 * (k % 3))))   # 門の外で止まってはじける
+        ear_twitch(tt + 1.9)
         tt += 2.1
     # 07-05b：まるロボが泡に跳びつく → 頭の上で消える
     tj = s("07-05b") - 0.9
-    mr.at(tj - 0.8, (0.3, -0.4, 0), 35, 25)
-    sound_bubble(tj - 1.8, tj + 0.25, "icon_clock.png", path=(GATE_IN, (0.32, -0.38, 1.85)), burst_at=(0.32, -0.38, 1.9))
+    mr.at(tj - 0.8, (0.3, 1.2, 0), 15, 25)                      # 門の格子の前まで行って
+    sound_bubble(tj - 1.8, tj + 0.25, "icon_clock.png", path=(GATE_IN, (0.32, 2.2, 1.6)), burst_at=(0.32, 2.2, 1.6))   # 格子の向こうで消える
     mr.hop(tj - 0.1, 0.4, 0.55)
     mr.at(s("07-05b") + 1.0, look=30)                            # 消えた所を見上げる
     mr.at(s("07-06") + 0.5, (0.4, -0.6, 0), 60, 14)              # 番犬を見る
@@ -240,35 +273,37 @@ def scene_gate():
     mr.at(s("08-02") + 2.0, face=40)                             # 外を見て、うなずく
     mr.hop(s("08-02", 1) - 1.2, 0.12, 0.3)
     # 08-03 テント：泡は消える。まるロボは番犬の顔をのぞき込む
-    tt = s("08-03", 1) - 0.8
-    sound_bubble(tt - 1.6, tt + 1.2, "icon_tent.png"); ear_twitch(tt + 1.1)
-    mr.at(s("08-04") - 0.2, (1.35, -0.45, 0), 60, 30)
-    mr.at(s("08-04", 1), (1.35, -0.45, 0), 60, 30)
+    tt = Wt("08-03", "テント")                                   # 「テント」と言った瞬間に泡
+    sound_bubble(tt, tt + 1.6, "icon_tent.png", path=(GATE_IN, OUTSIDE)); ear_twitch(tt + 1.5)
+    mr.at(s("08-04") - 0.2, (1.35, -0.45, 0), 60, 14)           # 番犬の顔をのぞく（見上げすぎない。v4「ひっくり返ってる」）
+    mr.at(s("08-04", 1), (1.35, -0.45, 0), 60, 14)
     # 08-05 ヘイ、テント（大きな泡）：耳がぴくっ。まるロボが目の前で左右に跳ねる
-    tt = s("08-05", 1) - 1.4
-    sound_bubble(tt - 1.4, tt + 1.4, "icon_tent.png", r=0.42); ear_twitch(tt + 1.2); ear_twitch(tt + 1.7)
+    tt = Wt("08-05", "ヘイ、テント")                             # v4「音声に合わせて泡出して」(4:10)
+    sound_bubble(tt, tt + 1.8, "icon_tent.png", r=0.42, path=(GATE_IN, (0.3, 2.25, 1.6))); ear_twitch(tt + 1.6); ear_twitch(tt + 2.1)
     for k in range(4):
         x = 1.05 if k % 2 == 0 else 1.6
         mr.at(s("08-06") + 0.6 * k, (x, -0.45, 0), 60, 30); mr.hop(s("08-06") + 0.6 * k, 0.18, 0.4)
     mr.at(s("08-07"), (0.5, -0.5, 0), 55, 16)
     # 08-08 似た言葉（ピー）：片目だけ開けて、すぐ閉じる。まるロボはのけぞる
     tb = s("08-08") - 1.6 + 0.3                                  # 「ピー」の始まり
-    sound_bubble(tb - 1.4, tb + 0.9, None, r=0.32, glow=0.4)
+    sound_bubble(tb, tb + 1.0, None, r=0.32, glow=0.4, path=(GATE_IN, OUTSIDE))   # 「ピー」と同時に泡。門の外で消える
     show(D["closed"][1], f(tb + 1.0), False); show(D["open"][1], f(tb + 1.0), True)
     show(D["closed"][1], f(s("08-08") + 2.6), True); show(D["open"][1], f(s("08-08") + 2.6), False)
     mr.lean(tb + 1.1, -18, 0.25); mr.at(tb + 1.1, look=26)
     mr.lean(s("08-08") + 3.0, 0, 0.4)
     # 08-11 本物の合言葉（ピー）：両目をぱっと開け、耳が動き、格子が上がり、ランプがオレンジ
     tb = s("08-11") - 1.6 + 0.3
-    rb = sound_bubble(tb - 1.4, tb + 0.9, None, r=0.34, glow=1.5, pop=False, path=(GATE_IN, (1.2, 0.9, 1.6)))
-    key(rb, "location", f(s("08-11") + 2.4), (1.2, 0.9, 1.6)); key(rb, "location", f(s("08-11") + 3.2), (0.0, -1.5, 1.4))   # 開いた門を通って中へ
-    key(rb, "scale", f(s("08-11") + 3.0), (1.0,) * 3); key(rb, "scale", f(s("08-11") + 3.3), (0.001,) * 3)
+    #   v4「門を通ってから門が開いてる」(4:56)：泡は門の外で待つ → 「門が開きました」で格子が上がる → 上がりきってから中へ
+    tg = Wt("08-11", "門が開きました")
+    rb = sound_bubble(tb, tb + 1.0, None, r=0.34, glow=1.5, pop=False, path=(GATE_IN, OUTSIDE))
+    key(rb, "location", f(tg + 0.5), OUTSIDE); key(rb, "location", f(tg + 1.3), (1.2, 0.9, 1.6))
+    key(rb, "scale", f(tg + 1.2), (1.0,) * 3); key(rb, "scale", f(tg + 1.5), (0.001,) * 3)
     show(eyes_closed, f(tb + 1.0), False); show(D["open"][0] + D["open"][1], f(tb + 1.0), True)
     ear_twitch(tb + 1.0)
-    bars_lift(bars, s("08-11") + 0.6, s("08-11") + 2.2)
-    lamps_on(lamps, lights, s("08-11") + 2.4)
-    mr.hop(s("08-11") + 2.6, 0.45, 0.55); mr.hop(s("08-11") + 3.3, 0.3, 0.45)
-    mr.glow(s("08-11") + 2.5, 0.3); mr.glow(s("08-11") + 2.8, 8.0)
+    bars_lift(bars, tg - 0.5, tg + 0.4)
+    lamps_on(lamps, lights, tg + 0.5)
+    mr.hop(tg + 0.7, 0.45, 0.55); mr.hop(tg + 1.4, 0.3, 0.45)
+    mr.glow(tg + 0.6, 0.3); mr.glow(tg + 0.9, 8.0)
     # ---- 光
     area((-2, -4, 3.5), (0, 0, 1), 350, 4, "#BFD9FF")
     area((4, -3, 3), (2.3, 1, 1.5), 250, 3, "#FFE9C7")

@@ -23,3 +23,23 @@ for (x, y, r) in ((380, 330, 22), (430, 250, 14), (330, 420, 12)):
 im.save(os.path.join(out, 'icon_sleep.png'))
 im, d = base(); d.polygon([(70, 420), (256, 110), (442, 420)], fill='#E9692C'); d.polygon([(210, 420), (256, 290), (302, 420)], fill='#7A2E12'); d.line([(256, 110), (256, 70)], fill='#5a3a20', width=12)
 im.save(os.path.join(out, 'icon_tent.png'))
+# 手がかりの箱の前の札（v4「箱のイラストもう少し分かるように」7:21）：白い札に、場所のピン／見たページ／二人
+OR, DK = '#E07B22', '#5B3B22'
+def card():
+    im = Image.new('RGBA', (512, 512), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle([16, 16, 496, 496], 70, fill='#FFFFFF', outline=DK, width=18); return im, d
+im, d = card()                                  # 場所：地図のピン
+d.ellipse([146, 70, 366, 290], fill=OR); d.polygon([(158, 225), (256, 440), (354, 225)], fill=OR); d.ellipse([214, 138, 298, 222], fill='#FFFFFF')
+d.ellipse([186, 420, 326, 462], outline=DK, width=12)
+im.save(os.path.join(out, 'box_pin.png'))
+im, d = card()                                  # 見たページ：ブラウザの窓
+d.rounded_rectangle([86, 96, 426, 416], 26, fill='#FFFFFF', outline=OR, width=20); d.rectangle([96, 106, 416, 166], fill=OR)
+for k, x in enumerate((122, 152, 182)): d.ellipse([x - 10, 126, x + 10, 146], fill='#FFFFFF')
+d.rounded_rectangle([122, 196, 250, 300], 10, fill='#F6C18E')
+for y in (206, 246, 286): d.line([(274, y), (392, y)], fill=DK, width=14)
+for y in (336, 372): d.line([(122, y), (392, y)], fill=DK, width=14)
+im.save(os.path.join(out, 'box_page.png'))
+im, d = card()                                  # 一緒にいた人：二人
+for cx, col in ((186, OR), (326, '#3E7CB1')):
+    d.ellipse([cx - 58, 110, cx + 58, 226], fill=col); d.pieslice([cx - 100, 250, cx + 100, 450], 180, 360, fill=col); d.rectangle([cx - 100, 349, cx + 100, 400], fill=col)
+im.save(os.path.join(out, 'box_two.png'))

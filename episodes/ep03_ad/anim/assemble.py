@@ -103,13 +103,15 @@ def ov(a, b, name, items): p, bx = tag_png(name, items); OVERLAYS.append((a, b, 
 def ovp(a, b, pb): OVERLAYS.append((a, b, pb[0], pb[1]))
 
 ov(6.2, 7.19, "s00_6h", [("dark",), ("tag", "6時間前", 640, 300, None, True)])
-ov(s("01-01") + 0.8, s("01-02") + 1.0, "s01_a", [("tag", "今度、キャンプ行きたいね", 400, 110, (420, 250))])
-ov(s("01-02") + 0.6, s("01-03") + 0.2, "s01_b", [("tag", "いいね！", 900, 150, (880, 260))])
-ovp(s("01-03"), s("01-03", 1) + 0.3, picbubble("s01_tent", 760, 300, 70, tent))
+# v4：冒頭の絵を引いた（テント 3 枚が見える）ので、名札・吹き出しの場所を合わせた
+ov(s("01-01"), s("01-03", 1), "s01_names", [("tag", "ハルさん", 470, 560, None, False, (62, 124, 177)), ("tag", "ソラさん", 835, 560, None, False, (229, 140, 90))])   # v4「どっちがハルでどっちがソラか」：服の色のふちの名札
+ov(s("01-01") + 0.8, s("01-02") + 1.0, "s01_a", [("tag", "今度、キャンプ行きたいね", 330, 80, (470, 370))])
+ov(s("01-02") + 0.6, s("01-03") + 0.2, "s01_b", [("tag", "いいね！", 1010, 80, (810, 370))])
+ovp(s("01-03"), s("01-03", 1) + 0.3, picbubble("s01_tent", 760, 330, 70, tent))
 ov(s("04-04"), s("04-04", 1) + 0.3, "s04_title", [("tag", "さっき話した物が、なぜ広告に出る？", 640, 110, None, False)])
 ov(W("05-02", "マイク"), s("05-06", 1), "s05_1", [("tag", "①マイク", 230, 70, None, False, SUS[0])])
-ov(W("05-03", "出ていく"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", 627, 165, None, False, SUS[1])])
-ov(W("05-04b", "わたしたち"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", 1040, 70, None, False, SUS[2])])
+ov(W("05-03", "出ていく"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", 612, 70, None, False, SUS[1])])
+ov(W("05-04b", "わたしたち"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", 1060, 70, None, False, SUS[2])])   # v4「123 のテロップ同じ高さで」：①②③とも y=70
 ov(W("06-02", "この小さな穴"), s("06-02", 1), "s06_ring", [("ring", 830, 392, 200, 62)])
 ov(W("07-02", "見張り番"), s("07-02b", 1), "s07_guard", [("tag", "見張り番", 1100, 120)])
 ov(W("07-04", "あの合言葉"), s("07-04", 1) + 0.3, "s07_word", [("tag", "Hey Siri", 640, 110, None, True), ("tag", "OK Google", 640, 230)])
@@ -123,16 +125,16 @@ if _dot: ov(W("08-14", "同じ色の点"), s("08-15", 1), "s08_dot", [("ring", _
 ov(W("10-05", "いた場所"), s("10-05", 1), "s10_drop", [("tag", "いた場所", 640, 110)])
 ov(W("10-06", "見たページ"), s("10-06", 1), "s10_square", [("tag", "見たページ", 640, 110)])
 ov(W("10-07", "一緒にいた人"), s("10-07", 1), "s10_two", [("tag", "一緒にいた人", 640, 110)])
-ov(s("12-04") + 1.5, s("12-05b", 1), "s12_cards", [("tag", "いた場所", 330, 110), ("tag", "見たページ", 640, 110), ("tag", "一緒にいた人", 960, 110)])
+# v4「ここで出てくる札テロップ意味わかんない」(8:25)：3 つの札は、差し込みの「ハルさんの手がかり」の絵に置きかえた（INS）
 ov(s("13-03"), s("13-04", 1), "s13_phone", [("tag", "ソラさんのスマホ", 1060, 90)])
 ov(W("13-03", "テントの写真"), s("13-04", 1), "s13_photo", [("img", os.path.join(SB, "phone_ad.png"), 1010, 170, 160)])   # 写真（答え）は言う瞬間に
-ov(W("13-05", "同じ電車"), s("13-06", 1), "s13_wifi", [("wifi", 640, 150, ((300, 380), (900, 380)))])
-ovp(W("14-01b", "紅葉"), s("14-01b", 1) + 1.0, picbubble("s14_leaf", 760, 300, 70, leaf))
+# v4「表現もっと分かりやすく」(9:26)：Wi-Fi の線は、差し込みの「電車の無料 Wi-Fi」「一緒にいた人」の絵に置きかえた（INS）
+# v4「紅葉も分かりやすいように」(9:51)：吹き出しの葉は、差し込みの「窓の外の紅葉」の絵に置きかえた（INS）
 ov(s("15-03") + 2.0, s("15-04", 1), "s15_q", [("tag", "？枚", 640, 300, None, True)])
 for k, x in enumerate((70, 640, 1210)):
     ov(W("15-05", "%d枚" % (k + 1)), s("15-06", 1), "s15_%d" % k, [("ring", x, 300, 80, 90), ("tag", str(k + 1), x, 170, None, True)])
-ov(W("16-06", "外れ"), s("16-06", 1), "s16b", [("tag", "外れ", 1050, 330)])
-ov(W("16-06", "当たり"), s("16-06", 1), "s16a", [("tag", "当たり", 470, 150)])
+ov(W("16-06", "外れ"), s("16-06", 1), "s16b", [("tag", "外れ", 905, 90)])          # 差し込みの「数える」の絵の右の箱の上
+ov(W("16-06", "当たり"), s("16-06", 1), "s16a", [("tag", "当たり", 305, 90)])        # 左の箱の上
 ov(W("18-03", "メールアドレス"), s("18-03", 1) + 0.5, "s18", [("tag", "メールアドレスの名簿", 900, 110)])
 ov(s("21-02"), s("21-02", 1), "s21", [("tag", "ピポ、ピポ", 980, 170)])
 ov(W("22-03", "キャンプの動画"), s("22-03", 1), "s22_inset", [("img", night_inset(), 820, 60, 420)])
@@ -140,7 +142,55 @@ ov(W("22-03", "キャンプの動画"), s("22-03", 1), "s22_inset", [("img", nig
 # 前の場面のことを言う所は、その場面の切り抜きを左上に小さく（QR回 v10 の指摘の横展開）。(出す始まり, 終わり, 元の時刻, 名前)
 PIPS = [(W("07-01", "柱の穴"), s("07-01", 1) + 0.3, W("06-02", "この小さな穴") + 1.0, "さきほどの穴"),
         (W("12-03", "あの枠"), s("12-03", 1) + 0.3, 29.0, "ハルさんの画面"),
-        (W("15-01b", "あの鏡"), s("15-01b", 1) + 0.3, 101.0, "あの鏡")]
+        (W("15-01b", "あの鏡"), W("15-01b", "私たち自身"), 101.0, "あの鏡"),
+        (W("10-02", "さきほどと同じ"), s("10-02", 1), 158.0, "さきほどのスマホの中")]
+
+
+# 言っている内容の場面を差し込む（v4「まるロボをただ映すのではなく、その内容のシーンを差し込んで」7:41 ほか）。
+#   (始まり, 終わり, 種類, 中身)：clip＝別の時刻の 3D をそのまま流す（中身＝元の時刻）／still＝その時刻の絵を止めて／img＝差し込みの 2D（inserts_2d.py の名前）
+#   前後 0.25 秒で溶かす。字幕は上に重なる
+def _w(i, f, o=0.0): return W(i, f, o)
+INS = [
+    (_w("05-03", "どこへ"), _w("05-03", "何を見たか"), "clip", 9.0),                 # 1:30「どこへ行ったか」→ 電車の二人
+    (_w("05-03", "何を見たか"), _w("05-03", "スマホから"), "clip", 23.0),            #       「何を見たか」→ ニュースを見るハルさん
+    (s("05-04b"), _w("05-04b", "3人目は"), "img", "mirror_us"),                      # 1:39「鏡分かりにくい」→ 鏡に映る私たち
+    (s("09-01b"), _w("09-01b", "電話の声"), "img", "home_talk"),                     # 5:23「家の会話のシーン」
+    (_w("09-01b", "電話の声"), _w("09-01b", "考えただけで") + 0.6, "img", "phone_call"),   #       「電話のシーン」
+    (s("09-06") - 0.1, s("09-06b") - 0.05, "clip", W("05-02", "マイク") + 0.2),       # 6:04 まとめの前置き → マイクのアップ（まとめの中身はまだ出さない）
+    (s("09-07"), s("09-07", 1) + 0.3, "clip", 27.6),                                  # 6:34「スマホに出てきたときのシーン」
+    (s("10-01"), s("10-01b", 1) + 0.2, "clip", W("05-03", "出ていく") + 0.2),         # 6:45 2 人目の容疑者の台
+    (_w("10-05", "ハルさんのスマホ"), s("10-05", 1) + 0.2, "clip", 9.0),            # 7:06「いつ、どこにあったか」→ 電車
+    (_w("10-06", "ハルさんが"), s("10-06", 1) + 0.2, "clip", 23.0),                   # 7:21「どんなページを見たか」→ ニュース
+    (_w("10-07", "ハルさんと"), s("10-07", 1) + 0.2, "clip", 14.0),                   # 7:30「一緒にいた人」→ 電車の二人
+    (s("10-08"), s("10-08", 1) + 0.2, "img", "wifi_place"),                           # 7:30「同じ家やお店」
+    (s("10-09"), s("10-09", 1) + 0.2, "img", "to_company"),                           # 7:41「アプリやサイトを通じて、広告の会社に」
+    (s("10-10"), s("10-10", 1) + 0.4, "img", "permission"),                           #       「許可したもの」
+    (_w("11-02b", "大きな会場"), SCST["S12"] + 0.05, "still", SCST["S12"] + 0.1),    # 8:00「大きな会場」で会場に切り替え
+    (s("12-05"), s("12-05", 1) + 0.2, "img", "clues"),                                # 8:25 手がかりの札 → 絵で
+    (s("12-05b"), _w("12-05b", "手がかりを見ると"), "clip", 23.0),                   # 8:31「ニュースを読んでいる場面」
+    (_w("13-05", "同じ電車"), s("13-05", 1) + 0.2, "img", "wifi_train"),             # 9:26 Wi-Fi
+    (s("13-05b"), s("13-05b", 1) + 0.2, "img", "together"),
+    (_w("14-01b", "紅葉"), s("14-01b", 1) + 0.4, "img", "autumn"),                   # 9:51 紅葉
+    (s("14-05"), s("14-05b") - 0.05, "clip", W("05-03", "出ていく") + 0.2),           # 10:21 2 人目の容疑者のまとめ → 容疑者の台
+    (s("14-05b"), s("14-05c") - 0.05, "clip", 505.0),                                 # 10:30「競りで使われていました」→ 競り
+    (s("14-05c"), _w("14-05c", "季節"), "clip", 563.0),                               #       「一緒にいた人」→ 二人
+    (_w("14-05c", "季節"), s("14-05d") - 0.05, "img", "autumn"),                     #       「季節」→ 紅葉
+    (_w("14-05d", "2人目の容疑者"), s("14-05d", 1) + 0.3, "clip", W("05-03", "出ていく") + 0.2),   # 10:39 容疑者のシーン
+    (s("15-01"), s("15-01", 1) + 0.2, "clip", 99.0),                                  # 10:43 3 人目の容疑者 → 鏡の台
+    (_w("15-01b", "私たち自身"), s("15-01b", 1) + 0.2, "img", "mirror_us"),
+    (s("16-01"), s("16-02") - 0.05, "img", "ads_many"),                               # 11:35〜12:00 記憶の場面を絵で
+    (s("16-02"), s("16-03") - 0.05, "img", "ads_forget"),
+    (s("16-03"), s("16-04") - 0.05, "img", "ad_notice"),
+    (s("16-04"), s("16-05") - 0.05, "img", "memory_strong"),
+    (s("16-05"), s("16-06") - 0.05, "img", "miss_forgot"),
+    (s("16-06"), s("16-06", 1) + 0.3, "img", "tally"),
+    (s("16-08"), s("16-08", 1) + 0.3, "clip", 99.0),                                  # 12:15 3 人目の容疑者のシーン
+    (s("18-00"), s("18-01", 1) + 0.2, "img", "government"),                           # 12:43 役所が調べる
+    (s("19-08"), s("19-08b") - 0.05, "clip", 232.0),                                  # 14:02 スマホの耳は聞いていない → 門と見張り番
+    (s("19-08b"), _w("19-08b", "好きそうな"), "clip", 410.0),                         #       出ていく手がかり → 箱
+    (_w("19-08b", "好きそうな"), s("19-08c") - 0.05, "clip", 512.0),                 #       予想 → 競り
+    (s("19-08c"), s("19-08c", 1) + 0.3, "img", "tally"),                              #       当たったときだけ覚えている
+]
 
 
 # ---------------- 絵の並び（場面ごとのコマ。間引いたコマは長さで埋める）
@@ -187,9 +237,13 @@ for a, b, pth in rows + [(END, END, None)]:
     cur = max(cur, b)
 allrows = sorted(rows + fill)
 def _frame_at(t):
+    # その時刻に出ている絵。ちょうど境目などで見つからないときは、その時刻より前の最後の絵（v4「6:38 一瞬何かのシーン写って消えてる」：
+    #   前は見つからないと最後の場面の絵を返し、それがつなぎに重なっていた）
+    best = None
     for a, b, pth in allrows:
         if a <= t < b: return pth
-    return allrows[-1][2]
+        if a <= t: best = pth
+    return best or allrows[0][2]
 for k, (a, b, tsrc, label) in enumerate(PIPS):
     im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     sub = Image.open(_frame_at(tsrc)).convert("RGB").resize((400, 225), Image.LANCZOS)
@@ -200,6 +254,25 @@ for k, (a, b, tsrc, label) in enumerate(PIPS):
     d.rounded_rectangle([30, 272, 30 + w + 40, 272 + th + 26], 14, fill=NAVY); d.text((50 - bb[0], 285 - bb[1]), label, font=TAGF, fill="white")
     pp = os.path.join(tmp, "pip_%d.png" % k); im.save(pp)
     OVERLAYS.append((a, b, pp, [(label, 24, 24, 436, 272 + th + 26, TAGF.size)]))
+# 差し込みの絵と動画を用意する
+INSD = os.path.join(tmp, "ins"); subprocess.run([sys.executable, os.path.join(HERE, "inserts_2d.py"), INSD, FONT], check=True, capture_output=True)
+def _clip(name, src, dur):
+    """src 秒からの dur 秒ぶんの絵（別の場面のコマ）を、1280×720・24 コマ/秒の短い動画に"""
+    items = [(max(a, src), min(b, src + dur), pth) for a, b, pth in allrows if b > src and a < src + dur]
+    if not items: items = [(src, src + dur, _frame_at(src))]
+    l = os.path.join(tmp, "ins_%s.txt" % name); o = os.path.join(tmp, "ins_%s.mp4" % name)
+    with open(l, "w") as fo:
+        for a, b, pth in items: fo.write("file '%s'\nduration %.4f\n" % (pth, b - a))
+        fo.write("file '%s'\n" % items[-1][2])
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", l, "-vf", "scale=1280:720,setsar=1,fps=24,format=yuv420p",
+                    "-frames:v", str(max(1, round(dur * 24))), "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", o], check=True)
+    return o
+INSV = []   # (始まり, 終わり, ファイル, 動画か)
+for k, (a, b, kind, arg) in enumerate(INS):
+    if b - a < 0.3: continue
+    if kind == "clip": INSV.append((a, b, _clip("c%d" % k, arg, b - a + 0.1), True))
+    elif kind == "still": INSV.append((a, b, _frame_at(arg), False))
+    else: INSV.append((a, b, os.path.join(INSD, "ins_%s.png" % arg), False))
 # 大きさの違う絵（3D の試し描き・2D・絵コンテ）を一度に並べると時刻がずれるので、続いている同じ場面ごとに
 # 1280×720・24 コマ/秒の短い動画にしてから、つなぐ
 runs = []
@@ -286,14 +359,20 @@ _ze = "+".join("between(%s,%.3f,%.3f)*0.06*((%s-%.3f)/%.3f)" % (_zt, a, b, _zt, 
 fl = ["[0:v]scale=1280:720,fps=24,setsar=1,zoompan=z='1+%s':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24[v0]" % _ze]
 cur = "v0"; nin = 1
 for j, (T, dd) in enumerate(XF):
-    _src = _frame_at(T - 0.03); _z = 1 + sum(0.06 * (T - 0.03 - a) / (b - a) for a, b in ZOOM if a <= T - 0.03 <= b)
+    _src = _frame_at(T - 0.1); _z = 1 + sum(0.06 * (T - 0.1 - a) / (b - a) for a, b in ZOOM if a <= T - 0.1 <= b)
     if _z > 1.001:                                                       # 寄っている場面の終わりは、重ねる絵も同じだけ寄せる（ずれて見えないように）
         _im = Image.open(_src).convert("RGB").resize((1280, 720), Image.LANCZOS); cw, ch = 1280 / _z, 720 / _z
         _im = _im.crop(((1280 - cw) / 2, (720 - ch) / 2, (1280 + cw) / 2, (720 + ch) / 2)).resize((1280, 720), Image.LANCZOS)
         _src = os.path.join(tmp, "xf_%d.png" % j); _im.save(_src)
-    inputs += ["-loop", "1", "-t", "%.3f" % dd, "-i", _src]
-    fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=out:st=0:d=%.3f:alpha=1,setpts=PTS+%.3f/TB[x%d]" % (nin, dd, T, j))
-    fl.append("[%s][x%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[c%d]" % (cur, j, T, T + dd, j)); cur = "c%d" % j; nin += 1
+    inputs += ["-loop", "1", "-t", "%.3f" % (dd + 3 / 24), "-i", _src]
+    T0 = T - 2 / 24                                                       # 2 コマ前から重ね始める（v4「15:03 切り替わる時点滅」：1 コマ遅れて次の場面がそのまま見えていた）
+    fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=out:st=%.3f:d=%.3f:alpha=1,setpts=PTS+%.3f/TB[x%d]" % (nin, 2 / 24, dd, T0, j))
+    fl.append("[%s][x%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[c%d]" % (cur, j, T0, T + dd, j)); cur = "c%d" % j; nin += 1
+for j, (a, b, pth, mv) in enumerate(INSV):
+    dd = b - a
+    inputs += (["-i", pth] if mv else ["-loop", "1", "-t", "%.3f" % dd, "-i", pth])
+    fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=in:st=0:d=0.25:alpha=1,fade=t=out:st=%.3f:d=0.25:alpha=1,setpts=PTS+%.3f/TB[n%d]" % (nin, max(0, dd - 0.25), a, j))
+    fl.append("[%s][n%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[d%d]" % (cur, j, a, b, j)); cur = "d%d" % j; nin += 1
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
     inputs += ["-i", pth]
     fl.append("[%s][%d:v]overlay=0:0:enable='between(t,%.3f,%.3f)'[o%d]" % (cur, nin, a, b, i)); cur = "o%d" % i; nin += 1
