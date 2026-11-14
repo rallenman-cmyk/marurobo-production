@@ -171,9 +171,11 @@ im = load('b03'); check_card(im, 's03', cy=96); save(im, 's03', '03-01')
 
 # オープニング（v5 コメント「03-05 のあとにオープニングを 2 秒」）：画面の中の世界に題名
 im = load('b12'); im = Image.eval(im, lambda v: int(v * 0.55)); d = ImageDraw.Draw(im)
-d.rounded_rectangle([70, 190, 1210, 420], 30, fill=(10, 20, 40), outline=TEAL, width=6)
-ctext(d, (640, 255), 'ロボットが', font(64), WHITE)
-ctext(d, (640, 350), '「私はロボットではありません」を押したら？', font(48), (255, 214, 120)); LOG.append(dict(shot='op', size=48))
+d.rounded_rectangle([170, 150, 1110, 470], 30, fill=(10, 20, 40), outline=TEAL, width=6)   # 画面の端から 170 ピクセル内側（スマホで端が隠れても切れない。v5 コメント）
+ctext(d, (640, 222), 'ロボットが', font(60), WHITE)
+ctext(d, (640, 310), '「私はロボットではありません」を', font(48), (255, 214, 120))
+ctext(d, (640, 398), '押したら？', font(60), WHITE); LOG.append(dict(shot='op', size=48))
+f52 = font(48); bb = d.textbbox((0, 0), '「私はロボットではありません」を', font=f52); assert bb[2] - bb[0] <= 1110 - 170 - 160, 'オープニングの字が枠からはみ出す'
 save(im, 's_op', '04-01', dt=-2.0)
 
 # ---------------- ① 実験
