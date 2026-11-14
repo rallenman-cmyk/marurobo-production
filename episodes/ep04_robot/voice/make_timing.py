@@ -7,7 +7,7 @@ P = W + "/stage/script/script_v2_timed.json"
 L = json.load(open(P, encoding="utf-8"))
 V = json.load(open(W + "/stage/voice/achernar/lines.json", encoding="utf-8"))
 BEEP = {}  # この回は合言葉がないので「ピー」はなし
-EXTRA = {"22-05": 0.8, "23-01": 1.4}  # 少し暗いまとめの前で一息、オチの前は長めに（余韻）
+EXTRA = {"04-01": 2.8, "22-05": 0.8, "23-01": 1.4}  # 04-01 の前はオープニング（2 秒）を差し込む（v5 コメント）  # 少し暗いまとめの前で一息、オチの前は長めに（余韻）
 t, prev = 0.5, None
 for e in L:
     d = V[str(e["no"])]["dur"]

@@ -62,21 +62,32 @@ def check_card(im, shot, cx=640, cy=110, state='empty', size=52, show_text=True)
     return bx + 32, by + 32   # 四角い欄のまん中
 
 
-def pic_bubble(im, cx, cy, r, draw):
+def ctext(d, xy, text, font, fill):
+    """字の外形（textbbox）で、(x, y) にぴったりまん中を合わせて書く（v5 コメント「左右高さ中央揃えじゃない」）"""
+    b = d.textbbox((0, 0), text, font=font)
+    d.text((xy[0] - (b[0] + b[2]) / 2, xy[1] - (b[1] + b[3]) / 2), text, font=font, fill=fill)
+
+
+def pic_bubble(im, cx, cy, r, draw, to=None):
+    """字のない絵の吹き出し。to：しっぽを向ける先（まるロボなど）。省くと左下"""
     d = ImageDraw.Draw(im)
     d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=WHITE, outline=NAVY, width=5)
-    tx, ty = cx - r * 0.55, cy + r * 0.8
-    d.polygon([(tx - r * 0.28, ty - 6), (tx + r * 0.28, ty - 6), (tx - r * 0.45, ty + r * 0.7)], fill=WHITE, outline=NAVY)
-    d.line([(tx - r * 0.25, ty - 4), (tx + r * 0.25, ty - 4)], fill=WHITE, width=8)
+    if to is None: to = (cx - r * 1.0, cy + r * 1.5)
+    ang = math.atan2(to[1] - cy, to[0] - cx); ux, uy = math.cos(ang), math.sin(ang); px, py = -uy, ux
+    bx, by = cx + ux * r * 0.85, cy + uy * r * 0.85
+    L = min(r * 0.75, max(r * 0.35, math.hypot(to[0] - bx, to[1] - by) - 12))
+    tip = (bx + ux * (L + r * 0.15), by + uy * (L + r * 0.15))
+    d.polygon([(bx + px * r * 0.3, by + py * r * 0.3), (bx - px * r * 0.3, by - py * r * 0.3), tip], fill=WHITE, outline=NAVY)
+    d.ellipse([cx - r + 6, cy - r + 6, cx + r - 6, cy + r - 6], fill=WHITE)
     draw(d, cx, cy, r)
 
 
 def q_mark(d, cx, cy, r, col=ORANGE):
-    f = font(int(r * 1.3)); d.text((cx, cy), '?', font=f, fill=col, anchor='mm')
+    ctext(d, (cx, cy), '?', font(int(r * 1.3)), col)
 
 
 def ex_mark(d, cx, cy, r):
-    f = font(int(r * 1.3)); d.text((cx, cy), '!', font=f, fill=ORANGE, anchor='mm')
+    ctext(d, (cx, cy), '!', font(int(r * 1.3)), ORANGE)
 
 
 def light_icon(d, cx, cy, s):
@@ -158,6 +169,13 @@ pic_bubble(im, 1110, 300, 70, lambda d, x, y, r: q_mark(d, x, y, r))
 save(im, 's02b', '02-02')
 im = load('b03'); check_card(im, 's03', cy=96); save(im, 's03', '03-01')
 
+# オープニング（v5 コメント「03-05 のあとにオープニングを 2 秒」）：画面の中の世界に題名
+im = load('b12'); im = Image.eval(im, lambda v: int(v * 0.55)); d = ImageDraw.Draw(im)
+d.rounded_rectangle([70, 190, 1210, 420], 30, fill=(10, 20, 40), outline=TEAL, width=6)
+ctext(d, (640, 255), 'ロボットが', font(64), WHITE)
+ctext(d, (640, 350), '「私はロボットではありません」を押したら？', font(48), (255, 214, 120)); LOG.append(dict(shot='op', size=48))
+save(im, 's_op', '04-01', dt=-2.0)
+
 # ---------------- ① 実験
 im = load('b04a'); check_card(im, 's04a', cy=96); tag(im, 's04a', 'まるロボ', 1080, 250, tail=(1020, 330)); save(im, 's04a', '04-01')
 im = load('b04a'); check_card(im, 's04x', cy=96); save(im, 's04x', '04-03')     # まだくるくる回っている（テストは 04-04 で出す）
@@ -213,23 +231,29 @@ def known_bubble(im):      # 左：出題する側は答えを知っている（
     d = ImageDraw.Draw(im)
     d.rounded_rectangle([250, 50, 530, 180], 30, fill=WHITE, outline=NAVY, width=5)
     d.polygon([(380, 178), (420, 178), (400, 238)], fill=WHITE, outline=NAVY)
-    d.text((390, 115), 'morning', font=font(60), fill=NAVY, anchor='mm'); LOG.append(dict(shot='bubble', size=60))
+    ctext(d, (390, 115), 'morning', font(60), NAVY); LOG.append(dict(shot='bubble', size=60))
 
 
 def unknown_bubble(im):    # 右：出題する側も答えを知らない
     d = ImageDraw.Draw(im)
     d.rounded_rectangle([790, 160, 960, 230], 30, fill=WHITE, outline=NAVY, width=5)
-    d.text((875, 195), '？？？', font=font(54), fill=ORANGE, anchor='mm')
+    ctext(d, (875, 195), '？？？', font(54), ORANGE)
 
 
 save(old_test('s07'), 's07', '07-01')
-im = old_test('s07b')   # 07-04「人には読めるけれど、機械には読めない」：人は○、機械の目は×
+im = old_test('s07b')   # 07-04（v5 コメント「人と機械がわかりにくい」）：人は読めて吹き出しに単語、機械（パソコンの目）は吹き出しに？
 d = ImageDraw.Draw(im)
-d.ellipse([60, 40, 160, 140], fill=(244, 210, 181)); d.rounded_rectangle([40, 140, 180, 200], 30, fill=(62, 124, 177))
-d.ellipse([200, 60, 300, 160], outline=GREEN, width=14)
-d.rounded_rectangle([980, 50, 1110, 170], 24, fill=TEAL); d.ellipse([1015, 80, 1075, 140], fill=WHITE)
-d.line([(1130, 60), (1230, 160)], fill=(220, 70, 60), width=16); d.line([(1230, 60), (1130, 160)], fill=(220, 70, 60), width=16)
-tag(im, 's07b', '人', 380, 110, size=52); tag(im, 's07b', '機械', 870, 110, size=52)
+d.ellipse([70, 50, 160, 140], fill=(244, 210, 181)); d.rounded_rectangle([50, 140, 180, 205], 30, fill=(62, 124, 177))   # 人
+d.rounded_rectangle([210, 40, 450, 130], 26, fill=WHITE, outline=NAVY, width=5); d.polygon([(220, 110), (250, 125), (175, 150)], fill=WHITE, outline=NAVY)
+ctext(d, (330, 85), 'morning', font(52), NAVY)
+d.ellipse([465, 55, 535, 125], outline=GREEN, width=12)
+d.rounded_rectangle([1060, 40, 1220, 150], 14, fill=NAVY2); d.rectangle([1075, 52, 1205, 138], fill=(214, 222, 232))   # 機械（パソコンの画面に目）
+d.ellipse([1110, 70, 1170, 120], fill=TEAL); d.ellipse([1128, 86, 1152, 108], fill=NAVY); d.rectangle([1125, 150, 1155, 175], fill=NAVY2); d.rounded_rectangle([1090, 172, 1190, 190], 6, fill=NAVY2)
+d.rounded_rectangle([830, 40, 1030, 130], 26, fill=WHITE, outline=NAVY, width=5); d.polygon([(1010, 110), (990, 125), (1065, 120)], fill=WHITE, outline=NAVY)
+ctext(d, (930, 85), '？？？', font(52), ORANGE)
+d.line([(700, 60), (780, 140)], fill=(220, 70, 60), width=12); d.line([(780, 60), (700, 140)], fill=(220, 70, 60), width=12)
+tag(im, 's07b', '人', 330, 178, size=44); tag(im, 's07b', '機械', 930, 178, size=44)
+LOG.append(dict(shot='s07b', size=52))
 save(im, 's07b', '07-04')
 save(old_test('s08a', frames=('L', 'R')), 's08a', '08-01')                       # 2 つの種類：枠で 2 つに分ける
 im = old_test('s08b', frames=('L',)); asker(im, 's08b'); known_bubble(im)
@@ -260,8 +284,8 @@ def compare(shot, labels=False, prog=False, human=False):
             f = font(58); fs = font(46)
             for yy, lab, val in ((270, '正解', acc), (410, '時間', sec)):
                 d.rounded_rectangle([x + 30, yy - 34, x + 150, yy + 34], 14, fill=(232, 238, 246))
-                d.text((x + 90, yy), lab, font=fs, fill=NAVY2, anchor='mm')
-                d.text((x + 335, yy), val, font=f, fill=NAVY, anchor='mm')
+                ctext(d, (x + 90, yy), lab, fs, NAVY2)
+                ctext(d, (x + 335, yy), val, f, NAVY)
             LOG.append(dict(shot=shot, size=46))
     tag(im, shot, '2023年', 640, 55, size=56)
     return im
@@ -292,10 +316,15 @@ tag(im, 's16b', '迷ったら → 絵のテスト', 920, 170, size=46, bg=(255, 
 # ---------------- ⑤ 絵のテスト
 im = load('b17n'); tag(im, 's17a', '信号機のマスを全部選んでください', 640, 60, size=46); save(im, 's17a', '17-01')
 im = load('b17'); tag(im, 's17b', '信号機のマスを全部選んでください', 640, 60, size=46); save(im, 's17b', '17-03b')
-a = anch('b18'); e = a.get('edge', [900, 250])
-im = load('b18'); pic_bubble(im, 300, 170, 80, lambda d, x, y, r: (light_icon(d, x - 15, y, 0.9), q_mark(d, x + 38, y, r * 0.55))); save(im, 's18a', '18-01')
-im = load('b18'); d = ImageDraw.Draw(im); d.ellipse([e[0] - 110, e[1] - 80, e[0] + 110, e[1] + 80], outline=ORANGE, width=9)
-pic_bubble(im, 300, 170, 80, lambda d, x, y, r: (light_icon(d, x - 15, y, 0.9), q_mark(d, x + 38, y, r * 0.55))); save(im, 's18b', '18-02')
+a = anch('b18'); e = a.get('edge', [900, 250]); mr = a.get('maru', [660, 220]); CELL = [tuple(a['cell%d' % k]) for k in range(4)] if 'cell0' in a else None
+def cell_line(im):   # まるロボが乗っている端っこのマスを、マスの形でふちどる
+    d = ImageDraw.Draw(im)
+    if CELL: d.line(CELL + [CELL[0]], fill=ORANGE, width=9, joint='curve')
+    else: d.ellipse([e[0] - 110, e[1] - 80, e[0] + 110, e[1] + 80], outline=ORANGE, width=9)
+BUB = (mr[0] - 330, max(110, mr[1] - 60))
+im = load('b18'); pic_bubble(im, BUB[0], BUB[1], 80, lambda d, x, y, r: (light_icon(d, x - 15, y, 0.9), q_mark(d, x + 38, y, r * 0.55)), to=(mr[0] - 40, mr[1])); save(im, 's18a', '18-01')
+im = load('b18'); cell_line(im)
+pic_bubble(im, BUB[0], BUB[1], 80, lambda d, x, y, r: (light_icon(d, x - 15, y, 0.9), q_mark(d, x + 38, y, r * 0.55)), to=(mr[0] - 40, mr[1])); save(im, 's18b', '18-02')
 
 # ---------------- ⑥ AI（2D）
 def chat(shot, n, head=True, person=True):
@@ -340,7 +369,12 @@ def ai_screen(shot, card=False, checked=False):
 save(ai_screen('s20b'), 's20b', '20-02')
 save(ai_screen('s20c', card=True), 's20c', '20-02c')
 save(ai_screen('s20d', card=True, checked=True), 's20d', '20-04')
-im = load('b21i'); a21 = anch('b21i'); m = a21.get('meter_top', [900, 200]); tag(im, 's21', 'チェック欄なし', 400, 90, size=50, bg=(255, 236, 214)); tag(im, 's21', '人らしさ', m[0], max(60, m[1] - 50), size=48, tail=(m[0], m[1] + 10)); save(im, 's21', '21-03')
+im = load('b01'); d = ImageDraw.Draw(im)   # 21-03：ふつうに買い物をしている画面（チェック欄なし）。その裏で、人らしさの点がついている
+tag(im, 's21', 'チェック欄なし', 330, 80, size=50, bg=(255, 236, 214))
+d.rounded_rectangle([960, 60, 1240, 470], 24, fill=(20, 33, 58), outline=TEAL, width=5)
+d.rounded_rectangle([1070, 150, 1130, 430], 14, fill=NAVY2); d.rounded_rectangle([1080, 240, 1120, 420], 10, fill=TEAL)
+tag(im, 's21', '人らしさ', 1100, 110, size=46); tag(im, 's21', '見えない所', 1100, 470 - 10, size=44, bg=(214, 247, 243))
+save(im, 's21', '21-03')
 
 # ---------------- ⑦ まとめ・オチ
 im = load('b22'); check_card(im, 's22', cy=96); d = ImageDraw.Draw(im)
@@ -376,7 +410,7 @@ im = Image.new('RGB', (1280, 720), (238, 232, 220)); pts = screens_crowd(im)
 w = warp_word('upon', 110, 7); im.paste(Image.new('RGB', w.size, (170, 110, 20)), (640 - w.width // 2, 270 - w.height // 2), w); save(im, 's08g', '08-05')
 im = Image.new('RGB', (1280, 720), (238, 232, 220)); pts = screens_crowd(im); d = ImageDraw.Draw(im)
 for x, y in pts: d.line([(x, y), (640, 270)], fill=(200, 180, 140), width=4)
-d.rounded_rectangle([470, 210, 810, 330], 20, fill=WHITE, outline=GREEN, width=6); d.text((640, 270), 'upon', font=font(80), fill=NAVY, anchor='mm'); LOG.append(dict(shot='s08h', size=80))
+d.rounded_rectangle([470, 210, 810, 330], 20, fill=WHITE, outline=GREEN, width=6); ctext(d, (640, 270), 'upon', font(80), NAVY); LOG.append(dict(shot='s08h', size=80))
 save(im, 's08h', '08-06')
 # 10-05：プログラムの方に丸
 im = compare('s10e', labels=True, prog=True, human=True); ring_on(im, 940, 320, 290, 200, TEAL); save(im, 's10e', '10-05')
@@ -422,8 +456,7 @@ im = load('b15'); a15 = anch('b15'); b = a15.get('book', [800, 250]); tag(im, 's
 im = load('b16'); a16 = anch('b16'); m = a16.get('meter_top', [300, 150]); tag(im, 's16c', '人らしさ', m[0], max(60, m[1] - 50), size=54, tail=(m[0], m[1] + 10))
 lock(ImageDraw.Draw(im), 1000, 200, 1.4); tag(im, 's16c', '公開されていない', 1000, 330, size=46); save(im, 's16c', '16-05')
 # 18-05・18-06：選び方も手がかり → まるロボの行ったり来たり
-a18 = anch('b18'); e = a18.get('edge', [900, 250])
-im = load('b18'); d = ImageDraw.Draw(im); d.ellipse([e[0] - 110, e[1] - 80, e[0] + 110, e[1] + 80], outline=ORANGE, width=9)
+im = load('b18'); cell_line(im); d = ImageDraw.Draw(im)
 d.rounded_rectangle([60, 140, 130, 470], 16, fill=NAVY2); d.rounded_rectangle([75, 300, 115, 455], 10, fill=TEAL)
 tag(im, 's18c', '人らしさ', 200, 110, size=48); tag(im, 's18c', '選び方も見ている', 560, 110, size=48, bg=(255, 236, 214)); save(im, 's18c', '18-05')
 # 19-03：AI は自分では解けない（テストの絵に ✕）
@@ -439,7 +472,7 @@ d.ellipse([340, 380, 420, 460], fill=(244, 210, 181)); d.rounded_rectangle([320,
 tag(im, 's19h', '研究者が手伝った試験', 700, 440, size=46, bg=(255, 236, 214)); save(im, 's19h', '19-08')
 # 21：このように → ふるまい全体を見る → チェック欄さえ出さない
 save(load('b20d'), 's20e', '20-05')
-im = load('b21w'); save(im, 's21b', '21-02')
+im = load('b14'); tag(im, 's21b', 'ふるまい全体を見る', 640, 70, size=52); save(im, 's21b', '21-02')   # 門番が足あと全体を照らして見ている（v5 コメント「分かりにくい」）
 # 22（v3 コメント「表現が分かりにくい」）：問い → 動き方 → 記録 → 昔と今 → AI が賢く → 見分け方が残り少ない
 im = load('b22'); check_card(im, 's22a', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r)); save(im, 's22a', '22-01')
 a13 = anch('b13'); h = a13.get('human_path', [400, 300]); r = a13.get('robot_path', [850, 300])
@@ -459,7 +492,7 @@ for k, lab in enumerate(('ゆがんだ文字', '絵のテスト', 'ふるまい'
     if k < 2:
         d.line([(x - 110, 270), (x + 110, 400)], fill=(220, 70, 60), width=18); d.line([(x + 110, 270), (x - 110, 400)], fill=(220, 70, 60), width=18)
     else:
-        d.text((x, 340), '？', font=font(110), fill=ORANGE, anchor='mm')
+        ctext(d, (x, 340), '？', font(110), ORANGE)
 tag(im, 's22f', '見分ける方法', 640, 80, size=50); save(im, 's22f', '22-06')
 json.dump(SHOTS, open(os.path.join(OUT, 'shots.json'), 'w'), ensure_ascii=False, indent=0)
 json.dump(LOG, open(os.path.join(OUT, 'tags_log.json'), 'w'), ensure_ascii=False, indent=0)
