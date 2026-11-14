@@ -142,7 +142,7 @@ ov(W("22-03", "キャンプの動画"), s("22-03", 1), "s22_inset", [("img", nig
 
 # 前の場面のことを言う所は、その場面の切り抜きを左上に小さく（QR回 v10 の指摘の横展開）。(出す始まり, 終わり, 元の時刻, 名前)
 PIPS = [(W("07-01", "柱の穴"), s("07-01", 1) + 0.3, W("06-02", "この小さな穴") + 1.0, "さきほどの穴"),
-        (W("12-03", "あの枠"), s("12-03", 1) + 0.3, 29.0, "ハルさんの画面"),
+        (W("12-03", "あの枠"), s("12-04") + 0.3, 29.0, "ハルさんの画面"),
         (W("15-01b", "あの鏡"), W("15-01b", "私たち自身"), 101.0, "あの鏡"),
         (W("10-02", "さきほどと同じ"), s("10-02", 1), 158.0, "さきほどのスマホの中")]
 
@@ -180,7 +180,7 @@ INS = [
     (s("12-05b"), _w("12-05b", "手がかりを見ると"), "clip", 23.0),                   # 8:31「ニュースを読んでいる場面」
     (_w("13-05", "同じ電車"), s("13-05", 1) + 0.2, "img", "wifi_train"),             # 9:26 Wi-Fi
     (s("13-05b"), s("13-05b", 1) + 0.2, "img", "together"),
-    (_w("14-01b", "紅葉"), s("14-01b", 1) + 0.4, "img", "autumn"),                   # 9:51 紅葉
+    (_w("14-01b", "紅葉"), s("14-01c", 1) + 0.2, "img", "autumn"),                   # 9:51 紅葉（v5：1.2 秒だけだと 3D の窓→絵の窓→3D の窓とちらつくので、次の文の終わりまで）
     (s("14-05"), s("14-05b") - 0.05, "clip", W("05-03", "出ていく") + 0.2),           # 10:21 2 人目の容疑者のまとめ → 容疑者の台
     (s("14-05b"), s("14-05c") - 0.05, "clip", 505.0),                                 # 10:30「競りで使われていました」→ 競り
     (s("14-05c"), _w("14-05c", "季節"), "clip", 563.0),                               #       「一緒にいた人」→ 二人
@@ -285,6 +285,16 @@ for _ in range(4):
         for _T in SCENE_TS:
             if -INS_FD < x[0] - _T < INS_GAP: x[0] = _T - INS_FD                   # 場面の始まりから少しだけ元の場面 → 切り替わりから差し込み
             if -INS_FD < _T - x[1] < INS_GAP: x[1] = _T + INS_FD               # 切り替わりの直後に終わる差し込みも（差し込みのあと少しだけ元の場面 → 切り替わりまで差し込み。v5「会場の後に前の場面が一瞬」）
+    for i in range(len(_ins) - 1):
+        if _ins[i + 1][0] - _ins[i][1] < INS_GAP: _ins[i][1] = max(_ins[i][1], _ins[i + 1][0])
+# ③ 元の場面は文の頭でカメラが切り替わることが多い。差し込みのあと次の文の頭まで 1.2 秒未満なら、その頭の 0.6 秒あとまでのばす。
+#   文の頭から 1.2 秒未満で始まる差し込みは、文の頭から出す（切り替わった直後の絵を一瞬見せない。v5 の 1 コマずつの点検で見つけた）
+SENT_TS = [p["start"] for p in P]
+for _ in range(3):
+    for x in _ins:
+        for _T in SENT_TS:
+            if 0 <= _T - x[1] < 1.2: x[1] = _T + 0.6
+            if 0 < x[0] - _T < 1.2: x[0] = _T - INS_FD
     for i in range(len(_ins) - 1):
         if _ins[i + 1][0] - _ins[i][1] < INS_GAP: _ins[i][1] = max(_ins[i][1], _ins[i + 1][0])
 INS_COVER = [(x[0], x[1]) for x in _ins]
@@ -405,7 +415,8 @@ for j, (a, b, pth, mv, fo_) in enumerate(INSV):
     fl.append("[%s][n%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[d%d]" % (cur, j, a, b, j)); cur = "d%d" % j; nin += 1
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
     inputs += ["-i", pth]
-    fl.append("[%s][%d:v]overlay=0:0:enable='between(t,%.3f,%.3f)'[o%d]" % (cur, nin, a, b, i)); cur = "o%d" % i; nin += 1
+    _ex = "".join("*not(between(t,%.3f,%.3f))" % (c, d) for c, d in INS_COVER if c < b and a < d)   # v5：差し込みの間は、元の場面の札・小窓を出さない
+    fl.append("[%s][%d:v]overlay=0:0:enable='between(t,%.3f,%.3f)%s'[o%d]" % (cur, nin, a, b, _ex, i)); cur = "o%d" % i; nin += 1
 fl.append("[%s]subtitles=%s:fontsdir=%s[vout]" % (cur, tmp + "/subs.ass", FONTS))
 inputs += ["-i", tmp + "/mix.wav"]
 cmd = ["ffmpeg", "-v", "error", "-y"] + inputs + ["-filter_complex", ";".join(fl), "-map", "[vout]", "-map", "%d:a" % nin,
