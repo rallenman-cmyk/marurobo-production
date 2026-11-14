@@ -11,6 +11,16 @@ sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "skill", "marurobo-video
 import subs_jp as SJ
 V = os.environ["MARU_VOICE"]
 P = json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8"))
+def merge_gaps(g, join=0.25):
+    # v4「字幕の出るのが早い」(8:31)：長い間の途中の息つぎ（0.2 秒ほどの小さな音）で間が 2 つに割れ、前半の間の終わりで替わって、0.6 秒早く出ていた。
+    #   近い間（0.25 秒未満で隣り合う）は 1 つの間にまとめる → 切り替わりは、本当に声が出る直前になる
+    out = []
+    for g0, g1 in g:
+        if out and g0 - out[-1][1] < join: out[-1] = (out[-1][0], g1)
+        else: out.append((g0, g1))
+    return out
+
+
 ev = []
 for k, p in enumerate(P):
     nxt = P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.0
@@ -20,7 +30,7 @@ for k, p in enumerate(P):
     if len(evl) > 1:
         # v4「字幕の出るのが早い／遅い」（7:06・7:14・14:50）：切り替わりを、声の間のうち「長い間」と「文の終わり（。？！……）」を重く見て選び直す
         #   字数の割合だけで選ぶと、「しずくの印の箱は、」の後の短い間で替わり、「いた場所」を言う前に次の文が出ていた
-        sil, dur = SJ.gaps(wav, p.get("speed", 1.0)); sil = [(g0, g1) for g0, g1 in sil if g1 - g0 >= 0.08]
+        sil, dur = SJ.gaps(wav, p.get("speed", 1.0)); sil = merge_gaps([(g0, g1) for g0, g1 in sil if g1 - g0 >= 0.08])
         L = [max(1, SJ._ylen(t)) for _, _, t in evl]; tot = sum(L)
         talk = lambda x: x - sum(min(g1, x) - g0 for g0, g1 in sil if g0 < x)
         vt = talk(dur); prev = 0.0; cuts = []
@@ -40,7 +50,7 @@ for k, p in enumerate(P):
         k = flat.find("……")
         if 2 <= k and len(flat) - (k + 2) >= 2 and not flat.startswith("……"):
             k2 = k + 2 + (1 if flat[k + 2:k + 3] in "。、" else 0)
-            g, d = SJ.gaps(wav, p.get("speed", 1.0))
+            g, d = SJ.gaps(wav, p.get("speed", 1.0)); g = merge_gaps(g)
             tgt = (a - p["start"]) + (c - a) * k2 / len(flat)
             cand = [(g0, g1) for g0, g1 in g if g1 - g0 >= 0.05 and a - p["start"] + 0.4 < g0 < c - p["start"] - 0.4]
             cut = p["start"] + (min(cand, key=lambda x: abs(x[0] - tgt))[1] - 0.08 if cand else tgt)

@@ -9,7 +9,7 @@ cp $EP/pc_kit/はじめに.txt $K/
   cp $EP/pc_kit/README_PC.md $K/
 cp $EP/anim/common.py $EP/anim/scenes_all.py $EP/anim/s07s08_gate.py $EP/anim/pc_out.py $K/episodes/ep03_ad/anim/
 cp $EP/storyboard/*.py $EP/storyboard/*.png $K/episodes/ep03_ad/storyboard/
-cp $EP/voice/placement.json $EP/voice/script_v1_0.json $K/episodes/ep03_ad/voice/
+cp $EP/voice/placement.json $EP/voice/script_v1_0.json $EP/voice/word_times.json $K/episodes/ep03_ad/voice/
 cp $REPO/episodes/ep01_earphone/stage/human/{iconfig,hgen,hbuild,sdf}.py $K/episodes/ep01_earphone/stage/human/
 (cd $T && rm -f "$OUT/marurobo_ep03.zip" && python3 -c "
 import zipfile,os
