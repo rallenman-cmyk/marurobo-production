@@ -20,8 +20,9 @@ def ev_list():
     E = []
     add = lambda *a: E.append(a)
     # 02：スマホに地図（大きく）。言うたびに家具が光る・いまいる場所の点に輪
-    add(s("02-02") - 0.15, s("02-05") - 0.4, "phone", dict(hl=[(w("02-03", "ソファ"), "sofa"), (w("02-03", "机"), "desk"), (w("02-03", "ベッド"), "bed"), (e("02-03") + 0.2, None)], ring=w("02-04", "この点")))
-    add(s("02-02") + 0.6, s("02-02") + 2.4, "bubble", dict(obj="maru", icon="!", side=-1))
+    add(s("02-02") - 0.15, s("02-05") + 0.35, "phone",   # 次のカット（字幕の切り替わり）の溶かしが終わるまで残す（前の場面をのぞかせない）
+         dict(hl=[(w("02-03", "ソファ"), "sofa"), (w("02-03", "机"), "desk"), (w("02-03", "ベッド"), "bed"), (e("02-03") + 0.2, None)], ring=w("02-04", "この点")))
+    add(e("02-01") - 0.2, s("02-02") - 0.15, "bubble", dict(obj="maru", icon="!", side=-1))     # スマホがついて、びくっ（大きなスマホの絵より前に）
     # 03：題名の前の「？」
     add(w("03-04", "いったい"), e("03-04") + 0.2, "bubble", dict(obj="maru", icon="?", side=-1))
     # オープニング（題名 2 秒）
@@ -36,7 +37,10 @@ def ev_list():
     add(e("07-05") - 2.6, e("07-05") + 0.3, "bubble", dict(obj="maru", icon="dizzy", side=1))
     # 08：「？」は 3D の輪で。
     # 10：光の物差し（言う瞬間）
-    add(w("10-03", "光の物差し"), e("10-04") + 0.3, "tag", dict(text="光の物差し", obj="senpai", dy=-160, track_clip="S10a"))
+    add(w("10-03", "光の物差し"), e("10-04") + 0.3, "tag", dict(text="光の物差し", pos=(1040, 90)))
+    # 11：「ここは壁。ここは、ソファの足」（点の上に黄色い輪。暗い中でも見えるように 2D で）
+    add(w("11-05", "壁"), e("11-05") + 0.8, "ring2d", dict(obj="wallpt", r=34))
+    add(w("11-05", "ソファ"), e("11-05") + 0.8, "ring2d", dict(obj="sofaleg", r=26))
     # 12：さきほどのスマホの地図（小窓）
     add(w("12-03", "さきほど"), e("12-05") + 0.2, "phone_pip", {})
     # 13：1 メートル・「？」
@@ -261,6 +265,12 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                     _paste(base, spr, x_ + off[0] + spr.width / 2, 110 + off[1] + spr.height / 2, *_pop(t, tt, t1))
             if t >= p["a"]: base.alpha_composite(arrow_sprite((790, 180), (440, 180), TEAL))      # 自分の場所 → 地図（地図を描くには、自分の場所が要る）
             if t >= p["b"]: base.alpha_composite(arrow_sprite((440, 225), (790, 225), D.ORANGE))  # 地図 → 自分の場所
+        elif kind == "ring2d":
+            q = where(p["obj"], t, p.get("track_clip"))
+            if q is None: continue
+            r = p.get("r", 30) * k; im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
+            d_.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], outline=YEL + (int(255 * a),), width=7)
+            base.alpha_composite(im)
         elif kind == "arrow":
             base.alpha_composite(arrow_sprite(p["p0"], p["p1"]))
         elif kind == "pip_clip" and frame_of:

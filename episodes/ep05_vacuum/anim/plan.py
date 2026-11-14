@@ -158,7 +158,7 @@ class Drive:
         return K[-1][1:]
 
 
-def scan_drive(dr, t0, t1, rot_per_s=1.0, rays=180, S=None, drift=None, jitter=0.0, seed=1):
+def scan_drive(dr, t0, t1, rot_per_s=1.0, rays=180, S=None, drift=None, jitter=0.0, seed=1, maxd=8.0):
     """走りながら光を回したとき当たった点 (x, y, 生まれた秒)。drift があれば、思っている場所で置く（ずれた地図）"""
     import random as _r
     _r.seed(seed)
@@ -169,7 +169,7 @@ def scan_drive(dr, t0, t1, rot_per_s=1.0, rays=180, S=None, drift=None, jitter=0
         t = t0 + i / (rot_per_s * rays)
         x, y, th = dr.pose(t)
         a = 2 * math.pi * (i % rays) / rays + i * 0.0007
-        h = ray(x, y, a, S)
+        h = ray(x, y, a, S, maxd)
         if not h: continue
         hx, hy = h[1]
         if jitter: hx += _r.gauss(0, jitter); hy += _r.gauss(0, jitter)

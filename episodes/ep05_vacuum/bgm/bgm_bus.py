@@ -10,7 +10,7 @@ _sp = importlib.util.spec_from_file_location("bgm_bus_ep03", os.path.join(HERE, 
 B3 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(B3)
 
 PLAN = [("B", "S01"), ("C", "S06"), ("B", "S09"), ("D", "S13"), ("C", "S16"), ("D", "S20"), ("C", "S22"), ("B", "S26")]
-OFFSET = {("B", "S09"): 30.0, ("C", "S16"): 40.0, ("D", "S20"): 40.0, ("C", "S22"): 80.0, ("B", "S26"): 60.0}
+OFFSET = {("D", "S20"): 40.0, ("C", "S22"): 60.0}   # 曲 C・D は約 3 分（くり返さない）。同じ曲の 2 回目は途中から
 RMS = 0.017   # 4本目 v9 で決めた大きさ（声より約 20 dB 下）
 
 

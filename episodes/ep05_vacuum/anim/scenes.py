@@ -80,8 +80,8 @@ def b_open(cl):
     key(m.root, "location", ta + 1.0, (1.55, 1.45, 0.0)); ev(ta + 0.3, "jump", 0.6); ev(ta + 1.0, "land", 0.7)
     m._last["loc"] = (ta + 1.0, (1.55, 1.45, 0.0))
     m.walk(ta + 1.3, ta + 2.6, (0.3, 1.5, 0.0)); m.at(ta + 2.9, face=180, look=5)
-    ev(s("04-02") + 0.35, "pipo", 0.6); m.hop(s("04-02") + 0.35, 0.06, 0.25, sound=False)
-    sp.pi(w("04-02", "短い") + 0.6, n=2)
+    ev(s("04-02") - 0.35, "pipo", 0.6); m.hop(s("04-02") - 0.35, 0.06, 0.25, sound=False)   # あいさつの「ピポ」は声の前のすき間に
+    sp.pi(s("04-02") + 0.98, n=2)          # 先輩の返事は、声の「……」の間（声の頭から 0.95〜1.53 秒の無音）に
     m.hop(s("04-04") + 0.6, 0.12, 0.35); m.hop(s("04-04") + 1.2, 0.12, 0.35)
     # 05：先輩の体をぐるりと（まるロボは左へ歩いて、カメラの通り道をあける）
     mp = (-0.3, 1.65, 0.0)
@@ -100,7 +100,7 @@ def b_open(cl):
     emit_key(le, t3, 4.0); emit_key(le, t3 + 0.2, 14.0); emit_key(le, t3 + 0.8, 4.0)
     emit_key(bm, t3 + 0.5, 0.0); emit_key(bm, t3 + 0.7, 1.6); emit_key(bm, t3 + 1.3, 0.0)
     emit_key(bl, t3 + 1.0, 0.0); emit_key(bl, t3 + 1.2, 14.0); emit_key(bl, t3 + 1.8, 0.0)
-    for k in range(3): ev(t3 + k * 0.5, "pi", 0.3)
+    ev(t3, "pi", 0.3)                     # 3 か所が順に光る（音は頭の 1 つだけ。声と重ねない）
     m.hop(e("05-05") - 0.3, 0.1, 0.3)
     # カメラ
     if cut(cl, "S01a"):
@@ -188,23 +188,15 @@ def b_old(cl):
         cam_move(c, tg, s("06-01") - 0.8, s("06-07"), (-1.7, -3.7, 2.7), (-1.2, -3.4, 2.4), (0.0, 0.0, 0.0), (0.0, -0.2, 0.0))
         con = tg.constraints.new('COPY_LOCATION'); con.target = op.root; con.influence = 0.45   # 先輩を半分だけ追う
     elif cut(cl, "S06b"):
-        # ぶつかる所のアップ（横から、少し引いて。壁とバンパーが両方入るように）
+        # ぶつかる所のアップ：先輩の横について行くカメラ（ぶつかる壁とバンパーが両方入る向き。部屋の中に収まる側を選ぶ）
         xh, yh, ah = dr.pose(t_hit)
         fwd = (math.sin(R(ah)), -math.cos(R(ah))); side = (math.cos(R(ah)), math.sin(R(ah)))
-        def inside_furn(p_):
-            for k in ("sofa", "desk", "bed", "shelf", "dock"):
-                x0_, y0_, x1_, y1_ = plan.FURN[k][:4]
-                if x0_ - 0.15 < p_[0] < x1_ + 0.15 and y0_ - 0.15 < p_[1] < y1_ + 0.15: return True
-            return False
-        cpos = None
-        for da in (100, -100, 120, -120, 140, -140, 160, -160, 180):      # 横〜後ろから。部屋の中で、家具の中でない所
-            a_ = math.atan2(fwd[1], fwd[0]) + math.radians(da)
-            p_ = (xh + 1.0 * math.cos(a_), yh + 1.0 * math.sin(a_), 0.42)
-            if plan.ROOM[0] + 0.25 < p_[0] < plan.ROOM[2] - 0.25 and plan.ROOM[1] + 0.25 < p_[1] < plan.ROOM[3] - 0.25 and not inside_furn(p_): cpos = p_; break
-        if cpos is None: cpos = (xh - fwd[0] * 1.0, yh - fwd[1] * 1.0, 0.5)
-        tgt = (xh + fwd[0] * 0.18, yh + fwd[1] * 0.18, 0.06)
-        c, tg = cam_rig(cpos, tgt, 34)
-        cam_move(c, tg, s("06-07") - 0.8, e("06-08") + 0.4, cpos, (cpos[0] + (tgt[0] - cpos[0]) * 0.15, cpos[1] + (tgt[1] - cpos[1]) * 0.15, cpos[2] - 0.05), tgt, tgt)
+        off = None
+        for sg in (-1, 1):      # 2:03 のちらつき：+側だと出入り口の外（黒）が映ったので、-側を先に
+            o_ = (sg * side[0] * 0.55 - fwd[0] * 0.35, sg * side[1] * 0.55 - fwd[1] * 0.35, 0.3)
+            if plan.ROOM[0] + 0.15 < xh + o_[0] < plan.ROOM[2] - 0.15 and plan.ROOM[1] + 0.15 < yh + o_[1] < plan.ROOM[3] - 0.15: off = o_; break
+        off = off or (-fwd[0] * 0.6, -fwd[1] * 0.6, 0.35)
+        c = cam_follow(op.root, off, 0.05, 30)
     else:
         c = cam_top((-0.2, 0.15, 7.6), 32)
         cam_top_move(c, s("06-09") - 0.8, e("06-10") + 0.8, (-0.2, 0.15, 7.6), (-0.2, 0.15, 7.1))
@@ -304,8 +296,9 @@ def lidar_drives():
 def full_map_points():
     """出来上がった地図の点（09〜12 と同じ走りで光を回したもの）。生まれた秒つき"""
     d9, d11, d12 = lidar_drives()
-    a = plan.scan_drive(d11, d11.t0, d11.t1, rot_per_s=1.0, rays=200, seed=2)
-    b = plan.scan_drive(d12, d12.t0, d12.t1, rot_per_s=4.0, rays=200, seed=3)
+    # 光の届く距離を 2.6 m に（遠くの壁まで一度に出ず、近い所から順に点がふえる。ひと回りで地図の 99% がうまる）
+    a = plan.scan_drive(d11, d11.t0, d11.t1, rot_per_s=1.0, rays=200, seed=2, maxd=2.6)
+    b = plan.scan_drive(d12, d12.t0, d12.t1, rot_per_s=4.0, rays=200, seed=3, maxd=2.6)
     return a + b, d9, d11, d12
 
 
@@ -379,11 +372,11 @@ def b_lidar(cl):
     out = fm.node_tree.nodes["Material Output"]
     fm.node_tree.links.new(tr.outputs[0], mix.inputs[1]); fm.node_tree.links.new(fn.outputs[0], mix.inputs[2]); fm.node_tree.links.new(mix.outputs[0], out.inputs[0])
     mix.inputs[0].default_value = 0.0; mix.inputs[0].keyframe_insert("default_value", frame=f(w("10-05", "何回も") - 0.2))
-    mix.inputs[0].default_value = 0.35; mix.inputs[0].keyframe_insert("default_value", frame=f(w("10-05", "何回も") + 0.5))
-    mix.inputs[0].default_value = 0.35; mix.inputs[0].keyframe_insert("default_value", frame=f(e("10-05") + 0.2))
+    mix.inputs[0].default_value = 0.12; mix.inputs[0].keyframe_insert("default_value", frame=f(w("10-05", "何回も") + 0.5))
+    mix.inputs[0].default_value = 0.12; mix.inputs[0].keyframe_insert("default_value", frame=f(e("10-05") + 0.2))
     mix.inputs[0].default_value = 0.0; mix.inputs[0].keyframe_insert("default_value", frame=f(e("10-05") + 0.8))
     fn.inputs["Strength"].default_value = 2.0
-    fan.scale = (3.5, 3.5, 1); fan.visible_shadow = False
+    fan.scale = (2.4, 2.4, 1); fan.visible_shadow = False
     show_between(fan, w("10-05", "何回も") - 0.3, e("10-05") + 1.0); ev(w("10-05", "何回も"), "whoosh", 0.4)
     ring1 = [(round(h_[1][0], 3), round(h_[1][1], 3), w("10-05", "何回も") + 0.3) for h_ in [plan.ray(xs, ys, R(a_), S_) for a_ in range(0, 360, 2)] if h_]
     rp, rm = point_cloud("ring1", ring1, life=e("10-05") + 0.6 - w("10-05", "何回も") - 0.3, t_offset=CLOCK["T0"])
@@ -394,9 +387,10 @@ def b_lidar(cl):
     pc, pm = point_cloud("map", pts, t_offset=CLOCK["T0"])
     mr.at(s("11-07") - 0.2, look=-35); mr.tilt(s("11-07"), 12); mr.tilt(e("11-07") + 0.8, -6); mr.tilt(e("11-07") + 1.6, 0)
     # 11-05「ここは壁。ここは、ソファの足」（点の上に輪）
-    rw = ring_marker((-3.0, -0.2), 0.22, YELLOW, w=0.012, z=plan.LIDAR_Z); rw.rotation_euler = (0, R(90), 0)
+    rw = ring_marker((-2.97, -0.2), 0.22, YELLOW, w=0.012, z=plan.LIDAR_Z); rw.rotation_euler = (0, R(90), 0)
     show_between(rw, w("11-05", "壁"), e("11-05") + 0.8); scale_pop(rw, w("11-05", "壁")); ev(w("11-05", "壁"), "pop", 0.4)
     lx, ly = plan.legs("sofa")[0]
+    track("wallpt", empty((-2.98, -0.2, plan.LIDAR_Z))); track("sofaleg", empty((lx, ly, plan.LIDAR_Z)))   # 2D の輪をつける所
     rs = ring_marker((lx, ly), 0.12, YELLOW, w=0.01, z=plan.LIDAR_Z)
     show_between(rs, w("11-05", "ソファ"), e("11-05") + 0.8); scale_pop(rs, w("11-05", "ソファ")); ev(w("11-05", "ソファ"), "pop", 0.4)
     # 12-03〜12-04：スマホの地図を上から重ねる（同じ間取りから描いた絵なので、ぴったり重なる）
@@ -711,7 +705,7 @@ def b_cam(cl):
     # 20：電気を消す → 光の先輩は進む、カメラの先輩はくるくる
     toff = e("20-01") + 0.15
     if not pov:
-        lights_off(toff, toff + 0.12, sky=0.02, world_s=0.012); ev(toff, "switch", 0.8)
+        lights_off(toff, toff + 0.12, sky=0.07, world_s=0.05); ev(toff, "switch", 0.8)   # 暗くても、先輩の動きが分かるくらいは残す
     xl, yl, al = LIDP[0], LIDP[1], 0.0
     d20 = plan.Drive([LIDP, (0.4, 0.3), (1.6, 0.3), (1.6, -1.2)], s("20-02") + 0.3, v=0.3)
     ls.drive(d20)

@@ -34,7 +34,12 @@ for k, p in enumerate(P):
     end = max(p["end"] + 0.35, p["start"] + 1.2)
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
 SUBS = []
-for a, c, t in lines: SUBS += SJ.events_v(a, c, t)
+for a, c, t in lines:
+    ev_ = SJ.events_v(a, c, t)
+    for i in range(len(ev_) - 1):        # 分けた字幕の 1 枚が 1.0 秒より短いときは、次の札を少し後ろへ（次も 1.0 秒は残す）
+        a0, c0, t0 = ev_[i]; a1, c1, t1 = ev_[i + 1]
+        if c0 - a0 < 1.0 and c1 - (a0 + 1.0) >= 1.0: ev_[i] = (a0, a0 + 1.0, t0); ev_[i + 1] = (a0 + 1.0, c1, t1)
+    SUBS += ev_
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
@@ -106,7 +111,9 @@ SCST = {}
 for p in P: SCST.setdefault(T.L[p["no"]]["scene"], p["start"])
 music = bgm_bus.make(T.END + 1, SCST, SR, W)[:N]
 g = np.where(on > 0, 10 ** (-6 / 20), 1.0).astype(np.float32)
-kk = int(0.4 * SR); g = np.convolve(np.pad(g, (kk, kk), mode="edge"), np.ones(kk) / kk, mode="same")[kk:-kk]
+kk = int(0.4 * SR)   # 0.4 秒の移動平均（累積和で。np.convolve だと何十分もかかる）
+gp = np.pad(g.astype(np.float64), (kk // 2, kk - kk // 2), mode="edge"); cs_ = np.concatenate([[0.0], np.cumsum(gp)])
+g = ((cs_[kk:] - cs_[:-kk]) / kk)[:N].astype(np.float32)
 # 効果音（クリップのログを合わせ、同じ物は 1 つに）
 EV = {}
 for nm in ORDER:
@@ -116,7 +123,11 @@ for nm in ORDER:
         EV[(round(t, 2), kind)] = gain
 SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
 fx = np.zeros(N, np.float32); moves = []; overl = []
-voiced = lambda t0, t1: on[max(0, int(t0 * SR)):max(0, int(t1 * SR))].any()
+# 効果音と声の重なりは、声が本当に出ている所（文の中の「……」の間は除く）で見る
+_hop = int(0.02 * SR); _m = N // _hop
+_env = np.abs(voice[:_m * _hop]).reshape(_m, _hop).max(1) > 0.02
+_env = np.convolve(_env.astype(float), np.ones(5), mode="same") > 0      # 前後 0.04 秒の余白
+voiced = lambda t0, t1: _env[max(0, int(t0 * SR) // _hop):max(0, int(t1 * SR) // _hop + 1)].any()
 motor_on = []
 for (t, kind), gain in sorted(EV.items()):
     if kind == "motor_on": motor_on.append(t); continue
@@ -134,10 +145,11 @@ for (t, kind), gain in sorted(EV.items()):
     dur = len(x) / SR
     if kind in SHIFT and voiced(t, t + dur):
         best = None
-        for d_ in np.arange(-0.5, 0.51, 0.02):
+        win = 0.9 if kind in ("pipi", "click") else 0.5     # 返事の「ピッ、ピッ」・バンパーのカチッは、言葉の「……」の間まで探す
+        for d_ in np.arange(-win, win + 0.01, 0.02):
             if not voiced(t + d_, t + d_ + dur) and (best is None or abs(d_) < abs(best)): best = d_
         if best is not None: moves.append((round(t, 2), kind, round(best, 2))); t += best
-        else: overl.append((round(t, 2), kind))
+        else: overl.append((round(t, 2), kind)); x = x * 0.5      # 言葉の瞬間に出る札の音：ずらせないときは半分の大きさに（声をじゃましない）
     i = int(t * SR)
     if i < 0: continue
     fx[i:i + len(x)] += x[:N - i]
@@ -193,7 +205,14 @@ over = [t for a, c, t in SUBS if any(SJ.width(r) > 25 for r in t.split("\\N")) o
 chk.append("25 字・2 行をこえる字幕：" + ("、".join(over) or "なし"))
 chk.append("絵の足りないクリップ：" + ("、".join(sorted(missing)) or "なし"))
 chk.append("声のすき間へずらした効果音：" + ("、".join("%.2f %s → %+.2f 秒" % m for m in moves) or "なし"))
-chk.append("声と重なったままの大事な効果音：" + ("、".join("%.2f %s" % m for m in overl) or "なし"))
+chk.append("声と重なるので半分の大きさにした効果音（札が言葉の瞬間に出る音）：" + ("、".join("%.2f %s" % m for m in overl) or "なし"))
+small = [p.get("text") for t0_, t1_, kind, p in OV.EVENTS if kind == "tag" and p.get("size", 48) < 44]
+chk.append("44 より小さい札の字：" + ("、".join(small) or "なし（札 48・年や数 56〜60）"))
+cps = []
+for p in P:
+    d_ = p["end"] - p["start"]; c_ = len(p["text"].replace("…", "").replace("、", "").replace("。", ""))
+    if d_ > 0 and not (4.0 <= c_ / d_ <= 9.5): cps.append("%s %.1f字/秒" % (T.L[p["no"]]["id"], c_ / d_))
+chk.append("極端に遅い・速い声（4〜9.5 字/秒の外）：" + ("、".join(cps) or "なし"))
 open(os.path.splitext(OUT)[0] + "_check.txt", "w", encoding="utf-8").write("\n".join(chk) + "\n")
 print("\n".join(chk))
 print("→ %s（%.1f MB）" % (OUT, os.path.getsize(OUT) / 1e6))
