@@ -43,6 +43,10 @@ def scan(x, soft=2.5, thr=14.0, short=1.2):
         res = [np.abs(x[k] - (A + (B - A) * (k - a1) / L)).mean() for k in range(a1 + 1, b0)]
         k = int(np.argmax(res))
         if res[k] > thr * 0.7: found.append(((a1 + 1 + k) / FPS, L / FPS, "つなぎの途中に別の絵"))
+    # ③ 1 コマだけ前後と違う絵（つなぎ目で下の場面が 1 コマ透ける など）：前後のコマどうしは似ているのに、そのコマだけ離れている
+    for k in range(1, len(x) - 1):
+        ab = np.abs(x[k - 1] - x[k + 1]).mean(); e1 = np.abs(x[k] - x[k - 1]).mean(); e2 = np.abs(x[k] - x[k + 1]).mean()
+        if min(e1, e2) > max(6.0, 2.5 * ab): found.append((k / FPS, 1 / FPS, "1 コマだけ違う絵"))
     return sorted(found)
 
 
@@ -58,8 +62,10 @@ def main():
         os.makedirs(outd, exist_ok=True)
         for t, du, why in found:
             png = os.path.join(outd, "flash_%07.2f.png" % t)
-            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "%.2f" % max(0, t - 1.0), "-t", "%.2f" % (du + 2.0), "-i", src,
-                            "-vf", "fps=8,scale=240:-2,tile=6x%d" % int(np.ceil((du + 2.0) * 8 / 6)), "-frames:v", "1", png], check=True)
+            # 全部のコマ（24 コマ/秒）で並べる。8 コマ/秒に間引くと、1 コマだけの透けを見落とす（v5 で 12:28 を見逃した）
+            span = min(du + 1.0, 2.5)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "%.3f" % max(0, t - 0.5), "-t", "%.3f" % span, "-i", src,
+                            "-vf", "fps=24,scale=200:-2,tile=8x%d" % int(np.ceil(span * 24 / 8)), "-frames:v", "1", png], check=True)
 
 
 if __name__ == "__main__":

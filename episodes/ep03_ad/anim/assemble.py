@@ -308,7 +308,7 @@ if os.environ.get("INS_DRY"):                                            # 差�
 INSV = []   # (始まり, 終わり, ファイル, 動画か, 消え方)  消え方 True＝最後に溶けて消える／False＝次の差し込みが上に重なる
 for k, (a, b, kind, arg) in enumerate(_ins):
     nxt = k + 1 < len(_ins) and _ins[k + 1][0] <= b + 1e-3
-    if nxt: b = _ins[k + 1][0] + INS_FD                                     # 次が出きるまで残す
+    if nxt: b = _ins[k + 1][0] + INS_FD + 0.25                              # 次が出きるまで残す（v5「12:28 一瞬なにかうつる」：ちょうど出きるコマで前の絵が消え、1 コマだけ下の場面が透けていた。0.25 秒余分に残す）
     if kind == "clip": INSV.append((a, b, _clip("c%d" % k, arg, b - a + 0.1), True, not nxt))
     elif kind == "still": INSV.append((a, b, _frame_at(arg), False, not nxt))
     else: INSV.append((a, b, os.path.join(INSD, "ins_%s.png" % arg), False, not nxt))
