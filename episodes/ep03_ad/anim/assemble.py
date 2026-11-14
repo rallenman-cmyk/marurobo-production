@@ -282,9 +282,9 @@ SCENE_TS = sorted(set([t for k, t in SCST.items() if k != "S00"] + [298.26]))
 _ins = sorted([list(x) for x in INS if x[1] - x[0] >= 0.3], key=lambda x: x[0])
 for _ in range(4):
     for x in _ins:
-        for T in SCENE_TS:
-            if -INS_FD < x[0] - T < INS_GAP: x[0] = T - INS_FD                   # 場面の始まりから少しだけ元の場面 → 切り替わりから差し込み
-            if -INS_FD < T - x[1] < INS_GAP: x[1] = T + INS_FD               # 切り替わりの直後に終わる差し込みも（v5「会場の後に前の場面が一瞬」）                   # 差し込みのあと少しだけ元の場面 → 切り替わりまで差し込み
+        for _T in SCENE_TS:
+            if -INS_FD < x[0] - _T < INS_GAP: x[0] = _T - INS_FD                   # 場面の始まりから少しだけ元の場面 → 切り替わりから差し込み
+            if -INS_FD < _T - x[1] < INS_GAP: x[1] = _T + INS_FD               # 切り替わりの直後に終わる差し込みも（差し込みのあと少しだけ元の場面 → 切り替わりまで差し込み。v5「会場の後に前の場面が一瞬」）
     for i in range(len(_ins) - 1):
         if _ins[i + 1][0] - _ins[i][1] < INS_GAP: _ins[i][1] = max(_ins[i][1], _ins[i + 1][0])
 INS_COVER = [(x[0], x[1]) for x in _ins]
