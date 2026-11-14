@@ -43,3 +43,12 @@ for i in range(len(rows) - 2):
         same += 1
         print('同じ語尾「%s」が 3 本: %s %s %s' % (es[0], rows[i][0], rows[i + 1][0], rows[i + 2][0]))
 print('同じ語尾が 3 本続く所 %d か所' % same)
+
+# 「しょう」の音（〜でしょう？・〜ましょう）は、2 本続いただけで耳に残る（5本目 台本 v0.1「しょうの語尾が連続してる」）。2 本続く所も出す。
+shou = 0
+for i in range(len(rows) - 1):
+    a, b = ending(rows[i][1]), ending(rows[i + 1][1])
+    if a == b == 'ょう':
+        shou += 1
+        print('「しょう」が 2 本続く: %s %s' % (rows[i][0], rows[i + 1][0]))
+print('「しょう」が 2 本続く所 %d か所' % shou)
