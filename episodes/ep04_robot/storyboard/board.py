@@ -168,6 +168,8 @@ def street_floor(selected=(), edge=False):
         cube(blue, (-2.25 + c * 1.5, 6.25 - r * 1.5, 0.03), (1.42, 1.42, 0.02))
     if edge:
         anchor("edge", (2.25, 6.25, 0.4))
+        for k, (dx, dy) in enumerate(((-0.75, -0.75), (0.75, -0.75), (0.75, 0.75), (-0.75, 0.75))):   # まるロボが乗っている端っこのマス（右の列・上から 2 段目）の四すみ
+            anchor("cell%d" % k, (2.25 + dx, 4.75 + dy, 0.03))
 
 
 def newspapers():
@@ -278,7 +280,7 @@ def b18():
     street_floor(selected=((2, 0), (2, 1)), edge=True)
     maru((2.25, 4.9, 0.03), face_deg=170, s=0.7, hat=False, eye_glow=1.2, look_up=-20, tilt=-10)
     anchor("maru", (2.25, 4.9, 1.3))
-    camera((3.0, -0.4, 4.2), (2.0, 5.9, 0.2), 30)
+    camera((3.0, -0.6, 4.4), (2.1, 4.9, 0.2), 30)
 
 
 def b21():
