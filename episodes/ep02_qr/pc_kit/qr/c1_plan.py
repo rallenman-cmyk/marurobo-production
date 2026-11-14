@@ -166,8 +166,8 @@ def _phone():
 BACK, PY, SCR = _phone(); SCR_N = -BACK                 # 画面の向き（手前・上向き）
 T_START = (float(_phone()[2][0]), -6.75)                 # 1章のはじめ：スマホの画面の正面、少し離れた所（タイトルの間に回り込んでいた）
 T_STANDPT = (float(SCR[0]), -5.05)                       # 画面の下の前（画面の下の端は高さ1.69m・y=-4.36）
-T_DIVE_TO = (float(SCR[0]), -3.4)                        # 跳ぶ先（ルート）。画面は上を向いて斜めに立っているので、高く跳んで上から飛び込む
-T_DIVE_DZ = 1.2; T_DIVE_APEX = 2.2
+T_DIVE_TO = (float(SCR[0]), -3.75)                       # 跳ぶ先（ルート）。v14（1:34「スマホの奥にはみ出てる」）：高く跳びすぎてスマホの上の端の奥に見えていた → 低く・画面の真ん中へ
+T_DIVE_DZ = 1.2; T_DIVE_APEX = 1.45
 def screen_d(x):                                         # 画面の面からの距離（手前が＋）
     return float(np.dot(np.array(x) - SCR, SCR_N))
 
@@ -195,5 +195,5 @@ def table_frames():
         if k['t'] < f['t0'] + 0.5 * (f['t1'] - f['t0']): continue      # 頂上を過ぎて、上から画面へ
         c = np.array(k['root']) + np.array([0, 0, mm.TORSO_Z]); d = screen_d(c)
         if t_cross is None and d < 0: t_cross = k['t']; p_cross = c
-        if t_gone is None and d < -0.40: t_gone = k['t']
+        if t_gone is None and d < -0.12: t_gone = k['t']                # v14：画面を少し越えたら消す（スマホの奥にはみ出さない）
     return p, fr, dict(t_takeoff=f['t0'], t_cross=t_cross, p_cross=p_cross.tolist() if t_cross else None, t_gone=t_gone)

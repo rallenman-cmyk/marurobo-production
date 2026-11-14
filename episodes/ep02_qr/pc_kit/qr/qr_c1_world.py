@@ -160,10 +160,12 @@ def panel_color(v, state):
     if state in (None, 'none'): return QW.color_for(v, None)
     base = W.srgb(QW.COL['black'] if v else QW.COL['white']); tint = W.srgb(QW.COL[state])
     if state == 'broken': return (*QW.mixc(base, tint, 0.7), 0.52)          # 壊れた箱：灰色で半分すける（中が読めない）
+    if state == 'data': return (*QW.mixc(base, tint, 0.80 if v else 0.88), 1.0)      # v14（3:16「青の色が薄いのか9個の箱がどれかわかんない」）：中身の箱ははっきりした青に
     return (*QW.mixc(base, tint, 0.45 if v else 0.62), 1.0)
 def lid_color(state):
     if state in (None, 'none'): return (0.86, 0.88, 0.90, 1.0)
     if state == 'broken': return (*W.srgb(QW.COL["broken"]), 0.52)
+    if state == 'data': return (*W.srgb(QW.COL[state]), 1.0)                          # v14：ふたも濃い青
     return (*QW.mixc((0.86, 0.88, 0.90), W.srgb(QW.COL[state]), 0.7), 1.0)
 gm = bpy.data.materials.new('Glow'); gm.use_nodes = True; gnt = gm.node_tree; gnt.nodes.clear()
 _oi = gnt.nodes.new('ShaderNodeObjectInfo'); _em = gnt.nodes.new('ShaderNodeEmission'); _tr = gnt.nodes.new('ShaderNodeBsdfTransparent'); _mx = gnt.nodes.new('ShaderNodeMixShader'); _out = gnt.nodes.new('ShaderNodeOutputMaterial')
@@ -179,7 +181,7 @@ for b, cells in BOXES.items():
     for i, (r, c) in enumerate(cells):
         tl = TILES[(r, c)]; p = W.box('Box %d panel %d' % (b, i), (1, 1, 1), TM, bevel=0.0, seg=1); p.parent = root
         p['v'] = tl['v']; p.color = panel_color(tl['v'], None); pans.append(p)
-    fl = W.box('Box %d floor' % b, (BOXW, BOXW, 0.04), floor_m); fl.parent = root; fl.location = (0, 0, 0.02)
+    fl = W.box('Box %d floor' % b, (BOXW, BOXW, 0.04), floor_m); fl.parent = root; fl.location = (0, 0, 0.06)      # v14（5:02「開けた箱の底が点滅」）：底を下の床から少し浮かせる（同じ高さで重なっていた）
     hinge = W.link(O.new('Box %d hinge' % b, None)); hinge.parent = root; hinge.location = (0, 0, WALL_H)
     lid = W.box('Box %d lid' % b, (BOXW + 0.05, BOXW + 0.05, 0.08), TM, bevel=0.02); lid.parent = hinge; lid.location = (0, -(BOXW + 0.05) / 2, 0.04); lid.color = lid_color(None)
     glow = W.box('Box %d glow' % b, (BOXW - 0.1, BOXW - 0.1, 0.02), gm); glow.parent = root; glow.location = (0, 0, WALL_H * 0.72); glow.color = (0, 0, 0, 0); glow.visible_shadow = False
@@ -264,6 +266,20 @@ lid_move(CP.FOLD_B, MK['peek1'] + 0.45, 0, 28, 0.3); lid_move(CP.FOLD_B, MK['pee
 lid_move(11, MK['peek2'] + 0.45, 0, 28, 0.3); lid_move(11, MK['peek2'] + 1.0, 28, 0, 0.25)
 t_open8 = T_OPEN_DATA; lid_move(CP.OPEN_DATA, t_open8, 0, 112, 0.35)
 # 目の光：まるロボが青い箱 8 を向いた瞬間、目から箱へ光が伸びる → ふたが開く
+def clip_len(o, d, L):
+    """o から d（長さ 1）へ L まで進む光が、最初に当たる箱（立っている箱の外形）までの長さ"""
+    best = L
+    for b in BOXES:
+        c = CEN[b]; lo = Vector((c.x - BOXW / 2, c.y - BOXW / 2, Z0)); hi = Vector((c.x + BOXW / 2, c.y + BOXW / 2, Z0 + WALL_H + 0.1))
+        t0, t1 = 0.0, best
+        for k in range(3):
+            if abs(d[k]) < 1e-9:
+                if o[k] < lo[k] or o[k] > hi[k]: t0, t1 = 1.0, 0.0; break
+                continue
+            a_, b_ = (lo[k] - o[k]) / d[k], (hi[k] - o[k]) / d[k]
+            t0, t1 = max(t0, min(a_, b_)), min(t1, max(a_, b_))
+        if t0 <= t1 and t0 > 0.05: best = min(best, t0)
+    return best
 _tb = MK['beam8']; _f = frame_at(_tb + 0.15); _e0 = eye_pos(_f); _e1 = Vector((CEN[CP.OPEN_DATA].x, CEN[CP.OPEN_DATA].y, Z0 + WALL_H + 0.1)); _dv = _e1 - _e0
 bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.07, depth=1.0, location=(0, 0, 0.5)); b8 = bpy.context.object; b8.name = 'Eye beam box8'
 bpy.ops.object.transform_apply(location=True); b8.data.materials.append(bmat); b8.visible_shadow = False; b8.location = _e0; b8.rotation_euler = _dv.to_track_quat('Z', 'Y').to_euler()
@@ -272,7 +288,7 @@ for ff in range(fr_of(_ts) - 1, fr_of(_tb + 0.35) + 1):
     t_ = (ff - 1) / FPS; fr_ = frame_at(t_); e0 = eye_pos(fr_); c_, R_ = torso_frame(fr_)
     if t_ < _tb:
         fwd = (e0 - c_); fwd.z = 0; fwd = fwd.normalized() if fwd.length > 1e-6 else Vector((0, 1, 0)); L_ = min(_dv.length, 3.0 + 6.0 * min(1, (t_ - _ts) / 0.5))
-        d_ = fwd * L_ + Vector((0, 0, -0.6))
+        d_ = fwd * L_ + Vector((0, 0, -0.6)); d_ = d_.normalized() * clip_len(e0, d_.normalized(), d_.length)      # v14（3:09「レーザーが箱貫通して奥に出てる」）：最初に当たった箱で止める
     else: d_ = _e1 - e0
     b8.location = e0; b8.rotation_euler = d_.to_track_quat('Z', 'Y').to_euler(); b8.scale = (1, 1, max(0.001, d_.length))
     b8.keyframe_insert('location', frame=ff); b8.keyframe_insert('rotation_euler', frame=ff); b8.keyframe_insert('scale', frame=ff)

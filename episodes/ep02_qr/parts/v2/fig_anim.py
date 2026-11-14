@@ -559,10 +559,10 @@ def _segs(d, xy, segs, size, a):
     """[(字, 色)] を真ん中ぞろえで並べて描く"""
     tw = sum(d.d.textlength(t_, font=F(size)) for t_, _ in segs); x = xy[0] * K - tw / 2
     for t_, col in segs: d.d.text((x, xy[1] * K), t_, font=F(size), fill=(*col, int(255 * a)), anchor='lm'); x += d.d.textlength(t_, font=F(size))
-def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False):
+def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False, fout=True):
     """m1・m2：(見出し, 1行目, 2行目 or None, 2行目の色)。extra：下に出す大きな一行。xlab：箱の下に ×1 ×2 ×3"""
     def f(t, dur, cue=None):
-        im, d = clear(); al = min(1.0, (t / 0.3) if fade else 1.0, (dur - t) / 0.25 if dur - t < 0.25 else 1.0)
+        im, d = clear(); al = min(1.0, (t / 0.3) if fade else 1.0, (dur - t) / 0.25 if (fout and dur - t < 0.25) else 1.0)      # v14：次も同じメモが続くときは消さない（fout=False。「メモ全体が点滅」）
         if al <= 0: return im
         for k, m in enumerate((m1, m2)):
             if not m: continue
@@ -581,3 +581,6 @@ def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False
             d.line((688, 206, 676, 206, 676, 431, 688, 431), RED, 5, a=al); d.rect((572, 222, 668, 282), fill=WHITE, outline=RED, width=3, r=10, a=al); d.text((620, 252), '2倍', 44, RED, a=al)      # 白い札にのせて、箱の角と重ならないように
         return im
     return f
+def memo_c(*a, **k):
+    """v14：次の区切りも同じメモが続くとき（終わりで消さない）"""
+    k['fout'] = False; return memo(*a, **k)

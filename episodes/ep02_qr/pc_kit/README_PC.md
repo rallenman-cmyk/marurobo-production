@@ -556,3 +556,7 @@ foreach ($j in $jobs) {
 ## 2026-11-14 v25（動画レビュー v12 の直し・2章の 5 本だけ）
 - `C:\marurobo\marurobo_tools` を消して、`marurobo_tools_v25.zip` を `C:\marurobo` に展開し、いつもの 1 行を貼る。
 - 描くのは 2章の `qrc2w3_` 5 本（よろけるアップを場面の頭から／紫の帯の本物のマスを光らせる）。終わると `marurobo_render\qrc2v13` にまとまり、Google ドライブへコピーされる。
+
+## 2026-11-14 v26（動画レビュー v13 の直し・73 本）
+- `C:\marurobo\marurobo_tools` を消して、`marurobo_tools_v26.zip` を `C:\marurobo` に展開し、いつもの 1 行を貼る（`marurobo_next` は消しておく）。
+- 描くもの：1章 卓上 qrc1t3_ 1 本・中の世界 qrc1w7_ 46 本／2章 qrc2w4_ 5 本／3章 qrc3w3_ 4 本／5章 机の場面（新しい）qrc5d_ 17 本（合わせて 73 本）。終わると `marurobo_render\qrv14` にまとまり、Google ドライブへコピーされる。

@@ -166,6 +166,12 @@ for k, b in enumerate(sorted(SPARE, key=lambda b: (CEN[b] - cam_xy).length)):   
     tg = ta + FOLD
     for j in range(8): g.scale = (0.75, 0.75, 1); g.keyframe_insert('scale', frame=fr_of(tg + 1.0 * j)); g.scale = (1.0, 1.0, 1); g.keyframe_insert('scale', frame=fr_of(tg + 1.0 * j + 0.5))
     show(g, [(tg, 9e3)])
+# v14（14:43「こちらの残った箱がどれかわかんないよ」）：19-04.5「まず『文字はここまで』という印」で 6 番目の箱、19-04.6「そのあとは…決まった数字で埋めて」で 7〜9 番目の箱のふたの上が光る
+rm_ = W.mat_emit('rest glow', W.srgb('#BFE3FF'), 6.0)
+for b, t0 in ((6, CP.s('19-04.5', 0.3)), (7, CP.s('19-04.6', 0.3)), (8, CP.s('19-04.6', 0.5)), (9, CP.s('19-04.6', 0.7))):
+    rp = CP.row_pos(b - 1); g = W.box('rest glow %d' % b, (BOXW * 0.86, BOXW * 0.86, 0.05), rm_, bevel=0.1); g.location = (rp[0], rp[1], ROWZ + WALL_H + 0.16); g.visible_shadow = False
+    for j in range(3): g.scale = (0.7, 0.7, 1); g.keyframe_insert('scale', frame=fr_of(t0 + 0.8 * j)); g.scale = (1.0, 1.0, 1); g.keyframe_insert('scale', frame=fr_of(t0 + 0.8 * j + 0.4))
+    show(g, [(t0, CP.shot_start('c3_alnum') if False else CP.s('20-01', 0.0))])
 bake_colors()
 
 # ================================================================ まるロボ

@@ -4,7 +4,7 @@ import sys, json, importlib
 KINDS = ('step', 'step_turn', 'takeoff', 'land')
 JOBS = {'op': [('op2_plan', 'plan', 'qrop4_')], 'c1': [('c1_plan', 'table_plan', 'qrc1t2_'), ('c1_plan', 'world_plan', 'qrc1w5_')],
         'c2': [('c2_plan', 'plan', 'qrc2w_'), ('c2_plan', 'desk_plan', 'qrc2t_')], 'c3': [('c3_plan', 'plan', 'qrc3w_')],
-        'c4': [('c4_plan', 'crate_plan', 'qrc4c_'), ('c4_plan', 'world_plan', 'qrc4w_'), ('c4_plan', 'factory_plan', 'qrc4f_')], 'c5': [('c5_plan', 'plan', 'qrc5w_')]}
+        'c4': [('c4_plan', 'crate_plan', 'qrc4c_'), ('c4_plan', 'world_plan', 'qrc4w_'), ('c4_plan', 'factory_plan', 'qrc4f_')], 'c5': [('c5_plan', 'plan', 'qrc5w_'), ('c5_plan', 'desk_plan', 'qrc5d_')]}      # v14：5章の机の場面
 out = {}
 for tag, js in JOBS.items():
     ev = []

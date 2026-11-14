@@ -165,7 +165,7 @@ for k, (a, b) in enumerate(((rc(3, -1), rc(3, 7.6)), (rc(-1, 3), rc(7.6, 3)), (r
 for k, key in enumerate((TL, TR, BL)): ring('ring24 %d' % k, key, CP.T_RINGS[k], 79.6, R=6.4)
 # ---------------------------------------------------------------- 12-01：大地ごと回る（回る向きの矢印）→ 元に戻りながら L 字・目印のない角
 arc = W.torus('spin arc', H * 1.35, 0.18, W.mat_emit('spin arc', W.srgb('#FFD640'), 2.5), arc=math.radians(110)); arc.location = (0, 0, 0.6); arc.rotation_euler = (0, 0, math.radians(20))
-show(arc, [(CP.T_SPIN[0] + 0.1, CP.T_UNSPIN[0])])
+arc.hide_render = True; arc.hide_viewport = True                                       # v14（8:06「奥に見える黄色い線」・8:11「上の方の黄色の半円」）：回る向きの弧は出さない
 beam('L top', (TR[0], TR[1], QW.TILE_H + 0.3), (TL[0], TL[1], QW.TILE_H + 0.3), col='#FFD640', r=0.22, strength=3.0, grow=0.6, t0=CP.T_LSHAPE, t1=148.4)
 beam('L left', (TL[0], TL[1], QW.TILE_H + 0.3), (BL[0], BL[1], QW.TILE_H + 0.3), col='#FFD640', r=0.22, strength=3.0, grow=0.6, t0=CP.T_LSHAPE + 0.6, t1=148.4)
 blink = [(CP.T_CORNER + 0.8 * k, CP.T_CORNER + 0.8 * k + 0.5) for k in range(4)] + [(CP.T_CORNER + 3.2, 148.4)]   # v12 #25：点滅は 5 回、あとは出したまま
@@ -233,12 +233,17 @@ def peel_sheet(t0, t1, rho=1.7, sub=4, z0=QW.TILE_H + 0.09):
         for ff, val in ((f - 1, 0.0), (f, 1.0), (f + 1, 0.0)):
             if n_ == len(keys) - 1 and ff == f + 1: continue          # 最後の形はそのまま残す（浮いて消えるまで）
             sk.value = val; sk.keyframe_insert('value', frame=ff)
+    # v14（9:41「白黒の配列が変わるのは柄を重ねたから？ なら重ねる感じのアニメを」）：K40 の間はシートが重なって見えていて、
+    # 14-02 で下のマスが元の並びに替わったあと、シートが浮いて外れる（中身＝柄を外した並び、が見える）
+    T_LIFT0 = 223.45
+    for t, z, s_ in ((217.6, z0, 1.0), (T_LIFT0, z0, 1.0), (T_LIFT0 + 0.7, z0 + 9.0, 0.6)):
+        ob.location = (-H, 0, z); ob.scale = (s_, s_, s_); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
     # 14-04 の頭：上から落ちてきて重なる
-    for t, z in ((264.95, z0 + 5.0), (265.55, z0)): ob.location = (-H, 0, z); ob.keyframe_insert('location', frame=fr_of(t))
+    for t, z in ((264.95, z0 + 5.0), (265.55, z0)): ob.location = (-H, 0, z); ob.scale = (1, 1, 1); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
     # めくり終わり：上へ浮いて小さくなって消える
     for t, z, s_ in ((t1, z0, 1.0), (t1 + 0.7, z0 + 9.0, 0.6)):
         ob.location = (-H, 0, z); ob.scale = (s_, s_, s_); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
-    show(ob, [(264.95, t1 + 0.7)])
+    show(ob, [(217.6, 223.45 + 0.7), (264.95, t1 + 0.7)])
     return ob
 SHEET = peel_sheet(*CP.T_UNMASK)
 tile_state(DATA_C, 'data', 276.2 - 0.05, 0.02); tile_state(SPARE_C, 'spare', 276.2 - 0.05, 0.02)     # v12 #26：タイミングの列は緑にしない

@@ -90,6 +90,9 @@ else:
     for i, fr in enumerate(FR):
         if F0 - 2 <= i + 1 <= F1 + 2: rig.apply(fr, i + 1, bk)
     bk.write(); robot_objs = hier(O['Maru'])
+# v14：画面に入る少し前から、入った所へ吸い込まれるように小さくなる（スマホの奥にはみ出さない）
+root_ob = rroot if A.standin else O['Maru']
+for t, s_ in ((T_CROSS - 0.12, 1.0), (T_GONE, 0.35)): root_ob.scale = (s_, s_, s_); root_ob.keyframe_insert('scale', frame=fr_of(t))
 for ob in robot_objs:
     if ob.hide_render: continue
     for f, h in ((1, False), (fr_of(T_GONE) + 1, True)): ob.hide_render = h; ob.keyframe_insert('hide_render', frame=f)

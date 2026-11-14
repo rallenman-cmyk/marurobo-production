@@ -93,6 +93,7 @@ OUTSIDE = ('qrop4_', 'qrc1t2_', 'qrc2t_', 'qrc1s2_')          # スマホの外�
 D_CUT, D_SPACE, D_CH = 0.35, 0.7, 0.6                         # v11 #42 #45 #92：つなぎの重ね（同じ所のカット／外と中が入れ替わる／章の変わり目）
 # v11（#1 #12 #20 #43 #57 #60 #70 #77）：長く動かない 3D の場面は、組み立てでゆっくり寄る・横へ移る（本当の動きは v12 で 3D を描き直す）
 #   (章, 絵の名前) → [(場面の中の割合 0〜1, 寄り, 中心 x, 中心 y)]
+NO_DISSOLVE = {('c1', 'K02')}                     # v14：重ねずに切る（1:35「歩いてる途中にディゾルブ入ってる」：まるロボが歩いている途中で 2 つの絵が重なって見えた）
 PUSH = {('op', 'S11_face'): [(0, 1.0, .5, .5), (.55, 1.32, .58, .42), (1, 1.32, .58, .42)],
         ('c1', 'R_number'): [(0, 1.0, .5, .5), (.3, 1.45, .33, .57), (.55, 1.45, .33, .57), (.8, 1.3, .72, .45), (1, 1.12, .6, .5)],
         ('c2', 'K24'): [(0, 1.0, .5, .5), (.35, 1.3, .8, .3), (.65, 1.3, .25, .72), (1, 1.05, .5, .5)],
@@ -165,7 +166,7 @@ def build(tag, _prev=True):
             lo, hi = edge(ki, sh)
             im = base3d(min(max(t, lo), hi), sh)
             if im is not None:
-                if ki > 0 and not any(x0 <= ch.SHOTS[ki - 1][1] - 0.05 < x1 for x0, x1, *_ in segs):   # つなぎ：前の 3D の最後のコマから重ねる
+                if ki > 0 and (tag, k) not in NO_DISSOLVE and not any(x0 <= ch.SHOTS[ki - 1][1] - 0.05 < x1 for x0, x1, *_ in segs):   # つなぎ：前の 3D の最後のコマから重ねる
                     pv = ch.SHOTS[ki - 1]; Dd = D_SPACE if space(pv) != space(sh) else D_CUT
                     if t - a < Dd:
                         if ki not in pcache: pcache[ki] = base3d(edge(ki - 1, pv)[1], pv)
@@ -203,6 +204,10 @@ def build(tag, _prev=True):
     for sh in ch.SHOTS:
         # v11：「F1」は 1章（たたむ）と 4章・結び（工場）で別の絵。たたむ音・ふたの音は 1章の 3D の時刻（c1_world_events.json）で鳴らす
         if sh[2] in ('C6a',): sfx.append((sh[1] - 0.05, SX.drop()))
+        if tag == 'c5' and sh[2] == 'D5a' and sh[0] < CH.s('30-02'):                  # v14：机の場面（びんが倒れる・しずく）
+            tt = CH.s('30-01', -0.35); sfx += [(tt + 0.30, SX.place(0.14)), (tt + 0.55, SX.drops(amp=0.09))]
+        if tag == 'c5' and sh[2] == 'L5a': sfx += [(106.72 + 0.7, SX.place(0.10))]
+        if tag == 'c5' and sh[2] == 'L5c': sfx += [(140.46, SX.drop(0.10))]
         if sh[2] == 'B28b': sfx.append((sh[0] + 0.2, SX.gather(amp=0.08)))         # v11：大きすぎた（0.16 → 0.08）
         if sh[2] == 'B28c': sfx.append((sh[0], SX.assemble(amp=0.10)))            # 0.20 → 0.10
     if tag == 'c1' and os.path.exists(os.path.join(HERE, 'c1_world_events.json')):
