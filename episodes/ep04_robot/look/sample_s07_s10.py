@@ -99,9 +99,9 @@ st2 = D.Stage(D.background(top=(238, 243, 250), bottom=(214, 224, 240)), dur=T1b
 t_y, t_who, t_res, t_fast, t_hum, t_hsec, t_wow = (said("2023年には"), said("ゆがんだ文字のテストを"), said("結果は"),
                                                   said("しかも、1問"), said("人は、正解"), said("1問に、9秒"), said("なんと"))
 st2.add(D.pill("2023年", 50, accent=D.ORANGE), (640, 64), t_y)
-COLS = ((350, "人", D.ORANGE), (930, "プログラム", D.TEAL))
+COLS = ((330, "人", D.ORANGE), (950, "プログラム", D.TEAL))
 for k, (x, who, col) in enumerate(COLS):
-    st2.add(D.card(500, 380, header=(col, None)), (x, 330), t_y + 0.2 + k * 0.15, slide=(0, 40))
+    st2.add(D.card(460, 370, header=(col, None)), (x, 320), t_y + 0.2 + k * 0.15, slide=(0, 40))
     st2.add(D.pill(who, 44, fg=D.WHITE, bg=col), (x, 160), t_who + k * 0.25)
 # 中身：正解（棒）と時間（数字）
 def rowcard(label, val, frac, col, lo=None):
@@ -115,22 +115,22 @@ def rowcard(label, val, frac, col, lo=None):
             D.ctext(d, ((x0 + x1) / 2, H_ / 2 - 22 * S), val, D.font(46 * S), D.NAVY)
         else:
             D.ctext(d, ((x0 + x1) / 2, H_ / 2), val, D.font(52 * S), D.NAVY)
-    return D.card(440, 120, r=22, bg=(250, 252, 255), draw=dr)
+    return D.card(410, 118, r=22, bg=(250, 252, 255), draw=dr)
 # プログラム：棒が伸びる（数コマで）
 for i in range(1, 9):
     ta = t_res + 1.2 + i * 0.07
-    st2.add(rowcard("正解", "ほぼ全部" if i == 8 else "", 0.97 * i / 8, D.TEAL), (930, 285), ta, ta + 0.07 if i < 8 else 1e9, pop=False, fade_out=0, z=1 + i)
-st2.add(rowcard("時間", "1秒未満", None, D.TEAL), (930, 435), t_fast, z=1)
+    st2.add(rowcard("正解", "ほぼ全部" if i == 8 else "", 0.97 * i / 8, D.TEAL), (950, 280), ta, ta + 0.07 if i < 8 else 1e9, pop=False, fade_out=0, z=1 + i)
+st2.add(rowcard("時間", "1秒未満", None, D.TEAL), (950, 425), t_fast, z=1)
 for i in range(1, 9):
     ta = t_hum + 0.3 + i * 0.07
-    st2.add(rowcard("正解", "5〜8割" if i == 8 else "", 0.5 + 0.3 * i / 8, D.ORANGE, lo=0.0), (350, 285), ta, ta + 0.07 if i < 8 else 1e9, pop=False, fade_out=0, z=1 + i)
-st2.add(rowcard("時間", "9〜15秒", None, D.ORANGE), (350, 435), t_hsec, z=1)
+    st2.add(rowcard("正解", "5〜8割" if i == 8 else "", 0.5 + 0.3 * i / 8, D.ORANGE, lo=0.0), (330, 280), ta, ta + 0.07 if i < 8 else 1e9, pop=False, fade_out=0, z=1 + i)
+st2.add(rowcard("時間", "9〜15秒", None, D.ORANGE), (330, 425), t_hsec, z=1)
 # まるロボ：まん中の下で見ている → なんと：跳ねて目が光る
-st2.add(maru("up", 170), (640, 640), t_y + 0.5, t_wow, bob=2, z=20)
-st2.add(maru("joy", 170), (640, 640), t_wow, hop=(t_wow + 0.1, t_wow + 0.6), z=20, pop=False)
+st2.add(maru("up", 150), (640, 505), t_y + 0.5, t_wow, bob=2, z=20)
+st2.add(maru("joy", 150), (640, 505), t_wow, hop=(t_wow + 0.1, t_wow + 0.6), z=20, pop=False)
 def ring(d, W_, H_, S, img):
     pass
-st2.add(D.pill("得意", 46, fg=D.WHITE, bg=D.TEAL, tail=(-50, 70)), (1140, 560), t_wow + 0.3, z=30)
+st2.add(D.pill("得意", 46, fg=D.WHITE, bg=D.TEAL, tail=(-70, 45)), (1150, 120), t_wow + 0.3, z=30)
 
 # ---------------- 書き出し
 if os.environ.get("STILLS"):
