@@ -31,6 +31,8 @@ CL.sort(key=lambda c: c["t0"])
 def clip_at(t):
     for c in CL:
         if c["t0"] - 1e-6 <= t < c["t1"] - 1e-6: return c
+    for c in CL:  # 区切りの端数（コマ数の丸め）で 1 コマ足りないときは、すぐ前のクリップの最後のコマを使う
+        if c["t1"] - 1e-6 <= t < c["t1"] + 0.1: return c
 
 
 def shot_i(t):
@@ -80,7 +82,7 @@ a = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
 a = np.concatenate([a, np.zeros(max(0, int(END * SR) - len(a)), np.float32)])[:int(END * SR)].copy()
 VO = os.path.join(HERE, "..", "voice")
 P_ = json.load(open(os.path.join(VO, "placement.json"), encoding="utf-8"))
-nos, over = set(), []
+nos, over, moved = set(), [], []
 _VE = {}
 def talking(t, d):
     """その時刻に声が出ているか（声の音そのものの大きさで見る。台詞の中の「……」の無音は、出ていない）"""
@@ -100,8 +102,13 @@ for c in CL:
         if not (c["t0"] <= t_ < c["t1"]): continue
         x = sfx.make(kind, SR)
         if x is None: nos.add(kind); continue
+        if kind in ("click", "pop_ui", "pi") and talking(t_, len(x) / SR):
+            # 大事な音が声と重なるときは、前後 0.5 秒以内のいちばん近い声のすき間へずらす（ずらせなければ報告）
+            for sh in sorted((k_ * 0.02 for k_ in range(-25, 26)), key=abs):
+                if t_ + sh >= 0 and not talking(t_ + sh, len(x) / SR):
+                    moved.append("%s %.1f→%.2f" % (kind, t_, t_ + sh)); t_ += sh; break
+            else: over.append("%s %.1f" % (kind, t_))
         i = int(t_ * SR); a[i:i + len(x)] += (g * x)[:len(a) - i]
-        if kind in ("click", "pop_ui", "pi") and talking(t_, len(x) / SR): over.append("%s %.1f" % (kind, t_))
 a /= max(1.0, np.abs(a).max() / 0.95)
 wv = os.path.join(tmp, "audio.wav")
 with wave.open(wv, "wb") as w_:
@@ -122,6 +129,7 @@ subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i
 chk = ["3D のコマが足りない所（絵コンテの絵で代わりに出した時刻）：" + (", ".join(map(str, miss[:30])) + (" ほか" if len(miss) > 30 else "") if miss else "なし"),
        "効果音のない種類：" + ("、".join(sorted(nos)) or "なし"),
        "大事な効果音が声と重なる所：" + ("、".join(over) or "なし"),
+       "声のすき間へずらした効果音：" + ("、".join(moved) or "なし"),
        "3D のクリップ：%d" % len(CL)]
 open(os.path.splitext(OUT)[0] + "_check.txt", "w", encoding="utf-8").write("\n".join(chk) + "\n")
 print("\n".join(chk)); print(OUT, "%.1f MB" % (os.path.getsize(OUT) / 1e6))
