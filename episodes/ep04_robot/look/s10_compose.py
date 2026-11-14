@@ -54,8 +54,17 @@ sys.path.insert(0, "/home/user/marurobo-production/episodes/ep04_robot/anim"); i
 SR = 48000
 r = subprocess.run(["ffmpeg", "-v", "error", "-ss", "%.3f" % T0, "-t", "%.3f" % (N / FPS), "-i", W + "/animatic_tmp/voice.wav", "-ac", "1", "-ar", str(SR), "-f", "s16le", "-"], capture_output=True, check=True)
 a = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768; a = a.copy()
-evs = list(LG["events"]) + [(T0 + 0.0, "x", 0)] * 0
-for tt in (t_y, t_who, t_who + 0.4, t_res + 2.2, t_fast, t_hum + 2.0, t_hsec): evs.append((tt, "pop_ui", 0.6))
+# 2026-11-14 ユーザー「SE があってない所がある」→ 3D の log の音は使わず、絵の動きごとに合う音を 1 つずつ決める
+#   出る＝pop／考え中の点＝小さい pi／光がたまる＝rise／速い針＝whoosh／遅い針＝コチコチ（小さい click）／跳ねる＝jump・land
+#   札の pop_ui は、ほかの音と 0.35 秒以内に重なるときは鳴らさない（同じ動きに音が 2 つ付かないように）
+evs = [(t_who - 0.1, "pop", 0.6), (t_who + 0.3, "pop", 0.6)]
+evs += [(t_res + 0.2 + j * 0.3, "pi", 0.18) for j in range(5)]
+evs += [(t_res + 1.3, "rise", 0.5), (t_fast + 0.2, "whoosh", 0.35)]
+evs += [(t_hum + 0.3, "rise", 0.4), (t_hum + 1.5, "rise", 0.35)]
+evs += [(t_hsec + 0.2 + j * 0.33, "click", 0.25) for j in range(8)]
+evs += [(t_wow + 0.1, "jump", 0.8), (t_wow + 0.55, "land", 0.8)]
+for tt in (t_y, t_who, t_who + 0.4, t_res + 2.2, t_fast, t_hum + 2.0, t_hsec):
+    if all(abs(tt - e[0]) > 0.35 for e in evs): evs.append((tt, "pop_ui", 0.5))
 for tt, kind, g in evs:
     x = sfx.make(kind, SR)
     if x is None: continue

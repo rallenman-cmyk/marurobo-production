@@ -117,13 +117,14 @@ def digital_bg():
     for L in (area((0, 2, 9), (0, 6, 0), 1500, 10, "#CFE9FF"), area((-6, -4, 4), (0, 5, 1), 500, 4, "#7FD9EE")):   # 上からの広い光・横からの青い光
         L.visible_glossy = False                               # つやのある床に、光の丸い形が映らないように
     random.seed(7)
-    panel = mat("panel", "#BFE6F5", rough=0.3, emit=1.2, alpha=0.85)
-    for k in range(14):
-        x = random.uniform(-24, 24); y = random.uniform(20, 40); z = random.uniform(3, 12)
+    # 2026-11-14 ユーザー「背景が少しうるさい」→ 浮かぶ板は数を減らし、暗く・透かして奥へ。柱の線・床の線も弱める
+    panel = mat("panel", "#6FA9C4", rough=0.3, emit=0.35, alpha=0.45)
+    for k in range(6):
+        x = random.uniform(-24, 24); y = random.uniform(30, 40); z = random.uniform(6, 12)
         if abs(x) < 4 and z < 6: x += 8
         cube(panel, (x, y, z), (random.uniform(1.5, 3.5), 0.08, random.uniform(1.0, 2.2)), bevel=0.15)
     tower = mat("tower", "#1F3557", rough=0.4)
-    strip = mat("towerstrip", "#2CD3C2", emit=3.0)
+    strip = mat("towerstrip", "#2CD3C2", emit=1.2)
     for k in range(10):
         x = random.choice([-1, 1]) * random.uniform(9, 26); y = random.uniform(14, 36); h = random.uniform(4, 12)
         cube(tower, (x, y, h / 2), (1.2, 1.2, h), bevel=0.08)
@@ -137,7 +138,7 @@ def screen_world(gate_alpha=1.0, gatekeeper=True, dog_down=False, gate=True):
         if o.type == 'MESH' and o.active_material and o.active_material.name.startswith(("ground", "grid_line")):
             bpy.data.objects.remove(o)
     plane(mat("floor_gloss", FLOOR, rough=0.15, coat=0.8), (0, 0, 0), (60, 60))
-    glow = mat("grid_glow", "#2CD3C2", rough=0.4, emit=2.5)
+    glow = mat("grid_glow", "#2CD3C2", rough=0.4, emit=1.2)
     for k in range(-12, 13):
         cube(glow, (k * 1.5, 6, 0.003), (0.02, 30, 0.003))
         cube(glow, (0, k * 1.5 + 6, 0.003), (36, 0.02, 0.003))
