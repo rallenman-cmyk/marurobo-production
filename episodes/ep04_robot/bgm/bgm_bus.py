@@ -12,9 +12,10 @@ B3 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(B3)
 
 PLAN = [("B", "S01"), ("C", "S04"), ("B", "S07"), ("D", "S12"), ("C", "S17"), ("D", "S19"), ("B", "S22")]
 OFFSET = {("D", "S19"): 40.0, ("C", "S17"): 60.0}
+RMS = 0.017   # v9：ユーザー「BGM もう少し音量下げて」→ 3 本目の 0.024 から 3 dB 下げた（声より約 20 dB 下）
 
 
 def make(END, SCST, sr, work):
     B3.SRC = os.path.join(work, "stage", "bgm")
-    B3.PLAN, B3.OFFSET = PLAN, OFFSET
+    B3.PLAN, B3.OFFSET, B3.RMS = PLAN, OFFSET, RMS
     return B3.make(END, SCST, sr)
