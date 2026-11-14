@@ -15,6 +15,7 @@ N_SAMPLES = int(ARGS[2]) if len(ARGS) > 2 and ARGS[2].isdigit() else 32
 RESX, RESY = opt("--res", [1920, 1080])
 STEP, = opt("--step", [1])
 FR = opt("--frames", [0, 0])
+TRACK_ONLY = "--track-only" in ARGS                 # 描かずに、log（場所の記録・効果音）だけ書き直す
 exec(open(os.path.join(_ANIM_HERE, "common.py"), encoding="utf-8").read())
 
 
@@ -49,6 +50,7 @@ def s04():
     room_shot("scr_check", maru_loc=R0, face=-10, mouse_loc=M0)
     seq_screen(find_screen(), SCR, "s04")
     mr = Maru(find_maru()); ms = find_mouse()
+    TRACK["maru"] = (mr.body, 0.12)                                  # 体の少し上（札のしっぽの先）
     click = said("カチッ"); a0, a1 = said("マウスで") + 0.3, click - 0.75   # screens.py と同じ時刻
     test_t = said("代わりに")
     M1 = (M0[0] - 0.24, M0[1] + 0.11, M0[2])                       # 矢印の動き（左上へ）と同じ向きにマウスが動く

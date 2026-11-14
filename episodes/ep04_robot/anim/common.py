@@ -62,6 +62,7 @@ def matkey(m, frame, strength=None):
 
 
 STEPS, EVENTS = [], []
+TRACK = {}          # 名前 → (物, 上へのずれ)：コマごとの画面の場所を log に書く（2D の札のしっぽを向けるため。1280×720 の座標）
 def ev(t, kind, gain=1.0): EVENTS.append((round(t, 3), kind, gain))
 
 
@@ -133,7 +134,16 @@ def render(name, t0, t1, outdir, samples, res, step, fr=None):
     n = round((t1 - t0) * FPS)
     a, b = (fr if fr else (0, n - 1))
     os.makedirs(outdir, exist_ok=True)
-    json.dump(dict(t0=t0, t1=t1, fps=FPS, frames=n, steps=STEPS, events=EVENTS), open(os.path.join(outdir, name + "_log.json"), "w"))
+    from bpy_extras.object_utils import world_to_camera_view
+    from mathutils import Vector
+    track = {k: [] for k in TRACK}
+    for k in range(0, n):
+        sc.frame_set(k)
+        for nm, (ob, dz) in TRACK.items():
+            p = world_to_camera_view(sc, sc.camera, ob.matrix_world.translation + Vector((0, 0, dz)))
+            track[nm].append([round(p.x * 1280), round((1 - p.y) * 720)])
+    json.dump(dict(t0=t0, t1=t1, fps=FPS, frames=n, steps=STEPS, events=EVENTS, track=track), open(os.path.join(outdir, name + "_log.json"), "w"))
+    if TRACK_ONLY: return
     for k in range(a, b + 1, step):
         sc.frame_set(k)
         sc.render.filepath = os.path.join(outdir, "%s_%04d.png" % (name, k))
