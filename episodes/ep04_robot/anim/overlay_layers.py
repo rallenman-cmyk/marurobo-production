@@ -23,6 +23,29 @@ def _load(name):
 g = {"__name__": "ov", "__file__": os.path.join(HERE, "..", "storyboard", "board_overlay.py")}
 src = src.replace("\ndef anch(name):", "\n_load_real = load\nload = __LOAD__\ndef anch(name):", 1)
 src = src.replace("def save(im, name, start_id, dt=0.0):\n", "def save(im, name, start_id, dt=0.0):\n    __BASE__[name] = im.info.get('base')\n", 1)
+# 札は新しい形で（look/newtag.py）
+src = src.replace("\ndef check_card(", """
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "look"))
+from newtag import tag_new as _tag_new
+def tag(im, shot, text, cx, cy, size=48, bg=WHITE, fg=NAVY, tail=None):
+    box = _tag_new(im, text, cx, cy, size, bg, fg, tail, fontdir=os.path.dirname(F))
+    check_band(shot, box, size)
+    return box
+
+
+def check_card(""", 1)
+src = src.replace("\ndef q_mark(", """
+def pic_bubble(im, cx, cy, r, draw, to=None):
+    import math as _m, design as _D
+    if to is None: to = (cx - r * 1.0, cy + r * 1.5)
+    ang = _m.atan2(to[1] - cy, to[0] - cx); L = min(r * 1.6, max(r * 1.25, _m.hypot(to[0] - cx, to[1] - cy) - 20))
+    spr, off = _D.bubble(int(r * 2), int(r * 2), (_m.cos(ang) * L, _m.sin(ang) * L), r=int(r * 0.7))
+    if im.mode == "RGBA": im.alpha_composite(spr, (int(cx + off[0]), int(cy + off[1])))
+    else: im.paste(spr, (int(cx + off[0]), int(cy + off[1])), spr)
+    draw(ImageDraw.Draw(im), cx, cy, r)
+
+
+def q_mark(""", 1)
 src = src.replace("def cell_line(im):", "def cell_line(im):\n    return   # 動く版：ふちどりは 3D で描く（まるロボより奥）\ndef _cell_line_old(im):", 1)
 g["__LOAD__"] = _load; g["__BASE__"] = BASE
 exec(compile(src, "board_overlay.py", "exec"), g)
