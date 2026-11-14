@@ -52,3 +52,9 @@ for i in range(len(rows) - 1):
         shou += 1
         print('「しょう」が 2 本続く: %s %s' % (rows[i][0], rows[i + 1][0]))
 print('「しょう」が 2 本続く所 %d か所' % shou)
+
+# 読点（、）は 1 行 0〜2 つまで（5本目 台本 v0.3「読点がちょっと細かい、1行で0〜多くて2回にして」）。3 つ以上の行を出す。
+many = [r for r in rows if r[1].count('、') > 2]
+for r in many:
+    print('読点 %d つ: %s %s' % (r[1].count('、'), r[0], r[1]))
+print('読点が 3 つ以上の行 %d 本' % len(many))
