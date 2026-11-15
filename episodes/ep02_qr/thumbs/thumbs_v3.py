@@ -16,6 +16,18 @@ BASE = ("Background art for a YouTube thumbnail, 16:9, polished cinematic 3D ren
 LAYOUT = ("STRICT LAYOUT (like a pro YouTube thumbnail): the QR card occupies the RIGHT half (x 52-97%, y 5-88%). The robot is SMALL, about one third "
           "of the frame height, standing at x 22-40%, y 58-95%. The whole TOP-LEFT area (x 0-50%, y 0-56%) is empty, plain, softly lit background for a big headline. ")
 PLANS = {
+ "P2C": ("Background art for a YouTube thumbnail, 16:9, polished 3D render. ABSOLUTELY NO TEXT and NO badges, icons, check marks or X marks anywhere (QR patterns "
+        "are fine). Clean bright light-grey studio with a soft teal accent light on the right. STRICT LAYOUT: everything left of the frame's horizontal middle "
+        "(x 0-52%) is completely empty plain background. Two identical crisp QR codes on thick white cards stand side by side ONLY in x 55-98%, vertically "
+        "y 25-90%, each card about 20% of the frame width, small gap between them. LEFT card (at x 55-76%): the small robot sits on its lower-right corner, "
+        "covering about a quarter of the code. RIGHT card (at x 78-98%): a few small dark smudges / tiny ink stains on its white squares (subtle but visible). "
+        "Nothing else. " + ROBOT),
+ "P2B": ("Background art for a YouTube thumbnail, 16:9, polished 3D render. ABSOLUTELY NO TEXT anywhere (QR patterns are fine). Clean bright light-grey studio "
+        "with a soft teal accent light. STRICT LAYOUT: the LEFT 44% of the frame is completely empty plain background (a big headline goes there). In the RIGHT "
+        "56% (x 46-98%), two identical crisp QR codes on thick white cards stand side by side in the lower 70% (y 28-95%), each card about 24% of the frame width. "
+        "LEFT card: the small robot sits on its lower-right corner, covering about a quarter of the code; a green circular badge with a white check mark floats "
+        "just above the card's top-left corner. RIGHT card: a few small dark smudges / tiny ink stains on its white squares (subtle but visible); a red circular "
+        "badge with a white X floats just above the card's top-right corner. " + ROBOT),
  "P1": (LAYOUT + "Dark navy studio with soft teal rim lights and subtle bokeh. The large crisp QR code is printed on a thick white card lying slightly tilted "
        "toward camera. The small robot is SITTING on the lower-right corner of the QR code, covering roughly a quarter of the code, looking pleased. A smartphone "
        "hovers above the card at the upper right, its screen facing us showing only a big glowing green check mark (no text). The robot is ON the card here, "
@@ -124,25 +136,46 @@ LAYOUTS = {   # 名前 → (地の種類, 札, [1 行目, 2 行目], 字の右�
  "D2": ("dark", ("QRコード", CYAN, NAVY), [[("たった", WHITE), ("3%", YEL), ("で", WHITE)], [("読めない!?", YEL)]], 1300),
  "B2": ("light", ("QRコード", TEAL, WHITE), [[("隠しても", BLACK)], [("読めた!?", RED)]], 1300),
 }
+CARDS_P2 = {"P2C_2.png": [(1050, 317, 1766, 1152), (1818, 317, 2509, 1152)]}   # 絵ごとの左と右の QR の札の位置（元の絵の 2560×1440 で。10% の目盛りを重ねて決めた）
+def badge(im, c, ok, r=110):
+    """緑の ✓／赤の × の丸い印（白いふち・影）"""
+    x, y = c; lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.ellipse((x - r + 8, y - r + 12, x + r + 8, y + r + 12), fill=(0, 0, 0, 120))
+    d.ellipse((x - r - 12, y - r - 12, x + r + 12, y + r + 12), fill=WHITE + (255,)); d.ellipse((x - r, y - r, x + r, y + r), fill=((40, 170, 70) if ok else (220, 40, 40)) + (255,))
+    if ok: d.line([(x - r * 0.48, y + r * 0.02), (x - r * 0.12, y + r * 0.38), (x + r * 0.5, y - r * 0.36)], fill=WHITE + (255,), width=int(r * 0.24), joint="curve")
+    else:
+        k = r * 0.4; d.line([(x - k, y - k), (x + k, y + k)], fill=WHITE + (255,), width=int(r * 0.24)); d.line([(x - k, y + k), (x + k, y - k)], fill=WHITE + (255,), width=int(r * 0.24))
+    return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
 def comp(choice):
     made = []
     for name, src in choice.items():
         im = bg(os.path.join(G, src)); key = name.split("_")[0]
-        if key == "P2":   # 比べる案：上に 1 行、赤い矢印で右の QR（読めない方）を指す
-            im = tag(im, (90, 40), "QRコード", px=84, bg=TEAL, fg=WHITE)
-            runs = [("なぜ", BLACK), ("こっち", RED), ("は読めない？", BLACK)]; px = fit(runs, 2300, 175)
-            im, xe = line(im, (90, 140), runs, px, WHITE)
-            im = arrow(im, (1330, 140 + px * 1.25), (1700, 760), bend=0.3, w=38)   # 「こっち」の下から右の QR へ（× の印と重ねない）
+        if key == "P2":   # 比べる案。しくみの正体の「なぜ／右に2回／左に1回？」と同じ 3 行・白と黄色の極太字・黒の太いふち。✓ と × はこちらで描く
+            k = 0.88; sw, sh_ = int(W * k), int(H * k); ox, oy = W - sw, (H - sh_) // 2   # 絵を少し小さくして右へ寄せ、左を同じ地でのばす
+            sm = bg(os.path.join(G, src)).resize((sw, sh_), Image.LANCZOS); cv = Image.new("RGBA", (W, H))
+            cv.paste(sm, (ox, oy)); cv.paste(sm.crop((0, 0, 6, sh_)).resize((ox, sh_)).filter(ImageFilter.GaussianBlur(20)), (0, oy))
+            cv.paste(cv.crop((0, oy, W, oy + 6)).resize((W, oy)), (0, 0)); cv.paste(cv.crop((0, oy + sh_ - 6, W, oy + sh_)).resize((W, H - oy - sh_)), (0, oy + sh_))
+            im = cv; c = [tuple(int(o + k * v) for o, v in zip((ox, oy, ox, oy), b)) for b in CARDS_P2[src]]   # 札の (左, 上, 右, 下)
+            im = tag(im, (70, 60), "QRコード", px=96, bg=TEAL, fg=WHITE)
+            rows = [[("なぜ", WHITE)], [("こっち", YEL), ("は", WHITE)], [("読めない？", YEL)]]
+            px = min(fit(r, c[0][0] - 100, 300) for r in rows); y = 220; xe = []
+            for r in rows:
+                im, x_ = line(im, (60, y), r, px, BLACK, ew=int(px * 0.14)); xe.append((x_, y)); y += int(px * 1.04)
+            im = badge(im, (c[0][0] + 40, c[0][1] + 70), True); im = badge(im, (c[1][2] - 110, c[1][1] - 10), False)
+            x2, y2 = xe[1]                                          # 「こっちは」の右から、右の札（読めない方）の真ん中へ
+            # 左の札の上を高く越えて、右の札の上から指す（左の札・✓ の印・字に重ねない）
+            im = arrow(im, (x2 + 30, y2 + px * 0.15), ((c[1][0] + c[1][2]) / 2 - 60, c[1][1] + 230), bend=-0.55, w=40)
             made.append(save(im, "v3_" + name.replace("_", ""))); continue
         kind, tg, lines, maxw, *mx = LAYOUTS[key]; mx = mx[0] if mx else None
         edge = NAVY if kind == "dark" else (BLACK if kind == "photo" else WHITE)
+        ewk = 0.14 if kind == "photo" else 0.11   # しくみの正体の形は黒いふちを太く
         if tg: im = tag(im, (90, 50), tg[0], px=104, bg=tg[1], fg=tg[2])   # 参考：札は高さの 1 割ほど
         y = 230 if kind == "dark" else (110 if kind == "photo" else 205)
         for i, runs in enumerate(lines):
             px = fit(runs, maxw - 90, mx[i] if mx else (360 if kind == "dark" else 320))   # 明るい地の案は、まるロボの頭に字がかからない大きさまで                  # 参考：1 行が高さの 2 割以上
-            im, _ = line(im, (90, y), runs, px, edge)
+            im, _ = line(im, (90, y), runs, px, edge, ew=int(px * ewk))
             y += int(px * 1.06)
-        if key == "P3": im = arrow(im, (1000, y - 10), (1820, 1140), bend=0.25, w=42)   # 破れた角を指す（絵を見て位置を合わせる）
+        if key == "P3": im = arrow(im, (420, y + 110), (1760, 1180), bend=-0.15, w=42)   # 字の下から出して、字に重ねない   # 破れた角を指す（絵を見て位置を合わせる）
         made.append(save(im, "v3_" + name.replace("_", "") ))
     return made
 if __name__ == "__main__":
