@@ -17,4 +17,4 @@
 | `review_tool/` | 台本レビューツールに入れるデータ（`build_from_md.py` で md から作る）。作品 MARU-VACUUM |
 
 - 台本レビューツール：https://claude.ai/artifact/3kj4tZtaZWwbvig7GmEs4c（作品 MARU-VACUUM）
-- 動画レビュー：https://claude.ai/artifact/S3dTcoRuFr2n7Eg99RiJWi（作品 MARU-EP05・v1＝確認用の通し）
+- 動画レビュー：https://claude.ai/artifact/S3dTcoRuFr2n7Eg99RiJWi（作品 MARU-EP05・v1＝確認用の通し・v2＝部屋を作り込んで 3D のスマホにした版）
