@@ -27,7 +27,7 @@ def ev_list():
     add(w("06-01", "顔の画面"), e("06-01") + 0.2, "tag", dict(text="顔の画面", obj="head", dy=-110))
     add(w("06-01", "トレー"), e("06-01") + 0.2, "tag", dict(text="トレー", obj="tray", dy=-60))
     add(w("06-02", "カメラ"), w("06-02", "足もと") - 0.1, "tag", dict(text="カメラ", obj="lens", dy=-90))
-    add(w("06-02", "小さな窓"), e("06-02") + 0.4, "tag", dict(text="小さな窓", obj="window", dy=-90))
+    add(w("06-02", "小さな窓"), e("06-02") + 0.4, "tag", dict(text="小さな窓", obj="window", dy=60))
     # 07：台数
     add(w("07-02", "2022年"), e("07-02") + 0.4, "tag", dict(text="2022年の1年間", pos=(640, 100), size=48))
     add(w("07-02", "約3,000台"), e("07-02") + 0.6, "tag", dict(text="約3,000台", pos=(640, 190), size=64, bg=YEL))
