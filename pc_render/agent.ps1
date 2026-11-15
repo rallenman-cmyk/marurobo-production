@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "3"
+$VER = "5"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -78,11 +78,11 @@ function Write-Json([string]$path, $obj) {
   $txt = $obj | ConvertTo-Json -Depth 6
   [System.IO.File]::WriteAllText($path, $txt, (New-Object System.Text.UTF8Encoding($false)))
 }
-function Heartbeat([string]$state, $job, $waiting) {
+function Heartbeat([string]$state, $job, $waiting, [string]$progress = "") {
   if (-not (Status-Ready)) { return }
   $jid = ""
   if ($job) { $jid = $job.id }
-  Write-Json (Join-Path $stat "agent.json") ([ordered]@{ at = (Get-Date).ToString("s"); ver = $VER; state = $state; job = $jid; waiting = @($waiting) })
+  Write-Json (Join-Path $stat "agent.json") ([ordered]@{ at = (Get-Date).ToString("s"); ver = $VER; state = $state; job = $jid; waiting = @($waiting); progress = $progress })
   Status-Push ("描画係：{0} {1}" -f $state, $jid)
 }
 
@@ -193,7 +193,13 @@ function Get-Kit($job) {
   if ($LASTEXITCODE -ne 0) { return ("一式の枝 {0} を取れません：{1}" -f $job.kit_branch, ($o -join " ")) }
   $zip = Join-Path $kits $job.zip
   if (Test-Path $zip) { Remove-Item $zip -Force }
-  cmd /c ('""{0}" -C "{1}" cat-file blob FETCH_HEAD:{2} > "{3}""' -f $git, $repo, $job.zip, $zip)
+  # 枝の中身（zip 1 つ）を、包みの zip として書き出してから開く（画面への出力を経由しないので、中身が壊れない）
+  $wrap = Join-Path $kits "_wrap.zip"
+  if (Test-Path $wrap) { Remove-Item $wrap -Force }
+  $o = G -C $repo archive --format=zip -o $wrap FETCH_HEAD
+  if (-not (Test-Path $wrap)) { return ("一式を枝から取り出せません：{0}" -f ($o -join " ")) }
+  try { Expand-Archive -Path $wrap -DestinationPath $kits -Force -ErrorAction Stop } catch { return ("一式の包みを開けません：{0}" -f $_.Exception.Message) }
+  Remove-Item $wrap -Force -ErrorAction SilentlyContinue
   if (-not (Test-Path $zip) -or (Get-Item $zip).Length -lt 1000) { return ("一式 {0} が枝に見つかりません" -f $job.zip) }
   try { Expand-Archive -Path $zip -DestinationPath $root -Force -ErrorAction Stop } catch { return ("一式を広げられません：{0}" -f $_.Exception.Message) }
   return ""
@@ -215,6 +221,8 @@ function Run-Job($job) {
       try { Measure-Workers $job $ps1 } catch { Note ("同時本数を測る途中で止まりました（{0}）。既定の本数で描きます" -f $_.Exception.Message); Kill-Kit $kitdir }
     }
     $lastCheck = Get-Date
+    $lastProg = Get-Date
+    $prog = ""
     for ($try = 1; $try -le 2 -and $state -ne "done" -and -not $preempt; $try++) {
       $a = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $ps1.FullName)
       if ($job.only) { $a += @("-Only", "$($job.only)") }
@@ -229,6 +237,12 @@ function Run-Job($job) {
         [void]$tail.Add($line)
         if ($tail.Count -gt 40) { $tail.RemoveAt(0) }
         if ($line -match "ぜんぶ終わりました") { $state = "done" }
+        # 進み具合（「残り N 本、およそ …」の行）を、30 分ごとに印の枝へ（係のセッションが、次に見に来る時間を決めるのに使う）
+        if ($line -match "残り") { $prog = $line }
+        if ($prog -and ((Get-Date) - $lastProg).TotalMinutes -ge 30) {
+          $lastProg = Get-Date
+          try { Heartbeat "描いています" $job @() $prog } catch { }
+        }
         # 全部描きの途中に短い直しが来たら、いったん止めて直しを先に描く（できている所は残り、あとで続きから）
         if ($job.kind -ne "fix" -and -not $preempt -and ((Get-Date) - $lastCheck).TotalSeconds -ge 180) {
           $lastCheck = Get-Date

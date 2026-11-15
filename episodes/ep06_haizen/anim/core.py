@@ -177,6 +177,10 @@ class Sv:
         self.set_face(CLOCK["T0"] - 5, face)
 
     def place(self, t, x, y, ang, interp="LINEAR"):
+        # 向きは前の向きに近い方へそろえる（180 度と -180 度を取り違えると、止まってから一回転してしまう。v1 の 21-03）
+        if getattr(self, "last_ang", None) is not None:
+            ang = ang + 360.0 * round((self.last_ang - ang) / 360.0)
+        self.last_ang = ang
         key(self.root, ("location", 0), t, x, interp); key(self.root, ("location", 1), t, y, interp); key(self.root, ("rotation_euler", 2), t, R(ang), interp)
 
     def drive(self, dr, t0=None, t1=None, dt=0.125, motor=True):
