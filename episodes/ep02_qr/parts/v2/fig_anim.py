@@ -454,7 +454,7 @@ def arrows(pts):
             d.line((sx, sy, tx - vx * 20, ty - vy * 20), RED, 12, a=a)
             px, py = -vy, vx; d.poly([(tx, ty), (tx - vx * 30 + px * 22, ty - vy * 30 + py * 22), (tx - vx * 30 - px * 22, ty - vy * 30 - py * 22)], RED, a=a)
             if lab:
-                lx, ly = sx - vx * 34, sy - vy * 34; w = 22 + 30 * len(lab)
+                lx, ly = sx - vx * 34, sy - vy * 34; w = 34 + 46 * len(lab)   # v14：字が札からはみ出ないよう（字の大きさ 44 に合わせる）
                 d.rect((lx - w / 2, ly - 30, lx + w / 2, ly + 30), fill=RED, r=14, a=a); d.text((lx, ly), lab, 44, WHITE, a=a)
         return im
     return f

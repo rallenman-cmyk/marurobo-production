@@ -55,12 +55,13 @@ FAMILY = {'c3_alnum': ('c3_alnum', None), 'c3_alnum_hl': ('c3_alnum', 'hl'), 'c4
           'D1': ('c2_finder', None), 'K25a': ('c2_print', None), 'K25': ('c2_print', 'scan'), 'K26a': ('c2_chart', None), 'K26b': ('c2_chart', 'mark'),
           'c2_mask': ('c2_mask', None), 'c2_mask_fake': ('c2_mask', 'fake'), 'c2_mask_pats': ('c2_mask', 'pats'), 'c2_mask_over': ('c2_mask', 'over')}
 SINGLE = ['c5_blank', 'c5_levels', 'c5_boxbar', 'end_parts', 'c1_url', 'c1_bigger', 'c2_nearfar', 'c2_ruler', 'c2_times21', 'c2_three', 'c2_manual', 'c2_shop', 'c3_toc', 'c4_bignum', 'c5_drops', 'c5_thirty', 'end_world']
-def fig_segments(ch):
+def fig_segments(ch, tag=''):
     """SHOTS の図の所を、動く図の区間 [(a, b, 図の名前, cue)] にまとめる"""
     segs = []; cur = None
     for sh in ch.SHOTS:
         a, b, k = sh[:3]
         fam = FAMILY.get(k, (k, None) if k in SINGLE else None)
+        if tag == 'c5' and k in ('D5a', 'D5b'): fam = None   # v14：5章の D5a/D5b は 3D の机の場面（4章の図 c4_summary と同じ名前なので分ける）
         if fam is None: cur = None; continue
         name, role = fam
         if cur and cur[2] == name and abs(cur[1] - a) < 1e-6 and role:
@@ -111,7 +112,7 @@ def build(tag, _prev=True):
     pim0 = None
     if _prev and PCX and tag in PREV:                         # 前の章の最後のコマ（章の頭で重ねる）
         pc = build(PREV[tag], _prev=False); pim0 = pc.frame(pc.T_END - 1.0 / FPS)
-    _cards.clear(); _meters.clear(); ch = CH.build(tag); segs = fig_segments(ch)
+    _cards.clear(); _meters.clear(); ch = CH.build(tag); segs = fig_segments(ch, tag)
     for sg in segs:
         if (tag, sg[2]) in CUEW: sg[3].update({k: ch.cue(v) - sg[0] for k, v in CUEW[(tag, sg[2])].items()})
     base_frame = ch.frame
