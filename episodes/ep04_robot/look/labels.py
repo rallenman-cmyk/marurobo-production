@@ -101,17 +101,17 @@ def s19_labels():
             P("GPT-4", "A_base", said("OpenAIが") + 0.6, d=(0, 30), solid=True, col="te"),
             P("頼まれた人", "P_base", t_ask + 0.5, d=(0, 30), solid=True, col="or", quiet=True),
             P("？", "P_top", t_q, d=(60, -80), solid=True, col="or", size=52, tail=(-30, 50)),
-            P("「私はロボットではありません」", "A_side", t_no + 0.1, d=(250, -150), plain=True, size=40, tail=(-180, 110)),
-            P("研究者が手伝った試験", "R_base", t_res + 1.0, d=(60, 40), solid=True, col="nv", size=38, quiet=True)]
+            P("「私はロボットではありません」", "A_side", t_no + 0.1, d=(130, -160), plain=True, size=40, tail=(-170, 110)),
+            P("研究者が手伝った試験", "R_base", t_res + 1.0, d=(150, 40), solid=True, col="nv", size=38, quiet=True)]
 
 
 # ---------------- S20 2024年・2025年（8:47〜9:30）
 def s20_labels():
-    T0, t_25, t_op, t_chk = said("2024年には"), said("そして2025年"), said("ChatGPTに、自分で"), said("途中で、人間かどうか")
+    T0, t_25, t_op, t_chk, t_go = said("2024年には"), said("そして2025年"), said("ChatGPTに、自分で"), said("途中で、人間かどうか"), said("先へ進んでしまった")
     return [P("2024年", (640, 62), T0, size=50, col="or", out=t_25 - 0.1),
             P("2025年", (640, 62), t_25 + 0.3, size=50, col="or"),
             P("ChatGPT", "A_base", t_op + 0.4, d=(0, 30), solid=True, col="te"),
-            P("人間かどうかを確かめます", "box", t_chk + 0.4, d=(140, 110), plain=True, size=36, tail=(-120, -70))]
+            P("人間かどうかを確かめます", "box", t_chk + 0.4, d=(140, 110), plain=True, size=36, tail=(-120, -70), out=t_go)]
 
 
 # ---------------- S22 昔と今・AI は賢く・残り少ない（10:10〜10:28）
