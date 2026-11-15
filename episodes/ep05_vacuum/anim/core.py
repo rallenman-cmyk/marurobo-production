@@ -248,6 +248,9 @@ def dof(c, target_ob, fstop=4.0):
 def render_clip(name, t0, t1, outdir, samples, res, step, fr=None, stills=None):
     sc = bpy.context.scene
     render_settings(samples, res)
+    if "--fast" in sys.argv:   # PC の本番：光の跳ね返りを減らす（見た目はほぼ同じで速い。SKILL「PC の本番描画は速い設定で描く」2026-11-15）
+        c = bpy.context.scene.cycles
+        c.max_bounces, c.diffuse_bounces, c.glossy_bounces, c.transmission_bounces, c.transparent_max_bounces = 3, 1, 1, 2, 4
     n = round((t1 - t0) * FPS)
     sc.frame_start, sc.frame_end = 0, max(0, n - 1)
     os.makedirs(outdir, exist_ok=True)

@@ -29,7 +29,7 @@ $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-
 ## 付けられるもの（1 行の最後に足す）
 - ` -Workers 2`：同時に描く本数（1〜4。既定 3）。パソコンが重いときは減らす。
 - ` -Only S10a,S11a`：一部のカットだけ描く。カットの名前は `episodes/ep05_vacuum/anim/clips.json` の S01a〜S27a。
-- ` -Samples 64`：描く細かさ（既定 48）。大きいほどざらつきが減るが、時間がかかる。
+- ` -Samples 48`：描く細かさ（既定 24。光の跳ね返りを減らす速い設定と合わせて描く）。大きいほどざらつきが減るが、時間がかかる。
 
 ## 中身
 - `pc_kit/run_pc_render_ep05.ps1`：描く順番と、100 コマずつの mp4 にする手順（3本目と同じ作り）。

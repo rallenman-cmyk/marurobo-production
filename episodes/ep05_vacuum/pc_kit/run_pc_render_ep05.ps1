@@ -2,12 +2,12 @@
 #   使い方：PowerShell に README_PC.md の 1 行を貼って Enter
 #   同時に描く本数：最後に -Workers 2 のように付ける（既定 3、1〜4）
 #   一部だけ描く：最後に -Only S10a,S11a のように付ける（カットの名前をカンマで区切る）
-#   描く細かさ：-Samples 48（既定）。大きくすると、きれいになるが時間がかかる
+#   描く細かさ：-Samples 24（既定。光の跳ね返りを減らす --fast と合わせて、48 の約 3 倍速い）。大きくすると、きれいになるが時間がかかる
 #   途中で止まったり窓を閉じたりしても、同じ行をもう一度走らせれば、できている所は飛ばして続きから描く
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
 #   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep05_v3 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
 #   （3本目の run_pc_render_ep03.ps1 と同じ作り。出力・記録・札のフォルダは 5本目だけのもの）
-param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 48)
+param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 24)
 $ErrorActionPreference = "Continue"
 $kit = Split-Path -Parent $PSScriptRoot                      # ...\marurobo_ep05
 $anim = Join-Path $kit "episodes\ep05_vacuum\anim"
@@ -129,7 +129,7 @@ function Run-Jobs {
     Note ("{0}：{1}〜{2} コマ目を描いています" -f $key, $a, $b)
     $t0 = Get-Date
     $blog = Join-Path $out ("blender_log{0}.txt" -f $Worker)
-    $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $anim $py), "--", $key, $out, "--samples", "$Samples", "--res", "1920", "1080", "--frames", "$a", "$b", "--gpu", "--video", "--tex", $tex)
+    $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $anim $py), "--", $key, $out, "--samples", "$Samples", "--res", "1920", "1080", "--frames", "$a", "$b", "--gpu", "--video", "--fast", "--tex", $tex)
     & $blender @argv *>> $blog
     $code = $LASTEXITCODE; $dt = (Get-Date) - $t0
     if ($code -eq 0 -and (Test-Path $mp4) -and ((Get-Item $mp4).Length -gt 10000)) {
