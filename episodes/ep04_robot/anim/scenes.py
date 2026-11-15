@@ -60,7 +60,8 @@ def s04():
     mr.hop(s("04-01") + 0.6, 0.25, 0.35); mr.hop(s("04-01") + 1.1, 0.25, 0.35)
     ev(s("04-01") + 0.6 + 0.35, "step"); ev(s("04-01") + 1.1 + 0.35, "step")
     # 04-02：体で押して、まっすぐ（等しい速さで）
-    dirz = math.degrees(math.atan2(M1[1] - M0[1], M1[0] - M0[0])) - 90
+    # v11「マウスを後ろ向きで操作するのやめて」：顔（レンズ）を進む向き＝マウスの方へ。face 0 でレンズは −Y（カメラ）向き
+    dirz = math.degrees(math.atan2(M1[1] - M0[1], M1[0] - M0[0])) + 90
     mr.at(a0 - 0.4, face=dirz)
     key(ms, "location", f(a0), M0, "LINEAR"); key(ms, "location", f(a1), M1, "LINEAR")
     mr.at(a0, tuple(M0[i] + off[i] for i in range(3)), interp="LINEAR", hold=False)

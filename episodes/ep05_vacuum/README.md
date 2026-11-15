@@ -6,6 +6,15 @@
 | `企画案.md` | 企画案（入口の問い・答え・面白いポイント・構成のたたき台・調べた資料） |
 | `構成案_v1.md` | 構成案 v1（面白いポイントの表・章ごとの流れ・正確さのために・決めたこと 4 つ） |
 | `台本_v0_1.md` | 台本 v0.1（132 本・約3,100字・です・ます 72%・同じ語尾 3 連続 0） |
+| `台本_v0_2.md` | 台本 v0.2（コメント 13 件を反映・148 本） |
+| `台本_v0_3.md` | 台本 v0.3（コメント 6 件を反映・です・ます 6 本以上続く所 0） |
+| `台本_v0_4.md` | 台本 v0.4（台本 OK のあと、読点を 1 行 2 つまでに） |
+| `台本_v1_0.md` | **台本 v1.0（確定）**。【確認】を資料で確かめた結果の表つき |
+| `voice/` | 声の台本・読みの直し・間（placement.json）。wav は入れない |
+| `anim/` | 3D（plan・kit・core・scenes）、2D の札（overlays）、効果音（sfx）、組み立て（assemble） |
+| `bgm/` | BGM のつなぎ（bgm_bus.py） |
+| `pc_kit/` | PC で本番の 3D を描く一式（make_kit.sh で zip にする） |
 | `review_tool/` | 台本レビューツールに入れるデータ（`build_from_md.py` で md から作る）。作品 MARU-VACUUM |
 
 - 台本レビューツール：https://claude.ai/artifact/3kj4tZtaZWwbvig7GmEs4c（作品 MARU-VACUUM）
+- 動画レビュー：https://claude.ai/artifact/S3dTcoRuFr2n7Eg99RiJWi（作品 MARU-EP05・v1＝確認用の通し・v2＝部屋を作り込んで 3D のスマホにした版）

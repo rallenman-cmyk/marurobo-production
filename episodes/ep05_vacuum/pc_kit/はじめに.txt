@@ -1,0 +1,14 @@
+まるロボ 5本目（ロボット掃除機）：パソコンで本番の絵を描く（やることは2つだけ）
+
+⓪ ほかの回の描画が動いていても大丈夫です（終わるのを自動で待ってから描き始めます）。
+① この marurobo_ep05.zip を右クリック →「すべて展開」→ 展開先を  C:\marurobo  にする。
+   C:\marurobo\marurobo_ep05 ができれば OK です。
+② PowerShell を開いて、下の1行をコピーして貼り、Enter を押す。あとは放っておくだけ。
+
+$f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-Object -First 1; if ($f) { powershell -ExecutionPolicy Bypass -File $f.FullName } else { "marurobo_ep05.zip を C:\marurobo に展開し直してください" }
+
+・小さな窓がいくつか開いて、順番に絵を描きます（45 カット・18,415 コマ。半日〜1日くらい）。
+・途中で止まっても、同じ1行をもう一度貼れば、続きから描きます。
+・描いている間、パソコンはスリープしません（画面は消えてOK。ノートは電源につないで、ふたは開けたまま）。
+・終わると Google ドライブの marurobo_render\ep05_v3 に自動で入ります。終わったらチャットで教えてください。
+・うまくいかないときは、C:\marurobo\render_log_ep05.txt をチャットに貼ってください。

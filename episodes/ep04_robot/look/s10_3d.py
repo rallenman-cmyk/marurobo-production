@@ -14,7 +14,7 @@ RESX, RESY = opt("--res", [1920, 1080]); STEP, = opt("--step", [1]); TRACK_ONLY 
 exec(open(os.path.join(_ANIM_HERE, "common.py"), encoding="utf-8").read())
 import bpy
 
-T0, T1 = said("2023年には") - 0.4, said("では、どうやって") - 0.05
+T0, T1 = said("2023年には") - 0.4, said("そこで、2014年")   # 次の場面（S11）の頭まで
 CLOCK["T0"] = T0
 t_y, t_who, t_res, t_fast, t_hum, t_hsec, t_wow = (said("2023年には"), said("ゆがんだ文字のテストを"), said("結果は"),
                                                   said("しかも、1問"), said("人は、正解"), said("1問に、9秒"), said("なんと"))
@@ -138,6 +138,14 @@ mr.at(t_res, face=85, look=16); mr.at(t_hum, face=-80, look=16)
 mr.at(t_wow - 0.2, face=10, look=8)
 mr.hop(t_wow + 0.1, 0.35, 0.45); mr.hop(t_wow + 0.65, 0.25, 0.4); ev(t_wow + 0.1, "jump"); ev(t_wow + 0.55, "land")
 mr.glow(t_wow + 0.1, 1.0, 2.6, 0.2); mr.glow(t_wow + 1.4, 2.6, 1.0, 0.6)
+# 「なんと」：プログラムの台を光の輪が囲んで上がる（勝ったのはプログラム）
+bpy.ops.mesh.primitive_torus_add(location=(XR, Y, 0.4), major_radius=1.45, minor_radius=0.035)
+win = bpy.context.object; win.data.materials.append(mat("win_ring", TE, emit=6.0))
+key(win, "scale", f(T0), (0.001,) * 3); key(win, "scale", f(t_wow), (0.001,) * 3); key(win, "scale", f(t_wow + 0.4), (1, 1, 1))
+key(win, ("location", 2), f(t_wow + 0.4), 0.4); key(win, ("location", 2), f(t_wow + 1.6), 1.3)
+# 「では、どうやって」：まるロボは首をかしげる
+t_how = said("では、どうやって")
+mr.at(t_how - 0.3, face=0, look=10); mr.tilt(t_how + 0.2, 14, 0.4)
 # 息
 t = T0 + 0.6
 while t < T1 - 1:

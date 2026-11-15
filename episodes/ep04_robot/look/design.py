@@ -55,6 +55,19 @@ def finish(shape_rgba, mask, blur=18, alpha=70, dy=10):
     return out, pad // SS
 
 
+def short_tip(base_c, tip, L):
+    """しっぽは短い三角（2026-11-15 ep04 v11「しっぽの形おかしい」→ユーザーの選択）。先は話す人の方へ、長さ L まで"""
+    bx, by = base_c; dx, dy = tip[0] - bx, tip[1] - by; d = math.hypot(dx, dy) or 1
+    k = min(1.0, L / d); return (bx + dx * k, by + dy * k)
+
+
+def tri_poly(base_c, half, tip):
+    """まっすぐな三角（付け根の中心・半分の幅・先）"""
+    bx, by = base_c; tx, ty = tip; dx, dy = tx - bx, ty - by; L = math.hypot(dx, dy) or 1
+    px, py = -dy / L, dx / L
+    return [(bx + px * half, by + py * half), (tx, ty), (bx - px * half, by - py * half)]
+
+
 def tail_poly(base_c, half, tip, bend=0.25):
     """付け根（中心・半分の幅）から先へ、少し曲がったしっぽ"""
     bx, by = base_c; tx, ty = tip
@@ -93,7 +106,8 @@ def pill(text, size=46, fg=NAVY, bg=WHITE, accent=None, tail=None, pad=(30, 16),
         bx = cx + math.cos(ang) * min(w / 2 - r * 0.6, abs(tail[0]) * SS) * (1 if tail[0] >= 0 else 1)
         bx = min(max(cx + tail[0] * SS * 0.25, ext + r), ext + w - r)
         by = cy + (h / 2 - 6 * SS) * (1 if tail[1] > 0 else -1)
-        dm.polygon(tail_poly((bx, by), h * 0.28, tip), fill=255)
+        tip = short_tip((bx, by), tip, h * 0.55)
+        dm.polygon(tri_poly((bx, by), h * 0.24, tip), fill=255)
     img = Image.new("RGBA", (W_, H_), bg + (0,)); img.putalpha(m)
     fill = Image.new("RGBA", (W_, H_), bg + (255,)); img = Image.composite(fill, img, m)
     d = ImageDraw.Draw(img)
@@ -122,7 +136,8 @@ def bubble(w, h, tail, draw=None, bg=WHITE, r=34):
     else:
         bx = cx + (W_ / 2 - 8 * SS) * (1 if tail[0] > 0 else -1)
         by = min(max(cy + tail[1] * SS * 0.45, ext + r * SS * 1.2), ext + H_ - r * SS * 1.2)
-    dm.polygon(tail_poly((bx, by), min(W_, H_) * 0.16, tip), fill=255)
+    tip = short_tip((bx, by), tip, min(W_, H_) * 0.32)
+    dm.polygon(tri_poly((bx, by), min(W_, H_) * 0.13, tip), fill=255)
     img = Image.composite(Image.new("RGBA", m.size, bg + (255,)), Image.new("RGBA", m.size, bg + (0,)), m)
     if draw: draw(ImageDraw.Draw(img), cx, cy, SS, img)
     spr, p = finish(img, m, blur=16, alpha=65, dy=8)

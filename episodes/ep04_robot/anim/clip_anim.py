@@ -175,8 +175,11 @@ def a_s11(mr, ms):                    # ぽかんと目を丸くする
 
 def a_s12a(mr, ms):                   # 画面の中へ：上から降りてきて着地 → ぐるりと見渡す → 門番を見上げる
     l0 = mr.loc0
-    key(mr.root, "location", f(T0), (l0[0], l0[1], l0[2] + 3.0)); key(mr.root, "location", f(T0 + 0.7), l0, "BEZIER")
-    mr._last["loc"] = (T0 + 0.7, l0); ev(T0 + 0.7, "land"); ev(T0 + 0.05, "dive")
+    # v11「SE 出てから画面切り替わる」：絵は字幕「では、画面の中に」の頭で替わる。降りる動きと音はそこから
+    tS = said("では、画面の中に")
+    key(mr.root, "location", f(T0), (l0[0], l0[1], l0[2] + 3.0)); key(mr.root, "location", f(tS + 0.05), (l0[0], l0[1], l0[2] + 3.0))
+    key(mr.root, "location", f(tS + 0.75), l0, "BEZIER")
+    mr._last["loc"] = (tS + 0.75, l0); ev(tS + 0.75, "land"); ev(tS + 0.1, "dive")
     idle(mr, a=T0 + 1.0, still=[(s("12-01b"), s("12-01b") + 3.2)])
     mr.at(s("12-01b"), face=mr.face0 + 50); mr.at(s("12-01b") + 1.5, face=mr.face0 - 50); mr.at(s("12-01b") + 3.0, face=mr.face0)
     mr.at(said("門番です") - 0.4, face=mr.face0 + 25, look=18)
@@ -200,7 +203,7 @@ def a_s13d(mr, ms):                   # まるロボの足あと（青緑）が�
 def a_s14(mr, ms):                    # 足あとの横で、しょんぼり沈む
     idle(mr, still=[(T0 + 1.5, T0 + 4)])
     key(mr.body, ("location", 2), f(T0 + 1.5), mr.z0); key(mr.body, ("location", 2), f(T0 + 2.5), mr.z0 - 0.1)
-    mr.z0 -= 0.1; mr.glow(T0 + 1.6, mr.g0, mr.g0 * 0.5, 0.6); ev(T0 + 1.6, "down")
+    mr.z0 -= 0.1; mr.glow(T0 + 1.6, mr.g0, mr.g0 * 0.5, 0.6)   # v11「何も動きがないのに SE だけ」：まるロボが画面の外なので音なし
 
 
 def a_s15(mr, ms):                    # 記録帳を下からのぞきこむ（つま先立ちで小さく跳ねる）
@@ -234,8 +237,15 @@ def a_s17a(mr, ms):                   # 信号機の写ったマスへ、一つ�
     idle(mr, a=t, still=[])
 
 
-def a_s17b(mr, ms):
-    idle(mr); mr.at(T0 + 0.8, face=mr.face0 - 20); mr.at(T0 + 2.5, face=mr.face0)
+def a_s17b(mr, ms):                   # v11「止まってしまいました のだいぶ前から足が止まってる」：言うまで、マスを跳んで選び続ける
+    t = said("まるロボ、慎重に") + 0.3
+    pts = [cell_c(2, 1), cell_c(2, 0), cell_c(3, 0), (2.25, 5.35, 0.03)]
+    idle(mr, a=T0, b=t)
+    for k, p in enumerate(pts):
+        mr.jump_to(t, p, 0.55, 0.9 if k < 3 else 0.35); t += 1.75
+    stop = said("……あれ？") - 0.6                                     # 端っこのマスの手前で、ぴたっと止まる
+    mr.at(stop - 0.3, (2.25, 5.25, 0.03)); mr.at(stop, (2.25, 5.2, 0.03)); mr.tilt(stop, -8, 0.3)
+    idle(mr, a=stop + 0.4, still=[])
 
 
 def a_s18a(mr, ms):                   # 端っこのマスのふちで止まる → 乗る → 降りる → また乗りかける。18-02 からマスをふちどる（3D：まるロボより奥）
@@ -267,16 +277,20 @@ def a_s23(mr, ms):                    # 次の夜：眠そうに（光とろん�
     seq_screen(find_screen(), SCR, "s23")
     m_0, m_1 = said("次の夜") + 1.5, said("……あ、通りました") - 0.6; click = said("……あ、通りました") - 0.3
     pa0 = m_0 + (m_1 - m_0) * 0.55; pa = (pa0, pa0 + 1.0)
-    m0 = (0.98, 0.2, 0.75); ms.location = m0; mr.at(T0, (0.98, 0.0, 0.75), -10, -8)
+    # v11：マウスが見えない・後ろ向き → まるロボはマウスの右うしろ（進む向きの反対）から、マウスの方を向いて押す
+    m0 = (0.98, 0.2, 0.75); ms.location = m0; BK = (0.17, -0.08); FACE = math.degrees(math.atan2(0.11, -0.24)) + 90
+    mr.at(T0, (0.98 + BK[0], 0.2 + BK[1], 0.75), FACE, -8)
     mr.glow(T0, 0.3, 0.3, 0.1)
     mv = (m_1 - m_0) - 1.0
     for k in range(0, 31):
         u = k / 30; uu = u * u * (3 - 2 * u); tt = m_0 + u * mv; tt += 1.0 if tt > pa[0] else 0
         x = 0.98 - 0.24 * uu + 0.022 * math.sin(uu * 9.0) * (1 - uu); y = 0.2 + 0.11 * uu + 0.016 * math.sin(uu * 6.0) * (1 - uu)
-        key(ms, "location", f(tt), (x, y, 0.75), "LINEAR"); mr.at(tt, (x + 0.0, y - 0.2, 0.75), interp="LINEAR", hold=False)
+        key(ms, "location", f(tt), (x, y, 0.75), "LINEAR"); mr.at(tt, (x + BK[0], y + BK[1], 0.75), interp="LINEAR", hold=False)
     for k, tt in enumerate((said("……だいぶ") - 1.2, said("……だいぶ") - 0.5, said("……だいぶ") + 0.2, said("……だいぶ") + 0.9)):
         mr.tilt(tt, 16 if k % 2 else -16, 0.45)                                                   # ふらふら
     key(mr.body, ("rotation_euler", 0), f(pa[0]), R(8)); key(mr.body, ("rotation_euler", 0), f(pa[0] + 0.5), R(26)); key(mr.body, ("rotation_euler", 0), f(pa[1]), R(8))   # こっくり
+    for tt in (T0 + 1.0, said("……だいぶ") - 0.9, said("……だいぶ") + 0.6):          # v11「眠そうに瞬きしてほしい」：ゆっくり、重いまばたき
+        mr.blink(tt, 0.3, 0.7)
     ev(click, "click")
     mr.tilt(click + 0.2, 0, 0.2); mr.glow(click + 0.25, 0.3, 1.8, 0.15); ev(click + 0.25, "pi")      # はっと起きる
     mr.hop(s("23-04") + 0.8, 0.3, 0.4); mr.hop(s("23-04") + 1.3, 0.3, 0.4); ev(s("23-04") + 1.2, "step"); ev(s("23-04") + 1.7, "step")
