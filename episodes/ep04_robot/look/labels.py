@@ -66,7 +66,7 @@ def s07_labels():
             P("morning", "L_top", t_who + 0.9, d=(0, -85), plain=True, size=46, tail=(0, 55), quiet=True, out=t_two - 0.1),
             P("？？？", "R_top", t_who + 2.7, d=(0, -75), plain=True, size=44, tail=(0, 50), quiet=True, out=t_two - 0.1),
             P("出題する側", "asker", t_known - 0.1, d=(0, 62), solid=True, col="nv", size=40, quiet=True),
-            P("morning", "wL", t_known + 1.6, d=(0, -70), plain=True, size=46, tail=(0, 50)),
+            P("morning", "wL", t_known + 1.6, d=(0, -70), plain=True, size=46, tail=(0, 50), quiet=True),
             P("？？？", "wR", t_unk + 0.4, d=(0, -70), solid=True, col="or", size=44, tail=(0, 50))]
 
 
