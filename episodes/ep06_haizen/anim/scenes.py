@@ -208,7 +208,7 @@ def b_open(cl):
     if cut(cl, "S03b"): cam((0.32, 0.05, 0.62), (0.0, 1.45, 0.72), 26, s("03-02") - 0.2, s("03-03"), (0.3, 0.12, 0.6), (0.0, 1.45, 0.75))
     if cut(cl, "S03c"): cam((-0.45, 3.1, 1.85), (0.2, 0.4, 0.4), 26, s("03-03") - 0.2, e("03-04"), (-0.3, 2.9, 1.8), (0.25, 0.0, 0.4))
     # v2：先輩のトレーと、受け取るお客さんが両方見える、通路の向こうがわから
-    if cut(cl, "S03d"): cam((-0.42, -0.95, 1.35), (0.56, 0.0, 0.78), 30, s("03-05") - 0.2, s("04-01"), (-0.38, -0.88, 1.32), (0.6, 0.0, 0.78))
+    if cut(cl, "S03d"): cam((0.3, 1.45, 1.75), (0.8, -0.3, 0.8), 24, s("03-05") - 0.2, s("04-01"), (0.32, 1.4, 1.72), (0.82, -0.3, 0.8))   # v2 点検：奥がわの横から（後ろからだと、テーブルに置く所がお客さんの体に隠れる）
     if cut(cl, "S04a"): cam((0.35, -3.1, 1.6), (0.0, 0.3, 0.5), 22, s("04-01") - 0.2, e("04-05") + 2.0, (0.25, -2.8, 1.5), (0.0, 0.5, 0.5))
 
 
@@ -691,20 +691,20 @@ def b_spill(cl):
     R1 = ramen(tr, (0, 0, 0.012), steam=False); br = R1["broth"]
     # 急に止まる：体が前へかたむき、スープが前へはねる
     key(st.root, ("rotation_euler", 0), t_stop - 0.05, 0.0); key(st.root, ("rotation_euler", 0), t_stop + 0.15, R(-7)); key(st.root, ("rotation_euler", 0), t_stop + 0.6, 0.0, "BEZIER")
-    key(br, ("rotation_euler", 0), t_stop, 0.0); key(br, ("rotation_euler", 0), t_stop + 0.12, R(-16)); key(br, ("rotation_euler", 0), t_stop + 0.35, R(9)); key(br, ("rotation_euler", 0), t_stop + 0.7, 0.0)
+    key(br, ("rotation_euler", 0), t_stop, 0.0); key(br, ("rotation_euler", 0), t_stop + 0.12, R(-24)); key(br, ("rotation_euler", 0), t_stop + 0.35, R(12)); key(br, ("rotation_euler", 0), t_stop + 0.7, 0.0)
     bowl_w = (0.0, y_stop - 0.4, 1.06 + 0.08)
-    sm = mat("splash", "#D9A35A", rough=0.15, coat=1.0)
+    sm = mat("splash", "#C9782C", rough=0.15, coat=1.0)   # v2 点検：うすい色だと床で見えない
     import random as _r; _r.seed(6)
-    for k in range(14):
-        dx, dy, dz = _r.uniform(-0.35, 0.35), -_r.uniform(0.7, 1.4), _r.uniform(0.6, 1.3)
-        o = sphere(sm, bowl_w, _r.uniform(0.009, 0.016)); show_between(o, t_stop + 0.06)
+    for k in range(24):   # v2 点検：しずくが小さくて見えなかった → 大きく・多く
+        dx, dy, dz = _r.uniform(-0.3, 0.3), -_r.uniform(0.5, 1.2), _r.uniform(0.5, 1.2)
+        o = sphere(sm, bowl_w, _r.uniform(0.018, 0.032)); show_between(o, t_stop + 0.06)
         t = 0.0
         while t <= 0.62:
             z = bowl_w[2] + dz * t - 4.9 * t * t
             if z < 0.01: z = 0.01
             key(o, "location", t_stop + 0.06 + t, (bowl_w[0] + dx * t, bowl_w[1] + dy * t, z), "LINEAR"); t += 0.04
     ev(t_stop, "stop", 0.5); ev(t_stop + 0.1, "splash", 0.5)
-    if cut(cl, "S22p"): cam((0.6, -1.95, 1.45), (0.0, -0.4, 1.1), 28)   # 前の横から（おぼんとラーメンが見えるように）
+    if cut(cl, "S22p"): cam((0.75, -1.75, 1.45), (0.0, -0.55, 1.12), 32)   # 前の横から（おぼんとラーメンが見えるように。v2 点検：近づけて、はねるのが見えるように）
 
 
 # ======================================================================== S23〜S25：通路を狭くすると
