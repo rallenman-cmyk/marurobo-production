@@ -261,6 +261,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         if not (t0 <= t < t1): continue
         k, a = _pop(t, t0, t1)
         if kind == "tag":
+            # いろは歌の札が出ている間は、上の方の板の名前を出さない（札の下に隠れて半分だけ見えたため。7本目 v1 の 2:26）
+            if any(k_ == "iroha" and a_ <= t < b_ for a_, b_, k_, _ in EVENTS) and not p.get("keep"): continue
             if "pos" in p: cx, cy = p["pos"]
             else:
                 q = where(p["obj"], t)
@@ -271,13 +273,20 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)
         elif kind == "keys":
             fl = p.get("flow", 0.0)
+            # 引いた絵でキーの字どうしが重なるときは、となりとの間に合わせて小さくする（7本目 v1 の 0:56・10:08 で字が重なった）
+            qs = [where(o, t) for o, _ in p["keys"]]
+            qs = [q for q in qs if q is not None]
+            sz = p.get("size", 46)
+            if len(qs) > 1:
+                gap = min(((qa[0] - qb[0]) ** 2 + (qa[1] - qb[1]) ** 2) ** 0.5 for i_, qa in enumerate(qs) for qb in qs[i_ + 1:])
+                sz = max(30, min(sz, int(gap * 0.85)))
             for i, (obj, ch) in enumerate(p["keys"]):
                 ti = t0 + fl * i
                 if t < ti: continue
                 q = where(obj, t)
                 if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= SUB_TOP - 10): continue
                 k2, a2 = _pop(t, ti, t1)
-                _paste(base, key_sprite(ch, p.get("size", 46), p.get("col", BLUE)), q[0], q[1], k2, a2)
+                _paste(base, key_sprite(ch, sz, p.get("col", BLUE)), q[0], q[1], k2, a2)
         elif kind == "bubble":
             q = where(p["obj"], t)
             if q is None or not (-20 <= q[0] <= 1300 and -20 <= q[1] <= 700): continue
