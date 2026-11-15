@@ -970,9 +970,9 @@ def b_ad(cl):
     """スタジオの台の上でカメラの先輩が回る → 「うんち」で前にうんち → 「よけられなかったら」で赤い × → 「新品」で箱がぽん（きらきら）。
     2D で、まわりにテレビのふち（overlays の tv）"""
     sc = bpy.context.scene; sc.world = bpy.data.worlds.new("adw"); sc.world.use_nodes = True
-    bg = sc.world.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = srgb("#DDEFF0"); bg.inputs["Strength"].default_value = 0.12
+    bg = sc.world.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = srgb("#DDEFF0"); bg.inputs["Strength"].default_value = 0.08
     # 床と、奥のまるい壁（つなぎ目の見えない背景）
-    fl = cyl(mat("adfloor", "#EEF4F4", rough=0.35, coat=0.3), (0, 0, -0.01), 6.0, 0.02, verts=96)
+    fl = cyl(mat("adfloor", "#E3ECEC", rough=0.7), (0, 0, -0.01), 6.0, 0.02, verts=96)
     bpy.ops.mesh.primitive_cylinder_add(radius=3.2, depth=4.0, vertices=128, location=(0, 0.6, 2.0), end_fill_type='NOTHING'); wall = bpy.context.object
     wm = bpy.data.materials.new("adwall"); wm.use_nodes = True; nt = wm.node_tree; bs = nt.nodes["Principled BSDF"]
     tc = nt.nodes.new("ShaderNodeTexCoord"); sp_ = nt.nodes.new("ShaderNodeSeparateXYZ"); cr = nt.nodes.new("ShaderNodeValToRGB")
@@ -992,14 +992,15 @@ def b_ad(cl):
     key(cs.root, ("rotation_euler", 2), t0, R(-40), "LINEAR"); key(cs.root, ("rotation_euler", 2), tpo, R(25), "LINEAR")
     key(cs.root, ("rotation_euler", 2), tpo + 0.5, R(25)); key(cs.root, ("rotation_euler", 2), tend, R(40), "LINEAR")
     # うんち（台の前の床）→ 赤い ×
-    PP = (0.0, -0.62)
+    # v3 点検：うんちが字幕の下・× が先輩の前に浮いて重なる・箱が画面の外 → 左にうんちと ×、真ん中に先輩、右に箱。少し引いて全部入れる
+    PP = (-0.52, -0.45)
     pe = poop((PP[0], PP[1], 0.0), 1.2); show_between(pe, tpo - 0.05); scale_pop(pe, tpo); ev(tpo, "pop", 0.5)
-    xe = empty((PP[0], PP[1], 0.26)); xe.rotation_euler = (0, 0, R(90))
-    xr = mat("xred", "#D93A30", rough=0.4, emit=0.9)
-    for sg in (1, -1): cube(xr, (0, 0, 0), (0.025, 0.26, 0.045), rot=(R(45 * sg), 0, 0), bevel=0.01, parent=xe)
+    xe = empty((PP[0], PP[1], 0.3)); xe.rotation_euler = (0, 0, R(90))      # うんちの上に浮かべる（うんちを隠さない）
+    xr = mat("xred", "#C8231A", rough=0.45)
+    for sg, th_ in ((1, 0.026), (-1, 0.022)): cube(xr, (0, 0, 0), (th_, 0.26, 0.045), rot=(R(45 * sg), 0, 0), bevel=0.008, parent=xe)   # 厚みを変えて、重なる面のちらつき（黒い四角）を防ぐ
     show_between(xe, tx_); scale_pop(xe, tx_); ev(tx_, "bonk_soft", 0.5)
     # 新品の箱（右に。リボン・きらきら）
-    bx = empty((0.66, -0.32, 0.0)); bx.rotation_euler = (0, 0, R(-18)); bsz = 0.26
+    bx = empty((0.56, -0.32, 0.0)); bx.rotation_euler = (0, 0, R(-18)); bsz = 0.26
     cube(noise_mat("cardboard", "#C99A62", "#BE8E57", 30, 0.8), (0, 0, bsz / 2), (bsz, bsz, bsz), bevel=0.006, parent=bx)
     cube(mat("boxlid", "#D3A66C", rough=0.75), (0, 0, bsz + 0.012), (bsz + 0.02, bsz + 0.02, 0.03), bevel=0.006, parent=bx)
     rb = mat("ribbon", "#E24C42", rough=0.35, coat=0.4)
@@ -1020,11 +1021,11 @@ def b_ad(cl):
             tt = t0 + 0.2 + k * 0.17 + j * 1.1
             emit_key(sm_, tt, 0.0); emit_key(sm_, tt + 0.15, 12.0); emit_key(sm_, tt + 0.45, 0.0)
     # 光（上からのやわらかい光・後ろからの縁の光）
-    for loc, en, sz in (((0.9, -1.6, 2.2), 110, 1.6), ((-1.4, -0.8, 1.6), 45, 1.2), ((0.0, 1.2, 1.8), 90, 1.0)):
+    for loc, en, sz in (((0.9, -1.6, 2.2), 70, 1.6), ((-1.4, -0.8, 1.6), 30, 1.2), ((0.0, 1.2, 1.8), 70, 1.0)):
         bpy.ops.object.light_add(type='AREA', location=loc); L_ = bpy.context.object; L_.data.energy = en; L_.data.size = sz
         dd = Vector((0, 0, 0.2)) - Vector(loc); L_.rotation_euler = dd.to_track_quat('-Z', 'Y').to_euler()
-    c, tg = cam_rig((0.5, -1.6, 0.6), (0.15, -0.25, 0.14), 42)
-    cam_move(c, tg, t0, tend, (0.55, -1.65, 0.62), (0.4, -1.4, 0.5), (0.16, -0.25, 0.15), (0.16, -0.3, 0.13)); dof(c, cs.root, 5.6)
+    c, tg = cam_rig((0.0, -2.5, 0.7), (0.0, -0.25, 0.08), 44)
+    cam_move(c, tg, t0, tend, (0.05, -2.6, 0.72), (0.0, -2.4, 0.66), (0.0, -0.25, 0.08), (0.0, -0.27, 0.08)); dof(c, cs.root, 8.0)
 
 
 # ======================================================================== S26〜S27：まとめ・オチ

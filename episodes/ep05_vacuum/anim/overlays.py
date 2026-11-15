@@ -86,7 +86,7 @@ def ev_list():
     add(w("26-05", "ぶつかって"), e("26-05") + 0.2, "pip_clip", dict(clip="S06c", src_t=s("06-09") + 2.5, sepia=True))
     add(s("26-02"), e("26-04") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
     # 27：オチの地図
-    add(s("27-05"), e("27-05") + 2.0, "pip_clip", dict(clip='S27b', src_t=e("27-04") - 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
+    add(s("27-05") + 0.4, e("27-05") + 2.0, "pip_clip", dict(clip='S27b', src_t=e("27-04") - 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
     return sorted(E, key=lambda x: x[0])
 
 
