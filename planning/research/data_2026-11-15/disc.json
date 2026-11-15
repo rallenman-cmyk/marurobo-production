@@ -1,0 +1,1967 @@
+{
+ "fetched_at": "2026-11-15T05:26:47.205229+00:00",
+ "sort": null,
+ "queries": {
+  "なぜ ゆっくり解説 パソコン": [
+   {
+    "id": "Febh76j_Bio",
+    "title": "なぜIBMは自ら作った市場で敗れたのか？PC市場から撤退した本当の理由【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 152133,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "25:12"
+   },
+   {
+    "id": "JvBgUrwxstA",
+    "title": "なぜゲームはWindowsPCじゃないと出来ないのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 94272,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "22:02"
+   },
+   {
+    "id": "tFCwGnwGKR4",
+    "title": "なぜPentium4のパソコンは数倍高いメモリを積まされたのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 9665,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "15:35"
+   },
+   {
+    "id": "hhKwgJAWdN8",
+    "title": "なぜソフトは重くなる？パソコンが進化しても早くならない本当の理由【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 84906,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "13:04"
+   },
+   {
+    "id": "XA5J9lYb82M",
+    "title": "なぜWindowsはMacより普及したのか【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 90686,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "15:47"
+   },
+   {
+    "id": "wJ6go-xP-fA",
+    "title": "なぜPC-88は御三家のFM-7やX1に勝てたのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 7274,
+    "published": "19 時間前",
+    "age_days": 0,
+    "length": "17:14"
+   },
+   {
+    "id": "4Shtd_kwdbQ",
+    "title": "ゲーミングPC離れが加速する理由【ずんだもん&ゆっくり解説】",
+    "channel": "ずんだ実話",
+    "channel_id": "UCCLJicEOjjzQftcy6ICtbgA",
+    "views": 45192,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "14:15"
+   },
+   {
+    "id": "SuHitCNd05M",
+    "title": "【CPU戦争】なぜ“弱い側”が世界を取ったのか【逆転の真相】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 133003,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "39:39"
+   },
+   {
+    "id": "NvgbeR78IEI",
+    "title": "【ゆっくり解説】説明できる？ なぜコンピュータは0と1だけで全てを表現できる？",
+    "channel": "ド文系でも分かる【ゆっくり数学】",
+    "channel_id": "UCw-RnrHWa-rI5KL8aCP43YA",
+    "views": 153001,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:22"
+   },
+   {
+    "id": "RqdV7_yb2t8",
+    "title": "なぜ昔のパソコンは全部「ベージュ」だったのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 39965,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "22:18"
+   },
+   {
+    "id": "Px5O8KatYGk",
+    "title": "自作PC離れが急増している理由【ずんだもん&ゆっくり解説】",
+    "channel": "ずんだ実話",
+    "channel_id": "UCCLJicEOjjzQftcy6ICtbgA",
+    "views": 37977,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "15:23"
+   },
+   {
+    "id": "u4QTIKnamYQ",
+    "title": "なぜパソコンは再起動すると直るのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 162171,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "21:22"
+   },
+   {
+    "id": "FVBjji5AYYE",
+    "title": "パソコンを使えないZ世代が増えている理由【ずんだもん&ゆっくり解説】",
+    "channel": "ずんだ実話",
+    "channel_id": "UCCLJicEOjjzQftcy6ICtbgA",
+    "views": 117684,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "14:34"
+   },
+   {
+    "id": "8C2tgTSrEEM",
+    "title": "CPU技術の進化 50年でどれだけ速くなった？【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 379070,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "22:09"
+   },
+   {
+    "id": "__GZNMsx1UY",
+    "title": "なぜAMDはインテルの互換CPUを作れるのか？【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 361188,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "16:18"
+   },
+   {
+    "id": "R5nlCLp4EAo",
+    "title": "【なぜ？】今12世代CPU Windows PCが売れてるらしい！？【路地オモテ情報】",
+    "channel": "けっこう安い。 イオシス",
+    "channel_id": "UC-PH3UBqXRQTuCPi8h7tmlw",
+    "views": 7676,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "9:40"
+   },
+   {
+    "id": "6rnPFiXYjN8",
+    "title": "今さら聞けない！パソコン選びで失敗しないための『CPU』の知識を徹底解説します",
+    "channel": "ウェブマニア",
+    "channel_id": "UCvpDuJLRV07mTu6gh9CGq0w",
+    "views": 126205,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:34"
+   },
+   {
+    "id": "jclt5lmRzP8",
+    "title": "なぜWindowsはXPからフリーズしなくなったのか【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 158013,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "15:38"
+   },
+   {
+    "id": "2bUT-A0N-aU",
+    "title": "なぜ自作パソコンのマザーボードは台湾の会社ばかりなのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 53650,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "15:46"
+   }
+  ],
+  "なぜ ゆっくり解説 スマホ": [
+   {
+    "id": "gEcxfmsE6BQ",
+    "title": "なぜ人類はスマホに強く惹きつけられるのか？【ゆっくり科学】",
+    "channel": "デルタのゆっくり科学",
+    "channel_id": "UCYG5ZT0oNuWYZl4o8IcNsGw",
+    "views": 238170,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "30:39"
+   },
+   {
+    "id": "k8XoMDQv9x4",
+    "title": "なぜ日本では売れるスマホの半分がiPhoneなのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの真相",
+    "channel_id": "UCDlGznf8OvYLZPiXcsL96gg",
+    "views": 8419,
+    "published": "22 時間前",
+    "age_days": 0,
+    "length": "20:52"
+   },
+   {
+    "id": "23Z80Fcumfg",
+    "title": "なぜ初期の日本製Androidスマホは完成度が低かったのか【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 103232,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "14:46"
+   },
+   {
+    "id": "mX-ohGbxe6c",
+    "title": "【スマホ戦争の真実】AndroidとiOS、覇権を握った二大OSの\"知られざる共通点\"【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 44077,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "41:56"
+   },
+   {
+    "id": "bhUdOBbJwSo",
+    "title": "なぜワンセグはスマホから消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの真相",
+    "channel_id": "UCDlGznf8OvYLZPiXcsL96gg",
+    "views": 40476,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "23:43"
+   },
+   {
+    "id": "n1KDIdDqgc8",
+    "title": "「最新スマホ離れ」が止まらない…なぜスマホを最新にする人が減ったのか【しくじり企業×ゆっくり解説】",
+    "channel": "企業しくじり・やらかし物語",
+    "channel_id": "UCzqg565KdjuxPXTBuzDdMAw",
+    "views": 44050,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "20:04"
+   },
+   {
+    "id": "wr_TEbk_rJY",
+    "title": "【ゆっくり解説】スマホに入ってたらすぐに消せ！危険アプリ５選",
+    "channel": "ダークぱんだ【ゆっくり解説チャンネル】",
+    "channel_id": "UCa0jR_r3D5f8MXeQZg6wMVw",
+    "views": 282601,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "13:50"
+   },
+   {
+    "id": "nRwjI83cNxk",
+    "title": "なぜスマホからホームボタンは消えたのか【ゆっくり解説】",
+    "channel": "テック解剖室【ゆっくり解説】",
+    "channel_id": "UCrIT17JlNjEJz_bCFQcrjRw",
+    "views": 6838,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "7:01"
+   },
+   {
+    "id": "ryS2ealJBFY",
+    "title": "iPhoneからアンドロイドに乗り換えが急増してる理由とは【ずんだもん&ゆっくり解説】",
+    "channel": "えだまめストーリー",
+    "channel_id": "UCazH99MFhU6Xm6zK-c0tR5g",
+    "views": 20714,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "11:55"
+   },
+   {
+    "id": "dOAoJTYhcaw",
+    "title": "【脳科学】スマホは『合法覚醒剤』です。壊れた脳を３日で全回復させる「物理ハック」がこれ。ドーパミン断食【ずんだもん＆ゆっくり解説】",
+    "channel": "ずんだもんカイゼンラボ",
+    "channel_id": "UCMHTRS4OMqiDb4beWFZ0MHg",
+    "views": 35298,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "17:30"
+   },
+   {
+    "id": "jte97Ed7Eko",
+    "title": "Androidに乗り換える人が急増してる理由【ずんだもん&ゆっくり解説】",
+    "channel": "ずんだ鉄道",
+    "channel_id": "UCgpZdq50Kbe4grHnmFdypGw",
+    "views": 76581,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "16:18"
+   },
+   {
+    "id": "cBNJ_p0rGoM",
+    "title": "Android使いだがiPhoneの凄さを教えてくれ【2ch面白いスレゆっくり解説】",
+    "channel": "鉄人28匹ギコ&しぃ【2ch面白いスレ】",
+    "channel_id": "UC8Ah27TJstSmttkq6X17kfQ",
+    "views": 223313,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:59"
+   },
+   {
+    "id": "ellBEhnHpVw",
+    "title": "なぜ出遅れたAndroidはiPhoneより普及したのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 87525,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "22:14"
+   },
+   {
+    "id": "OeQ_sSwwaEQ",
+    "title": "なぜ最新スマホは見向きもされなくなってきてるのか？【ずんだもん&ゆっくり解説】",
+    "channel": "ずんだ鉄道",
+    "channel_id": "UCgpZdq50Kbe4grHnmFdypGw",
+    "views": 55798,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "16:35"
+   },
+   {
+    "id": "n1M8O9Qzzx4",
+    "title": "想像以上にあれだった・・・【ゆっくり解説】バルミューダフォン",
+    "channel": "カカチャンネル",
+    "channel_id": "UC1KM0FPG8NvCWKRZURZZEfQ",
+    "views": 715492,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "14:31"
+   },
+   {
+    "id": "7YE7PzMtZjU",
+    "title": "なぜスマホの電池は外せなくなったのか【ゆっくり解説】",
+    "channel": "テック解剖室【ゆっくり解説】",
+    "channel_id": "UCrIT17JlNjEJz_bCFQcrjRw",
+    "views": 16137,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "13:23"
+   },
+   {
+    "id": "U9axWjwMtDY",
+    "title": "なぜスマホからSIMカードの穴は消えたのか【ゆっくり解説】",
+    "channel": "テック解剖室【ゆっくり解説】",
+    "channel_id": "UCrIT17JlNjEJz_bCFQcrjRw",
+    "views": 6166,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "8:52"
+   },
+   {
+    "id": "VFaTJI1RBHY",
+    "title": "「やっと気づいたか」なぜ日本人はアップルを見限り始めたのか？",
+    "channel": "ずんだカー",
+    "channel_id": "UCEvapAm_pM3m0aIKK8dmdIQ",
+    "views": 189224,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "18:28"
+   },
+   {
+    "id": "ZbRXCfrHdSA",
+    "title": "スマホの時計は、なぜ勝手に合う？【図解・ゆっくり解説】",
+    "channel": "図でわかるIT【ゆっくり解説】",
+    "channel_id": "UCE4kxff0Wo-5Jxs7SQk1oaw",
+    "views": 122,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "6:13"
+   },
+   {
+    "id": "1J7qaolpQDg",
+    "title": "【Windows Phone】なぜマイクロソフトのスマホOSは失敗したのか？！【ゆっくり解説】",
+    "channel": "ゆっくりルーザーズ",
+    "channel_id": "UCgaGnTwMi4vMGpuFpeSotYA",
+    "views": 263974,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:56"
+   }
+  ],
+  "身近な 仕組み 解説": [
+   {
+    "id": "CoeMQJmpomk",
+    "title": "【ITパスポート】8-2 身近なシステム｜ストラテジ分野",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 11224,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:59"
+   },
+   {
+    "id": "It4NBmtFhK8",
+    "title": "【2025】『実は危険な身近な貝』つぶ貝の煮つけを食べた女性が強烈な眩暈と全身麻痺を発症し命の危機に…安全に食べられているはずの貝で何故？『テトラミン中毒事件』を解説（ﾘﾒｲｸ",
+    "channel": "ゆっくりするところ",
+    "channel_id": "UCcT5a1J7XJW7CLYI2RKl4pw",
+    "views": 36717,
+    "published": "16 時間前",
+    "age_days": 0,
+    "length": "21:54"
+   },
+   {
+    "id": "rMPDzvQfjWE",
+    "title": "【身近な物質】プラスチックとはどんなもの？【化学解説系Vtuber】",
+    "channel": "才媛テス子の実験室",
+    "channel_id": "UC48JndhoUqIgsQJvpuyMIDA",
+    "views": 2260,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:09"
+   }
+  ],
+  "身の回り なぜ 解説": [
+   {
+    "id": "_Ws8Y0BjRWM",
+    "title": "【なぜ？】身の回りにある\"謎\"徹底解説まとめ「作業用/たっくー切り抜き」",
+    "channel": "たっくーマニア【切り抜き】",
+    "channel_id": "UCglyrJ0T-fJ5Dt6Kk2lBNRA",
+    "views": 205261,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:54:43"
+   },
+   {
+    "id": "TGj9VqZVmDU",
+    "title": "【ゆっくり解説】身の回りの電磁波を全て解説！",
+    "channel": "かつおの電波と光ゆっくり解説",
+    "channel_id": "UCdFvLx8cAy7Xa4VueVeP59A",
+    "views": 49282,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "20:13"
+   },
+   {
+    "id": "niIwB_cBURY",
+    "title": "【要約】「何回説明しても伝わらない」はなぜ起こるのか？　認知科学が教えるコミュニケーションの本質と解決策【今井むつみ】",
+    "channel": "フェルミ漫画大学",
+    "channel_id": "UC9V4eJBNx_hOieGG51NZ6nA",
+    "views": 155221,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "21:27"
+   },
+   {
+    "id": "O6hoRj9_E74",
+    "title": "【作業用】身の回りにある”なぜ”解説集 #説明欄も読んでね #きりぬき #たっくー",
+    "channel": "chadlikesboysss",
+    "channel_id": "UCWHWAvfs5JqvYVVPENKioEw",
+    "views": 10,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:20:33"
+   },
+   {
+    "id": "It4NBmtFhK8",
+    "title": "【2025】『実は危険な身近な貝』つぶ貝の煮つけを食べた女性が強烈な眩暈と全身麻痺を発症し命の危機に…安全に食べられているはずの貝で何故？『テトラミン中毒事件』を解説（ﾘﾒｲｸ",
+    "channel": "ゆっくりするところ",
+    "channel_id": "UCcT5a1J7XJW7CLYI2RKl4pw",
+    "views": 36717,
+    "published": "16 時間前",
+    "age_days": 0,
+    "length": "21:54"
+   },
+   {
+    "id": "CtVZhjKA4x0",
+    "title": "【作業用】身の回りにある”なぜ”解説集 #説明欄も読んでね #きりぬき #たっくー",
+    "channel": "Paul-Adrien Enseignement",
+    "channel_id": "UCHtDtu0lDjlnobfreaRzn5Q",
+    "views": 254,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:22:12"
+   },
+   {
+    "id": "b6XgyXIFkM0",
+    "title": "【9割が知らない】なぜ身近な人にほどキツく強く当たってしまうのか？【ずんだもん&ゆっくり解説】",
+    "channel": "えだまめストーリー",
+    "channel_id": "UCazH99MFhU6Xm6zK-c0tR5g",
+    "views": 43492,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "15:01"
+   },
+   {
+    "id": "r29RIuw_fUE",
+    "title": "【ゆっくり解説】猛毒のフッ素がなぜ身近な製品に利用されるのか？",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 443111,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:03"
+   },
+   {
+    "id": "AZvkwk-YTXY",
+    "title": "【ゆっくり解説】【総集編】何者なのか？身近な「鳥」6選を解説/カラス、ハト、スズメ、ニワトリ、ツバメ、ムクドリ【作業用】【睡眠用】",
+    "channel": "ゆっくり生物チャンネル【ゆっくり解説】",
+    "channel_id": "UCY3WhU5uwwi4tUMgJUhEpcw",
+    "views": 666661,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:25:04"
+   }
+  ],
+  "家電 仕組み 解説": [
+   {
+    "id": "_U9qcidDXwY",
+    "title": "【解説】家電の仕組みについて解説",
+    "channel": "Science Technology",
+    "channel_id": "UCbOIjFuOnxVrHFW-ssdNJ9Q",
+    "views": 216,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:31"
+   },
+   {
+    "id": "E_HkRa7KiLY",
+    "title": "家電シリーズ①/How home appliances work",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 173396,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:21"
+   },
+   {
+    "id": "bEtFky6PFwE",
+    "title": "エアコンのしくみ／ How Air Conditioners Work",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 588954,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "T3J9di2SvEU",
+    "title": "家電の三種の神器とは",
+    "channel": "大岩俊之の家電とITの達人",
+    "channel_id": "UCDTHN9zxg4eABejbQa5SvzQ",
+    "views": 365,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:50"
+   },
+   {
+    "id": "7VmlrSlG5bs",
+    "title": "冷蔵庫の仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 270902,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "9:19"
+   },
+   {
+    "id": "Q59p3_HpCFE",
+    "title": "IH調理器のしくみ／How Induction Cooking Appliances Work",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 224112,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "UTnpgEnE9qs",
+    "title": "冷暖房のメカニズム／How an Air Conditioner’s Heater and Cooler Work",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 120196,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "3:01"
+   },
+   {
+    "id": "DVY-O4QOoMI",
+    "title": "USB充電器の動作原理を解説しますANKER power port mini | USB charger. How it works. Compare it to AC adapter.",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 544378,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:36"
+   },
+   {
+    "id": "c9u5IC75i_Q",
+    "title": "USB家電とはどんなもの？一から解説",
+    "channel": "つちやたけし / ネットの疑問を解説",
+    "channel_id": "UCmfcNK62WfD-gYffHfAenOA",
+    "views": 74,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "5:28"
+   },
+   {
+    "id": "R8LqSqm436M",
+    "title": "IoTとは何か？家電などの身近な活用事例やこれから普及しそうなIoT技術をわかりやすく解説！vol.4",
+    "channel": "IoT HACK チャンネル",
+    "channel_id": "UCof9BZfrxlsHsa5dJ_S_XlQ",
+    "views": 179,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "3:29"
+   },
+   {
+    "id": "wAvxc5ighCY",
+    "title": "アース線が必要な家電について解説",
+    "channel": "まーち電気",
+    "channel_id": "UCz-EUAuCA2si9j-PxqEEagg",
+    "views": 167156,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "7:41"
+   },
+   {
+    "id": "-7ctcnDcv-8",
+    "title": "Codexで家電の仕組みを立体化！説明文と図解の選び方",
+    "channel": "AIやさしい研究所",
+    "channel_id": "UCOY3_5idrsR8mZg2mVx9yBg",
+    "views": 3,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:49"
+   },
+   {
+    "id": "Cz4epdAi7wc",
+    "title": "【保存版】家電リサイクル料金の構造をシンプルに解説",
+    "channel": "家電ユーチューバーふいちゃん",
+    "channel_id": "UCCj_vryGqDPrFdI88xTBBGg",
+    "views": 376,
+    "published": "10 か月前 に配信済み",
+    "age_days": 300,
+    "length": "13:04"
+   },
+   {
+    "id": "Gb4JxcZmO0M",
+    "title": "家電シリーズ②/How home appliances work",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 101014,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:26"
+   },
+   {
+    "id": "HLT_FaTDNNg",
+    "title": "家電で一括りにするな！家電業界（ソニー・Panasonic・日立）の違いを徹底解説【就職・転職】",
+    "channel": "御社と競合の違い【就職・転職】",
+    "channel_id": "UCx12srqCTxTOPTfSUELbnlg",
+    "views": 19830,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:41"
+   },
+   {
+    "id": "sby40QSgfx4",
+    "title": "あなたの家にあるエアコンの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 158113,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:56"
+   },
+   {
+    "id": "z80ChCjEClU",
+    "title": "【インバータの本質①】インバータとは？モーターの速さを変える仕組み",
+    "channel": "電学チャンネル",
+    "channel_id": "UCDrgai9mrPUadw8rgWy25fg",
+    "views": 507,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "6:13"
+   },
+   {
+    "id": "chdMWhGB6G4",
+    "title": "【雑学まとめ】意外と知らない家電の仕組み12個を8分で解説⚡",
+    "channel": "探偵アンの雑学ノート",
+    "channel_id": "UC0jUq9k47qvM3mlAdi5UT0A",
+    "views": 333,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "7:13"
+   }
+  ],
+  "IT 雑学 なぜ": [
+   {
+    "id": "92XjMln4048",
+    "title": "ITが発達しても住む場所と働く場所は自由に選べないという話：なぜ最もフルリモートが可能そうなIT産業が出社を要求するのか？【シリコンバレーとハリウッド共通点】",
+    "channel": "地理の雑学ゆっくり解説",
+    "channel_id": "UCKN1x9HADB_rGluUs6y_SLw",
+    "views": 239209,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "30:43"
+   },
+   {
+    "id": "mS9vD3hxZjQ",
+    "title": "巨大IT企業はなぜ邪悪になるのか？",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 728635,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "50:16"
+   },
+   {
+    "id": "jDz-ZnyZ89w",
+    "title": "【ITに関する雑学④】なぜパスワードは定期的に変更すべきなのか？",
+    "channel": "雑学FACE",
+    "channel_id": "UCTiyMN4Od7Jc1Dr9oNg8g8Q",
+    "views": 27,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "2:20"
+   },
+   {
+    "id": "kZakG8UPZaY",
+    "title": "IT用語66選！エンジニアリングの基本をこの動画1本で！【非エンジニア必見】",
+    "channel": "だれでもエンジニア / 山浦清透",
+    "channel_id": "UC452hry4DI_pDn_CVT9ZKhQ",
+    "views": 616380,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "44:06"
+   },
+   {
+    "id": "Z0_bm8JhrDw",
+    "title": "パソコンの仕組み 超基本から解説【ゼロから学ぶITスキル】：（アニメ動画）第496回",
+    "channel": "両学長 リベラルアーツ大学",
+    "channel_id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+    "views": 247768,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "20:58"
+   },
+   {
+    "id": "daRctqvpf9U",
+    "title": "【IT業界】一生終わらない『なぜなぜ分析』の話",
+    "channel": "プロマネコ",
+    "channel_id": "UCC41FZwXz-NqO9AJSsIrdbg",
+    "views": 25838,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "10:12"
+   },
+   {
+    "id": "YDK28RXVntI",
+    "title": "【未経験→IT業界を目指す就活生必見！】面接頻出質問「なぜIT業界？」の質問にはこう答えよう！",
+    "channel": "SIer就活チャンネル",
+    "channel_id": "UCdLFSnp0Q6B5jdpuEsPQtFw",
+    "views": 26789,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:07"
+   },
+   {
+    "id": "zvyRcaW4mHM",
+    "title": "【ひろゆき】IT業界の仕事について正直言います..ITエンジニアの将来性は●●です。/エンジニアの仕事まとめ/SIer/自社開発/SES/キャリア/転職/kirinuki/論破【切り抜き】",
+    "channel": "ひろぬけ【ひろゆき切り抜き】",
+    "channel_id": "UC3McPdkyidCBzdV_XbQu-4w",
+    "views": 174176,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "17:16"
+   },
+   {
+    "id": "ynTqyw2cCQ0",
+    "title": "聞き流しOK！IT/エンジニア用語21選！徹底解説【サーバーネットワーク編】",
+    "channel": "エンジニア転職チャンネル【RUNTEQ公式】",
+    "channel_id": "UCwjx6ZG4pwCvAPSozYEWymA",
+    "views": 20936,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "27:57"
+   },
+   {
+    "id": "o6dWdLTw-ho",
+    "title": "【生物として謎】なぜ人類は苦痛ばかり求めるのか？",
+    "channel": "圧縮雑学チャンネル",
+    "channel_id": "UC7_B1Zw6Cq5YjJRbykSXclw",
+    "views": 34843,
+    "published": "20 時間前",
+    "age_days": 0,
+    "length": "11:11"
+   }
+  ],
+  "デジタル 雑学 解説": [
+   {
+    "id": "c-g1ctvGg3I",
+    "title": "子育てにおけるデジタルデバイスの雑学",
+    "channel": "みんなが知らない雑学チャンネル",
+    "channel_id": "UCQUzN2n1LP6_00U0ysPD0Sw",
+    "views": 662,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "4:32"
+   },
+   {
+    "id": "4SrbXLimXDw",
+    "title": "【雑学】コンピュータ関連の必見雑学　ずんだもん解説",
+    "channel": "ずんだもん身の回り雑学解説【科学・生活・趣味】",
+    "channel_id": "UCpumxh7ro15fbZFeksftudg",
+    "views": 20,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:18"
+   },
+   {
+    "id": "hXukLK1FuNM",
+    "title": "【地図で旅する】面白すぎるカナダの地理雑学37選【ゆっくり解説】",
+    "channel": "ジオグラ【ゆっくり雑学】",
+    "channel_id": "UCWX0rU4o9CR8nUJKz0bSMlQ",
+    "views": 10737,
+    "published": "20 時間前",
+    "age_days": 0,
+    "length": "29:22"
+   },
+   {
+    "id": "IwrSyMgRrCM",
+    "title": "【デジタル雑学】第0話「チャンネルの正体」｜ブラウン管の向こう側に流れる、電子の川の話。",
+    "channel": "諸人賛歌",
+    "channel_id": "UCnsOS-pVj4Udv7hcW0Ejf_A",
+    "views": 108,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "2:49"
+   },
+   {
+    "id": "r56oP5mNbac",
+    "title": "全部知ってたらすごい『アドベンチャー・タイム』の雑学・豆知識まとめ 【VOICEVOX解説】",
+    "channel": "海外アニメ解説チャンネル",
+    "channel_id": "UCRMQO0VWDbB_8s_-SNC0P7Q",
+    "views": 97354,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:27"
+   }
+  ],
+  "なぜ 日本だけ スマホ": [
+   {
+    "id": "FmpM5Nx5X-Y",
+    "title": "アイフォンが日本だけ流行った理由",
+    "channel": "ずんだカー",
+    "channel_id": "UCEvapAm_pM3m0aIKK8dmdIQ",
+    "views": 22820,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:48"
+   },
+   {
+    "id": "k8XoMDQv9x4",
+    "title": "なぜ日本では売れるスマホの半分がiPhoneなのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの真相",
+    "channel_id": "UCDlGznf8OvYLZPiXcsL96gg",
+    "views": 8419,
+    "published": "22 時間前",
+    "age_days": 0,
+    "length": "20:52"
+   },
+   {
+    "id": "yM8isoZtJyk",
+    "title": "📱なぜ日本だけ？消せないスマホのシャッター音の真実",
+    "channel": "Japan Tv",
+    "channel_id": "UC66cpSTL4NA63sRbxVWuMVw",
+    "views": 118,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "7:03"
+   },
+   {
+    "id": "23Z80Fcumfg",
+    "title": "なぜ初期の日本製Androidスマホは完成度が低かったのか【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 103232,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "14:46"
+   },
+   {
+    "id": "aEBe0GbNgJQ",
+    "title": "日本のスマホはなぜ負けた？国産メーカーが存在感を失った本当の理由",
+    "channel": "ずんだずんだ大先生",
+    "channel_id": "UCITfj2TKjModO4mY2uzn7yg",
+    "views": 747,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "11:17"
+   },
+   {
+    "id": "stRxP2STLvQ",
+    "title": "【タイトル】 スマホのシャッター音、なぜ消せない？📱😳 日本だけの謎ルールに批判殺到！",
+    "channel": "Japan Scope ",
+    "channel_id": "UCFNRGdKZtu928YoYtumHowg",
+    "views": 3,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "6:12"
+   },
+   {
+    "id": "rIe-adcgv_c",
+    "title": "【たった1本の動画】なぜ日本だけ？財布もスマホも戻る国…世界が震えた“日本の当たり前”",
+    "channel": "日本の真実　Sinsinity of Japan",
+    "channel_id": "UCqwmMKuun4q2hZ5oc7WLYYw",
+    "views": 6,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "7:49"
+   },
+   {
+    "id": "ylKXa1CO9RE",
+    "title": "【ソフトバンク】ジェンスン・フアンは、なぜ400億ドルでスマホの頭脳を買えなかったのか",
+    "channel": "世界を変えたCEO",
+    "channel_id": "UC0B8hLUTM0mX23a_01CmkDw",
+    "views": 17758,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "26:27"
+   },
+   {
+    "id": "cXpftZ91Urc",
+    "title": "【海外の反応】「なぜ日本だけ地震の前にスマホが鳴るんだ！？」世界が絶句した日本の地震速報テクノロジーの全貌",
+    "channel": "ニッポン技術開拓史",
+    "channel_id": "UCv2ZRzaHzfagtKdh1slMqQA",
+    "views": 274,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "19:52"
+   },
+   {
+    "id": "ZWs2zUxrNBw",
+    "title": "📱🔊 日本だけなぜ消せない？スマホのシャッター音問題に不満爆発！😲🇯🇵",
+    "channel": "Undercover stars",
+    "channel_id": "UC7uBkjOzPvmBQiB75pjmCnw",
+    "views": 31,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "9:22"
+   },
+   {
+    "id": "ZDvwXrXisWQ",
+    "title": "聞くだけでわかる国際経済 日本のスマホはなぜダメなのか？",
+    "channel": "FXチャート取引の正攻法",
+    "channel_id": "UCh66gCU_m4naS1OGApGl3Yw",
+    "views": 155,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "17:23"
+   }
+  ],
+  "インターネット 仕組み 解説": [
+   {
+    "id": "BPODklKbx5s",
+    "title": "インターネットはどんなしくみなのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1735807,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:16"
+   },
+   {
+    "id": "-jNFptYDc44",
+    "title": "インターネットの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 462480,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:03"
+   },
+   {
+    "id": "FJzeLWblobQ",
+    "title": "５分でわかるインターネットの仕組み【音速パソコン教室】",
+    "channel": "音速パソコン教室。1万人が自宅でパソコン上達。",
+    "channel_id": "UCYAPVqVW8hDn9K0zgpL0foQ",
+    "views": 106197,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "6:07"
+   },
+   {
+    "id": "A11m1lWiUrs",
+    "title": "インターネットの仕組み入門～IPアドレス・DNS・MACアドレス【高校情報１・基本情報技術者・ITパスポート】高校情報Ⅰ教科書完全準拠版",
+    "channel": "情報処理技術者試験・高校情報教科対策の突破口ドットコム",
+    "channel_id": "UC_0LOFMRg60xDBfkzMAmkfA",
+    "views": 391039,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "43:47"
+   },
+   {
+    "id": "iWfKp-Qv7Xk",
+    "title": "ネットワークとは何かやLAN・WAN・インターネットの違いを理解しよう【情報I基礎】4-1 ネットワークの基本",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 70881,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:54"
+   },
+   {
+    "id": "OIgVcdZYqK8",
+    "title": "インターネットを提供する通信回線事業者とプロバイダー(ISP)とは🌐／ITパスポート・基本情報技術者試験・高校情報",
+    "channel": "ITすきま教室【ITパスポート.基本情報技術者試験.高校情報】",
+    "channel_id": "UCUARkmYU3gZK7WueJ-GlGig",
+    "views": 66588,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:18"
+   },
+   {
+    "id": "-bF3t5oaRTk",
+    "title": "ネットワーク通信とは【IPアドレス/サーバー/通信プロトコル】／ITパスポート・基本情報技術者・高校情報",
+    "channel": "ITすきま教室【ITパスポート.基本情報技術者試験.高校情報】",
+    "channel_id": "UCUARkmYU3gZK7WueJ-GlGig",
+    "views": 147730,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:00"
+   },
+   {
+    "id": "Bje9PXS0pMA",
+    "title": "【初心者向け】インターネットの仕組みがわかるキーワード６選【情報I基礎】4-8 webの仕組み",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 35035,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:54"
+   },
+   {
+    "id": "iCuLBHEu5mU",
+    "title": "VPN ってなに？　とにかくわかりやすく解説しています。VPNという言葉を最近よく聞くようになりました一体どんな時に有効なのか。　コンピュータ・セキュリティ関連",
+    "channel": "Linux ちゃんねる　〜PC・インフラ・ITの仕組み〜",
+    "channel_id": "UCTS1YgULmZOdQ6KwONhK9zw",
+    "views": 691117,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:56"
+   },
+   {
+    "id": "CIcbJOPiy8s",
+    "title": "【インターネット 仕組み】超簡単、5分で分かるインターネットの仕組み【中小企業のWEB担当者の全知識】",
+    "channel": "鈴木康広のMEO道場【日本1位が教える集客】SEO・AIO・SNS",
+    "channel_id": "UCyc1aT4nzqqLQAcfg1SX-bA",
+    "views": 215,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:30"
+   },
+   {
+    "id": "dacgJMZGmKM",
+    "title": "インターネットVPNとは",
+    "channel": "ITを分かりやすく解説【生成AI・情報処理試験・プログラミング講座】",
+    "channel_id": "UC--TPTOTN0O178CcwvMNV6w",
+    "views": 110466,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:58"
+   },
+   {
+    "id": "t0tVQkIAfos",
+    "title": "【入門】ネットワークの仕組み。Ethernet、TCP/IP、TLS、DNS。",
+    "channel": "直也テック",
+    "channel_id": "UCtiDTuG40ZOarubtFm1fbzg",
+    "views": 1121565,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "24:36"
+   },
+   {
+    "id": "68mINYR6Bg0",
+    "title": "サーバーとインターネットの仕組み入門。パソコン初心者向け　【音速パソコン教室】",
+    "channel": "音速パソコン教室。1万人が自宅でパソコン上達。",
+    "channel_id": "UCYAPVqVW8hDn9K0zgpL0foQ",
+    "views": 71906,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "11:21"
+   },
+   {
+    "id": "p-J3iNHHEA8",
+    "title": "インターネットの仕組みは『水曜どうでしょう』と同じ【ネットワーク1】#16",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 202681,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "21:42"
+   },
+   {
+    "id": "t8Ar70pZ_IA",
+    "title": "モデムとルーターの違いを、初心者にも分かりやすく解説！",
+    "channel": "ノジマ【公式】チャンネル",
+    "channel_id": "UCrFGUKtdBJbPLYNlhYDLPgw",
+    "views": 464608,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:46"
+   },
+   {
+    "id": "JgxbHgdDPnA",
+    "title": "インターネットはどうやって世界中とつながるのか？知られざる仕組みを徹底解説！",
+    "channel": "夜更かし科学 (Yofukashi Kagaku)",
+    "channel_id": "UCMb6xiQSUAhVpK4kBYre0XQ",
+    "views": 132,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "16:16"
+   },
+   {
+    "id": "v0sR9oOF0hM",
+    "title": "【再放送】【インターネットの基本】知らないと恥ずかしい7つの用語について解説【ゼロから学ぶITスキル】：（アニメ動画）第84回",
+    "channel": "両学長 リベラルアーツ大学",
+    "channel_id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+    "views": 147999,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "23:10"
+   },
+   {
+    "id": "-5pq-u83NH0",
+    "title": "「インターネット回線、光回線の仕組み」スマホの学校 リーガルサローラ Regal Salaula",
+    "channel": "スマホの学校 リーガルサローラ",
+    "channel_id": "UC8itkenvH06qC20BZ1dnfHw",
+    "views": 1709,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:03"
+   },
+   {
+    "id": "TjiDovbPyR0",
+    "title": "【軍事技術から世界標準へ】インターネットとは？ARPANETから始まったインターネット！電話回線とTCP/IPが社会を変えた！Webページのアクセスの仕組みとは？ No.188",
+    "channel": "ゆっくりITちゃんねる",
+    "channel_id": "UCXn1BeokidOdzY0DzcHszgA",
+    "views": 4442,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "17:34"
+   }
+  ],
+  "ロボット 仕組み 解説": [
+   {
+    "id": "YqHNBVgGo6I",
+    "title": "ロボットについて知ろう② 「ロボットのしくみの基礎」 3",
+    "channel": "未来の教室",
+    "channel_id": "UCa7V4QUQJ1NWEieFLzWDM2A",
+    "views": 591,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:16"
+   },
+   {
+    "id": "FPQdi8X05Z4",
+    "title": "ロボットについて知ろう② 「ロボットのしくみの基礎」 1",
+    "channel": "未来の教室",
+    "channel_id": "UCa7V4QUQJ1NWEieFLzWDM2A",
+    "views": 767,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:41"
+   },
+   {
+    "id": "YiHeUckng90",
+    "title": "【中国製人型ロボットを分解】「Unitree G1」の構造を徹底分析｜人の動きをどう再現？｜高い運動能力の秘密",
+    "channel": "日経クロステック【公式】",
+    "channel_id": "UCwPgJIiUAYhdN3AYkmm5YYA",
+    "views": 612578,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "7:13"
+   },
+   {
+    "id": "OwPHe6C0aw8",
+    "title": "産業用ロボットが動く仕組みを分かりやすく解説します。",
+    "channel": "エンジニア大学",
+    "channel_id": "UC7-wNnSal6pz_hECUYkPY2A",
+    "views": 3492,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:56"
+   },
+   {
+    "id": "ehoqESAy0zw",
+    "title": "フィジカルAI徹底解説｜なぜロボットは急に器用になった！？【ゆっくり解説】",
+    "channel": "しくみをつかむ【ゆっくり解説】",
+    "channel_id": "UC1Cn65qCNPOEuicBlTb57uQ",
+    "views": 2660,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "12:21"
+   },
+   {
+    "id": "8GcUUJh_ZgI",
+    "title": "【概要速修】ロボットの作り方、仕組みをさっと知りたい【初心者向け】",
+    "channel": "ThothChildren みんなのわかりやすい技術解説動画",
+    "channel_id": "UCB5i6ei_zxKbtU4qJ7p4-LQ",
+    "views": 29988,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:22"
+   },
+   {
+    "id": "GQaRg0p9YNw",
+    "title": "ロボット界で大流行！「QDD」の正体とは？仕組みや特徴を徹底考察",
+    "channel": "rough robotics",
+    "channel_id": "UCFOj4HG-E2kPjvfTm_BGw1A",
+    "views": 22322,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "13:37"
+   },
+   {
+    "id": "9SEl4_td1cM",
+    "title": "【無駄考察】ロボットのリアリティとは【オリジナルロボット】",
+    "channel": "メカ部チャンネル",
+    "channel_id": "UCH3Hnp10783cqjty6GKqVCw",
+    "views": 107083,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "31:59"
+   },
+   {
+    "id": "RVZmVX1sdLc",
+    "title": "人型ロボットの身体能力が急進化している。Unitree G1・全身制御20研究を徹底解説【2026年最新】｜2026年11月3日",
+    "channel": "sonnet soneo",
+    "channel_id": "UCjMCN2e_Z0ZJdrZNXAfaHlg",
+    "views": 37,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "29:41"
+   },
+   {
+    "id": "GSpLs4GGoVY",
+    "title": "人型ロボット02：ロボットの定義、ヒューマノイド、アンドロイド、サイボーグの違いは？初心者向けにわかりやすく解説",
+    "channel": "2030年の未来予測@広島弁フューチャリスト友村晋",
+    "channel_id": "UCOXxfCRhJfwB5sMC1aCRJ3Q",
+    "views": 18187,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "17:36"
+   },
+   {
+    "id": "1mFfUE8fwk0",
+    "title": "【 #きっかけ解説 】“考えて動く”｢フィジカルAI｣  次世代ロボット戦略とは？",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 18326,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "5:02"
+   },
+   {
+    "id": "8wazzrqlKR0",
+    "title": "【ロボットVLA①】ロボット基盤モデル(VLA)の現状",
+    "channel": "人工知能学会(JSAI) 公式チャンネル、JSK / EVARL / Kento Kawaharazuka",
+    "channel_id": null,
+    "views": 8562,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "10:27"
+   },
+   {
+    "id": "ruL8qFd5xuk",
+    "title": "人型ロボット20：人型ロボット（ヒューマノイドロボット）に対する米中、日本の文化的な違いについて初心者向けにわかりやすく解説",
+    "channel": "2030年の未来予測@広島弁フューチャリスト友村晋",
+    "channel_id": "UCOXxfCRhJfwB5sMC1aCRJ3Q",
+    "views": 16804,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "18:29"
+   },
+   {
+    "id": "7xt0uSsHBE0",
+    "title": "第1回 SLAMロボット“ROS次郎”の製作～LiDAR×ROSで作る地図作成ロボット～",
+    "channel": "DigiKey日本公式チャンネル",
+    "channel_id": "UCc-7D4LcsxH2JP9TtylRuFQ",
+    "views": 86386,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:41"
+   },
+   {
+    "id": "wZvU-S0M33Q",
+    "title": "ロボットの手の仕組み",
+    "channel": "加納雅春",
+    "channel_id": "UCQWU2mtRQ4v5V2nJytk9KjA",
+    "views": 7539,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "2:23"
+   },
+   {
+    "id": "QXcj3cLd9oA",
+    "title": "【フィジカルAI】人の動画でロボットが育つ仕組み、Figureの3,750万本と遠隔操作の違い【技術解説 #1】",
+    "channel": "フィジカルAI通信",
+    "channel_id": "UCcgwcF9hktjF0NXmPhmzCEQ",
+    "views": 26,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "8:23"
+   },
+   {
+    "id": "u6U4EkqRGR0",
+    "title": "摩訶不思議な科学『ラピュタ』ロボット兵の仕組み【岡田斗司夫切り抜き】",
+    "channel": "おかだぬき夫の超解説【岡田斗司夫切り抜き】",
+    "channel_id": "UCFU-ZKrHWs8qYnOQSESukkg",
+    "views": 497841,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:06"
+   },
+   {
+    "id": "fAGtQmaAz-0",
+    "title": "【海外の反応】なんと海中で電波が繋がる！？海外が諦めた「水中無線通信」を日本が実現し世界が驚愕した理由",
+    "channel": " 匠の国・日本 ",
+    "channel_id": "UC7AEq3uMDyz9fLP243Nxupg",
+    "views": 2336,
+    "published": "20 時間前",
+    "age_days": 0,
+    "length": "46:38"
+   },
+   {
+    "id": "jakLvkun6K8",
+    "title": "人型ロボット16：転職の参考に！人型ロボット、ヒューマノイドでブルーカラー業界の今後の見通し初心者にわかりやすく解説",
+    "channel": "2030年の未来予測@広島弁フューチャリスト友村晋",
+    "channel_id": "UCOXxfCRhJfwB5sMC1aCRJ3Q",
+    "views": 24851,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "17:57"
+   },
+   {
+    "id": "Okg1wYDObt4",
+    "title": "エンコーダとは？ロボットは位置をどう知る？｜光学式・磁気式、インクリメンタルとアブソリュートの違いと選び方",
+    "channel": "みんなの技術広報",
+    "channel_id": "UCC6SYNT1hPM0MiNItvIGDYA",
+    "views": 17,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "10:53"
+   }
+  ],
+  "日常 なぜ 理由 解説 アニメ": [
+   {
+    "id": "3tICuKJO1ts",
+    "title": "【TVアニメ『日常』】徹底解説　2025年 京アニ新作『CITY』の原点とも言える『日常』について、今こそ予習しよう　シュールギャグアニメの傑作　　ちょっと昔のアニメガタリ　Part2",
+    "channel": "チャッピーちゃんねる【大人のアニメ考察・解説】",
+    "channel_id": "UCJKZTXt_F_ggjpAfhDtaFmQ",
+    "views": 4214,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:33"
+   },
+   {
+    "id": "wTRcXmlK8Sk",
+    "title": "ワイがなぜ日常系アニメが1番好きなのかをマジで熱弁させてくれよ！！",
+    "channel": "れつおち",
+    "channel_id": "UCuoqajuQQu2Ook-bNB48tAA",
+    "views": 2228,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "8:12"
+   },
+   {
+    "id": "VeRjy5rX_Wg",
+    "title": "海外「なぜ日常系アニメは日本が舞台なの？アメリカはないの」←「アメリカの日常系とかウケるww」【海外の反応】",
+    "channel": "アニメのJAPAN【海外の反応解説】",
+    "channel_id": "UCs-xzguclESYS8kNGbn2L2w",
+    "views": 285952,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "10:41"
+   },
+   {
+    "id": "T4klYCVe3Nk",
+    "title": "【ゆっくり解説】アニメ『日常』再評価の歴史：海外人気と国内人気について",
+    "channel": "平山軽",
+    "channel_id": "UCI0lbj4U6dHRJYIdmreOQgA",
+    "views": 33700,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "18:01"
+   },
+   {
+    "id": "5sXGN1TwesI",
+    "title": "【理由】なぜ\"日常系\"のマンガ・アニメが流行ったのか？【山田玲司】",
+    "channel": "山田玲司のご機嫌解説集 切り抜き",
+    "channel_id": "UC_MTHhBNhFOy9EeSM67zxTQ",
+    "views": 3701,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:34"
+   },
+   {
+    "id": "P9PRHYpnehI",
+    "title": "昔は長期放送が当たり前だったアニメが、なぜ今は1クール12話で終わる作品が多いのか？",
+    "channel": "まめポ",
+    "channel_id": "UCBE-DSwqUTu82g4Raa5Us3g",
+    "views": 78333,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "30:36"
+   },
+   {
+    "id": "AtYL1inu22E",
+    "title": "涼宮ハルヒの憂鬱はなぜ社会現象に？人気の理由と作品の凄さ【ずんだもん解説】",
+    "channel": "ニッチなアニメ紹介するよ",
+    "channel_id": "UCDOkkRoGhAxaDVu2ihGi1Dg",
+    "views": 26,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "4:36"
+   },
+   {
+    "id": "1ZYVy7jVuks",
+    "title": "あろうことか機兵でニアに戦いを挑むも一発も当たらない？反撃をしない理由とその結末を解説【凶乱令嬢ニア・リストン漫画・原作考察】",
+    "channel": "ニア・リストン考察【毎日配信中】",
+    "channel_id": "UCBJMw7zDnTlSpXIa_aNn5zA",
+    "views": 20889,
+    "published": "20 時間前",
+    "age_days": 0,
+    "length": "21:55"
+   },
+   {
+    "id": "8HaCko2nVCk",
+    "title": "【3分あらすじ】アニメ初心者が見るべきマジで面白い日常アニメ10選【アニメ解説】",
+    "channel": "チョコっとアニメ紹介解説",
+    "channel_id": "UCkyHMd-oudPf0IWPa-IRi6w",
+    "views": 151,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:39"
+   },
+   {
+    "id": "65d1keQo3ec",
+    "title": "【必見】日常系アニメの構造、魅力、未来を語る【シナリオライター】",
+    "channel": "ティラミス エンタメチャンネル",
+    "channel_id": "UCNDJZvq90WK1w9XuymszddQ",
+    "views": 744,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "16:31"
+   },
+   {
+    "id": "K9Xnf2lgEwc",
+    "title": "なぜ最強のニアをホテルマンは入口で止めたのか？ニアを止めた意外な理由を解説【凶乱令嬢ニア・リストン漫画・原作考察】",
+    "channel": "ニア・リストン考察【毎日配信中】",
+    "channel_id": "UCBJMw7zDnTlSpXIa_aNn5zA",
+    "views": 8069,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "22:03"
+   },
+   {
+    "id": "Movek7rBXqU",
+    "title": "【予習&解説】続編に向けて傑作SF『楽園追放』の世界観や設定を振り返る【Expelled from Paradise】【アニメ映画】",
+    "channel": "ごじょおに【アニメ ch】",
+    "channel_id": "UCciVgozyprkGTOY7giR1LiQ",
+    "views": 61357,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "18:35"
+   }
+  ],
+  "ゆっくり解説 雑学 なぜ 理由": [
+   {
+    "id": "5vH5yu3ZGjI",
+    "title": "【哺乳類が卵を産まない理由】なぜ99%の動物は卵を産むのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 594647,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "17:32"
+   },
+   {
+    "id": "KdB6Fcpbpyg",
+    "title": "【石油と石炭何が違う？】なぜ石油の方が圧倒的に燃えるのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 366152,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "18:17"
+   },
+   {
+    "id": "qYcP6STJ_uI",
+    "title": "【ゆっくり解説】時間の流れが存在しない理由－時間とは何か？－",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 1682813,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "51:04"
+   },
+   {
+    "id": "HKKxw40PVfg",
+    "title": "なぜアメリカの教育は終わっているのか【ゆっくり解説】",
+    "channel": "世界の地理雑学【ゆっくり解説】",
+    "channel_id": "UCzN7pGhDglhT0VoeNBmeMTw",
+    "views": 927941,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "23:51"
+   },
+   {
+    "id": "3mEiFWaR9sA",
+    "title": "【あきらかな進化矛盾】なぜヒトは不健康な行動が好きなのか【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 765274,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "14:28"
+   },
+   {
+    "id": "NYROvN6ACcs",
+    "title": "【雑学】なぜ人間は草を食べられないのか？【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 1059349,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "14:13"
+   },
+   {
+    "id": "fC3PnufMcUo",
+    "title": "ゆっくり解説 戦争する国としない国の違いはどこにあるのか？ 戦争と平和の弊害",
+    "channel": "地理の雑学ゆっくり解説",
+    "channel_id": "UCKN1x9HADB_rGluUs6y_SLw",
+    "views": 515632,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "26:01"
+   },
+   {
+    "id": "NAFW70LjJ_w",
+    "title": "【人口のジレンマ】なぜ人口爆発のニュースを聞かなくなったのか【ゆっくり解説】【雑学",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 797726,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:15"
+   },
+   {
+    "id": "G80s1DnepDE",
+    "title": "【雑学】漢字、なんでそうなった？-字源の謎-【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 722486,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "12:30"
+   },
+   {
+    "id": "TkG_cSr1WM8",
+    "title": "【雑学】実は人の顔にしかない特徴4選【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 756461,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "14:58"
+   },
+   {
+    "id": "VPGCMKd0pn8",
+    "title": "なぜ人類は現実を正しく認識できないのか？【ゆっくり解説】",
+    "channel": "デルタのゆっくり科学",
+    "channel_id": "UCYG5ZT0oNuWYZl4o8IcNsGw",
+    "views": 216290,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "36:03"
+   },
+   {
+    "id": "1WT9RVzAcoo",
+    "title": "【ゆっくり解説】指が4本だとどうなる？【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 538512,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "14:02"
+   },
+   {
+    "id": "NqNxrrpD6fc",
+    "title": "【エンジン不要】なぜ船は逆風で前に進めるのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 382996,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "16:14"
+   },
+   {
+    "id": "bgdCBbtdY30",
+    "title": "【ゆっくり解説】なぜ精神を壊さない麻薬は作れないのか？－薬物と相反過程理論－",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 602291,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "19:02"
+   },
+   {
+    "id": "BgK3h78Vedk",
+    "title": "【確かに激似】人類はなぜうつ病にならなければならないのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 482451,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:11"
+   },
+   {
+    "id": "31JtY3N7UT0",
+    "title": "【地理ミステリー】なぜ世界宗教は必ず北半球で生まれるのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 393539,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "25:18"
+   },
+   {
+    "id": "B5YbjMHywzI",
+    "title": "【ゆっくり解説】昭和の人気企業はなぜ消えたのか？",
+    "channel": "ゆっくり昭和ボンバイエイ",
+    "channel_id": "UCQjPO5yhbxZSHHO8uJIg99w",
+    "views": 434,
+    "published": "2 時間前",
+    "age_days": 0,
+    "length": "11:38"
+   },
+   {
+    "id": "ayusReyQsWA",
+    "title": "【知らなきゃよかった雑学】人体の欠陥4選【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 4155332,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:09"
+   },
+   {
+    "id": "6tnIIMrbO30",
+    "title": "【残酷な進化論】われわれはなぜ嘘つきか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 631652,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "11:05"
+   }
+  ],
+  "知らない 理由 パソコン 解説": [
+   {
+    "id": "Z0_bm8JhrDw",
+    "title": "パソコンの仕組み 超基本から解説【ゼロから学ぶITスキル】：（アニメ動画）第496回",
+    "channel": "両学長 リベラルアーツ大学",
+    "channel_id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+    "views": 247768,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "20:58"
+   },
+   {
+    "id": "pkjPhJMLuDs",
+    "title": "【騙されるな！】プロが教えるパソコンの選び方！と適正価格とは？【ビジネス用途からゲーミングまで】",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 4216017,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "30:49"
+   },
+   {
+    "id": "3B1LCJACKro",
+    "title": "知らないとヤバい！生産性の高いパソコンの使い方 13選",
+    "channel": "マコなり社長",
+    "channel_id": "UC7I3QTra4_kC4TSu8f7rHkA",
+    "views": 964888,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "14:34"
+   },
+   {
+    "id": "EPzNVv9aC1g",
+    "title": "【パソコン】知らないとやばい！学校パソコンの選び方　後悔しないために…　スペックの見方から買うべきものまで完全解説　保護者必見",
+    "channel": "らいらいのパソコン研究所",
+    "channel_id": "UCW857WGDGQj1vhPTtLJabvg",
+    "views": 465,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "6:38"
+   },
+   {
+    "id": "JK-bK4MjDCo",
+    "title": "URLって何？ページの「住所」の仕組みを解説💻",
+    "channel": "チップくんのパソコン教室",
+    "channel_id": "UCJjctDP7HUGjfEV6_MkXfSA",
+    "views": 1,
+    "published": "1 時間前",
+    "age_days": 0,
+    "length": "2:05"
+   },
+   {
+    "id": "1E62fItDKlI",
+    "title": "【9割知らない】PC購入時の落とし穴！ そのパソコン←致命的な欠点あるかも…　初心者必見パソコン買うとき気を付ける点3選！",
+    "channel": "らいらいのパソコン研究所",
+    "channel_id": "UCW857WGDGQj1vhPTtLJabvg",
+    "views": 1616,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:24"
+   },
+   {
+    "id": "c6DuvLPzjrg",
+    "title": "【パソコン入門】１０分でわかる！パソコン用語と基本操作【初心者向け】",
+    "channel": "くませんのパソコンクラブ",
+    "channel_id": "UCEc4cJsXgY5AgV00g_3sMcw",
+    "views": 450585,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:36"
+   },
+   {
+    "id": "u4QTIKnamYQ",
+    "title": "なぜパソコンは再起動すると直るのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 162171,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "21:22"
+   },
+   {
+    "id": "u4PQY9GIKRI",
+    "title": "【初心者必見】90%が知らない！絶対に失敗しないパソコンの選び方【NEC/hp/Fujitsu】",
+    "channel": "あかつきパソコン大学",
+    "channel_id": "UCIMkbieG05MGCEPVPcv8DqQ",
+    "views": 28640,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:40"
+   },
+   {
+    "id": "0try_o0sBUU",
+    "title": "【パソコンって何？】パソコンの基本の基本を解説します！【ざっくり解説】",
+    "channel": "パソコン修理屋の豆知識",
+    "channel_id": "UCKPZsaXTuIgEfzeKVFMpn7Q",
+    "views": 64335,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "17:43"
+   },
+   {
+    "id": "Huc67ACtKoQ",
+    "title": "なぜ人はスタバでパソコンを開くのか？99%が知らない深層心理【ゆっくり解説】",
+    "channel": "知って驚く心理学【ゆっくり解説】",
+    "channel_id": "UC1tGQYQ0o3IfK3y0loDgNOg",
+    "views": 2486,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "19:15"
+   },
+   {
+    "id": "53sXin3Ic7E",
+    "title": "【アニメ】※知らないと損します...仕事が早い人のパソコンには「これ」がありません",
+    "channel": "いい社会人のなり方講座",
+    "channel_id": "UCFRxi8Yyx4GCa_mAPOpSVfg",
+    "views": 36876,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "15:33"
+   },
+   {
+    "id": "lAxKiwd1QLo",
+    "title": "【知らないとヤバい】半導体とは何なのか？",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 1474735,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "9:46"
+   },
+   {
+    "id": "7Uu23EC3rdQ",
+    "title": "なぜ昔のパソコンにはスクリーンセーバーが必要だったのか？知られざる役割と消えた理由【ゆっくり解説】",
+    "channel": "ゆっくりPC研究所",
+    "channel_id": "UCmv-hEKMxtTOzETpAFlaeVg",
+    "views": 15105,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "20:11"
+   },
+   {
+    "id": "v0sR9oOF0hM",
+    "title": "【再放送】【インターネットの基本】知らないと恥ずかしい7つの用語について解説【ゼロから学ぶITスキル】：（アニメ動画）第84回",
+    "channel": "両学長 リベラルアーツ大学",
+    "channel_id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+    "views": 147999,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "23:10"
+   },
+   {
+    "id": "2bUT-A0N-aU",
+    "title": "なぜ自作パソコンのマザーボードは台湾の会社ばかりなのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 53650,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "15:46"
+   },
+   {
+    "id": "OFYTXPT2ZIk",
+    "title": "今後知らないとヤバい、パソコンの知識【不動産勉強190回目】",
+    "channel": "ユーティリティチャンネル",
+    "channel_id": "UCnAJWnEhTb188FhI2aVzzNA",
+    "views": 22,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:37"
+   },
+   {
+    "id": "F2MrI8nU-DQ",
+    "title": "【多分知らない】NPUとGPUの決定的な違い！【かなり違う】",
+    "channel": "後藤PC塾:プロが伝えるパソコン教室",
+    "channel_id": "UCMvaNVWBGbEPuZllYZETjfQ",
+    "views": 38096,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "20:35"
+   },
+   {
+    "id": "NvgbeR78IEI",
+    "title": "【ゆっくり解説】説明できる？ なぜコンピュータは0と1だけで全てを表現できる？",
+    "channel": "ド文系でも分かる【ゆっくり数学】",
+    "channel_id": "UCw-RnrHWa-rI5KL8aCP43YA",
+    "views": 153001,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:22"
+   }
+  ],
+  "なぜ この形 理由 解説": [
+   {
+    "id": "KEJ72r5x-pg",
+    "title": "【リンバス】ヴァルプルギスの夜は仕組まれている？なぜ過去を見せているのか？【Limbus Company】",
+    "channel": "寛大なファウスト",
+    "channel_id": "UClbSAXzR6Eh8A9hbeZLDbBQ",
+    "views": 10314,
+    "published": "21 時間前",
+    "age_days": 0,
+    "length": "11:52"
+   },
+   {
+    "id": "LmZE6Wt2pAs",
+    "title": "【仙台散策】「通称Ｘ橋」があの形で造られた理由「名掛丁」「元寺小路」はどんな街道だったのか？周辺の変遷",
+    "channel": "エーエスオー仙台散策ch",
+    "channel_id": "UCxcHCimFrFk2MQicwsKukzQ",
+    "views": 3970,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "10:47"
+   },
+   {
+    "id": "bIQesPCJ73M",
+    "title": "【岐阜基地航空祭2026 予習第1弾】なぜ岐阜は別格なのか？異機種大編隊・加速対決・試作機…空のオールスターを徹底解説！F-2 F-15 T-4 C-2 飛行開発実験団",
+    "channel": "日本の航空祭と世界のエアショー  Tonkatsu298",
+    "channel_id": "UCtSHd0XjYnhI6fFBy_O-PRg",
+    "views": 100245,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "8:02"
+   },
+   {
+    "id": "G1NaCyZRwt4",
+    "title": "【なぜ今】新車を続々と導入しているJR九州が、車歴30年の関東の中古車を導入する理由【VOICELOID解説】",
+    "channel": "交通解説CH",
+    "channel_id": "UC7KPAotETfzO1KiFJHFek4Q",
+    "views": 15463,
+    "published": "20 時間前",
+    "age_days": 0,
+    "length": "28:29"
+   },
+   {
+    "id": "cNdYm4srDAU",
+    "title": "浮き上がり続ける島に、なぜ島民は80年帰れないのか",
+    "channel": "その土地には理由がある | 地理解説",
+    "channel_id": "UCBxbgX9BpgdHOdhsKHpIrgA",
+    "views": 28676,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "10:51"
+   },
+   {
+    "id": "Y0CwjOoNoaA",
+    "title": "「死ねない島」。なぜ北極の果てに2,500人が住むのか？",
+    "channel": "その土地には理由がある | 地理解説",
+    "channel_id": "UCBxbgX9BpgdHOdhsKHpIrgA",
+    "views": 18870,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "16:56"
+   },
+   {
+    "id": "hFB8ijxQykQ",
+    "title": "【Microsoft 365大規模障害】なぜ復旧しても再び止まるのか？｜現役SEが解説",
+    "channel": "あのシステムの裏側",
+    "channel_id": "UCdqG9RMb-XI8ONfW9j6MOpg",
+    "views": 20519,
+    "published": "23 時間前",
+    "age_days": 0,
+    "length": "19:12"
+   }
+  ],
+  "テクノロジー 歴史 なぜ 解説": [],
+  "身近な機械 しくみ": [
+   {
+    "id": "HAMGzH7iLCE",
+    "title": "【再放送】身近な機械のしくみ図解53連発！電気ケトル・改札・ボールペンの中身が1話40秒で次々わかる",
+    "channel": "フタのむこう側",
+    "channel_id": "UCbpw7unIuQXBbf7h2yIlvQg",
+    "views": 1,
+    "published": "",
+    "age_days": null,
+    "length": ""
+   },
+   {
+    "id": "OivNUA4Kv2w",
+    "title": "ショベルカーの仕組み｜機械工学の驚異",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 259565,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:01"
+   }
+  ]
+ }
+}

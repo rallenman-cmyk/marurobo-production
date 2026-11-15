@@ -1,0 +1,1119 @@
+{
+ "fetched_at": "2026-11-15T05:39:02.797390+00:00",
+ "sort": null,
+ "queries": {
+  "0と1 なぜ コンピュータ 解説": [
+   {
+    "id": "NvgbeR78IEI",
+    "title": "【ゆっくり解説】説明できる？ なぜコンピュータは0と1だけで全てを表現できる？",
+    "channel": "ド文系でも分かる【ゆっくり数学】",
+    "channel_id": "UCw-RnrHWa-rI5KL8aCP43YA",
+    "views": 153001,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:22"
+   },
+   {
+    "id": "r24wUhaYOEw",
+    "title": "コンピュータはなぜ0と1を使う？｜電気の信号から情報処理が生まれる仕組み",
+    "channel": "AIフレンドパーク",
+    "channel_id": "UCJW2r3lGzFrb0nAEIWE1ikA",
+    "views": 8,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "9:41"
+   },
+   {
+    "id": "yYZRxktHM-Y",
+    "title": "【初心者向け】コンピュータの考え方  -0と1の世界の話-",
+    "channel": "アキツ@フルリモートITエンジニア",
+    "channel_id": "UCbI-XKGOGJf1SOpSaEZIDXw",
+    "views": 1144,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:30"
+   },
+   {
+    "id": "8Ss3CThdW2U",
+    "title": "コンピューターはなぜ「0」と「1」だけで動くのか？【他のチャンネルよりも深めに解説】",
+    "channel": "コンピューター雑学 / 0と1の機械",
+    "channel_id": "UCF-n29xcarwWGcRnJ1Ko2wg",
+    "views": 1789,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "25:33"
+   },
+   {
+    "id": "tQTb1hbZlBM",
+    "title": "2進数とは？コンピュータが0と1だけで動く理由【情報I・初心者向け】",
+    "channel": "デジタル知ってみ",
+    "channel_id": "UC4hrHBj5bnUJH7TkvysLGRg",
+    "views": 57,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "9:03"
+   },
+   {
+    "id": "6GB4a0jzZzs",
+    "title": "コンピューターは、なぜ0と1しか使わないの？【オクト先生のAI教室】",
+    "channel": "オクト先生のAI教室",
+    "channel_id": "UCqeeadGlROpbb0Uf-8xzLeA",
+    "views": 11,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "5:34"
+   },
+   {
+    "id": "XvyKql9b6uw",
+    "title": "なぜコンピュータは0と1を使うの？",
+    "channel": "せい / 健康優良不良プログラマ",
+    "channel_id": "UCWLE1sPEqPMClfuC807OQig",
+    "views": 252,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:25"
+   },
+   {
+    "id": "z53pfTXznvM",
+    "title": "コンピュータはなぜ0と1で動くのか｜電子→トランジスタ→論理ゲートを3Dで解説【ずんだもん】",
+    "channel": "ミサカ(LLM解説)",
+    "channel_id": "UCtAl9eyNDKn71nZVHkM4fNw",
+    "views": 209,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "10:42"
+   },
+   {
+    "id": "PsVooUlJfTw",
+    "title": "なぜコンピューターは0と1で動くのか ― 2進数と論理回路の発明",
+    "channel": "コンピューターはなぜこうなった?",
+    "channel_id": "UCvZRFNHHWcTm7PmraSGdKoA",
+    "views": 140,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "17:43"
+   },
+   {
+    "id": "hF1Jj7nzSWc",
+    "title": "コンピュータの仕組み なぜ0と1だけでいろいろなものを表現できる？【ITの超基礎1】",
+    "channel": "BetaMola ~アニメーション教養事典~",
+    "channel_id": "UCVrD6I1nEA0aR-WsvdrXrlQ",
+    "views": 1544,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:28"
+   },
+   {
+    "id": "Qg_HHPnuvYA",
+    "title": "【情報I】コンピュータはなぜ0と1だけ？2進数を10分でゼロから完全攻略",
+    "channel": "数学・物理・情報を10分でゼロイチ",
+    "channel_id": "UCIiytFtOoFZCmulZuAtzq1A",
+    "views": 27,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "9:39"
+   },
+   {
+    "id": "bfpcs5CNtLI",
+    "title": "【0と1の視覚化】どうやって水流だけでコンピュータとして駆動させているのか？【ゆっくり解説】",
+    "channel": "化け学のふしぎ【ゆっくり解説】",
+    "channel_id": "UCW_SXldsg7l5NLnsIK1g2Bw",
+    "views": 37091,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "19:05"
+   },
+   {
+    "id": "-N-Hmua4bz4",
+    "title": "【コンピュータの仕組み】0と1だけで、なぜ何でもできるのか",
+    "channel": "AIの地図帳",
+    "channel_id": "UCNX4YlU8FnzrchmyCyTIWtw",
+    "views": 3,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "3:35"
+   },
+   {
+    "id": "CBF3STezDok",
+    "title": "0と1しか分からないコンピュータが、どうやって通信しているのか【ずんだもん解説】",
+    "channel": "ずんだのひもとき現代塾【IT・お金・教養】",
+    "channel_id": "UCfXKLlmiko_ilHeQqnaH6Uw",
+    "views": 125,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "10:08"
+   },
+   {
+    "id": "JiuCNyYcWiU",
+    "title": "【情報Ⅰ】なぜパソコンは0と1だけで動くのか？｜2進法と16進法",
+    "channel": "情報の時間チャンネル",
+    "channel_id": "UCMIifRMh_AhuQuOqtTw9VNg",
+    "views": 91,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "10:47"
+   },
+   {
+    "id": "qDJgFZrAu8Y",
+    "title": "【ゆっくり解説】コンピュータは0と1でどうやって計算するの？PCやスマホの基本原理",
+    "channel": "ゆっくり科学解説大学",
+    "channel_id": "UCUAZ_pW-FzcAJMBOnLBHU5w",
+    "views": 88533,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:16"
+   },
+   {
+    "id": "u6-5pp55RYA",
+    "title": "なぜコンピューターは「1と0」だけで動くのか？",
+    "channel": "カガヤオch -PC雑学探究-",
+    "channel_id": "UCb01Pxc-NBulhXWT5FznLDA",
+    "views": 169,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "24:24"
+   },
+   {
+    "id": "VSOw71pMkPw",
+    "title": "    なんでコンピュータは0と1だけなの？",
+    "channel": "ゆるっと情報I",
+    "channel_id": "UC8EGai1I2JhraYtNZfF14bQ",
+    "views": 47,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "0:53"
+   },
+   {
+    "id": "Xpk67YzOn5w",
+    "title": "コンピューターはなぜ 1 と 0 を使うのでしょうか? バイナリとトランジスタについて説明します。",
+    "channel": "Basics Explained, H3Vtux",
+    "channel_id": "UCjpxbl1_Uvr0VlgMz7GUCjw",
+    "views": 5096492,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "7:00"
+   },
+   {
+    "id": "ofRnP4IT4JY",
+    "title": "【ゆっくり解説】コンピュータはなぜ2進数？10進数のコンピュータは存在するのか？",
+    "channel": "『ゆっくりIT雑学帳』情報社会を考えるチャンネル",
+    "channel_id": "UCeJdeyyCQrpqcfDVPtXs1-A",
+    "views": 27664,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:03"
+   }
+  ],
+  "2進数 なぜ コンピュータ": [
+   {
+    "id": "ofRnP4IT4JY",
+    "title": "【ゆっくり解説】コンピュータはなぜ2進数？10進数のコンピュータは存在するのか？",
+    "channel": "『ゆっくりIT雑学帳』情報社会を考えるチャンネル",
+    "channel_id": "UCeJdeyyCQrpqcfDVPtXs1-A",
+    "views": 27664,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:03"
+   },
+   {
+    "id": "NvgbeR78IEI",
+    "title": "【ゆっくり解説】説明できる？ なぜコンピュータは0と1だけで全てを表現できる？",
+    "channel": "ド文系でも分かる【ゆっくり数学】",
+    "channel_id": "UCw-RnrHWa-rI5KL8aCP43YA",
+    "views": 153001,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:22"
+   },
+   {
+    "id": "MqugzRiVino",
+    "title": "【ITパスポート・基本情報】#1 2進数と基数変換｜なぜコンピュータは0と1だけなのか",
+    "channel": "ITのなぜ図鑑 - 動く図解で3分納得",
+    "channel_id": "UCdLH9JN5jYqNEIPvZixKzYQ",
+    "views": 7,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "6:01"
+   },
+   {
+    "id": "kMSXS3LUP0w",
+    "title": "【ITパスポート・基本情報】#1 2進数と基数変換｜なぜコンピュータは0と1だけなのか",
+    "channel": "ITのなぜ図鑑 - 動く図解で3分納得",
+    "channel_id": "UCdLH9JN5jYqNEIPvZixKzYQ",
+    "views": 2,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "5:59"
+   },
+   {
+    "id": "PsVooUlJfTw",
+    "title": "なぜコンピューターは0と1で動くのか ― 2進数と論理回路の発明",
+    "channel": "コンピューターはなぜこうなった?",
+    "channel_id": "UCvZRFNHHWcTm7PmraSGdKoA",
+    "views": 140,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "17:43"
+   },
+   {
+    "id": "Qg_HHPnuvYA",
+    "title": "【情報I】コンピュータはなぜ0と1だけ？2進数を10分でゼロから完全攻略",
+    "channel": "数学・物理・情報を10分でゼロイチ",
+    "channel_id": "UCIiytFtOoFZCmulZuAtzq1A",
+    "views": 27,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "9:39"
+   },
+   {
+    "id": "rtCvVVq15Ps",
+    "title": "2進数とコンピューター：離散数学とは？文字列とASCIIコード",
+    "channel": "ITすきま教室【ITパスポート.基本情報技術者試験.高校情報】",
+    "channel_id": "UCUARkmYU3gZK7WueJ-GlGig",
+    "views": 23802,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:14"
+   },
+   {
+    "id": "XvyKql9b6uw",
+    "title": "なぜコンピュータは0と1を使うの？",
+    "channel": "せい / 健康優良不良プログラマ",
+    "channel_id": "UCWLE1sPEqPMClfuC807OQig",
+    "views": 252,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:25"
+   },
+   {
+    "id": "p0WYsDRuLU0",
+    "title": "#2 なぜコンピュータは0と1しか使わないの？ 2進数・ビット・バイト【コンピュータ編】",
+    "channel": "DoIT_たまご",
+    "channel_id": "UCywsWIkqjUa8gVD1JnGhwCg",
+    "views": 31,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "8:45"
+   },
+   {
+    "id": "YYuxHxdPMrc",
+    "title": "【ゆっくりIT】2進数とは？ コンピュータ基礎知識シリーズ No 012",
+    "channel": "ゆっくりITちゃんねる",
+    "channel_id": "UCXn1BeokidOdzY0DzcHszgA",
+    "views": 912,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:49"
+   },
+   {
+    "id": "VSOw71pMkPw",
+    "title": "    なんでコンピュータは0と1だけなの？",
+    "channel": "ゆるっと情報I",
+    "channel_id": "UC8EGai1I2JhraYtNZfF14bQ",
+    "views": 47,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "0:53"
+   },
+   {
+    "id": "AqrvykoQa_w",
+    "title": "なぜコンピューターは2進法？10進法じゃだめ？未来も二進法なの？",
+    "channel": "ワイのITアカデミア@ITエンジニア就活応援",
+    "channel_id": "UC7_oajFrWQCSGzKZp7iWMKQ",
+    "views": 615,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "18:52"
+   },
+   {
+    "id": "e3QuTGmjRh8",
+    "title": "なぜコンピューターは0と1しか使わないのか【2進数】",
+    "channel": "iponCHANNEL",
+    "channel_id": "UCKoOXwih6jVO92ZNQb-ojug",
+    "views": 24,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:25"
+   },
+   {
+    "id": "maCrDuX4iI4",
+    "title": "コンピューターはなぜ0と1？ 2進数とビット・バイトのしくみ｜ラクにゃんのIT基礎講座",
+    "channel": "ラクタノ",
+    "channel_id": "UCuLYHTm_QSo_m7118P1U94A",
+    "views": 42,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "7:03"
+   },
+   {
+    "id": "2pyWu8MVqdA",
+    "title": "プログラムはなぜ小数の計算をミスるのか？",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 492584,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "30:41"
+   },
+   {
+    "id": "b4rZ54xbFtQ",
+    "title": "【16/16】ゼロからわかる！コンピュータの仕組み(2進数でデータを表現)",
+    "channel": "鳥羽眞嘉 / プログラミングチャンネル",
+    "channel_id": "UC7wdW5bvuOX4ohXiiE6sfow",
+    "views": 4312,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "9:03"
+   },
+   {
+    "id": "pBNiP1apnCQ",
+    "title": "２進数とは何かを丁寧にわかりやすく解説　パソコン初心者でもわかりやすい",
+    "channel": "みんなのSE・IT講座",
+    "channel_id": "UC6IOCAIpnOtO88SYYs2pKFw",
+    "views": 10190,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "6:39"
+   },
+   {
+    "id": "cvx73DvUYfk",
+    "title": "コンピュータサイエンス（情報科学）Step1 2 2進数って何？",
+    "channel": "NUS.Scratchゲーム",
+    "channel_id": "UCl7jXdV8e1lDEDhjRDpGB3Q",
+    "views": 18,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:53"
+   },
+   {
+    "id": "sFglknJTyCc",
+    "title": "なぜプログラマーは2進数を学ぶの？｜#プログラマーのための数の教養 ～0と1から学ぶコンピュータの世界～ #CodeBoostLabo #数の教養",
+    "channel": "CodeBoost Labo",
+    "channel_id": "UC_Gx50kI_gTmT9ghkO_MfLg",
+    "views": 59,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "6:09"
+   }
+  ],
+  "USB-C 何が違う なぜ": [
+   {
+    "id": "Ru9F1deLehk",
+    "title": "【USB Type-Cの種類】Thunderbolt？　Type-C？　USB３？　USB4？　わかりにくいんじゃ！　USB 3は何種類もあるし！　ということで解説していきます。",
+    "channel": "Linux ちゃんねる　〜PC・インフラ・ITの仕組み〜",
+    "channel_id": "UCTS1YgULmZOdQ6KwONhK9zw",
+    "views": 37107,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:23"
+   },
+   {
+    "id": "p8_TkblAsRU",
+    "title": "同じUSB-Cなのに、なぜ充電速度が違う？ケーブル・充電器の違いを図解",
+    "channel": "図でわかるIT【ゆっくり解説】",
+    "channel_id": "UCE4kxff0Wo-5Jxs7SQk1oaw",
+    "views": 773,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:08"
+   },
+   {
+    "id": "_zIo4giUrqY",
+    "title": "USB-Cは同じ形なのに、なぜ速さが違う？データ・充電・映像のしくみ",
+    "channel": "脱線ノート",
+    "channel_id": "UCPFWovgmV0UOc7GTy9blrfQ",
+    "views": 28,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "31:01"
+   },
+   {
+    "id": "cYMyiHV-Ehg",
+    "title": "USB-Cとは一体何なのか？（なぜ今、あらゆる電子機器に使われているのか？）",
+    "channel": "昔の人の知恵",
+    "channel_id": "UCYJ2D_D1q7_sYGorIB2_6iA",
+    "views": 85980,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "15:20"
+   },
+   {
+    "id": "w9BZwVeMi9w",
+    "title": "USB-Cとは何か？ なぜ全員が使うことになったのか",
+    "channel": "知の裏側",
+    "channel_id": "UCUPF7BcFwXDm1YCIyloaWdg",
+    "views": 61,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "5:03"
+   },
+   {
+    "id": "5CnXm9XqRoc",
+    "title": "【神規格】なぜUSB-Cは「1本で全部」できるのか？映像も電力も同時に送れる「ヤバすぎる仕組み」",
+    "channel": "ディープIT・PCトレンドラボ",
+    "channel_id": "UCyU-hoikUPtr9DN9D4gbJ1A",
+    "views": 2936,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "9:00"
+   },
+   {
+    "id": "jGs4_aXin7U",
+    "title": "USB-Cの真実 (なぜ世界中がこの規格を採用せざるを得なかったのか)",
+    "channel": "Logic Gap 日本語",
+    "channel_id": "UCYDmxwlJ_BsU3MurDtUQoBA",
+    "views": 2,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "20:56"
+   },
+   {
+    "id": "jTUCTN9sR9Q",
+    "title": "なぜUSB-Cケーブルは見た目が同じなのに性能が違うのか？",
+    "channel": "History of Simple Things",
+    "channel_id": "UC95ANqPeSKRNEH1CaCOs2ew",
+    "views": 13796,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "9:20"
+   },
+   {
+    "id": "LZiOwZuTZgs",
+    "title": "【３分】USBタイプの違いは？",
+    "channel": "3分トピック",
+    "channel_id": "UCsVPfzHbJMaS3C5WotbABrQ",
+    "views": 16506,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:01"
+   },
+   {
+    "id": "-FnPB_ISJkM",
+    "title": "３分でわかる！USB-CとThunderbolt３の違い",
+    "channel": "やぬぬ",
+    "channel_id": "UCH_5tNSToThenhY6jOt9h5w",
+    "views": 258581,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:00"
+   },
+   {
+    "id": "sotd7W5PFCc",
+    "title": "USB-Cなのに充電速度が違う理由、充電器とスマホの見えない電力交渉",
+    "channel": "モノづくりの科学",
+    "channel_id": "UCl6e9kFkefFRWI3xEgVONKQ",
+    "views": 21,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "23:17"
+   },
+   {
+    "id": "_9zRL4XI8Jo",
+    "title": "USBはなぜ『裏表』で悩むのか——端子統一の歴史【技術史】",
+    "channel": "発明ノ系譜",
+    "channel_id": "UCT8DVF-nxqKs67gb0fBJG3A",
+    "views": 25,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "17:24"
+   },
+   {
+    "id": "0KISba2oLG4",
+    "title": "USB-CとThunderbolt 3の違いを徹底解説【保存版】",
+    "channel": "金子晃之",
+    "channel_id": "UCaxV7Sf7pdNjlahl6BtJBBw",
+    "views": 155678,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "19:57"
+   },
+   {
+    "id": "hoK1PGIw2cU",
+    "title": "【最強端子】サンダーボルト４とUSB4の違い【USBタイプC】",
+    "channel": "【ガジェット】デイリーフォース",
+    "channel_id": "UCrcfHIbFrqRWMsdcgvP7uyA",
+    "views": 13898,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:28"
+   },
+   {
+    "id": "c6VYZ_u6G-0",
+    "title": "同じUSB-Cなのに なぜ性能が違う？｜AIのみ・一発制作",
+    "channel": "ひとふで",
+    "channel_id": "UC7oA-ZZD1FbIsupGr218jHw",
+    "views": 52,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:41"
+   },
+   {
+    "id": "195fd8TyeIs",
+    "title": "【USBの歴史】なぜ1回で入らないのか？30年続く「四次元端子」の正体と驚愕の歴史【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 41741,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "17:47"
+   },
+   {
+    "id": "hduTLwR7hRg",
+    "title": "頭を使わなくても分かるUSBケーブルの種類！四つを知っておけば！",
+    "channel": "大阿美",
+    "channel_id": "UChqtJvMRzg2Z_cABnNqU5jQ",
+    "views": 78703,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:22"
+   },
+   {
+    "id": "cHFD8DYlBkA",
+    "title": "USBの種類&使い分けを徹底解説【保存版】",
+    "channel": "金子晃之",
+    "channel_id": "UCaxV7Sf7pdNjlahl6BtJBBw",
+    "views": 246346,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "26:46"
+   },
+   {
+    "id": "6bc4RbFHsLo",
+    "title": "【今さら聞けない】USBの基本・進化・選び方をざっくり解説",
+    "channel": "カガヤオch -PC雑学探究-",
+    "channel_id": "UCb01Pxc-NBulhXWT5FznLDA",
+    "views": 1998,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:00"
+   },
+   {
+    "id": "kYD-12GYxA0",
+    "title": "充電できるのに、なぜ映らない？ 同じUSB-Cで性能が違う理由",
+    "channel": "道具のなぜ",
+    "channel_id": "UCMAffosnqQNRyQBrxaki4tQ",
+    "views": 57178,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "11:46"
+   }
+  ],
+  "USB なぜ 裏表": [
+   {
+    "id": "AXEmVDiBUIs",
+    "title": "【技術の雑学】なぜUSBには裏と表があるのか？",
+    "channel": "ハゲタカくんの技術研究所",
+    "channel_id": "UCiReb_F5-iuxvvYzoR0vSTw",
+    "views": 179,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "11:58"
+   },
+   {
+    "id": "_9zRL4XI8Jo",
+    "title": "USBはなぜ『裏表』で悩むのか——端子統一の歴史【技術史】",
+    "channel": "発明ノ系譜",
+    "channel_id": "UCT8DVF-nxqKs67gb0fBJG3A",
+    "views": 25,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "17:24"
+   },
+   {
+    "id": "pAf2aiwNtpw",
+    "title": "なぜUSBには裏表があるのか？世界を救った「あえての不便」と天才の決断",
+    "channel": "まなの黒板ラボ",
+    "channel_id": "UCqDBfCuXJa6sxuIpvBxRTXQ",
+    "views": 558,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:44"
+   },
+   {
+    "id": "47vJ-4CXUXk",
+    "title": "【英語学習版】なぜUSBには裏表があるのか？世界を救った「あえての不便」と天才の決断",
+    "channel": "まなの黒板ラボ",
+    "channel_id": "UCqDBfCuXJa6sxuIpvBxRTXQ",
+    "views": 20,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:59"
+   },
+   {
+    "id": "3bMT5D_Ba3I",
+    "title": "USBコネクタの裏表(上下)の見分け方",
+    "channel": "半歩進んだデジタル製品入門",
+    "channel_id": "UCGfgV36l8Tm21So0JNXC20g",
+    "views": 1491,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "0:39"
+   },
+   {
+    "id": "V9mRmGci_b0",
+    "title": "【解説】USBの進化、30年の歴史",
+    "channel": "理由の図鑑",
+    "channel_id": "UC-UPyCb0mbNXiMxX9MiObPw",
+    "views": 25,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "5:28"
+   },
+   {
+    "id": "yAjSDwxozxM",
+    "title": "USBの種類は、なぜこんなに多いのか？【日常のなぜ？】",
+    "channel": "WHY QUEST LAB　なぜをひも解く",
+    "channel_id": "UCZ3aQki1c3LTYtChuP4nj-g",
+    "views": 174,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:38"
+   },
+   {
+    "id": "195fd8TyeIs",
+    "title": "【USBの歴史】なぜ1回で入らないのか？30年続く「四次元端子」の正体と驚愕の歴史【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 41741,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "17:47"
+   },
+   {
+    "id": "pVCwedudujo",
+    "title": "【セキュリティ】自衛隊でUSBウイルス感染事件！安いものには裏がある？偽装USBに要注意！【経済】",
+    "channel": "政治経済たぬじろう",
+    "channel_id": "UC9eo2v-zP26zvK2PNCqRVMg",
+    "views": 885,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "10:02"
+   },
+   {
+    "id": "YJ2xnbnjpvc",
+    "title": "なぜUSBメモリは小さいのに大容量なのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 66593,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "16:59"
+   },
+   {
+    "id": "JT4Oabb1pAk",
+    "title": "【簡単】USBを見ないで上下を間違えずに１発でさす方法 / 裏表の区別・挿す方向 裏技",
+    "channel": "Takahashi Suzuki（防災 看護師）",
+    "channel_id": "UCwGUHa9SAmdOreCrFIK1VSw",
+    "views": 1243,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:08"
+   },
+   {
+    "id": "cYMyiHV-Ehg",
+    "title": "USB-Cとは一体何なのか？（なぜ今、あらゆる電子機器に使われているのか？）",
+    "channel": "昔の人の知恵",
+    "channel_id": "UCYJ2D_D1q7_sYGorIB2_6iA",
+    "views": 85980,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "15:20"
+   }
+  ],
+  "パソコン 遅くなる なぜ 解説": [
+   {
+    "id": "uRRDGE098Hg",
+    "title": "PCはなぜ重くなる？今さら聞けない“原因の仕組み”をやさしく解説【ずんだもん解説】",
+    "channel": "ずんだのひもとき現代塾【IT・お金・教養】",
+    "channel_id": "UCfXKLlmiko_ilHeQqnaH6Uw",
+    "views": 565,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "10:26"
+   },
+   {
+    "id": "bafqrAdoZRc",
+    "title": "【宿命】最新PCでもたった数年で重くなる理由【小学生でもわかる】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 147838,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "17:00"
+   },
+   {
+    "id": "0KYyYiWYlXk",
+    "title": "【前編】PCが遅くなる仕組み",
+    "channel": "サイエンス千夜一夜",
+    "channel_id": "UCTrBYMgw9TzVlQ_lQRO2ErQ",
+    "views": 15209,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "26:52"
+   },
+   {
+    "id": "zPaaTIumh44",
+    "title": "【プロが解説】Windowsの“アレ”を切ったらPCが急に軽くなりました",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 2364547,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "14:07"
+   },
+   {
+    "id": "cJj0ZwwJFQk",
+    "title": "古いパソコン/スマホが重くなる本質的な理由",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 1085549,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "43:11"
+   },
+   {
+    "id": "K9ymJaa_Vfw",
+    "title": "パソコンの動き・起動が遅いのを軽くする！Windows11とWindows10の高速化【音速パソコン教室】",
+    "channel": "音速パソコン教室。1万人が自宅でパソコン上達。",
+    "channel_id": "UCYAPVqVW8hDn9K0zgpL0foQ",
+    "views": 355791,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "33:19"
+   },
+   {
+    "id": "MJtQ5tvhy7Y",
+    "title": "【効果絶大】パソコンが重くて固まる…ストレスフリーなPC環境を取り戻す方法",
+    "channel": "りょう【1日20秒で学べるPCスキル】",
+    "channel_id": "UChpcGIbf-cx-1R666FIxUFw",
+    "views": 480062,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:51"
+   },
+   {
+    "id": "wrSSFiD4hGk",
+    "title": "『プロの技！』パソコンの不調はこれで解決！『初心者でも理解できる解説』",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 1873057,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "29:31"
+   },
+   {
+    "id": "LncbUorIEPc",
+    "title": "【Windows11】パソコンが重い原因と今すぐできる対処法",
+    "channel": "スマホ・パソコンTV　虎太郎大百科",
+    "channel_id": "UCPRgFQji3JMJMi4WpjJZspQ",
+    "views": 1300,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "2:07"
+   },
+   {
+    "id": "FqCzKteDQuQ",
+    "title": "【Windows10/11】エクスプローラーが重くなる原因と高速化する対処法｜パソコン裏技",
+    "channel": "みおと学ぶパソコン道",
+    "channel_id": "UCCzahUnzNpG8qlRf328dYAQ",
+    "views": 1722,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:36"
+   },
+   {
+    "id": "u4QTIKnamYQ",
+    "title": "なぜパソコンは再起動すると直るのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 162171,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "21:22"
+   },
+   {
+    "id": "8TeN2usDRoA",
+    "title": "Windows 11が急に遅くなった！勝手に変わった設定を元に戻す方法を徹底解説",
+    "channel": "後藤PC塾:プロが伝えるパソコン教室",
+    "channel_id": "UCMvaNVWBGbEPuZllYZETjfQ",
+    "views": 499895,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "12:25"
+   },
+   {
+    "id": "3uQLeBOfXoU",
+    "title": "【解説編｜初心者向け】パソコンの動作が急に遅くなったときの原因と対処法｜突然重くなるケースの確認ポイント",
+    "channel": "PC・スマホ・AIやさしい解説",
+    "channel_id": "UCDWdPu9YLafkB-FFn37yP4A",
+    "views": 121,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "8:26"
+   },
+   {
+    "id": "8n03NV3RpYE",
+    "title": "【プロが教える】遅いパソコンを速くする設定10選【2023年度最新版】",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 2199428,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "43:04"
+   },
+   {
+    "id": "tUxosAd6NCM",
+    "title": "なぜ，PCは重くなるのか．CPUは劣化しない！？パソコンが遅くなる「3つの最悪な要因」",
+    "channel": "ディープIT・PCトレンドラボ",
+    "channel_id": "UCyU-hoikUPtr9DN9D4gbJ1A",
+    "views": 2894,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "12:29"
+   },
+   {
+    "id": "Anz2NUZnRns",
+    "title": "【第52回】PCが遅い原因はコレ！？「断片化」と「デフラグ」をスッキリ解説！",
+    "channel": "ひろあさちゃんねる",
+    "channel_id": "UC01SDOM18dc5dHvGKM7DaMA",
+    "views": 48,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "19:23"
+   },
+   {
+    "id": "nECJxg8nXSs",
+    "title": "【Windows11】重い原因はCドライブです｜体感速度が変わる改善12選",
+    "channel": "パソコン困ったらテクまる",
+    "channel_id": "UCMDrAXzxFkyoHRKSgAb0fTA",
+    "views": 62325,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "22:06"
+   },
+   {
+    "id": "qvhRaCm97v8",
+    "title": "パソコンが遅い時の5つの対処方法",
+    "channel": "デル・テクノロジーズ株式会社 テクニカルサポート",
+    "channel_id": "UCanA3vFcVMlhucoxzbhUK0g",
+    "views": 1013,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "4:16"
+   },
+   {
+    "id": "IE7qO0UhfmU",
+    "title": "【ゆっくり解説】AMDの起動が遅い原因はこれだ！設定一つで「3倍速く」する方法！？",
+    "channel": "ガジェット速報",
+    "channel_id": "UCjZ7tmNSS_eBPAbTUO8EP5Q",
+    "views": 32492,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "8:17"
+   }
+  ],
+  "ソフト 重くなる なぜ": [
+   {
+    "id": "cJj0ZwwJFQk",
+    "title": "古いパソコン/スマホが重くなる本質的な理由",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 1085549,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "43:11"
+   },
+   {
+    "id": "hhKwgJAWdN8",
+    "title": "なぜソフトは重くなる？パソコンが進化しても早くならない本当の理由【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 84906,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "13:04"
+   },
+   {
+    "id": "bafqrAdoZRc",
+    "title": "【宿命】最新PCでもたった数年で重くなる理由【小学生でもわかる】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 147838,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "17:00"
+   },
+   {
+    "id": "uRRDGE098Hg",
+    "title": "PCはなぜ重くなる？今さら聞けない“原因の仕組み”をやさしく解説【ずんだもん解説】",
+    "channel": "ずんだのひもとき現代塾【IT・お金・教養】",
+    "channel_id": "UCfXKLlmiko_ilHeQqnaH6Uw",
+    "views": 565,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "10:26"
+   },
+   {
+    "id": "FqCzKteDQuQ",
+    "title": "【Windows10/11】エクスプローラーが重くなる原因と高速化する対処法｜パソコン裏技",
+    "channel": "みおと学ぶパソコン道",
+    "channel_id": "UCCzahUnzNpG8qlRf328dYAQ",
+    "views": 1722,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:36"
+   },
+   {
+    "id": "MJtQ5tvhy7Y",
+    "title": "【効果絶大】パソコンが重くて固まる…ストレスフリーなPC環境を取り戻す方法",
+    "channel": "りょう【1日20秒で学べるPCスキル】",
+    "channel_id": "UChpcGIbf-cx-1R666FIxUFw",
+    "views": 480062,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:51"
+   },
+   {
+    "id": "oiEn803nQh8",
+    "title": "YMM4動画編集が重くなりすぎる？今すぐ見直せる原因と対策ガイド【ゆっくりコラム】",
+    "channel": "SS@YMM4 YouTubeの使い方をゆっくり解説",
+    "channel_id": "UC5jAXCWAhHCLAdJ8yBCKd8w",
+    "views": 536,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "8:00"
+   },
+   {
+    "id": "LncbUorIEPc",
+    "title": "【Windows11】パソコンが重い原因と今すぐできる対処法",
+    "channel": "スマホ・パソコンTV　虎太郎大百科",
+    "channel_id": "UCPRgFQji3JMJMi4WpjJZspQ",
+    "views": 1300,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "2:07"
+   },
+   {
+    "id": "Yo7OYAtghuw",
+    "title": "【衝撃】CPUもメモリも正常なのになぜ遅い？Windows11の「隠れ常駐アプリ」を完全抹消する方法",
+    "channel": "プロが簡単解説　あなたを守る　情報セキュリティ",
+    "channel_id": "UC7q0T--7aki86kABeZMiHjg",
+    "views": 78822,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "14:48"
+   },
+   {
+    "id": "RB-zbm1Kwcg",
+    "title": "高性能なのに遅い!? Windowsが重くなる本当の理由",
+    "channel": "ずんだずんだ大先生",
+    "channel_id": "UCITfj2TKjModO4mY2uzn7yg",
+    "views": 1649,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "12:10"
+   },
+   {
+    "id": "g5hzvcP7KNA",
+    "title": "【動画編集】Premiere Proの動作が重くなる原因とその解決方法",
+    "channel": "みみしき / Mimishiki",
+    "channel_id": "UCFdnW69IgKmHf-NIPYuL6sQ",
+    "views": 5985,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:23"
+   },
+   {
+    "id": "_4fs1ua5wNk",
+    "title": "PCが重くなる原因はコレ！？SysMainの無効化が実は逆効果な理由【Windows 11 高速化の嘘と真実】",
+    "channel": "N企画",
+    "channel_id": "UCDUG_t7XCjUcZcc1F-r2FmA",
+    "views": 2478,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "8:22"
+   },
+   {
+    "id": "bzMJUwMzv-c",
+    "title": "パソコンが重い原因はメモリ不足！動作を軽くする具体的な手順を解説｜Wondershare Recoverit",
+    "channel": "Wondershare Recoverit データ復元",
+    "channel_id": "UCwc4nP0dv00ohZLuCzgi7aw",
+    "views": 4404,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "7:22"
+   },
+   {
+    "id": "Om1s0F0h50E",
+    "title": "Windows 11  「PCが重い本当の理由」",
+    "channel": "パソコンAI研究会 ( PC and AI Research Channel )",
+    "channel_id": "UCRYtuhdDrTUwaXuqt9MkzXQ",
+    "views": 196,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "17:54"
+   },
+   {
+    "id": "wrSSFiD4hGk",
+    "title": "『プロの技！』パソコンの不調はこれで解決！『初心者でも理解できる解説』",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 1873060,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "29:31"
+   },
+   {
+    "id": "ZqXdFL6bpnc",
+    "title": "【PCが重い原因】あるアプリがメモリを大量に使っている場合があります。原因と対策を解説｜Wondershare Recoverit",
+    "channel": "Wondershare Recoverit データ復元",
+    "channel_id": "UCwc4nP0dv00ohZLuCzgi7aw",
+    "views": 3682,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "8:33"
+   },
+   {
+    "id": "zPaaTIumh44",
+    "title": "【プロが解説】Windowsの“アレ”を切ったらPCが急に軽くなりました",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 2364547,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "14:07"
+   },
+   {
+    "id": "vydsAqjhK2c",
+    "title": "【Windows10/11】パソコンの立ち上がりが遅い主な原因と高速化設定5️⃣選｜4DDiG Duplicate File Deleter",
+    "channel": "【公式】Tenorshare 4DDiG データ復元",
+    "channel_id": "UC5G9VIvb5VvnPhijjHAOqew",
+    "views": 16154,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "5:00"
+   },
+   {
+    "id": "FWO0e6vClHI",
+    "title": "【Windows 11】パソコンの動作が重い・遅い時の爆速化設定7選！初心者向け安全な高速化手順",
+    "channel": "PCお悩み相談",
+    "channel_id": "UCdeDZQmtsq7F-u_p_uGSKZw",
+    "views": 312,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "10:15"
+   },
+   {
+    "id": "xITH8NNpznI",
+    "title": "【これ１本で全てがわかる】Windows11絶対やるべき設定11選！MicrosoftがこっそりONにしている“危険設定”を全解除！【最新版】",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 1927345,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "40:42"
+   }
+  ],
+  "スマホ 遅くなる なぜ 解説": []
+ }
+}
