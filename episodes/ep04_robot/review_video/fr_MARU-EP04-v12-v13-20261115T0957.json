@@ -1,0 +1,61 @@
+{
+ "created_at": "2026-11-15T09:57:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-EP04-v12",
+ "to_version": "MARU-EP04-v13",
+ "project_id": "MARU-EP04",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwh5latg0a2nsaja",
+   "comment_rev": 1,
+   "explain": "門番の札を犬の真上に置き、しっぽをまっすぐ下へ。三角の底は札の内側に沈め、外にはみ出さない形にした。",
+   "new_t": 291.7,
+   "new_t_end": null,
+   "new_version_id": "MARU-EP04-v13",
+   "original_t": 291.7,
+   "original_t_end": null,
+   "original_text": "門番の吹き出しのしっぽおかしい（戻し：まだ形おかしい）",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwh5td6ae9r33pik",
+   "comment_rev": 1,
+   "explain": "しっぽを、GPT-4 の「…」の吹き出しの真下から、まっすぐ上へ向けた。",
+   "new_t": 507.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-EP04-v13",
+   "original_t": 507.8,
+   "original_t_end": null,
+   "original_text": "吹き出しのしっぽおかしい（戻し：ＡＩの方向いてないよしっぽ）",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwh5vaepwvbe7s85",
+   "comment_rev": 1,
+   "explain": "しっぽを、画面のチェック欄の真下から、まっすぐ上へ向けた。",
+   "new_t": 549.5,
+   "new_t_end": null,
+   "new_version_id": "MARU-EP04-v13",
+   "original_t": 549.5,
+   "original_t_end": null,
+   "original_text": "吹き出しのしっぽおかしい（戻し：しっぽの向きおかしい）",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwh5wg0rptpvbcad",
+   "comment_rev": 1,
+   "explain": "しっぽをなくした。",
+   "new_t": 596.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-EP04-v13",
+   "original_t": 596.8,
+   "original_t_end": null,
+   "original_text": "吹き出しのしっぽおかしい（戻し：ここもうしっぽいらない）",
+   "reason": ""
+  }
+ ]
+}
