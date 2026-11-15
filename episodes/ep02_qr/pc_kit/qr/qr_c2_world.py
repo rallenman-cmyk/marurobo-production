@@ -190,7 +190,7 @@ for k, rc_ in enumerate(ticks): tile_state([rc_], 'restored', CP.T_TICK[k], 0.08
 # ---------------------------------------------------------------- 14：真上から。いまの QR（柄を重ねた後）→ 柄を外した並び。14-04b は光の線が通った所から入れ替わる
 BP = SYM['before_pattern']; REG = [rc_ for rc_ in TILES if FL[rc_[0]][rc_[1]] == 'data']
 cur = lambda rc_: TILES[rc_]['v']; raw = lambda rc_: BP[rc_[0]][rc_[1]]
-tile_value(REG + TIM, cur, 217.6 - 0.05, 0.02)                     # 役割の色を外して、ふつうの白黒に
+tile_value(TIM, cur, 217.6 - 0.05, 0.02); tile_value(REG, raw, 217.6 - 0.05, 0.02)   # 役割の色を外して、ふつうの白黒に。v15：下のマスは柄を重ねる前の並び（この上に柄のシートが重なる）
 tile_value(REG, raw, 223.5 - 0.05, 0.02)                           # 14-02：中身をそのまま書いた並び
 tile_value(REG, raw, 264.9 - 0.05, 0.02)                           # 14-04：下のマスは元の並び。その上に柄のシートが落ちてきて重なる（v12 #31）
 # v12 #31：スキャンの光ではなく「柄のシート」をめくる。シートには柄を重ねた後の白黒が刷ってある。下のマスは元の並び
@@ -218,17 +218,30 @@ def peel_sheet(t0, t1, rho=1.7, sub=4, z0=QW.TILE_H + 0.09):
     base = [Vector(v) for v in V_]; L = N * MOD
     sk0 = ob.shape_key_add(name='flat'); keys = []
     f0, f1 = fr_of(t0), fr_of(t1)
-    for f in range(f0, f1 + 1):
-        u = (f - f0) / max(1, f1 - f0); u = u * u * (3 - 2 * u)
+    def shape(nm, u):
         xp = L + 2.0 - (L + 2.0 + math.pi * rho) * u                 # めくれの折り目（右の外 → 左の外へ）
-        sk = ob.shape_key_add(name='peel %d' % f)
+        sk = ob.shape_key_add(name=nm)
         for i, v in enumerate(base):
             sarc = v.x - xp
             if sarc <= 0: co = Vector((v.x, v.y, 0.0))
             elif sarc < math.pi * rho: ph = sarc / rho; co = Vector((xp + rho * math.sin(ph), v.y, rho * (1 - math.cos(ph))))
             else: co = Vector((xp - (sarc - math.pi * rho), v.y, 2 * rho))
             sk.data[i].co = co
-        keys.append((f, sk))
+        return sk
+    for f in range(f0, f1 + 1):
+        u = (f - f0) / max(1, f1 - f0); u = u * u * (3 - 2 * u)
+        keys.append((f, shape('peel %d' % f, u)))
+    # v15（9:41「重ねてあるんですで、めくる時と逆の動きで重ねるようにして」）：14-01「上から柄が重ねてある」で、
+    # めくり終わりの形（左へ裏返って浮いた形）で上から降りてきて、めくりと逆の動きで右へ広がって重なる
+    T_DROP0, T_ON0, T_ON1 = 219.5, 220.1, 222.6
+    g0, g1 = fr_of(T_ON0), fr_of(T_ON1); on_keys = []
+    for f in range(g0, g1 + 1):
+        u = (f - g0) / max(1, g1 - g0); u = u * u * (3 - 2 * u)
+        on_keys.append((f, shape('lay %d' % f, 1.0 - u)))
+    for n_, (f, sk) in enumerate(on_keys):
+        pts = ((f - 1, 0.0), (f, 1.0), (f + 1, 0.0))
+        if n_ == 0: pts = ((fr_of(T_DROP0) - 1, 0.0), (fr_of(T_DROP0), 1.0), (f, 1.0), (f + 1, 0.0))   # 降りてくる間は、めくり終わりの形のまま
+        for ff, val in pts: sk.value = val; sk.keyframe_insert('value', frame=ff)
     for n_, (f, sk) in enumerate(keys):
         for ff, val in ((f - 1, 0.0), (f, 1.0), (f + 1, 0.0)):
             if n_ == len(keys) - 1 and ff == f + 1: continue          # 最後の形はそのまま残す（浮いて消えるまで）
@@ -236,14 +249,14 @@ def peel_sheet(t0, t1, rho=1.7, sub=4, z0=QW.TILE_H + 0.09):
     # v14（9:41「白黒の配列が変わるのは柄を重ねたから？ なら重ねる感じのアニメを」）：K40 の間はシートが重なって見えていて、
     # 14-02 で下のマスが元の並びに替わったあと、シートが浮いて外れる（中身＝柄を外した並び、が見える）
     T_LIFT0 = 223.45
-    for t, z, s_ in ((217.6, z0, 1.0), (T_LIFT0, z0, 1.0), (T_LIFT0 + 0.7, z0 + 9.0, 0.6)):
+    for t, z, s_ in ((T_DROP0, z0 + 9.0, 0.6), (T_ON0, z0, 1.0), (T_LIFT0, z0, 1.0), (T_LIFT0 + 0.7, z0 + 9.0, 0.6)):
         ob.location = (-H, 0, z); ob.scale = (s_, s_, s_); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
     # 14-04 の頭：上から落ちてきて重なる
     for t, z in ((264.95, z0 + 5.0), (265.55, z0)): ob.location = (-H, 0, z); ob.scale = (1, 1, 1); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
     # めくり終わり：上へ浮いて小さくなって消える
     for t, z, s_ in ((t1, z0, 1.0), (t1 + 0.7, z0 + 9.0, 0.6)):
         ob.location = (-H, 0, z); ob.scale = (s_, s_, s_); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
-    show(ob, [(217.6, 223.45 + 0.7), (264.95, t1 + 0.7)])
+    show(ob, [(T_DROP0, 223.45 + 0.7), (264.95, t1 + 0.7)])
     return ob
 SHEET = peel_sheet(*CP.T_UNMASK)
 tile_state(DATA_C, 'data', 276.2 - 0.05, 0.02); tile_state(SPARE_C, 'spare', 276.2 - 0.05, 0.02)     # v12 #26：タイミングの列は緑にしない

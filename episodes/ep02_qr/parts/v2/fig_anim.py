@@ -445,17 +445,18 @@ def arrows(pts):
     """3D の上に矢印と短いラベル。pts：[(x, y, ラベル, cue のキー, 向き 'down'|'up'|'left'|'right')]（座標は 1280×720）"""
     def f(t, dur, cue=None):
         im, d = clear()
-        for x, y, lab, key, dr in pts:
+        for pt in pts:
+            x, y, lab, key, dr = pt[:5]; col = pt[5] if len(pt) > 5 else RED   # v15：赤い所の上では別の色（6 番目に色）
             t0 = C(cue, key, 0.0); a = min(ease((t - t0) / 0.25), (dur - t) / 0.3)
             if a <= 0: continue
             bob = 6 * math.sin((t - t0) * 6) * (1 - min(1, (t - t0) / 1.5))
             vx, vy = {'down': (0, 1), 'up': (0, -1), 'left': (-1, 0), 'right': (1, 0)}[dr]; L = 70
             tx, ty = x - vx * (12 + bob), y - vy * (12 + bob); sx, sy = tx - vx * L, ty - vy * L
-            d.line((sx, sy, tx - vx * 20, ty - vy * 20), RED, 12, a=a)
-            px, py = -vy, vx; d.poly([(tx, ty), (tx - vx * 30 + px * 22, ty - vy * 30 + py * 22), (tx - vx * 30 - px * 22, ty - vy * 30 - py * 22)], RED, a=a)
+            d.line((sx, sy, tx - vx * 20, ty - vy * 20), col, 12, a=a)
+            px, py = -vy, vx; d.poly([(tx, ty), (tx - vx * 30 + px * 22, ty - vy * 30 + py * 22), (tx - vx * 30 - px * 22, ty - vy * 30 - py * 22)], col, a=a)
             if lab:
                 lx, ly = sx - vx * 34, sy - vy * 34; w = 34 + 46 * len(lab)   # v14：字が札からはみ出ないよう（字の大きさ 44 に合わせる）
-                d.rect((lx - w / 2, ly - 30, lx + w / 2, ly + 30), fill=RED, r=14, a=a); d.text((lx, ly), lab, 44, WHITE, a=a)
+                d.rect((lx - w / 2, ly - 30, lx + w / 2, ly + 30), fill=col, r=14, a=a); d.text((lx, ly), lab, 44, WHITE, a=a)
         return im
     return f
 def patterns8(t, dur, cue=None):

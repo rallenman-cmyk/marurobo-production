@@ -68,6 +68,14 @@ d = (cphone + back * 0.2) - foot; pole = W.cyl('Stand pole', 0.06, d.length, met
 # ================================================================ まるロボ（卓上の予定）。画面の面を越えた所は画面とスマホの体が隠す → 通り抜けたら消す
 plan, FR, EV = CP.table_frames()
 T_CROSS, T_GONE = EV['t_cross'], EV['t_gone']; P_CROSS = Vector(EV['p_cross'])
+# v15（1:34「足はみ出てる」）：画面へ飛び込む間、足を体へ引き込む（丸くなる）。足首の目標を付け根の少し下へ寄せる
+T_TUCK0, T_TUCK1 = T_CROSS - 0.50, T_CROSS - 0.22
+for k_ in FR:
+    u_ = min(1.0, max(0.0, (k_['t'] - T_TUCK0) / (T_TUCK1 - T_TUCK0)))
+    if u_ <= 0: continue
+    u_ = u_ * u_ * (3 - 2 * u_); zt = k_['root'][2] + mm.HIP_Z - 0.10
+    for ft in k_['feet']:
+        an = list(ft['ankle']); an[2] = an[2] + (max(an[2], zt) - an[2]) * u_; ft['ankle'] = an
 if A.standin:
     import op_stage_standin as SI
     rroot, rtorso, rlegs = SI.build_robot()
@@ -92,7 +100,10 @@ else:
     bk.write(); robot_objs = hier(O['Maru'])
 # v14：画面に入る少し前から、入った所へ吸い込まれるように小さくなる（スマホの奥にはみ出さない）
 root_ob = rroot if A.standin else O['Maru']
-for t, s_ in ((T_CROSS - 0.12, 1.0), (T_GONE, 0.35)): root_ob.scale = (s_, s_, s_); root_ob.keyframe_insert('scale', frame=fr_of(t))
+# v15：体の真ん中を中心に小さくする（前は足元が中心で、足が画面の下の端から出ていた）。早めに小さくし始める
+for t, s_ in ((T_CROSS - 0.45, 1.0), (T_CROSS, 0.45), (T_GONE, 0.3)):
+    root_ob.scale = (s_, s_, s_); root_ob.keyframe_insert('scale', frame=fr_of(t))
+    root_ob.delta_location = (0.0, 0.0, (1.0 - s_) * mm.TORSO_Z); root_ob.keyframe_insert('delta_location', frame=fr_of(t))
 for ob in robot_objs:
     if ob.hide_render: continue
     for f, h in ((1, False), (fr_of(T_GONE) + 1, True)): ob.hide_render = h; ob.keyframe_insert('hide_render', frame=f)
