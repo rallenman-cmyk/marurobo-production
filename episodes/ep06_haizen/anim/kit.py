@@ -470,10 +470,11 @@ def senpai_serve(loc=(0, 0), face=0.0, s=SV_S):
     cube(mat("sv_lidhead", "#2A3238", rough=0.3), (0, 0, 0), (0.08, 0.05, 0.03), parent=spin)
     sphere(glow_mat("sv_lideye", TEAL, 4.0), (0, -0.03, 0), 0.008, parent=spin)
     cyl(white, (0, 0, LZ + 0.06), 0.24, 0.06, parent=root, verts=64)
-    # 前のカメラ（低い所 2 つ）
+    # 前のカメラ（おなかの前の台に 2 つ。いちばん下のトレーの下。06-02「おなかの前には、カメラ」で見えるように）
     lenses = []
-    for sx in (-0.08, 0.08):
-        e_ = empty((sx, -0.235, 0.17)); e_.parent = root; e_.rotation_euler = (R(-12), 0, 0)
+    cube(white, (0, -0.15, 0.462), (0.26, 0.14, 0.085), bevel=0.025, parent=root)
+    for sx in (-0.07, 0.07):
+        e_ = empty((sx, -0.222, 0.462)); e_.parent = root; e_.rotation_euler = (R(-12), 0, 0)
         cyl(mat("sv_camrim", "#2E3338", rough=0.3, metal=0.4), (0, 0, 0), 0.026, 0.02, rot=(R(90), 0, 0), parent=e_)
         sphere(mat("sv_lens", "#0E1A22", rough=0.05, coat=1.0), (0, -0.008, 0), 0.018, scale=(1, 0.4, 1), parent=e_)
         lenses.append(e_)
