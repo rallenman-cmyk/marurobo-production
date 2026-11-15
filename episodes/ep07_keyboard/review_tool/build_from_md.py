@@ -43,7 +43,7 @@ for ln in lines[i:]:
     if s.startswith('## '):
         flush()
         title = s[3:].strip()
-        if title.startswith('確認すること') or title.startswith('決めたこと') or title.startswith('決めてほしいこと'):
+        if title.startswith('確認すること') or title.startswith('確かめた結果') or title.startswith('決めたこと') or title.startswith('決めてほしいこと'):
             in_tail = True
             tail.append(title)
             continue
