@@ -209,7 +209,7 @@ for k in PARTS:
     lg = None
     for d in DIRS:
         p = os.path.join(d, k + "_log.json")
-        if os.path.exists(p) and glob.glob(os.path.join(d, k + "_[0-9]*.png")):
+        if os.path.exists(p) and (glob.glob(os.path.join(d, k + "_[0-9]*.png")) or glob.glob(os.path.join(d, k + "_[0-9]*.jpg"))):   # 本番の絵は jpg（pc_frames.py）
             lg = json.load(open(p)); lg["dir"] = d; break
     logs[k] = lg
 t_prev = 0.0
@@ -218,7 +218,7 @@ for k in PARTS:
     lg = logs[k]
     if lg is None:
         missing.append(k); continue
-    fs = sorted(glob.glob(os.path.join(lg["dir"], k + "_[0-9]*.png")))
+    fs = sorted(glob.glob(os.path.join(lg["dir"], k + "_[0-9]*.png")) + glob.glob(os.path.join(lg["dir"], k + "_[0-9]*.jpg")))
     nums = [int(os.path.basename(x)[len(k) + 1:-4]) for x in fs]
     lim = min(lg["t1"], SCEND["S%02d" % BOARD[k]] if k != "gate" else SCEND["S08"])   # 場面の終わり（次の場面の始まり）で切る
     for i, (pth, n) in enumerate(zip(fs, nums)):
