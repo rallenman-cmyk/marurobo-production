@@ -1,0 +1,14 @@
+{
+ "id": "20261115-131639-ep04_v13",
+ "name": "ep04_v13",
+ "kit_branch": "pc-kit/20261115-131639-ep04_v13",
+ "zip": "marurobo_ep04.zip",
+ "ps1": "run_pc_render_ep04.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 4,
+ "workers": 0,
+ "samples": 0,
+ "session": "\ud83e\udd1604\u30ed\u30dc\u3058\u3083\u306a\u3044",
+ "created": "2026-11-15T13:16:39Z"
+}
