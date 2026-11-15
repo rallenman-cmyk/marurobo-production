@@ -48,8 +48,8 @@ def ev_list():
     for i, ch in enumerate("MARUROBO"):
         kl(t2 + 0.4 + i * dt2, e("05-05") + 0.6, [("a_" + ch, ch)], col=ORANGE)
     # 06：上から結果（名前の札・数字。言うときに 1 つずつ）
-    add(s("06-01"), e("07-10") + 0.3, "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
-    add(s("06-01"), e("07-10") + 0.3, "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
+    add(s("06-01"), w("07-04", "クワーティ") - 0.05, "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
+    add(s("06-01"), w("07-04", "クワーティ") - 0.05, "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
     add(w("06-02", "キー28個分"), e("06-04") + 0.4, "tag", dict(text="キー28個分", obj="k_V", dy=110, size=60, bg=YEL))
     add(w("06-03", "キー31個分"), e("06-04") + 0.4, "tag", dict(text="キー31個分", obj="a_V", dy=110, size=60, bg=YEL))
     add(w("06-04", "ほとんど") - 0.1, e("06-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
@@ -196,44 +196,37 @@ def iroha_sprite(k):
 
 
 def bars_sprite(p, t, t0):
-    """棒グラフ（横の棒。名前・長さ・数字。1 本ずつ、言うときに伸びる）"""
-    S2 = 2; Wd, Hd = 900, 90 + 110 * len(p["items"])
-    im = Image.new("RGBA", (Wd * S2, Hd * S2), (0, 0, 0, 0))
-    spr, off = D.card(Wd, Hd)
-    im = spr.copy(); d = ImageDraw.Draw(im); sx = im.width / Wd
-    for i, (col, name, val, ti) in enumerate(p["items"]):
-        if t < ti: continue
-        kk = min(1.0, (t - ti) / 0.6); kk = 1 - (1 - kk) ** 3
-        y = (60 + i * 110) * sx + (im.height - spr.height) / 2
-        D.ctext(d, (150 * sx, y + 32 * sx), name, D.font(int(40 * sx)), NAVY)
-        v = val if val is not None else p["vals"][i]
-        L = (520 * v / p["vmax"]) * kk
-        d.rounded_rectangle([280 * sx, y + 6 * sx, (280 + L) * sx, y + 58 * sx], int(12 * sx), fill=col + (255,))
-        if val is not None and kk > 0.9:
-            D.ctext(d, ((280 + L + 80) * sx, y + 32 * sx), "%s%d" % (p.get("unit", ""), val), D.font(int(40 * sx)), NAVY)
-    return im
+    """棒グラフ（横の棒。名前・長さ・数字。1 本ずつ、言うときに伸びる）。card の draw の中で 2 倍の座標で描く"""
+    n = len(p["items"]); Wd, Hd = 940, 60 + 100 * n
+    def dr(d, W_, H_, ss, img):
+        for i, (col, name, val, ti) in enumerate(p["items"]):
+            if t < ti: continue
+            kk = min(1.0, (t - ti) / 0.6); kk = 1 - (1 - kk) ** 3
+            y = (30 + 100 * i + 50) * ss
+            D.ctext(d, (130 * ss, y), name, D.font(42 * ss), NAVY)
+            v = val if val is not None else p["vals"][i]
+            L = 470 * v / p["vmax"] * kk
+            d.rounded_rectangle([250 * ss, y - 26 * ss, (250 + max(L, 8)) * ss, y + 26 * ss], 12 * ss, fill=col + (255,))
+            if val is not None and kk > 0.9:
+                D.ctext(d, ((250 + L + 105) * ss, y), "%s%d" % (p.get("unit", ""), val), D.font(42 * ss), NAVY)
+    return D.card(Wd, Hd, draw=dr)[0]
 
 
 def morse_sprite(t, p):
     """Z ＝ ・・・　・ と、S ＋ E ＝ ・・・　・（2 段。ほとんど同じ）"""
-    def dots(d, x, y, pat, sx, col):
-        for c in pat:
-            if c == " ": x += 46 * sx; continue
-            d.ellipse([x, y - 13 * sx, x + 26 * sx, y + 13 * sx], fill=col); x += 42 * sx
-        return x
-    spr, off = D.card(760, 300)
-    im = spr.copy(); d = ImageDraw.Draw(im); sx = im.width / (760 + 2 * 0) / 1.0
-    sx = 2
-    ox, oy = (im.width - 760 * sx) / 2, (im.height - 300 * sx) / 2
-    if t >= p["t_z"]:
-        D.ctext(d, (ox + 120 * sx, oy + 90 * sx), "Z", D.font(60 * sx), NAVY)
-        dots(d, ox + 260 * sx, oy + 90 * sx, "... .", sx, NAVY)
-    if t >= p["t_s"]:
-        D.ctext(d, (ox + 120 * sx, oy + 210 * sx), "S E", D.font(56 * sx), D.TEAL_D)
-        x = dots(d, ox + 260 * sx, oy + 210 * sx, "..." if t < p["t_e"] else "... .", sx, D.TEAL_D)
-    if t >= p["t_same"]:
-        d.rounded_rectangle([ox + 240 * sx, oy + 50 * sx, ox + 520 * sx, oy + 250 * sx], int(20 * sx), outline=RED + (255,), width=6 * sx)
-    return im.resize((im.width // 2, im.height // 2), Image.LANCZOS)
+    def dr(d, W_, H_, ss, img):
+        def dots(x, y, pat, col):
+            for c in pat:
+                if c == " ": x += 46 * ss; continue
+                d.ellipse([x, y - 15 * ss, x + 30 * ss, y + 15 * ss], fill=col); x += 48 * ss
+        if t >= p["t_z"]:
+            D.ctext(d, (110 * ss, 90 * ss), "Z", D.font(64 * ss), NAVY); dots(230 * ss, 90 * ss, "... .", NAVY)
+        if t >= p["t_s"]:
+            D.ctext(d, (110 * ss, 210 * ss), "S E", D.font(56 * ss), D.TEAL_D)
+            dots(230 * ss, 210 * ss, "..." if t < p["t_e"] else "... .", D.TEAL_D)
+        if t >= p["t_same"]:
+            d.rounded_rectangle([210 * ss, 40 * ss, 470 * ss, 260 * ss], 20 * ss, outline=RED + (255,), width=6 * ss)
+    return D.card(560, 300, draw=dr)[0]
 
 
 def arrow_img(p0, p1, col):
@@ -251,12 +244,12 @@ def phone_keys():
     if key not in _cache:
         def dr(d, W_, H_, ss, img):
             for r, row in enumerate(("QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM")):
-                x0 = 28 * ss + r * 22 * ss
+                x0 = 30 * ss + r * 28 * ss
                 for c, ch in enumerate(row):
-                    x = x0 + c * 46 * ss; y = 26 * ss + r * 58 * ss
-                    d.rounded_rectangle([x, y, x + 40 * ss, y + 50 * ss], 8 * ss, fill=(233, 238, 245), outline=(180, 190, 205), width=2 * ss)
-                    D.ctext(d, (x + 20 * ss, y + 25 * ss), ch, D.font(30 * ss), BLUE if (r == 0 and c < 6) else NAVY)
-        _cache[key] = D.card(520, 200, draw=dr)[0]
+                    x = x0 + c * 58 * ss; y = 28 * ss + r * 70 * ss
+                    d.rounded_rectangle([x, y, x + 52 * ss, y + 62 * ss], 8 * ss, fill=(233, 238, 245), outline=(180, 190, 205), width=2 * ss)
+                    D.ctext(d, (x + 26 * ss, y + 31 * ss), ch, D.font(40 * ss), BLUE if (r == 0 and c < 6) else NAVY)
+        _cache[key] = D.card(650, 250, draw=dr)[0]
     return _cache[key]
 
 
@@ -297,7 +290,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "iroha":
             _paste(base, iroha_sprite(0.0 if t < w("07-03", "ローマ字") else 1.0), 640, 150, k, a)
         elif kind == "bars":
-            _paste(base, bars_sprite(p, t, t0).resize((900, 90 + 110 * len(p["items"]) + 0), Image.LANCZOS) if False else bars_sprite(p, t, t0), 640, 170 + 55 * (len(p["items"]) - 2), k, a)
+            _paste(base, bars_sprite(p, t, t0), 640, 175, k, a)
         elif kind == "morse":
             _paste(base, morse_sprite(t, p), 640, 230, k, a)
         elif kind == "arrow2":
