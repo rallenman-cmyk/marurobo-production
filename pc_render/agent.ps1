@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "2"
+$VER = "3"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -112,14 +112,79 @@ function Read-Queue {
 }
 
 # ---------------------------------------------------------------- 1 件を描く
-function Wait-OtherBlender {
-  $said = $false
-  while ($true) {
-    $busy = @(Get-CimInstance Win32_Process -Filter "Name='blender.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '\s-b\s' })
-    if ($busy.Count -eq 0) { break }
-    if (-not $said) { Note ("手で始めた描画（Blender {0} 本）が動いています。終わるのを待ちます（止めません）" -f $busy.Count); $said = $true }
-    Start-Sleep -Seconds 120
+function Other-Blender {
+  return @(Get-CimInstance Win32_Process -Filter "Name='blender.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '\s-b\s' }).Count
+}
+# その一式（フォルダ）から動いている手順と Blender を、ぜんぶ止める（できている所は残る。次に走らせると続きから）
+function Kill-Kit([string]$kitdir) {
+  if (-not $kitdir -or $kitdir.Length -lt 12) { return }
+  for ($k = 0; $k -lt 3; $k++) {
+    $ps = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -and $_.CommandLine.ToLower().Contains($kitdir.ToLower()) })
+    if ($ps.Count -eq 0) { break }
+    foreach ($p in $ps) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue }
+    Start-Sleep -Seconds 4
   }
+}
+# 同時に何本描くのが一番速いかを、最初の全部描きのときに 1 回だけ測る（測るのに描いた分は、そのまま本番に使う）
+#   長いカット（1000 コマ以上・まだ手つかず）を 1 つ選び、1 本 → 2 本 → 3 本 → 4 本同時で、100 コマずつ描く速さを比べる
+function Measure-Workers($job, $ps1) {
+  $wf = Join-Path $root "pc_workers.json"
+  if (Test-Path $wf) { return }
+  $txt = Get-Content $ps1.FullName -Raw -Encoding UTF8
+  $mo = [regex]::Match($txt, '\$out = Join-Path \$root "([A-Za-z0-9_.-]+)"')
+  $cuts = [regex]::Matches($txt, '@\("([A-Za-z0-9_]+)",\s*(\d+),')
+  if (-not $mo.Success -or $cuts.Count -eq 0) { return }
+  $done = Join-Path $root ($mo.Groups[1].Value + "\_done")
+  $cut = ""; $best = 0
+  foreach ($c in $cuts) {
+    $nm = $c.Groups[1].Value; $fr = [int]$c.Groups[2].Value
+    if ($fr -lt 1000 -or $fr -le $best) { continue }
+    if (@(Get-ChildItem $done -Filter ($nm + "_*.ok") -ErrorAction SilentlyContinue).Count -gt 0) { continue }
+    $cut = $nm; $best = $fr
+  }
+  if (-not $cut) { Note "同時本数は、まだ測れません（長い手つかずのカットが無い）。既定の本数で描きます"; return }
+  $kitdir = Split-Path -Parent (Split-Path -Parent $ps1.FullName)
+  Note ("同時に何本が一番速いかを測ります（カット {0} で 1〜4 本。描いた分はそのまま使います）" -f $cut)
+  $rate = [ordered]@{}; $limit = 5400
+  foreach ($w in 1, 2, 3, 4) {
+    $before = @(Get-ChildItem $done -Filter ($cut + "_*.ok") -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })
+    $al = '-NoProfile -ExecutionPolicy Bypass -File "{0}" -Only {1} -Workers {2}' -f $ps1.FullName, $cut, $w
+    if ($job.samples) { $al += " -Samples {0}" -f [int]$job.samples }
+    $t0 = Get-Date
+    $pr = Start-Process -FilePath "powershell.exe" -ArgumentList $al -WindowStyle Minimized -PassThru
+    $new = @()
+    while (((Get-Date) - $t0).TotalSeconds -lt $limit) {
+      Start-Sleep -Seconds 5
+      $new = @(Get-ChildItem $done -Filter ($cut + "_*.ok") -ErrorAction SilentlyContinue | Where-Object { $before -notcontains $_.Name } | Sort-Object LastWriteTime)
+      if ($new.Count -ge $w) { break }
+      if ($pr.HasExited) { break }
+    }
+    Start-Sleep -Seconds 15          # できた mp4 をドライブへコピーし終えるのを待ってから止める
+    Kill-Kit $kitdir
+    Start-Sleep -Seconds 8
+    if ($new.Count -ge $w) {
+      # k 番目の描き手は 20 秒ずつ遅れて始まる。1 本あたりの時間の平均から、1 分あたりに描ける本数を出す
+      $sum = 0.0
+      for ($k = 0; $k -lt $w; $k++) { $sum += [Math]::Max(30.0, ($new[$k].LastWriteTime - $t0).TotalSeconds - 20.0 * $k) }
+      $mean = $sum / $w
+      $rate["$w"] = [Math]::Round($w * 60.0 / $mean, 3)
+      Note ("  {0} 本同時：1 本（100 コマ）に平均 {1} 秒 → 1 分に {2} 本" -f $w, [int]$mean, $rate["$w"])
+      if ($w -eq 1) { $limit = [Math]::Max(1200, [int]($mean * 4)) }
+    } else {
+      $rate["$w"] = 0
+      Note ("  {0} 本同時：描ききれませんでした（遅すぎるか、グラフィックボードのメモリ不足）" -f $w)
+    }
+  }
+  $bw = 0; $br = 0.0
+  foreach ($w in 1, 2, 3, 4) { if ([double]$rate["$w"] -gt $br * 1.03) { $bw = $w; $br = [double]$rate["$w"] } }
+  if ($bw -eq 0) { Note "同時本数を測れませんでした。既定の本数で描きます"; return }
+  Write-Json $wf ([ordered]@{ workers = $bw; rate = $rate; cut = $cut; job = $job.id; at = (Get-Date).ToString("s") })
+  Copy-Item $wf (Join-Path $stat "pc_workers.json") -Force -ErrorAction SilentlyContinue
+  Note ("同時本数は {0} 本に決めました（これからの描画に使います）" -f $bw)
+  Status-Push ("同時本数：{0}" -f $bw)
+}
+function Best-Workers {
+  try { $j = Get-Content (Join-Path $root "pc_workers.json") -Raw -Encoding UTF8 -ErrorAction Stop | ConvertFrom-Json; return [int]$j.workers } catch { return 0 }
 }
 function Get-Kit($job) {
   # 一式（zip）は、GitHub の枝 pc-kit/<名前> に 1 つだけ入っている。取ってきて C:\marurobo に広げる
@@ -142,12 +207,20 @@ function Run-Job($job) {
     $ps1 = Get-ChildItem $root -Recurse -Depth 3 -Filter $job.ps1 -File -ErrorAction SilentlyContinue | Where-Object { $_.FullName -notlike "$repo\*" } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if (-not $ps1) { $err = ("手順 {0} が一式の中に見つかりません" -f $job.ps1) }
   }
+  $preempt = $false
   if ($err) { Note $err; [void]$tail.Add($err) }
   else {
-    for ($try = 1; $try -le 2 -and $state -ne "done"; $try++) {
+    $kitdir = Split-Path -Parent (Split-Path -Parent $ps1.FullName)
+    if ($job.kind -ne "fix" -and -not $job.workers) {
+      try { Measure-Workers $job $ps1 } catch { Note ("同時本数を測る途中で止まりました（{0}）。既定の本数で描きます" -f $_.Exception.Message); Kill-Kit $kitdir }
+    }
+    $lastCheck = Get-Date
+    for ($try = 1; $try -le 2 -and $state -ne "done" -and -not $preempt; $try++) {
       $a = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $ps1.FullName)
       if ($job.only) { $a += @("-Only", "$($job.only)") }
-      if ($job.workers) { $a += @("-Workers", "$([int]$job.workers)") }
+      $w = 0
+      if ($job.workers) { $w = [int]$job.workers } else { $w = Best-Workers }
+      if ($w -gt 0) { $a += @("-Workers", "$w") }
       if ($job.samples) { $a += @("-Samples", "$([int]$job.samples)") }
       Note ("描きます：{0}（{1} 回目）" -f $job.id, $try)
       & powershell.exe @a 2>&1 | ForEach-Object {
@@ -156,9 +229,24 @@ function Run-Job($job) {
         [void]$tail.Add($line)
         if ($tail.Count -gt 40) { $tail.RemoveAt(0) }
         if ($line -match "ぜんぶ終わりました") { $state = "done" }
+        # 全部描きの途中に短い直しが来たら、いったん止めて直しを先に描く（できている所は残り、あとで続きから）
+        if ($job.kind -ne "fix" -and -not $preempt -and ((Get-Date) - $lastCheck).TotalSeconds -ge 180) {
+          $lastCheck = Get-Date
+          try {
+            if (Pull-Repo) {
+              $q2 = Read-Queue
+              if ($q2.Count -gt 0 -and $q2[0].kind -eq "fix") {
+                $preempt = $true
+                Note ("短い直し（{0}）が来たので、{1} をいったん止めて、直しを先に描きます" -f $q2[0].id, $job.id)
+                Kill-Kit $kitdir
+              }
+            }
+          } catch { }
+        }
       }
     }
   }
+  if ($preempt) { Start-Sleep -Seconds 5; return }
   $min = [int]((Get-Date) - $t0).TotalMinutes
   Write-Json (Join-Path $stat ("done\{0}.json" -f $job.id)) ([ordered]@{ id = $job.id; state = $state; finished = (Get-Date).ToString("s"); minutes = $min; tail = @($tail | Select-Object -Last 12) })
   if ($state -eq "done") { Note ("終わりました：{0}（{1} 分）" -f $job.id, $min) }
@@ -171,6 +259,7 @@ Note "描画係をはじめます（この窓は置いたままにしてくだ�
 $me = (Get-FileHash $PSCommandPath -Algorithm SHA256).Hash
 $lastBeat = Get-Date "2000-01-01"
 $badHash = ""
+$waitSaid = $false
 while ($true) {
   if ((Status-Ready) -and (Pull-Repo)) {
     $newHash = (Get-FileHash (Join-Path $repo "pc_render\agent.ps1") -Algorithm SHA256).Hash
@@ -195,7 +284,13 @@ while ($true) {
     if ($q.Count -gt 0) {
       $job = $q[0]
       $rest = @($q | Select-Object -Skip 1 | ForEach-Object { $_.id })
-      Wait-OtherBlender
+      $ob = Other-Blender
+      if ($ob -gt 0) {
+        if (-not $waitSaid) { Note ("手で始めた描画（Blender {0} 本）が動いています。終わるのを待ちます（止めません）" -f $ob); Heartbeat "手で始めた描画が終わるのを待っています" $null @($q | ForEach-Object { $_.id }); $waitSaid = $true }
+        Start-Sleep -Seconds $Every
+        continue
+      }
+      $waitSaid = $false
       Heartbeat "描いています" $job $rest
       Run-Job $job
       $lastBeat = Get-Date "2000-01-01"
