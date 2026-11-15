@@ -491,7 +491,7 @@ def senpai_serve(loc=(0, 0), face=0.0, s=SV_S):
     cube(white, (0, 0.13, 1.12), (0.2, 0.1, 0.16), bevel=0.03, parent=root)
     head = empty((0, 0.04, 1.3)); head.parent = root
     cube(white, (0, 0, 0), (0.42, 0.22, 0.3), bevel=0.08, parent=head)
-    scr = cube(mat("sv_screen", "#14202C", rough=0.1, coat=1.0, emit=0.15), (0, -0.103, 0), (0.34, 0.02, 0.22), bevel=0.04, parent=head)
+    scr = cube(mat("sv_screen", "#14202C", rough=0.75, emit=0.15), (0, -0.103, 0), (0.34, 0.02, 0.22), bevel=0.04, parent=head)
     # 高い所のカメラ（頭の下）
     e_ = empty((0, -0.09, -0.17)); e_.parent = head; e_.rotation_euler = (R(-25), 0, 0)
     cyl(mat("sv_camrim", "#2E3338", rough=0.3, metal=0.4), (0, 0, 0), 0.022, 0.02, rot=(R(90), 0, 0), parent=e_)
@@ -574,14 +574,14 @@ def hamburg(parent=None, loc=(0, 0, 0)):
     return e
 
 
-def light_plane(parent, r=1.6, col=TEAL, a=0.12):
+def light_plane(parent, r=1.6, col=TEAL, a=0.26):   # v2：濃く（v1 6:01「薄い」）
     """回る光が見ている高さ（水平に広がる、うすい光の板）"""
-    m = mat("lplane", col, rough=0.5, emit=0.35, alpha=a)
+    m = mat("lplane", col, rough=0.5, emit=0.9, alpha=a)
     o = cyl(m, (0, 0, 0), r, 0.004, parent=parent, verts=64); o.visible_shadow = False
     return o, m
 
 
-def cam_fan(parent, near=0.05, far=1.2, a_lo=-40, a_hi=55, half_w=35, col="#FFE27A", alpha=0.16):
+def cam_fan(parent, near=0.05, far=1.2, a_lo=-40, a_hi=55, half_w=35, col="#FF4FA0", alpha=0.22):   # v2：光の板（青緑）とはっきり違う桃色で、濃く（v1 6:01）
     """前のカメラが見ている範囲（上下に広がる扇）。前＝-y。角度は水平から上を + の度"""
     me = bpy.data.meshes.new("fan"); bm = bmesh.new()
     vs = []
@@ -601,5 +601,5 @@ def cam_fan(parent, near=0.05, far=1.2, a_lo=-40, a_hi=55, half_w=35, col="#FFE2
         bm.faces.new((o, vs[0][j + 1], vs[0][j])); bm.faces.new((o, vs[8][j], vs[8][j + 1]))
     bm.to_mesh(me); bm.free()
     ob = bpy.data.objects.new("fan", me); bpy.context.collection.objects.link(ob); ob.parent = parent
-    m = mat("fanm", col, rough=0.5, emit=1.0, alpha=alpha); ob.data.materials.append(m); ob.visible_shadow = False
+    m = mat("fanm", col, rough=0.5, emit=1.6, alpha=alpha); ob.data.materials.append(m); ob.visible_shadow = False
     return ob, m

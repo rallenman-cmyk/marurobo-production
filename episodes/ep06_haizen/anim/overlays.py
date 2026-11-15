@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "..", "ep04_robot", "look"))
 import design as D
 import timing as T
 s, e, w = T.s, T.e, T.w
-TEAL = (33, 193, 179); YEL = (255, 210, 74); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48); ORANGE = (255, 154, 60)
+TEAL = (33, 193, 179); YEL = (255, 210, 74); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48); ORANGE = (255, 154, 60); PINK = (255, 79, 160)
 SUB_TOP = 560
 
 
@@ -19,7 +19,7 @@ def ev_list():
     E = []
     add = lambda *a: E.append(a)
     # 03：にらめっこ（どいていいのか分からない）
-    add(w("03-02", "どいて") - 0.2, e("03-02") + 0.3, "bubble", dict(obj="maru", icon="?", side=-1))
+    add(w("03-02", "どうして") - 0.2, e("03-02") + 0.3, "bubble", dict(obj="maru", icon="?", side=-1))
     # 04：問い → 題名（2 秒）
     add(w("04-03", "どうして") - 0.2, e("04-04") + 0.2, "bubble", dict(obj="maru", icon="?", side=-1))
     add(e("04-05") + 0.3, s("05-01") - 0.3, "title", {})
@@ -32,10 +32,10 @@ def ev_list():
     add(w("07-02", "2022年"), e("07-02") + 0.4, "tag", dict(text="2022年の1年間", pos=(640, 100), size=48))
     add(w("07-02", "約3,000台"), e("07-02") + 0.6, "tag", dict(text="約3,000台", pos=(640, 190), size=64, bg=YEL))
     # 08：席の番号
-    add(w("08-03", "12番"), e("08-04") + 0.2, "tag", dict(text="12番", obj="head", dy=-120, size=60, bg=YEL))
+    add(w("08-03", "12番"), s("08-04") + 0.4, "tag", dict(text="12番", obj="head", dy=-120, size=60, bg=YEL))   # v2：走り出したら消す（v1 2:16）
     # 09〜10：席の点・道・自分はどこ？
     add(w("09-03", "白い丸") + 0.3, e("09-04") + 0.3, "tag", dict(text="席の点", pos=(1080, 90)))
-    add(w("09-04", "ここで"), e("10-03") + 0.3, "tag", dict(text="12番", obj="seat12", dy=-70, size=56, bg=YEL))
+    add(w("09-04", "ここで"), s("10-03"), "tag", dict(text="12番", obj="seat12", dy=-70, size=56, bg=YEL))
     add(w("10-05", "自分が"), e("10-05") + 0.3, "bubble", dict(obj="senpai", icon="?", side=1, gap=30))
     # 11：天井の目印
     add(w("11-02", "目印"), e("11-04") + 0.3, "tag", dict(text="目印のシール", pos=(640, 90)))
@@ -57,13 +57,17 @@ def ev_list():
     # 19：出っぱったテーブルのはし
     add(w("19-01", "テーブルのはし"), e("19-02") + 0.3, "ring2d", dict(obj="edgept", r=40))
     add(w("19-04", "どこで") - 0.2, e("19-04") + 0.2, "bubble", dict(obj="maru", icon="?", side=1))
-    # 20：前のカメラ 3 つ
+    # 20：前のカメラ 3 つ。v2：「このカメラ」で、おなかの前の 2 つに丸と札（どれのことか分かるように。v1 5:51）。「3つ」で頭の下にも丸
+    add(w("20-01", "このカメラ"), e("20-02") + 0.3, "ring2d", dict(obj="lens", r=30))
+    add(w("20-01", "このカメラ"), e("20-02") + 0.3, "ring2d", dict(obj="lens1", r=30))
+    add(w("20-01", "このカメラ"), w("20-02", "3つ"), "tag", dict(text="前のカメラ", obj="lens", dx=40, dy=-90))
+    add(w("20-02", "3つ"), e("20-02") + 0.3, "ring2d", dict(obj="lens2", r=30))
     add(w("20-02", "3つ"), e("20-03") + 0.3, "tag", dict(text="前のカメラ 3つ", pos=(1040, 90), size=52))
-    add(w("20-04", "回る光"), e("20-05") + 0.2, "legend", dict(items=[(TEAL, "回る光：遠くまで"), ((255, 226, 122), "前のカメラ：目の前")], t1=w("20-04", "前のカメラ")))
+    add(w("20-04", "回る光"), e("20-05") + 0.2, "legend", dict(items=[(TEAL, "回る光：遠くまで"), (PINK, "前のカメラ：目の前")], t1=w("20-04", "前のカメラ")))
     # 21：子ども
     add(s("21-01") + 0.3, s("21-01") + 1.6, "bubble", dict(obj="maru", icon="!", side=-1))
     # 22：人が運ぶと……（小窓の絵）・速さの変え方（絵）
-    add(w("22-01b", "人が"), e("22-01b") + 0.3, "spill", {})
+    add(w("22-01b", "人が"), e("22-01b") + 0.3, "pip_clip", dict(clip="S22p", src_t=w("22-01b", "人が"), big=True))   # v2：3D の小窓に
     add(w("22-02", "なめらかに"), e("22-03") + 0.3, "speed", dict(t1=e("22-02")))
     # 24：通路のはば
     add(s("24-01"), e("24-03") + 0.3, "darrow", dict(a="gapL", b="gapR", text="70cm", track_clip="S24a", t_text=w("24-01", "70cm")))
@@ -71,9 +75,12 @@ def ev_list():
     add(s("23-03") + 0.3, e("23-03") + 0.6, "bubble", dict(obj="maru", icon="?", side=-1, track_clip="S23b"))
     # 28：怒った
     add(w("28-03", "怒った") + 0.1, e("28-03") + 0.6, "bubble", dict(obj="maru", icon="!", side=1, track_clip="S28a"))
-    # 29：まとめ（言い始めてから、1 つずつ）
+    # 29：まとめ。v2：問いと答えが分かるように、問いの札（黄色）の下に答えの札を並べる（v1 8:43・9:00「何が問いで何が答えか」「まとめ方分かりにくい」）
+    add(w("29-01", "一つ目"), e("29-07") + 0.5, "tag", dict(text="問い①　どの席か分かる？", pos=(640, 70), size=48, bg=YEL))
+    add(w("29-04", "二つ目"), e("29-07") + 0.5, "tag", dict(text="問い②　なぜぶつからない？", pos=(640, 250), size=48, bg=YEL))
     for txt, at, row in (("席の点", w("29-02", "席ごとの"), 0), ("天井の目印", w("29-03", "天井の目印"), 0), ("まわりの形", w("29-03", "まわりの形"), 0),
-                         ("回る光", w("29-05", "回る光"), 1), ("前のカメラ", w("29-05", "前のカメラ"), 1), ("顔", w("29-07", "顔が"), 2)):
+                         ("回る光", w("29-05", "回る光"), 1), ("前のカメラ", w("29-05", "前のカメラ"), 1), ("近づくと止まる", w("29-06", "止まって"), 1),
+                         ("顔", w("29-07", "顔が"), 2)):
         add(at, e("29-07") + 0.5, "sumtag", dict(text=txt, row=row, t_all=at))
     # 30：オチ
     add(w("30-04", "デザート") - 0.2, e("30-04") + 1.2, "bubble", dict(obj="maru", icon="!", side=-1, gap=30))
@@ -171,7 +178,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             else:
                 q = where(p["obj"], t, p.get("track_clip"))
                 if q is None: continue
-                cx, cy = q[0], max(70, q[1] + p.get("dy", -120)); cy = min(cy, SUB_TOP - 60)
+                cx, cy = q[0] + p.get("dx", 0), max(70, q[1] + p.get("dy", -120)); cy = min(cy, SUB_TOP - 60)
                 tail = (0, 46) if q[1] - cy > 60 else None      # v3：しっぽは決まった三角（物との距離で大きさが変わらない。5本目 v2「バンパー」）
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), tail=tail)
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
@@ -199,14 +206,14 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "sumtag":     # まとめの札（3 段に並べる）
             row = p["row"]; same = [x for x in EVENTS if x[2] == "sumtag" and x[3]["row"] == row]
             i = [x[3]["text"] for x in same].index(p["text"])
-            spr, off = tag_sprite(p["text"], 46, YEL if row == 2 else WHITE)
+            spr, off = tag_sprite(p["text"], 46, WHITE)
             widths = [tag_sprite(x[3]["text"], 46)[0].width for x in same]; tot = sum(widths) + 24 * (len(same) - 1)
             x_ = 640 - tot / 2 + sum(widths[:i]) + 24 * i + spr.width / 2
-            _paste(base, spr, x_, 80 + row * 92, k, a)
+            _paste(base, spr, x_, (150, 330, 420)[row], k, a)
         elif kind == "spill":      # 人がおぼんで運んで、急に止まると……スープがはねる（字なしの絵）
             _paste(base, spill_sprite(min(1.0, (t - t0) / 1.6)), 250, 170, k, a)
         elif kind == "speed":      # 速さの変え方：ぐっと（点線）と、なめらか（青緑）
-            _paste(base, speed_sprite(min(1.0, (t - t0) / 1.4)), 1010, 180, k, a)
+            _paste(base, speed_sprite(min(1.0, (t - t0) / 1.4)), 960, 280, k, a)
         elif kind == "ring2d":
             q = where(p["obj"], t, p.get("track_clip"))
             if q is None: continue
@@ -311,22 +318,36 @@ def spill_sprite(k):
 
 
 def speed_sprite(k):
-    """速さの変え方：横＝時間・縦＝速さ。点線＝ぐっと止まる、青緑＝なめらかに止まる（字は使わない）"""
+    """止まるときの速さ（v2：何のグラフか分かるように、題・軸・線の名前を入れた。v1 6:51「何のグラフかわかるように、大事なところ」）
+       横＝時間・縦＝速さ。灰色の点線＝ぐっと止まる、青緑＝先輩（なめらかに止まる）"""
     st = round(min(1.0, k) * 10) / 10
     key = ("speed", st)
     if key in _cache: return _cache[key]
     def dr(d, W_, H_, ss, img):
-        x0, y0, x1, y1 = 50 * ss, H_ - 50 * ss, W_ - 40 * ss, 50 * ss
+        f_t = D.font(44 * ss); f_a = D.font(36 * ss); f_l = D.font(36 * ss)
+        D.ctext(d, (W_ / 2, 40 * ss), "止まるときの速さ", f_t, NAVY)
+        # 線の名前（題の下に 1 列で）
+        ly = 100 * ss; gx = 60 * ss
+        for i in range(0, 4): d.line([gx + i * 16 * ss, ly, gx + i * 16 * ss + 9 * ss, ly], fill=(150, 160, 170), width=6 * ss)
+        d.text((gx + 70 * ss, ly), "ぐっと止まる", font=f_l, fill=(110, 120, 130), anchor="lm")
+        ly2 = ly + 48 * ss
+        d.line([gx, ly2, gx + 56 * ss, ly2], fill=TEAL, width=9 * ss)
+        d.text((gx + 70 * ss, ly2), "先輩（なめらか）", font=f_l, fill=(20, 150, 138), anchor="lm")
+        x0, y0, x1, y1 = 120 * ss, H_ - 80 * ss, W_ - 40 * ss, 190 * ss
         d.line([x0, y0, x1, y0], fill=NAVY, width=4 * ss); d.line([x0, y0, x0, y1], fill=NAVY, width=4 * ss)
-        top = y1 + 30 * ss; mid = x0 + (x1 - x0) * 0.45
-        # ぐっと（点線）：高いまま → いきなり 0
-        for i in range(0, 20):
-            if i % 2: continue
+        d.polygon([(x1 + 4 * ss, y0), (x1 - 14 * ss, y0 - 9 * ss), (x1 - 14 * ss, y0 + 9 * ss)], fill=NAVY)
+        d.polygon([(x0, y1 - 4 * ss), (x0 - 9 * ss, y1 + 14 * ss), (x0 + 9 * ss, y1 + 14 * ss)], fill=NAVY)
+        D.ctext(d, (x0 - 55 * ss, (y0 + y1) / 2), "速さ", f_a, NAVY)
+        D.ctext(d, (x1 - 50 * ss, y0 + 38 * ss), "時間", f_a, NAVY)
+        top = y1 + 30 * ss; mid = x0 + (x1 - x0) * 0.32
+        # ぐっと（灰色の点線）：高いまま → いきなり 0（なめらかな線より少し上に描いて、重ならないように）
+        topg = top - 12 * ss
+        for i in range(0, 20, 2):
             xa = x0 + (mid - x0) * i / 20; xb = x0 + (mid - x0) * (i + 1) / 20
-            d.line([xa, top, xb, top], fill=(150, 160, 170), width=5 * ss)
+            d.line([xa, topg, xb, topg], fill=(150, 160, 170), width=6 * ss)
         for i in range(0, 10, 2):
-            ya = top + (y0 - top) * i / 10; yb = top + (y0 - top) * (i + 1) / 10
-            d.line([mid, ya, mid, yb], fill=(150, 160, 170), width=5 * ss)
+            ya = topg + (y0 - topg) * i / 10; yb = topg + (y0 - topg) * (i + 1) / 10
+            d.line([mid, ya, mid, yb], fill=(150, 160, 170), width=6 * ss)
         # なめらか（青緑）：少しずつ 0 へ
         pts = []
         n = int(40 * st) + 1
@@ -336,8 +357,8 @@ def speed_sprite(k):
             else:
                 q = min(1.0, (u - 0.3) / 0.6); v = 1 - q * q * (3 - 2 * q)
             pts.append((x, top + (y0 - top) * (1 - v)))
-        if len(pts) > 1: d.line(pts, fill=TEAL, width=8 * ss, joint="curve")
-    spr, off = D.card(440, 280, draw=dr)
+        if len(pts) > 1: d.line(pts, fill=TEAL, width=9 * ss, joint="curve")
+    spr, off = D.card(480, 420, draw=dr)
     _cache[key] = spr
     return spr
 

@@ -26,6 +26,8 @@ def make(kind, sr=48000):
     if kind == "grr":
         a = _t(300, 260, 0.12, sr, d=0.05)
         return 0.3 * np.concatenate([a, np.zeros(int(0.05 * sr)), a])
+    if kind == "splash":    # スープがはねる（ピチャッ）。v2
+        return 0.3 * _mx(_n(0.12, sr, 700, 5000, a=0.002, d=0.08), 0.5 * _n(0.05, sr, 2500, 9000, a=0.001, d=0.03))
     if kind == "rise":
         return 0.22 * _t(500, 1100, 0.6, sr, a=0.05, d=0.3)
     return S5.make(kind, sr)
