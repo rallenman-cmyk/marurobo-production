@@ -108,12 +108,14 @@ def pill(text, size=46, fg=NAVY, bg=WHITE, accent=None, tail=None, pad=(30, 16),
         tx, ty = tx * k, ty * k
         L = h * 0.6; half = h * 0.22
         sy = 1 if ty >= 0 else -1                         # いつも上か下の辺から（横の相手には端から斜めに）
-        bx = min(max(cx + tx, ext + r * 1.15), ext + w - r * 1.15)
-        by = cy + sy * (h / 2 - 5 * SS)
+        bx = min(max(cx + tx, ext + r), ext + w - r)
+        ey = cy + sy * h / 2                              # 辺の上の点
         dx, dy = cx + tx - bx, abs(ty) - h / 2
         ang = math.atan2(dx, max(dy, 1)); ang = max(-0.85, min(0.85, ang))
-        tip = (bx + math.sin(ang) * L, by + sy * math.cos(ang) * L)
-        dm.polygon(tri_poly((bx, by), half, tip), fill=255)
+        tip = (bx + math.sin(ang) * L, ey + sy * math.cos(ang) * L)
+        # 底は辺と平行に、札の内側へ沈める（v12「底辺が吹き出しより出てる」）
+        iy = cy + sy * (h / 2 - h * 0.2)
+        dm.polygon([(bx - half, iy), tip, (bx + half, iy)], fill=255)
     img = Image.new("RGBA", (W_, H_), bg + (0,)); img.putalpha(m)
     fill = Image.new("RGBA", (W_, H_), bg + (255,)); img = Image.composite(fill, img, m)
     d = ImageDraw.Draw(img)
@@ -143,7 +145,12 @@ def bubble(w, h, tail, draw=None, bg=WHITE, r=34, notail=False):
         bx = cx + (W_ / 2 - 8 * SS) * (1 if tail[0] > 0 else -1)
         by = min(max(cy + tail[1] * SS * 0.45, ext + r * SS * 1.2), ext + H_ - r * SS * 1.2)
     tip = short_tip((bx, by), tip, min(W_, H_) * 0.32)
-    if not notail: dm.polygon(tri_poly((bx, by), min(W_, H_) * 0.13, tip), fill=255)
+    hw = min(W_, H_) * 0.13; ins = min(W_, H_) * 0.12
+    if abs(tail[1]) * w >= abs(tail[0]) * h:          # 上か下の辺：底は横向き、内側へ沈める
+        sg = 1 if tail[1] > 0 else -1; base = [(bx - hw, by - sg * ins), (bx + hw, by - sg * ins)]
+    else:                                              # 左か右の辺：底は縦向き
+        sg = 1 if tail[0] > 0 else -1; base = [(bx - sg * ins, by - hw), (bx - sg * ins, by + hw)]
+    if not notail: dm.polygon([base[0], tip, base[1]], fill=255)
     img = Image.composite(Image.new("RGBA", m.size, bg + (255,)), Image.new("RGBA", m.size, bg + (0,)), m)
     if draw: draw(ImageDraw.Draw(img), cx, cy, SS, img)
     spr, p = finish(img, m, blur=16, alpha=65, dy=8)
