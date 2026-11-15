@@ -128,7 +128,8 @@ for c in CL + LCL:
         if c not in LCL and lclip_at(t_): continue           # 図の場面の時刻は、その場面の音だけ
         x = sfx.make(kind, SR)
         if x is None: nos.add(kind); continue
-        if kind in ("click", "pop_ui", "pi") and talking(t_, len(x) / SR):
+        # 小さな音（g<0.3）は続けて鳴る拍子（考え中の点・時計）なので、ずらさない。ずらすと何個も同じ所に集まって大きく鳴る
+        if kind in ("click", "pop_ui", "pi") and g >= 0.3 and talking(t_, len(x) / SR):
             # 大事な音が声と重なるときは、前後 0.5 秒以内のいちばん近い声のすき間へずらす（ずらせなければ報告）
             for sh in sorted((k_ * 0.02 for k_ in range(-25, 26)), key=abs):
                 if t_ + sh >= 0 and not talking(t_ + sh, len(x) / SR):
