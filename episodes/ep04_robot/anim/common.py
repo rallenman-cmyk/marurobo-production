@@ -153,6 +153,34 @@ def render(name, t0, t1, outdir, samples, res, step, fr=None):
             track[nm].append([round(p.x * 1280), round((1 - p.y) * 720)])
     json.dump(dict(t0=t0, t1=t1, fps=FPS, frames=n, steps=STEPS, events=EVENTS, track=track), open(os.path.join(outdir, name + "_log.json"), "w"))
     if TRACK_ONLY: return
+    # ---- PC の本番描画（2026-11-15。3本目・5本目の pc_out.py と同じ設定）
+    #   --frames A B：その範囲だけ ／ --gpu：グラフィックボード ／ --fast：光の跳ね返りを減らす ／ --video：mp4（<名前>_<A>-<B>.mp4）
+    _A = globals().get("ARGS", [])
+    if "--frames" in _A:
+        _i = _A.index("--frames"); a, b = int(_A[_i + 1]), min(int(_A[_i + 2]), n - 1)
+    if "--gpu" in _A:
+        _pr = bpy.context.preferences.addons["cycles"].preferences; _got = None
+        for _t in ("OPTIX", "CUDA", "HIP", "ONEAPI"):
+            try:
+                _pr.compute_device_type = _t; _pr.get_devices()
+                if [d for d in _pr.devices if d.type == _t]:
+                    for d in _pr.devices: d.use = (d.type == _t)
+                    _got = _t; break
+            except Exception:
+                pass
+        if _got:
+            sc.cycles.device = "GPU"
+            if _got == "OPTIX": sc.cycles.denoiser = "OPTIX"
+        print("DEVICE", _got or "CPU")
+    if "--fast" in _A:
+        sc.cycles.max_bounces = 3; sc.cycles.diffuse_bounces = 1; sc.cycles.glossy_bounces = 1
+    if "--video" in _A:
+        sc.render.image_settings.file_format = "FFMPEG"; sc.render.ffmpeg.format = "MPEG4"; sc.render.ffmpeg.codec = "H264"
+        sc.render.ffmpeg.constant_rate_factor = "HIGH"; sc.render.ffmpeg.ffmpeg_preset = "GOOD"; sc.render.ffmpeg.audio_codec = "NONE"
+        sc.frame_start, sc.frame_end, sc.frame_step = a, b, 1
+        sc.render.filepath = os.path.join(outdir, name + "_")
+        bpy.ops.render.render(animation=True)
+        return
     for k in range(a, b + 1, step):
         fp = os.path.join(outdir, "%s_%04d.png" % (name, k))
         if os.environ.get("RESUME") and os.path.exists(fp): continue   # 止まった続きから描く（RESUME=1）
