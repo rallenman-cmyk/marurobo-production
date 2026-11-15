@@ -33,6 +33,15 @@ IROHA = "irohanihoheto chirinuruwo wakayotareso tsunenaramu uwinookuyama kefukoe
 KANA = "いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす"
 
 
+_M_ = [None]
+
+
+class MaruR(Maru):
+    """まるロボ（最後に作ったものを覚えておく。カット割りのカメラで追うため）"""
+    def __init__(self, *a, **k):
+        Maru.__init__(self, *a, **k); _M_[0] = self
+
+
 def cam(loc, target, lens=35, t0=None, t1=None, loc1=None, target1=None, lens1=None):
     c, tg = cam_rig(loc, target, lens)
     if t0 is not None:
@@ -64,7 +73,7 @@ def b_desk(cl):
     key(D.root, "location", s("23-02") + 1.4, (0, 0, KEY_TOP))
     if s("23-02") > s("04-03"):
         key(A.root, "location", s("08-01"), (0, 0, KEY_TOP)); key(A.root, "location", s("08-01") + 0.1, (6.0, 0, KEY_TOP))
-    M = Maru(Q.pos("A", 0.075), face=0.0); track("maru", M.body, 0.1); track("maru_top", M.body, 0.25)
+    M = MaruR(Q.pos("A", 0.075), face=0.0); track("maru", M.body, 0.1); track("maru_top", M.body, 0.25)
     P = lambda B, ch: B.pos(ch, 0.075)
     # 01：A を打つ
     M.at(-100.0, loc=P(Q, "A"), face=0.0)
@@ -162,7 +171,7 @@ def b_end(cl):
     k = KEY; x0 = -1.2; y0 = -1.0
     L = Board([KANA], (x0, y0), name="kl", key_col="#F6F1E4", offs=(0.0,), extra_rows=False)
     for i, ch in enumerate(KANA[:12]): track("l_%d" % i, L.keys[ch], 0.06)
-    M = Maru(L.pos("い", 0.075), face=0.0); track("maru", M.body, 0.1)
+    M = MaruR(L.pos("い", 0.075), face=0.0); track("maru", M.body, 0.1)
     # キーがくるくる入れかわる（28-01〜28-02）：クワーティのキーが浮いて回る
     for i, (ch, o) in enumerate(list(Q.keys.items())[:18]):
         t_ = s("28-02") + 0.05 * i
@@ -203,7 +212,7 @@ def b_shop(cl, night=False):
     for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZ": track("p_" + ch, pk[ch], 0.05)
     mtw, mk = modern_typewriter((0.0, 0.4, 0.94), layout=["QWE.TY", "ASDFG", "ZXCV"])
     for ch, o in mk.items(): track("m_" + ("dot" if ch == "." else ch), o, 0.04)
-    M = Maru((-1.9, -0.6, 0.94), face=0.0, s=0.2); track("maru", M.body, 0.1)
+    M = MaruR((-1.9, -0.6, 0.94), face=0.0, s=0.2); track("maru", M.body, 0.1)
     # 作業台の手前の床から机の上へ（08：歩いて入る → 机の上に跳び乗る）
     sh = walker((1.2, 1.5, 0), face=180, shirt="#5A4632", pants="#3A2E24", hair="#5A4A3A")   # ショールズさんたち（顔は描かない）
     sh2 = walker((2.2, 1.6, 0), face=200, shirt="#3E4A5A", pants="#2D3640", hair="#2B2220")
@@ -289,7 +298,7 @@ def b_inside(cl):
     spot((0.0, -1.5, 2.6), (0, 0.6, 0.3), energy=3200, angle=60, col="#FFE3BC")
     area((-2.0, 1.5, 2.0), (0, 0.6, 0.3), energy=600, size=3, col="#9FB3E0")
     area((1.8, -1.8, 2.2), (0, 0.2, 0.3), energy=700, size=3, col="#FFF1D6")
-    M = Maru((0.0, -0.9, 0.0), face=0.0, s=0.26); track("maru", M.body, 0.1)
+    M = MaruR((0.0, -0.9, 0.0), face=0.0, s=0.26); track("maru", M.body, 0.1)
     # 12：中へ入る → 棒が跳ね上がる
     M.at(-100.0, loc=(-1.5, -2.2, 0.0), face=-30)
     M.walk(s("12-01") + 0.6, s("12-02"), (0.0, -0.9, 0.0))
@@ -338,7 +347,7 @@ def b_tel(cl):
     for ch in "ZSE": track("t_" + ch, tk[ch], 0.04)
     op = typist((0.6, -0.15, 0), 0, shirt="#6D5A44", hair="#3A2E24"); track("op", op.root, 1.4)
     cube(mat("chairw", "#5A3D26", rough=0.6), (0.6, -0.35, 0.45), (0.5, 0.5, 0.06))
-    M = Maru((-0.95, 0.75, 0.92), face=-20, s=0.2); track("maru", M.body, 0.1)
+    M = MaruR((-0.95, 0.75, 0.92), face=-20, s=0.2); track("maru", M.body, 0.1)
     # 17：受信機がカチカチ → 人が打つ
     t = s("17-01") + 0.3
     click_seq(arm, t, ".-.. -- .- .--", 0.08, 0.35)
@@ -376,7 +385,7 @@ def b_school(cl):
             cube(mat("schair", "#5A3D26", rough=0.6), (x, y - 0.75, 0.45), (0.45, 0.45, 0.05))
     for i, tp in enumerate(T_): type_motion(tp, CLOCK["T0"] + 0.2 * i, CLOCK["T0"] + 30, 5.0 + 0.3 * (i % 3), 0.06 if i < 2 else 0.0)
     cube(mat("board", "#2E3B33", rough=0.8), (0, 3.85, 2.0), (3.0, 0.05, 1.3))       # 黒板（字は書かない）
-    M = Maru((-3.4, 1.0, 0.0), face=-60); track("maru", M.body, 0.1)
+    M = MaruR((-3.4, 1.0, 0.0), face=-60); track("maru", M.body, 0.1)
     M.at(-100.0, loc=(-3.4, 1.4, 0.0), face=0.0)
     if cl == "S22a":
         M.at(s("22-01"), loc=(-3.0, -1.4, 0.0), face=-30); M.hop(s("22-02") + 0.4, h=0.15, d=0.4)
@@ -398,7 +407,7 @@ def b_demo(cl):
     cube(mat("tchair", "#4A3220", rough=0.6), (0.8, 0.05, 0.45), (0.5, 0.5, 0.06))
     for k in range(5):     # 見ている人たち（立っている）
         wk = walker((-2.6 + k * 1.3, 2.4, 0), face=180, shirt=["#3E4A5A", "#5A4632", "#4A3A5A", "#2D3640", "#6D5A44"][k], s=0.96)
-    M = Maru((0.0, -0.4, 0.0), face=0.0); track("maru", M.body, 0.1)
+    M = MaruR((0.0, -0.4, 0.0), face=0.0); track("maru", M.body, 0.1)
     t = s("17-07"); tend = e("17-08") + 0.8
     k_ = 0; tt = t
     while tt < tend:
@@ -427,7 +436,7 @@ def b_contest(cl):
     cube(mat("flag", "#E23A30", rough=0.6), (0.14, 0, 0.15), (0.26, 0.01, 0.18), parent=flag)
     hide_key(flag, -100.0, True); hide_key(flag, w("22-03", "勝ちました"), False); scale_pop(flag, w("22-03", "勝ちました"), 1.0, 0.4)
     ev(w("22-03", "勝ちました"), "pop", 0.6)
-    M = Maru((-2.6, 0.2, 0.4), face=-20); track("maru", M.body, 0.1)
+    M = MaruR((-2.6, 0.2, 0.4), face=-20); track("maru", M.body, 0.1)
     M.at(s("22-03") + 0.5, face=20); M.at(s("22-03") + 1.6, face=-20); M.at(w("22-03", "勝ちました") + 0.3, face=10)
     M.hop(w("22-03", "勝ちました") + 0.3, h=0.15, d=0.4)
     cam((0.0, -4.4, 2.2), (0.0, 0.9, 1.4), 30, s("22-03"), e("22-04") + 0.8, (0.6, -4.0, 2.0), (-0.3, 0.9, 1.4), 34)
@@ -448,7 +457,7 @@ def b_factory(cl):
         tws.append(tw)
     for k in range(3):
         wk = walker((-3 + k * 3, 2.6, 0), face=180, shirt=["#4A5A6A", "#6A5A44", "#3E4A5A"][k], apron=True)
-    M = Maru((0.6, -0.8, 0.0), face=0.0); track("maru", M.body, 0.1)
+    M = MaruR((0.6, -0.8, 0.0), face=0.0); track("maru", M.body, 0.1)
     if cl == "S10c":
         # 10-07：台車で運ばれてくる機械（運ぶ所を見せてから、作業台へ）→ 10-08：ピリオドが外れて R が入る
         cube(mat("fbench", "#7B5638", rough=0.5), (0.4, -0.3, 0.86), (1.4, 0.8, 0.05))
@@ -503,7 +512,7 @@ def b_merge(cl):
         for i in range(7): cube(mat("bwin", "#F3E6C4", rough=0.4, emit=0.6), (-2.1 + 0.7 * i, -1.21, 0.6 + j * 0.7), (0.4, 0.02, 0.4), parent=big)
     hide_key(big, -100.0, True); hide_key(big, w("22-06", "1つに") + 1.3, False); scale_pop(big, w("22-06", "1つに") + 1.3, 1.0, 0.5)
     ev(w("22-06", "1つに") + 1.3, "pop", 0.7)
-    M = Maru((0.0, -2.6, 0.0), face=180 - 180); track("maru", M.body, 0.1)
+    M = MaruR((0.0, -2.6, 0.0), face=180 - 180); track("maru", M.body, 0.1)
     M.at(-100.0, loc=(-1.0, -2.4, 0.0), face=10)
     M.at(w("22-06", "1つに") + 1.5, look=20); M.hop(w("22-06", "1つに") + 1.6, h=0.15, d=0.4)
     cam((0.0, -10.0, 3.6), (0.0, 1.0, 1.6), 26, s("22-06"), e("22-07") + 0.8, (0.0, -9.0, 3.2), (0.0, 1.0, 1.8), 28)
@@ -524,7 +533,7 @@ def b_evolve(cl):
     cube(mat("telek", "#2A2E33", rough=0.4), (0, -0.25, 0.75), (1.0, 0.4, 0.12), bevel=0.03, parent=tele)
     cyl(mat("telepaper", "#F4EFE3", rough=0.8), (0, 0.2, 0.85), 0.12, 0.8, rot=(0, R(90), 0), parent=tele)
     kb = Board(ROWS_Q, (2.25, 0.25), k=0.06, name="ev3", extra_rows=True); kb.root.location = (0, 0, 0.82)
-    M = Maru((-3.6, -1.4, 0.0), face=0.0); track("maru", M.body, 0.1)
+    M = MaruR((-3.6, -1.4, 0.0), face=0.0); track("maru", M.body, 0.1)
     M.walk(s("22-08") + 0.2, e("22-08") + 1.2, (3.0, -1.4, 0.0))
     cam((-3.0, -4.2, 2.0), (-3.0, 0.0, 0.9), 32, s("22-08"), e("22-08") + 1.2, (3.0, -4.2, 2.0), (3.0, 0.0, 0.9), 32)
 
@@ -538,7 +547,7 @@ def b_lab(cl):
         tp = typist((0, 0.0, 0), 0, shirt="#4F81BD", hair="#3A2E24"); type_motion(tp, s("23-05"), e("23-05") + 1, 7.0, 0.15)
         prof = walker((1.0, 0.1, 0), face=120, shirt="#5A5A5A", pants="#2D3640", hair="#BBBBBB"); track("prof", prof.head, 0.3)
         cube(mat("clipb", "#C9A96B", rough=0.6), (0.85, -0.15, 1.15), (0.25, 0.02, 0.32), rot=(R(-20), 0, R(30)))
-        M = Maru((-1.3, -0.6, 0.0), face=-30); track("maru", M.body, 0.1)
+        M = MaruR((-1.3, -0.6, 0.0), face=-30); track("maru", M.body, 0.1)
         M.at(s("23-05") + 0.6, face=40); M.tilt(w("23-05", "考えた本人"), 12); M.tilt(e("23-05") + 0.4, 0)
         cam((-1.6, -2.8, 1.8), (0.3, 0.4, 1.0), 30, s("23-05"), e("23-05") + 0.8, (-1.3, -2.6, 1.7), (0.3, 0.4, 1.0), 32)
     else:
@@ -549,7 +558,7 @@ def b_lab(cl):
             modern_typewriter((x, 0.65, 0.77), name="lc%d" % k, col="#2E3A2E" if k % 2 else "#2B2B2B")[0].scale = (0.28, 0.28, 0.28)
             tp = typist((x, 0.05, 0), 0, shirt=["#4F81BD", "#C0504D", "#9BBB59", "#7E57C2", "#E8A04D", "#5B6E86"][k]); T_.append(tp)
             type_motion(tp, s("23-06") + 0.1 * k, e("23-07") + 1, 6.0, 0.04 if k < 2 else 0.0)
-        M = Maru((-3.3, -0.8, 0.0), face=-20); track("maru", M.body, 0.1)
+        M = MaruR((-3.3, -0.8, 0.0), face=-20); track("maru", M.body, 0.1)
         M.at(w("23-06", "はっきり") + 0.5, look=10); M.tilt(w("23-06", "はっきり") + 0.6, 14); M.tilt(e("23-07") + 0.3, 0)
         cam((-4.2, -3.4, 2.2), (-0.6, 0.4, 0.9), 26, s("23-06"), e("23-07") + 0.8, (-3.8, -3.2, 2.0), (-0.2, 0.4, 0.9), 27)
 
@@ -571,7 +580,7 @@ def b_office(cl):
     for kb in kbs:
         key(kb, ("rotation_euler", 2), t_if, 0.0); key(kb, ("rotation_euler", 2), t_if + 0.8, R(360))
     ev(t_if + 0.1, "whoosh", 0.4)
-    M = Maru((0.2, -2.6, 0.0), face=0.0); track("maru", M.body, 0.1)
+    M = MaruR((0.2, -2.6, 0.0), face=0.0); track("maru", M.body, 0.1)
     M.walk(s("24-02") + 0.2, s("24-03") + 1.0, (-0.6, -1.0, 0.0))
     M.at(t_if + 0.8, face=-30); M.at(t_if + 1.6, face=30); M.wobble(s("24-05"), e("24-05"), 8, 0.4)
     if cl == "S24a":
@@ -586,35 +595,104 @@ def _desk(cl):
     S_ = b_desk(cl); b_desk_cam(cl, S_)
 
 
-CUTS = [
-    ("S01a", _desk, 0.0), ("S02a", _desk, s("02-01")), ("S03a", _desk, s("03-01")),
-    ("S04a", _desk, s("04-01")), ("S05a", _desk, s("05-01")), ("S06a", _desk, s("06-01")), ("S07a", _desk, s("07-01")),
-    ("S08a", b_shop_day, s("08-01")), ("S09a", b_shop_day, s("09-01")), ("S10a", b_shop_day, s("10-01")), ("S10b", b_shop_day, s("10-04")),
-    ("S10c", b_factory, s("10-07")), ("S11a", b_shop_day, s("11-01")),
-    ("S12a", b_inside, s("12-01")), ("S13a", b_inside, s("13-01")), ("S14a", b_inside, s("14-01")), ("S15a", b_inside, s("15-01")),
-    ("S16a", b_shop_day, s("16-01")), ("S17a", b_tel, s("17-01")), ("S17b", b_school, s("17-05")), ("S17c", b_demo, s("17-06")),
-    ("S18a", b_tel, s("18-01")), ("S19a", b_tel, s("19-01")), ("S19b", _desk, s("19-03")), ("S20a", b_shop_night, s("20-01")),
-    ("S21a", _desk, s("21-01")), ("S22a", b_school, s("22-01")), ("S22b", b_contest, s("22-03")), ("S22c", b_factory, s("22-05")),
-    ("S22d", b_merge, s("22-06")), ("S22e", b_evolve, s("22-08")),
-    ("S23a", _desk, s("23-01")), ("S23b", b_lab, s("23-05")), ("S23c", b_lab, s("23-06")),
-    ("S24a", b_office, s("24-01")), ("S24b", b_office, s("24-04")), ("S24c", _desk, s("24-06")),
-    ("S27a", _desk, s("27-01")), ("S28a", b_end, s("28-01")), ("S28b", b_end, s("28-06")),
+# ---- カット割り（2026-11-15 ユーザー「場面が変わり映えしないのが多いので気をつけてね」）：同じ絵を 12 秒以上続けない。
+#   文の切れ目で、寄り・引き・真上・横・まるロボを追う絵に替える。親（舞台と動きを作るクリップ）はそのまま、カメラだけ替える
+def F(off, lens=40, dz=0.05, t0=None, t1=None, off1=None):
+    """まるロボを追うカメラ（体は跳ねても揺れないよう、足もとの root を追う）。off＝まるロボからのずれ（世界の向き）"""
+    c = cam_follow(_M_[0].root, off, dz, lens)
+    if t0 is not None: key(c, "location", t0, off); key(c, "location", t1, off1)
+    return c
+
+
+def C(loc, tgt, lens=35, loc1=None, tgt1=None, lens1=None, d=8.0):
+    """決まったカメラ（カットの頭から d 秒かけて、ゆっくり動く）"""
+    def mk(t0):
+        return cam(loc, tgt, lens, t0, t0 + d, loc1 or loc, tgt1 or tgt, lens1 or lens)
+    return mk
+
+
+def TOP(loc, loc1=None, lens=32, d=8.0):
+    def mk(t0):
+        return topcam(loc, loc1 or loc, t0, t0 + d, lens)
+    return mk
+
+
+CUTS = [   # (名前, 舞台, 切り替わる時刻, カメラ（None＝舞台のカメラ）, 親)
+    ("S01a", _desk, 0.0, None, "S01a"), ("S01b", _desk, s("01-03"), lambda t0: F((0.35, -0.75, 0.22), 40), "S01a"),
+    ("S02a", _desk, s("02-01"), None, "S02a"), ("S02b", _desk, s("02-03"), lambda t0: F((-0.55, -0.55, 0.3), 34), "S02a"),
+    ("S03a", _desk, s("03-01"), None, "S03a"), ("S03a2", _desk, s("03-02"), C((-0.2, -0.95, 0.35), (-0.1, 0.5, 0.1), 30, (0.1, -0.9, 0.35)), "S03a"), ("S03b", _desk, s("03-03"), C((1.6, -1.3, 0.45), (-0.2, 0.3, 0.1), 24, (1.3, -1.1, 0.4), (-0.3, 0.3, 0.1)), "S03a"),
+    ("S03c", _desk, s("03-05"), lambda t0: F((0.2, -0.8, 0.3), 38, 0.05, t0, t0 + 6, (0.4, -0.95, 0.35)), "S03a"),
+    ("S04a", _desk, s("04-01"), lambda t0: F((0.45, -0.7, 0.28), 38), "S04a"), ("S04b", _desk, s("04-03"), None, "S04a"),
+    ("S05a", _desk, s("05-01"), None, "S05a"), ("S05a2", _desk, s("05-02"), lambda t0: F((0.3, -0.7, 0.25), 38), "S05a"), ("S05b", _desk, s("05-04"), lambda t0: F((0.0, -0.95, 0.85), 30), "S05a"),
+    ("S05c", _desk, s("05-05"), C((3.7, -1.3, 0.9), (2.2, 0.3, 0.0), 30, (3.5, -1.5, 1.0)), "S05a"),
+    ("S06a", _desk, s("06-01"), None, "S06a"), ("S06b", _desk, s("06-04"), lambda t0: F((0.3, -0.7, 0.25), 40), "S06a"),
+    ("S07a", _desk, s("07-01"), None, "S07a"), ("S07a2", _desk, s("07-03"), C((-1.4, -1.2, 0.5), (1.0, 0.3, 0.0), 26, (-1.2, -1.4, 0.6)), "S07a"), ("S07b", _desk, s("07-04"), C((1.2, -2.3, 0.75), (1.2, 0.3, 0.0), 26, (1.0, -2.1, 0.7)), "S07a"),
+    ("S07b2", _desk, s("07-05"), TOP((1.05, 0.2, 3.6), (1.05, 0.2, 3.8)), "S07a"), ("S07c", _desk, s("07-06"), lambda t0: F((-0.4, -0.7, 0.3), 38), "S07a"), ("S07c2", _desk, s("07-07"), C((3.4, -1.6, 0.9), (1.0, 0.3, 0.0), 28, (3.2, -1.8, 1.0)), "S07a"), ("S07d", _desk, s("07-08"), TOP((1.05, 0.2, 3.2), (1.05, 0.2, 4.4)), "S07a"),
+    ("S07e", _desk, s("07-10"), C((0.9, -3.6, 1.6), (0.9, 1.5, 1.2), 28, (0.9, -2.2, 1.5), (0.9, 2.0, 1.8)), "S07a"),
+    ("S08a", b_shop_day, s("08-01"), None, "S08a"), ("S08a2", b_shop_day, s("08-02"), C((1.6, -0.7, 1.5), (1.7, 1.5, 1.25), 32, (1.4, -0.6, 1.45)), "S08a"), ("S08b", b_shop_day, s("08-03"), C((-0.7, -0.7, 1.35), (-0.35, 0.45, 1.0), 34, (-0.5, -0.65, 1.3)), "S08a"),
+    ("S09a", b_shop_day, s("09-01"), None, "S09a"), ("S09b", b_shop_day, s("09-04"), C((-0.05, 0.1, 2.7), (-0.05, 0.42, 0.98), 26, (0.0, 0.12, 2.6)), "S09a"),
+    ("S10a", b_shop_day, s("10-01"), None, "S10a"), ("S10a2", b_shop_day, s("10-03"), C((0.3, -0.75, 1.35), (0.0, 0.35, 1.12), 34, (0.1, -0.7, 1.4)), "S10a"),
+    ("S10b", b_shop_day, s("10-04"), None, "S10b"), ("S10b1", b_shop_day, s("10-05"), C((-0.25, 0.15, 1.95), (-0.25, 0.36, 1.15), 35, (-0.2, 0.15, 1.9)), "S10b"), ("S10b2", b_shop_day, s("10-06"), lambda t0: F((0.4, -0.6, 0.25), 38), "S10b"),
+    ("S10c", b_factory, s("10-07"), None, "S10c"), ("S10c2", b_factory, s("10-08"), C((0.95, -1.1, 1.4), (0.4, -0.2, 0.95), 40, (0.8, -1.0, 1.35)), "S10c"),
+    ("S11a", b_shop_day, s("11-01"), None, "S11a"), ("S11b", b_shop_day, s("11-03"), C((-0.6, -3.6, 1.6), (-0.6, 0.3, 0.9), 28, (-0.3, -3.3, 1.5)), "S11a"),
+    ("S12a", b_inside, s("12-01"), None, "S12a"), ("S12b", b_inside, s("12-03"), C((0.45, -0.55, 0.5), (0.0, 0.7, 0.25), 28, (0.3, -0.5, 0.55)), "S12a"),
+    ("S13a", b_inside, s("13-01"), None, "S13a"), ("S13b", b_inside, s("13-03"), C((0.0, -0.5, 2.4), (0.0, 0.6, 0.0), 26, (0.2, -0.3, 2.2)), "S13a"),
+    ("S13c", b_inside, s("13-05"), lambda t0: F((0.35, -0.75, 0.25), 36), "S13a"),
+    ("S14a", b_inside, s("14-01"), None, "S14a"), ("S14b", b_inside, s("14-03"), C((0.35, 0.0, 1.6), (0.0, 0.9, 0.0), 32, (0.2, 0.1, 1.5)), "S14a"),
+    ("S14b2", b_inside, s("14-05"), lambda t0: F((0.3, -0.7, 0.2), 36), "S14a"), ("S15a", b_inside, s("15-01"), None, "S15a"), ("S15b", b_inside, s("15-03"), lambda t0: F((0.4, -0.8, 0.22), 36), "S15a"),
+    ("S15c", b_inside, s("15-05"), C((0.0, -0.4, 2.5), (0.0, 0.6, 0.0), 26, (-0.2, -0.3, 2.3)), "S15a"),
+    ("S15d", b_inside, s("15-07"), C((-1.6, -2.0, 0.45), (0.2, 0.6, 0.35), 24, (-1.2, -2.2, 0.5)), "S15a"),
+    ("S15e", b_inside, s("15-09"), lambda t0: F((0.0, -0.8, 0.2), 38), "S15a"),
+    ("S16a", b_shop_day, s("16-01"), None, "S16a"), ("S16b", b_shop_day, s("16-03"), C((0.3, -0.9, 1.4), (0.0, 0.4, 1.1), 34, (0.1, -0.85, 1.35)), "S16a"),
+    ("S17a", b_tel, s("17-01"), None, "S17a"), ("S17a2", b_tel, s("17-03"), C((-0.95, -0.5, 1.25), (-0.6, 0.6, 0.98), 40, (-0.85, -0.45, 1.2)), "S17a"),
+    ("S17a3", b_tel, s("17-04"), C((2.0, -1.4, 1.9), (0.6, 0.6, 0.95), 32, (1.8, -1.2, 1.8)), "S17a"),
+    ("S17b", b_school, s("17-05"), None, "S17b"),
+    ("S17c", b_demo, s("17-06"), None, "S17c"), ("S17c2", b_demo, s("17-07"), C((-0.4, -0.5, 1.25), (-0.9, 0.75, 0.85), 34, (-0.5, -0.45, 1.2)), "S17c"),
+    ("S17c3", b_demo, s("17-08"), C((2.3, -0.5, 1.95), (0.8, 0.85, 0.95), 34, (2.2, -0.4, 1.9)), "S17c"),
+    ("S17c4", b_demo, s("17-09"), lambda t0: F((0.4, -0.8, 0.3), 36), "S17c"),
+    ("S18a", b_tel, s("18-01"), None, "S18a"), ("S18a2", b_tel, s("18-02"), C((-0.6, -1.3, 1.6), (-0.6, 0.6, 0.95), 30, (-0.5, -1.2, 1.55)), "S18a"), ("S18b", b_tel, s("18-04"), lambda t0: F((0.3, -0.5, 0.15), 38), "S18a"),
+    ("S18c", b_tel, s("18-05"), C((-2.2, -2.2, 1.6), (0.0, 0.6, 1.0), 28, (-1.9, -2.0, 1.5)), "S18a"),
+    ("S19a", b_tel, s("19-01"), None, "S19a"),
+    ("S19a2", b_tel, s("19-02"), C((0.6, 0.0, 1.6), (0.6, 0.62, 0.95), 36, (0.65, 0.05, 1.55)), "S19a"), ("S19b", _desk, s("19-03"), None, "S19b"), ("S19b2", _desk, s("19-05"), TOP((-0.3, 0.3, 1.6), (-0.1, 0.3, 2.2)), "S19b"),
+    ("S20a", b_shop_night, s("20-01"), None, "S20a"), ("S20b", b_shop_night, s("20-03"), lambda t0: F((0.3, -0.7, 0.2), 38), "S20a"),
+    ("S20c", b_shop_night, s("20-04"), C((2.0, -0.75, 1.5), (1.6, 0.3, 1.1), 36, (1.85, -0.7, 1.45)), "S20a"),
+    ("S20c2", b_shop_night, s("20-05"), C((1.6, -0.1, 1.7), (1.6, 0.3, 1.1), 36, (1.65, -0.05, 1.65)), "S20a"), ("S20d", b_shop_night, s("20-06"), C((-0.8, -2.0, 1.4), (1.0, 0.4, 1.0), 30, (-0.6, -1.8, 1.35)), "S20a"),
+    ("S20e", b_shop_night, s("20-07"), lambda t0: F((0.15, -0.5, 0.05), 32, 0.12), "S20a"),
+    ("S21a", _desk, s("21-01"), None, "S21a"), ("S21b", _desk, s("21-03"), TOP((0.0, 0.2, 1.8), (0.4, 0.2, 3.4)), "S21a"),
+    ("S22a", b_school, s("22-01"), None, "S22a"),
+    ("S22a2", b_school, s("22-02"), lambda t0: F((0.4, -0.8, 0.3), 36), "S22a"), ("S22b", b_contest, s("22-03"), None, "S22b"), ("S22b2", b_contest, s("22-04"), C((-1.6, -0.2, 1.7), (-1.0, 1.2, 1.3), 34, (-1.5, -0.1, 1.65)), "S22b"),
+    ("S22c", b_factory, s("22-05"), None, "S22c"),
+    ("S22d", b_merge, s("22-06"), None, "S22d"), ("S22d2", b_merge, s("22-07"), lambda t0: F((0.8, -1.4, 0.3), 30, 0.4), "S22d"),
+    ("S22e", b_evolve, s("22-08"), None, "S22e"),
+    ("S23a", _desk, s("23-01"), lambda t0: F((0.4, -0.7, 0.3), 38), "S23a"), ("S23a2", _desk, s("23-03"), lambda t0: F((0.2, -0.9, 0.6), 32), "S23a"),
+    ("S23a3", _desk, s("23-04"), TOP((1.05, 0.2, 3.4), (1.05, 0.2, 3.9)), "S23a"),
+    ("S23a1", _desk, s("23-02"), None, "S23a"), ("S23b", b_lab, s("23-05"), None, "S23b"), ("S23c", b_lab, s("23-06"), None, "S23c"),
+    ("S23c2", b_lab, s("23-07"), lambda t0: F((0.4, -0.8, 0.3), 36), "S23c"), ("S24a", b_office, s("24-01"), None, "S24a"), ("S24a2", b_office, s("24-03"), C((-1.4, -1.6, 1.4), (-1.3, 0.0, 0.9), 34, (-1.2, -1.5, 1.35)), "S24a"),
+    ("S24b", b_office, s("24-04"), None, "S24b"),
+    ("S24c", _desk, s("24-06"), None, "S24c"), ("S24c1", _desk, s("24-07"), TOP((-0.1, -1.6, 1.7), (-0.1, -1.5, 1.9)), "S24c"), ("S24c2", _desk, s("24-08"), lambda t0: F((0.4, -0.7, 0.3), 36), "S24c"),
+    ("S24c3", _desk, s("24-09"), C((0.6, -3.4, 1.4), (0.2, 0.2, 0.3), 26, (0.8, -4.2, 1.8)), "S24c"),
+    ("S27a", _desk, s("27-01"), None, "S27a"), ("S27b", _desk, s("27-03"), TOP((0.0, 0.2, 1.7), (0.2, 0.2, 2.1)), "S27a"),
+    ("S27b2", _desk, s("27-04"), C((-1.2, -1.0, 0.5), (0.3, 0.3, 0.1), 28, (-1.0, -1.2, 0.55)), "S27a"), ("S27c", _desk, s("27-05"), lambda t0: F((0.35, -0.75, 0.25), 38), "S27a"),
+    ("S27d", _desk, s("27-06"), C((0.3, -2.0, 0.7), (0.0, 0.5, 0.4), 30, (0.3, -3.4, 1.4), (0.0, 1.0, 0.9), d=9.0), "S27a"),
+    ("S28a", b_end, s("28-01"), None, "S28a"), ("S28a1", b_end, s("28-02"), C((0.0, -0.6, 0.6), (-0.2, 0.35, 0.1), 30, (0.1, -0.55, 0.55)), "S28a"), ("S28a2", b_end, s("28-04"), lambda t0: F((0.15, -0.55, 0.12), 34, 0.08), "S28a"),
+    ("S28b", b_end, s("28-06"), None, "S28b"), ("S28b1", b_end, s("28-07"), C((3.2, -2.2, 0.9), (0.6, -0.6, 0.3), 30, (3.0, -2.0, 0.85)), "S28b"), ("S28b2", b_end, s("28-08"), lambda t0: F((0.3, -0.6, 0.18), 38), "S28b"),
 ]
 END_T = e("28-08") + 2.5
+CUTS.sort(key=lambda c: c[2])   # 足したカットを時刻の順に（次のカットの頭で終わる）
 CLIPS = {}
-for i, (nm, fn, tc) in enumerate(CUTS):
+for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     t0 = max(0.0, tc - 0.1)
     t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
-    CLIPS[nm] = (fn, t0, t1)
-CLIPS["S06p"] = (_desk, s("06-01"), e("06-04") + 0.5)   # 小窓用：名前で比べた結果（07-06〜07-07）
+    CLIPS[nm] = (fn, t0, t1, cm, par)
+CLIPS["S06p"] = (_desk, s("06-01"), e("06-04") + 0.5, None, "S06a")   # 小窓用：名前で比べた結果（07-06〜07-07）
 
 if __name__ == "__main__" or True:
     if CLIPNAME == "--list":
-        print(json.dumps({k: [round(v[1], 3), round(v[2], 3), round(([c[2] for c in CUTS if c[0] == k] or [v[1]])[0], 3)] for k, v in CLIPS.items()}))
+        print(json.dumps({k: [round(v[1], 3), round(v[2], 3), round(([c[2] for c in CUTS if c[0] == k] or [v[1]])[0], 3), v[4]] for k, v in CLIPS.items()}))
     else:
-        fn, t0, t1 = CLIPS[CLIPNAME]
+        fn, t0, t1, cm, par = CLIPS[CLIPNAME]
         CLOCK["T0"] = t0
-        if CLIPNAME == "S06p": fn("S06a")
-        else: fn(CLIPNAME)
+        fn(par)
+        if cm is not None: cm(t0)
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)
