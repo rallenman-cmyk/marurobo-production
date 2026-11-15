@@ -689,17 +689,17 @@ def b_rug(cl):
     #   2D で「同じ壁」の両向きの矢印と札（overlays）。17-08 で引き戻すと、オレンジが青緑にぴたっと重なり、17-10 で青緑に戻る
     t7 = w("17-07", "一つの壁") - 0.2
     ORANGE = "#FF9A3C"
-    for mm in (dom, com):
-        pts_color(mm, t7 - 0.01, TEAL if mm is dom else WHITE_PT); pts_color(mm, t7 + 0.4, ORANGE)
-        pts_color(mm, s("17-10") + 0.2, ORANGE); pts_color(mm, s("17-10") + 1.0, TEAL)
-    Y1 = 2.437
-    real = empty((0.2, Y1 + 0.02, 0.005))      # 大きさは子の板で（scale_pop は親の empty に。板の scale を 1 に戻すと 1 m の箱になった）
+    pts_color(com, t7 - 0.01, WHITE_PT); pts_color(com, t7 + 0.4, ORANGE)
+    pts_color(com, s("17-10") + 0.2, ORANGE); pts_color(com, s("17-10") + 1.0, TEAL)
+    pts_color(dom, tB + 0.25, TEAL)             # ずれた点は S17c では隠していて、ぴたっと重なったあとに青緑で戻る
+    Y1 = 2.49                                   # 地図の点の壁の線（plan.map_points の y）
+    real = empty((0.2, Y1, 0.005))      # 大きさは子の板で（scale_pop は親の empty に。板の scale を 1 に戻すと 1 m の箱になった）
     rb_ = cube(flat_mat("realwall", "#FFFFFF", 0.9), (0, 0, 0), (2.5, 0.07, 0.004), parent=real); rb_.visible_shadow = False
     show_between(real, t7 + 0.3, tA); scale_pop(real, t7 + 0.3, d=0.3)
     ax_ = -0.75
-    a1 = empty((ax_, Y1, 0.0))
+    a1 = empty((ax_, Y1, plan.LIDAR_Z))
     th0 = math.radians(DRIFT["th"]); rx, ry = ax_ - DRIFT["c"][0], Y1 - DRIFT["c"][1]
-    a2 = empty((DRIFT["c"][0] + rx * math.cos(th0) - ry * math.sin(th0) + DRIFT["d"][0], DRIFT["c"][1] + rx * math.sin(th0) + ry * math.cos(th0) + DRIFT["d"][1], 0.0)); a2.parent = hold
+    a2 = empty((DRIFT["c"][0] + rx * math.cos(th0) - ry * math.sin(th0) + DRIFT["d"][0], DRIFT["c"][1] + rx * math.sin(th0) + ry * math.cos(th0) + DRIFT["d"][1], plan.LIDAR_Z)); a2.parent = hold
     track("wall1", a1, 0.0); track("wall2", a2, 0.0)
     if cut(cl, "S16a"):
         c_, tg = cam_rig((1.6, -2.6, 1.6), (-0.4, 0.4, 0.0), 28)
@@ -719,9 +719,16 @@ def b_rug(cl):
         c_, tg = cam_rig((1.2, -2.8, 3.0), (-0.6, 0.8, 0.0), 26)
         cam_move(c_, tg, s("17-01") - 0.8, e("17-02") + 0.4, (1.2, -2.8, 3.0), (1.4, -1.6, 2.6), (-0.6, 0.8, 0.0), (0.2, 1.7, 0.0))
     elif cut(cl, "S17c"):    # v3：真上から（1 周目と 2 周目の壁を色で分けて見せる）→ 17-10 で地図全体へ引く
-        c_ = cam_top((-0.5, 2.2, 2.2), 29)          # 2 本の壁がいちばん離れている左の方に寄る
-        cam_top_move(c_, s("17-07") - 0.4, e("17-09"), (-0.5, 2.2, 2.2), (-0.45, 2.2, 2.1))
-        cam_top_move(c_, e("17-09"), e("17-11") + 0.8, (-0.45, 2.2, 2.1), (0.0, 0.2, 7.6))
+        # v3 点検：点の光が床を照らして画面じゅうがオレンジになり、青緑の線も矢印も埋もれた → この絵では点はまわりを照らさない。
+        #   寄りすぎると点が大きな粒になって帯に見え、左はソファに隠れる → 高さ 1.9 m（2 本の間は画面で 140px ほど）
+        # 何周分ものずれた点が重なって太い帯に見えた → この絵では、ずれた点（do）を隠して、いま見えている形（オレンジの 1 本）だけにする。
+        #   引き戻してぴたっと重なったあとに戻す（青緑の地図の一部として）
+        hide_key(do, s("17-07") - 1.0, True); hide_key(do, tB + 0.3, False)
+        for o in (do, co, fo, bo):
+            o.visible_diffuse = False; o.visible_glossy = False; o.visible_transmission = False; o.visible_volume_scatter = False
+        c_ = cam_top((-0.5, 2.2, 1.95), 29)
+        cam_top_move(c_, s("17-07") - 0.4, e("17-09"), (-0.5, 2.2, 1.95), (-0.45, 2.2, 1.85))
+        cam_top_move(c_, e("17-09"), e("17-11") + 0.8, (-0.45, 2.2, 1.85), (0.0, 0.2, 7.6))
     else:
         c_, tg = cam_rig((0.4, 0.4, 2.2), (0.3, 2.3, 0.0), 30)
         cam_move(c_, tg, s("17-03") - 0.8, s("17-07") + 1.0, (0.45, 0.45, 2.2), (0.35, 0.75, 2.0), (0.3, 2.3, 0.0), (0.3, 2.35, 0.0))

@@ -219,13 +219,13 @@ def promise_sprite(stage):
     return _cache[key]
 
 
-def arrow_sprite(p0, p1, col=YEL):
+def arrow_sprite(p0, p1, col=YEL, hs=1.0):
     """矢印（v3：先が潰れて見えた → 2 倍で描いて縮める・線は頭の付け根で止める・頭を大きく 1 つの三角に。5本目 v2）"""
-    key = ("arrow", p0, p1, col)
+    key = ("arrow", p0, p1, col, hs)
     if key in _cache: return _cache[key]
     S2 = 2; im = Image.new("RGBA", (1280 * S2, 720 * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     a = math.atan2(p1[1] - p0[1], p1[0] - p0[0]); ca, sa = math.cos(a), math.sin(a)
-    L_, Hw, lw = 52, 30, 14
+    L_, Hw, lw = 52 * hs, 30 * hs, round(14 * min(1.0, hs + 0.2))
     tip = (p1[0] * S2, p1[1] * S2); base = ((p1[0] - L_ * ca) * S2, (p1[1] - L_ * sa) * S2)
     d.line([(p0[0] * S2, p0[1] * S2), (base[0] + 4 * ca, base[1] + 4 * sa)], fill=col + (255,), width=lw * S2)
     r = lw * S2 / 2; d.ellipse([p0[0] * S2 - r, p0[1] * S2 - r, p0[0] * S2 + r, p0[1] * S2 + r], fill=col + (255,))
@@ -306,11 +306,14 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             if qa is None or qb is None: continue
             L = math.dist(qa, qb); ux, uy = (qb[0] - qa[0]) / max(L, 1), (qb[1] - qa[1]) / max(L, 1)
             pa = (qa[0] + ux * 14, qa[1] + uy * 14); pb = (qb[0] - ux * 14, qb[1] - uy * 14); mid = ((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2)
-            im = arrow_sprite((round(mid[0]), round(mid[1])), (round(pb[0]), round(pb[1])), WHITE).copy(); im.alpha_composite(arrow_sprite((round(mid[0]), round(mid[1])), (round(pa[0]), round(pa[1])), WHITE))
+            hs = max(0.45, min(1.0, (L / 2 - 14) / 70))      # 短い矢印は頭も小さく（2 つの頭が重ならない）
+            im = arrow_sprite((round(mid[0]), round(mid[1])), (round(pb[0]), round(pb[1])), WHITE, hs).copy(); im.alpha_composite(arrow_sprite((round(mid[0]), round(mid[1])), (round(pa[0]), round(pa[1])), WHITE, hs))
+            sh = Image.new("RGBA", im.size, (20, 24, 30, 0)); sh.putalpha(im.getchannel("A").filter(ImageFilter.MaxFilter(7)))   # 暗いふち（明るい点の上でも見える）
+            sh.alpha_composite(im); im = sh
             if a < 1: im.putalpha(im.getchannel("A").point(lambda v: int(v * a)))
             base.alpha_composite(im)
             spr, off = tag_sprite(p["text"], 48)
-            _paste(base, spr, mid[0] + 70 + spr.width / 2 + off[0] + spr.width / 2 - spr.width / 2, mid[1] + off[1] + spr.height / 2, k, a)
+            _paste(base, spr, mid[0] + spr.width / 2 - 30, max(pa[1], pb[1]) + 26 + spr.height / 2, k, a)    # 矢印の下に（矢印・点の線に重ねない）
         elif kind == "tv":        # テレビのふち（黒い枠・下に小さな電源の光）。枠は 0.25 秒で出る
             kk = min(1.0, (t - t0) / 0.25) * a
             bw = int(34 * kk) + 1; im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
