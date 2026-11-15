@@ -5,6 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
+$VER = "2"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -81,7 +82,7 @@ function Heartbeat([string]$state, $job, $waiting) {
   if (-not (Status-Ready)) { return }
   $jid = ""
   if ($job) { $jid = $job.id }
-  Write-Json (Join-Path $stat "agent.json") ([ordered]@{ at = (Get-Date).ToString("s"); state = $state; job = $jid; waiting = @($waiting) })
+  Write-Json (Join-Path $stat "agent.json") ([ordered]@{ at = (Get-Date).ToString("s"); ver = $VER; state = $state; job = $jid; waiting = @($waiting) })
   Status-Push ("描画係：{0} {1}" -f $state, $jid)
 }
 
@@ -169,13 +170,25 @@ function Run-Job($job) {
 Note "描画係をはじめます（この窓は置いたままにしてください。最小化して大丈夫です）"
 $me = (Get-FileHash $PSCommandPath -Algorithm SHA256).Hash
 $lastBeat = Get-Date "2000-01-01"
+$badHash = ""
 while ($true) {
   if ((Status-Ready) -and (Pull-Repo)) {
-    if ((Get-FileHash (Join-Path $repo "pc_render\agent.ps1") -Algorithm SHA256).Hash -ne $me) {
-      Note "描画係が新しくなったので、入れ替えて立ち上げ直します"
-      $mutex.ReleaseMutex(); $mutex.Dispose()
-      Start-Process -FilePath "powershell.exe" -ArgumentList ('-NoProfile -ExecutionPolicy Bypass -File "{0}"' -f (Join-Path $repo "pc_render\agent.ps1"))
-      exit 0
+    $newHash = (Get-FileHash (Join-Path $repo "pc_render\agent.ps1") -Algorithm SHA256).Hash
+    if ($newHash -ne $me -and $newHash -ne $badHash) {
+      # 入れ替える前に、新しい描画係の書き方を点検する。誤りがあれば入れ替えず、今のまま動き続ける
+      $perr = $null; $ptok = $null
+      [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path $repo "pc_render\agent.ps1"), [ref]$ptok, [ref]$perr)
+      if ($perr -and $perr.Count -gt 0) {
+        $badHash = $newHash
+        Note ("新しい描画係に書き方の誤りがあるので、入れ替えません（今のまま動きます）：{0}" -f $perr[0].ToString())
+        Write-Json (Join-Path $stat "agent_error.json") ([ordered]@{ at = (Get-Date).ToString("s"); error = @($perr | Select-Object -First 5 | ForEach-Object { "{0}（{1} 行目）" -f $_.Message, $_.Extent.StartLineNumber }) })
+        Status-Push "描画係：新しい版に誤り"
+      } else {
+        Note "描画係が新しくなったので、入れ替えて立ち上げ直します"
+        $mutex.ReleaseMutex(); $mutex.Dispose()
+        Start-Process -FilePath "powershell.exe" -ArgumentList ('-NoProfile -ExecutionPolicy Bypass -File "{0}"' -f (Join-Path $repo "pc_render\agent.ps1"))
+        exit 0
+      }
     }
     [void](G -C $stat pull -q --rebase origin $sbranch)
     $q = Read-Queue
