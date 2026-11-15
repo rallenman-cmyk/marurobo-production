@@ -43,10 +43,10 @@ def ev_list():
     # 12：さきほどのスマホの地図（小窓）
     add(w("12-03", "さきほど"), e("12-05") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))   # 3D のスマホの寄りの絵（v2）
     # 13：1 メートル・「？」
-    add(w("13-03", "1メートル"), e("13-03") + 0.4, "tag", dict(text="1メートル", obj="onemeter", dy=70, size=56))   # v4：「ここ」の札と重なった → 光の線の下に
+    add(w("13-03", "1メートル"), e("13-03") + 0.4, "tag", dict(text="1メートル", obj="onemeter", dx=-80, dy=80, size=56))   # v4：「ここ」の札と重なった → 光の線の下に
     #   （v3：「ここ」が分からない、が伝わらない → 「ここから」で先輩に「ここ」の札。「ここ」で先輩が消え、点と線が当てずっぽうに動き回る（3D）。
     #    「先輩がどこにいたか」で、先輩を赤い枠で囲む）
-    add(w("13-03", "ここから"), w("13-04", "「ここ」") + 0.1, "tag", dict(text="ここ", obj="senpai", dy=-110, bg=YEL))
+    add(w("13-03", "ここから"), w("13-04", "「ここ」") + 0.1, "tag", dict(text="ここ", obj="senpai", dx=70, dy=-110, bg=YEL))
     add(w("13-04", "「ここ」") + 0.2, s("13-05") + 0.3, "bubble", dict(obj="ghost", icon="?", side=1))
     add(w("13-05", "先輩がどこに"), e("13-05") + 0.4, "frame2d", dict(obj="senpai", r=62, col=RED))
     add(w("13-06", "どうやって") - 0.3, e("13-06") + 0.3, "bubble", dict(obj="senpai", icon="?", side=1))
@@ -69,7 +69,7 @@ def ev_list():
     add(w("18-03", "カメラの先輩"), s("18-04") - 0.1, "tag", dict(text="カメラの先輩", obj="cam", dy=-130))
     # v3：「前にカメラ」で、前のカメラを黄色い輪で囲み「カメラ」の札（5本目 v2「前のカメラがどれかわかんない」）
     add(w("18-04", "カメラ"), e("18-04") + 0.5, "ring2d", dict(obj="camlens", r=40, track_clip="S18a"))
-    add(w("18-04", "カメラ"), e("18-04") + 0.5, "tag", dict(text="カメラ", obj="camlens", dy=-120, track_clip="S18a"))
+    add(w("18-04", "カメラ"), e("18-04") + 0.5, "tag", dict(text="カメラ", obj="camlens", dy=-175, track_clip="S18a"))   # 輪（形の箱）の上に（v5 の重なり点検）
     # 19：照明が後ろへ（矢印）
     add(w("19-03", "後ろ") - 0.3, e("19-04") + 0.2, "arrow", dict(p0=(640, 140), p1=(640, 470)))
     # 19（v3）：カメラの先輩から見た絵だと分かるように、四すみにカメラの枠（5本目 v2「前のカメラがどれかわかんない」）
@@ -106,6 +106,7 @@ def _pop(t, t0, t1):
 BOX = [None]        # assemble が入れる：BOX[0](名前, t, clip) → 物の形を画面に写した箱 (x0, y0, x1, y1) か None
 RECTS = []          # いま描いた 2D の場所 [(出来事の番号, 名前, (x0, y0, x1, y1))]。重なりの点検（assemble の点検）に使う（5本目 v4「ここと 1メートルのテロップ重なってる → 見つける仕組み」）
 _CUR = [None]
+_BB = {}
 NO_CHECK = ("phone", "title", "promise", "tv", "viewfinder", "arrow")   # 画面いっぱい・わざと重ねるもの
 
 
@@ -125,12 +126,20 @@ def overlaps(margin=6):
 
 
 def _paste(base, spr, cx, cy, k=1.0, a=1.0):
+    kb = (id(spr), spr.size)   # 見えている所（影や透明な余白を除く）。元の絵で測り、大きさ k をかける（絵そのものは持たない）
+    bb = _BB.get(kb)
+    if bb is None:
+        bb = (None, spr.getchannel("A").point(lambda v: 255 if v > 120 else 0).getbbox() or (0, 0, 0, 0))
+        if len(_BB) < 5000: _BB[kb] = bb
+    W0, H0 = spr.width, spr.height
     if k != 1.0:
         spr = spr.resize((max(1, int(spr.width * k)), max(1, int(spr.height * k))), Image.LANCZOS)
     if a < 1.0:
         al = spr.getchannel("A").point(lambda v: int(v * a)); spr = spr.copy(); spr.putalpha(al)
     base.alpha_composite(spr, (int(cx - spr.width / 2), int(cy - spr.height / 2)))
-    if a > 0.3: _rect(cx - spr.width / 2, cy - spr.height / 2, cx + spr.width / 2, cy + spr.height / 2)
+    if a > 0.3:
+        b_ = bb[1]
+        _rect(cx + (b_[0] - W0 / 2) * k, cy + (b_[1] - H0 / 2) * k, cx + (b_[2] - W0 / 2) * k, cy + (b_[3] - H0 / 2) * k)
 
 
 def tag_sprite(text, size=48, bg=WHITE, fg=None, tail=None):
@@ -272,7 +281,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             else:
                 q = where(p["obj"], t, p.get("track_clip"))
                 if q is None: continue
-                cx, cy = q[0], max(70, q[1] + p.get("dy", -120)); cy = min(cy, SUB_TOP - 60)
+                cx, cy = q[0] + p.get("dx", 0), max(70, q[1] + p.get("dy", -120)); cy = min(cy, SUB_TOP - 60)
                 tail = (0, 46) if q[1] - cy > 60 else None      # v3：しっぽは決まった三角（物との距離で大きさが変わらない。5本目 v2「バンパー」）
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), tail=tail)
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
