@@ -541,18 +541,18 @@ def ramen(parent=None, loc=(0, 0, 0), steam=True):
     bowl = mat("bowl", "#B8372B", rough=0.25, coat=0.7); inner = mat("bowlin", "#F4F1EA", rough=0.3, coat=0.5)
     bpy.ops.mesh.primitive_cone_add(radius1=0.045, radius2=0.09, depth=0.07, location=(0, 0, 0.035), vertices=40)
     c = bpy.context.object; c.data.materials.append(bowl); c.parent = e; bpy.ops.object.shade_smooth()
-    cyl(inner, (0, 0, 0.069), 0.088, 0.003, parent=e, verts=40)
-    broth = cyl(mat("broth", "#D9A35A", rough=0.15, coat=1.0), (0, 0, 0.062), 0.082, 0.004, parent=e, verts=40)
+    cyl(inner, (0, 0, 0.0715), 0.089, 0.002, parent=e, verts=40)
+    broth = cyl(mat("broth", "#D9A35A", rough=0.15, coat=1.0), (0, 0, 0.0735), 0.08, 0.002, parent=e, verts=40)
     random.seed(3)
     for k in range(9):
         a = k * 0.7; r = 0.02 + 0.03 * (k % 3) / 2
-        sphere(mat("noodle", "#F2D27A", rough=0.4), (r * math.cos(a), r * math.sin(a), 0.064), 0.025, scale=(1.4, 0.5, 0.15), parent=e, seg=12)
+        sphere(mat("noodle", "#F2D27A", rough=0.4), (r * math.cos(a), r * math.sin(a), 0.075), 0.025, scale=(1.4, 0.5, 0.15), parent=e, seg=12)
     for k, (dx, dy) in enumerate(((-0.035, 0.02), (-0.01, 0.04))):
-        cyl(mat("chashu", "#C98C66", rough=0.5), (dx, dy, 0.068), 0.028, 0.006, parent=e, verts=24)
-    sphere(mat("egg", "#FFFFFF", rough=0.3), (0.035, -0.02, 0.066), 0.02, scale=(1, 1, 0.45), parent=e, seg=16)
-    sphere(mat("yolk", "#F2A93B", rough=0.3), (0.035, -0.02, 0.071), 0.011, scale=(1, 1, 0.4), parent=e, seg=12)
+        cyl(mat("chashu", "#C98C66", rough=0.5), (dx, dy, 0.077), 0.028, 0.006, parent=e, verts=24)
+    sphere(mat("egg", "#FFFFFF", rough=0.3), (0.035, -0.02, 0.076), 0.02, scale=(1, 1, 0.45), parent=e, seg=16)
+    sphere(mat("yolk", "#F2A93B", rough=0.3), (0.035, -0.02, 0.081), 0.011, scale=(1, 1, 0.4), parent=e, seg=12)
     for k in range(6):
-        sphere(mat("negi", "#5FA84E", rough=0.5), (0.02 - 0.01 * k, -0.04 + 0.012 * k, 0.067), 0.006, parent=e, seg=8)
+        sphere(mat("negi", "#5FA84E", rough=0.5), (0.02 - 0.01 * k, -0.04 + 0.012 * k, 0.077), 0.006, parent=e, seg=8)
     st = []
     if steam:
         sm = mat("steam", "#FFFFFF", rough=0.9, alpha=0.18)
@@ -573,9 +573,9 @@ def hamburg(parent=None, loc=(0, 0, 0)):
     return e
 
 
-def light_plane(parent, r=1.6, col=TEAL, a=0.18):
+def light_plane(parent, r=1.6, col=TEAL, a=0.12):
     """回る光が見ている高さ（水平に広がる、うすい光の板）"""
-    m = mat("lplane", col, rough=0.5, emit=0.6, alpha=a)
+    m = mat("lplane", col, rough=0.5, emit=0.35, alpha=a)
     o = cyl(m, (0, 0, 0), r, 0.004, parent=parent, verts=64); o.visible_shadow = False
     return o, m
 

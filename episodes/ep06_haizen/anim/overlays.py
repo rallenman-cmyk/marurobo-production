@@ -272,9 +272,7 @@ def title_sprite():
 def legend_sprite(col, txt):
     key = ("leg", col, txt)
     if key not in _cache:
-        spr, off = D.pill("   " + txt, 44, fg=NAVY, bg=WHITE)
-        d = ImageDraw.Draw(spr); r = 13; cx = 38; cy = spr.height / 2 - 3
-        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=col + (255,), outline=(40, 50, 60, 255), width=2)
+        spr, off = D.pill(txt, 44, fg=NAVY, bg=WHITE, accent=col)
         _cache[key] = spr
     return _cache[key]
 
