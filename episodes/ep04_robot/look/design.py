@@ -99,15 +99,21 @@ def pill(text, size=46, fg=NAVY, bg=WHITE, accent=None, tail=None, pad=(30, 16),
     m = Image.new("L", (W_, H_), 0); dm = ImageDraw.Draw(m)
     dm.rounded_rectangle([ext, ext, ext + w - 1, ext + h - 1], r, fill=255)
     if tail:
+        # 2026-11-15 ep04 v12「しっぽの形・向きがおかしい」：先が札のふちに沿って寝ないよう、
+        # 付け根は相手に近い辺（上・下・左右の丸い端）に置き、向きは辺から 40° 以内に起こす
         cx, cy = ext + w / 2, ext + h / 2
-        tip = (cx + tail[0] * SS, cy + tail[1] * SS)
-        ang = math.atan2(tail[1], tail[0])
-        # 付け根は札のふちの内側
-        bx = cx + math.cos(ang) * min(w / 2 - r * 0.6, abs(tail[0]) * SS) * (1 if tail[0] >= 0 else 1)
-        bx = min(max(cx + tail[0] * SS * 0.25, ext + r), ext + w - r)
-        by = cy + (h / 2 - 6 * SS) * (1 if tail[1] > 0 else -1)
-        tip = short_tip((bx, by), tip, h * 0.55)
-        dm.polygon(tri_poly((bx, by), h * 0.24, tip), fill=255)
+        tx, ty = tail[0] * SS, tail[1] * SS
+        k = 1.0                                           # 先が札の中にあるとき（向きだけの指定）は、札の外まで伸ばして向きとして使う
+        while abs(tx * k) < w / 2 + h * 0.4 and abs(ty * k) < h / 2 + h * 0.4 and k < 50: k *= 1.25
+        tx, ty = tx * k, ty * k
+        L = h * 0.6; half = h * 0.22
+        sy = 1 if ty >= 0 else -1                         # いつも上か下の辺から（横の相手には端から斜めに）
+        bx = min(max(cx + tx, ext + r * 1.15), ext + w - r * 1.15)
+        by = cy + sy * (h / 2 - 5 * SS)
+        dx, dy = cx + tx - bx, abs(ty) - h / 2
+        ang = math.atan2(dx, max(dy, 1)); ang = max(-0.85, min(0.85, ang))
+        tip = (bx + math.sin(ang) * L, by + sy * math.cos(ang) * L)
+        dm.polygon(tri_poly((bx, by), half, tip), fill=255)
     img = Image.new("RGBA", (W_, H_), bg + (0,)); img.putalpha(m)
     fill = Image.new("RGBA", (W_, H_), bg + (255,)); img = Image.composite(fill, img, m)
     d = ImageDraw.Draw(img)
@@ -121,7 +127,7 @@ def pill(text, size=46, fg=NAVY, bg=WHITE, accent=None, tail=None, pad=(30, 16),
     return spr, (-(W_ / 2) / SS - p, -(H_ / 2) / SS - p)
 
 
-def bubble(w, h, tail, draw=None, bg=WHITE, r=34):
+def bubble(w, h, tail, draw=None, bg=WHITE, r=34, notail=False):
     """吹き出し。w,h は 1 倍の大きさ。tail＝しっぽの先（吹き出しの中心からの相対）。draw(d, cx, cy, s) で中身"""
     W_, H_ = w * SS, h * SS
     ext = int(max(abs(tail[0]), abs(tail[1])) * SS) + 30
@@ -137,7 +143,7 @@ def bubble(w, h, tail, draw=None, bg=WHITE, r=34):
         bx = cx + (W_ / 2 - 8 * SS) * (1 if tail[0] > 0 else -1)
         by = min(max(cy + tail[1] * SS * 0.45, ext + r * SS * 1.2), ext + H_ - r * SS * 1.2)
     tip = short_tip((bx, by), tip, min(W_, H_) * 0.32)
-    dm.polygon(tri_poly((bx, by), min(W_, H_) * 0.13, tip), fill=255)
+    if not notail: dm.polygon(tri_poly((bx, by), min(W_, H_) * 0.13, tip), fill=255)
     img = Image.composite(Image.new("RGBA", m.size, bg + (255,)), Image.new("RGBA", m.size, bg + (0,)), m)
     if draw: draw(ImageDraw.Draw(img), cx, cy, SS, img)
     spr, p = finish(img, m, blur=16, alpha=65, dy=8)

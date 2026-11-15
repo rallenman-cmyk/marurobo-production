@@ -45,6 +45,11 @@ def check_card(""", 1)
 src = src.replace("\ndef q_mark(", """
 def pic_bubble(im, cx, cy, r, draw, to=None):
     import math as _m, design as _D
+    if to == "none":                        # しっぽなし（ep04 v12 9:56「ここもうしっぽいらない」）
+        spr, off = _D.bubble(int(r * 2), int(r * 2), (0, 0), r=int(r * 0.7), notail=True)
+        if im.mode == "RGBA": im.alpha_composite(spr, (int(cx + off[0]), int(cy + off[1])))
+        else: im.paste(spr, (int(cx + off[0]), int(cy + off[1])), spr)
+        draw(ImageDraw.Draw(im), cx, cy, r); return
     if im.info.get("base") and to:          # 吹き出しは字幕から遠い所にあるので動かさず、しっぽの先（まるロボ）だけ上げる
         to = (to[0], to[1] - __DY__)
     if to is None: to = (cx - r * 1.0, cy + r * 1.5)

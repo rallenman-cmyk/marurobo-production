@@ -311,7 +311,7 @@ im = load('b11'); check_card(im, 's11', cy=96); tag(im, 's11', '2014年', 1120, 
 a = anch('b12'); im = load('b12')
 save(im, 's12a', '12-01')
 im = load('b12'); g = a.get('gate', [640, 100]); tag(im, 's12b', 'チェック欄', g[0], max(60, g[1] - 10), size=50, tail=(g[0], g[1] + 50)); save(im, 's12b', '12-02')
-im = load('b12'); g = a.get('dog', [900, 200]); tag(im, 's12c', '門番', min(g[0] + 140, 1150), max(80, g[1] - 60), size=56, tail=(g[0] + 30, g[1])); save(im, 's12c', '12-03')
+im = load('b12'); g = a.get('dog', [900, 200]); tag(im, 's12c', '門番', g[0] + 10, max(80, g[1] - 90), size=56, tail=(g[0] + 10, g[1])); save(im, 's12c', '12-03')
 a = anch('b13'); h = a.get('human_path', [400, 300]); r = a.get('robot_path', [850, 300])
 save(load('b13e'), 's13a', '13-01')                                                     # まだ足あとなし
 im = load('b13h'); tag(im, 's13b', '私', h[0] - 120, min(h[1], 470), size=56, bg=(255, 236, 214)); save(im, 's13b', '13-03')
@@ -493,7 +493,7 @@ tag(im, 's19h', '研究者が手伝った試験', 700, 440, size=46, bg=(255, 23
 save(load('b20d'), 's20e', '20-05')
 im = load('b14'); tag(im, 's21b', 'ふるまい全体を見る', 640, 70, size=52); save(im, 's21b', '21-02')   # 門番が足あと全体を照らして見ている（v5 コメント「分かりにくい」）
 # 22（v3 コメント「表現が分かりにくい」）：問い → 動き方 → 記録 → 昔と今 → AI が賢く → 見分け方が残り少ない
-im = load('b22'); check_card(im, 's22a', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r), to=(1190, 560)); save(im, 's22a', '22-01')
+im = load('b22'); check_card(im, 's22a', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r), to='none'); save(im, 's22a', '22-01')
 a13 = anch('b13'); h = a13.get('human_path', [400, 300]); r = a13.get('robot_path', [850, 300])
 im = load('b13'); tag(im, 's22b', '私', h[0] - 120, min(h[1], 470), size=56, bg=(255, 236, 214)); tag(im, 's22b', 'まるロボ', r[0] + 170, min(r[1], 470), size=52, bg=(214, 247, 243)); tag(im, 's22b', '動き方', 640, 70, size=56); save(im, 's22b', '22-02')
 im = load('b15'); a15 = anch('b15'); b = a15.get('book', [800, 250]); tag(im, 's22c', 'これまでの記録', b[0], max(70, b[1] - 120), size=52, tail=(b[0], b[1] - 40)); save(im, 's22c', '22-03')
