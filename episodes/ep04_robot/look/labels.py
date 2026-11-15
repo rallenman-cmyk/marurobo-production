@@ -26,9 +26,9 @@ def s10_labels():
             P("人", "L_top", t_who, d=(0, -70), solid=True, col="or", size=46, tail=(0, 55)),
             P("プログラム", "R_top", t_who + 0.4, d=(0, -70), solid=True, col="te", size=46, tail=(0, 55)),
             P("ほぼ全部", "R_tube", t_res + 2.2, size=40, d=(40, 0)),
-            P("1秒未満", "R_clock", t_fast, d=(0, -78), size=40),
+            P("1秒未満", "R_clock", t_fast, d=(-140, 0), size=34),
             P("5〜8割", "L_tube", t_hum + 2.0, size=40, col="or"),
-            P("9〜15秒", "L_clock", t_hsec, d=(0, -78), size=40, col="or")]
+            P("9〜15秒", "L_clock", t_hsec, d=(150, 0), size=34, col="or")]
 
 
 def s10_sfx():

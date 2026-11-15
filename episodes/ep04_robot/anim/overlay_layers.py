@@ -65,6 +65,9 @@ for fn in ("wavy", "straight"):
     src = src.replace("def %s(d, x0, y0, x1, y1, col" % fn, "def %s(d, x0, y0, x1, y1, col" % fn, 1)
     i = src.index("def %s(d, x0, y0, x1, y1, col" % fn); j = src.index("\n", i) + 1
     src = src[:j] + "    if __CUR__['base']: y0 -= __DY__; y1 -= __DY__\n" + src[j:]
+# 2D のチェック欄に付く輪・札は動かさない（上げると欄からずれる。v12 0:30・4:10）
+src = src.replace("ring_on(im, bc[0], bc[1], 62, 56)", "ring_on(im, bc[0], bc[1] + __DY__, 62, 56)", 1)
+src = src.replace("tag(im, 's11', '2014年', 1120, 230,", "tag(im, 's11', '2014年', 1120, 230 + __DY__,", 1)
 g["__LOAD__"] = _load; g["__BASE__"] = BASE; g["__DY__"] = DY; g["__CUR__"] = CUR
 exec(compile(src, "board_overlay.py", "exec"), g)
 sh = json.load(open(os.path.join(OUT, "shots.json"), encoding="utf-8"))
