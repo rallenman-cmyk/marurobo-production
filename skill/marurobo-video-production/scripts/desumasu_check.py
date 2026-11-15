@@ -58,3 +58,29 @@ many = [r for r in rows if r[1].count('、') > 2]
 for r in many:
     print('読点 %d つ: %s %s' % (r[1].count('、'), r[0], r[1]))
 print('読点が 3 つ以上の行 %d 本' % len(many))
+
+# 終わりの形で数える（7本目 台本 v0.3、2026-11-15 ユーザーと決めた）：ていねいな形のまま、
+# 「です」「ます」「ました」「のです」「ですね」「でしょう（か）」「ましょう」などを混ぜ、同じ形を 4 本続けない。
+# くだけた形（〜というわけ。など）では切らない。ていねいでない文は、続きを切る。
+def form(t):
+    s = re.sub(r'【[^】]*】', '', t).strip()
+    s = [x for x in re.split(r'(?<=[。？！])', s) if x.strip()]
+    s = re.sub(r'[。？！?!」』…\s]+$', '', s[-1]) if s else ''
+    for k, name in [(r'(でしょう|ましょう)か?$', 'しょう'), (r'(です|ます)(ね|よね|よ)$', 'ね・よ'),
+                    (r'(の|ん)です$', 'のです'), (r'(ました|でした)$', 'た'), (r'ません$', 'ません'),
+                    (r'です$', 'です'), (r'ます$', 'ます'), (r'ください$', 'ください')]:
+        if re.search(k, s):
+            return name
+    return None
+runs = 0
+i = 0
+while i < len(rows):
+    f0 = form(rows[i][1])
+    j = i
+    while j + 1 < len(rows) and f0 and form(rows[j + 1][1]) == f0:
+        j += 1
+    if f0 and j - i + 1 >= 4:
+        runs += 1
+        print('同じ終わりの形「%s」が %d 本: %s 〜 %s' % (f0, j - i + 1, rows[i][0], rows[j][0]))
+    i = j + 1
+print('同じ終わりの形が 4 本以上続く所 %d か所' % runs)
