@@ -110,6 +110,22 @@ def where(name, t, clip=None):
     return None
 
 
+def where_box(name, t, clip=None):
+    """物の形を画面に写した箱 (x0, y0, x1, y1)（track(..., box=True) で記録したもの）"""
+    cands = [clip] if clip else [n for n, _ in active(t)][::-1]
+    for nm in cands:
+        if nm not in LOG or name + "#box" not in LOG[nm]["track"]: continue
+        tr = LOG[nm]["track"][name + "#box"]; k = (t - CL[nm][0]) * FPS
+        if not tr: continue
+        best = min(tr, key=lambda r: abs(r[0] - k))
+        if best[5] <= 0: return None
+        return tuple(best[1:5])
+    return None
+
+
+OV.BOX[0] = where_box
+
+
 # ---------------------------------------------------------------- 音
 N = int((T.END + 1) * SR)
 voice = np.zeros(N, np.float32)
@@ -197,7 +213,7 @@ cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s
        "-i", os.path.join(tmp, "mix.wav"), "-vf", "subtitles=%s:fontsdir=%s" % (os.path.join(tmp, "subs.ass"), ffdir),
        "-c:v", "libx264", "-preset", "veryfast", "-crf", "30", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-shortest", OUT]
 pr = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-missing = set(); last = None
+missing = set(); last = None; OVL = {}
 nf = int((TO - FROM) * FPS)
 for fi in range(nf):
     t = FROM + fi / FPS
@@ -216,12 +232,17 @@ for fi in range(nf):
     last = im
     base = im.convert("RGBA")
     OV.draw(t, base, where, frame_of=frame, fontdir=FONTDIR)
+    for pr_ in OV.overlaps(): OVL.setdefault(pr_, []).append(t)
     pr.stdin.write(base.convert("RGB").tobytes())
     if fi % 1200 == 0: print("%.0f 秒" % t, flush=True)
 pr.stdin.close(); pr.wait()
 
 # ---------------------------------------------------------------- 点検
 chk = []
+ovl_txt = []
+for (na, nb), ts in sorted(OVL.items(), key=lambda x: x[1][0]):
+    ovl_txt.append("%d:%04.1f〜%d:%04.1f %s × %s" % (ts[0] // 60, ts[0] % 60, ts[-1] // 60, ts[-1] % 60, na, nb))
+chk.append("重なっている札・吹き出し・枠（2D どうし）：" + ("、".join(ovl_txt) or "なし"))
 gaps = [(P[k]["end"], P[k + 1]["start"] - P[k]["end"], T.L[P[k + 1]["no"]]["id"]) for k in range(len(P) - 1) if P[k + 1]["start"] - P[k]["end"] >= 2.2]
 chk.append("2.2 秒以上の間：" + ("、".join("%.1f 秒（%s の前）" % (g_, i_) for _, g_, i_ in gaps) or "なし"))
 short = [(a, c - a, t) for a, c, t in SUBS if c - a < 1.0]

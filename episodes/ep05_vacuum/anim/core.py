@@ -25,7 +25,27 @@ def w(i, word, end=False):
 
 def f(t): return round((t - CLOCK["T0"]) * FPS)
 def ev(t, kind, gain=1.0): EVENTS.append((round(t, 3), kind, gain))
-def track(name, ob, dz=0.0): TRACK[name] = (ob, dz)
+def track(name, ob, dz=0.0, box=False):
+    """2D の札をつける物。box=True なら、物（と子）の形の角を画面に写した外接の箱も記録する（name#box）。
+    赤い枠・輪は、中心と決まった大きさで描くとずれる（5本目 v4「赤い枠はちゃんと先輩の形で囲って」「カメラのまるの位置ズレてる」）"""
+    TRACK[name] = (ob, dz)
+    if box: TRACK_BOX[name] = ob
+
+
+TRACK_BOX = {}
+START_SE_FROM = [1e9]    # scenes.py が入れる（カメラの先輩が出る 18 章の頭）
+
+
+def _screen_box(sc, ob):
+    from bpy_extras.object_utils import world_to_camera_view
+    xs, ys, zs = [], [], []
+    for o in [ob] + list(ob.children_recursive):
+        if o.type != 'MESH' or o.hide_render: continue
+        for c in o.bound_box:
+            p = world_to_camera_view(sc, sc.camera, o.matrix_world @ Vector(c))
+            xs.append(p.x * 1280); ys.append((1 - p.y) * 720); zs.append(p.z)
+    if not xs: return None
+    return [round(min(xs), 1), round(min(ys), 1), round(max(xs), 1), round(max(ys), 1), round(min(zs), 2)]
 
 
 def _interp(ob, frame, interp):
@@ -155,7 +175,8 @@ class Maru:
             cur = self._last["face"][1] if "face" in self._last else self.face
             fd = cur + ((fd - cur + 180) % 360 - 180)
             self.at(t0 - 0.35, face=cur); self.at(t0, face=fd)
-        self.at(t0, loc=p0, interp="LINEAR"); self.at(t1, loc=p1, interp="LINEAR")
+        self.at(t0, loc=p0, interp="LINEAR"); self.at(t1, loc=p1, interp="LINEAR", hold=False)   # hold=False：1 秒より長い歩きで、止まったまま最後に走る（5本目 v4 の点検で見つけた）
+        if os.environ.get("DBG_WALK"): print("DBGWALK %.2f %.2f %.2f" % (t0, t1, t1 - t0))
         n = max(1, int((t1 - t0) / step)); z = self.z0
         for k in range(n):
             ta = t0 + k * (t1 - t0) / n
@@ -191,6 +212,12 @@ class Sp:
             if brush: key(self.d["brush"], ("rotation_euler", 2), t, -t * 12.0, "LINEAR")
             prev = (x, y, ang); t += dt
         if motor: ev(a, "motor_on", 0.5); ev(b, "motor_off", 0.5)
+        # v4「先輩 2 人の動き始めるときの SE を分けたら、どっちか分かりやすい」（候補 C）：カメラの先輩が出てから（START_SE_FROM）、
+        #   止まっていた先輩が動き出す所で、光の物差し＝上がる 3 音／カメラ＝下がる 3 音。続けて走る区間（すき間 0.5 秒未満）では鳴らさない
+        kind = self.d.get("kind")
+        if kind in ("lidar", "camera") and a >= START_SE_FROM[0] and a - getattr(self, "_drive_end", -99) > 0.5:
+            ev(a, "start_" + kind, 0.45)
+        self._drive_end = b
 
     def spin(self, t0, t1, rps=0.5):
         if "spin" not in self.d: return
@@ -261,6 +288,12 @@ def render_clip(name, t0, t1, outdir, samples, res, step, fr=None, stills=None):
         for nm, (ob, dz) in TRACK.items():
             p = world_to_camera_view(sc, sc.camera, ob.matrix_world.translation + Vector((0, 0, dz)))
             track[nm].append([k, round(p.x * 1280, 1), round((1 - p.y) * 720, 1), round(p.z, 2)])
+        if os.environ.get("DBG_LOC"):
+            for nm in os.environ["DBG_LOC"].split(","):
+                if nm in TRACK: print("DBG", k, nm, tuple(round(v, 3) for v in TRACK[nm][0].matrix_world.translation))
+        for nm, ob in TRACK_BOX.items():
+            bx = _screen_box(sc, ob)
+            if bx: track.setdefault(nm + "#box", []).append([k] + bx)
     json.dump(dict(t0=t0, t1=t1, fps=FPS, frames=n, step=step, events=sorted(EVENTS), track=track), open(os.path.join(outdir, name + "_log.json"), "w"))
     if TRACK_ONLY: return
     if "--video" in _argv or "--gpu" in _argv:      # PC の本番（pc_out.py：グラフィックボード・mp4）

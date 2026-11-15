@@ -43,7 +43,7 @@ def ev_list():
     # 12：さきほどのスマホの地図（小窓）
     add(w("12-03", "さきほど"), e("12-05") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))   # 3D のスマホの寄りの絵（v2）
     # 13：1 メートル・「？」
-    add(w("13-03", "1メートル"), e("13-03") + 0.4, "tag", dict(text="1メートル", obj="onemeter", dy=-70, size=56))
+    add(w("13-03", "1メートル"), e("13-03") + 0.4, "tag", dict(text="1メートル", obj="onemeter", dy=70, size=56))   # v4：「ここ」の札と重なった → 光の線の下に
     #   （v3：「ここ」が分からない、が伝わらない → 「ここから」で先輩に「ここ」の札。「ここ」で先輩が消え、点と線が当てずっぽうに動き回る（3D）。
     #    「先輩がどこにいたか」で、先輩を赤い枠で囲む）
     add(w("13-03", "ここから"), w("13-04", "「ここ」") + 0.1, "tag", dict(text="ここ", obj="senpai", dy=-110, bg=YEL))
@@ -85,6 +85,8 @@ def ev_list():
     # 26：前の場面の小窓（「ぶつかって曲がるだけだった」→ 昔の先輩）
     add(w("26-05", "ぶつかって"), e("26-05") + 0.2, "pip_clip", dict(clip="S06c", src_t=s("06-09") + 2.5, sepia=True))
     add(s("26-02"), e("26-04") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
+    # 17-05：「いちばん最初に描いたあの壁」→ 4 章で最初に壁を描いた所の小窓（v4「最初のところの切り抜きを表示して」）
+    add(w("17-05", "いちばん最初"), e("17-05") + 0.6, "pip_clip", dict(clip="S11a", src_t=245.6, hold=True))
     # 27：オチの地図
     add(s("27-05") + 0.4, e("27-05") + 2.0, "pip_clip", dict(clip='S27b', src_t=e("27-04") - 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
     return sorted(E, key=lambda x: x[0])
@@ -101,12 +103,34 @@ def _pop(t, t0, t1):
     return max(0.05, k), a
 
 
+BOX = [None]        # assemble が入れる：BOX[0](名前, t, clip) → 物の形を画面に写した箱 (x0, y0, x1, y1) か None
+RECTS = []          # いま描いた 2D の場所 [(出来事の番号, 名前, (x0, y0, x1, y1))]。重なりの点検（assemble の点検）に使う（5本目 v4「ここと 1メートルのテロップ重なってる → 見つける仕組み」）
+_CUR = [None]
+NO_CHECK = ("phone", "title", "promise", "tv", "viewfinder", "arrow")   # 画面いっぱい・わざと重ねるもの
+
+
+def _rect(x0, y0, x1, y1):
+    if _CUR[0] is not None and _CUR[0][1] not in NO_CHECK: RECTS.append((_CUR[0][0], _CUR[0][2], (x0, y0, x1, y1)))
+
+
+def overlaps(margin=6):
+    """いまの絵で、ちがう出来事の 2D どうしが重なっている組 [(名前, 名前)]"""
+    out = []
+    for i in range(len(RECTS)):
+        for j in range(i + 1, len(RECTS)):
+            (ea, na, ra), (eb, nb, rb) = RECTS[i], RECTS[j]
+            if ea == eb: continue
+            if min(ra[2], rb[2]) - max(ra[0], rb[0]) > margin and min(ra[3], rb[3]) - max(ra[1], rb[1]) > margin: out.append((na, nb))
+    return out
+
+
 def _paste(base, spr, cx, cy, k=1.0, a=1.0):
     if k != 1.0:
         spr = spr.resize((max(1, int(spr.width * k)), max(1, int(spr.height * k))), Image.LANCZOS)
     if a < 1.0:
         al = spr.getchannel("A").point(lambda v: int(v * a)); spr = spr.copy(); spr.putalpha(al)
     base.alpha_composite(spr, (int(cx - spr.width / 2), int(cy - spr.height / 2)))
+    if a > 0.3: _rect(cx - spr.width / 2, cy - spr.height / 2, cx + spr.width / 2, cy + spr.height / 2)
 
 
 def tag_sprite(text, size=48, bg=WHITE, fg=None, tail=None):
@@ -238,9 +262,11 @@ def arrow_sprite(p0, p1, col=YEL, hs=1.0):
 def draw(t, base, where, frame_of=None, fontdir=None):
     """base（1280×720 RGBA）に、時刻 t の 2D を描く。where(名前, t, clip=None) → 画面の (x, y) か None。frame_of(clip, t) → 小窓の絵"""
     if fontdir and not D.FDIR[0]: D.FDIR[0] = fontdir
-    for t0, t1, kind, p in EVENTS:
+    RECTS.clear()
+    for ei, (t0, t1, kind, p) in enumerate(EVENTS):
         if not (t0 <= t < t1): continue
         k, a = _pop(t, t0, t1)
+        _CUR[0] = (ei, kind, "%s「%s」" % (kind, p.get("text") or p.get("icon") or p.get("obj") or p.get("clip") or ""))
         if kind == "tag":
             if "pos" in p: cx, cy = p["pos"]; tail = None
             else:
@@ -292,15 +318,23 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "ring2d":
             q = where(p["obj"], t, p.get("track_clip"))
             if q is None: continue
-            r = p.get("r", 30) * k; im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
+            bx = BOX[0](p["obj"], t, p.get("track_clip")) if BOX[0] else None
+            if bx: q = ((bx[0] + bx[2]) / 2, (bx[1] + bx[3]) / 2); r = (max(bx[2] - bx[0], bx[3] - bx[1]) / 2 + 14) * k    # 物の形の箱の中心と大きさで（ずれない）
+            else: r = p.get("r", 30) * k
+            im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
             d_.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], outline=YEL + (int(255 * a),), width=7)
-            base.alpha_composite(im)
+            base.alpha_composite(im); _rect(q[0] - r, q[1] - r, q[0] + r, q[1] + r)
         elif kind == "frame2d":    # 物を囲む角の丸い枠（v3：先輩がどこにいたか）
             q = where(p["obj"], t, p.get("track_clip"))
             if q is None: continue
-            r = p.get("r", 60) * k; S2 = 2; im = Image.new("RGBA", (1280 * S2, 720 * S2), (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
-            d_.rounded_rectangle([(q[0] - r) * S2, (q[1] - r * 0.8) * S2, (q[0] + r) * S2, (q[1] + r * 0.8) * S2], int(18 * S2), outline=p.get("col", RED) + (int(255 * a),), width=8 * S2)
-            base.alpha_composite(im.resize((1280, 720), Image.LANCZOS))
+            bx = BOX[0](p["obj"], t, p.get("track_clip")) if BOX[0] else None
+            if bx:     # 物の形の箱 ＋ すき間 14px（形に沿って囲む。5本目 v4「赤い枠はちゃんと先輩の形で囲って」）
+                cx_, cy_ = (bx[0] + bx[2]) / 2, (bx[1] + bx[3]) / 2; hw, hh = ((bx[2] - bx[0]) / 2 + 14) * k, ((bx[3] - bx[1]) / 2 + 14) * k
+            else:
+                r = p.get("r", 60) * k; cx_, cy_, hw, hh = q[0], q[1], r, r * 0.8
+            S2 = 2; im = Image.new("RGBA", (1280 * S2, 720 * S2), (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
+            d_.rounded_rectangle([(cx_ - hw) * S2, (cy_ - hh) * S2, (cx_ + hw) * S2, (cy_ + hh) * S2], int(min(18, hh) * S2), outline=p.get("col", RED) + (int(255 * a),), width=7 * S2)
+            base.alpha_composite(im.resize((1280, 720), Image.LANCZOS)); _rect(cx_ - hw, cy_ - hh, cx_ + hw, cy_ + hh)
         elif kind == "darrow":    # 2 つの物の間の両向きの矢印と札
             qa = where(p["a"], t, p.get("track_clip")); qb = where(p["b"], t, p.get("track_clip"))
             if qa is None or qb is None: continue

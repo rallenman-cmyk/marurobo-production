@@ -345,7 +345,8 @@ def b_lidar(cl):
     ride = empty((0, 0, 0)); ride.parent = sp.root
     # まるロボを先輩の上に移す：跳ぶ弧は世界の座標で打ち、着いた瞬間から先輩の子にする（子の場所は先輩の上）
     mr = Maru((0, 0, 0), face=0); mr.root.parent = sp.root
-    mr.root.location = (0, -0.085, sp.d["top_z"] + 0.004); mr.root.rotation_euler = (0, 0, R(180))
+    MRY = -0.112          # v4「まるロボが乗るときにセンサー貫通しないように」：ふた（y 0.035・半径 0.052）から離して前のふちに
+    mr.root.location = (0, MRY, sp.d["top_z"] + 0.004); mr.root.rotation_euler = (0, 0, R(180))
     show_between(mr.root, tj + 0.5); hide_key(m.root, s("09-01") - 1.5, False); hide_key(m.root, tj + 0.5, True)
     key(m.root, "location", tj, (-1.3, 0.62, 0.0)); key(m.root, "location", tj + 0.25, (-1.25, 0.8, 0.24)); key(m.root, "location", tj + 0.5, (-1.215, 0.95, sp.d["top_z"] + 0.004))
     ev(tj, "jump", 0.5); ev(tj + 0.5, "land", 0.35)
@@ -377,6 +378,10 @@ def b_lidar(cl):
         dirx, diry = math.sin(wa), -math.cos(wa)
         h = plan.ray(xs + dirx * 0.0, ys + diry * 0.0, math.atan2(diry, dirx), S_)
         L = (h[0] if h else 3.0)
+        # v4「レーザーみたいなのもまるロボやソファに当たってるときは貫通させないで」：
+        #   乗っているまるロボの足（先輩の上の円）と、ソファの形（本当は座面の下を通るが、絵では突きぬけて見える）で止める
+        if t > tj + 0.5: L = min(L, _ray_circle(xs, ys, dirx, diry, *_loc2world(xs, ys, R(angs), 0, MRY), 0.075))
+        L = min(L, _ray_rect(xs, ys, dirx, diry, plan.FURN["sofa"][:4]))
         key(bm_, ("scale", 1), t, L, "LINEAR"); t += 1 / FPS * 2
     show_between(bm_, s("10-03") - 0.3, s("11-01") + 0.2)
     # 10-04：光が出て、返ってくる（光の玉が行って戻る）
@@ -402,7 +407,7 @@ def b_lidar(cl):
     ring1 = [(round(h_[1][0], 3), round(h_[1][1], 3), w("10-05", "何回も") + 0.3) for h_ in [plan.ray(xs, ys, R(a_), S_) for a_ in range(0, 360, 2)] if h_]
     rp, rm = point_cloud("ring1", ring1, life=e("10-05") + 0.6 - w("10-05", "何回も") - 0.3, t_offset=CLOCK["T0"])
     # 11：明かりを落とす → 走りながら点を置く（まるロボは上に乗ったまま）
-    lights_off(s("11-02") + 0.3, s("11-02") + 2.4, sky=0.03, world_s=0.02)
+    lights_off(s("11-02") + 0.3, s("11-02") + 2.4, sky=DARK_SKY, world_s=DARK_W)
     sp.drive(d11); sp.drive(d12)
     xe, ye, ae = d12.pose(d12.t1); sp.place(e("12-05") + 2, xe, ye, ae)
     pc, pm = point_cloud("map", pts, t_offset=CLOCK["T0"])
@@ -448,15 +453,42 @@ def b_lidar(cl):
 SP13 = (-1.62, -0.2)
 
 
+START_SE_FROM[0] = s("18-01")    # 先輩ごとの動き出しの音は、カメラの先輩が出てから
+DARK_SKY, DARK_W = 0.06, 0.035   # 明かりを落とした部屋（v4「部屋の暗さ若干明るく」「明るくしすぎなくていい」：0.03・0.02 から少しだけ。点の線は目立つまま）
+
+
 def dark_map(split_x=0.3):
     """暗くした部屋と、出来上がった地図（右側＝x > split_x は、13-08 で「まだ描いていない所」として消せるよう別にする）"""
     room(); door_leaf(False)
-    lights_off(CLOCK["T0"] - 2.0, CLOCK["T0"] - 1.0, sky=0.03, world_s=0.02)
+    lights_off(CLOCK["T0"] - 2.0, CLOCK["T0"] - 1.0, sky=DARK_SKY, world_s=DARK_W)
     pts = [(x, y, -10.0) for x, y in plan.map_points()]
     left = [p for p in pts if p[0] <= split_x]; right = [p for p in pts if p[0] > split_x]
     a, am = point_cloud("mapL", left, pop=0.0, t_offset=CLOCK["T0"])
     b, bm = point_cloud("mapR", right, pop=0.0, t_offset=CLOCK["T0"])
     return am, bm, right
+
+
+def _loc2world(x, y, a, lx, ly):
+    return (x + lx * math.cos(a) - ly * math.sin(a), y + lx * math.sin(a) + ly * math.cos(a))
+
+
+def _ray_circle(ox, oy, dx, dy, cx, cy, r):
+    """(ox, oy) から (dx, dy) 向きの線が円に当たるまでの長さ（当たらなければ大きな数）"""
+    fx, fy = ox - cx, oy - cy; b = fx * dx + fy * dy; c = fx * fx + fy * fy - r * r; d = b * b - c
+    if d < 0: return 99.0
+    t1 = -b - math.sqrt(d)
+    return t1 if t1 > 0 else 99.0
+
+
+def _ray_rect(ox, oy, dx, dy, rc):
+    x0, y0, x1, y1 = rc; tn, tf = -1e9, 1e9
+    for o, d, lo, hi in ((ox, dx, x0, x1), (oy, dy, y0, y1)):
+        if abs(d) < 1e-9:
+            if not (lo <= o <= hi): return 99.0
+            continue
+        a_, b_ = (lo - o) / d, (hi - o) / d
+        tn, tf = max(tn, min(a_, b_)), min(tf, max(a_, b_))
+    return tn if (tn <= tf and tn > 0) else 99.0
 
 
 def pts_color(m, t, col):
@@ -498,7 +530,7 @@ def b_dark(cl):
         key(unit, "location", tk, (SP13[0] + dx, SP13[1] + dy, 0)); key(unit, ("rotation_euler", 2), tk, R(da))
     key(unit, "location", tback, (SP13[0], SP13[1], 0)); key(unit, ("rotation_euler", 2), tback, 0.0); ev(tback + 0.1, "snap", 0.4)
     gh_t = empty((0, 0, 0.1)); gh_t.parent = unit
-    track("ghost", gh_t, 0.0); track("senpai", sp.root, 0.18)
+    track("ghost", gh_t, 0.0); track("senpai", sp.root, 0.18, box=True)
     # 13-07 地図が光る、13-08 右の半分は「まだ描いていない」→ 消える
     pts_glow(am, w("13-07", "地図") - 0.05, 2.2); pts_glow(am, w("13-07", "地図") + 0.3, 6.0); pts_glow(am, e("13-07") + 0.2, 2.2)
     pts_glow(bm, w("13-07", "地図") - 0.05, 2.2); pts_glow(bm, w("13-07", "地図") + 0.3, 6.0); pts_glow(bm, e("13-07") + 0.2, 2.2)
@@ -631,20 +663,39 @@ def b_rug(cl):
     room(rug=True); door_leaf(False)
     rug = RUGOBJ[-1]
     tr_ = w("16-02", "じゅうたん")
-    key(rug, "scale", tr_ - 0.3, (0.001, 0.001, 1)); key(rug, "scale", tr_ + 0.25, (1.08, 1.08, 1)); key(rug, "scale", tr_ + 0.45, (1, 1, 1)); ev(tr_, "pop", 0.5)
+    # v4「じゅうたんはまるロボが転がして広げる感じに」：巻いたじゅうたんの左にまるロボ。「じゅうたん」でまるロボが押すと、
+    #   転がりながら右へ広がる（広がった所だけ見せる・巻きは残りの長さで細くなる）。押し終わったら、まるロボはもとの場所へ
+    rx0, ry0, rx1, ry1 = plan.RUG; yc_ = (ry0 + ry1) / 2; LW = rx1 - rx0; TH = 0.024
+    tp0, tp1 = tr_ - 0.5, e("16-02") - 0.15
+    rmat = bpy.data.materials["rug"]
+    roll = empty((0, 0, 0)); rcyl = cyl(rmat, (0, 0, 0), 1.0, ry1 - ry0 + 0.02, rot=(R(90), 0, 0), parent=roll, verts=48)
+    for sy in (-1, 1):     # 両はしだけ、ふちの色（巻いた渦の面）
+        cyl(mat("rugedge_r", "#E9D8C4", rough=0.95), (0, sy * ((ry1 - ry0) / 2 + 0.018), 0), 1.0, 0.03, rot=(R(90), 0, 0), parent=roll, verts=48)
+    rad = lambda xr: math.sqrt(0.0035 ** 2 + TH * max(0.0, rx1 - xr) / math.pi)
+    ang = 0.0; nst = 40; prev = rx0
+    for i in range(nst + 1):
+        u = i / nst; uu = u; tt = tp0 + (tp1 - tp0) * u; xr = rx0 + LW * uu; r_ = rad(xr)
+        ang += (xr - prev) / max(r_, 0.02); prev = xr
+        key(roll, "location", tt, (xr + r_, yc_, r_), "LINEAR"); key(roll, "scale", tt, (r_, 1, r_), "LINEAR"); key(roll, ("rotation_euler", 1), tt, ang, "LINEAR")
+        key(rug, "location", tt, (rx0 + (xr - rx0) / 2 + 0.0001, yc_, 0), "LINEAR"); key(rug, "scale", tt, (max(0.001, (xr - rx0) / LW), 1, 1), "LINEAR")
+    show_between(roll, CLOCK["T0"] - 1.0, tp1 + 0.05)
+    ev(tp0 + 0.1, "whoosh", 0.3)
     sp = Sp(senpai_lidar((0.3, 1.95), 0)); sp.spin(CLOCK["T0"] - 2, e("17-11") + 3, 0.6)
     d1, d2, d3 = rug_drive()
     sp.place(s("16-01") - 1.5, 0.3, 1.95, plan.face_deg(0, -1))
     sp.drive(d1); sp.drive(d2, wheel_scale=4.0); sp.drive(d3)
     xe, ye, ae = d3.pose(d3.t1); sp.place(e("17-11") + 3, xe, ye, ae)
-    m = Maru((0.9, -0.3, 0), face=face_to((0.9, -0.3), (-0.6, 0.0)))
-    m.at(s("16-01") - 1.5, loc=(0.9, -0.3, 0)); m.hop(tr_ + 0.5, 0.1, 0.3)
+    MG = 0.17      # まるロボの中心と巻きの左はしの間（体がちょうど触れるくらい）
+    m = Maru((rx0 - MG, yc_, 0), face=plan.face_deg(1, 0))
+    m.at(s("16-01") - 1.5, loc=(rx0 - MG, yc_, 0), face=plan.face_deg(1, 0))
+    m.walk(tp0, tp1, (rx1 - MG, yc_, 0), turn=False)                       # 巻きを押して歩く
+    m.walk(tp1 + 0.3, s("16-03") + 0.6, (0.9, -0.3, 0)); m.at(s("16-03") + 0.7, face=face_to((0.9, -0.3), (-0.6, 0.0)))
     m.at(s("16-03") + 1.0, face=face_to((0.9, -0.3), (-1.0, -0.2)))
     m.tilt(s("16-06") + 0.1, 18, 0.35); m.tilt(e("16-06") + 0.8, 0)
     m.walk(s("17-01") + 0.2, s("17-02"), (0.9, 0.9, 0)); m.at(s("17-02") + 0.4, face=face_to((0.9, 0.9), (0.3, 2.0)))
     # 16-05 から暗い地図：もとの地図（青緑）＋ ずれて置かれた新しい点（青緑）→ 壁が二重
     tdark = s("16-05") - 0.25
-    lights_off(tdark, tdark + 0.25, sky=0.03, world_s=0.02)
+    lights_off(tdark, tdark + 0.25, sky=DARK_SKY, world_s=DARK_W)
     base = [(x, y, -10.0) for x, y in plan.map_points()]
     first = [p for p in base if p[1] > 2.3 and -1.0 < p[0] < 1.4]
     restb = [p for p in base if not (p[1] > 2.3 and -1.0 < p[0] < 1.4)]
@@ -668,6 +719,9 @@ def b_rug(cl):
     tw = w("17-03", "いま見えている")
     co, com = point_cloud("cur17", cur, col=WHITE_PT, radius=0.022, z=plan.LIDAR_Z + 0.01, pop=0.0, base=3.5, t_offset=1e5); co.parent = hold
     show_between(co, tw); ev(tw, "pop", 0.4)
+    # v4「いま見えている壁のときには、いま見えている壁のとこだけ見せた方がいいかも」：17-03 の間は地図の点を隠し、白い形だけ。
+    #   17-04（どこかで見たような）で地図が戻って、見比べる
+    for o in (bo, fo, do): hide_key(o, tw - 0.05, True); hide_key(o, s("17-04") - 0.1, False)
     # 17-05：いちばん最初に描いた壁が光る／17-06 先輩「ピッ」
     t5 = w("17-05", "あの壁")
     pts_glow(fom, t5 - 0.1, 2.2); pts_glow(fom, t5 + 0.3, 9.0); pts_glow(fom, e("17-05") + 0.4, 9.0); pts_glow(fom, e("17-05") + 1.0, 3.5)
@@ -723,7 +777,7 @@ def b_rug(cl):
         #   寄りすぎると点が大きな粒になって帯に見え、左はソファに隠れる → 高さ 1.9 m（2 本の間は画面で 140px ほど）
         # 何周分ものずれた点が重なって太い帯に見えた → この絵では、ずれた点（do）を隠して、いま見えている形（オレンジの 1 本）だけにする。
         #   引き戻してぴたっと重なったあとに戻す（青緑の地図の一部として）
-        hide_key(do, s("17-07") - 1.0, True); hide_key(do, tB + 0.3, False)
+        hide_key(do, s("17-07") - 1.0, True)     # v4「青い点がすごいブレて線みたいじゃなくなってる」：ぴたっと重なったあとも戻さない（もとの地図だけで、きれいな線）
         for o in (do, co, fo, bo):
             o.visible_diffuse = False; o.visible_glossy = False; o.visible_transmission = False; o.visible_volume_scatter = False
         c_ = cam_top((-0.5, 2.2, 1.95), 29)
@@ -732,7 +786,7 @@ def b_rug(cl):
     else:
         c_, tg = cam_rig((0.4, 0.4, 2.2), (0.3, 2.3, 0.0), 30)
         cam_move(c_, tg, s("17-03") - 0.8, s("17-07") + 1.0, (0.45, 0.45, 2.2), (0.35, 0.75, 2.0), (0.3, 2.3, 0.0), (0.3, 2.35, 0.0))
-    track("senpai", sp.root, 0.15); track("maru", m.root, 0.42); track("wheel_r", sp.d["wheels"][1], 0.0)
+    track("senpai", sp.root, 0.15); track("maru", m.root, 0.42); track("wheel_r", sp.d["wheels"][1], 0.0); track("roll", roll, 0.0)
 
 
 # ======================================================================== S18〜S21：カメラの先輩
@@ -800,7 +854,8 @@ def b_cam(cl):
     spl.data.spot_size = R(40); spl.data.spot_blend = 0.5; spl.data.color = srgb("#BFFFF6")[:3]
     spl.data.energy = 0.0; spl.data.keyframe_insert("energy", frame=f(tp - 0.1)); spl.data.energy = 1400.0; spl.data.keyframe_insert("energy", frame=f(tp + 0.15))
     CD = 9.6   # 円すいの長さ（体の中の大きさ。まるロボは 0.26 倍なので、本当は約 2.5 m＝天井まで）
-    bpy.ops.mesh.primitive_cone_add(radius1=0.12, radius2=1.3, depth=CD, vertices=48, location=(0, 0, 0)); cone = bpy.context.object
+    # v4「まるロボ側が細くて、天井側の光が広いように」：円すいの +z（radius2）が目の側に来るので、目の側を細く
+    bpy.ops.mesh.primitive_cone_add(radius1=1.6, radius2=0.1, depth=CD, vertices=48, location=(0, 0, 0)); cone = bpy.context.object
     cone.parent = m.body; cone.location = (0, -0.5 - CD / 2, 0.05); cone.rotation_euler = (R(-90), 0, 0)   # 目の光の筋（光の円すい。天井まで）
     cm_ = bpy.data.materials.new("eyecone"); cm_.use_nodes = True; nt_ = cm_.node_tree
     for n_ in list(nt_.nodes): nt_.nodes.remove(n_)
@@ -813,7 +868,7 @@ def b_cam(cl):
     # 天井に当たった光の丸（はっきり見えるように）
     mx0, my0 = xc + 0.45, yc - 0.35; ux, uy = xc - mx0, yc - my0; ul = math.hypot(ux, uy); ux, uy = ux / ul, uy / ul
     reach = (plan.CEIL - 0.2) / math.tan(R(60))
-    spot = cyl(glow_mat("ceilspot", "#DFFFFA", 3.0), (mx0 + ux * reach, my0 + uy * reach, plan.CEIL - 0.006), 0.3, 0.004, verts=64); spot.visible_shadow = False
+    spot = cyl(glow_mat("ceilspot", "#DFFFFA", 3.0), (mx0 + ux * reach, my0 + uy * reach, plan.CEIL - 0.006), 0.42, 0.004, verts=64); spot.visible_shadow = False
     for a_ in ("visible_diffuse", "visible_glossy"): setattr(spot, a_, False)
     show_between(spot, tp); scale_pop(spot, tp, d=0.2)
     for o in marks:
@@ -842,7 +897,7 @@ def b_cam(cl):
         c, tg = cam_rig((1.6, -0.9, 0.7), (0.4, 1.1, 1.0), 22)
         cam_move(c, tg, s("21-01") - 0.8, e("21-02"), (1.6, -0.9, 0.7), (1.4, -0.7, 0.6), (0.2, 1.2, 1.3), (0.1, 1.2, 1.0))
         cam_move(c, tg, e("21-02"), e("21-03") + 0.6, (1.4, -0.7, 0.6), (0.9, 0.0, 0.35), (0.1, 1.2, 1.0), (-0.1, 0.9, 0.08), 22, 32)
-    track("cam", cs.root, 0.12); track("lidar", ls.root, 0.15); track("maru", m.root, 0.42); track("camlens", cs.d["cam"], 0.0)
+    track("cam", cs.root, 0.12); track("lidar", ls.root, 0.15); track("maru", m.root, 0.42); track("camlens", cs.d["cam"], 0.0, box=True)
 
 
 # ======================================================================== S22〜S23：段差（光の物差しの先輩）

@@ -48,6 +48,10 @@ def make(kind, sr=48000):
         a = env * (np.sin(ph) + 0.25 * np.sin(2 * ph))
         b = 0.5 * _t(900, 700, 0.08, sr, d=0.05)
         return 0.22 * np.concatenate([b, np.zeros(int(0.04 * sr)), a])
+    if kind == "start_lidar":    # 光の物差しの先輩が動き出す：上がる 3 音（v4 で選んでもらった候補 C）
+        return 0.26 * np.concatenate([_t(1047, 1047, 0.08, sr, d=0.06), _t(1319, 1319, 0.08, sr, d=0.06), _t(1760, 1760, 0.16, sr, d=0.12)])
+    if kind == "start_camera":   # カメラの先輩が動き出す：下がる 3 音
+        return 0.26 * np.concatenate([_t(1319, 1319, 0.08, sr, d=0.06), _t(1047, 1047, 0.08, sr, d=0.06), _t(784, 784, 0.18, sr, d=0.14)])
     if kind == "motor":     # 1 秒ぶん（組み立てでくり返して敷く）
         n = sr; tt = np.arange(n) / sr
         x = 0.6 * _n(1.0, sr, 90, 700, a=0.0, d=100.0) + 0.25 * np.sin(2 * np.pi * 118 * tt) + 0.12 * np.sin(2 * np.pi * 236 * tt)
