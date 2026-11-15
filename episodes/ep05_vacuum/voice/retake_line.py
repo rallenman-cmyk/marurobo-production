@@ -1,6 +1,7 @@
 # 1 文だけ声を作り直す（読み違い・聞き取りにくい・極端に遅い文）。何回か作って、書き起こしが台本にいちばん近く、
 # 声の高さ・速さがまわりの文に近いものを選ぶ。前の声は line_NNN_before_retake.wav に残す
 # MARU_WORK=<作業フォルダ> python3 retake_line.py 4,10,13 [回数=4] [必ず聞こえてほしい言葉=まる]
+#   KANA=1 をつけると、ひらがなで書き起こして MUST（ひらがなで書く。例 そうじきが）を確かめる（5本目 v2「そうじが と読んでいる」）
 #   前後の文も一緒に読ませて（3 文）、まん中の文だけを切り出す（1 文だけで読ませると調子が変わるため）
 import os, sys, json, wave, base64, urllib.request, difflib, re, shutil, time
 import numpy as np
@@ -42,6 +43,12 @@ def heard(x):
     return post("gemini-3.8-flash", body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
+def heard_kana(x):
+    """ひらがなだけで書き起こす（漢字にすると「そうじが／そうじきが」の聞き違いが分からないため。KANA=1 のとき MUST をこれで確かめる）"""
+    body = {"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wav_bytes(x)).decode()}}, {"text": "この音声を、聞こえた音のとおりに、すべてひらがなで書き起こしてください。漢字・カタカナは使わない。言いまちがいや抜けた音も、そのまま書く。書き起こしだけを出力。"}]}]}
+    return post("gemini-3.8-flash", body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
+
+
 def runs(x, sr=24000, thr=-42, fr=0.01, min_sil=0.12):
     n = int(fr * sr); m = len(x) // n
     db = 20 * np.log10(np.sqrt((x[:m * n].reshape(m, n) ** 2).mean(1)) + 1e-9); q = db < thr; out = []; i = 0
@@ -53,6 +60,18 @@ def runs(x, sr=24000, thr=-42, fr=0.01, min_sil=0.12):
             i = j
         else: i += 1
     return out, db
+
+
+def pick_first(x, texts, sr=24000):
+    """1 本目の文（前の文がない）：2 文で読ませて、字数の割合に近い無音で切った前の文だけを取る（5本目 v2 で、2 文ともそのまま入っていた）"""
+    sil, db = runs(x)
+    tot = len(x) / sr; e1 = tot * len(texts[0]) / (len(texts[0]) + len(texts[1]))
+    mids = [((a + b) / 2, b - a) for a, b in sil if a > 0.2 and b < tot - 0.2]
+    if not mids: return None
+    m = min(mids, key=lambda q: abs(q[0] - e1) - 0.8 * q[1])
+    y = x[:int(m[0] * sr)]
+    on = np.where(np.abs(y) > 0.01)[0]
+    return y[max(0, on[0] - 960): on[-1] + 960] if len(on) else None
 
 
 def pick_middle(x, texts, sr=24000):
@@ -80,10 +99,13 @@ for no in NOS:
     cands = []
     for k in range(N):
         x = tts(ctx)
-        y = pick_middle(x, ctx) if len(ctx) == 3 else x
+        y = pick_middle(x, ctx) if len(ctx) == 3 else (pick_first(x, ctx) if mid == 0 and len(ctx) == 2 else x)
         if y is None: continue
         h = heard(y); sc = difflib.SequenceMatcher(None, norm(e["text"]), norm(h)).ratio()
-        ok = (not MUST) or (MUST in h or MUST.replace("まる", "マル") in h)
+        if os.environ.get("KANA"):
+            hk = heard_kana(y); ok = MUST in hk; h = h + " ／ " + hk
+        else:
+            ok = (not MUST) or (MUST in h or MUST.replace("まる", "マル") in h)
         cps = len(e["text"]) / (len(y) / 24000)
         cands.append((sc + (0.3 if ok else 0) - 0.05 * abs(cps - 7.0), y, h, sc, cps))
         print(no, e["id"], "候補", k, "一致 %.2f" % sc, "字/秒 %.1f" % cps, h, flush=True)

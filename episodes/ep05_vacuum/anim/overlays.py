@@ -12,7 +12,7 @@ import design as D
 import timing as T
 import map_tex
 s, e, w = T.s, T.e, T.w
-TEAL = (33, 193, 179); YEL = (255, 210, 74); NAVY = D.NAVY; WHITE = (255, 255, 255)
+TEAL = (33, 193, 179); YEL = (255, 210, 74); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48)
 SUB_TOP = 560
 
 
@@ -44,7 +44,11 @@ def ev_list():
     add(w("12-03", "さきほど"), e("12-05") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))   # 3D のスマホの寄りの絵（v2）
     # 13：1 メートル・「？」
     add(w("13-03", "1メートル"), e("13-03") + 0.4, "tag", dict(text="1メートル", obj="onemeter", dy=-70, size=56))
-    add(w("13-04", "「ここ」"), s("13-05") + 1.0, "bubble", dict(obj="ghost", icon="?", side=1))
+    #   （v3：「ここ」が分からない、が伝わらない → 「ここから」で先輩に「ここ」の札。「ここ」で先輩が消え、点と線が当てずっぽうに動き回る（3D）。
+    #    「先輩がどこにいたか」で、先輩を赤い枠で囲む）
+    add(w("13-03", "ここから"), w("13-04", "「ここ」") + 0.1, "tag", dict(text="ここ", obj="senpai", dy=-110, bg=YEL))
+    add(w("13-04", "「ここ」") + 0.2, s("13-05") + 0.3, "bubble", dict(obj="ghost", icon="?", side=1))
+    add(w("13-05", "先輩がどこに"), e("13-05") + 0.4, "frame2d", dict(obj="senpai", r=62, col=RED))
     add(w("13-06", "どうやって") - 0.3, e("13-06") + 0.3, "bubble", dict(obj="senpai", icon="?", side=1))
     # 14：にわとりと卵
     add(w("14-01", "地図"), e("14-02") + 0.4, "loop", dict(a=w("14-01", "自分の場所"), b=w("14-02", "地図")))
@@ -53,18 +57,31 @@ def ev_list():
     add(w("15-02", "数えて"), e("15-03") + 0.4, "counter", dict(t10=w("15-03", "10回")))
     add(w("15-04", "だいたいここ"), e("15-05") + 0.3, "tag", dict(text="だいたいここ", obj="disc", dy=-120, track_clip="S15c"))
     add(w("15-08", "ぴったりここ"), e("15-08") + 0.4, "tag", dict(text="ぴったりここ", obj="disc", dy=-120, track_clip="S15c", bg=YEL))
+    # v3：いま見えている形（白）を地図（青緑）に合わせる、が分かるように名前の札
+    add(w("15-06", "いま見えている") + 0.3, w("15-08", "ぴったり") - 0.1, "tag", dict(text="いま見えている壁", obj="curshape", dy=-70, track_clip="S15c", size=44))
+    # 16：車輪が空回り（v3：車輪のまわりで回る矢印。車輪は 3D で速く回る）
+    add(w("16-03", "空回り") - 0.4, e("16-04") + 0.3, "spin", dict(obj="wheel_r", r=58, track_clip="S16b"))
     # 16：首をかしげる
     add(s("16-06") + 0.1, e("16-06") + 0.4, "bubble", dict(obj="maru", icon="?", side=1, track_clip="S16c"))
+    # 17-07（v3）：上から見た 2 本の壁の間に、両向きの矢印と「同じ壁」の札（引き戻す前に消す）
+    add(w("17-07", "一つの壁") + 0.3, w("17-08", "ぐっと") - 0.1, "darrow", dict(a="wall1", b="wall2", text="同じ壁", track_clip="S17c"))
     # 18：名前（言う瞬間）
-    add(w("18-03", "カメラの先輩"), e("18-04") + 0.3, "tag", dict(text="カメラの先輩", obj="cam", dy=-130))
+    add(w("18-03", "カメラの先輩"), s("18-04") - 0.1, "tag", dict(text="カメラの先輩", obj="cam", dy=-130))
+    # v3：「前にカメラ」で、前のカメラを黄色い輪で囲み「カメラ」の札（5本目 v2「前のカメラがどれかわかんない」）
+    add(w("18-04", "カメラ"), e("18-04") + 0.5, "ring2d", dict(obj="camlens", r=40, track_clip="S18a"))
+    add(w("18-04", "カメラ"), e("18-04") + 0.5, "tag", dict(text="カメラ", obj="camlens", dy=-120, track_clip="S18a"))
     # 19：照明が後ろへ（矢印）
     add(w("19-03", "後ろ") - 0.3, e("19-04") + 0.2, "arrow", dict(p0=(640, 140), p1=(640, 470)))
+    # 19（v3）：カメラの先輩から見た絵だと分かるように、四すみにカメラの枠（5本目 v2「前のカメラがどれかわかんない」）
+    add(s("19-01"), s("20-01"), "viewfinder", {})
     # 20：迷子
-    add(w("20-04", "くるくる"), e("20-05") + 0.3, "bubble", dict(obj="cam", icon="?", side=1, track_clip="S20a"))
+    add(w("20-04", "くるくる"), e("20-05") + 0.3, "bubble", dict(obj="cam", icon="?", side=1, track_clip="S20a", gap=95))   # v3：先輩に重ならないよう高く
     # 25：約束（2021 年・絵だけのカード。文は下の字幕にあるので、カードは絵で）
     #   （v2：カードはやめ、3D の赤い×と新しい箱で見せる。年だけ札で）
     add(w("25-05", "2021年"), s("25-07") - 0.1, "tag", dict(text="2021年", pos=(640, 110), size=56))
-    add(s("25-07") + 0.25, s("25-07") + 1.6, "bubble", dict(obj="maru", icon="!", side=-1, track_clip="S25a"))
+    # v3：25-06 はテレビの広告（3D の S25c）。まわりにテレビのふち
+    add(s("25-06"), s("25-07"), "tv", {})
+    add(s("25-07") + 0.25, s("25-07") + 1.6, "bubble", dict(obj="maru", icon="!", side=-1, track_clip="S25d"))
     # 26：前の場面の小窓（「ぶつかって曲がるだけだった」→ 昔の先輩）
     add(w("26-05", "ぶつかって"), e("26-05") + 0.2, "pip_clip", dict(clip="S06c", src_t=s("06-09") + 2.5, sepia=True))
     add(s("26-02"), e("26-04") + 0.2, "pip_clip", dict(clip='S02a', src_t=s("02-04") + 0.3, hold=True, crop=(0.06, 0.04, 0.9, 0.88)))
@@ -128,10 +145,11 @@ def icon_draw(kind):
 
 
 def bubble_sprite(kind, big=False, side=1):
-    key = ("bub", kind, big, side)
+    """吹き出し（v3：しっぽなし。5本目 v2「はてなの吹き出しのしっぽいらない」。頭の上に浮かべる）"""
+    key = ("bub", kind, big)
     if key not in _cache:
         wdt, hgt = (240, 140) if big else (120, 110)
-        spr, off = D.bubble(wdt, hgt, (side * 40, 90), draw=icon_draw(kind))
+        spr, off = D.bubble(wdt, hgt, (0, 0), draw=icon_draw(kind))
         _cache[key] = (spr, off)
     return _cache[key]
 
@@ -202,11 +220,18 @@ def promise_sprite(stage):
 
 
 def arrow_sprite(p0, p1, col=YEL):
-    im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    d.line([p0, p1], fill=col + (255,), width=14)
-    a = math.atan2(p1[1] - p0[1], p1[0] - p0[0])
-    tip = p1; L_ = 38
-    d.polygon([tip, (tip[0] - L_ * math.cos(a - 0.5), tip[1] - L_ * math.sin(a - 0.5)), (tip[0] - L_ * math.cos(a + 0.5), tip[1] - L_ * math.sin(a + 0.5))], fill=col + (255,))
+    """矢印（v3：先が潰れて見えた → 2 倍で描いて縮める・線は頭の付け根で止める・頭を大きく 1 つの三角に。5本目 v2）"""
+    key = ("arrow", p0, p1, col)
+    if key in _cache: return _cache[key]
+    S2 = 2; im = Image.new("RGBA", (1280 * S2, 720 * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    a = math.atan2(p1[1] - p0[1], p1[0] - p0[0]); ca, sa = math.cos(a), math.sin(a)
+    L_, Hw, lw = 52, 30, 14
+    tip = (p1[0] * S2, p1[1] * S2); base = ((p1[0] - L_ * ca) * S2, (p1[1] - L_ * sa) * S2)
+    d.line([(p0[0] * S2, p0[1] * S2), (base[0] + 4 * ca, base[1] + 4 * sa)], fill=col + (255,), width=lw * S2)
+    r = lw * S2 / 2; d.ellipse([p0[0] * S2 - r, p0[1] * S2 - r, p0[0] * S2 + r, p0[1] * S2 + r], fill=col + (255,))
+    d.polygon([tip, (base[0] - Hw * sa * S2, base[1] + Hw * ca * S2), (base[0] + Hw * sa * S2, base[1] - Hw * ca * S2)], fill=col + (255,))
+    im = im.resize((1280, 720), Image.LANCZOS)
+    _cache[key] = im
     return im
 
 
@@ -222,7 +247,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 q = where(p["obj"], t, p.get("track_clip"))
                 if q is None: continue
                 cx, cy = q[0], max(70, q[1] + p.get("dy", -120)); cy = min(cy, SUB_TOP - 60)
-                tail = (round((q[0] - cx) / 10) * 10, round((q[1] - 30 - cy) / 10) * 10) if q[1] - cy > 60 else None
+                tail = (0, 46) if q[1] - cy > 60 else None      # v3：しっぽは決まった三角（物との距離で大きさが変わらない。5本目 v2「バンパー」）
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), tail=tail)
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)
@@ -230,7 +255,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             q = where(p["obj"], t, p.get("track_clip"))
             if q is None: continue
             spr, off = bubble_sprite(p["icon"], p.get("big", False), p.get("side", 1))
-            cx = q[0] - p.get("side", 1) * 40 - off[0] - spr.width / 2; cy = q[1] - 90 - (spr.height / 2 + off[1])
+            cx = q[0] + p.get("dx", 0); cy = q[1] - p.get("gap", 40) - spr.height / 2
             cx = min(max(cx, spr.width / 2 + 10), 1270 - spr.width / 2); cy = min(max(cy, spr.height / 2 + 10), SUB_TOP - spr.height / 2)
             _paste(base, spr, cx, cy, k, a)
         elif kind in ("phone", "phone_pip"):
@@ -270,6 +295,48 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             r = p.get("r", 30) * k; im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
             d_.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], outline=YEL + (int(255 * a),), width=7)
             base.alpha_composite(im)
+        elif kind == "frame2d":    # 物を囲む角の丸い枠（v3：先輩がどこにいたか）
+            q = where(p["obj"], t, p.get("track_clip"))
+            if q is None: continue
+            r = p.get("r", 60) * k; S2 = 2; im = Image.new("RGBA", (1280 * S2, 720 * S2), (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
+            d_.rounded_rectangle([(q[0] - r) * S2, (q[1] - r * 0.8) * S2, (q[0] + r) * S2, (q[1] + r * 0.8) * S2], int(18 * S2), outline=p.get("col", RED) + (int(255 * a),), width=8 * S2)
+            base.alpha_composite(im.resize((1280, 720), Image.LANCZOS))
+        elif kind == "darrow":    # 2 つの物の間の両向きの矢印と札
+            qa = where(p["a"], t, p.get("track_clip")); qb = where(p["b"], t, p.get("track_clip"))
+            if qa is None or qb is None: continue
+            L = math.dist(qa, qb); ux, uy = (qb[0] - qa[0]) / max(L, 1), (qb[1] - qa[1]) / max(L, 1)
+            pa = (qa[0] + ux * 14, qa[1] + uy * 14); pb = (qb[0] - ux * 14, qb[1] - uy * 14); mid = ((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2)
+            im = arrow_sprite((round(mid[0]), round(mid[1])), (round(pb[0]), round(pb[1])), WHITE).copy(); im.alpha_composite(arrow_sprite((round(mid[0]), round(mid[1])), (round(pa[0]), round(pa[1])), WHITE))
+            if a < 1: im.putalpha(im.getchannel("A").point(lambda v: int(v * a)))
+            base.alpha_composite(im)
+            spr, off = tag_sprite(p["text"], 48)
+            _paste(base, spr, mid[0] + 70 + spr.width / 2 + off[0] + spr.width / 2 - spr.width / 2, mid[1] + off[1] + spr.height / 2, k, a)
+        elif kind == "tv":        # テレビのふち（黒い枠・下に小さな電源の光）。枠は 0.25 秒で出る
+            kk = min(1.0, (t - t0) / 0.25) * a
+            bw = int(34 * kk) + 1; im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
+            m_ = Image.new("L", base.size, 255); ImageDraw.Draw(m_).rounded_rectangle([bw, bw, 1279 - bw, 719 - bw], 26, fill=0)
+            im.paste((22, 25, 30, 255), (0, 0), m_)
+            if kk > 0.9: d_.ellipse([1280 - 70, 720 - 24, 1280 - 60, 720 - 14], fill=(90, 230, 140, 255))
+            base.alpha_composite(im)
+        elif kind == "viewfinder":   # カメラの枠（四すみのかぎ）
+            im = Image.new("RGBA", base.size, (0, 0, 0, 0)); d_ = ImageDraw.Draw(im); col = WHITE + (int(230 * a),); L_ = 60; m0 = 40
+            for (x, y, sx, sy) in ((m0, m0, 1, 1), (1280 - m0, m0, -1, 1), (m0, 720 - m0 - 170, 1, -1), (1280 - m0, 720 - m0 - 170, -1, -1)):
+                d_.line([(x, y), (x + sx * L_, y)], fill=col, width=6); d_.line([(x, y), (x, y + sy * L_)], fill=col, width=6)
+            d_.ellipse([m0 + 24, m0 + 24, m0 + 42, m0 + 42], fill=(235, 70, 60, int(230 * a)))
+            base.alpha_composite(im)
+        elif kind == "spin":      # 回る矢印（円の 3/4 と矢じり）が、物のまわりでくるくる回る
+            q = where(p["obj"], t, p.get("track_clip"))
+            if q is None: continue
+            S2 = 2; r = p.get("r", 50) * k * S2; im = Image.new("RGBA", (1280 * S2, 720 * S2), (0, 0, 0, 0)); d_ = ImageDraw.Draw(im)
+            cx, cy = q[0] * S2, q[1] * S2; rot = -((t - t0) * 540) % 360; col = YEL + (int(255 * a),)
+            for half in (0, 180):
+                a0 = rot + half; a1 = a0 + 120
+                d_.arc([cx - r, cy - r, cx + r, cy + r], a0, a1, fill=col, width=9 * S2)
+                th = math.radians(a0); tx, ty = cx + r * math.cos(th), cy + r * math.sin(th)
+                tg = (math.sin(th), -math.cos(th))          # 回る向き（角度が減る向き）の接線
+                L_, Hw = 26 * S2, 16 * S2
+                d_.polygon([(tx + tg[0] * L_, ty + tg[1] * L_), (tx - Hw * math.cos(th), ty - Hw * math.sin(th)), (tx + Hw * math.cos(th), ty + Hw * math.sin(th))], fill=col)
+            base.alpha_composite(im.resize((1280, 720), Image.LANCZOS))
         elif kind == "arrow":
             base.alpha_composite(arrow_sprite(p["p0"], p["p1"]))
         elif kind == "pip_clip" and frame_of:

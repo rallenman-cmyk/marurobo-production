@@ -40,6 +40,14 @@ def make(kind, sr=48000):
         return 0.25 * _mx(_t(500, 500, 0.06, sr, d=0.03), 0.4 * _n(0.05, sr, 200, 1500, d=0.02))
     if kind == "squish":
         return 0.4 * _mx(_n(0.14, sr, 60, 700, d=0.05), _t(140, 80, 0.12, sr, d=0.05))
+    if kind == "ouch":      # いたそう：「ピュイ〜ん↓」と下がって、ふるえる電子音（v3）
+        n = int(0.55 * sr); tt = np.arange(n) / sr
+        fq = 1500 * np.exp(-tt * 2.4) + 380 + 60 * np.sin(2 * np.pi * 11 * tt) * (tt / tt[-1])
+        ph = 2 * np.pi * np.cumsum(fq) / sr
+        env = np.minimum(1, tt / 0.01) * np.exp(-tt * 2.2) * (1 - np.clip((tt - 0.45) / 0.1, 0, 1))
+        a = env * (np.sin(ph) + 0.25 * np.sin(2 * ph))
+        b = 0.5 * _t(900, 700, 0.08, sr, d=0.05)
+        return 0.22 * np.concatenate([b, np.zeros(int(0.04 * sr)), a])
     if kind == "motor":     # 1 秒ぶん（組み立てでくり返して敷く）
         n = sr; tt = np.arange(n) / sr
         x = 0.6 * _n(1.0, sr, 90, 700, a=0.0, d=100.0) + 0.25 * np.sin(2 * np.pi * 118 * tt) + 0.12 * np.sin(2 * np.pi * 236 * tt)

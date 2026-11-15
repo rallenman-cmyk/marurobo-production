@@ -398,8 +398,11 @@ def _senpai_body(root, top_col, side_col, h=0.075, r=0.17):
     # 車輪（横から少し見える）
     wheels = []
     for sx in (-1, 1):
-        w = cyl(mat("sp_wheel", "#22262A", rough=0.7), (sx * (r - 0.03), 0.0, 0.03), 0.032, 0.022, rot=(0, R(90), 0), parent=root, verts=24)
+        # v3：車輪は車軸（ax）の子にして、自分の軸（local z）で回す。回っているのが見えるように、明るい線（スポーク）を 1 本（5本目 v2「車輪も写ってないし空回りもわかんない」）
+        ax = empty((sx * (r - 0.03), 0.0, 0.03)); ax.parent = root; ax.rotation_euler = (0, R(90), 0)
+        w = cyl(mat("sp_wheel", "#22262A", rough=0.7), (0, 0, 0), 0.032, 0.022, parent=ax, verts=24)
         cyl(mat("sp_hub", "#8C949B", rough=0.4, metal=0.6), (0, 0, 0), 0.012, 0.024, parent=w, verts=16)
+        cube(mat("sp_spoke", "#C9CED3", rough=0.5), (0, 0, 0), (0.056, 0.01, 0.0245), parent=w)
         wheels.append(w)
     # 横のブラシ（前の右）
     br = empty((0.11, -0.11, 0.008)); br.parent = root

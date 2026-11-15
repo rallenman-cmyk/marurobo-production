@@ -25,6 +25,9 @@ CL = json.load(open(os.path.join(HERE, "clips.json")))
 ORDER = sorted(CL, key=lambda k: CL[k][2])
 CHAPTER = {"S04a", "S06a", "S09a", "S13a", "S18a", "S22a", "S26a", "S27a"}
 SEPIA = {"S06a", "S06b", "S06c"}
+# v3（5本目 v2「左上の小窓を出しつつ、メインの映像もそこのシーンを」）：26-05「ぶつかって曲がるだけだった先輩たち」で、
+#   メインの絵も昔の先輩がぶつかって曲がる場面（S06b・セピア）にする：(差しかえるカット, 始め, 使うクリップ, そのクリップの秒)
+REPLAY = [("S26a", T.s("26-05"), "S06b", T.s("06-07") + 0.5)]
 
 # ---------------------------------------------------------------- 字幕（声の終わり +0.35 秒・次の字幕の 0.05 秒前まで。1.2 秒未満なら次の前までのばす）
 P = T.P
@@ -33,8 +36,21 @@ for k, p in enumerate(P):
     nxt = P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5
     end = max(p["end"] + 0.35, p["start"] + 1.2)
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
+# 波形で確かめた切り替わり（文の頭からの秒）。自動で選ぶと外れた所（5本目 v2 のコメント：「これを」が早い・「あれ」が遅い・「ぱっ」がだいぶ早い・改行の位置がおかしい）
+#   ID: (分け方（None＝自動の分け方のまま）, [切り替わりの秒, …])。最後の 1 枚が 1.0 秒未満なら、次の文の前までのばす
+FIX_AT = {"15-10": (None, [5.2]), "16-03": (None, [2.25]), "21-01": (None, [3.2]),
+          "26-05": (["ぶつかって曲がるだけだった先輩たちは、", "いつの間にか自分で地図を\\N描けるようになっていました。"], [3.05])}
+ID_OF = {v: k for k, v in T.TEXT.items()}
+NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
 SUBS = []
 for a, c, t in lines:
+    fx_ = FIX_AT.get(ID_OF.get(t))
+    if fx_:
+        ps_ = fx_[0] or SJ.plan_tame(t); ts_ = [a] + [a + x for x in fx_[1]]
+        assert len(ps_) == len(ts_), (t, ps_)
+        if c - ts_[-1] < 1.0: c = min(ts_[-1] + 1.0, NEXT_START[a] - 0.05)
+        SUBS += [(ts_[i], ts_[i + 1] if i + 1 < len(ts_) else c, ps_[i]) for i in range(len(ps_))]
+        continue
     ev_ = SJ.events_v(a, c, t)
     for i in range(len(ev_) - 1):        # 分けた字幕の 1 枚が 1.0 秒より短いときは、次の札を少し後ろへ（次も 1.0 秒は残す）
         a0, c0, t0 = ev_[i]; a1, c1, t1 = ev_[i + 1]
@@ -188,6 +204,12 @@ for fi in range(nf):
     act = active(t); im = None
     for nm, wgt in act:
         f_ = frame(nm, t)
+        for r_nm, r0, r_clip, r_src in REPLAY:     # 前の場面をもう一度（メインの絵を差しかえる。頭は 0.35 秒で溶かす）
+            if nm == r_nm and t >= r0:
+                g_ = frame(r_clip, r_src + (t - r0))
+                if g_ is not None:
+                    kq = min(1.0, (t - r0) / 0.35); kq = kq * kq * (3 - 2 * kq)
+                    f_ = g_ if (f_ is None or kq >= 1) else Image.blend(f_, g_, kq)
         if f_ is None: missing.add(nm); continue
         im = f_.copy() if im is None else Image.blend(im, f_, wgt)
     if im is None: im = last if last is not None else Image.new("RGB", (WV, HV), (20, 24, 32))

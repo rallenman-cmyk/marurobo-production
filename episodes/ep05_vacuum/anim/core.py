@@ -123,6 +123,25 @@ class Maru:
         else: emit_key(self.lens, t, self.lens.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value)
         emit_key(self.lens, t + d, g)
 
+    def eyelid(self, t, closed=1.0, d=0.35):
+        """まぶた（体と同じ白）を上から下ろす。closed＝0（開く）〜1（閉じる）。v3：5本目 v2「目の光を消しました → 目を閉じさせて」"""
+        if not hasattr(self, "_lid"):
+            piv = empty((0, -0.485, 0.04 + 0.235)); piv.parent = self.body
+            lid = sphere(bpy.data.materials["maru_white"], (0, 0, -0.235), 0.238, scale=(1, 0.55, 1), parent=piv)
+            piv.scale = (1, 1, 0.001); self._lid = piv
+            key(piv, ("scale", 2), CLOCK["T0"] - 5, 0.001)
+            # 閉じた目の線（「︶」）：閉じ終わってから出る
+            seam = empty((0, -0.62, 0.04)); seam.parent = self.body
+            dk = mat("lidline", "#2B3440", rough=0.5)
+            for k in range(17):
+                a0 = math.radians(-60 + 7.5 * k)
+                o_ = cyl(dk, (0.13 * math.sin(a0), 0, -0.13 * math.cos(a0) + 0.1), 0.012, 0.022, rot=(0, R(90) + a0, 0), parent=seam)
+            self._seam = seam; hide_key(seam, CLOCK["T0"] - 5, True)
+        cur = self._lid.scale[2]
+        key(self._lid, ("scale", 2), t, max(0.001, self._lid.get("_v", 0.001)))
+        key(self._lid, ("scale", 2), t + d, max(0.001, closed)); self._lid["_v"] = max(0.001, closed)
+        hide_key(self._seam, t + d if closed >= 0.99 else t, closed < 0.99)
+
     def blink(self, t, g=0.9, d=0.22):
         emit_key(self.lens, t, g); emit_key(self.lens, t + d / 2, 0.0); emit_key(self.lens, t + d, g)
 
@@ -168,7 +187,7 @@ class Sp:
             if prev is not None:
                 dist = math.dist(prev[:2], (x, y)); dang = abs(ang - prev[2])
                 self.wh += (dist / 0.032 + math.radians(dang) * 0.15 / 0.032) * wheel_scale
-            for wl in self.d["wheels"]: key(wl, ("rotation_euler", 0), t, -self.wh, "LINEAR")
+            for wl in self.d["wheels"]: key(wl, ("rotation_euler", 2), t, -self.wh * (1 if wl.parent.location.x > 0 else -1), "LINEAR")
             if brush: key(self.d["brush"], ("rotation_euler", 2), t, -t * 12.0, "LINEAR")
             prev = (x, y, ang); t += dt
         if motor: ev(a, "motor_on", 0.5); ev(b, "motor_off", 0.5)

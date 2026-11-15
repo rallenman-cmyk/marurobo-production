@@ -43,6 +43,16 @@ def tex(n): return os.path.join(TEX, n)
 def cut(cl, name): return cl == name
 
 
+def dashed_ring(parent, r=0.17, n=16, col=None, strength=5.0, name="ghostring"):
+    """どこにいるか分からない（思っているだけの）先輩の場所：床の上の白い点線の輪（v3。S13 と S15 で同じ表し方）"""
+    g = empty((0, 0, 0.0)); g.parent = parent
+    gm_ = glow_mat(name, col or WHITE_PT, strength)
+    for k in range(n):
+        a0 = 2 * math.pi * k / n
+        o_ = cube(gm_, (r * math.cos(a0), r * math.sin(a0), 0.02), (0.045, 0.012, 0.012), parent=g); o_.rotation_euler = (0, 0, a0 + math.pi / 2); o_.visible_shadow = False
+    return g
+
+
 # ======================================================================== S01〜S05：誰も教えていないのに、地図が出た／先輩に会う
 def b_open(cl):
     room(); door_leaf(False)
@@ -82,7 +92,7 @@ def b_open(cl):
     key(m.root, "location", ta + 0.3, (1.85, 1.82, DESK_Z), "LINEAR"); key(m.root, "location", ta + 0.62, (1.7, 1.62, DESK_Z + 0.18))
     key(m.root, "location", ta + 1.0, (1.55, 1.45, 0.0)); ev(ta + 0.3, "jump", 0.6); ev(ta + 1.0, "land", 0.7)
     m._last["loc"] = (ta + 1.0, (1.55, 1.45, 0.0))
-    m.walk(ta + 1.3, ta + 2.6, (0.3, 1.5, 0.0)); m.at(ta + 2.9, face=180, look=5)
+    m.walk(ta + 1.3, ta + 2.6, (0.3, 1.5, 0.0), gain=0.14); m.at(ta + 2.9, face=180, look=5)   # v3：足音が聞こえない（5本目 v2「歩く SE いれて」）→ 少し大きく
     ev(s("04-02") - 0.35, "pipo", 0.6); m.hop(s("04-02") - 0.35, 0.06, 0.25, sound=False)   # あいさつの「ピポ」は声の前のすき間に
     sp.pi(s("04-02") + 0.98, n=2)          # 先輩の返事は、声の「……」の間（声の頭から 0.95〜1.53 秒の無音）に
     m.hop(s("04-04") + 0.6, 0.12, 0.35); m.hop(s("04-04") + 1.2, 0.12, 0.35)
@@ -235,6 +245,7 @@ def b_blind(cl):
     m.hop(e("07-01") - 0.6, 0.1, 0.3)
     tg_off = w("07-02", "消しました")
     m.glow(tg_off - 0.1, 0.0, d=0.4, g0=0.9); ev(tg_off, "power_down", 0.5)
+    m.eyelid(tg_off + 0.25, 1.0, 0.45)                     # v3：目の光を消して、まぶたを閉じる（正面のアップ S07b で見せる）
     th1 = w("07-03", "ゴツン") + 0.05
     m.walk(s("07-03") + 0.1, th1, (B[0] + 0.03, B[1], 0), turn=False)
     m.at(th1 + 0.12, loc=(B[0] + 0.12, B[1], 0)); m.tilt(th1, 16, 0.1); m.tilt(th1 + 0.25, -8, 0.15); m.tilt(th1 + 0.5, 0, 0.2)
@@ -246,6 +257,7 @@ def b_blind(cl):
     m.at(th2 + 0.12, loc=(Cp[0] - 0.03, Cp[1] - 0.1, 0)); m.tilt(th2, -16, 0.1); m.tilt(th2 + 0.25, 8, 0.15); m.tilt(th2 + 0.5, 0, 0.2)
     ev(th2, "bonk", 0.8)
     m.wobble(s("07-05") + 0.2, e("07-05") + 0.2, 9, 0.6)
+    ev(e("07-05") - 2.6, "ouch", 0.8)      # v3：いたそうな音（ぐるぐるの吹き出しと一緒に。5本目 v2「いたそうなまるロボの SE」）
     # 08：上から。早回しで部屋じゅうを回り、通った道を黄色い線で
     ts = s("08-01") + 0.4; te = e("08-02") + 0.2
     rest = route[2:]
@@ -274,7 +286,10 @@ def b_blind(cl):
     show_between(ln, s("08-01") - 0.5)
     corner = ring_marker((-2.45, -1.95), 0.42, YELLOW, w=0.02); show_between(corner, s("08-03") + 0.1); scale_pop(corner, s("08-03") + 0.1); ev(s("08-03") + 0.1, "pop", 0.5)
     m.at(te + 0.6, face=face_to(rest[-2], rest[-1]) + 30); m.tilt(te + 0.6, 10); m.tilt(e("08-06"), 0)
-    if cut(cl, "S07a"):
+    if cut(cl, "S07b"):     # v3：07-02 は正面のアップ（目の光が消えて、まぶたが閉じる。5本目 v2）
+        c, tg = cam_rig((A[0] - 0.62, A[1] - 0.12, 0.2), (A[0], A[1], 0.17), 42)
+        cam_move(c, tg, s("07-02") - 0.6, s("07-03") + 0.2, (A[0] - 0.66, A[1] - 0.13, 0.21), (A[0] - 0.55, A[1] - 0.1, 0.19), (A[0], A[1], 0.17), (A[0], A[1], 0.17)); dof(c, m.root, 2.8)
+    elif cut(cl, "S07a") or cut(cl, "S07c"):
         c, tg = cam_rig((-0.6, -1.4, 1.0), (-2.2, 0.9, 0.2), 30)
         cam_move(c, tg, s("07-01") - 0.8, e("07-05") + 0.6, (-0.5, -1.5, 1.05), (-0.9, -1.0, 0.85), (-2.0, 0.9, 0.2), (-2.5, 1.1, 0.2)); dof(c, m.root, 5.0)
     else:
@@ -444,6 +459,12 @@ def dark_map(split_x=0.3):
     return am, bm, right
 
 
+def pts_color(m, t, col):
+    """点の色を t で変える（v3：1 周目＝青緑・2 周目＝オレンジ）"""
+    em = [x for x in m.node_tree.nodes if x.type == 'EMISSION'][0]
+    em.inputs["Color"].default_value = srgb(col); em.inputs["Color"].keyframe_insert("default_value", frame=f(t))
+
+
 def pts_glow(m, t, v):
     n = [x for x in m.node_tree.nodes if x.type == 'MATH' and x.operation == 'MULTIPLY_ADD'][0]
     n.inputs[2].default_value = v; n.inputs[2].keyframe_insert("default_value", frame=f(t))
@@ -454,21 +475,30 @@ def b_dark(cl):
     sp = Sp(senpai_lidar(SP13, plan.face_deg(-1, 0))); sp.spin(CLOCK["T0"] - 2, e("15-10") + 3, 0.6)
     m = Maru((-1.25, -0.62, 0), face=face_to((-1.25, -0.62), SP13), glow=1.2)
     # 13-02〜13-03：光の線を 1 本、本棚まで
-    b1 = beam(empty((SP13[0] - 0.035, SP13[1], 0.127)), 1.0, TEAL, 0.004, 9.0); b1.rotation_euler = (0, 0, R(plan.face_deg(-1, 0)))
+    #   v3（5本目 v2「ロボット掃除機が消えて『ここ』が分からなくなるのをうまく表現して」）：先輩・光の線・先の点を 1 つの組（unit）にする。
+    #   「ここ」で先輩が消え、点線の輪（どこにいるか分からない先輩）と線と点が、組のまま当てずっぽうに動き回る（点の場所が決まらない）。
+    #   13-05 で先輩が戻ると、組も本当の場所に戻って、点がぴたっと置かれる
+    unit = empty((SP13[0], SP13[1], 0.0))
+    bp = empty((-0.035, 0.0, 0.127)); bp.parent = unit
+    b1 = beam(bp, 1.0, TEAL, 0.004, 9.0); b1.rotation_euler = (0, 0, R(plan.face_deg(-1, 0)))
     h = plan.ray(SP13[0], SP13[1], math.pi, plan.segments()); L1 = h[0]
     key(b1, ("scale", 1), w("13-02", "どの向き") - 0.05, 0.01); key(b1, ("scale", 1), w("13-02", "どの向き") + 0.6, L1)
-    show_between(b1, w("13-02", "どの向き") - 0.1, e("13-03") + 0.5); ev(w("13-02", "どの向き"), "whoosh", 0.3)
-    hit = sphere(glow_mat("hit13", TEAL, 14.0), (h[1][0], h[1][1], plan.LIDAR_Z), 0.03); show_between(hit, w("13-02", "どの向き") + 0.6, e("13-05") + 0.5)
+    tq = w("13-04", "「ここ」"); tback = s("13-05") + 0.3
+    show_between(b1, w("13-02", "どの向き") - 0.1, tback + 1.2); ev(w("13-02", "どの向き"), "whoosh", 0.3)
+    hit = sphere(glow_mat("hit13", TEAL, 14.0), (h[1][0] - SP13[0], h[1][1] - SP13[1], plan.LIDAR_Z), 0.03, parent=unit); show_between(hit, w("13-02", "どの向き") + 0.6, e("13-05") + 0.5)
     anchor13 = empty(((SP13[0] + h[1][0]) / 2, SP13[1], plan.LIDAR_Z + 0.12)); track("onemeter", anchor13)
-    # 13-04：「ここ」が分からない → 先輩が消え、点が宙に浮く／13-05：先輩が戻り、点が置かれる
-    tq = w("13-04", "「ここ」")
-    hide_key(sp.root, s("13-01") - 1.5, False); hide_key(sp.root, tq, True); hide_key(sp.root, s("13-05") + 0.3, False)
-    ghost = sphere(glow_mat("ghost13", WHITE_PT, 12.0), (h[1][0], h[1][1], 0.5), 0.035)
-    for k in range(5):
-        key(ghost, "location", tq + 0.2 + k * 0.8, (h[1][0] + 0.25 * math.sin(k * 1.7), h[1][1] + 0.25 * math.cos(k * 1.3), 0.45 + 0.1 * (k % 2)))
-    key(ghost, "location", s("13-05") + 0.6, (h[1][0], h[1][1], 0.45)); key(ghost, "location", s("13-05") + 1.1, (h[1][0], h[1][1], plan.LIDAR_Z))
-    show_between(ghost, tq + 0.1, s("13-05") + 1.3); ev(s("13-05") + 1.1, "snap", 0.4)
-    track("ghost", ghost, 0.12); track("senpai", sp.root, 0.18)
+    hide_key(sp.root, s("13-01") - 1.5, False); hide_key(sp.root, tq, True); hide_key(sp.root, tback, False)
+    # どこにいるか分からない先輩：白い点線の輪（床の上）
+    ghost = dashed_ring(unit, name="ghost13")
+    show_between(ghost, tq, tback); scale_pop(ghost, tq, d=0.25); ev(tq, "whoosh", 0.3)
+    rnd = [(0.32, 0.18, 18), (-0.22, 0.34, -22), (0.12, -0.28, 12), (-0.3, -0.08, -15), (0.26, 0.3, 25)]
+    key(unit, "location", tq, (SP13[0], SP13[1], 0)); key(unit, ("rotation_euler", 2), tq, 0.0)
+    for k, (dx, dy, da) in enumerate(rnd):
+        tk = tq + 0.35 + k * (tback - 0.5 - tq - 0.35) / (len(rnd) - 1)
+        key(unit, "location", tk, (SP13[0] + dx, SP13[1] + dy, 0)); key(unit, ("rotation_euler", 2), tk, R(da))
+    key(unit, "location", tback, (SP13[0], SP13[1], 0)); key(unit, ("rotation_euler", 2), tback, 0.0); ev(tback + 0.1, "snap", 0.4)
+    gh_t = empty((0, 0, 0.1)); gh_t.parent = unit
+    track("ghost", gh_t, 0.0); track("senpai", sp.root, 0.18)
     # 13-07 地図が光る、13-08 右の半分は「まだ描いていない」→ 消える
     pts_glow(am, w("13-07", "地図") - 0.05, 2.2); pts_glow(am, w("13-07", "地図") + 0.3, 6.0); pts_glow(am, e("13-07") + 0.2, 2.2)
     pts_glow(bm, w("13-07", "地図") - 0.05, 2.2); pts_glow(bm, w("13-07", "地図") + 0.3, 6.0); pts_glow(bm, e("13-07") + 0.2, 2.2)
@@ -509,6 +539,12 @@ def b_dark(cl):
     cpt.parent = wpt
     tw = w("15-06", "いま見えている")
     show_between(cpt, tw); ev(tw + 0.2, "pop", 0.4)
+    # v3（5本目 v2「壁の線と、ロボット掃除機が動かして位置を合わせてるのが分かるように」）：
+    #   白い形と一緒に、「思っている自分の場所」の点線の輪が動く → 地図の壁にぴったり重なると、輪が本当の先輩に重なって消える
+    ring15 = dashed_ring(wpt, name="guess15")
+    show_between(ring15, tw, w("15-08", "ぴったり") + 0.35); scale_pop(ring15, tw, d=0.25)
+    top = max(cur, key=lambda q: q[1]); an_c = empty((top[0] - PX[0], top[1] - PX[1], 0.05)); an_c.parent = wpt
+    track("curshape", an_c, 0.0); track("guess15", wpt, 0.05)
     th_err = 9.0
     key(wpt, "location", tw, (PX[0] + off[0], PX[1] + off[1], 0)); key(wpt, ("rotation_euler", 2), tw, R(th_err))
     t7 = s("15-07") + 0.3
@@ -648,22 +684,48 @@ def b_rug(cl):
         pts_glow(mm, tB - 0.05, 2.2 if mm is not com else 3.5); pts_glow(mm, tB + 0.2, 8.0); pts_glow(mm, tB + 1.2, 2.2 if mm is not com else 3.5)
     hide_key(co, e("17-10"), True)
     m.hop(tB + 0.2, 0.15, 0.4)
+    # v3（5本目 v2「ここの表現全然わかんない」→ 上から見て色分け）：17-07 で真上から。1 周目に描いた壁＝青緑、
+    #   2 周目（じゅうたんのあと）に描いた点・いま見えている形＝オレンジ。本当の壁はうすい白の帯で重ねる（本当は 1 本）。
+    #   2D で「同じ壁」の両向きの矢印と札（overlays）。17-08 で引き戻すと、オレンジが青緑にぴたっと重なり、17-10 で青緑に戻る
+    t7 = w("17-07", "一つの壁") - 0.2
+    ORANGE = "#FF9A3C"
+    for mm in (dom, com):
+        pts_color(mm, t7 - 0.01, TEAL if mm is dom else WHITE_PT); pts_color(mm, t7 + 0.4, ORANGE)
+        pts_color(mm, s("17-10") + 0.2, ORANGE); pts_color(mm, s("17-10") + 1.0, TEAL)
+    Y1 = 2.437
+    real = empty((0.2, Y1 + 0.02, 0.005))      # 大きさは子の板で（scale_pop は親の empty に。板の scale を 1 に戻すと 1 m の箱になった）
+    rb_ = cube(flat_mat("realwall", "#FFFFFF", 0.9), (0, 0, 0), (2.5, 0.07, 0.004), parent=real); rb_.visible_shadow = False
+    show_between(real, t7 + 0.3, tA); scale_pop(real, t7 + 0.3, d=0.3)
+    ax_ = -0.75
+    a1 = empty((ax_, Y1, 0.0))
+    th0 = math.radians(DRIFT["th"]); rx, ry = ax_ - DRIFT["c"][0], Y1 - DRIFT["c"][1]
+    a2 = empty((DRIFT["c"][0] + rx * math.cos(th0) - ry * math.sin(th0) + DRIFT["d"][0], DRIFT["c"][1] + rx * math.sin(th0) + ry * math.cos(th0) + DRIFT["d"][1], 0.0)); a2.parent = hold
+    track("wall1", a1, 0.0); track("wall2", a2, 0.0)
     if cut(cl, "S16a"):
         c_, tg = cam_rig((1.6, -2.6, 1.6), (-0.4, 0.4, 0.0), 28)
         cam_move(c_, tg, s("16-01") - 0.8, e("16-02") + 0.8, (1.7, -2.7, 1.65), (1.3, -2.3, 1.45), (-0.4, 0.4, 0.0), (-0.5, 0.2, 0.0))
     elif cut(cl, "S16b"):
-        c_ = cam_follow(sp.root, (0.12, -0.42, 0.09), 0.03, 38)     # 先輩の横について行き、車輪を見る
+        # v3（5本目 v2「車輪も写ってないし空回りもわかんない」）：体を透かして車輪を見せ、すぐ横の低い所から。
+        #   車輪は速く回る（スポークが回る）のに、体と床の模様はほとんど進まない。2D で車輪のまわりに回る矢印（overlays の spin）
+        for nm in ("sp_top_#F3F5F7", "sp_side_#DDE2E6", "sp_bumper"):
+            mm = bpy.data.materials[nm]; mm.blend_method = 'BLEND'
+            alpha_key(mm, s("16-03") - 0.2, 0.14)
+        c_ = cam_follow(sp.root, (0.06, -0.62, 0.07), 0.03, 50)     # 先輩の右の車輪の真横、床すれすれ（近すぎるとぼける）
+        c_.data.dof.use_dof = True; c_.data.dof.focus_object = sp.root; c_.data.dof.aperture_fstop = 11.0
     elif cut(cl, "S16c"):
         c_ = cam_top((-0.4, 0.1, 8.0), 30)
         cam_top_move(c_, s("16-05") - 0.8, e("16-06") + 0.8, (-0.4, 0.1, 8.0), (-0.6, 0.1, 7.6))
     elif cut(cl, "S17a"):
         c_, tg = cam_rig((1.2, -2.8, 3.0), (-0.6, 0.8, 0.0), 26)
         cam_move(c_, tg, s("17-01") - 0.8, e("17-02") + 0.4, (1.2, -2.8, 3.0), (1.4, -1.6, 2.6), (-0.6, 0.8, 0.0), (0.2, 1.7, 0.0))
+    elif cut(cl, "S17c"):    # v3：真上から（1 周目と 2 周目の壁を色で分けて見せる）→ 17-10 で地図全体へ引く
+        c_ = cam_top((-0.5, 2.2, 2.2), 29)          # 2 本の壁がいちばん離れている左の方に寄る
+        cam_top_move(c_, s("17-07") - 0.4, e("17-09"), (-0.5, 2.2, 2.2), (-0.45, 2.2, 2.1))
+        cam_top_move(c_, e("17-09"), e("17-11") + 0.8, (-0.45, 2.2, 2.1), (0.0, 0.2, 7.6))
     else:
         c_, tg = cam_rig((0.4, 0.4, 2.2), (0.3, 2.3, 0.0), 30)
-        cam_move(c_, tg, s("17-03") - 0.8, e("17-09"), (0.45, 0.45, 2.2), (0.35, 0.75, 2.0), (0.3, 2.3, 0.0), (0.3, 2.35, 0.0))
-        cam_move(c_, tg, e("17-09"), e("17-11") + 0.8, (0.35, 0.75, 2.0), (0.0, -2.0, 6.0), (0.3, 2.35, 0.0), (0.0, 0.3, 0.0), 30, 28)
-    track("senpai", sp.root, 0.15); track("maru", m.root, 0.42)
+        cam_move(c_, tg, s("17-03") - 0.8, s("17-07") + 1.0, (0.45, 0.45, 2.2), (0.35, 0.75, 2.0), (0.3, 2.3, 0.0), (0.3, 2.35, 0.0))
+    track("senpai", sp.root, 0.15); track("maru", m.root, 0.42); track("wheel_r", sp.d["wheels"][1], 0.0)
 
 
 # ======================================================================== S18〜S21：カメラの先輩
@@ -722,7 +784,7 @@ def b_cam(cl):
     ev(s("20-04") + 0.3, "motor_on", 0.3)
     m.at(e("19-07"), loc=(0.75, 0.75, 0))
     m.walk(s("20-05"), s("20-05") + 2.0, (xc + 0.45, yc - 0.35, 0)); m.at(s("20-06"), face=face_to((xc + 0.45, yc - 0.35), (xc, yc)))
-    m.at(s("21-01") + 0.3, look=40)
+    m.at(s("21-01") + 0.3, look=60)        # v3：真上に近く（光が天井に当たるのが見えるように。5本目 v2「まるロボが照らしてるのが分かりにくい」）
     # 21：まるロボが目の光で天井を照らす → 目印がまた見える → カメラの先輩が動き出す
     tp = w("21-01", "ぱっ")
     m.glow(tp - 0.1, 9.0, 0.15, g0=1.0); ev(tp, "light_on", 0.6)
@@ -730,15 +792,23 @@ def b_cam(cl):
     spl.parent = m.body; spl.location = (0, -0.5, 0.05); spl.rotation_euler = (R(-90), 0, 0)
     spl.data.spot_size = R(40); spl.data.spot_blend = 0.5; spl.data.color = srgb("#BFFFF6")[:3]
     spl.data.energy = 0.0; spl.data.keyframe_insert("energy", frame=f(tp - 0.1)); spl.data.energy = 1400.0; spl.data.keyframe_insert("energy", frame=f(tp + 0.15))
-    bpy.ops.mesh.primitive_cone_add(radius1=0.0, radius2=0.9, depth=2.2, vertices=48, location=(0, 0, 0)); cone = bpy.context.object
-    cone.parent = m.body; cone.location = (0, -0.5 - 1.1, 0.05); cone.rotation_euler = (R(-90), 0, 0)   # 目の光の筋（うすい光の円すい）
+    CD = 9.6   # 円すいの長さ（体の中の大きさ。まるロボは 0.26 倍なので、本当は約 2.5 m＝天井まで）
+    bpy.ops.mesh.primitive_cone_add(radius1=0.12, radius2=1.3, depth=CD, vertices=48, location=(0, 0, 0)); cone = bpy.context.object
+    cone.parent = m.body; cone.location = (0, -0.5 - CD / 2, 0.05); cone.rotation_euler = (R(-90), 0, 0)   # 目の光の筋（光の円すい。天井まで）
     cm_ = bpy.data.materials.new("eyecone"); cm_.use_nodes = True; nt_ = cm_.node_tree
     for n_ in list(nt_.nodes): nt_.nodes.remove(n_)
     o_ = nt_.nodes.new("ShaderNodeOutputMaterial"); em_ = nt_.nodes.new("ShaderNodeEmission"); tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); mx_ = nt_.nodes.new("ShaderNodeMixShader")
-    em_.inputs["Color"].default_value = srgb("#BFFFF6"); em_.inputs["Strength"].default_value = 0.6
+    em_.inputs["Color"].default_value = srgb("#BFFFF6"); em_.inputs["Strength"].default_value = 2.2
     nt_.links.new(tr_.outputs[0], mx_.inputs[1]); nt_.links.new(em_.outputs[0], mx_.inputs[2]); nt_.links.new(mx_.outputs[0], o_.inputs[0])
-    mx_.inputs[0].default_value = 0.12; cone.data.materials.append(cm_); cone.visible_shadow = False
+    mx_.inputs[0].default_value = 0.13; cone.data.materials.append(cm_); cone.visible_shadow = False
+    for a_ in ("visible_diffuse", "visible_glossy", "visible_transmission"): setattr(cone, a_, False)
     show_between(cone, tp)
+    # 天井に当たった光の丸（はっきり見えるように）
+    mx0, my0 = xc + 0.45, yc - 0.35; ux, uy = xc - mx0, yc - my0; ul = math.hypot(ux, uy); ux, uy = ux / ul, uy / ul
+    reach = (plan.CEIL - 0.2) / math.tan(R(60))
+    spot = cyl(glow_mat("ceilspot", "#DFFFFA", 3.0), (mx0 + ux * reach, my0 + uy * reach, plan.CEIL - 0.006), 0.3, 0.004, verts=64); spot.visible_shadow = False
+    for a_ in ("visible_diffuse", "visible_glossy"): setattr(spot, a_, False)
+    show_between(spot, tp); scale_pop(spot, tp, d=0.2)
     for o in marks:
         hide_key(o, toff, True); hide_key(o, tp + 0.4, False)
     cs.place(s("21-02") + 0.6, xc, yc, ac + 8 * 80)
@@ -752,7 +822,8 @@ def b_cam(cl):
     if cut(cl, "S18a"):
         c, tg = cam_rig((-0.9, -1.0, 0.7), (-1.2, 1.1, 0.1), 30)
         cam_move(c, tg, s("18-01") - 0.8, e("18-02") + 0.4, (-0.85, -1.05, 0.72), (-0.9, -0.5, 0.5), (-1.5, 1.4, 0.1), (-0.9, 1.0, 0.1))
-        cam_move(c, tg, e("18-02") + 0.4, e("18-04") + 0.6, (-0.9, -0.5, 0.5), (-1.15, 0.35, 0.3), (-0.9, 1.0, 0.1), (-1.2, 0.95, 0.07), 30, 48)
+        cam_move(c, tg, e("18-02") + 0.4, s("18-04"), (-0.9, -0.5, 0.5), (-1.15, 0.35, 0.3), (-0.9, 1.0, 0.1), (-1.2, 0.95, 0.07), 30, 48)
+        cam_move(c, tg, s("18-04"), e("18-04") + 0.6, (-1.15, 0.35, 0.3), (-1.2, 0.2, 0.15), (-1.2, 0.95, 0.07), (-1.2, 0.8, 0.06), 48, 45)   # v3：前のカメラに寄る（5本目 v2「前のカメラがどれかわかんない」）
     elif pov:
         cam = bpy.data.objects.new("povcam", bpy.data.cameras.new("povcam")); bpy.context.collection.objects.link(cam)
         cam.parent = cs.root; cam.location = (0, -0.1, 0.12); cam.rotation_euler = (R(150), 0, R(180)); cam.data.lens = 14
@@ -762,9 +833,9 @@ def b_cam(cl):
         cam_move(c, tg, s("20-01") - 0.8, e("20-06") + 0.6, (0.7, -3.3, 2.25), (0.1, -2.6, 1.6), (-0.3, 0.4, 0.0), (-0.2, 0.1, 0.0))
     else:
         c, tg = cam_rig((1.6, -0.9, 0.7), (0.4, 1.1, 1.0), 22)
-        cam_move(c, tg, s("21-01") - 0.8, e("21-02"), (1.6, -0.9, 0.7), (1.4, -0.7, 0.6), (0.4, 1.1, 1.1), (0.3, 1.0, 0.6))
-        cam_move(c, tg, e("21-02"), e("21-03") + 0.6, (1.4, -0.7, 0.6), (0.9, 0.0, 0.35), (0.3, 1.0, 0.6), (-0.1, 0.9, 0.08), 22, 32)
-    track("cam", cs.root, 0.12); track("lidar", ls.root, 0.15); track("maru", m.root, 0.42)
+        cam_move(c, tg, s("21-01") - 0.8, e("21-02"), (1.6, -0.9, 0.7), (1.4, -0.7, 0.6), (0.2, 1.2, 1.3), (0.1, 1.2, 1.0))
+        cam_move(c, tg, e("21-02"), e("21-03") + 0.6, (1.4, -0.7, 0.6), (0.9, 0.0, 0.35), (0.1, 1.2, 1.0), (-0.1, 0.9, 0.08), 22, 32)
+    track("cam", cs.root, 0.12); track("lidar", ls.root, 0.15); track("maru", m.root, 0.42); track("camlens", cs.d["cam"], 0.0)
 
 
 # ======================================================================== S22〜S23：段差（光の物差しの先輩）
@@ -796,8 +867,10 @@ def b_step(cl):
         alpha_key(mm, s("23-01") - 0.5, 1.0); alpha_key(mm, s("23-01") + 0.3, 0.25)
     # 窓と床のすき間（実物は 1 cm たらず）を、この場面だけ少し広げて見せる（体を上げ、車輪は床のまま）
     key(ls.root, ("location", 2), s("23-01") - 0.6, 0.0); key(ls.root, ("location", 2), s("23-01") + 0.2, 0.035)
-    for wl in ls.d["wheels"]: key(wl, ("location", 2), s("23-01") - 0.6, 0.03); key(wl, ("location", 2), s("23-01") + 0.2, -0.005)
+    for wl in ls.d["wheels"]: key(wl.parent, ("location", 2), s("23-01") - 0.6, 0.03); key(wl.parent, ("location", 2), s("23-01") + 0.2, -0.005)
     bb = beam(ls.root, 1.0, YELLOW, 0.006, 9.0); bb.location = (0, -0.13, 0.006); bb.rotation_euler = (R(90), 0, 0)
+    for ch in bb.children:      # v3：光の線がまわり（段差の板）を照らして、板を突きぬけて見えた（5本目 v2「一瞬光が下に貫通してる」）→ まわりを照らさない
+        ch.visible_diffuse = False; ch.visible_glossy = False; ch.visible_transmission = False
     pulse = sphere(glow_mat("bpulse", "#FFFFFF", 20.0), (0, 0, 0), 0.012, parent=bb)
     bb.scale = (1, 0.045, 1)
     t1_ = w("23-01", "光が出ている") - 0.3
@@ -810,14 +883,14 @@ def b_step(cl):
     ls.place(t2, edge, -1.75, plan.face_deg(1, 0) - 360)
     ls.place(t2 + 0.8, edge, -1.75, plan.face_deg(-1, 0) - 360 - 360 + 360)
     ls.place(t2 + 1.6, edge - 0.09, -1.75, plan.face_deg(-1, 0) - 360 - 360 + 360)
-    key(bb, ("scale", 1), t2 + 1.5, 0.045); key(bb, ("scale", 1), t2 + 1.7, 0.4)
+    key(bb, ("scale", 1), t2 + 1.5, 0.045); key(bb, ("scale", 1), t2 + 1.7, 0.15)     # 下の床に届かない長さで止める（v3）
     for k in range(2):
         tk = t2 + 1.8 + k * 1.1
         key(pulse, ("location", 1), tk, 0.0, "LINEAR"); key(pulse, ("location", 1), tk + 0.7, -1.0, "LINEAR"); key(pulse, ("location", 1), tk + 0.71, 0.0, "CONSTANT")
     ev(w("23-02", "返ってこなければ"), "pi_low", 0.5)
     tb = w("23-02", "止まれる")
     ls.place(tb, edge - 0.09, -1.75, -450); ls.place(tb + 0.8, edge + 0.05, -1.75, -450)
-    key(bb, ("scale", 1), tb + 0.6, 0.4); key(bb, ("scale", 1), tb + 0.8, 0.045)
+    key(bb, ("scale", 1), tb + 0.6, 0.15); key(bb, ("scale", 1), tb + 0.8, 0.045)
     if cut(cl, "S22a"):     # 部屋の中から、出入り口の方を
         c, tg = cam_rig((-1.0, -0.4, 0.9), (-3.3, -1.9, 0.0), 26)
         cam_move(c, tg, s("22-01") - 0.8, e("22-03") + 0.4, (-0.9, -0.3, 0.95), (-1.5, -0.9, 0.55), (-3.0, -1.7, 0.0), (-3.0, -1.8, 0.05))
@@ -855,40 +928,17 @@ def b_avoid(cl):
     # 25：うんちがぽん → カメラの先輩が見分けて、手前でよける
     pe = poop((POOP[0], POOP[1], 0.0)); tpo = w("25-02", "うんち")
     show_between(pe, tpo - 0.05); scale_pop(pe, tpo); ev(tpo, "pop", 0.6)
-    m.at(tpo + 0.1, face=face_to((-0.4, -0.25), POOP)); m.hop(tpo + 0.15, 0.12, 0.3)
+    m.hop(tpo + 0.15, 0.12, 0.3)
     frame_box(POOP[0], POOP[1], 0.26, 0.26, s("25-03") + 0.6, s("25-04") + 0.5)
-    # 25-05〜06：約束（2026-11-14 v2：2D のカードをやめ、3D で見せる）。「よけられなかったら」でうんちの上に赤い×、
-    #   「新品」で、リボンの付いた新しい箱がぽん（きらっと光る）。のけぞる前に消す
-    t2 = w("25-06", "よけられなかったら") + 0.3; t3 = w("25-06", "新品"); tg_ = s("25-07") - 0.25
-    cpos = (-0.1, -1.7)
-    xe = empty((POOP[0], POOP[1], 0.24)); xe.rotation_euler = (0, 0, math.atan2(cpos[1] - POOP[1], cpos[0] - POOP[0]))
-    xr = mat("xred", "#D93A30", rough=0.4, emit=0.9)
-    for sg in (1, -1): cube(xr, (0, 0, 0), (0.02, 0.2, 0.035), rot=(R(45 * sg), 0, 0), bevel=0.008, parent=xe)
-    show_between(xe, t2, tg_ + 0.2); scale_pop(xe, t2); ev(t2, "bonk_soft", 0.5)
-    key(xe, "scale", tg_, (1, 1, 1)); key(xe, "scale", tg_ + 0.2, (0.001, 0.001, 0.001))
-    BOX = (1.11, -0.62)
-    bx = empty((BOX[0], BOX[1], 0.0)); bx.rotation_euler = (0, 0, R(20))
-    bs = 0.22
-    cube(noise_mat("cardboard", "#C99A62", "#BE8E57", 30, 0.8), (0, 0, bs / 2), (bs, bs, bs), bevel=0.006, parent=bx)
-    cube(mat("boxlid", "#D3A66C", rough=0.75), (0, 0, bs + 0.012), (bs + 0.02, bs + 0.02, 0.03), bevel=0.006, parent=bx)
-    rb = mat("ribbon", "#E24C42", rough=0.35, coat=0.4)
-    cube(rb, (0, 0, bs / 2 + 0.01), (0.035, bs + 0.024, bs + 0.04), parent=bx); cube(rb, (0, 0, bs / 2 + 0.01), (bs + 0.024, 0.035, bs + 0.04), parent=bx)
-    for sx in (-1, 1): sphere(rb, (sx * 0.035, 0, bs + 0.045), 0.03, scale=(1.3, 0.6, 0.8), parent=bx)
-    stars = []
-    for k, (dx, dy, dz) in enumerate(((-0.17, 0.0, 0.32), (0.16, 0.05, 0.28), (-0.05, -0.1, 0.4), (0.1, -0.12, 0.18))):
-        sm_ = mat("spark%d" % k, "#FFD24A", rough=0.3, emit=0.0)
-        o = sphere(sm_, (dx, dy, dz), 0.016, parent=bx, seg=12); stars.append(sm_)
-        for j in range(3):
-            tt = t3 + 0.15 + k * 0.12 + j * 0.55
-            emit_key(sm_, tt, 0.0); emit_key(sm_, tt + 0.12, 9.0); emit_key(sm_, tt + 0.35, 0.0)
-    show_between(bx, t3, tg_ + 0.2); scale_pop(bx, t3, d=0.35); ev(t3, "chime", 0.5)
-    key(bx, "scale", tg_, (1, 1, 1)); key(bx, "scale", tg_ + 0.2, (0.001, 0.001, 0.001))
+    # 25-06：約束は、テレビの広告（S25c・b_ad）で見せる（v3。5本目 v2「広告なりインタビューで宣言してるような映像を差し込んで」）
     x24, y24, a24 = d24.pose(d24.t1)
-    d25 = plan.Drive([(x24, y24), (0.75, -0.85), (0.45, -0.75), (0.35, -0.2), (0.8, 0.15)], max(d24.t1, s("25-03") - 0.2), v=0.28, face0=a24)
+    d25 = plan.Drive([(x24, y24), (0.75, -0.85), (0.4, -0.78), (0.2, -0.25), (0.55, 0.2)], max(d24.t1, s("25-03") - 0.2), v=0.28, face0=a24)   # v3：まるロボ（mp1）から 0.37 m 離れて通る
     cs.drive(d25)
     # 25-07：まるロボ、のけぞって後ろへ跳ぶ → 足がうんちのすぐ横に（アップでは踏んだように見える）
     mp1 = (0.62, -0.32); mp2 = (POOP[0] - 0.13, POOP[1] + 0.05)
-    m.walk(s("25-04") + 0.5, s("25-05"), mp1); m.at(s("25-05") + 0.3, face=face_to(mp1, (0.0, 0.6)))
+    # v3（5本目 v2「驚く前にうんちに近づくのが違和感」）：うんちが出る前（24-04 のあと）に歩いておく。うんちが出たら見て、25-05 で向こうを向く
+    m.walk(e("24-04") + 0.3, w("25-02", "うんち") - 0.8, mp1); m.at(tpo + 0.1, face=face_to(mp1, POOP))
+    m.at(s("25-05") + 0.3, face=face_to(mp1, (0.0, 0.6)))
     tj = s("25-07") + 0.2
     m.at(tj, look=-35); key(m.root, "location", tj, (mp1[0], mp1[1], 0)); key(m.root, "location", tj + 0.25, ((mp1[0] + mp2[0]) / 2, (mp1[1] + mp2[1]) / 2, 0.18)); key(m.root, "location", tj + 0.5, (mp2[0], mp2[1], 0))
     ev(tj, "jump", 0.6); ev(tj + 0.5, "squish", 0.8)
@@ -898,7 +948,7 @@ def b_avoid(cl):
     if cut(cl, "S24a"):
         c, tg = cam_rig((-1.8, -2.6, 1.3), (-0.3, -1.2, 0.0), 30)
         cam_move(c, tg, s("24-01") - 0.8, e("24-04") + 0.5, (-1.9, -2.7, 1.35), (-0.6, -2.9, 1.1), (-0.6, -1.2, 0.0), (0.1, -1.3, 0.0))
-    elif cut(cl, "S25a"):
+    elif cut(cl, "S25a") or cut(cl, "S25d"):
         c, tg = cam_rig((-0.4, -1.9, 1.0), (0.7, -0.45, 0.05), 30)
         cam_move(c, tg, s("25-01") - 0.8, e("25-06") + 0.4, (-0.45, -2.0, 1.05), (-0.1, -1.7, 0.75), (0.7, -0.45, 0.05), (0.8, -0.5, 0.05))
         cam_move(c, tg, e("25-06") + 0.4, e("25-08") - 0.2, (-0.1, -1.7, 0.75), (0.5, -0.95, 0.1), (0.8, -0.5, 0.05), (0.82, -0.48, 0.04), 30, 48)
@@ -906,6 +956,68 @@ def b_avoid(cl):
         c = cam_top((0.8, -0.5, 1.0), 40)
         cam_top_move(c, e("25-08") - 0.6, e("25-09") + 0.6, (0.8, -0.5, 1.0), (0.8, -0.45, 1.25))
     track("cam", cs.root, 0.12); track("maru", m.root, 0.42); track("poop", pe, 0.1)
+
+
+# ======================================================================== S25c：テレビの広告（v3）。架空の会社。本物の会社名・ロゴは使わない。字は書かない
+def b_ad(cl):
+    """スタジオの台の上でカメラの先輩が回る → 「うんち」で前にうんち → 「よけられなかったら」で赤い × → 「新品」で箱がぽん（きらきら）。
+    2D で、まわりにテレビのふち（overlays の tv）"""
+    sc = bpy.context.scene; sc.world = bpy.data.worlds.new("adw"); sc.world.use_nodes = True
+    bg = sc.world.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = srgb("#DDEFF0"); bg.inputs["Strength"].default_value = 0.12
+    # 床と、奥のまるい壁（つなぎ目の見えない背景）
+    fl = cyl(mat("adfloor", "#EEF4F4", rough=0.35, coat=0.3), (0, 0, -0.01), 6.0, 0.02, verts=96)
+    bpy.ops.mesh.primitive_cylinder_add(radius=3.2, depth=4.0, vertices=128, location=(0, 0.6, 2.0), end_fill_type='NOTHING'); wall = bpy.context.object
+    wm = bpy.data.materials.new("adwall"); wm.use_nodes = True; nt = wm.node_tree; bs = nt.nodes["Principled BSDF"]
+    tc = nt.nodes.new("ShaderNodeTexCoord"); sp_ = nt.nodes.new("ShaderNodeSeparateXYZ"); cr = nt.nodes.new("ShaderNodeValToRGB")
+    nt.links.new(tc.outputs["Generated"], sp_.inputs[0]); nt.links.new(sp_.outputs["Z"], cr.inputs[0])
+    cr.color_ramp.elements[0].color = srgb("#CFEDEA"); cr.color_ramp.elements[1].color = srgb("#2A8C88"); cr.color_ramp.elements[1].position = 0.75
+    nt.links.new(cr.outputs[0], bs.inputs["Base Color"]); nt.links.new(cr.outputs[0], bs.inputs["Emission Color"]); bs.inputs["Emission Strength"].default_value = 0.08
+    bs.inputs["Roughness"].default_value = 0.8; wall.data.materials.append(wm)
+    # 台（白い丸い台・青緑の光の輪・前に会社の印（丸い形だけ））
+    cyl(mat("podium", "#FFFFFF", rough=0.2, coat=0.6), (0, 0, 0.05), 0.42, 0.1, verts=96)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.42, minor_radius=0.008, location=(0, 0, 0.1)); ring = bpy.context.object
+    ring.data.materials.append(glow_mat("podring", TEAL, 6.0)); ring.visible_shadow = False
+    logo = cyl(glow_mat("adlogo", TEAL, 2.0), (0, -0.421, 0.05), 0.035, 0.004, rot=(R(90), 0, 0), verts=48); logo.visible_shadow = False
+    cyl(mat("adlogo_in", "#FFFFFF", rough=0.3), (0, -0.424, 0.05), 0.018, 0.004, rot=(R(90), 0, 0), verts=32)
+    # 主役：カメラの先輩（台の上でゆっくり回る）
+    cs = Sp(senpai_camera((0, 0, 0.1), 0))
+    t0 = s("25-06") - 0.6; tpo = w("25-06", "うんち"); tx_ = w("25-06", "よけられなかったら") + 0.25; tn = w("25-06", "新品"); tend = s("25-07") + 1.0
+    key(cs.root, ("rotation_euler", 2), t0, R(-40), "LINEAR"); key(cs.root, ("rotation_euler", 2), tpo, R(25), "LINEAR")
+    key(cs.root, ("rotation_euler", 2), tpo + 0.5, R(25)); key(cs.root, ("rotation_euler", 2), tend, R(40), "LINEAR")
+    # うんち（台の前の床）→ 赤い ×
+    PP = (0.0, -0.62)
+    pe = poop((PP[0], PP[1], 0.0), 1.2); show_between(pe, tpo - 0.05); scale_pop(pe, tpo); ev(tpo, "pop", 0.5)
+    xe = empty((PP[0], PP[1], 0.26)); xe.rotation_euler = (0, 0, R(90))
+    xr = mat("xred", "#D93A30", rough=0.4, emit=0.9)
+    for sg in (1, -1): cube(xr, (0, 0, 0), (0.025, 0.26, 0.045), rot=(R(45 * sg), 0, 0), bevel=0.01, parent=xe)
+    show_between(xe, tx_); scale_pop(xe, tx_); ev(tx_, "bonk_soft", 0.5)
+    # 新品の箱（右に。リボン・きらきら）
+    bx = empty((0.66, -0.32, 0.0)); bx.rotation_euler = (0, 0, R(-18)); bsz = 0.26
+    cube(noise_mat("cardboard", "#C99A62", "#BE8E57", 30, 0.8), (0, 0, bsz / 2), (bsz, bsz, bsz), bevel=0.006, parent=bx)
+    cube(mat("boxlid", "#D3A66C", rough=0.75), (0, 0, bsz + 0.012), (bsz + 0.02, bsz + 0.02, 0.03), bevel=0.006, parent=bx)
+    rb = mat("ribbon", "#E24C42", rough=0.35, coat=0.4)
+    cube(rb, (0, 0, bsz / 2 + 0.01), (0.04, bsz + 0.024, bsz + 0.04), parent=bx); cube(rb, (0, 0, bsz / 2 + 0.01), (bsz + 0.024, 0.04, bsz + 0.04), parent=bx)
+    for sx in (-1, 1): sphere(rb, (sx * 0.04, 0, bsz + 0.05), 0.034, scale=(1.3, 0.6, 0.8), parent=bx)
+    for k, (dx, dy, dz) in enumerate(((-0.2, 0.0, 0.36), (0.19, 0.05, 0.32), (-0.06, -0.12, 0.46), (0.12, -0.14, 0.2))):
+        sm_ = mat("spark%d" % k, "#FFD24A", rough=0.3, emit=0.0)
+        sphere(sm_, (dx, dy, dz), 0.018, parent=bx, seg=12)
+        for j in range(4):
+            tt = tn + 0.15 + k * 0.12 + j * 0.55
+            emit_key(sm_, tt, 0.0); emit_key(sm_, tt + 0.12, 9.0); emit_key(sm_, tt + 0.35, 0.0)
+    show_between(bx, tn); scale_pop(bx, tn, d=0.35); ev(tn, "chime", 0.5)
+    # まわりのきらきら（広告らしく）
+    for k in range(10):
+        a_ = 2 * math.pi * k / 10; sm_ = mat("adsp%d" % k, "#FFFFFF", rough=0.3, emit=0.0)
+        sphere(sm_, (0.75 * math.cos(a_), 0.4 + 0.5 * math.sin(a_), 0.5 + 0.35 * (k % 3)), 0.012, seg=10)
+        for j in range(6):
+            tt = t0 + 0.2 + k * 0.17 + j * 1.1
+            emit_key(sm_, tt, 0.0); emit_key(sm_, tt + 0.15, 12.0); emit_key(sm_, tt + 0.45, 0.0)
+    # 光（上からのやわらかい光・後ろからの縁の光）
+    for loc, en, sz in (((0.9, -1.6, 2.2), 110, 1.6), ((-1.4, -0.8, 1.6), 45, 1.2), ((0.0, 1.2, 1.8), 90, 1.0)):
+        bpy.ops.object.light_add(type='AREA', location=loc); L_ = bpy.context.object; L_.data.energy = en; L_.data.size = sz
+        dd = Vector((0, 0, 0.2)) - Vector(loc); L_.rotation_euler = dd.to_track_quat('-Z', 'Y').to_euler()
+    c, tg = cam_rig((0.5, -1.6, 0.6), (0.15, -0.25, 0.14), 42)
+    cam_move(c, tg, t0, tend, (0.55, -1.65, 0.62), (0.4, -1.4, 0.5), (0.16, -0.25, 0.15), (0.16, -0.3, 0.13)); dof(c, cs.root, 5.6)
 
 
 # ======================================================================== S26〜S27：まとめ・オチ
@@ -963,13 +1075,13 @@ CUTS = [
     ("S01a", b_open, 0.0), ("S01b", b_open, s("01-03")), ("S02a", b_open, s("02-01")), ("S02b", b_open, s("02-05")),
     ("S03a", b_open, s("03-01")), ("S04a", b_open, s("04-01")), ("S05a", b_open, s("05-01")),
     ("S06a", b_old, s("06-01")), ("S06b", b_old, s("06-07")), ("S06c", b_old, s("06-09")),
-    ("S07a", b_blind, s("07-01")), ("S08a", b_blind, s("08-01")),
+    ("S07a", b_blind, s("07-01")), ("S07b", b_blind, s("07-02")), ("S07c", b_blind, s("07-03")), ("S08a", b_blind, s("08-01")),
     ("S09a", b_lidar, s("09-01")), ("S10a", b_lidar, s("10-01")), ("S11a", b_lidar, s("11-01")), ("S12a", b_lidar, s("12-01")),
     ("S13a", b_dark, s("13-01")), ("S14a", b_dark, s("14-01")), ("S15a", b_dark, s("15-01")), ("S15b", b_dark, s("15-02")), ("S15c", b_dark, s("15-04")),
-    ("S16a", b_rug, s("16-01")), ("S16b", b_rug, s("16-03")), ("S16c", b_rug, s("16-05")), ("S17a", b_rug, s("17-01")), ("S17b", b_rug, s("17-03")),
+    ("S16a", b_rug, s("16-01")), ("S16b", b_rug, s("16-03")), ("S16c", b_rug, s("16-05")), ("S17a", b_rug, s("17-01")), ("S17b", b_rug, s("17-03")), ("S17c", b_rug, s("17-07")),
     ("S18a", b_cam, s("18-01")), ("S19a", b_cam, s("19-01")), ("S20a", b_cam, s("20-01")), ("S21a", b_cam, s("21-01")),
     ("S22a", b_step, s("22-01")), ("S22b", b_step, s("22-04")), ("S23a", b_step, s("23-01")),
-    ("S24a", b_avoid, s("24-01")), ("S25a", b_avoid, s("25-01")), ("S25b", b_avoid, s("25-09")),
+    ("S24a", b_avoid, s("24-01")), ("S25a", b_avoid, s("25-01")), ("S25c", b_ad, s("25-06")), ("S25d", b_avoid, s("25-07")), ("S25b", b_avoid, s("25-09")),
     ("S26a", b_end, s("26-01")), ("S27a", b_end, s("27-01")), ("S27b", b_end, s("27-02")), ("S27c", b_end, s("27-05")),
 ]
 END_T = e("27-05") + 2.5
