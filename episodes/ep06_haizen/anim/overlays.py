@@ -179,6 +179,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "bubble":
             q = where(p["obj"], t, p.get("track_clip"))
             if q is None: continue
+            if not (-20 <= q[0] <= 1300 and -20 <= q[1] <= 700): continue      # 物が画面の外なら出さない（どこの吹き出しか分からなくなる）
             spr, off = bubble_sprite(p["icon"], p.get("big", False), p.get("side", 1))
             cx = q[0] + p.get("dx", 0); cy = q[1] - p.get("gap", 40) - spr.height / 2
             cx = min(max(cx, spr.width / 2 + 10), 1270 - spr.width / 2); cy = min(max(cy, spr.height / 2 + 10), SUB_TOP - spr.height / 2)
