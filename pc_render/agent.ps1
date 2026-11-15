@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "4"
+$VER = "5"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -193,7 +193,13 @@ function Get-Kit($job) {
   if ($LASTEXITCODE -ne 0) { return ("一式の枝 {0} を取れません：{1}" -f $job.kit_branch, ($o -join " ")) }
   $zip = Join-Path $kits $job.zip
   if (Test-Path $zip) { Remove-Item $zip -Force }
-  cmd /c ('""{0}" -C "{1}" cat-file blob FETCH_HEAD:{2} > "{3}""' -f $git, $repo, $job.zip, $zip)
+  # 枝の中身（zip 1 つ）を、包みの zip として書き出してから開く（画面への出力を経由しないので、中身が壊れない）
+  $wrap = Join-Path $kits "_wrap.zip"
+  if (Test-Path $wrap) { Remove-Item $wrap -Force }
+  $o = G -C $repo archive --format=zip -o $wrap FETCH_HEAD
+  if (-not (Test-Path $wrap)) { return ("一式を枝から取り出せません：{0}" -f ($o -join " ")) }
+  try { Expand-Archive -Path $wrap -DestinationPath $kits -Force -ErrorAction Stop } catch { return ("一式の包みを開けません：{0}" -f $_.Exception.Message) }
+  Remove-Item $wrap -Force -ErrorAction SilentlyContinue
   if (-not (Test-Path $zip) -or (Get-Item $zip).Length -lt 1000) { return ("一式 {0} が枝に見つかりません" -f $job.zip) }
   try { Expand-Archive -Path $zip -DestinationPath $root -Force -ErrorAction Stop } catch { return ("一式を広げられません：{0}" -f $_.Exception.Message) }
   return ""
