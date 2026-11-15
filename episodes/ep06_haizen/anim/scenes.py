@@ -394,22 +394,9 @@ def b_shape(cl):
             if h: mp.add((round(h[1][0] / 0.04) * 0.04, round(h[1][1] / 0.04) * 0.04))
     t_map = s("12-01a") + 0.3
     pc, pm = point_cloud("map", [(x, y, t_map + 0.002 * i) for i, (x, y) in enumerate(sorted(mp))], col=TEAL, radius=0.045, z=0.05, base=1.6, pop=3.0, decay=4.0, t_offset=CLOCK["T0"])
-    # いま見えている形（白い点）：先輩のまわり。はじめは少しずれた所に出て、「ここだ」で地図にぴたっと重なる
-    cur = []
-    for k in range(360):
-        h = plan.ray(pos[0], pos[1], math.radians(k), S, 2.2)
-        if h: cur.append((h[1][0], h[1][1]))
-    g = empty((0, 0, 0)); t_c = w("12-02", "見えている")
-    co, cm = point_cloud("cur", [(x, y, t_c + 0.004 * i) for i, (x, y) in enumerate(cur)], col=WHITE_PT, radius=0.055, z=0.07, base=3.0, pop=5.0, decay=6.0, t_offset=CLOCK["T0"])
-    co.parent = g
-    # v2：「重ねてみて」で、白い形が地図の上をすべって何度か合わせ直し、「ぴったり」で重なる（v1 3:34「わかりにくい・変わり映えしない」）
-    t_o = w("12-02", "重ねて"); t_k = w("12-02", "ぴったり")
-    tries = [(t_o - 0.2, (0.9, -0.7, 18)), (t_o + 0.6, (-0.55, 0.45, -12)), (t_o + 1.4, (0.45, 0.55, 8)), (t_k - 0.5, (0.12, -0.08, 3)), (t_k, (0.0, 0.0, 0))]
-    key(g, "location", CLOCK["T0"] - 1, (0.9, -0.7, 0)); key(g, "rotation_euler", CLOCK["T0"] - 1, (0, 0, R(18)))
-    for t, (x, y, a) in tries:
-        key(g, "location", t, (x, y, 0), "BEZIER"); key(g, "rotation_euler", t, (0, 0, R(a)), "BEZIER")
-    for t, _ in tries[1:4]: ev(t, "rub", 0.25)
-    ev(t_k, "snap", 0.6)
+    # v3：いま見えている形を地図に重ねる所は 2D の図にした（overlays.py の shapematch。v2 3:31「分かりにくい・動きも早い」）。3D は地図の点と先輩だけ
+    t_o = s("12-02"); t_k = e("12-02c")
+    ev(w("12-02b", "合わない"), "click", 0.35); ev(w("12-02b", "も……合") + 0.15, "click", 0.35); ev(w("12-02c", "ぴったり") + 0.35, "snap", 0.6)   # 図の × × ✓ の音
     r_ = ring_marker(pos, r=0.36, col="#FFD24A", w=0.03, z=0.03); show_between(r_, t_k); scale_pop(r_, t_k)
     # 12-03：先輩に寄っていく（このあと、先輩の目をのぞく）
     if cut(cl, "S12a"):

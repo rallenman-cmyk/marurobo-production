@@ -40,7 +40,8 @@ def ev_list():
     # 11：天井の目印
     add(w("11-02", "目印"), e("11-04") + 0.3, "tag", dict(text="目印のシール", pos=(640, 90)))
     # 12：地図と、いま見えている形
-    add(w("12-02", "地図"), e("12-03"), "legend", dict(items=[(TEAL, "地図"), (WHITE, "いま見えている形")], t1=w("12-02", "地図") + 0.5))
+    # v3：12-02〜12-02c は 2D の図（左＝先輩に見える点の形、右＝お店の地図。ゆっくり動かして × × ✓。v2 3:31「分かりにくい・動きも早い」）
+    add(s("12-02") - 0.2, e("12-02c") + 0.6, "shapematch", {})
     # 13：光の物差し
     add(w("13-02", "光の物差し"), e("13-03") + 0.3, "tag", dict(text="光の物差し", pos=(1060, 90)))
     # 14〜16：点の色の名前（14 から最後まで同じ）
@@ -76,12 +77,10 @@ def ev_list():
     # 28：怒った
     add(w("28-03", "怒った") + 0.1, e("28-03") + 0.6, "bubble", dict(obj="maru", icon="!", side=1, track_clip="S28a"))
     # 29：まとめ。v2：問いと答えが分かるように、問いの札（黄色）の下に答えの札を並べる（v1 8:43・9:00「何が問いで何が答えか」「まとめ方分かりにくい」）
-    add(w("29-01", "一つ目"), e("29-07") + 0.5, "tag", dict(text="問い①　どの席か分かる？", pos=(640, 70), size=48, bg=YEL))
-    add(w("29-04", "二つ目"), e("29-07") + 0.5, "tag", dict(text="問い②　なぜぶつからない？", pos=(640, 250), size=48, bg=YEL))
-    for txt, at, row in (("席の点", w("29-02", "席ごとの"), 0), ("天井の目印", w("29-03", "天井の目印"), 0), ("まわりの形", w("29-03", "まわりの形"), 0),
-                         ("回る光", w("29-05", "回る光"), 1), ("前のカメラ", w("29-05", "前のカメラ"), 1), ("近づくと止まる", w("29-06", "止まって"), 1),
-                         ("顔", w("29-07", "顔が"), 2)):
-        add(at, e("29-07") + 0.5, "sumtag", dict(text=txt, row=row, t_all=at))
+    # v3：1 枚の白いカードに、問い（黄色）と答え（青緑のふち）を 2 段で。うしろの絵は暗く（v2 8:52「画面がぐちゃぐちゃしている」）
+    add(w("29-01", "一つ目") - 0.2, e("29-07") + 0.8, "sumcard", dict(rows=[
+        ("問い①　どの席か分かる？", w("29-01", "一つ目"), [("席の点", w("29-02", "席ごとの")), ("天井の目印", w("29-03", "天井の目印")), ("まわりの形", w("29-03", "まわりの形"))]),
+        ("問い②　なぜぶつからない？", w("29-04", "二つ目"), [("回る光", w("29-05", "回る光")), ("前のカメラ", w("29-05", "前のカメラ")), ("近づくと止まる", w("29-06", "止まって")), ("顔", w("29-07", "顔が"))])]))
     # 30：オチ
     add(w("30-04", "デザート") - 0.2, e("30-04") + 1.2, "bubble", dict(obj="maru", icon="!", side=-1, gap=30))
     return sorted(E, key=lambda x: x[0])
@@ -210,6 +209,10 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             widths = [tag_sprite(x[3]["text"], 46)[0].width for x in same]; tot = sum(widths) + 24 * (len(same) - 1)
             x_ = 640 - tot / 2 + sum(widths[:i]) + 24 * i + spr.width / 2
             _paste(base, spr, x_, (150, 330, 420)[row], k, a)
+        elif kind == "shapematch":
+            shapematch_draw(base, t, t0, t1)
+        elif kind == "sumcard":
+            sumcard_draw(base, t, t0, t1, p)
         elif kind == "spill":      # 人がおぼんで運んで、急に止まると……スープがはねる（字なしの絵）
             _paste(base, spill_sprite(min(1.0, (t - t0) / 1.6)), 250, 170, k, a)
         elif kind == "speed":      # 速さの変え方：ぐっと（点線）と、なめらか（青緑）
@@ -366,3 +369,169 @@ def speed_sprite(k):
 def sepia(im):
     g = im.convert("L")
     return Image.merge("RGB", (g.point(lambda v: min(255, int(v * 1.07 + 18))), g.point(lambda v: int(v * 0.92 + 8)), g.point(lambda v: int(v * 0.74))))
+
+
+# ======================================================================== 12：点の形を地図に重ねる（v3。2D の図）
+import plan as _plan
+_SM = {}
+
+
+def _sm_data():
+    if _SM: return _SM
+    S = _plan.segments(); pos = (0.0, 0.35)
+    pts = []
+    for k in range(0, 360, 2):
+        h = _plan.ray(pos[0], pos[1], math.radians(k), S, 2.2)
+        if h: pts.append((h[1][0] - pos[0], h[1][1] - pos[1]))
+    _SM.update(S=S, pos=pos, pts=pts)
+    return _SM
+
+
+SM_SC = 64.0                      # 1 m ＝ 64 px
+SM_MAP_C = (842, 318)             # 地図のまん中（お店の x 0・y 0.1）
+SM_LEFT_C = (300, 318)            # 左の枠のまん中
+
+
+def _m2p(x, y):
+    return (SM_MAP_C[0] + x * SM_SC, SM_MAP_C[1] - (y - 0.1) * SM_SC)
+
+
+def _sm_base():
+    """変わらない所：白いカード・2 つの枠・題・地図"""
+    if "base" in _SM: return _SM["base"]
+    _sm_data()
+    ss = 2; im = Image.new("RGBA", (1280 * ss, 720 * ss), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0)); ImageDraw.Draw(sh).rounded_rectangle([104 * ss, 40 * ss, 1176 * ss, 552 * ss], 30 * ss, fill=(0, 0, 0, 90))
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(14 * ss)))
+    d.rounded_rectangle([100 * ss, 34 * ss, 1180 * ss, 548 * ss], 30 * ss, fill=(255, 255, 255, 255))
+    f = D.font(40 * ss)
+    D.ctext(d, (SM_LEFT_C[0] * ss, 78 * ss), "先輩に見える点の形", f, NAVY)
+    D.ctext(d, (SM_MAP_C[0] * ss, 78 * ss), "お店の地図", f, NAVY)
+    d.rounded_rectangle([130 * ss, 112 * ss, 470 * ss, 528 * ss], 20 * ss, fill=(236, 243, 247, 255))
+    d.rounded_rectangle([590 * ss, 104 * ss, 1094 * ss, 536 * ss], 16 * ss, fill=(246, 241, 232, 255))
+    P = lambda x, y: tuple(v * ss for v in _m2p(x, y))
+    # いす・テーブル（上から見た形）
+    for n, (tx, ty) in _plan.TABLE.items():
+        for side in ("in", "out"):
+            cx, cy = _plan.chair_pos(n, side)
+            a, b = P(cx - 0.2, cy + 0.2), P(cx + 0.2, cy - 0.2)
+            d.rounded_rectangle([a[0], a[1], b[0], b[1]], 4 * ss, fill=(228, 214, 196, 255), outline=(190, 170, 150, 255), width=2 * ss)
+        h = _plan.TSIZE / 2; a, b = P(tx - h, ty + h), P(tx + h, ty - h)
+        d.rounded_rectangle([a[0], a[1], b[0], b[1]], 5 * ss, fill=(214, 186, 150, 255), outline=(170, 135, 100, 255), width=2 * ss)
+    # 壁
+    x0, y0, x1, y1 = _plan.ROOM
+    for (ax, ay), (bx, by) in [((x0, y0), (x1, y0)), ((x1, y0), (x1, y1)), ((x0, y0), (x0, y1)), ((x0, y1), (_plan.KITCHEN[0], y1)), ((_plan.KITCHEN[1], y1), (x1, y1))]:
+        d.line([P(ax, ay), P(bx, by)], fill=NAVY + (255,), width=6 * ss)
+    _SM["base"] = im.resize((1280, 720), Image.LANCZOS)
+    return _SM["base"]
+
+
+def _ease(u):
+    u = max(0.0, min(1.0, u)); return u * u * (3 - 2 * u)
+
+
+def shapematch_draw(base, t, t0, t1):
+    sm = _sm_data(); pts = sm["pts"]
+    a = min(1.0, (t - t0) / 0.35, max(0.0, (t1 - t) / 0.4))
+    lay = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    lay.alpha_composite(_sm_base())
+    # 形の置き場所（スクリーン座標）：左の枠 → ちがう所 1 → ちがう所 2 → ぴったり
+    tgt = sm["pos"]
+    T1, T2 = (-1.45, 0.55), (1.45, -1.05)   # ちがう所：テーブルの上（点が机や壁とずれて、合わないのがすぐ分かる）
+    m1a, m1b = w("12-02a", "動かして"), w("12-02b", "ここは") + 0.05
+    x1 = w("12-02b", "合わない")
+    m2a, m2b = w("12-02b", "ここも") - 0.15, w("12-02b", "も……合") - 0.05
+    x2 = w("12-02b", "も……合") + 0.15
+    m3a, m3b = s("12-02c") - 0.7, w("12-02c", "ぴったり") + 0.35
+    ok = w("12-02c", "ここが")
+    L = SM_LEFT_C; Q1, Q2, Q3 = _m2p(*T1), _m2p(*T2), _m2p(*tgt)
+    def lerp(p, q, u): u = _ease(u); return (p[0] + (q[0] - p[0]) * u, p[1] + (q[1] - p[1]) * u)
+    if t < m1a: c = L
+    elif t < m1b: c = lerp(L, Q1, (t - m1a) / (m1b - m1a))
+    elif t < m2a: c = Q1
+    elif t < m2b: c = lerp(Q1, Q2, (t - m2a) / (m2b - m2a))
+    elif t < m3a: c = Q2
+    elif t < m3b: c = lerp(Q2, Q3, (t - m3a) / (m3b - m3a))
+    else: c = Q3
+    bad = (x1 <= t < m2a) or (x2 <= t < m3a); good = t >= m3b
+    col = (226, 58, 48) if bad else ((240, 170, 0) if good else TEAL)
+    # 点：はじめはぐるりと順に出る（光が回って測る感じ）
+    n_show = len(pts) if t > s("12-02") + 2.2 else int(len(pts) * max(0.0, (t - s("12-02") - 0.3) / 1.9))
+    ss = 2; L2 = Image.new("RGBA", (1280 * ss, 720 * ss), (0, 0, 0, 0)); d = ImageDraw.Draw(L2)
+    for (dx, dy) in pts[:n_show]:
+        px, py = (c[0] + dx * SM_SC) * ss, (c[1] - dy * SM_SC) * ss
+        d.ellipse([px - 5.5 * ss, py - 5.5 * ss, px + 5.5 * ss, py + 5.5 * ss], fill=col + (255,))
+    if t >= m1a:   # 左の枠には、もとの形をうすく残す（見比べられるように）
+        for (dx, dy) in pts:
+            px, py = (L[0] + dx * SM_SC) * ss, (L[1] - dy * SM_SC) * ss
+            d.ellipse([px - 5.5 * ss, py - 5.5 * ss, px + 5.5 * ss, py + 5.5 * ss], fill=(160, 222, 215, 255))
+    # 先輩の印（白い丸に目 2 つ）
+    cx, cy = c[0] * ss, c[1] * ss; r = 15 * ss
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(255, 255, 255, 255), outline=NAVY + (255,), width=4 * ss)
+    for ex in (-5, 5): d.ellipse([cx + (ex - 2.5) * ss, cy - 4.5 * ss, cx + (ex + 2.5) * ss, cy + 0.5 * ss], fill=NAVY + (255,))
+    if good:
+        rr = 28 * ss; d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=(240, 170, 0, 255), width=6 * ss)
+    lay.alpha_composite(L2.resize((1280, 720), Image.LANCZOS))
+    # × と ✓（字ではなく線で描く）
+    def mark(kind, at, p0):
+        if t < at: return
+        k, _ = _pop(t, at, at + 99)
+        m = Image.new("RGBA", (200, 200), (0, 0, 0, 0)); md = ImageDraw.Draw(m)
+        md.ellipse([20, 20, 180, 180], fill=(255, 255, 255, 235))
+        if kind == "x":
+            md.line([60, 60, 140, 140], fill=(226, 58, 48, 255), width=22); md.line([140, 60, 60, 140], fill=(226, 58, 48, 255), width=22)
+        else:
+            md.line([52, 104, 88, 140, 150, 64], fill=(30, 170, 90, 255), width=24, joint="curve")
+        m = m.resize((84, 84), Image.LANCZOS)
+        _paste(lay, m, p0[0] + 46, p0[1] - 46, k)
+    if x1 <= t < m2a: mark("x", x1, Q1)
+    if x2 <= t < m3a: mark("x", x2, Q2)
+    if t >= m3b: mark("ok", m3b, (Q3[0] + 40, Q3[1] + 46))   # ✓ は右下（上の「ここ！」と重ねない）
+    if t >= ok:
+        k, _ = _pop(t, ok, ok + 99)
+        spr, off = tag_sprite("ここ！", 48, YEL, tail=(0, 46))
+        _paste(lay, spr, Q3[0] + off[0] + spr.width / 2, Q3[1] - 90 + off[1] + spr.height / 2, k)
+    if a < 1.0:
+        al = lay.getchannel("A").point(lambda v: int(v * a)); lay.putalpha(al)
+    base.alpha_composite(lay)
+
+
+# ======================================================================== 29：まとめのカード（v3）
+def chip_sprite(text, size=40):
+    key = ("chip", text, size)
+    if key not in _cache:
+        f = D.font(size * 2); tw = int(D.font(size * 2).getlength(text)); ss = 2
+        W_, H_ = tw + 56 * ss, int(size * 1.7) * ss
+        im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        d.rounded_rectangle([3 * ss, 3 * ss, W_ - 3 * ss, H_ - 3 * ss], H_ // 2, fill=(232, 248, 246, 255), outline=TEAL + (255,), width=4 * ss)
+        D.ctext(d, (W_ / 2, H_ / 2), text, f, NAVY)
+        _cache[key] = im.resize((W_ // ss, H_ // ss), Image.LANCZOS)
+    return _cache[key]
+
+
+def sumcard_draw(base, t, t0, t1, p):
+    a = min(1.0, (t - t0) / 0.35, max(0.0, (t1 - t) / 0.4))
+    dim = Image.new("RGBA", base.size, (10, 18, 28, int(140 * a))); base.alpha_composite(dim)
+    lay = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    if "sumbase" not in _cache:
+        ss = 2; im = Image.new("RGBA", (1280 * ss, 720 * ss), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        d.rounded_rectangle([110 * ss, 46 * ss, 1170 * ss, 530 * ss], 30 * ss, fill=(255, 255, 255, 250))
+        d.line([150 * ss, 290 * ss, 1130 * ss, 290 * ss], fill=(220, 226, 232, 255), width=3 * ss)
+        _cache["sumbase"] = im.resize((1280, 720), Image.LANCZOS)
+    lay.alpha_composite(_cache["sumbase"])
+    for r, (head, th, chips) in enumerate(p["rows"]):
+        y_h, y_c = (110, 205) if r == 0 else (350, 445)
+        if t >= th:
+            k, _ = _pop(t, th, th + 99)
+            spr, off = tag_sprite(head, 48, YEL)
+            _paste(lay, spr, 150 + spr.width / 2, y_h, k)
+        x = 160
+        for txt, at in chips:
+            spr = chip_sprite(txt)
+            if t >= at:
+                k, _ = _pop(t, at, at + 99)
+                _paste(lay, spr, x + spr.width / 2, y_c, k)
+            x += spr.width + 18
+    if a < 1.0:
+        al = lay.getchannel("A").point(lambda v: int(v * a)); lay.putalpha(al)
+    base.alpha_composite(lay)
