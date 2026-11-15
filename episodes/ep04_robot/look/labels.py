@@ -102,8 +102,8 @@ def s19_labels():
             P("GPT-4", "A_top", said("OpenAIが") + 0.6, d=(0, -50), solid=True, col="te"),
             P("頼まれた人", "P_top", t_ask + 0.5, d=(0, -55), solid=True, col="or", quiet=True),
             P("？", "P_top", t_q, d=(-105, 50), solid=True, col="or", size=52, tail=(45, 5)),
-            P("「私はロボットではありません」", "A_side", t_no + 0.1, d=(130, -160), plain=True, size=40, tail=(-170, 110)),
-            P("研究者が手伝った試験", "R_base", t_res + 1.0, d=(0, -175), solid=True, col="nv", size=38, quiet=True)]
+            P("「私はロボットではありません」", "A_side", t_no + 0.1, d=(105, 128), plain=True, size=34, tail=(-300, -45), out=t_res + 0.9),
+            P("研究者が手伝った試験", "R_base", t_res + 1.0, d=(-230, -95), solid=True, col="nv", size=38, quiet=True)]
 
 
 # ---------------- S20 2024年・2025年（8:47〜9:30）
