@@ -16,6 +16,19 @@ BASE = ("Background art for a YouTube thumbnail, 16:9, polished cinematic 3D ren
 LAYOUT = ("STRICT LAYOUT (like a pro YouTube thumbnail): the QR card occupies the RIGHT half (x 52-97%, y 5-88%). The robot is SMALL, about one third "
           "of the frame height, standing at x 22-40%, y 58-95%. The whole TOP-LEFT area (x 0-50%, y 0-56%) is empty, plain, softly lit background for a big headline. ")
 PLANS = {
+ "P1": (LAYOUT + "Dark navy studio with soft teal rim lights and subtle bokeh. The large crisp QR code is printed on a thick white card lying slightly tilted "
+       "toward camera. The small robot is SITTING on the lower-right corner of the QR code, covering roughly a quarter of the code, looking pleased. A smartphone "
+       "hovers above the card at the upper right, its screen facing us showing only a big glowing green check mark (no text). The robot is ON the card here, "
+       "so ignore the robot position in the layout; keep the top-left empty."),
+ "P2": ("Background art for a YouTube thumbnail, 16:9, polished 3D render. ABSOLUTELY NO TEXT anywhere (QR patterns are fine). Clean bright light-grey studio. "
+        "The TOP 35% of the frame is plain empty background. Two identical large crisp QR codes on thick white cards stand side by side in the lower 65%, "
+        "the left one centered at x 28%, the right one at x 72%. LEFT card: the small robot sits on its lower-right corner, covering about a quarter of the "
+        "code, and a big green circular badge with a white check mark floats at its upper-left corner. RIGHT card: a few small dark smudges / tiny ink stains "
+        "on its white squares (subtle but visible), and a big red circular badge with a white X floats at its upper-right corner. " + ROBOT),
+ "P3": ("Photorealistic stock-photo style image, 16:9, like a real camera photo (NOT a 3D render, no cartoon). ABSOLUTELY NO TEXT anywhere (QR pattern is fine). "
+        "A large QR code sticker on a slightly worn poster on a city wall or a shop window, shot close-up with shallow depth of field and natural daylight. "
+        "The QR code fills the RIGHT 55% of the frame. Its lower-right corner is clearly torn off and scratched, with the paper peeling, yet the rest is intact. "
+        "The LEFT 45% of the frame is out-of-focus wall/background, calm and fairly empty, for a big headline. No people, no robot."),
  "D2": (LAYOUT + "Dark navy studio with soft teal rim lights and subtle bokeh. The large crisp QR code is printed on a thick white card standing upright, "
        "slightly angled. About twelve small flat black ink splatter dots are scattered on its white modules, and a glowing bright RED ring (neon-like, slightly "
        "glowing) circles a cluster of three ink dots on the lower part of the code, like a highlight mark. A toppled small glass ink bottle lies at the base of the "
@@ -77,6 +90,22 @@ def tag(im, xy, txt, px=92, bg=CYAN, fg=NAVY, edge=None):
     d.polygon(poly, fill=bg + (255,))
     b = f.getbbox(txt); d.text((x + pad, y + (h - (b[3] - b[1])) / 2 - b[1]), txt, font=f, fill=fg + (255,))
     return Image.alpha_composite(im, lay)
+def arrow(im, p0, p1, bend=0.35, w=34, col=RED, edge=WHITE):
+    """しくみの正体のような、白いふちの太い赤い矢印（p0 から p1 へ、少し曲げる）"""
+    import math
+    (x0, y0), (x1, y1) = p0, p1; mx, my = (x0 + x1) / 2, (y0 + y1) / 2; dx, dy = x1 - x0, y1 - y0
+    cx, cy = mx - dy * bend, my + dx * bend
+    pts = [((1 - t) ** 2 * x0 + 2 * (1 - t) * t * cx + t * t * x1, (1 - t) ** 2 * y0 + 2 * (1 - t) * t * cy + t * t * y1) for t in [i / 60 for i in range(61)]]
+    ang = math.atan2(y1 - pts[-6][1], x1 - pts[-6][0]); L = w * 2.6
+    tip = (x1 + math.cos(ang) * w * 0.6, y1 + math.sin(ang) * w * 0.6)
+    head = [tip, (x1 - math.cos(ang - 0.55) * L, y1 - math.sin(ang - 0.55) * L), (x1 - math.cos(ang + 0.55) * L, y1 - math.sin(ang + 0.55) * L)]
+    body = pts[:-4]
+    lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay)
+    sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.line([(x + 10, y + 14) for x, y in body], fill=(0, 0, 0, 110), width=w + 16, joint="curve"); ds.polygon([(x + 10, y + 14) for x, y in head], fill=(0, 0, 0, 110))
+    d.line(body, fill=edge + (255,), width=w + 16, joint="curve"); d.polygon(head, fill=edge + (255,), outline=edge + (255,), width=16)
+    d.line(body, fill=col + (255,), width=w, joint="curve"); d.polygon(head, fill=col + (255,))
+    return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(8))), lay)
 def bg(path):
     return Image.open(path).convert("RGB").resize((W, H), Image.LANCZOS).convert("RGBA")
 def save(im, name):
@@ -90,20 +119,30 @@ def fit(runs, maxw, px0, track=-0.02):
         px -= 4
     return px
 LAYOUTS = {   # 名前 → (地の種類, 札, [1 行目, 2 行目], 字の右の端)
+ "P1": ("dark", ("QRコード", CYAN, NAVY), [[("隠しても", WHITE)], [("なぜ", WHITE), ("読める？", YEL)]], 1400, [250, 300]),
+ "P3": ("photo", None, [[("こんなに", WHITE)], [("欠けても", WHITE)], [("なぜ読める？", YEL)]], 1250, [280, 280, 280]),
  "D2": ("dark", ("QRコード", CYAN, NAVY), [[("たった", WHITE), ("3%", YEL), ("で", WHITE)], [("読めない!?", YEL)]], 1300),
  "B2": ("light", ("QRコード", TEAL, WHITE), [[("隠しても", BLACK)], [("読めた!?", RED)]], 1300),
 }
 def comp(choice):
     made = []
     for name, src in choice.items():
-        im = bg(os.path.join(G, src)); kind, (tt, tb, tf), lines, maxw = LAYOUTS[name.split("_")[0]]
-        edge = NAVY if kind == "dark" else WHITE
-        im = tag(im, (90, 50), tt, px=104, bg=tb, fg=tf)   # 参考：札は高さの 1 割ほど
-        y = 230 if kind == "dark" else 205
+        im = bg(os.path.join(G, src)); key = name.split("_")[0]
+        if key == "P2":   # 比べる案：上に 1 行、赤い矢印で右の QR（読めない方）を指す
+            im = tag(im, (90, 40), "QRコード", px=84, bg=TEAL, fg=WHITE)
+            runs = [("なぜ", BLACK), ("こっち", RED), ("は読めない？", BLACK)]; px = fit(runs, 2300, 175)
+            im, xe = line(im, (90, 140), runs, px, WHITE)
+            im = arrow(im, (1330, 140 + px * 1.25), (1700, 760), bend=0.3, w=38)   # 「こっち」の下から右の QR へ（× の印と重ねない）
+            made.append(save(im, "v3_" + name.replace("_", ""))); continue
+        kind, tg, lines, maxw, *mx = LAYOUTS[key]; mx = mx[0] if mx else None
+        edge = NAVY if kind == "dark" else (BLACK if kind == "photo" else WHITE)
+        if tg: im = tag(im, (90, 50), tg[0], px=104, bg=tg[1], fg=tg[2])   # 参考：札は高さの 1 割ほど
+        y = 230 if kind == "dark" else (110 if kind == "photo" else 205)
         for i, runs in enumerate(lines):
-            px = fit(runs, maxw - 90, 360 if kind == "dark" else 320)   # 明るい地の案は、まるロボの頭に字がかからない大きさまで                  # 参考：1 行が高さの 2 割以上
+            px = fit(runs, maxw - 90, mx[i] if mx else (360 if kind == "dark" else 320))   # 明るい地の案は、まるロボの頭に字がかからない大きさまで                  # 参考：1 行が高さの 2 割以上
             im, _ = line(im, (90, y), runs, px, edge)
             y += int(px * 1.06)
+        if key == "P3": im = arrow(im, (1000, y - 10), (1820, 1140), bend=0.25, w=42)   # 破れた角を指す（絵を見て位置を合わせる）
         made.append(save(im, "v3_" + name.replace("_", "") ))
     return made
 if __name__ == "__main__":
