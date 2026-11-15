@@ -61,10 +61,11 @@ def s06_sfx(): return []   # 3D の log の音を使う（use_log）
 # ---------------- S07〜S08 昔のテスト（1:52〜2:36）
 def s07_labels():
     t_who, t_two, t_known, t_unk, t_other = said("人には読める"), said("実は、このゆがんだ"), said("1つは、出題"), said("実は、出題する側も"), said("では、もう1つは")
-    return [P("人", "L_base", t_who - 0.1, d=(0, 30), solid=True, col="or", quiet=True, out=t_two - 0.1),
-            P("機械", "R_base", t_who + 0.3, d=(0, 30), solid=True, col="te", quiet=True, out=t_two - 0.1),
-            P("morning", "L_top", t_who + 0.9, d=(0, -85), plain=True, size=46, tail=(0, 55), quiet=True, out=t_two - 0.1),
-            P("？？？", "R_top", t_who + 2.7, d=(0, -75), plain=True, size=44, tail=(0, 50), quiet=True, out=t_two - 0.1),
+    # v11「人と機械のテロップがメインのテロップと重なる」→ 名前の札は頭の上、読んだ言葉は頭の横に
+    return [P("人", "L_base", t_who - 0.1, d=(-170, -45), solid=True, col="or", quiet=True, out=t_two - 0.1),
+            P("機械", "R_base", t_who + 0.3, d=(175, -45), solid=True, col="te", quiet=True, out=t_two - 0.1),
+            P("morning", "L_top", t_who + 0.9, d=(-175, -10), plain=True, size=44, tail=(80, 20), quiet=True, out=t_two - 0.1),
+            P("？？？", "R_top", t_who + 2.7, d=(150, -10), plain=True, size=44, tail=(-70, 20), quiet=True, out=t_two - 0.1),
             P("出題する側", "asker", t_known - 0.1, d=(0, 62), solid=True, col="nv", size=40, quiet=True),
             P("morning", "wL", t_known + 1.6, d=(0, -70), plain=True, size=46, tail=(0, 50), quiet=True),
             P("？？？", "wR", t_unk + 0.4, d=(0, -70), solid=True, col="or", size=44, tail=(0, 50))]
@@ -98,11 +99,11 @@ def s15_labels():
 def s19_labels():
     t_y, t_ask, t_q, t_no, t_res = said("2023年。"), said("そこで、ネットで"), said("「あなた、ロボット"), said("「いいえ、私は"), said("ただしこれは")
     return [P("2023年  OpenAI「GPT-4」", (640, 62), t_y, size=46, col="or"),
-            P("GPT-4", "A_base", said("OpenAIが") + 0.6, d=(0, 30), solid=True, col="te"),
-            P("頼まれた人", "P_base", t_ask + 0.5, d=(0, 30), solid=True, col="or", quiet=True),
-            P("？", "P_top", t_q, d=(60, -80), solid=True, col="or", size=52, tail=(-30, 50)),
+            P("GPT-4", "A_top", said("OpenAIが") + 0.6, d=(0, -50), solid=True, col="te"),
+            P("頼まれた人", "P_top", t_ask + 0.5, d=(0, -55), solid=True, col="or", quiet=True),
+            P("？", "P_top", t_q, d=(-105, 50), solid=True, col="or", size=52, tail=(45, 5)),
             P("「私はロボットではありません」", "A_side", t_no + 0.1, d=(130, -160), plain=True, size=40, tail=(-170, 110)),
-            P("研究者が手伝った試験", "R_base", t_res + 1.0, d=(150, 40), solid=True, col="nv", size=38, quiet=True)]
+            P("研究者が手伝った試験", "R_base", t_res + 1.0, d=(0, -175), solid=True, col="nv", size=38, quiet=True)]
 
 
 # ---------------- S20 2024年・2025年（8:47〜9:30）
@@ -110,7 +111,7 @@ def s20_labels():
     T0, t_25, t_op, t_chk, t_go = said("2024年には"), said("そして2025年"), said("ChatGPTに、自分で"), said("途中で、人間かどうか"), said("先へ進んでしまった")
     return [P("2024年", (640, 62), T0, size=50, col="or", out=t_25 - 0.1),
             P("2025年", (640, 62), t_25 + 0.3, size=50, col="or"),
-            P("ChatGPT", "A_base", t_op + 0.4, d=(0, 30), solid=True, col="te"),
+            P("ChatGPT", "A_top", t_op + 0.4, d=(0, -50), solid=True, col="te"),
             P("人間かどうかを確かめます", "box", t_chk + 0.4, d=(140, 110), plain=True, size=36, tail=(-120, -70), out=t_go)]
 
 

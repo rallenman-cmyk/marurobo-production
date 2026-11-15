@@ -25,6 +25,14 @@ FPS = 24
 def ease(x): x = min(1, max(0, x)); return x * x * (3 - 2 * x)
 
 
+# v11「パソコンの画面のマウスカーソルと軌跡が薄くて動きが分かりにくい」：矢印は黒く大きく白いふち、通った跡は太く濃く
+def arrow(d, x, y, s=1.0):
+    s *= 1.9
+    pts = [(0, 0), (0, 46), (12, 35), (21, 56), (29, 52), (20, 32), (36, 32)]
+    d.polygon([(x + px * s, y + py * s) for px, py in pts], fill=(20, 26, 40), outline='white', width=max(4, int(4 * s)))
+TEAL_D, ORANGE_D = (0, 128, 118), (226, 104, 18)
+
+
 def spinner(d, ang):
     d.rounded_rectangle([425, 460, 525, 560], 10, fill='white')
     d.arc([430, 465, 520, 555], ang, ang + 280, fill=TEAL, width=10)
@@ -49,7 +57,7 @@ if SC == "s04":
             n = int(u * 14)
             for j in range(n):                    # 通った所に点の跡（まっすぐ）
                 v = j / 13; x = P0[0] + (P1[0] - P0[0]) * v; y = P0[1] + 40 + (P1[1] - P0[1]) * v
-                d.ellipse([x - 9, y - 9, x + 9, y + 9], fill=TEAL)
+                d.ellipse([x - 17, y - 17, x + 17, y + 17], fill=TEAL_D)
             x = P0[0] + (P1[0] - P0[0]) * u; y = P0[1] + (P1[1] - P0[1]) * u
             if t >= click: spinner(d, (t - click) * 400)
             arrow(d, x, y, 1.6)
@@ -83,7 +91,7 @@ if SC in ("s05", "s23"):
         u = prog(t)
         n = int(u * 30)
         for j in range(n):
-            x, y = human_path(j / 29); d.ellipse([x - 9, y + 31, x + 9, y + 49], fill=ORANGE)
+            x, y = human_path(j / 29); d.ellipse([x - 17, y + 23, x + 17, y + 57], fill=ORANGE_D)
         x, y = human_path(u); arrow(d, x, y, 1.6)
         im.save(os.path.join(OUTD, "%s_%04d.png" % (SC, k + 1)))
     print("screens", SC, round((T1 - T0) * FPS), "コマ", dict(m0=m0, m1=m1, click=click))

@@ -12,7 +12,7 @@ W = os.environ["MARU_WORK"]
 FR, LY, SH, FONTS, OUT, MODES = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6:]
 FULL = {"s_op"}
 # しっぽが動く物を追う札：ショット → (札のない同じ層, 字, 札のまん中, 追う物)。s04a は s04x（チェック欄だけ）の上に描く
-FOLLOW = {"s04a": ("s04x", "まるロボ", (1080, 250), "maru")}
+FOLLOW = {}   # v11「まるロボに吹き出しのしっぽがついてくる違和感」→ 札なし（ユーザーの選択）。前：{"s04a": ("s04x", "まるロボ", (1080, 250), "maru")}
 from PIL import ImageDraw, ImageFont
 NAVY = (20, 36, 72)
 

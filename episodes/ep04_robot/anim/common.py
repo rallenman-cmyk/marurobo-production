@@ -119,9 +119,13 @@ def seq_screen(scr_obj, folder, prefix):
     for n in list(nt.nodes): nt.nodes.remove(n)
     out = nt.nodes.new("ShaderNodeOutputMaterial"); em = nt.nodes.new("ShaderNodeEmission"); tx = nt.nodes.new("ShaderNodeTexImage")
     tx.image = im; tx.image_user.frame_duration = len(fs); tx.image_user.frame_start = 0; tx.image_user.use_auto_refresh = True
-    nt.links.new(tx.outputs["Color"], em.inputs["Color"]); em.inputs["Strength"].default_value = 1.8
+    nt.links.new(tx.outputs["Color"], em.inputs["Color"]); em.inputs["Strength"].default_value = 1.15   # v11「画面が薄い」→ 光を弱く（白く飛ばない）
     nt.links.new(em.outputs[0], out.inputs[0])
     scr_obj.data.materials.clear(); scr_obj.data.materials.append(m)
+
+
+CAM_SHIFT = float(os.environ.get("CAM_SHIFT", "-0.05"))   # 1280 幅で 64px
+CAM_DY = -CAM_SHIFT * 1280
 
 
 def render(name, t0, t1, outdir, samples, res, step, fr=None):
@@ -132,6 +136,9 @@ def render(name, t0, t1, outdir, samples, res, step, fr=None):
     sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Punchy'
     sc.render.fps = FPS
     sc.render.use_persistent_data = True          # コマごとに舞台を作り直さない（速くなる）
+    # 2026-11-15 ep04 v11「全体的に映像を上目に」：レンズを下へずらし、絵を約 64px（1280 幅で）上げる。字幕の帯に物がかからない
+    #   レンズのずらしは絵をそのまま平行に動かすだけ。2D の札（overlay_layers）も同じだけ上げる（CAM_DY）
+    sc.camera.data.shift_y = sc.camera.data.shift_y + CAM_SHIFT
     n = round((t1 - t0) * FPS)
     if not fr and os.environ.get("FR"): fr = tuple(int(x) for x in os.environ["FR"].split())   # 試し：FR="48 48" でそのコマだけ
     a, b = (fr if fr else (0, n - 1))

@@ -32,10 +32,13 @@ def cart(d, c):
 icon("lk_cart", (226, 76, 66), cart)
 icon("lk_play", (33, 193, 179), lambda d, c: d.polygon([(170, 135), (170, 265), (275, 200)], fill=c))
 # ふつうのページ（ChatGPT が操作している画面）
-im = Image.new("RGB", (1600, 1000), (214, 222, 232)); d = ImageDraw.Draw(im)
-d.rectangle([0, 0, 1600, 90], fill=(198, 210, 224))
-for k in range(3): d.ellipse([30 + k * 40, 22, 56 + k * 40, 48], fill=(160, 176, 196))
-for y, w in ((150, 760), (230, 560), (310, 700), (390, 520), (470, 640)): d.rounded_rectangle([120, y, 120 + w, y + 34], 17, fill=(186, 198, 214))
+# v11「パソコンの画面が薄すぎて分かんない」→ 地を少し暗く、上の帯・字の行・ボタン・写真の枠を濃く
+im = Image.new("RGB", (1600, 1000), (226, 232, 240)); d = ImageDraw.Draw(im)
+d.rectangle([0, 0, 1600, 90], fill=(47, 74, 115))
+for k, c in enumerate(((236, 96, 86), (240, 190, 70), (90, 200, 120))): d.ellipse([30 + k * 40, 22, 56 + k * 40, 48], fill=c)
+for y, w in ((150, 760), (230, 560), (310, 700), (390, 520), (470, 640)): d.rounded_rectangle([120, y, 120 + w, y + 34], 17, fill=(120, 140, 170))
+d.rounded_rectangle([1040, 150, 1480, 470], 24, fill=(150, 190, 215)); d.polygon([(1080, 440), (1200, 300), (1300, 400), (1360, 340), (1450, 440)], fill=(60, 120, 160))
+d.rounded_rectangle([120, 560, 420, 640], 40, fill=(31, 174, 159))
 im.save(os.path.join(OUT, "lk_page.png"))
 # チェック欄の絵から、矢印を消した版（3D の矢印を動かすので）
 im = Image.open(os.path.join(OUT, "scr_check.png")).convert("RGB"); ImageDraw.Draw(im).rectangle([1235, 805, 1325, 925], fill=(214, 222, 232))

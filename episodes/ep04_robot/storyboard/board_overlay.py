@@ -105,6 +105,16 @@ def wavy(d, x0, y0, x1, y1, col, amp=40, n=40, dot=7):
         if k % 2 == 0: d.ellipse([x - dot, y - dot, x + dot, y + dot], fill=col)
 
 
+def arrow_to(im, x0, y0, x1, y1, col=ORANGE, w=12):
+    """太い矢印（x0,y0 から x1,y1 へ。先に三角）"""
+    import math as _m
+    d = ImageDraw.Draw(im); a = _m.atan2(y1 - y0, x1 - x0); L = 34
+    bx, by = x1 - _m.cos(a) * L, y1 - _m.sin(a) * L
+    d.line([(x0, y0), (bx, by)], fill=col, width=w)
+    px, py = -_m.sin(a) * 24, _m.cos(a) * 24
+    d.polygon([(x1, y1), (bx + px, by + py), (bx - px, by - py)], fill=col)
+
+
 def straight(d, x0, y0, x1, y1, col, n=18, dot=7):
     for k in range(n):
         t = k / (n - 1); x = x0 + (x1 - x0) * t; y = y0 + (y1 - y0) * t
@@ -162,10 +172,10 @@ def save(im, name, start_id, dt=0.0):
 # ---------------- 冒頭
 save(load('b01'), 's01', '01-01')
 im = load('b02'); check_card(im, 's02a', cy=96, show_text=False)
-pic_bubble(im, 1110, 300, 70, lambda d, x, y, r: q_mark(d, x, y, r))
+pic_bubble(im, 1110, 300, 70, lambda d, x, y, r: q_mark(d, x, y, r), to=(1070, 480))   # v11「しっぽの形おかしい」→ まるロボへ向ける
 save(im, 's02a', '02-01')
 im = load('b02'); check_card(im, 's02b', cy=96)
-pic_bubble(im, 1110, 300, 70, lambda d, x, y, r: q_mark(d, x, y, r))
+pic_bubble(im, 1110, 300, 70, lambda d, x, y, r: q_mark(d, x, y, r), to=(1070, 480))   # v11「しっぽの形おかしい」→ まるロボへ向ける
 save(im, 's02b', '02-02')
 im = load('b03'); check_card(im, 's03', cy=96); save(im, 's03', '03-01')
 
@@ -179,7 +189,7 @@ f52 = font(48); bb = d.textbbox((0, 0), '「私はロボットではありませ
 save(im, 's_op', '04-01', dt=-2.0)
 
 # ---------------- ① 実験
-im = load('b04a'); check_card(im, 's04a', cy=96); tag(im, 's04a', 'まるロボ', 1080, 250, tail=(1020, 330)); save(im, 's04a', '04-01')
+im = load('b04a'); check_card(im, 's04a', cy=96); save(im, 's04a', '04-01')   # v11「まるロボに吹き出しのしっぽがついてくる」→ 札なし（ユーザーの選択）
 im = load('b04a'); check_card(im, 's04x', cy=96); save(im, 's04x', '04-03')     # まだくるくる回っている（テストは 04-04 で出す）
 im = load('b04b'); tag(im, 's04b', '信号機を全部選んでください', 640, 70, size=48); save(im, 's04b', '04-04')
 im = load('b04b'); tag(im, 's04c', '信号機を全部選んでください', 640, 70, size=48); tag(im, 's04c', '疑われたときに出る', 1020, 220, size=48, bg=(255, 236, 214)); save(im, 's04c', '04-05')
@@ -388,16 +398,20 @@ save(im, 's22', '22-01')
 im = load('b23'); check_card(im, 's23', cy=96); save(im, 's23a', '23-01')
 for k, side in enumerate(('l', 'r', 'l', 'r')):
     im = load('b23' + side); check_card(im, 's23', cy=96); save(im, 's23w%d' % k, '23-02', dt=0.7 * k)
-im = load('b23'); check_card(im, 's23', cy=96, state='checked'); d = ImageDraw.Draw(im); wavy(d, 1180, 480, 900, 200, ORANGE, amp=30, n=30, dot=6); save(im, 's23b', '23-03')
+# v11「右の線は足跡の揺れを示しているのが分かりにくい」→ 矢印で、画面の上のふらふらの道を指す
+im = load('b23'); check_card(im, 's23', cy=96, state='checked'); arrow_to(im, 968, 364, 790, 330); tag(im, 's23b', 'ふらふら動いた', 1110, 300 + 64, size=44, bg=(255, 236, 214)); save(im, 's23b', '23-03')
 
 
 # ---------------- v2：同じ絵が長く続く所（12 秒以上）に、声に合わせた絵を足す
 def ring_on(im, cx, cy, rx, ry, col=ORANGE):
     ImageDraw.Draw(im).ellipse([cx - rx, cy - ry, cx + rx, cy + ry], outline=col, width=9)
 def lock(d, cx, cy, s=1.0):
-    d.rounded_rectangle([cx - 45 * s, cy - 10 * s, cx + 45 * s, cy + 60 * s], 10, fill=NAVY2)
-    d.arc([cx - 30 * s, cy - 60 * s, cx + 30 * s, cy + 10 * s], 180, 360, fill=NAVY2, width=int(12 * s))
+    # v11「鍵のアイコンが背景と色かぶり」→ 白い丸の上に、オレンジの鍵
+    d.ellipse([cx - 80 * s, cy - 82 * s, cx + 80 * s, cy + 78 * s], fill=WHITE)
+    d.rounded_rectangle([cx - 45 * s, cy - 10 * s, cx + 45 * s, cy + 60 * s], 10, fill=ORANGE)
+    d.arc([cx - 30 * s, cy - 60 * s, cx + 30 * s, cy + 10 * s], 180, 360, fill=ORANGE, width=int(12 * s))
     d.ellipse([cx - 9 * s, cy + 15 * s, cx + 9 * s, cy + 33 * s], fill=WHITE)
+
 def screens_crowd(im, n=12):
     d = ImageDraw.Draw(im); random.seed(4)
     pts = []
@@ -409,7 +423,7 @@ def screens_crowd(im, n=12):
 im = load('b03'); bc = check_card(im, 's03b', cy=96); ring_on(im, bc[0], bc[1], 62, 56); save(im, 's03b', '03-03')
 im = load('b03'); check_card(im, 's03c', cy=96); save(im, 's03c', '03-05')
 # 06-04：昔は違う形 → 欄に「？」
-im = load('b11'); check_card(im, 's06b', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r)); save(im, 's06b', '06-04')
+im = load('b11'); check_card(im, 's06b', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r), to=(1190, 560)); save(im, 's06b', '06-04')
 # 08-05・08-06：たくさんの人に読んでもらう → 同じ答えが集まって決まる
 im = Image.new('RGB', (1280, 720), (238, 232, 220)); pts = screens_crowd(im)
 w = warp_word('upon', 110, 7); im.paste(Image.new('RGB', w.size, (170, 110, 20)), (640 - w.width // 2, 270 - w.height // 2), w); save(im, 's08g', '08-05')
@@ -422,7 +436,7 @@ im = compare('s10e', labels=True, prog=True, human=True); ring_on(im, 940, 320, 
 # 11-03〜11-05：ロボットにも押せる → 冒頭のテスト → どこを見ている？
 im = load('b04a'); check_card(im, 's11b', cy=96); save(im, 's11b', '11-03')
 im = load('b04b'); tag(im, 's11c', '信号機を全部選んでください', 640, 70, size=48); tag(im, 's11c', '疑われたときに出る', 1020, 220, size=48, bg=(255, 236, 214)); save(im, 's11c', '11-04')
-im = load('b11'); check_card(im, 's11d', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r)); save(im, 's11d', '11-05')
+im = load('b11'); check_card(im, 's11d', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r), to=(1190, 560)); save(im, 's11d', '11-05')
 # 13-06・13-07：ふらつく私の跡に丸 → まっすぐのまるロボの跡に丸
 a13 = anch('b13'); h = a13.get('human_path', [400, 300]); r = a13.get('robot_path', [850, 300])
 im = load('b13'); tag(im, 's13e', '私', h[0] - 120, min(h[1], 470), size=56, bg=(255, 236, 214)); ring_on(im, h[0], h[1] - 40, 150, 120); save(im, 's13e', '13-06')
@@ -459,7 +473,7 @@ save(page('s15d', same=True), 's15d', '15-02e')
 im = load('b15'); a15 = anch('b15'); b = a15.get('book', [800, 250]); tag(im, 's15e', 'これまでの記録', b[0], max(70, b[1] - 120), size=52, tail=(b[0], b[1] - 40)); save(im, 's15e', '15-03')
 # 16-05：細かいことは公開されていない → かぎ
 im = load('b16'); a16 = anch('b16'); m = a16.get('meter_top', [300, 150]); tag(im, 's16c', '人らしさ', m[0], max(60, m[1] - 50), size=54, tail=(m[0], m[1] + 10))
-lock(ImageDraw.Draw(im), 1000, 200, 1.4); tag(im, 's16c', '公開されていない', 1000, 330, size=46); save(im, 's16c', '16-05')
+lock(ImageDraw.Draw(im), 1000, 190, 1.1); tag(im, 's16c', '公開されていない', 1000, 330, size=46); save(im, 's16c', '16-05')
 # 18-05・18-06：選び方も手がかり → まるロボの行ったり来たり
 im = load('b18'); cell_line(im); d = ImageDraw.Draw(im)
 d.rounded_rectangle([60, 140, 130, 470], 16, fill=NAVY2); d.rounded_rectangle([75, 300, 115, 455], 10, fill=TEAL)
@@ -479,7 +493,7 @@ tag(im, 's19h', '研究者が手伝った試験', 700, 440, size=46, bg=(255, 23
 save(load('b20d'), 's20e', '20-05')
 im = load('b14'); tag(im, 's21b', 'ふるまい全体を見る', 640, 70, size=52); save(im, 's21b', '21-02')   # 門番が足あと全体を照らして見ている（v5 コメント「分かりにくい」）
 # 22（v3 コメント「表現が分かりにくい」）：問い → 動き方 → 記録 → 昔と今 → AI が賢く → 見分け方が残り少ない
-im = load('b22'); check_card(im, 's22a', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r)); save(im, 's22a', '22-01')
+im = load('b22'); check_card(im, 's22a', cy=96); pic_bubble(im, 1080, 280, 80, lambda d, x, y, r: q_mark(d, x, y, r), to=(1190, 560)); save(im, 's22a', '22-01')
 a13 = anch('b13'); h = a13.get('human_path', [400, 300]); r = a13.get('robot_path', [850, 300])
 im = load('b13'); tag(im, 's22b', '私', h[0] - 120, min(h[1], 470), size=56, bg=(255, 236, 214)); tag(im, 's22b', 'まるロボ', r[0] + 170, min(r[1], 470), size=52, bg=(214, 247, 243)); tag(im, 's22b', '動き方', 640, 70, size=56); save(im, 's22b', '22-02')
 im = load('b15'); a15 = anch('b15'); b = a15.get('book', [800, 250]); tag(im, 's22c', 'これまでの記録', b[0], max(70, b[1] - 120), size=52, tail=(b[0], b[1] - 40)); save(im, 's22c', '22-03')

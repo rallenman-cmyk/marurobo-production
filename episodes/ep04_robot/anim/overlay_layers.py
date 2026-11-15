@@ -15,19 +15,27 @@ class Layer(Image.Image):
     pass
 
 
+# 2026-11-15 ep04 v11「全体的に映像を上目に」：3D はレンズをずらして絵を DY 上げた（common.py の CAM_SHIFT）。
+#   3D の物に付く 2D（しっぽのある札・物の近くの札・吹き出し・輪・線・鍵・矢印）も同じだけ上げる。上の題とチェック欄の札は動かさない
+DY = -float(os.environ.get("CAM_SHIFT", "-0.05")) * 1280
+CUR = {"base": None}
+
+
 def _load(name):
-    im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); im.info["base"] = name
+    im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); im.info["base"] = name; CUR["base"] = name
     return im
 
 
 g = {"__name__": "ov", "__file__": os.path.join(HERE, "..", "storyboard", "board_overlay.py")}
 src = src.replace("\ndef anch(name):", "\n_load_real = load\nload = __LOAD__\ndef anch(name):", 1)
-src = src.replace("def save(im, name, start_id, dt=0.0):\n", "def save(im, name, start_id, dt=0.0):\n    __BASE__[name] = im.info.get('base')\n", 1)
+src = src.replace("def save(im, name, start_id, dt=0.0):\n", "def save(im, name, start_id, dt=0.0):\n    __BASE__[name] = im.info.get('base'); __CUR__['base'] = None\n", 1)
 # 札は新しい形で（look/newtag.py）
 src = src.replace("\ndef check_card(", """
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "look"))
 from newtag import tag_new as _tag_new
 def tag(im, shot, text, cx, cy, size=48, bg=WHITE, fg=NAVY, tail=None):
+    if im.info.get("base") and (tail or cy > 150):
+        cy -= __DY__; tail = (tail[0], tail[1] - __DY__) if tail else None
     box = _tag_new(im, text, cx, cy, size, bg, fg, tail, fontdir=os.path.dirname(F))
     check_band(shot, box, size)
     return box
@@ -37,6 +45,8 @@ def check_card(""", 1)
 src = src.replace("\ndef q_mark(", """
 def pic_bubble(im, cx, cy, r, draw, to=None):
     import math as _m, design as _D
+    if im.info.get("base") and to:          # 吹き出しは字幕から遠い所にあるので動かさず、しっぽの先（まるロボ）だけ上げる
+        to = (to[0], to[1] - __DY__)
     if to is None: to = (cx - r * 1.0, cy + r * 1.5)
     ang = _m.atan2(to[1] - cy, to[0] - cx); L = min(r * 1.6, max(r * 1.25, _m.hypot(to[0] - cx, to[1] - cy) - 20))
     spr, off = _D.bubble(int(r * 2), int(r * 2), (_m.cos(ang) * L, _m.sin(ang) * L), r=int(r * 0.7))
@@ -47,7 +57,15 @@ def pic_bubble(im, cx, cy, r, draw, to=None):
 
 def q_mark(""", 1)
 src = src.replace("def cell_line(im):", "def cell_line(im):\n    return   # 動く版：ふちどりは 3D で描く（まるロボより奥）\ndef _cell_line_old(im):", 1)
-g["__LOAD__"] = _load; g["__BASE__"] = BASE
+# 輪・線・鍵・矢印：3D の上の層なら上げる
+src = src.replace("def ring_on(im, cx, cy, rx, ry, col=ORANGE):\n", "def ring_on(im, cx, cy, rx, ry, col=ORANGE):\n    cy -= __DY__ if __CUR__['base'] else 0\n", 1)
+src = src.replace("def lock(d, cx, cy, s=1.0):\n", "def lock(d, cx, cy, s=1.0):\n    cy -= __DY__ if __CUR__['base'] else 0\n", 1)
+src = src.replace("def arrow_to(im, x0, y0, x1, y1, col=ORANGE, w=12):\n", "def arrow_to(im, x0, y0, x1, y1, col=ORANGE, w=12):\n    if __CUR__['base']: y0 -= __DY__; y1 -= __DY__\n", 1)
+for fn in ("wavy", "straight"):
+    src = src.replace("def %s(d, x0, y0, x1, y1, col" % fn, "def %s(d, x0, y0, x1, y1, col" % fn, 1)
+    i = src.index("def %s(d, x0, y0, x1, y1, col" % fn); j = src.index("\n", i) + 1
+    src = src[:j] + "    if __CUR__['base']: y0 -= __DY__; y1 -= __DY__\n" + src[j:]
+g["__LOAD__"] = _load; g["__BASE__"] = BASE; g["__DY__"] = DY; g["__CUR__"] = CUR
 exec(compile(src, "board_overlay.py", "exec"), g)
 sh = json.load(open(os.path.join(OUT, "shots.json"), encoding="utf-8"))
 for s in sh: s["base"] = BASE.get(s["img"][:-4])

@@ -181,8 +181,8 @@ def swap_tex(m, tex, t):
     mx.inputs[0].default_value = 1.0; mx.inputs[0].keyframe_insert("default_value", frame=f(t) + 2)
 
 
-def frame_rect(x, y, z, w, h, col, name, th=0.05, emit=4.0):
-    """光る四角い枠（板の前）"""
+def frame_rect(x, y, z, w, h, col, name, th=0.09, emit=1.3):
+    """光る四角い枠（板の前）。v11「枠の色が薄い」→ 光を弱く（強いと白く飛ぶ）、太く"""
     m = mat(name, col, emit=emit)
     for dz in (-h / 2, h / 2): cube(m, (x, y, z + dz), (w + th, th, th))
     for dx in (-w / 2, w / 2): cube(m, (x + dx, y, z), (th, th, h + th))
@@ -268,7 +268,7 @@ def fill(liq, H, t, frac, d=1.2):
 
 def scan(x0, x1, y, z, h, t0, t1, per=1.4, col=TE, name="scan"):
     """光の線が板の上を左右に走る（機械が読む）"""
-    o = cube(mat(name, col, emit=6.0, alpha=0.9), (x0, y, z), (0.05, 0.03, h)); s0 = tuple(o.scale)
+    o = cube(mat(name, col, emit=1.2), (x0, y, z), (0.1, 0.05, h)); s0 = tuple(o.scale)   # v11「スキャンの線をもう少し濃く」
     on, off = s0, (0.0001, 0.0001, 0.0001)
     key(o, "scale", f(CLOCK["T0"]), off); key(o, "scale", f(t0), off); key(o, "scale", f(t0 + 0.2), on)
     t = t0; a = True
@@ -282,8 +282,10 @@ def scan(x0, x1, y, z, h, t0, t1, per=1.4, col=TE, name="scan"):
 def cursor(name="cur"):
     """マウスの矢印（白・紺のふち）。先が原点。動きは location にキーで"""
     def mk():
-        w = mat(name + "_w", "#FFFFFF", rough=0.3, emit=0.8)
-        bpy.ops.mesh.primitive_cone_add(vertices=3, radius1=0.22, depth=0.06, location=(0.1, 0, -0.16), rotation=(R(90), R(-30), 0))
-        bpy.context.object.data.materials.append(w)
-        cube(w, (0.17, 0, -0.38), (0.07, 0.05, 0.28), rot=(0, R(-28), 0))
+        # v11「マウスカーソルが見えない」→ 黒っぽく大きく、白いふち（少し奥に大きい白）
+        w = mat(name + "_w", "#141C2E", rough=0.4, emit=0.0); e = mat(name + "_e", "#FFFFFF", rough=0.3, emit=0.6)
+        for m_, k, dy in ((w, 1.5, 0.0), (e, 1.75, 0.04)):
+            bpy.ops.mesh.primitive_cone_add(vertices=3, radius1=0.22 * k, depth=0.06, location=(0.1 * k, dy, -0.16 * k), rotation=(R(90), R(-30), 0))
+            bpy.context.object.data.materials.append(m_)
+            cube(m_, (0.17 * k, dy, -0.38 * k), (0.07 * k, 0.05, 0.28 * k), rot=(0, R(-28), 0))
     _, g = build(mk, (0, 0, 0)); return g

@@ -21,7 +21,7 @@ pop(gG, T0 + 3.6, 0.35); ev(T0 + 3.6, "lamp", 0.35)
 for g in (gT, gG): vanish(g, t_25, 0.3)
 # 2025年：ページの板（チェック欄へ替わる → チェックが入る）
 PW = 5.4; PH = PW * 1000 / 1600
-pm, gPg = build(lambda: board("lk_page", 0.4, Y, BZ, PW, PH, emit=0.45, name="pg"), (0.4, Y, BZ))
+pm, gPg = build(lambda: board("lk_page", 0.4, Y, BZ, PW, PH, emit=0.3, name="pg"), (0.4, Y, BZ))
 pop(gPg, t_op + 0.1); ev(t_op + 0.1, "whoosh", 0.3); bob(gPg, t_op + 0.6, T1, 0.035, 2.8)
 swap_tex(pm, "lk_check", t_chk + 0.2); ev(t_chk + 0.2, "pop_ui", 0.5)
 # チェック欄の場所（絵の左から 0.296・上から 0.51）
