@@ -1,0 +1,15 @@
+{
+ "id": "20261116-083442-ep04_v14",
+ "name": "ep04_v14",
+ "kit_branch": "pc-kit/20261116-083442-ep04_v14",
+ "zip": "marurobo_ep04.zip",
+ "ps1": "run_pc_render_ep04.ps1",
+ "only": "c_s03,c_s13a,c_s13b,c_s13d,c_s22b,c_s15a,c_s15e,c_s22c,s08x,s22",
+ "kind": "fix",
+ "order": 4,
+ "frames": 2828,
+ "workers": 0,
+ "samples": 0,
+ "session": "\ud83e\udd1604\u30ed\u30dc\u3058\u3083\u306a\u3044",
+ "created": "2026-11-16T08:34:42Z"
+}

@@ -24,7 +24,8 @@ FPS, SR, WV, HV = 24, 48000, 1280, 720
 CL = json.load(open(os.path.join(HERE, "clips.json")))
 PIP_ONLY = {"S18p", "S22p"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
 ORDER = sorted([k for k in CL if k not in PIP_ONLY], key=lambda k: CL[k][2])
-CHAPTER = {"S05a", "S08a", "S13a", "S14a", "S17a", "S22a", "S23a", "S26a", "S29a", "S30a"}
+FADE = {"S14a": 1.0}   # 明るい店が、同じ角度のまま暗くなる（v4 4:10）
+CHAPTER = {"S05a", "S08a", "S13a", "S14L", "S17a", "S22a", "S23a", "S26a", "S29a", "S30a"}
 SEPIA = set()
 # v3（5本目 v2「左上の小窓を出しつつ、メインの映像もそこのシーンを」）：26-05「ぶつかって曲がるだけだった先輩たち」で、
 #   メインの絵も昔の先輩がぶつかって曲がる場面（S06b・セピア）にする：(差しかえるカット, 始め, 使うクリップ, そのクリップの秒)
@@ -90,7 +91,7 @@ def active(t):
     for i, nm in enumerate(ORDER):
         if CL[nm][2] <= t: cur = i
     if cur is None: return [(ORDER[0], 1.0)]
-    nm = ORDER[cur]; tc = CL[nm][2]; dur = 0.6 if nm in CHAPTER else 0.35
+    nm = ORDER[cur]; tc = CL[nm][2]; dur = FADE.get(nm, 0.6 if nm in CHAPTER else 0.35)
     if cur > 0 and t < tc + dur:
         k = (t - tc) / dur; k = k * k * (3 - 2 * k)
         return [(ORDER[cur - 1], 1 - k), (nm, k)]
@@ -111,6 +112,8 @@ def where(name, t, clip=None):
 
 
 # ---------------------------------------------------------------- 音
+# 測ると同じ大きさでも、話し方が元気で大きく聞こえる文を下げる（dB）。v1 9:20・v4 9:47「声大きい」（2 回言われた）
+VOICE_TRIM = {"30-01": -3.0, "30-02": -3.0}
 N = int((T.END + 1) * SR)
 voice = np.zeros(N, np.float32)
 VD = os.environ["MARU_VOICE"]
@@ -120,6 +123,7 @@ for p in P:
         sr0 = wv.getframerate(); x = np.frombuffer(wv.readframes(wv.getnframes()), np.int16).astype(np.float32) / 32768
     if sr0 != SR: x = np.interp(np.arange(int(len(x) * SR / sr0)) * sr0 / SR, np.arange(len(x)), x).astype(np.float32)
     v = x[np.abs(x) > 0.01]; r = np.sqrt((v ** 2).mean() + 1e-12); x *= 10 ** (-20 / 20) / r
+    x *= 10 ** (VOICE_TRIM.get(T.L[p["no"]]["id"], 0.0) / 20)
     # 文の頭と終わりをなめらかに（切り出しの端がいきなり大きいと「プツッ」「ザッ」と鳴る。ep02 v13「ノイズ入ってる」）
     fi, fo = int(0.012 * SR), int(0.025 * SR)
     x[:fi] *= np.linspace(0, 1, fi, dtype=np.float32) ** 2; x[-fo:] *= np.linspace(1, 0, fo, dtype=np.float32) ** 2

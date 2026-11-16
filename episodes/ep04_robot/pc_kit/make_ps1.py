@@ -1,6 +1,7 @@
 # 4本目の PC 手順（run_pc_render_ep04.ps1）を、5本目の手順から作る：python3 make_ps1.py
 #   カットとコマ数は、クラウドの描画の記録（*_log.json の frames）と同じ。カットを足したら JOBS を直して作り直す
-import os
+import os, sys
+VER = sys.argv[1] if len(sys.argv) > 1 else "v13"     # 版（出力とドライブのフォルダ名 ep04_<版>）。直しの描き直しは新しい版にする（できた印が前の版と混ざらない）
 H = os.path.dirname(os.path.abspath(__file__))
 src = open(os.path.join(H, '../../ep05_vacuum/pc_kit/run_pc_render_ep05.ps1'), encoding='utf-8-sig').read()
 C, S, L = "anim\\clip_anim.py", "anim\\scenes.py", "look\\%s_3d.py"
@@ -24,12 +25,12 @@ head = f"""# まるロボ 4本目「私はロボットではありません」�
 #   描く細かさ：-Samples 24（既定。光の跳ね返りを減らす --fast と合わせて、48 の約 3 倍速い）
 #   途中で止まったり窓を閉じたりしても、同じ行をもう一度走らせれば、できている所は飛ばして続きから描く
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
-#   終わると、送るファイルだけを C:\\marurobo\\marurobo_render\\ep04_v13 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
+#   終わると、送るファイルだけを C:\\marurobo\\marurobo_render\\ep04_{VER} にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
 #   5本目の手順と同じ作り。描き方は 3 種類：部屋の場面＝anim\\clip_anim.py、0:44 のマウス＝anim\\scenes.py、図の場面＝look\\<名前>_3d.py
 """
 s = head + s
 R = [('$anim = Join-Path $kit "episodes\\ep05_vacuum\\anim"', '$ep = Join-Path $kit "episodes\\ep04_robot"'),
-     ("...\\marurobo_ep05", "...\\marurobo_ep04"), ("render_ep05_v3", "render_ep04_v13"), ("ep05_v3", "ep04_v13"),
+     ("...\\marurobo_ep05", "...\\marurobo_ep04"), ("render_ep05_v3", "render_ep04_" + VER), ("ep05_v3", "ep04_" + VER),
      ("render_log_ep05.txt", "render_log_ep04.txt"), ("5本目を描き始めます", "4本目を描き始めます"), ("marurobo_ep05.zip", "marurobo_ep04.zip"),
      ('$tex = Join-Path $kit "tex"', '$tex = Join-Path $kit "tex"\n$scr = Join-Path $kit "scr"')]
 for o, n in R:

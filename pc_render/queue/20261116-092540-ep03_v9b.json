@@ -1,0 +1,15 @@
+{
+ "id": "20261116-092540-ep03_v9b",
+ "name": "ep03_v9b",
+ "kit_branch": "pc-kit/20261116-092540-ep03_v9b",
+ "zip": "marurobo_ep03.zip",
+ "ps1": "run_pc_render_ep03.ps1",
+ "only": "s00,s01,s02,s04,s13,s14,s15,s17,s18,s21,s22,gate",
+ "kind": "fix",
+ "order": 3,
+ "frames": 11634,
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1603\u5e83\u544a",
+ "created": "2026-11-16T09:25:40Z"
+}

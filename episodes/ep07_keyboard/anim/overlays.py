@@ -48,8 +48,8 @@ def ev_list():
     for i, ch in enumerate("MARUROBO"):
         kl(t2 + 0.4 + i * dt2, e("05-05") + 0.6, [("a_" + ch, ch)], col=ORANGE)
     # 06：上から結果（名前の札・数字。言うときに 1 つずつ）
-    add(s("06-01"), w("07-04", "クワーティ") - 0.05, "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
-    add(s("06-01"), w("07-04", "クワーティ") - 0.05, "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
+    add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
+    add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
     add(w("06-02", "キー28個分"), e("06-04") + 0.4, "tag", dict(text="キー28個分", obj="k_V", dy=110, size=60, bg=YEL))
     add(w("06-03", "キー31個分"), e("06-04") + 0.4, "tag", dict(text="キー31個分", obj="a_V", dy=110, size=60, bg=YEL))
     add(w("06-04", "ほとんど") - 0.1, e("06-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
@@ -253,10 +253,24 @@ def phone_keys():
     return _cache[key]
 
 
+_TAGS = []
+GAP = [1e9]
+
+
 def draw(t, base, where, frame_of=None, fontdir=None):
     global EVENTS
     if fontdir and not D.FDIR[0]: D.FDIR[0] = fontdir
     if EVENTS is None: EVENTS = ev_list()
+    _TAGS.clear()
+    # その時に出ているキーの字を全部集めて、となりとの間がいちばん狭い所を測る（字は 1 字ずつ別の出し方のことが多いため）
+    pts = []
+    for t0_, t1_, k_, p_ in EVENTS:
+        if k_ == "keys" and t0_ <= t < t1_:
+            for i_, (o_, _) in enumerate(p_["keys"]):
+                if t < t0_ + p_.get("flow", 0.0) * i_: continue
+                q_ = where(o_, t)
+                if q_ is not None and 0 <= q_[0] <= 1280 and 0 <= q_[1] <= SUB_TOP - 10: pts.append(q_)
+    GAP[0] = min((((a_[0] - b_[0]) ** 2 + (a_[1] - b_[1]) ** 2) ** 0.5 for i_, a_ in enumerate(pts) for b_ in pts[i_ + 1:]), default=1e9)
     for t0, t1, kind, p in EVENTS:
         if not (t0 <= t < t1): continue
         k, a = _pop(t, t0, t1)
@@ -270,16 +284,21 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 cx, cy = q[0] + p.get("dx", 0), min(max(70, q[1] + p.get("dy", -120)), SUB_TOP - 60)
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), p.get("fg"))
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
+            # 札どうしが重なるときは、あとの札を下へずらす（7本目 v1 の 1:49 で「クワーティ」が「ABC 順」の下に隠れた）
+            x0 = cx + off[0] + spr.width / 2 - spr.width / 2
+            for _ in range(4):
+                y0 = cy + off[1]
+                hit = [r for r in _TAGS if x0 < r[2] and r[0] < x0 + spr.width and y0 < r[3] and r[1] < y0 + spr.height]
+                if not hit: break
+                cy = max(r[3] for r in hit) + 8 - off[1]
+            _TAGS.append((x0, cy + off[1], x0 + spr.width, cy + off[1] + spr.height))
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)
         elif kind == "keys":
             fl = p.get("flow", 0.0)
             # 引いた絵でキーの字どうしが重なるときは、となりとの間に合わせて小さくする（7本目 v1 の 0:56・10:08 で字が重なった）
-            qs = [where(o, t) for o, _ in p["keys"]]
-            qs = [q for q in qs if q is not None]
             sz = p.get("size", 46)
-            if len(qs) > 1:
-                gap = min(((qa[0] - qb[0]) ** 2 + (qa[1] - qb[1]) ** 2) ** 0.5 for i_, qa in enumerate(qs) for qb in qs[i_ + 1:])
-                sz = max(30, min(sz, int(gap * 0.85)))
+            if GAP[0] * 0.85 < 30: continue     # 遠くて字が重なるだけなら出さない（7本目 v1 の 0:52〜0:58・1:55）
+            sz = min(sz, int(GAP[0] * 0.85))
             for i, (obj, ch) in enumerate(p["keys"]):
                 ti = t0 + fl * i
                 if t < ti: continue

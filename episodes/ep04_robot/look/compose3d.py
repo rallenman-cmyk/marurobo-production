@@ -32,7 +32,7 @@ for L_ in LBL:
     else:
         spr = D.pill(L_["text"], L_.get("size", 44), accent=None if L_.get("plain") else col, tail=L_.get("tail"))
     SPR.append(spr)
-fs = sorted(glob.glob(os.path.join(FR, NAME + "_[0-9]*.png")))
+fs = sorted(glob.glob(os.path.join(FR, NAME + "_[0-9]*.png")) + glob.glob(os.path.join(FR, NAME + "_[0-9]*.jpg")))   # jpg＝PC の本番（pc_frames.py）
 ks = [int(p[-8:-4]) for p in fs]
 os.makedirs(OD, exist_ok=True)
 outs = []

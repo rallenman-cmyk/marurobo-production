@@ -32,7 +32,8 @@ for i in range(12):
     b = beam(hp, (0.0 + (i - 5.5) * 0.12, Y - 0.15, BZ - bh / 2 + 0.1), TE if i % 2 else OR, "bm%d" % i, r=0.018)
     tb = t_same + 0.4 + i * 0.12; grow(b, tb, 0.45)
     if i % 2 == 0: ev(tb, "pi", 0.12)
-root = maru((0, 1.0, 0), face_deg=90, s=0.7, hat=False, eye_glow=1.0, look_up=20)
+# 2026-11-16 本番の見直し：まるロボが字幕にかかる → 群衆の列まで奥へ（1.0 → 1.8）
+root = maru((0, float(os.environ.get("MARU_Y", "1.8")), 0), face_deg=90, s=0.7, hat=False, eye_glow=1.0, look_up=20)
 mr = Maru(root); mr.g0 = 1.0
 mr.at(T0 + 0.2, face=0, look=20); breathe(mr, T0 + 0.6, T1, [(t_ok, t_ok + 1.2)])
 mr.at(t_many + 1.0, face=-40, look=8); mr.at(t_many + 2.6, face=40, look=8); mr.at(t_same + 0.5, face=0, look=22)
