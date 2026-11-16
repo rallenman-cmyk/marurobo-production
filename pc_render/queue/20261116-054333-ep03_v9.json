@@ -5,11 +5,12 @@
  "zip": "marurobo_ep03.zip",
  "ps1": "run_pc_render_ep03.ps1",
  "only": "s00,s01,s02,s04,s13,s14,s15,s21,s22,gate",
- "kind": "fix",
- "order": 3,
+ "kind": "full",
+ "order": 0,
  "workers": 0,
  "samples": 24,
  "session": "\ud83e\udd1603\u5e83\u544a",
  "created": "2026-11-16T05:43:33Z",
- "frames": 10231
+ "frames": 10231,
+ "note": "big fix: runs right after the current job, before other full renders (no preemption)"
 }
