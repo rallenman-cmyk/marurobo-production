@@ -16,6 +16,12 @@ _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
 CLIPNAME, OUTDIR = _argv[0], _argv[1]
+# 効果音に「鳴らした物」（track の名前）を持たせる。組み立てで、その物が画面に映っているときだけ鳴らす（7本目 v5「まるロボが写ってないのにSE聞こえるのやめて」）
+_SRC_DEFAULT = {"step": "maru", "jump": "maru", "land": "maru", "takeoff": "maru", "step_turn": "maru"}
+
+
+def ev(t, kind, gain=1.0, src=None):
+    EVENTS.append((round(t, 3), kind, gain, src if src is not None else _SRC_DEFAULT.get(kind, "")))
 
 
 def _opt(name, n=1, default=None):

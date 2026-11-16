@@ -17,6 +17,7 @@ import timing as T
 import overlays as OV
 import sfx
 import subs_jp as SJ
+import subs_one as SO
 RD, FONTDIR, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv else 0.0
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
@@ -51,11 +52,10 @@ for a, c, t in lines:
         if c - ts_[-1] < 1.0: c = min(ts_[-1] + 1.0, NEXT_START[a] - 0.05)
         SUBS += [(ts_[i], ts_[i + 1] if i + 1 < len(ts_) else c, ps_[i]) for i in range(len(ps_))]
         continue
-    ev_ = SJ.events_v(a, c, t)
-    for i in range(len(ev_) - 1):        # 分けた字幕の 1 枚が 1.0 秒より短いときは、次の札を少し後ろへ（次も 1.0 秒は残す）
-        a0, c0, t0 = ev_[i]; a1, c1, t1 = ev_[i + 1]
-        if c0 - a0 < 1.0 and c1 - (a0 + 1.0) >= 1.0: ev_[i] = (a0, a0 + 1.0, t0); ev_[i + 1] = (a0 + 1.0, c1, t1)
-    SUBS += ev_
+    # 7本目 v6：1 行ずつの字幕（subs_one.py。文の区切りで必ず分け、2 行の字幕は出さない）
+    _p = SJ._placement().get(t)
+    ev_ = SO.events(a, c, t, os.path.join(SJ.VOICE, "line_%03d.wav" % _p["no"]), SJ, speed=_p.get("speed", 1.0), c_max=NEXT_START[a] - 0.05)
+    SUBS += [(float(x), float(y), z) for x, y, z in ev_]
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
@@ -82,6 +82,10 @@ def frame(nm, t):
         if nm in SEPIA: im = OV.sepia(im)
         _img[key] = im
     return _img[key]
+
+
+# 音の大きさ（7本目 v5「声大きい」「SEの音でかい」「叩く音うるさい」）：声 -24（v5 は -20）、効果音 0.5（v5 は 0.8）、人の打つ音はさらに 0.35 倍
+VOICE_DB = -24.0; FX_GAIN = 0.5; TYPE_GAIN = 0.35
 
 
 def active(t):
@@ -119,7 +123,7 @@ for p in P:
     with wave.open(os.path.join(VD, "line_%03d.wav" % p["no"])) as wv:
         sr0 = wv.getframerate(); x = np.frombuffer(wv.readframes(wv.getnframes()), np.int16).astype(np.float32) / 32768
     if sr0 != SR: x = np.interp(np.arange(int(len(x) * SR / sr0)) * sr0 / SR, np.arange(len(x)), x).astype(np.float32)
-    v = x[np.abs(x) > 0.01]; r = np.sqrt((v ** 2).mean() + 1e-12); x *= 10 ** (-20 / 20) / r
+    v = x[np.abs(x) > 0.01]; r = np.sqrt((v ** 2).mean() + 1e-12); x *= 10 ** (VOICE_DB / 20) / r
     # 文の頭と終わりをなめらかに（切り出しの端がいきなり大きいと「プツッ」「ザッ」と鳴る。ep02 v13「ノイズ入ってる」）
     fi, fo = int(0.012 * SR), int(0.025 * SR)
     x[:fi] *= np.linspace(0, 1, fi, dtype=np.float32) ** 2; x[-fo:] *= np.linspace(1, 0, fo, dtype=np.float32) ** 2
@@ -135,11 +139,29 @@ gp = np.pad(g.astype(np.float64), (kk // 2, kk - kk // 2), mode="edge"); cs_ = n
 g = ((cs_[kk:] - cs_[:-kk]) / kk)[:N].astype(np.float32)
 # 効果音（クリップのログを合わせ、同じ物は 1 つに）
 EV = {}
+def _seen(src, t):
+    """鳴らした物（track の名前）が、時刻 t に映っているクリップの画面の中にあるか"""
+    nm = max(active(t), key=lambda q: q[1])[0]
+    lg = LOG.get(nm)
+    if not lg or src not in lg["track"]: return False
+    k = (t - CL[nm][0]) * lg["fps"]; pts = lg["track"][src]
+    q = min(pts, key=lambda p: abs(p[0] - k))
+    return 0 <= q[1] <= 1280 and 0 <= q[2] <= 720 and q[3] > 0
+DROP = []
 for nm in ORDER:
     if nm not in LOG: continue
-    a_, b_ = CL[nm][0], CL[nm][1]
-    for t, kind, gain in LOG[nm]["events"]:
-        EV[(round(t, 2), kind)] = gain
+    for e_ in LOG[nm]["events"]:
+        t, kind, gain = e_[:3]; src = e_[3] if len(e_) > 3 else ""
+        if (round(t, 2), kind) in EV: continue
+        if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
+        EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
+# 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）
+_run = None
+for (t, kind) in sorted(EV):
+    if kind != "key" or EV[(t, kind)] == 0: continue
+    if _run is None or t - _last > 0.6: _run = t
+    _last = t
+    if t - _run > 3.0: EV[(t, kind)] = 0.0
 SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
 fx = np.zeros(N, np.float32); moves = []; overl = []
 # 効果音と声の重なりは、声が本当に出ている所（文の中の「……」の間は除く）で見る
@@ -172,7 +194,7 @@ for (t, kind), gain in sorted(EV.items()):
     i = int(t * SR)
     if i < 0: continue
     fx[i:i + len(x)] += x[:N - i]
-mix = voice + music * g + fx * 0.8
+mix = voice + music * g + fx * FX_GAIN
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)
 tmp = os.path.splitext(OUT)[0] + "_tmp"; os.makedirs(tmp, exist_ok=True)

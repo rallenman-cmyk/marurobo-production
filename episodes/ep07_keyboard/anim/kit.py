@@ -92,7 +92,7 @@ class Board:
     def press(self, ch, t, d=0.14, sound=True, gain=0.5):
         o = self.keys[ch]; z = o.location.z
         key(o, ("location", 2), t - 0.01, z); key(o, ("location", 2), t + 0.04, z - 0.03); key(o, ("location", 2), t + d, z)
-        if sound: ev(t, "key", gain)
+        if sound: ev(t, "key", gain, getattr(self, "tp", "") + ch if getattr(self, "tp", "") else "")
 
     def hold(self, ch, t0, t1, dz=0.03):
         """まるロボが乗っている間、そのキーを沈ませておく（2026-11-16 ユーザー「まるロボが乗っているボタンは沈ませて」）"""
@@ -121,6 +121,7 @@ class Board:
         if t1 is not None: hide_key(g, t1, True)
 
     def track_all(self, prefix="k_", dz=0.06):
+        self.tp = prefix
         for ch, o in self.keys.items(): track(prefix + ch, o, dz)
 
 
@@ -337,13 +338,17 @@ def typist(loc, face=0.0, shirt="#5B6E86", sit=True, hair="#2B2220", skin="#F1C7
     return t_
 
 
+_TPN = [0]
+
+
 def type_motion(T_, t0, t1, rate=6.0, gain=0.0):
     """手を交互に小さく上下（打っている）。gain>0 なら打つ音も"""
     k = 0; t = t0
+    _TPN[0] += 1; src = "typist%d" % _TPN[0]; track(src, T_.arms[0], 0.0)
     while t < t1:
         a = T_.arms[k % 2]
         key(a, ("rotation_euler", 0), t, R(-62)); key(a, ("rotation_euler", 0), t + 0.5 / rate, R(-55)); key(a, ("rotation_euler", 0), t + 1 / rate, R(-62))
-        if gain: ev(t + 0.5 / rate, "key", gain)
+        if gain: ev(t + 0.5 / rate, "key", gain, src)
         t += 1 / rate; k += 1
 
 

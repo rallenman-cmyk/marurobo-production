@@ -12,95 +12,86 @@ sys.path.insert(0, os.path.join(HERE, "..", "..", "ep04_robot", "look"))
 import design as D
 import timing as T
 s, e, w = T.s, T.e, T.w
-YEL = (255, 210, 74); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48)
+YEL = (255, 210, 74); NAVY = D.NAVY; NAVY2 = D.NAVY2; WHITE = (255, 255, 255); RED = (226, 58, 48)
 BLUE = (61, 139, 255); ORANGE = (255, 154, 60); GREEN = (60, 203, 106)
 SUB_TOP = 560
 _cache = {}
 
 
 def ev_list():
+    """v6（絵コンテ_v6.md と見比べて作る）。キーの字は全部 3D に書いたので、2D でキーの字は出さない"""
     E = []
     add = lambda *a: E.append(a)
-    # 机のキーボード（k_・a_・d_・l_）は、キーの上に字を書いたので 2D の字は出さない（2026-11-16 ユーザー「最初っからＡってテロップあってもわかんない」「ボタンにそれぞれの文字表示して」）
-    kl = lambda t0, t1, keys, **kw: None if all(o.split("_")[0] in ("k", "a", "d", "l") for o, _ in keys) else add(t0, t1, "keys", dict(keys=keys, **kw))
-    # 01〜02：A を打つ → 画面に A。B をさがす
-    kl(s("01-01"), e("02-04") + 0.3, [("k_A", "A")])
-    add(w("01-04", "カタッ") + 0.1, e("01-04") + 0.5, "tag", dict(text="A", obj="screen", dy=0, size=64))
-    kl(w("02-02", "S"), e("02-04") + 0.3, [("k_S", "S")]); kl(w("02-03", "反対側"), e("02-04") + 0.3, [("k_Q", "Q"), ("k_W", "W")])
-    add(w("02-04", "どこ") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru", icon="B"))
-    # 03：上から。Q W E R T Y を 1 つずつ → 名前「クワーティ」。B（まるロボが着く所）
-    for i, ch in enumerate("QWERTY"):
-        kl(w("03-01", "Q W E R T Y") + 0.3 * i, e("03-05") + 0.3, [("k_" + ch, ch)], col=BLUE)
-    kl(s("03-01") + 0.5, e("03-05") + 0.3, [("k_B", "B")])
-    add(w("03-02", "クワーティ"), e("03-05") + 0.3, "tag", dict(text="Q W E R T Y ＝ クワーティ", pos=(640, 80), size=52, bg=WHITE))
+    # 01〜02：A を打つ → A のキーから「A」が浮き上がって左上へ（v5「最初っからＡってテロップあってもわかんない」）
+    tA = w("01-04", "ぴょん") + 0.18
+    add(tA, e("02-04") + 0.3, "typed", dict(items=[("k_A", "A", tA, 0, 0, NAVY)]))
+    add(w("02-04", "どこ") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
+    # 03：名前「クワーティ」（キーが浮き上がるのは 3D）
+    add(w("03-02", "クワーティ"), e("03-03") + 0.3, "tag", dict(text="Q W E R T Y ＝ クワーティ", pos=(640, 80), size=52, bg=WHITE))
     add(w("03-04", "なぜ") - 0.2, e("03-04") + 0.4, "bubble", dict(obj="maru", icon="?"))
     add(e("03-05") + 0.3, s("04-01") - 0.3, "title", {})
-    # 04〜05：ABC 順のキーボード。名前の札（色は道のりと同じ）
+    # 04〜05：名前の札（引きの絵だけ）・打つ言葉・人とまるロボの札（2 つ同時に）
     add(s("04-03") + 1.6, e("05-05") + 0.5, "tag", dict(text="クワーティ", obj="k_T", dy=-150, bg=BLUE, fg=WHITE))
     add(s("04-03") + 1.6, e("05-05") + 0.5, "tag", dict(text="ABC 順", obj="a_E", dy=-150, bg=ORANGE, fg=WHITE))
-    kl(w("04-04", "ABC 順"), s("05-01"), [("a_A", "A"), ("a_B", "B"), ("a_C", "C")], col=ORANGE)
-    add(w("05-03", "人は") - 0.1, w("05-03", "まるロボ") + 0.2, "tag", dict(text="人：10本の指", pos=(1020, 110), size=48))
-    add(w("05-03", "まるロボ"), e("05-03") + 0.3, "tag", dict(text="まるロボ：1字ずつ", pos=(1000, 110), size=48))
-    # MARUROBO：打った字を、打つ瞬間に（青 → 橙）
+    add(w("05-02", "マルロボ"), s("05-04"), "tag", dict(text="マルロボ ＝ M A R U R O B O", pos=(640, 80), size=52))
+    add(w("05-03", "人は") - 0.1, e("05-03") + 0.3, "tag", dict(text="人：10本の指", pos=(330, 110), size=46, keep=True))
+    add(w("05-03", "まるロボ"), e("05-03") + 0.3, "tag", dict(text="まるロボ：1字ずつ", pos=(950, 110), size=46, keep=True))
+    # MARUROBO：押したキーから字が浮き上がって、左上に並ぶ（v5「該当のキーを押したらその文字が浮かび上がって まるろぼ になるように」）
     t = w("05-04", "道のり"); dt = min(0.55, (e("05-04") + 0.4 - t) / 7)
-    for i, ch in enumerate("MARUROBO"):
-        kl(t + i * dt, e("05-05") + 0.6, [("k_" + ch, ch)], col=BLUE)
-    t2 = s("05-05") - 0.2; dt2 = min(0.55, (e("05-05") + 0.5 - t2) / 7)
-    for i, ch in enumerate("MARUROBO"):
-        kl(t2 + 0.4 + i * dt2, e("05-05") + 0.6, [("a_" + ch, ch)], col=ORANGE)
-    # 06：上から結果（名前の札・数字。言うときに 1 つずつ）
+    t2 = s("05-05") - 0.2 + 0.4; dt2 = min(0.55, (e("05-05") + 0.5 - (t2 - 0.4)) / 7)
+    it = [("k_" + ch, ch, t + i * dt, i, 0, BLUE) for i, ch in enumerate("MARUROBO")]
+    it += [("a_" + ch, ch, t2 + i * dt2, i, 1, ORANGE) for i, ch in enumerate("MARUROBO")]
+    add(t, e("05-05") + 0.6, "typed", dict(items=it))
+    # 06：結果（名前の札は引きの絵だけ。距離の札は決まった場所）
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
     add(w("06-02", "キー28個分"), e("06-04") + 0.4, "tag", dict(text="キー28個分", pos=(330, 500), size=60, bg=YEL))
     add(w("06-03", "キー31個分"), e("06-04") + 0.4, "tag", dict(text="キー31個分", pos=(950, 500), size=60, bg=YEL))
     add(w("06-04", "ほとんど") - 0.1, e("06-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
-    # 07：いろは歌（ひらがな → ローマ字）→ 結果の棒グラフ → 名前の結果を小窓で
+    # 07：いろは歌 → 比べのグラフ（題つき。予想の点線 → 2 組 → ✕）（v5「話の内容に見せ方があってない」）
     add(w("07-02", "いろはにほへと"), w("07-04", "結果"), "iroha", {})
-    add(w("07-04", "クワーティ"), e("07-08") + 0.3, "bars", dict(items=[(BLUE, "クワーティ", 316, w("07-04", "クワーティ")), (ORANGE, "ABC 順", 302, w("07-04", "ABC 順"))], unit="キー", vmax=330))
-    add(w("07-06", "もし"), e("07-07") + 0.3, "pip_clip", dict(clip="S06p", src_t=e("06-04"), hold=True))
+    add(w("07-04", "クワーティ"), e("07-08") + 0.3, "cmp", dict(t_irq=w("07-04", "クワーティ"), t_ira=w("07-04", "ABC 順"), t_long=w("07-05", "長く"),
+                                                             t_pred=w("07-06", "ずっと短く"), t_name=w("07-07", "名前"), t_x=w("07-08", "打つ距離")))
     add(w("07-09", "何のために") - 0.2, e("07-09") + 0.3, "bubble", dict(obj="maru", icon="?"))
-    # 08〜09：1868年。ピアノのような鍵盤の字（手前 A→N 左から右、奥 O→Z 右から左）
+    # 08〜09：1868年。人の名前の札。ピアノの形の鍵盤（字は 3D）・向きの矢印
     add(w("08-01", "1868年"), e("08-03") + 0.3, "tag", dict(text="1868年　アメリカ", pos=(640, 80), size=56))
-    kl(w("09-03", "ABC"), w("09-04", "手前"), [("p_A", "A"), ("p_B", "B"), ("p_C", "C")], col=ORANGE, size=44)
-    kl(w("09-04", "手前"), e("09-05") + 0.5, [("p_" + c, c) for c in "ABCDEFGHIJKLMN"], col=ORANGE, size=34, flow=0.12)
-    kl(w("09-05", "奥"), e("09-05") + 0.5, [("p_" + c, c) for c in "OPQRSTUVWXYZ"], col=NAVY, size=34, flow=0.12)
+    add(w("08-02", "ショールズさん"), e("08-02") + 0.3, "tag", dict(text="ショールズさん", obj="sholes", dy=-80, size=46, keep=True))
+    add(w("08-02", "仲間"), e("08-02") + 0.3, "tag", dict(text="仲間", obj="nakama", dy=-80, size=46, keep=True))
     add(w("09-04", "左から右"), e("09-05") + 0.5, "arrow2", dict(a="p_A", b="p_N", dy=48, col=ORANGE))
     add(w("09-05", "右から左"), e("09-05") + 0.5, "arrow2", dict(a="p_O", b="p_Z", dy=-46, col=NAVY))
-    # 10：1872年の上の列（Q W E ． T Y）→ 1873年の会社 → R が入る
+    # 10：1872年・1873年・クワーティ
     add(w("10-04", "1872年"), e("10-06") + 0.3, "tag", dict(text="1872年ごろ", pos=(1080, 80), size=56))
-    for i, (o, ch) in enumerate((("m_Q", "Q"), ("m_W", "W"), ("m_E", "E"), ("m_dot", "．"), ("m_T", "T"), ("m_Y", "Y"))):
-        tt = w("10-05", "Q W E") + 0.35 * min(i, 2) if i < 3 else (w("10-05", "ピリオド") if i == 3 else w("10-05", "T Y") + 0.35 * (i - 4))
-        kl(tt, e("10-06") + 0.3, [(o, ch)], col=RED if ch == "．" else BLUE, size=44)
     add(w("10-07", "1873年"), e("10-09") + 0.3, "tag", dict(text="1873年", pos=(1100, 80), size=56))
-    kl(s("10-08"), e("10-09") + 0.3, [("f_" + c, c) for c in "QWE"] + [("f_T", "T"), ("f_Y", "Y")], col=BLUE, size=40)
-    kl(s("10-08"), w("10-08", "外され") + 0.4, [("f_dot", "．")], col=RED, size=40)
-    kl(w("10-08", "R が") + 0.35, e("10-09") + 0.3, [("f_R", "R")], col=BLUE, size=40)
     add(w("10-09", "クワーティ"), e("10-09") + 0.3, "tag", dict(text="クワーティ", pos=(640, 80), size=52, bg=BLUE, fg=WHITE))
-    add(w("11-01", "どうして") - 0.2, e("11-02") + 0.3, "bubble", dict(obj="maru", icon="?"))
-    # 13〜14：からまる → E と R の棒
-    add(s("13-02") + 0.2, e("13-02") + 0.4, "bubble", dict(obj="maru", icon="!"))
-    kl(w("14-03", "E"), e("14-05") + 0.4, [("bar_E", "E"), ("bar_R", "R")], col=YEL, size=48)
-    # 15：わざとゆっくり？ → 最初のお客さん（電信の部屋を小窓で先に少し）
-    add(w("15-02", "わざと"), e("15-02") + 0.3, "tag", dict(text="わざと ゆっくり？", pos=(640, 80), size=52))
+    add(w("11-01", "どうして") - 0.2, e("11-01") + 0.3, "bubble", dict(obj="maru", icon="?"))
+    # 13〜15：説（引用の札）・からまる・わざとゆっくり
+    add(s("13-04"), e("13-04") + 0.3, "tag", dict(text="よく続けて打つ字を、わざと離した？", pos=(640, 80), size=46))
+    add(s("13-02") + 0.6, e("13-02") + 0.4, "bubble", dict(obj="maru", icon="!"))
+    add(w("14-05", "おかしい") - 0.2, e("14-05") + 0.3, "bubble", dict(obj="maru", icon="?"))
+    add(w("15-02", "わざと"), e("15-02") + 0.3, "tag", dict(text="わざと ゆっくり打たせた？", pos=(640, 80), size=50))
     add(w("15-04", "ちょっと待って") - 0.1, e("15-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
+    add(w("15-05", "手で書く"), e("15-05") + 0.3, "note", dict(style="speed"))
+    add(w("15-06", "わざと"), e("15-06") + 0.3, "note", dict(style="nobuy", t_x=w("15-06", "いなく")))
     add(w("15-07", "最初のお客さん"), e("15-07") + 0.3, "pip_clip", dict(clip="S17a", src_t=s("17-04")))
-    # 16〜17：日本の研究・電信・最初のお客さん・試し打ち
+    add(s("15-08"), e("15-08") + 0.3, "note", dict(style="deny", t_x=w("15-08", "否定")))
+    # 16〜17：研究・電信・学校・試し打ち（人の札）
     add(w("16-02", "京都大学"), e("16-03") + 0.3, "tag", dict(text="京都大学　安岡孝一さんたち（2011年）", pos=(640, 80), size=48))
     add(w("17-02", "電信"), e("17-02") + 0.3, "tag", dict(text="電信", pos=(1060, 80), size=56))
     add(w("17-03", "モールス信号"), e("17-04") + 0.3, "tag", dict(text="モールス信号", pos=(1020, 80), size=52))
     add(w("17-05", "シカゴ"), e("17-05") + 0.3, "tag", dict(text="シカゴの電信の学校", pos=(640, 80), size=52))
     add(w("17-06", "1872年"), e("17-09") + 0.3, "tag", dict(text="1872年", pos=(1100, 80), size=56))
-    add(w("17-08", "もっと速く"), e("17-08") + 0.5, "tag", dict(text="もっと速く！", obj="teacher", dy=-70, size=52, bg=YEL))
-    # 18：Z と SE（点の並び。言うときに 1 段ずつ）
+    add(w("17-06", "えらい人"), e("17-07") + 0.3, "tag", dict(text="電信の会社のえらい人", obj="boss", dy=-90, size=44, keep=True))
+    add(w("17-07", "学校の先生"), e("17-08") + 0.3, "tag", dict(text="学校の先生", obj="teacher", dy=-90, size=44, keep=True))
+    add(w("17-08", "もっと速く"), e("17-08") + 0.5, "tag", dict(text="「もっと速く！」", pos=(640, 170), size=56, bg=YEL))
+    # 18：Z と SE
     add(w("18-02", "Z"), e("18-05") + 0.4, "morse", dict(t_z=w("18-02", "Z"), t_s=w("18-03", "S"), t_e=w("18-04", "E が"), t_same=w("18-04", "あれ")))
-    # 19：迷う → Z S E が、ななめにつながる
+    # 19：迷う
     add(w("19-01", "迷って") - 0.1, e("19-01") + 0.3, "bubble", dict(obj="op", icon="?"))
-    for ch, wd in (("Z", "この3つ"), ("S", "光らせて"), ("E", "みると")):
-        kl(w("19-03", wd), e("19-05") + 0.4, [("k_" + ch, ch)], col=YEL, size=48)
-    # 20：ショールズさんの別の並び（2 段目 X P M C H）
-    add(w("20-04", "別の並び"), e("20-06") + 0.3, "tag", dict(text="1889年", pos=(1100, 80), size=56))
-    kl(w("20-05", "X P M C H"), e("20-06") + 0.3, [("x_" + c, c) for c in "XPMCH"], col=RED, size=40, flow=0.25)
-    kl(w("20-05", "クワーティ"), e("20-06") + 0.3, [("m_" + c, c) for c in "QWE"] + [("m_T", "T"), ("m_Y", "Y")], col=BLUE, size=40)
+    # 20：予想・からみの小窓・特許の書類・1889年
+    add(w("20-01", "予想"), e("20-01") + 0.3, "tag", dict(text="研究者の予想", pos=(640, 80), size=50))
+    add(w("20-02", "棒のからみ"), e("20-02") + 0.3, "pip_clip", dict(clip="S13a", src_t=s("13-02") - 0.2))
+    add(w("20-04", "特許"), e("20-04") + 0.4, "note", dict(style="patent"))
+    add(w("20-05", "その並び"), e("20-06") + 0.3, "tag", dict(text="1889年", pos=(1100, 80), size=56))
     add(w("21-02", "もっと良い") - 0.2, e("21-02") + 0.3, "bubble", dict(obj="maru", icon="?"))
     # 22：広まっていく
     add(w("22-03", "1888年"), e("22-04") + 0.3, "tag", dict(text="1888年", pos=(1100, 80), size=56))
@@ -109,18 +100,17 @@ def ev_list():
     add(w("22-05", "10万台"), e("22-05") + 0.5, "tag", dict(text="10万台", pos=(640, 200), size=64, bg=YEL))
     add(w("22-06", "1893年"), e("22-07") + 0.3, "tag", dict(text="1893年", pos=(1100, 80), size=56))
     add(w("22-07", "クワーティ"), e("22-08") + 0.3, "tag", dict(text="クワーティ", pos=(640, 80), size=52, bg=BLUE, fg=WHITE))
-    # 23：速い並び（真ん中の列）→ 比べ直すと、ほぼ同じ
+    # 23：速い並び（真ん中の列は 3D で光る）→ 比べ直すと、ほぼ同じ（グラフに題）
     add(w("23-02", "1936年"), e("23-04") + 0.3, "tag", dict(text="1936年", pos=(1100, 80), size=56))
-    kl(w("23-03", "真ん中の列"), e("23-04") + 0.3, [("d_" + c, c) for c in "AOEUIDHTNS"], col=GREEN, size=40, flow=0.15)
     add(w("23-05", "考えた本人"), e("23-05") + 0.3, "tag", dict(text="考えた本人", obj="prof", dy=-60, size=48))
-    add(w("23-06", "比べ直す"), e("23-07") + 0.3, "bars", dict(items=[(BLUE, "クワーティ", None, w("23-06", "比べ直す") + 0.3), ((120, 134, 156), "新しい並び", None, w("23-06", "比べ直す") + 0.8)], vmax=1.0, vals=[0.9, 0.92]))
-    # 24：もしも → スマホもクワーティ
+    add(w("23-06", "比べ直す"), e("23-07") + 0.3, "bars", dict(title="打つ速さ（国の役所の比べ直し）", items=[(BLUE, "クワーティ", None, w("23-06", "比べ直す") + 0.3), ((120, 134, 156), "新しい並び", None, w("23-06", "比べ直す") + 0.8)], vmax=1.0, vals=[0.9, 0.92]))
+    # 24：もしも → 指が止まる → スマホもクワーティ
     add(w("24-04", "もし"), e("24-05") + 0.3, "tint", {})
     add(w("24-04", "もし"), e("24-05") + 0.3, "tag", dict(text="もしも…", pos=(1080, 80), size=52))
+    add(w("24-05", "指が止まって") - 0.2, e("24-05") + 0.3, "bubble", dict(obj="slowhand", icon="?"))
     add(w("24-07", "スマホ"), e("24-08") + 0.3, "phonekeys", dict(obj="phone"))
-    # 28：いろは歌専用（距離 → 引くと、いろは順）
+    # 28：いろは歌専用（7分の1）
     add(w("28-05", "7分の1"), e("28-05") + 0.6, "tag", dict(text="クワーティの 7分の1", pos=(640, 90), size=60, bg=YEL))
-    kl(w("28-06", "い ろ は"), e("28-07") + 0.4, [("l_%d" % i, c) for i, c in enumerate("いろはにほへとちりぬるを")], col=GREEN, size=40, flow=0.08)
     return sorted(E, key=lambda x: x[0])
 
 
@@ -198,12 +188,13 @@ def iroha_sprite(k):
 
 def bars_sprite(p, t, t0):
     """棒グラフ（横の棒。名前・長さ・数字。1 本ずつ、言うときに伸びる）。card の draw の中で 2 倍の座標で描く"""
-    n = len(p["items"]); Wd, Hd = 940, 60 + 100 * n
+    n = len(p["items"]); top = 70 if p.get("title") else 0; Wd, Hd = 940, 60 + 100 * n + top
     def dr(d, W_, H_, ss, img):
+        if top: D.ctext(d, (W_ / 2, 48 * ss), p["title"], D.font(40 * ss), NAVY)     # 何の比べか（v5「何の違いを示したグラフかかいてよ」）
         for i, (col, name, val, ti) in enumerate(p["items"]):
             if t < ti: continue
             kk = min(1.0, (t - ti) / 0.6); kk = 1 - (1 - kk) ** 3
-            y = (30 + 100 * i + 50) * ss
+            y = (top + 30 + 100 * i + 50) * ss
             D.ctext(d, (130 * ss, y), name, D.font(42 * ss), NAVY)
             v = val if val is not None else p["vals"][i]
             L = 470 * v / p["vmax"] * kk
@@ -228,6 +219,78 @@ def morse_sprite(t, p):
         if t >= p["t_same"]:
             d.rounded_rectangle([210 * ss, 40 * ss, 470 * ss, 260 * ss], 20 * ss, outline=RED + (255,), width=6 * ss)
     return D.card(560, 300, draw=dr)[0]
+
+
+def cmp_sprite(t, p):
+    """07 の比べ（題つき）。いろは歌 → 予想の点線の棒 → マルロボ → 「距離を短くするため？」に ✕（v5「話の内容に見せ方があってない」）"""
+    xs = t >= p["t_x"]
+    def dr(d, W_, H_, ss, img):
+        D.ctext(d, (W_ / 2, 44 * ss), "打つ距離（キー何個分）", D.font(40 * ss), NAVY)
+        y = 100
+        def bar(name, val, mx, col, tt, yy, dash=False):
+            if name: D.ctext(d, (120 * ss, yy * ss), name, D.font(38 * ss), NAVY)
+            kk = min(1.0, (t - tt) / 0.6); kk = 1 - (1 - kk) ** 3; L = 420 * val / mx * kk
+            if dash:
+                x = 230
+                while x < 230 + L:
+                    d.rounded_rectangle([x * ss, (yy - 16) * ss, min(x + 22, 230 + L) * ss, (yy + 16) * ss], 6 * ss, outline=BLUE + (255,), width=4 * ss); x += 34
+                if kk > 0.9: D.ctext(d, ((230 + L + 80) * ss, yy * ss), "予想", D.font(36 * ss), BLUE)
+            else:
+                d.rounded_rectangle([230 * ss, (yy - 18) * ss, (230 + max(L, 8)) * ss, (yy + 18) * ss], 9 * ss, fill=col + (255,))
+                if kk > 0.9: D.ctext(d, ((230 + L + 60) * ss, yy * ss), "%d" % val, D.font(38 * ss), NAVY)
+        if t >= p["t_irq"]:
+            D.ctext(d, (120 * ss, (y + 30) * ss), "いろは歌", D.font(38 * ss), NAVY)
+            bar("", 316, 316, BLUE, p["t_irq"], y + 6)
+            if t >= p["t_ira"]: bar("", 302, 316, ORANGE, p["t_ira"], y + 54)
+            if t >= p["t_pred"]: bar("", 302 * 0.55, 316, BLUE, p["t_pred"], y + 102, dash=True)
+        y = 290
+        if t >= p["t_name"]:
+            D.ctext(d, (120 * ss, (y + 24) * ss), "マルロボ", D.font(38 * ss), NAVY)
+            bar("", 28, 31, BLUE, p["t_name"], y)
+            bar("", 31, 31, ORANGE, p["t_name"] + 0.3, y + 48)
+        if xs:
+            D.ctext(d, (W_ / 2 - 40 * ss, 420 * ss), "距離を短くするため？", D.font(40 * ss), NAVY)
+            kk = min(1.0, (t - p["t_x"]) / 0.3); cx, cy, r = (W_ / ss / 2 + 230), 420, 26 * kk
+            d.line([((cx - r) * ss, (cy - r) * ss), ((cx + r) * ss, (cy + r) * ss)], fill=RED + (255,), width=10 * ss)
+            d.line([((cx + r) * ss, (cy - r) * ss), ((cx - r) * ss, (cy + r) * ss)], fill=RED + (255,), width=10 * ss)
+    return D.card(900, 470 if xs else 380, draw=dr)[0]
+
+
+def note_sprite(t, p):
+    """15・20 の説明の札（速さの比べ・買わない・否定のはんこ・特許の書類）"""
+    st = p["style"]
+    def dr(d, W_, H_, ss, img):
+        if st == "speed":
+            D.ctext(d, (W_ / 2, 44 * ss), "字を書く速さ", D.font(40 * ss), NAVY)
+            for k_, (name, L, col) in enumerate((("手で書く", 150, (150, 160, 175)), ("タイプライター", 430, BLUE))):
+                y = (110 + 70 * k_) * ss
+                D.ctext(d, (150 * ss, y), name, D.font(34 * ss), NAVY)
+                d.rounded_rectangle([290 * ss, y - 20 * ss, (290 + L) * ss, y + 20 * ss], 10 * ss, fill=col + (255,))
+            D.ctext(d, ((290 + 430 + 56) * ss, 180 * ss), "速い", D.font(36 * ss), BLUE)
+        elif st == "nobuy":
+            D.ctext(d, (W_ / 2, 60 * ss), "わざと遅いタイプライター", D.font(42 * ss), NAVY)
+            D.ctext(d, (W_ / 2, 140 * ss), "高いのに、遅い", D.font(40 * ss), (120, 130, 145))
+            if t >= p["t_x"]:
+                D.ctext(d, (W_ / 2, 215 * ss), "→ 買う人がいない", D.font(42 * ss), RED)
+        elif st == "deny":
+            D.ctext(d, (330 * ss, 110 * ss), "「わざと遅く打たせた」", D.font(46 * ss), NAVY)
+            if t >= p["t_x"]:      # はんこ「否定」（字に重ねない）
+                kk = min(1.0, (t - p["t_x"]) / 0.25); r = 70 * (1.4 - 0.4 * kk)
+                d.ellipse([(720 - r) * ss, (110 - r) * ss, (720 + r) * ss, (110 + r) * ss], outline=RED + (255,), width=8 * ss)
+                D.ctext(d, (720 * ss, 110 * ss), "否定", D.font(int(46 * r / 70) * ss), RED)
+        elif st == "patent":
+            D.ctext(d, (W_ / 2, 50 * ss), "特許の申し込み（1889年）", D.font(42 * ss), NAVY)
+            D.ctext(d, (W_ / 2, 108 * ss), "ショールズ", D.font(36 * ss), NAVY2)
+            # 資料で確かめたのは「2 段目が X P M C H で始まる」ことだけ。ほかのキーは字を書かない
+            rows = (["", ""] * 4, ["X", "P", "M", "C", "H", "", "", ""], [""] * 7)
+            for r, row in enumerate(rows):
+                for c, ch in enumerate(row):
+                    x = ((760 - len(row) * 74) / 2 + r * 18 - 9 + c * 74) * ss; y = (160 + r * 70) * ss
+                    d.rounded_rectangle([x, y, x + 62 * ss, y + 58 * ss], 10 * ss, fill=(255, 255, 255, 255), outline=(150, 140, 120, 255), width=3 * ss)
+                    D.ctext(d, (x + 31 * ss, y + 29 * ss), ch, D.font(34 * ss), RED if (r == 1 and c < 5) else NAVY)
+    hh = {"speed": 230, "nobuy": 270, "deny": 220, "patent": 400}[st]
+    bg = (250, 244, 228) if st == "patent" else WHITE
+    return D.card(860 if st != "patent" else 760, hh, bg=bg, draw=dr)[0]
 
 
 def arrow_img(p0, p1, col):
@@ -322,6 +385,19 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             _paste(base, title_sprite(), 640, 290, k, a)
         elif kind == "iroha":
             _paste(base, iroha_sprite(0.0 if t < w("07-03", "ローマ字") else 1.0), 640, 150, k, a)
+        elif kind == "typed":      # 押したキーから字が浮き上がって、左上の列に並ぶ
+            for obj, ch, ti, slot, row, col in p["items"]:
+                if t < ti: continue
+                gx, gy = 70 + 64 * slot, 60 + 74 * row
+                q = where(obj, ti)
+                kk = min(1.0, (t - ti) / 0.5); kk = 1 - (1 - kk) ** 3
+                if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= 720): kk = 1.0; q = (gx, gy)
+                x = q[0] + (gx - q[0]) * kk; y = q[1] - 40 * math.sin(math.pi * kk) + (gy - q[1]) * kk
+                _paste(base, key_sprite(ch, 44, col), x, y, 1.0, a)
+        elif kind == "cmp":
+            _paste(base, cmp_sprite(t, p), 640, 270, k, a)
+        elif kind == "note":
+            _paste(base, note_sprite(t, p), 640, 240, k, a)
         elif kind == "bars":
             _paste(base, bars_sprite(p, t, t0), 640, 175, k, a)
         elif kind == "morse":
