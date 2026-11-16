@@ -38,7 +38,8 @@ def ev_list():
     add(w("09-04", "ここで"), s("10-03"), "tag", dict(text="12番", obj="seat12", dy=-70, size=56, bg=YEL))
     add(w("10-05", "自分が"), e("10-05") + 0.3, "bubble", dict(obj="senpai", icon="?", side=1, gap=30))
     # 11：天井の目印
-    add(w("11-02", "目印"), e("11-04") + 0.3, "tag", dict(text="目印のシール", pos=(640, 90)))
+    add(w("11-02", "目印"), e("11-04") + 0.3, "tag", dict(text="目印のシール", pos=(640, 90), leaders=["mark0", "mark1", "mark2"]))   # v4：札から目印へ線を引き、丸で囲む（3:14「どれかわかんない」）
+    for k in range(3): add(w("11-02", "目印") + 0.1 * k, e("11-04") + 0.3, "ring2d", dict(obj="mark%d" % k, r=26))
     # 12：地図と、いま見えている形
     # v3：12-02〜12-02c は 2D の図（左＝先輩に見える点の形、右＝お店の地図。ゆっくり動かして × × ✓。v2 3:31「分かりにくい・動きも早い」）
     add(s("12-02") - 0.2, e("12-02c") + 0.6, "shapematch", {})
@@ -61,7 +62,8 @@ def ev_list():
     # 20：前のカメラ 3 つ。v2：「このカメラ」で、おなかの前の 2 つに丸と札（どれのことか分かるように。v1 5:51）。「3つ」で頭の下にも丸
     add(w("20-01", "このカメラ"), e("20-02") + 0.3, "ring2d", dict(obj="lens", r=30))
     add(w("20-01", "このカメラ"), e("20-02") + 0.3, "ring2d", dict(obj="lens1", r=30))
-    add(w("20-01", "このカメラ"), w("20-02", "3つ"), "tag", dict(text="前のカメラ", obj="lens", dx=40, dy=-90))
+    add(w("20-01", "このカメラ"), w("20-02", "3つ"), "tag", dict(text="前のカメラ", obj="lens", dx=40, dy=-90, leaders=["lens2"]))   # v4：上のカメラにも線（6:10「上についているのも対象」）
+    add(w("20-01", "このカメラ"), w("20-02", "3つ"), "ring2d", dict(obj="lens2", r=30))
     add(w("20-02", "3つ"), e("20-02") + 0.3, "ring2d", dict(obj="lens2", r=30))
     add(w("20-02", "3つ"), e("20-03") + 0.3, "tag", dict(text="前のカメラ 3つ", pos=(1040, 90), size=52))
     add(w("20-04", "回る光"), e("20-05") + 0.2, "legend", dict(items=[(TEAL, "回る光：遠くまで"), (PINK, "前のカメラ：目の前")], t1=w("20-04", "前のカメラ")))
@@ -181,6 +183,15 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 tail = (0, 46) if q[1] - cy > 60 else None      # v3：しっぽは決まった三角（物との距離で大きさが変わらない。5本目 v2「バンパー」）
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), tail=tail)
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
+            for ob in p.get("leaders", []):   # 札から物へ細い線（しっぽを 2 つ目・3 つ目の物にも。v4）
+                q2 = where(ob, t, p.get("track_clip"))
+                if q2 is None: continue
+                y0 = cy + off[1] + spr.height / 2 + (spr.height / 2 - 6 if q2[1] > cy else -(spr.height / 2 - 6))
+                L_ = math.dist((cx, y0), q2)
+                if L_ < 40: continue
+                ux, uy = (q2[0] - cx) / L_, (q2[1] - y0) / L_
+                ln = Image.new("RGBA", base.size, (0, 0, 0, 0)); ImageDraw.Draw(ln).line([cx, y0, q2[0] - ux * 30, q2[1] - uy * 30], fill=WHITE + (int(235 * a),), width=5)
+                base.alpha_composite(ln)
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)
         elif kind == "bubble":
             q = where(p["obj"], t, p.get("track_clip"))
