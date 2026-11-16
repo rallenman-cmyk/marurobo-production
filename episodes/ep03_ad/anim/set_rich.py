@@ -182,7 +182,7 @@ def train_floor():
     cube(tex_mat("tr_floor2", "#7F7B73", "#737069", 25.0, rough=0.7), (0, 1.05, 0.001), (9.0, 0.22, 0.004))
 
 
-def train_rich(wifi=True):
+def train_rich(wifi=True, tents=(-2.8, 0.0, 2.8)):
     """電車の中をまとめて作る。人（ハルさん・ソラさん）とつり広告（テント 3 枚）は前と同じ場所"""
     world("#F2E6D2", 0.5)
     train_floor(); train_wall(); train_seat(); train_ceiling(); train_doors(); train_outside()
@@ -191,7 +191,7 @@ def train_rich(wifi=True):
     tent = img_mat("tentposter", os.path.join(HERE, "tent.png"), emit=0.6)
     others = ["#9BC4E2", "#F6B8C8", "#C9E4B4", "#FFE3A3"]
     xs = [-4.2, -2.8, -1.4, 0.0, 1.4, 2.8, 4.2]
-    tent_at = {-2.8, 0.0, 2.8}
+    tent_at = set(tents)
     wire = mat("wire", "#888888", metal=0.8, rough=0.3)
     for i, x in enumerate(xs):
         y = 0.25

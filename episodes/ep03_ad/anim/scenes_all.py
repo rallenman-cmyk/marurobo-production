@@ -8,6 +8,7 @@ import mathutils
 ARGS = sys.argv[sys.argv.index("--") + 1:]
 _ANIM_HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(_ANIM_HERE, "common.py"), encoding="utf-8").read())
+POS2D = []   # 3D の物の画面での位置（2D の輪用。1280×720）
 exec(open(os.path.join(_ANIM_HERE, "set_rich.py"), encoding="utf-8").read())   # 作り込んだ舞台（電車・部屋）
 KEY, OUTDIR = ARGS[0], ARGS[1]
 N_SAMPLES = int(ARGS[2]) if len(ARGS) > 2 and ARGS[2].isdigit() else 32
@@ -428,8 +429,8 @@ def s12():
 
 
 # ---------------- S13〜S15 電車（ふり返り）
-def train_set(maru_kw=None):
-    train_rich(wifi=True)                                            # v8「電車の中がチープすぎる」：作り込んだ電車
+def train_set(maru_kw=None, tents=(-2.8, 0.0, 2.8)):
+    train_rich(wifi=True, tents=tents)                                           # v8「電車の中がチープすぎる」：作り込んだ電車
     led = mat("wifi_led", "#2BB3A6", emit=3.0); sphere(led, (0, 0.44, 2.54), 0.025)
     return Maru(**(maru_kw or dict(loc=(0.0, 1.05, 0.5), face=0, s=0.55, hat=False, eye_glow=0.9))), led
 
@@ -468,18 +469,25 @@ def s14():
 
 def s15():
     t0, t1 = span("S15")
-    mr, led = train_set()
+    # v8 見直し：±2.8 の広告は画面の端（x 60・1220）で輪が切れた。この場面だけ、テントの広告を 1 つおき → となり合う 3 枚にし、少し狭い画角で 3 枚とも輪が入るように
+    mr, led = train_set(tents=(-1.4, 0.0, 1.4))
     mr.at(s("15-03"), look=4); mr.tilt(s("15-03") + 0.3, 14)          # 首をかしげて思い出そうとする
     mr.tilt(s("15-05") - 0.2, 0)
     posters = [m for m in bpy.data.materials if m.name.startswith("tentposter")]
-    for k, x in enumerate((-2.8, 0.0, 2.8)):
-        mr.at(s("15-05") + 1.4 * k, face=-30 + 30 * k)
+    for k, x in enumerate((-1.4, 0.0, 1.4)):
+        mr.at(s("15-05") + 1.4 * k, face=-25 + 25 * k)
     for m in posters:
         matkey(m, f(s("15-05")) - 2, strength=0.6); matkey(m, f(s("15-05")) + 6, strength=2.0)
     cam, tgt = cam_rig()
     shots(cam, tgt, [
         (t0, s("15-05") - 0.3, (0.0, -1.45, 1.2), (0.0, 1.0, 1.15), (0.0, -1.45, 1.2), (0.0, 1.0, 1.25), 24),        # 広告が見えない角度
-        (s("15-05") - 0.3, t1, (0.0, -1.45, 1.1), (0.0, 0.8, 1.9), (0.0, -1.45, 1.1), (0.0, 0.8, 1.85), 11)])
+        (s("15-05") - 0.3, t1, (0.0, -1.45, 1.1), (0.0, 0.8, 1.9), (0.0, -1.45, 1.1), (0.0, 0.8, 1.85), 15)])
+    # v8 見直し：つり広告の輪を、3D の広告の場所から計算する（手で決めた位置だと、作り直した電車でずれる・画面の端で切れる）
+    from bpy_extras.object_utils import world_to_camera_view
+    sc_ = bpy.context.scene; sc_.frame_set(f(s("15-05")) + 12); bpy.context.view_layer.update()
+    for x in (-1.4, 0.0, 1.4):
+        v = world_to_camera_view(sc_, cam, mathutils.Vector((x, 0.25, 1.95)))
+        POS2D.append([round(v.x * 1280), round((1 - v.y) * 720)])
     return t0, t1
 
 
@@ -620,10 +628,11 @@ def s22():
     matkey(mr.lens, f(s("22-05")), strength=1.6); matkey(mr.lens, f(s("22-05") + 0.6), strength=0.3)
     sun((50, 0, 200), 2.0); area((0, -3, 2.5), (0, -1, 0.3), 300, 3, "#FFF1DD")
     cam, tgt = cam_rig()
+    # v8 見直し：まるロボが字幕の帯にかかっていた（15:05）→ 見る先を下げて、まるロボを画面の上へ
     shots(cam, tgt, [
-        (t0, s("22-02c") - 0.2, (0.3, -3.0, 1.2), (0.05, -1.0, 0.3), (0.3, -2.7, 1.1), (0.0, -1.05, 0.3), 38),
+        (t0, s("22-02c") - 0.2, (0.3, -3.0, 1.2), (0.05, -1.0, 0.12), (0.3, -2.7, 1.1), (0.0, -1.05, 0.12), 38),
         (s("22-02c") - 0.2, s("22-03"), (0.45, -1.5, 1.2), (0.36, -0.9, 0.02), (0.45, -1.4, 1.15), (0.36, -0.9, 0.02), 36),   # 画面のテントの広告
-        (s("22-03"), t1, (0.3, -3.0, 1.2), (0.05, -1.0, 0.3), (0.2, -2.6, 1.0), (-0.1, -1.1, 0.3), 38)])
+        (s("22-03"), t1, (0.3, -3.0, 1.2), (0.05, -1.0, 0.12), (0.2, -2.6, 1.0), (-0.1, -1.1, 0.12), 38)])
     return t0, t1
 
 
@@ -652,7 +661,7 @@ sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = os.path.join(OUTDIR, KEY + "_")
 exec(open(os.path.join(_ANIM_HERE, "pc_out.py"), encoding="utf-8").read())  # PC：--gpu・--video
 os.makedirs(OUTDIR, exist_ok=True)
-json.dump(dict(mode=KEY, t0=t0, t1=t1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS)),
+json.dump(dict(mode=KEY, t0=t0, t1=t1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS), pos2d=POS2D),
           open(os.path.join(OUTDIR, KEY + "_log.json"), "w"), ensure_ascii=False)
 print("FRAMES", KEY, sc.frame_start, sc.frame_end, "T0 %.2f T1 %.2f" % (t0, t1))
 if "--blend" in ARGS:

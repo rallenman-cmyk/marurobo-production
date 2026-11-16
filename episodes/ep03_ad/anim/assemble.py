@@ -71,7 +71,7 @@ def tag_png(name, items):
 def picbubble(name, cx, cy, r, drawer):
     im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.ellipse([cx - r, cy - r, cx + r, cy + r], fill="white", outline=NAVY, width=4)
-    d.ellipse([cx - r * 0.9 - 30, cy + r * 0.7, cx - r * 0.9, cy + r * 0.7 + 30], fill="white", outline=NAVY, width=3)
+    # v8 見直し：左下の小さな丸（考えごとの印）は消す。他の回で「丸が何か分からない」（決まり）
     drawer(d, cx, cy, r)
     p = os.path.join(tmp, "ov_%s.png" % name); im.save(p); return p, []
 
@@ -132,8 +132,10 @@ ov(W("13-03", "テントの写真"), s("13-04", 1), "s13_photo", [("img", os.pat
 # v4「表現もっと分かりやすく」(9:26)：Wi-Fi の線は、差し込みの「電車の無料 Wi-Fi」「一緒にいた人」の絵に置きかえた（INS）
 # v4「紅葉も分かりやすいように」(9:51)：吹き出しの葉は、差し込みの「窓の外の紅葉」の絵に置きかえた（INS）
 ov(s("15-03") + 2.0, s("15-04", 1), "s15_q", [("tag", "？枚", 640, 300, None, True)])
-for k, x in enumerate((70, 640, 1210)):
-    ov(W("15-05", "%d枚" % (k + 1)), s("15-06", 1), "s15_%d" % k, [("ring", x, 300, 80, 90), ("tag", str(k + 1), x, 170, None, True)])
+# v8 見直し：輪の位置は 3D の広告の場所から計算した値（s15_log.json の pos2d）。手で決めた値は電車を作り直すとずれ、画面の端で切れた
+_p15 = next((json.load(open(os.path.join(d_, "s15_log.json"))).get("pos2d") for d_ in DIRS if os.path.exists(os.path.join(d_, "s15_log.json"))), None) or [[244, 295], [640, 295], [1036, 295]]
+for k, (x, y) in enumerate(_p15):
+    ov(W("15-05", "%d枚" % (k + 1)), s("15-06", 1), "s15_%d" % k, [("ring", x, y, 95, 105), ("tag", str(k + 1), x, y - 150, None, True)])
 ov(W("16-06", "外れ"), s("16-06", 1), "s16b", [("tag", "外れ", 905, 90)])          # 差し込みの「数える」の絵の右の箱の上
 ov(W("16-06", "当たり"), s("16-06", 1), "s16a", [("tag", "当たり", 305, 90)])        # 左の箱の上
 ov(W("18-03", "メールアドレス"), s("18-03", 1) + 0.5, "s18", [("tag", "メールアドレスの名簿", 900, 110)])
@@ -414,9 +416,11 @@ for j, (a, b, pth, mv, fo_) in enumerate(INSV):
     fl.append("[%d:v]scale=1280:720,format=rgba,fade=t=in:st=0:d=%.3f:alpha=1%s,setpts=PTS+%.3f/TB[n%d]" % (nin, INS_FD, _fo, a, j))
     fl.append("[%s][n%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)'[d%d]" % (cur, j, a, b, j)); cur = "d%d" % j; nin += 1
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
-    inputs += ["-i", pth]
+    # v8 見直し：札は 0.25 秒でふわっと出て、0.2 秒で消える（他の回の決まり「札がいきなり出る」）
+    inputs += ["-loop", "1", "-framerate", "24", "-t", "%.3f" % (b - a + 0.05), "-i", pth]
     _ex = "".join("*not(between(t,%.3f,%.3f))" % (c, d) for c, d in INS_COVER if c < b and a < d)   # v5：差し込みの間は、元の場面の札・小窓を出さない
-    fl.append("[%s][%d:v]overlay=0:0:enable='between(t,%.3f,%.3f)%s'[o%d]" % (cur, nin, a, b, _ex, i)); cur = "o%d" % i; nin += 1
+    fl.append("[%d:v]format=rgba,fade=t=in:st=0:d=0.25:alpha=1,fade=t=out:st=%.3f:d=0.2:alpha=1,setpts=PTS+%.3f/TB[t%d]" % (nin, max(0.3, b - a - 0.2), a, i))
+    fl.append("[%s][t%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)%s'[o%d]" % (cur, i, a, b, _ex, i)); cur = "o%d" % i; nin += 1
 fl.append("[%s]subtitles=%s:fontsdir=%s[vout]" % (cur, tmp + "/subs.ass", FONTS))
 inputs += ["-i", tmp + "/mix.wav"]
 cmd = ["ffmpeg", "-v", "error", "-y"] + inputs + ["-filter_complex", ";".join(fl), "-map", "[vout]", "-map", "%d:a" % nin,
