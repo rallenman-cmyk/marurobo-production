@@ -23,7 +23,7 @@ CL = []
 for d in DIRS:
     for lg in glob.glob(os.path.join(d, "*_log.json")):
         nm = os.path.basename(lg)[:-9]; L_ = json.load(open(lg))
-        fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].png")))
+        fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].png")) + glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].jpg")))   # jpg＝PC の本番（pc_frames.py）
         if not fs: continue
         ks = [int(p[-8:-4]) for p in fs]
         CL.append(dict(name=nm, t0=L_["t0"], t1=L_["t0"] + L_["frames"] / L_["fps"], fps=L_["fps"], ks=ks, fs=fs, log=L_))
@@ -41,7 +41,7 @@ _SUB0 = sorted(e[0] for e in ev)
 for d in [x for x in os.environ.get("LOOK_DIRS", "").split(":") if x]:
     for lg in glob.glob(os.path.join(d, "L*_log.json")):
         nm = os.path.basename(lg)[:-9]; L_ = json.load(open(lg))
-        fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].png")))
+        fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].png")) + glob.glob(os.path.join(d, nm + "_[0-9][0-9][0-9][0-9].jpg")))   # jpg＝PC の本番（pc_frames.py）
         if not fs: continue
         t0 = L_["t0"]; near = min(_SUB0, key=lambda x: abs(x - t0))
         if abs(near - t0) < 0.8: t0 = near                 # 絵の切り替わりは字幕の切り替わりと同じコマに
