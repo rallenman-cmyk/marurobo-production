@@ -7,7 +7,7 @@ mkdir -p $K/pc_kit $K/episodes/ep03_ad/anim $K/episodes/ep03_ad/storyboard $K/ep
 cp $EP/pc_kit/run_pc_render_ep03.ps1 $EP/pc_kit/README_PC.md $EP/pc_kit/はじめに.txt $K/pc_kit/
 cp $EP/pc_kit/はじめに.txt $K/
   cp $EP/pc_kit/README_PC.md $K/
-cp $EP/anim/common.py $EP/anim/scenes_all.py $EP/anim/s07s08_gate.py $EP/anim/pc_out.py $K/episodes/ep03_ad/anim/
+cp $EP/anim/common.py $EP/anim/set_rich.py $EP/anim/scenes_all.py $EP/anim/s07s08_gate.py $EP/anim/pc_out.py $K/episodes/ep03_ad/anim/
 cp $EP/storyboard/*.py $EP/storyboard/*.png $K/episodes/ep03_ad/storyboard/
 cp $EP/voice/placement.json $EP/voice/script_v1_0.json $EP/voice/word_times.json $K/episodes/ep03_ad/voice/
 cp $REPO/episodes/ep01_earphone/stage/human/{iconfig,hgen,hbuild,sdf}.py $K/episodes/ep01_earphone/stage/human/
