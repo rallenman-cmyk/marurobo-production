@@ -4,6 +4,7 @@
 #   出力：<場面>_####.png と <場面>_log.json（t0・t1・fps・frames・足音 steps・効果音 events）
 # 決まり：3D の中に字を書かない（札・吹き出し・数字は 2D）。人＝服と肌の色を分けた形、番犬＝ぶちの垂れ耳。まるロボは喋らない
 import os, sys, json, math, random
+import mathutils
 ARGS = sys.argv[sys.argv.index("--") + 1:]
 _ANIM_HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(_ANIM_HERE, "common.py"), encoding="utf-8").read())
@@ -38,7 +39,7 @@ def phone_screen(ph, img, glow):
 # ---------------- S00 いきなり夜：テントの広告に、まるロボがびくっ
 def s00():
     t0, t1 = span("S00")
-    room(night=True); person_lie((0.15, -0.15, 0.42))
+    room(night=True); person_sleep(0.15)
     ph = phone((0.35, -0.9, 0.0), 10, screen=None)
     ad = phone_screen(ph, "phone_ad.png", 2.5)
     L = night_lamp((0.35, -0.9, 0.6), 0)
@@ -71,6 +72,48 @@ def s01():
     return t0, t1
 
 
+def person_sleep(x=0.15):
+    # v7「人の頭が枕に埋まってる」(0:04)：枕の上（上の面 z=0.40）に頭をのせ、毛布はふとんの上（z=0.24）に寝かせる
+    sphere(mat("skin_haru", HARU_C["skin"], rough=0.55), (x, -0.22, 0.40 + 0.17), 0.2)
+    sphere(mat("blanket", "#5B7DB8", rough=0.9), (x, 0.55, 0.24 + 0.06), 0.5, scale=(0.9, 1.3, 0.3))
+
+
+def soft_towel(n=(24, 20), size=(0.6, 0.5)):
+    """v7「タオルが浮いてたりと雑」(0:43)：やわらかい布。形の鍵（平ら・頭にかぶる・スマホにかぶる）で形を変える"""
+    import bmesh
+    me = bpy.data.meshes.new("towel"); ob = bpy.data.objects.new("towel", me); bpy.context.collection.objects.link(ob)
+    bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=n[0], y_segments=n[1], size=0.5); bm.to_mesh(me); bm.free()
+    for v in me.vertices: v.co.x *= size[0]; v.co.y *= size[1]; v.co.z = 0.004
+    me.materials.append(mat("towel", "#F5B7C5", rough=0.95))
+    for p in me.polygons: p.use_smooth = True
+    sol = ob.modifiers.new("厚み", "SOLIDIFY"); sol.thickness = 0.012
+    ob.modifiers.new("なめらか", "SUBSURF").levels = 1
+    ob.shape_key_add(name="平ら")
+    def add(name, fn):
+        k = ob.shape_key_add(name=name, from_mix=False)
+        for i, v in enumerate(me.vertices): k.data[i].co = fn(v.co.x, v.co.y)
+        return k
+    R_ = 0.5 * 0.42                                                   # まるロボ（s=0.42）の頭の半径
+    def head(x, y):                                                   # 頭のてっぺんを原点に、球にそって垂れる
+        d = math.hypot(x, y)
+        if d < 1e-6: return (0.0, 0.0, 0.0)
+        a = min(d / R_, math.pi / 2 + 0.25)
+        if d / R_ <= math.pi / 2:
+            r = R_ * math.sin(d / R_); z = R_ * math.cos(d / R_) - R_
+        else:
+            r = R_ * 1.02; z = -R_ - (d - R_ * math.pi / 2) * 1.0
+        return (x / d * r, y / d * r, z + 0.012)
+    # スマホ（0.36×0.74・厚み 0.04）の下の端（マイクの穴）にかぶさる。布の中心はスマホの中心から y-0.2
+    def phone(x, y):
+        bx, by0, by1 = 0.18, -0.37 + 0.2, 0.37 + 0.2
+        ex = max(0.0, abs(x) - bx); ey = max(0.0, by0 - y, y - by1); e = math.hypot(ex, ey)
+        z = 0.046 if e == 0 else max(0.006, 0.046 * math.cos(min(e / 0.05, 1.0) * math.pi / 2) + 0.006)
+        z += 0.004 * math.sin(x * 40) * (1 if e > 0.05 else 0)          # 床の上は少ししわ
+        return (x, y, z)
+    add("頭", head); add("スマホ", phone)
+    return ob
+
+
 # ---------------- S02 その夜：ニュース → テントの広告 → タオルでマイクをふさぐ
 def s02():
     t0, t1 = span("S02")
@@ -90,15 +133,28 @@ def s02():
     mr.hop(ta + 0.25, 0.25, 0.4); ev(ta + 0.25, "pi")                       # 広告を見てびくっ
     for k, tt in enumerate((s("02-04") + 0.2, s("02-04") + 0.9, s("02-04") + 1.6)):  # きょろきょろ
         mr.at(tt, face=40 + (45 if k % 2 == 0 else -45))
-    # タオルを取りに走る → 頭に載せて戻る → スマホにぱさり
-    tw = towel((-1.6, -1.6, 0.02), 30)
+    # タオルを取りに走る → 頭にかぶって戻る → スマホの下の端（マイクの穴）にぱさり（v7：やわらかい布にして、頭にぴったり乗せて運ぶ）
+    tw = soft_towel(); tw.location = (-1.6, -1.6, 0.0); tw.rotation_euler = (0, 0, R(30))
+    kb = tw.data.shape_keys.key_blocks
     tr = s("02-05") - 2.2
+    MX = (-0.06, -1.06, 0)                                            # 置く所（スマホの左。体がスマホにかからない）
     mr.walk(tr - 1.0, tr, (-0.35, -1.05, 0), (-1.5, -1.5, 0), face=120)
-    key(tw, "location", f(tr), (-1.6, -1.6, 0.02)); key(tw, "location", f(tr + 0.3), (-1.5, -1.5, 0.62))
-    mr.walk(tr + 0.4, tr + 1.4, (-1.5, -1.5, 0), (0.05, -1.0, 0), face=-60)
-    key(tw, "location", f(tr + 1.4), (0.05, -1.0, 0.62))
-    key(tw, "location", f(tr + 1.75), (0.36, -1.0, 0.06)); ev(tr + 1.75, "towel")
-    key(tw, ("rotation_euler", 2), f(tr + 1.4), R(30)); key(tw, ("rotation_euler", 2), f(tr + 1.75), R(12))
+    mr.walk(tr + 0.4, tr + 1.4, (-1.5, -1.5, 0), MX, face=-60)
+    ant = [o for o in mr.body.children if o.active_material and o.active_material.name.startswith(("maru_grey", "maru_orange"))]
+    show(ant, f(tr + 0.25), False); show(ant, f(tr + 1.9), True)       # 布の下のアンテナは隠す（突き抜けないように）
+    def kshape(t, h, p):
+        kb["頭"].value = h; kb["頭"].keyframe_insert("value", frame=f(t)); kb["スマホ"].value = p; kb["スマホ"].keyframe_insert("value", frame=f(t))
+    key(tw, "location", f(tr), (-1.6, -1.6, 0.0)); kshape(tr, 0, 0)
+    sc_ = bpy.context.scene
+    for fr in range(f(tr + 0.3), f(tr + 1.4) + 1):                     # 運ぶ間：頭のてっぺんに 1 コマずつ合わせる（浮かない）
+        sc_.frame_set(fr); bpy.context.view_layer.update()
+        top = mr.body.matrix_world @ mathutils.Vector((0, 0, 0.5))
+        key(tw, "location", fr, tuple(top)); key(tw, ("rotation_euler", 2), fr, mr.root.rotation_euler[2])
+    kshape(tr + 0.3, 1, 0); kshape(tr + 1.4, 1, 0)
+    PH = (0.35 + 0.2 * math.sin(R(10)), -0.9 - 0.2 * math.cos(R(10)), 0.0)
+    key(tw, "location", f(tr + 1.75), PH); key(tw, ("rotation_euler", 2), f(tr + 1.75), R(10)); ev(tr + 1.75, "towel")
+    kshape(tr + 1.6, 0.4, 0.4); kshape(tr + 1.75, 0, 1)
+    sc_.frame_set(0)
     mr.at(tr + 2.0, look=-6); key(mr.body, ("location", 2), f(tr + 2.1), mr.z0); key(mr.body, ("location", 2), f(tr + 2.5), mr.z0 - 0.04)  # ふうっと沈む
     area((-3, 2, 3), (0, 0, 0), 120, 2, "#7F9CFF")
     cam, tgt = cam_rig()
@@ -535,7 +591,7 @@ def s19():
 # ---------------- S21 その夜：こそこそ近づいて「ピポ、ピポ」→ 何も起きない → 丸くなる
 def s21():
     t0, t1 = span("S21")
-    room(night=True); person_lie((0.15, -0.15, 0.42))
+    room(night=True); person_sleep(0.15)
     phone((0.35, -0.9, 0.0), 10, screen=None)
     mr = Maru((-1.2, -1.9, 0), 40, s=0.42, hat=True, eye_glow=1.1)
     for k in range(3): mr.at(s("21-01") + 3.0 + 0.5 * k, face=40 + (40 if k % 2 == 0 else -40))   # 辺りを見回す
