@@ -120,13 +120,13 @@ save(im, "phone_call")
 
 # ---------------- 同じ Wi-Fi（10-08）：家とお店。それぞれの Wi-Fi に、二人のスマホがつながっている
 im, d = canvas()
-house(d, 330, 260, 1.3); shop(d, 950, 260, 1.3)
+house(d, 330, 175, 1.3); shop(d, 950, 175, 1.3)          # v8 見直し：スマホが字幕の帯にかかっていた（7:27）→ 全体を 85px 上へ
 for cx in (330, 950):
-    wifi(d, cx, 200, 0.8, TEAL)
+    wifi(d, cx, 115, 0.8, TEAL)
     for dx, col in ((-70, HARU), (70, SORA)):
-        x0 = cx + dx - 38; phone(d, x0, 470, 76, 120, WHITE); d.rectangle([x0 + 14, 492, x0 + 62, 500], fill=col)
-        d.line([(cx, 210), (cx + dx, 466)], fill=TEAL, width=5)
-label(d, "家", 150, 140, 50); label(d, "お店", 1170, 140, 50)
+        x0 = cx + dx - 38; phone(d, x0, 385, 76, 120, WHITE); d.rectangle([x0 + 14, 407, x0 + 62, 415], fill=col)
+        d.line([(cx, 125), (cx + dx, 381)], fill=TEAL, width=5)
+label(d, "家", 150, 70, 50); label(d, "お店", 1170, 70, 50)
 save(im, "wifi_place")
 
 # ---------------- 手がかりが広告の会社へ（10-09）：スマホ → アプリ・サイト → 広告の会社
