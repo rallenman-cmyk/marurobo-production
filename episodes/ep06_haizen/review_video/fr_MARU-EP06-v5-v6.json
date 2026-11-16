@@ -1,0 +1,35 @@
+{
+ "created_at": "2026-11-16T13:30:15.000Z",
+ "created_by": "ai",
+ "from_version": "MARU-EP06-v5",
+ "to_version": "MARU-EP06-v6",
+ "project_id": "MARU-EP06",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwiztlsbtehf3oyt",
+   "comment_rev": 1,
+   "explain": "止まった場面ではラーメンをずっとトレーの上に置いたまま、次の場面でははじめからテーブルの上にした。場面がとけて変わる間に消えることはない。",
+   "new_t": 41.3,
+   "new_t_end": null,
+   "new_version_id": "MARU-EP06-v6",
+   "original_t": 41.3,
+   "original_t_end": null,
+   "original_text": "ラーメンの受け取る動き全然できてない、後ろ向きに動いてるし、手の関節おかしいし、無理ならラーメン受けとらず先輩停止したままでいいや（戻し：ラーメン最後消えてシーン変わるんじゃなくて、ラーメンそのままでシーン変わったらラーメンなくなってる感じにして）",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwj09gfowy7u9acs",
+   "comment_rev": 1,
+   "explain": "札（テロップ）をいつもいちばん前に描くようにした。黄色い丸や線は札の後ろになる。",
+   "new_t": 194.6,
+   "new_t_end": null,
+   "new_version_id": "MARU-EP06-v6",
+   "original_t": 194.6,
+   "original_t_end": null,
+   "original_text": "目印のシールがどれかわかんない（戻し：シールがテロップより前面にきている、目印のシールというテロップを最前面にして）",
+   "reason": ""
+  }
+ ]
+}
