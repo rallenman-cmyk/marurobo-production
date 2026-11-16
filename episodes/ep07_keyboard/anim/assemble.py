@@ -249,6 +249,8 @@ chk.append("2.2 秒以上の間：" + ("、".join("%.1f 秒（%s の前）" % (g
 short = [(a, c - a, t) for a, c, t in SUBS if c - a < 1.0]
 chk.append("1.0 秒未満の字幕：" + ("、".join("%.1f秒 %.2f 秒「%s」" % (a, d_, t[:12]) for a, d_, t in short) or "なし"))
 over = [t for a, c, t in SUBS if any(SJ.width(r) > 25 for r in t.split("\\N")) or t.count("\\N") > 1]
+chk.append("鳴らした効果音（時刻・種類・大きさ）：" + "、".join("%.1f %s %.2f" % (t, k, g) for (t, k), g in sorted(EV.items()) if g > 0))
+chk.append("映っていないので鳴らさなかった効果音：" + ("、".join("%.1f %s" % x for x in sorted(DROP)) or "なし"))
 chk.append("25 字・2 行をこえる字幕：" + ("、".join(over) or "なし"))
 chk.append("絵の足りないクリップ：" + ("、".join(sorted(missing)) or "なし"))
 chk.append("声のすき間へずらした効果音：" + ("、".join("%.2f %s → %+.2f 秒" % m for m in moves) or "なし"))
