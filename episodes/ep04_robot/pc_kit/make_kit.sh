@@ -7,7 +7,7 @@
 set -e
 EP=$(cd "$(dirname "$0")/.." && pwd); REPO=$(cd "$EP/../.." && pwd); OUT=$(cd "${1:-.}" && pwd); TEXD=$2; SCRD=$3
 [ -d "$TEXD" ] && [ -d "$SCRD" ] || { echo "使い方：bash make_kit.sh <出力> <ep04_tex> <scr>"; exit 1; }
-python3 $EP/pc_kit/make_ps1.py
+python3 $EP/pc_kit/make_ps1.py ${VER:-v13}
 python3 $REPO/skill/marurobo-video-production/scripts/ps_lint.py $EP/pc_kit/run_pc_render_ep04.ps1
 LOOKS="s06 s07 s08x s09 s10 s15 s19 s20 s22"
 for f in anim/common anim/clip_anim anim/scenes look/_head look/kit3d storyboard/board storyboard/rich; do python3 -m py_compile $EP/$f.py; done

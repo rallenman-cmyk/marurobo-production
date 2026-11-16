@@ -306,6 +306,18 @@ globals()[base]()
 if not bpy.context.scene.camera.data.dof.use_dof:
     for k in ("maru", "book", "edge", "gate", "dog"):
         if k in ANCH: focus_on(tuple(ANCH[k]), 4.0); break
+# 2026-11-16 本番の 3 秒ごとの見直し：まるロボが字幕の帯にかかるカットは、まるロボをカメラの奥へずらす（画面では上へ・少し小さく）
+#   値＝奥へずらす長さ（m）。カメラの向きを床に写した向きへ動かす。2D の札は、まるロボに付くものがないカットだけ
+NUDGE = dict(c_s13a=1.0, c_s13b=1.0, c_s13d=1.0, c_s22b=1.0, c_s15a=1.0, c_s15e=1.0, c_s22c=1.0)
+# 奥へずらせない所（机の上でパソコンにめり込む）は、そのカットだけ絵をもっと上げる（2D の札がまるロボに付かないカットだけ）
+CAMX = dict(c_s03=-0.11)
+if NAME in CAMX and not os.environ.get("CAM_SHIFT"): CAM_SHIFT = CAMX[NAME]
+_nd = float(os.environ.get("NUDGE_D", NUDGE.get(NAME, 0.0)))
+if _nd:
+    from mathutils import Vector as _V
+    _cam = bpy.context.scene.camera; _fw = _cam.matrix_world.to_quaternion() @ _V((0, 0, -1)); _fw.z = 0; _fw.normalize()
+    _r = find_maru(); _r.location = _r.location + _fw * _nd
+    bpy.context.view_layer.update()
 mr = M(find_maru()); ms = find_mouse()
 TRACK["maru"] = (mr.body, 0.12 if base.startswith(("b0", "b1", "b2")) and base in ("b01", "b02", "b03", "b04a", "b04b", "b05a", "b05b", "b11", "b22", "b23") else 0.6)
 ACT.get(NAME, a_idle)(mr, ms)

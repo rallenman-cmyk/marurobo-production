@@ -35,7 +35,8 @@ _, gQ = build(lambda: ring3d(2.6, Y - 0.2, BZ, 1.15, OR, "q_ring", minor=0.04, e
 pop(gQ, t_few + 3.6, 0.4); ev(t_few + 3.6, "lamp", 0.35)
 for k in range(3):
     tt = t_few + 4.2 + k * 0.9; key(gQ, "scale", f(tt), (1, 1, 1)); key(gQ, "scale", f(tt + 0.45), (1.08,) * 3); key(gQ, "scale", f(tt + 0.9), (1, 1, 1))
-root = maru((0, 1.4, 0), face_deg=90, s=0.7, hat=False, eye_glow=1.0, look_up=16)
+# 2026-11-16 本番の見直し：まるロボが字幕にかかる → 奥へ（1.4 → 2.4）
+root = maru((0, float(os.environ.get("MARU_Y", "2.4")), 0), face_deg=90, s=0.7, hat=False, eye_glow=1.0, look_up=16)
 mr = Maru(root); mr.g0 = 1.0
 mr.at(T0 + 0.2, face=-30, look=14); breathe(mr, T0 + 0.6, T1)
 mr.at(t_now, face=30, look=14); mr.at(t_ai + 0.3, face=0, look=26)
