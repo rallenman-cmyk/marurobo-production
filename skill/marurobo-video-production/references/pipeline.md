@@ -43,7 +43,7 @@ EP01 は 3D の章のフォルダ名が歴史的に `stage/ch03/` にまとま�
 - ユーザーの「5:04」は通しの秒。章の始まりを引いて章の中の秒にし、`TE.src()` で本編の秒へ戻してから、声・3D の予定と照らす。
 
 ## 4. 声
-- Gemini 3.8 Flash TTS（`generativelanguage.googleapis.com`、ヘッダー `x-goog-api-key: $GEMINI_API_KEY`）、声 `Achernar`、指示 `style_gentle.txt`。24kHz で返る → 48kHz に直して使う。1 日の回数に上限がある（429 は待ってやり直し、1 日の上限なら止まる）。
+- Gemini 3.8 Flash TTS（`generativelanguage.googleapis.com`、ヘッダー `x-goog-api-key: $GEMINI_API_KEY`）、声 `Achernar`、指示 `style_gentle.txt`。24kHz で返る → 48kHz に直して使う。1 日の回数に上限がある（429 は待ってやり直し）。**1 日の上限（100 回）に当たったら、バッチで作る**（`retake_line.py` に `BATCH=1`。バッチは上限が別で、数分で返る。返る形は WAV なので中身を取り出す。6本目 v3、2026-11-16 ユーザー「バッチファイルでやってみて」）。上限は 0 時に全部戻るのではなく、使った時刻から 24 時間たった分ずつ戻る。
 - 読み間違いは `tts_text.json`（文の番号 → 読ませる文）で直してから作り直す。
 - 置き方（`narration.place()`）：台本の仮の時刻に始める。前の声がはみ出すときは遅らせ、次の文にかかるときは前を最大 0.6 秒早める → それでも無理なら 1.08 倍まで詰める。文ごとの大きさは −20 dBFS にそろえる。
 - **話が変わる文には台本に `gap_before: 0.78` を書く**（前の声の終わりから 0.78 秒あける）。置いたら `python3 narration.py --gaps` で 0.5 秒未満の間を一覧にし、話が変わる所が残っていないか見る。
