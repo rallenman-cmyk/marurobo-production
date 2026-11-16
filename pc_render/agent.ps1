@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "7"
+$VER = "8"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -227,6 +227,21 @@ function Clear-Old($job, $ps1) {
     Note ("描き直し：前の出力フォルダ {0} を捨てました" -f $od)
   }
 }
+# 係のセッションからの合図：pc_render/control.json の restart_token が、前に見た値と変わっていたら $true（見た値は PC に覚える）
+function Restart-Asked {
+  try {
+    $cf = Join-Path $repo "pc_render\control.json"
+    if (-not (Test-Path $cf)) { return $false }
+    $tok = "$((Get-Content $cf -Raw -Encoding UTF8 | ConvertFrom-Json).restart_token)"
+    if (-not $tok) { return $false }
+    $sf = Join-Path $root "pc_control_seen.txt"
+    $seen = ""
+    if (Test-Path $sf) { $seen = (Get-Content $sf -Raw -ErrorAction SilentlyContinue).Trim() }
+    if ($tok -eq $seen) { return $false }
+    Set-Content -Path $sf -Value $tok -Encoding ASCII
+    return $true
+  } catch { return $false }
+}
 function Run-Job($job) {
   $t0 = Get-Date
   $tail = New-Object System.Collections.ArrayList
@@ -282,6 +297,11 @@ function Run-Job($job) {
                 $cancel = $true
                 Note ("依頼 {0} が取り消されたので、止めます" -f $job.id)
                 Kill-Kit $kitdir
+              } elseif (Restart-Asked) {
+                # 係からの合図：いったん止める（できている所は残る）。回る所に戻ると、新しい描画係に入れ替わって続きから描く
+                $preempt = $true
+                Note ("係からの合図で、{0} をいったん止めます（新しい描画係で続きから描きます）" -f $job.id)
+                Kill-Kit $kitdir
               } elseif ($job.kind -ne "fix") {
                 $q2 = Read-Queue
                 $small = $false
@@ -314,6 +334,7 @@ function Run-Job($job) {
 # ---------------------------------------------------------------- 回し続ける
 Note "描画係をはじめます（この窓は置いたままにしてください。最小化して大丈夫です）"
 $me = (Get-FileHash $PSCommandPath -Algorithm SHA256).Hash
+[void](Restart-Asked)
 $lastBeat = Get-Date "2000-01-01"
 $badHash = ""
 $waitSaid = $false
