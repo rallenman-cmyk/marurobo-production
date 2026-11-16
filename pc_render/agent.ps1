@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "6"
+$VER = "7"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -204,6 +204,29 @@ function Get-Kit($job) {
   try { Expand-Archive -Path $zip -DestinationPath $root -Force -ErrorAction Stop } catch { return ("一式を広げられません：{0}" -f $_.Exception.Message) }
   return ""
 }
+# 依頼に fresh があるとき：同じ出力フォルダに残っている前の絵を捨ててから描く（残っていると「できている」と見なされて描き直されない）
+#   --only があればそのカットの分だけ、無ければ出力フォルダごと
+function Clear-Old($job, $ps1) {
+  $txt = Get-Content $ps1.FullName -Raw -Encoding UTF8
+  $mo = [regex]::Match($txt, '\$out = Join-Path \$root "(render_[A-Za-z0-9_.-]+)"')
+  if (-not $mo.Success) { Note "描き直しの指定がありますが、出力フォルダの名前が手順から読めないので、捨てずに進みます"; return }
+  $od = Join-Path $root $mo.Groups[1].Value
+  if (-not (Test-Path $od)) { return }
+  if ($job.only) {
+    $n = 0
+    foreach ($c in ("$($job.only)".Split(","))) {
+      $c = $c.Trim()
+      if (-not $c) { continue }
+      $fs = @(Get-ChildItem $od -File -Filter ($c + "_*") -ErrorAction SilentlyContinue | Where-Object { $_.Name -match ("^" + [regex]::Escape($c) + "_(\d{4}-\d{4}\.mp4|log\.json)$") })
+      $fs += @(Get-ChildItem (Join-Path $od "_done") -File -Filter ($c + "_*") -ErrorAction SilentlyContinue | Where-Object { $_.Name -match ("^" + [regex]::Escape($c) + "_\d{4}-\d{4}\.(ok|lock)$") })
+      foreach ($f in $fs) { Remove-Item $f.FullName -Force -ErrorAction SilentlyContinue; $n++ }
+    }
+    Note ("描き直し：前の絵を {0} 個捨てました（{1}）" -f $n, $job.only)
+  } else {
+    Remove-Item $od -Recurse -Force -ErrorAction SilentlyContinue
+    Note ("描き直し：前の出力フォルダ {0} を捨てました" -f $od)
+  }
+}
 function Run-Job($job) {
   $t0 = Get-Date
   $tail = New-Object System.Collections.ArrayList
@@ -214,16 +237,21 @@ function Run-Job($job) {
     if (-not $ps1) { $err = ("手順 {0} が一式の中に見つかりません" -f $job.ps1) }
   }
   $preempt = $false
+  $cancel = $false
   if ($err) { Note $err; [void]$tail.Add($err) }
   else {
     $kitdir = Split-Path -Parent (Split-Path -Parent $ps1.FullName)
+    $freshMark = Join-Path $kits ("fresh_{0}.done" -f $job.id)
+    if ($job.fresh -and -not (Test-Path $freshMark)) {
+      try { Clear-Old $job $ps1; New-Item -ItemType File -Force -Path $freshMark | Out-Null } catch { Note ("前の絵を捨てる途中で止まりました：{0}" -f $_.Exception.Message) }
+    }
     if ($job.kind -ne "fix" -and -not $job.workers) {
       try { Measure-Workers $job $ps1 } catch { Note ("同時本数を測る途中で止まりました（{0}）。既定の本数で描きます" -f $_.Exception.Message); Kill-Kit $kitdir }
     }
     $lastCheck = Get-Date
     $lastProg = Get-Date
     $prog = ""
-    for ($try = 1; $try -le 2 -and $state -ne "done" -and -not $preempt; $try++) {
+    for ($try = 1; $try -le 2 -and $state -ne "done" -and -not $preempt -and -not $cancel; $try++) {
       $a = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $ps1.FullName)
       if ($job.only) { $a += @("-Only", "$($job.only)") }
       $w = 0
@@ -245,23 +273,35 @@ function Run-Job($job) {
         }
         # 全部描きの途中に短い直しが来たら、いったん止めて直しを先に描く（できている所は残り、あとで続きから）
         #   割り込むのは小さな直し（3000 コマまで・およそ 2 時間半）だけ。大きな直しは、いまの 1 件が終わってから先頭で描く
-        if ($job.kind -ne "fix" -and -not $preempt -and ((Get-Date) - $lastCheck).TotalSeconds -ge 180) {
+        if (-not $preempt -and -not $cancel -and ((Get-Date) - $lastCheck).TotalSeconds -ge 180) {
           $lastCheck = Get-Date
           try {
             if (Pull-Repo) {
-              $q2 = Read-Queue
-              $small = $false
-              if ($q2.Count -gt 0 -and $q2[0].kind -eq "fix") { $small = (-not $q2[0].frames) -or ([int]$q2[0].frames -le 3000) }
-              if ($small) {
-                $preempt = $true
-                Note ("短い直し（{0}）が来たので、{1} をいったん止めて、直しを先に描きます" -f $q2[0].id, $job.id)
+              if (-not (Test-Path (Join-Path $repo ("pc_render\queue\{0}.json" -f $job.id)))) {
+                # 依頼票が消された＝取り消し。描いている途中でも止める
+                $cancel = $true
+                Note ("依頼 {0} が取り消されたので、止めます" -f $job.id)
                 Kill-Kit $kitdir
+              } elseif ($job.kind -ne "fix") {
+                $q2 = Read-Queue
+                $small = $false
+                if ($q2.Count -gt 0 -and $q2[0].kind -eq "fix") { $small = (-not $q2[0].frames) -or ([int]$q2[0].frames -le 3000) }
+                if ($small) {
+                  $preempt = $true
+                  Note ("短い直し（{0}）が来たので、{1} をいったん止めて、直しを先に描きます" -f $q2[0].id, $job.id)
+                  Kill-Kit $kitdir
+                }
               }
             }
           } catch { }
         }
       }
     }
+  }
+  if ($cancel) {
+    Write-Json (Join-Path $stat ("done\{0}.json" -f $job.id)) ([ordered]@{ id = $job.id; state = "canceled"; finished = (Get-Date).ToString("s"); minutes = [int]((Get-Date) - $t0).TotalMinutes; tail = @() })
+    Status-Push ("{0}：canceled" -f $job.id)
+    return
   }
   if ($preempt) { Start-Sleep -Seconds 5; return }
   $min = [int]((Get-Date) - $t0).TotalMinutes

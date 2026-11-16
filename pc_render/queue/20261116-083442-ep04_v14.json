@@ -6,7 +6,7 @@
  "ps1": "run_pc_render_ep04.ps1",
  "only": "c_s03,c_s13a,c_s13b,c_s13d,c_s22b,c_s15a,c_s15e,c_s22c,s08x,s22",
  "kind": "fix",
- "order": 4,
+ "order": 1,
  "frames": 2828,
  "workers": 0,
  "samples": 0,

@@ -6,10 +6,11 @@
  "ps1": "run_pc_render_ep03.ps1",
  "only": "s00,s01,s02,s04,s13,s14,s15,s17,s18,s21,s22,gate",
  "kind": "fix",
- "order": 3,
+ "order": 2,
  "frames": 11634,
  "workers": 0,
  "samples": 24,
  "session": "\ud83e\udd1603\u5e83\u544a",
- "created": "2026-11-16T09:26:05Z"
+ "created": "2026-11-16T09:26:05Z",
+ "fresh": true
 }

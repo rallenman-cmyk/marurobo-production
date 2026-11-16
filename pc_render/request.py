@@ -17,6 +17,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("zip"); ap.add_argument("--ps1", required=True); ap.add_argument("--name", required=True, help="回と版。例 ep05_v3")
 ap.add_argument("--only", default=""); ap.add_argument("--order", type=int, default=0)
 ap.add_argument("--workers", type=int, default=0); ap.add_argument("--samples", type=int, default=0)
+ap.add_argument("--fresh", action="store_true", help="同じ出力フォルダに残っている前の絵を捨ててから描く（同じ版の名前で描き直すときは必ず付ける）")
 ap.add_argument("--session", default="", help="頼んだセッションの名前（記録用）")
 A = ap.parse_args()
 ok = re.compile(r"^[A-Za-z0-9_.-]+$")
@@ -57,7 +58,7 @@ except SystemExit: raise
 except Exception: frames = 0
 # 2) 依頼票
 job = dict(id=jid, name=A.name, kit_branch=kb, zip=zname, ps1=A.ps1, only=A.only, kind="fix" if A.only else "full",
-           order=A.order, frames=frames, workers=A.workers, samples=A.samples, session=A.session, created=now.strftime("%Y-%m-%dT%H:%M:%SZ"))
+           order=A.order, frames=frames, fresh=A.fresh, workers=A.workers, samples=A.samples, session=A.session, created=now.strftime("%Y-%m-%dT%H:%M:%SZ"))
 p = "pc_render/queue/%s.json" % jid
 json.dump(job, open(p, "w"), ensure_ascii=True, indent=1)
 sh("git", "add", p); sh("git", "commit", "-q", "-m", "PC 描画の依頼：%s%s" % (A.name, "（" + A.only + "）" if A.only else ""), "--", p)
