@@ -12,6 +12,8 @@ L = json.load(open(W + "/stage/script/script_v2_timed.json", encoding="utf-8"))
 FIX = json.load(open(D + "/tts_text.json", encoding="utf-8")) if os.path.exists(D + "/tts_text.json") else {}
 V = json.load(open(D + "/lines.json", encoding="utf-8"))
 STYLE = open(W + "/stage/voice_test/style_gentle.txt", encoding="utf-8").read().strip()
+# STYLE_EXTRA：話し方の指示を足す（7本目 v5「声大きい」：張った声の文を、落ち着いた小さめの声で作り直す）
+if os.environ.get("STYLE_EXTRA"): STYLE = STYLE + "\n" + os.environ["STYLE_EXTRA"]
 KEY = os.environ["GEMINI_API_KEY"]
 
 
