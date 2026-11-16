@@ -274,7 +274,7 @@ def typebar_basket(center=(0, 0, 0), r=1.2, n=36, bars=None):
 
 
 def bar_up(p, t, d=0.35, back=True, ang=78):
-    key(p, ("rotation_euler", 0), t, 0.0); key(p, ("rotation_euler", 0), t + d * 0.5, R(ang))
+    key(p, ("rotation_euler", 0), t, 0.0); key(p, ("rotation_euler", 0), t + d * 0.5, R(-ang))   # 棒は x 軸の負の向きに回すと上がる（正だと床の下へ。7本目 v2 で見えなかった）
     if back: key(p, ("rotation_euler", 0), t + d, 0.0)
 
 
