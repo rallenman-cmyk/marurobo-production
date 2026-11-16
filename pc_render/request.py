@@ -41,9 +41,23 @@ for i in range(4):
     if r.returncode == 0: break
     time.sleep(2 ** (i + 1))
 else: sys.exit("一式の枝を push できませんでした")
+# 頼む量（コマ数）を、zip の中の手順（JOBS）から数える。描画係が「小さな直しだけ割り込ませる」のに使う
+frames = 0
+try:
+    import zipfile
+    z = zipfile.ZipFile(A.zip)
+    nm = [n for n in z.namelist() if n.endswith("/" + A.ps1) or n == A.ps1]
+    txt = z.read(nm[0]).decode("utf-8-sig", "replace") if nm else ""
+    jobs = {a: int(b) for a, b in re.findall(r'@\("([A-Za-z0-9_]+)",\s*(\d+),', txt)}
+    want = [c for c in A.only.split(",") if c] if A.only else list(jobs)
+    miss = [c for c in want if c not in jobs]
+    if A.only and jobs and miss: sys.exit("--only のカットが手順にありません：" + ",".join(miss))
+    frames = sum(jobs.get(c, 0) for c in want)
+except SystemExit: raise
+except Exception: frames = 0
 # 2) 依頼票
 job = dict(id=jid, name=A.name, kit_branch=kb, zip=zname, ps1=A.ps1, only=A.only, kind="fix" if A.only else "full",
-           order=A.order, workers=A.workers, samples=A.samples, session=A.session, created=now.strftime("%Y-%m-%dT%H:%M:%SZ"))
+           order=A.order, frames=frames, workers=A.workers, samples=A.samples, session=A.session, created=now.strftime("%Y-%m-%dT%H:%M:%SZ"))
 p = "pc_render/queue/%s.json" % jid
 json.dump(job, open(p, "w"), ensure_ascii=True, indent=1)
 sh("git", "add", p); sh("git", "commit", "-q", "-m", "PC 描画の依頼：%s%s" % (A.name, "（" + A.only + "）" if A.only else ""), "--", p)
