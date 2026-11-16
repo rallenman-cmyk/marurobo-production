@@ -6,7 +6,7 @@
 #   部品は kit.py（6本目の kit を読み込んで足した）、時刻と動きの共通は 6本目の core.py（声は ../voice）
 #   決まり：3D の中に字を書かない（キーの字は 2D。キーの場所を track で書き出す）／まるロボは喋らない／動きは言い終えてから／
 #     瞬間移動に見せない（跳ねて・歩いて移る）／カメラはいつもゆっくり動かす／道のり：クワーティ＝青・ABC 順＝橙・いろは歌専用＝緑
-import os, sys, math
+import os, sys, math, json
 KIT_HERE = os.path.dirname(os.path.abspath(__file__))
 _argv = sys.argv[sys.argv.index("--") + 1:]
 import bpy
@@ -16,6 +16,9 @@ _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
 CLIPNAME, OUTDIR = _argv[0], _argv[1]
+# 字を言う瞬間（voice/letter_times.json）。文の頭からの秒を足す
+_LT = json.load(open(os.path.join(_K7, "..", "voice", "letter_times.json"), encoding="utf-8"))
+def lt(i, ch): return s(i) + _LT[i][ch]
 # 効果音に「鳴らした物」（track の名前）を持たせる。組み立てで、その物が画面に映っているときだけ鳴らす（7本目 v5「まるロボが写ってないのにSE聞こえるのやめて」）
 _SRC_DEFAULT = {"step": "maru", "jump": "maru", "land": "maru", "takeoff": "maru", "step_turn": "maru"}
 
@@ -84,7 +87,8 @@ def b_desk(cl):
     # 01：机の上を歩いてキーボードの前へ → 跳ねて A に乗る → A を打つ（2026-11-16 ユーザー「まるロボがキーボードのところまで歩いてくる感じにして」）
     fl = (QO[0] - 0.32, QO[1] - 0.2, 0.0)        # キーボードの左はし（A の左）
     M.at(-100.0, loc=(QO[0] - 0.7, QO[1] - 0.85, 0.0), face=-40)
-    M.walk(s("01-01") + 0.4, e("01-02") - 0.2, fl)
+    M.walk(s("01-01") + 0.4, e("01-01") + 0.2, fl)
+    M.wobble(w("01-02", "腕") - 0.2, e("01-02") + 0.1, 10, 0.5)      # 01-02：腕がない（体を左右にふる）
     t = w("01-03", "跳ねて"); M.hop(t - 0.1, h=0.35, d=0.55); M.at(t - 0.1, loc=fl); M.at(t + 0.45, loc=P(Q, "A")); ev(t + 0.45, "land", 0.4)
     t = w("01-04", "ぴょん"); M.hop(t - 0.2, h=0.22, d=0.4); Q.press("A", t + 0.18, gain=0.7)
     Q.hold("A", t + 0.4, s("02-04") + 0.35)
@@ -92,20 +96,28 @@ def b_desk(cl):
     # 向き：となりの S（右）を見る → 反対側（左）を見る（2026-11-16 ユーザー「まるロボ見てる方向が逆」で左右を入れかえた）
     M.at(w("02-01", "すぐとなり") - 0.4, face=0.0); M.at(w("02-01", "すぐとなり"), face=35)
     M.at(s("02-02"), face=60); M.at(s("02-03") - 0.1, face=60); M.at(s("02-03") + 0.4, face=-70)
+    Q.light("S", w("02-02", "S"), s("02-04"), col="#FFD24A")      # 02-02：となりの S
     t = s("02-04"); M.at(t, face=-70)
     SR = ("Q", "W", "S", "D", "K")      # 最後は K（上の段の QWERTY の前に立たない。03 でその 6 個が浮き上がるため）
     for i, ch in enumerate(SR):
         hop_path(Q, ("A" + ch) if i == 0 else (SR[i - 1] + ch), t + 0.4 + i * 0.55, 0.55, M, line=False)
-    Q.hold("K", t + 0.4 + 4 * 0.55 + 0.6, s("05-01") + 0.4)
+    Q.hold("K", t + 0.4 + 4 * 0.55 + 0.6, w("04-02", "遠く") - 0.1)
     M.wobble(e("02-04") - 0.6, e("02-04"), 8, 0.3)
     # 03：上から。まるロボは K で止まったまま（B へは行かない。2026-11-16 ユーザー「この話してるときにＢのとこ行ってるのおかしい」）
-    for i, ch in enumerate("QWERTY"): Q.light(ch, w("03-01", "Q W E R T Y") + 0.3 * i, s("03-03") + 0.2)
+    # 03-01：声が字を言う瞬間に光る（v5「音声に合わせて対象のキーを光らせて」。時刻は voice/letter_times.json）
+    for ch in "QWERTY": Q.light(ch, lt("03-01", ch), s("03-03") + 0.2); ev(lt("03-01", ch), "pi", 0.2, "k_" + ch)
     # 03-02：Q W E R T Y のキーが浮き上がって、字をこちらに向ける
     for i, ch in enumerate("QWERTY"): Q.rise(ch, w("03-02", "左上") + 0.15 * i, e("03-02") + 0.6 + 0.08 * i)
     M.at(w("03-02", "左上") + 0.2, look=-18); M.at(e("03-02") + 0.8, look=0)
     M.at(e("03-05") + 0.4, face=0.0)
-    # 04：ABC 順のキーボードがとなりに。まるロボは B から右を見て、跳ねてよろこぶ
-    M.at(s("04-03") - 0.3, face=0.0); M.at(s("04-03") + 0.6, face=-90)
+    # 04-01〜02：遠くのキーほど、たくさん跳ぶ（K → J は小さく、J → Q は大きく）
+    Q.light("Q", w("04-01", "跳ねる距離"), e("04-02") + 0.2, col="#FFD24A")
+    ta = w("04-02", "遠く"); M.at(ta - 0.35, face=-90)
+    hop_path(Q, "KJ", ta, 0.5, M, line=False, h=0.12)
+    tb = w("04-02", "たくさん"); hop_path(Q, "JQ", tb, 1.0, M, line=False, h=0.45)
+    Q.hold("J", ta + 0.1, tb - 0.85); Q.hold("Q", tb + 1.05, s("05-01") + 0.4)
+    # 04-03〜04：ABC 順のキーボードが右にすべりこむ → まるロボはそちら（右）を向いて、跳ねてよろこぶ（v5「まるロボはabcのキーボードの方を向かせて」）
+    M.at(s("04-03") - 0.3, face=-60); M.at(s("04-03") + 0.6, face=80)
     M.hop(s("04-04") + 0.3, h=0.2, d=0.4); M.hop(s("04-04") + 0.8, h=0.2, d=0.4)
     # 05：「マルロボ」を打つ（青 → 橙）。最初の M へ歩く
     M.walk(s("05-01") + 0.4, s("05-01") + 1.6, P(Q, "M"))
@@ -135,7 +147,7 @@ def b_desk(cl):
     Q.hold("Z", s("19-03") - 0.9, w("19-04", "S") - 0.3); Q.hold("E", w("19-04", "S") + 2 * 0.9 + 0.3, e("19-05") + 0.6)
     # 21：首をかしげる
     M.at(s("21-01") - 0.5, loc=P(Q, "G"), face=0.0); M.tilt(w("21-02", "もっと"), 12); M.tilt(e("21-02"), 0)
-    Q.hold("G", s("21-01") - 0.4, e("21-03") + 0.6); Q.hold("G", s("27-01") - 0.4, e("27-06") + 1.0)
+    Q.hold("G", s("21-01") - 0.4, e("21-03") + 0.6); Q.hold("G", s("27-02") + 0.2, e("27-06") + 1.0)
     # 23：速い並び（23-02 ですべりこむ。まるロボは跳ねて「おお」→ 23-06 で首をかしげる）
     M.walk(s("23-02") + 1.6, s("23-03") + 0.4, P(D, "A"))
     hop_path(D, "AOEUIDHTNS", s("23-03") + 0.6, min(0.45, (e("23-04") - s("23-03")) / 11), M, line=False)
@@ -147,10 +159,22 @@ def b_desk(cl):
     M.walk(s("24-06") + 0.2, s("24-07") - 0.2, (0.1, -1.25, 0.06))
     M.hop(w("24-07", "スマホ"), h=0.2, d=0.4); M.at(e("24-07"), face=0.0)
     key(ph, "location", s("27-01") - 0.6, (-0.1, -1.6, 0.0)); key(ph, "location", s("27-01") - 0.5, (-0.1, -6.0, 0.0))
-    M.at(s("27-01") - 0.6, loc=(0.1, -1.25, 0.06))
-    # 27：まとめ（キーボードの真ん中でキーを見渡す）
-    M.at(s("27-01") - 0.5, loc=P(Q, "G"), face=0.0)
-    M.at(s("27-03"), face=-25); M.at(s("27-04"), face=25); M.at(s("27-06"), face=0.0)
+    # 27-01：スマホから歩いてキーボードの前へ → 跳ねて G に乗る（v5「まるロボがワープしてる」）
+    gx, gy, gz = P(Q, "G")
+    M.at(s("27-01") - 0.7, loc=(0.1, -1.25, 0.06))
+    M.walk(s("27-01") - 0.5, s("27-02") - 0.4, (gx, gy - 0.42, 0.0))
+    M.hop(s("27-02") - 0.3, h=0.25, d=0.5); M.at(s("27-02") - 0.3, loc=(gx, gy - 0.42, 0.0)); M.at(s("27-02") + 0.2, loc=(gx, gy, gz)); ev(s("27-02") + 0.2, "land", 0.4)
+    M.at(s("27-03"), face=-25); M.at(s("27-04"), face=25)
+    # 27-05：キーを横へ押してずらそうとする → 動かない（v5「まるロボがただいるだけになってる」）
+    M.at(s("27-05"), face=80)
+    hk = Q.keys["H"]; hx = hk.location.x
+    for k_ in range(3):
+        tp = s("27-05") + 0.6 + k_ * 0.9
+        M.at(tp, loc=(gx + 0.035, gy, gz), interp="LINEAR"); M.at(tp + 0.3, loc=(gx, gy, gz))
+        key(hk, ("location", 0), tp, hx); key(hk, ("location", 0), tp + 0.12, hx + 0.006); key(hk, ("location", 0), tp + 0.3, hx)
+        ev(tp + 0.1, "tick", 0.3, "k_H")
+    M.wobble(e("27-05") - 0.5, e("27-05") + 0.2, 6, 0.3)
+    M.at(s("27-06"), face=0.0)
     return dict(Q=Q, A=A, D=D, M=M)
 
 
@@ -188,11 +212,18 @@ def b_end(cl):
     k = KEY; x0 = -1.2; y0 = -1.0
     L = Board([KANA], (x0, y0), name="kl", key_col="#F6F1E4", offs=(0.0,), extra_rows=False)
     for i, ch in enumerate(KANA[:12]): track("l_%d" % i, L.keys[ch], 0.06)
-    M = MaruR(L.pos("い", 0.075), face=0.0); track("maru", M.body, 0.1)
+    # 横に長いキーボードは、28-03「できあがったのは」まで机の下に隠す（v5「最初の考えたところで横並びのキーボードうつさないで」）
+    tu = w("28-03", "できあがった")
+    key(L.root, "location", -100.0, (0, 0, KEY_TOP - 0.3)); key(L.root, "location", tu, (0, 0, KEY_TOP - 0.3)); key(L.root, "location", tu + 0.6, (0, 0, KEY_TOP))
+    ev(tu + 0.1, "whoosh", 0.3)
+    ix, iy, iz = L.pos("い", 0.075)
+    M = MaruR((ix, iy - 0.3, 0.0), face=0.0); track("maru", M.body, 0.1)
+    M.at(-100.0, loc=(ix, iy - 0.3, 0.0), face=0.0)
+    M.hop(tu + 0.7, h=0.2, d=0.5); M.at(tu + 0.7, loc=(ix, iy - 0.3, 0.0)); M.at(tu + 1.2, loc=(ix, iy, iz)); ev(tu + 1.2, "land", 0.3)
     # キーがくるくる入れかわる（28-01〜28-02）：クワーティのキーが浮いて回る
     for i, (ch, o) in enumerate(list(Q.keys.items())[:18]):
         t_ = s("28-02") + 0.05 * i
-        key(o, ("location", 2), t_, o.location.z); key(o, ("location", 2), t_ + 0.4, o.location.z + 0.25); key(o, ("location", 2), t_ + 0.9, o.location.z)
+        z_ = o.location.z; key(o, ("location", 2), t_, z_); key(o, ("location", 2), t_ + 0.4, z_ + 0.25); key(o, ("location", 2), t_ + 0.9, z_)
         key(o, ("rotation_euler", 2), t_, 0.0); key(o, ("rotation_euler", 2), t_ + 0.9, R(360))
     ev(s("28-02") + 0.1, "whoosh", 0.4)
     # いろは歌を打つ：となりへ、となりへ 1 歩ずつ（緑の線）
@@ -205,11 +236,17 @@ def b_end(cl):
     M.hop(s("28-05") + 0.2, h=0.18, d=0.4); M.at(s("28-05") + 1.0, look=10)
     # 28-06：はっと固まる → 28-07〜08：人の手が来て、となりのいつものキーボードへ（まるロボはしょんぼり）
     M.at(s("28-06") + 0.6, look=0); M.glow(s("28-06") + 0.6, 2.0, 0.15); M.glow(s("28-06") + 1.0, 0.9, 0.3)
+    # 人の手（ほかの人と同じ、丸い形。手のひら・丸い指 4 本・親指・そで口）（v5「何で急に雑な手が出てくるの」）
     hand = empty((3.5, -0.2, 1.4)); km = mat("skin", "#F1C7A5", rough=0.55)
-    cube(km, (0, 0, 0), (0.7, 0.9, 0.18), bevel=0.08, parent=hand)
-    for i in range(4): cyl(km, (-0.27 + 0.18 * i, 0.62, 0.0), 0.07, 0.42, rot=(R(90), 0, 0), parent=hand)
-    cyl(km, (0.45, 0.1, 0.0), 0.08, 0.35, rot=(R(90), 0, R(-50)), parent=hand)
-    cyl(mat("sleeve", "#3E7CB1", rough=0.7), (0, -1.2, 0.0), 0.36, 1.6, rot=(R(90), 0, 0), parent=hand)
+    sphere(km, (0, 0, 0), 0.34, scale=(1.0, 1.25, 0.42), parent=hand)
+    for i in range(4):
+        fx = -0.24 + 0.16 * i; ln = (0.30, 0.36, 0.34, 0.27)[i]
+        f_ = empty((fx, 0.36, 0.0)); f_.parent = hand; f_.rotation_euler = (R(-14), 0, 0)
+        cyl(km, (0, ln / 2, 0), 0.068, ln, rot=(R(90), 0, 0), parent=f_, verts=20); sphere(km, (0, ln, 0), 0.068, parent=f_, seg=20)
+    th = empty((0.32, 0.05, -0.02)); th.parent = hand; th.rotation_euler = (0, 0, R(-48))
+    cyl(km, (0, 0.13, 0), 0.075, 0.26, rot=(R(90), 0, 0), parent=th, verts=20); sphere(km, (0, 0.26, 0), 0.075, parent=th, seg=20)
+    cyl(mat("cuff", "#F4F2EC", rough=0.6), (0, -0.42, 0.0), 0.3, 0.12, rot=(R(90), 0, 0), parent=hand)
+    cyl(mat("sleeve", "#3E7CB1", rough=0.7), (0, -1.25, 0.0), 0.31, 1.55, rot=(R(90), 0, 0), parent=hand)
     key(hand, "location", -100.0, (3.5, -4.5, 1.6)); key(hand, "location", s("28-07"), (3.5, -4.5, 1.6))
     key(hand, "location", s("28-07") + 1.6, (-0.1, -0.6, 0.4)); key(hand, "location", s("28-08"), (-0.1, -0.2, 0.25))
     key(hand, "location", s("28-08") + 0.6, (-0.1, -0.1, 0.22))
@@ -223,46 +260,70 @@ def b_end(cl):
 
 
 # ======================================================================== C：1868年の作業場（S08〜S11・S16・S20）
+TW_KEYS = [None]
+
+
 def b_shop(cl, night=False):
     workshop(night=night)
     ptw, pk = piano_typewriter((-0.95, 0.4, 0.94))
     for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZ": track("p_" + ch, pk[ch], 0.05)
     mtw, mk = modern_typewriter((0.0, 0.4, 0.94), layout=["QWE.TY", "ASDFG", "ZXCV"])
+    TW_KEYS[0] = mk
     for ch, o in mk.items(): track("m_" + ("dot" if ch == "." else ch), o, 0.04)
     M = MaruR((-1.9, -0.6, 0.94), face=0.0, s=0.2); track("maru", M.body, 0.1)
     # 作業台の手前の床から机の上へ（08：歩いて入る → 机の上に跳び乗る）
     sh = walker((1.2, 1.5, 0), face=(20 if cl.startswith("S08") else 180), shirt="#5A4632", pants="#3A2E24", hair="#5A4A3A")   # ショールズさんたち（顔は描かない）
     sh2 = walker((2.2, 1.6, 0), face=(-20 if cl.startswith("S08") else 200), shirt="#3E4A5A", pants="#2D3640", hair="#2B2220")
+    track("sholes", sh.head, 0.25); track("nakama", sh2.head, 0.25)
     if not night:
         M.at(-100.0, loc=(-2.6, -1.6, 0.0), face=-60)
         M.walk(s("08-01") + 0.3, s("08-02"), (-1.8, -0.4, 0.0))
         M.at(s("08-02") + 0.1, face=0.0); M.at(s("08-02") + 0.5, look=18); M.at(e("08-03"), look=0)
         M.hop(s("09-01") - 0.4, h=1.1, d=0.6); M.at(s("09-01") - 0.4, loc=(-1.8, -0.4, 0.0)); M.at(s("09-01") + 0.2, loc=(-1.0, 0.2, 0.94))
-        # 09：A → B → C（となりへ）
+        # 09：A → B → C（となりへ）。キーに字（3D）。乗ったキーは沈み、降りたら戻る
         p = lambda ch: (pk[ch].matrix_world.translation.x, pk[ch].matrix_world.translation.y, 0.94 + 0.18)
         bpy.context.view_layer.update()
-        M.at(s("09-03") - 0.4, loc=p("A"))
+        M.hop(s("09-03") - 0.9, h=0.15, d=0.5); M.at(s("09-03") - 0.9, loc=(-1.0, 0.2, 0.94)); M.at(s("09-03") - 0.4, loc=p("A"))
+        Z0 = {ch: o.location.z for ch, o in pk.items()}       # 高さは先に覚えておく（打ったあとに読み直すと、戻らなくなる）
+        hold = lambda o, z, t0, t1: [key(o, ("location", 2), t0 - 0.01, z), key(o, ("location", 2), t0 + 0.06, z - 0.02),
+                                     key(o, ("location", 2), t1, z - 0.02), key(o, ("location", 2), t1 + 0.08, z)]
+        tab = [s("09-03") - 0.4]
         for i, ch in enumerate("BC"):
             ta = w("09-03", "ABC") + 0.3 + 0.6 * i
             prv = p("AB"[i]); M.at(ta - 0.5, loc=prv, interp="LINEAR"); M.at(ta, loc=p(ch), interp="LINEAR"); M.hop(ta - 0.5, h=0.15, d=0.5)
-            key(pk[ch], ("location", 2), ta, pk[ch].location.z); key(pk[ch], ("location", 2), ta + 0.05, pk[ch].location.z - 0.02); key(pk[ch], ("location", 2), ta + 0.15, pk[ch].location.z)
-            ev(ta, "key", 0.5)
-        M.at(e("09-05"), face=20); M.hop(e("09-05") + 0.2, h=0.12, d=0.4)
-        # 10：作り直すたびに、入れかわる（ピアノの機械が消え、今の形の機械がキーをはね上げながら出てくる）
+            ev(ta, "key", 0.4, "p_" + ch); tab.append(ta)
+        t_off = s("10-01") + 0.4
+        hold(pk["A"], Z0["A"], tab[0], tab[1] - 0.5); hold(pk["B"], Z0["B"], tab[1], tab[2] - 0.5); hold(pk["C"], Z0["C"], tab[2], t_off)
+        # 09-04〜05：手前の列が左から、奥の列が右から、順に光る
+        for i, ch in enumerate("ABCDEFGHIJKLMN"): glow_plate(pk[ch], w("09-04", "手前") + 0.12 * i, e("09-05") + 0.5, "#FFB45C", (0.13 * 0.8, 0.26), 0.031)
+        for i, ch in enumerate("OPQRSTUVWXYZ"): glow_plate(pk[ch], w("09-05", "奥") + 0.12 * i, e("09-05") + 0.5, "#7FA8FF", (0.13 * 0.6, 0.16), 0.031)
+        M.at(e("09-05") - 0.2, face=20)
+        # 10-01：鍵盤から机へ跳び降りて歩く（浮かない。v5「まるロボ浮いてるように見える」）
+        M.hop(t_off, h=0.2, d=0.5); M.at(t_off, loc=p("C")); M.at(t_off + 0.5, loc=(-0.75, -0.35, 0.94)); ev(t_off + 0.5, "land", 0.3)
+        # 10-02：ピアノの機械が消え、今の形の機械が出る。まるロボは歩いて近づく（足音）
         ta = s("10-02")
         hide_key(ptw, -100.0, False); hide_key(ptw, ta + 0.6, True)
         hide_key(mtw, -100.0, True); hide_key(mtw, ta + 0.6, False); scale_pop(mtw, ta + 0.6, 1.0, 0.5)
-        ev(ta + 0.6, "pop", 0.6)
-        M.at(ta, loc=(-1.9, 0.0, 0.94)); M.at(ta + 0.4, loc=(-1.6, -0.1, 0.94))
-        for i, (ch, o) in enumerate(mk.items()):
-            tt = s("10-03") + 0.08 * i
-            key(o, ("location", 2), tt, o.location.z); key(o, ("location", 2), tt + 0.25, o.location.z + 0.18); key(o, ("location", 2), tt + 0.6, o.location.z)
-        ev(s("10-03") + 0.2, "whoosh", 0.4)
-        for i, ch in enumerate("QWE.TY"):
-            tt = w("10-05", "Q W E") + 0.35 * i if ch != "." else w("10-05", "ピリオド")
-            if ch in "TY": tt = w("10-05", "T Y") + 0.35 * (ch == "Y")
-            key(mk[ch], ("location", 2), tt, mk[ch].location.z); key(mk[ch], ("location", 2), tt + 0.15, mk[ch].location.z + 0.05); key(mk[ch], ("location", 2), tt + 0.35, mk[ch].location.z)
-        M.at(s("10-04"), loc=(-0.9, -0.3, 0.94), face=20)
+        ev(ta + 0.6, "pop", 0.5)
+        M.walk(ta + 1.0, ta + 2.4, (-0.85, -0.4, 0.94))
+        # 10-03：キーが 2 つずつ、弧をえがいて場所を入れかえる（最後に今の並び QWE.TY になる）
+        bpy.context.view_layer.update()
+        for k_, (a_, b_) in enumerate((("E", "T"), ("A", "S"), ("C", "V"))):
+            oa, ob_ = mk[a_], mk[b_]; pa, pb = tuple(oa.location), tuple(ob_.location)
+            tt = w("10-03", "入れかわって") - 0.6 + 0.7 * k_
+            key(oa, "location", -100.0, pb); key(ob_, "location", -100.0, pa)
+            key(oa, "location", tt, pb); key(ob_, "location", tt, pa)
+            key(oa, "location", tt + 0.3, ((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2, pa[2] + 0.16)); key(ob_, "location", tt + 0.3, ((pa[0] + pb[0]) / 2, (pa[1] + pb[1]) / 2 - 0.05, pb[2] + 0.1))
+            key(oa, "location", tt + 0.6, pa); key(ob_, "location", tt + 0.6, pb)
+            ev(tt + 0.1, "whoosh", 0.25); ev(tt + 0.6, "tick", 0.3)
+        # 10-04：机の上（足は机の面）で上の列を見る
+        M.at(s("10-04"), loc=(-0.85, -0.4, 0.94), face=25); M.at(s("10-04") + 0.4, look=14)
+        # 10-05：声が字を言う瞬間に、そのキーが跳ねて光る（ピリオドは赤。10-06 のあいだ光り続ける）
+        for ch in "QWE.TY":
+            tt = lt("10-05", ch); o = mk[ch]; z_ = o.location.z
+            key(o, ("location", 2), tt, z_); key(o, ("location", 2), tt + 0.15, z_ + 0.05); key(o, ("location", 2), tt + 0.35, z_)
+            glow_plate(o, tt, (e("10-06") + 0.4) if ch == "." else (e("10-05") + 0.3), "#FF6A5A" if ch == "." else "#FFD24A", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
+            ev(tt, "pi", 0.2, "m_" + ("dot" if ch == "." else ch))
     else:
         hide_key(ptw, -100.0, True)
         # 20：夜。もう 1 台の、並びの違う機械（2 段目が X P M C H）
@@ -271,6 +332,7 @@ def b_shop(cl, night=False):
         hide_key(xtw, -100.0, True); hide_key(xtw, w("20-04", "別の並び"), False); scale_pop(xtw, w("20-04", "別の並び"), 1.0, 0.5)
         ev(w("20-04", "別の並び"), "pop", 0.6)
         area((1.6, -0.8, 2.0), (1.6, 0.3, 0.95), energy=70, size=1.5, col="#FFE7C4")   # 夜でも並びの違う機械が見えるように
+        for i, ch in enumerate("XPMCH"): glow_plate(xk[ch], w("20-05", "X P M C H") + 0.25 * i, e("20-06") + 0.3, "#FF6A5A", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True); ev(w("20-05", "X P M C H") + 0.25 * i, "pi", 0.2, "x_" + ch)
         M.at(-100.0, loc=(0.8, -0.3, 0.94), face=0.0)
         M.at(w("20-04", "別の並び") + 0.4, face=-50); M.at(s("20-05") + 0.6, face=40); M.at(s("20-06"), face=-50); M.at(s("20-07"), face=0.0)
         M.at(s("20-07") + 0.5, look=16); M.glow(w("20-04", "なんと"), 1.8, 0.2); M.glow(w("20-04", "なんと") + 0.8, 0.9, 0.4)
@@ -298,9 +360,38 @@ def b_shop_day(cl):
     M = b_shop(cl)
     # 11：何も書かれていない紙の束をのぞきこむ（字は書かない）
     pm = mat("blank", "#F6F1E4", rough=0.85)
-    for k_ in range(6): cube(pm, (-1.3, 1.1, 0.97 + k_ * 0.01), (0.42, 0.56, 0.008), rot=(0, 0, R(3 * k_ - 8)))
-    M.at(s("11-01") - 0.6, loc=(-1.55, 0.6, 0.94), face=-20); M.at(s("11-01") + 0.3, look=25)
+    sheets = [cube(pm, (-1.3, 1.1, 0.97 + k_ * 0.01), (0.42, 0.56, 0.008), rot=(0, 0, R(3 * k_ - 8))) for k_ in range(6)]
+    top = sheets[-1]
+    L0 = tuple(top.location)
+    def flip(t):     # いちばん上の紙をめくって、下の紙を見る（何も書いていない）
+        up = (L0[0], L0[1] + 0.12, L0[2] + 0.18)
+        key(top, "location", t, L0); key(top, ("rotation_euler", 0), t, 0.0)
+        key(top, "location", t + 0.4, up); key(top, ("rotation_euler", 0), t + 0.4, R(-70))
+        key(top, "location", t + 1.4, up); key(top, ("rotation_euler", 0), t + 1.4, R(-70))
+        key(top, "location", t + 1.8, L0); key(top, ("rotation_euler", 0), t + 1.8, 0.0)
+        ev(t, "whoosh", 0.15)
+    # 11：歩いて紙の束へ（滑らない）→ めくって、何も書いていないのを見る
+    M.walk(e("10-09") + 0.3, s("11-01") + 0.4, (-1.55, 0.6, 0.94))
+    M.at(s("11-01") + 0.6, face=-20); M.at(s("11-01") + 0.9, look=25)
+    flip(w("11-02", "書き残して") - 0.6)
     M.tilt(w("11-02", "書き残して"), 15); M.tilt(e("11-03"), 0)
+    # 12-01：機械へ歩き、キーに跳び乗る → キーが外れる → 開いた穴から中へ飛びこむ（v5「まるロボがタイプライターのキーを外して中に入り込むみたいな演出にして」）
+    t0 = s("12-01") + 0.2
+    gx, gy, gz = -0.0675, 0.233, 1.192
+    M.walk(t0, t0 + 1.6, (gx, -0.32, 0.94))
+    t1 = t0 + 1.9; M.hop(t1, h=0.25, d=0.5); M.at(t1, loc=(gx, -0.32, 0.94)); M.at(t1 + 0.5, loc=(gx, gy, gz)); ev(t1 + 0.5, "land", 0.3)
+    G = TW_KEYS[0]["G"]; gl = TW_KEYS[0]["G"].location[:]
+    t2 = t1 + 1.0
+    key(G, "location", t2, gl); key(G, ("rotation_euler", 1), t2, 0.0)
+    key(G, "location", t2 + 0.25, (gl[0] + 0.12, gl[1] - 0.05, gl[2] + 0.22)); key(G, ("rotation_euler", 1), t2 + 0.6, R(160))
+    key(G, "location", t2 + 0.7, (gl[0] + 0.42, gl[1] - 0.35, -0.2)); ev(t2 + 0.05, "pop", 0.4)
+    M.hop(t2 - 0.15, h=0.2, d=0.4); M.at(t2 + 0.25, loc=(gx - 0.1, gy - 0.12, gz)); ev(t2 + 0.95, "land", 0.2, "")
+    t3 = t2 + 1.0
+    M.hop(t3, h=0.3, d=0.45); M.at(t3, loc=(gx - 0.1, gy - 0.12, gz)); M.at(t3 + 0.25, loc=(gx, gy, gz + 0.1)); M.at(t3 + 0.6, loc=(gx, gy, 0.8))
+    ev(t3 + 0.3, "whoosh", 0.4)
+    # 14-02：紙の束へ戻って、もう一度めくる（記録はどこにもない）
+    M.at(s("14-02") - 0.3, loc=(-1.55, 0.6, 0.94), face=-20, interp="CONSTANT"); M.at(s("14-02") - 0.2, look=25)
+    flip(w("14-02", "記録") - 0.3)
 
 
 # ======================================================================== C：タイプライターの中（S12〜S15）
@@ -317,38 +408,63 @@ def b_inside(cl):
     area((-2.0, 1.5, 2.0), (0, 0.6, 0.3), energy=600, size=3, col="#9FB3E0")
     area((1.8, -1.8, 2.2), (0, 0.2, 0.3), energy=700, size=3, col="#FFF1D6")
     M = MaruR((0.0, -0.9, 0.0), face=0.0, s=0.26); track("maru", M.body, 0.1)
-    # 12：中へ入る → 棒が跳ね上がる
-    M.at(-100.0, loc=(-1.5, -2.2, 0.0), face=-30)
-    M.walk(s("12-01") + 0.6, s("12-02"), (0.0, -0.9, 0.0))
-    M.at(s("12-02") + 0.2, look=15)
+    # 12：上から飛びこんできて着く → 棒が 1 本ずつ真ん中へ跳ね上がる
+    M.at(-100.0, loc=(0.0, -0.9, 1.6), face=0.0)
+    M.at(s("12-02") - 0.4, loc=(0.0, -0.9, 1.6)); M.at(s("12-02") + 0.1, loc=(0.0, -0.9, 0.0), interp="LINEAR"); ev(s("12-02") + 0.1, "land", 0.4)
+    M.at(s("12-02") + 0.5, look=15)
     for i, ch in enumerate("QAZ"):
-        bar_up(pv[ch], w("12-03", "跳ね上がって") + 0.4 * i); ev(w("12-03", "跳ね上がって") + 0.4 * i + 0.18, "clack", 0.6)
+        bar_up(pv[ch], w("12-03", "跳ね上がって") + 0.5 * i, d=0.45); ev(w("12-03", "跳ね上がって") + 0.5 * i + 0.2, "clack", 0.35)
     M.hop(w("12-03", "跳ね上がって") + 0.05, h=0.18, d=0.4)
-    # 13：となり合う 2 本が続けて上がる → ぶつかって止まる → まるロボがほどく
-    a_, b_ = pv["T"], pv["Y"]; t = w("13-01", "続けて")
-    key(a_, ("rotation_euler", 0), t, 0.0); key(a_, ("rotation_euler", 0), t + 0.3, R(-55))
-    key(b_, ("rotation_euler", 0), t + 0.1, 0.0); key(b_, ("rotation_euler", 0), t + 0.35, R(-52))
-    ev(t + 0.35, "clank", 0.7)
-    M.walk(s("13-03") - 0.2, s("13-03") + 0.8, (0.35, 0.0, 0.0)); M.at(s("13-03") + 1.0, look=20)
+    # 13：T と Y（となり同士）が光る → T が真ん中へ上がる途中に Y も上がり、真ん中の手前でぶつかって交差したまま止まる（赤い光・ふるえる）
+    a_, b_ = pv["T"], pv["Y"]
+    for o in (a_, b_): glow_plate(o.children[0], s("13-01") + 0.3, e("13-02") + 0.4, "#FFD24A", (0.05, 1.2 * 0.9), 0.0135)
+    t = w("13-01", "続けて") + 0.6
+    key(a_, ("rotation_euler", 0), t, 0.0); key(a_, ("rotation_euler", 0), t + 0.5, R(-128))
+    key(b_, ("rotation_euler", 0), t + 0.2, 0.0); key(b_, ("rotation_euler", 0), t + 0.6, R(-122))
+    tj = s("13-02") + 0.1
+    for k_ in range(8):      # からまって、小さくふるえる
+        key(a_, ("rotation_euler", 0), tj + 0.12 * k_, R(-128 + (2 if k_ % 2 else -2))); key(b_, ("rotation_euler", 0), tj + 0.12 * k_, R(-122 + (-2 if k_ % 2 else 2)))
+    key(a_, ("rotation_euler", 0), tj + 1.0, R(-128)); key(b_, ("rotation_euler", 0), tj + 1.0, R(-122))
+    fl = sphere(glow_mat("jamflash", "#FF5A3C", 12.0), (0, 0, 0), 0.06); fl.visible_shadow = False
+    bpy.context.view_layer.update()
+    hp = a_.children[1].matrix_world.translation
+    key(a_, ("rotation_euler", 0), t + 0.6, R(-128)); bpy.context.view_layer.update()
+    fl.location = (-0.12, 0.38, 0.58); hide_key(fl, -100.0, True); hide_key(fl, t + 0.6, False); hide_key(fl, e("13-02") + 0.3, True)
+    scale_pop(fl, t + 0.6, 1.0, 0.25)
+    ev(t + 0.6, "clank", 0.6)
+    M.walk(s("13-03") - 0.2, s("13-03") + 0.8, (-0.05, 0.05, 0.0)); M.at(s("13-03") + 1.0, look=20)
     M.wobble(s("13-03") + 1.0, s("13-04"), 8, 0.3)
-    key(a_, ("rotation_euler", 0), s("13-04") + 0.2, R(-55)); key(a_, ("rotation_euler", 0), s("13-04") + 0.6, 0.0)
-    key(b_, ("rotation_euler", 0), s("13-04") + 0.3, R(-52)); key(b_, ("rotation_euler", 0), s("13-04") + 0.7, 0.0)
-    ev(s("13-04") + 0.5, "snap", 0.5); M.at(s("13-04") + 0.8, look=0)
-    # 14：E と R の棒を同時に光らせる（となり同士）
+    key(a_, ("rotation_euler", 0), s("13-04") + 0.2, R(-128)); key(a_, ("rotation_euler", 0), s("13-04") + 0.6, 0.0)
+    key(b_, ("rotation_euler", 0), s("13-04") + 0.3, R(-122)); key(b_, ("rotation_euler", 0), s("13-04") + 0.7, 0.0)
+    ev(s("13-04") + 0.5, "snap", 0.4); M.at(s("13-04") + 0.8, look=0)
+    M.at(w("13-05", "ところが"), look=0); M.tilt(w("13-05", "ところが"), 12); M.tilt(e("14-01") + 0.3, 0)
+    # 14-04：棒の半円にそって歩き、棒を 1 本ずつ見ていく → E と R の所で止まる → 2 本が光る（v5「探してみるとって言ってるのに全然探している演出じゃない」）
     for ch in "ER":
         g = glow_mat("barglow" + ch, "#FFD24A", 4.0)
-        bar = pv[ch].children[0]
         gl = cube(g, (0, -1.2 * 0.45, 0.05), (0.05, 1.2 * 0.9, 0.01), parent=pv[ch]); gl.visible_shadow = False
         hide_key(gl, -100.0, True); hide_key(gl, w("14-04", "となり同士"), False); hide_key(gl, e("14-05") + 0.6, True)
-    M.walk(s("14-03"), s("14-04"), (0.15, -0.1, 0.0)); M.at(w("14-04", "となり同士") + 0.2, look=22)
-    M.hop(w("14-04", "となり同士") + 0.1, h=0.15, d=0.4)
-    # 15：わざとゆっくり跳ねる（棒は 1 本ずつ上がって、からまない）→ ちょっと待って、で止まる
-    t = s("15-03") + 0.4
+    route = [(0.75, 0.75, 0.0), (0.45, 0.98, 0.0), (0.1, 1.08, 0.0), (-0.25, 1.02, 0.0)]
+    M.at(s("14-03") - 0.3, loc=(-0.05, 0.05, 0.0))
+    M.walk(s("14-03"), s("14-03") + 1.2, route[0])
+    t = w("14-04", "探して")
+    for k_, pt in enumerate(route[1:]):
+        M.walk(t + k_ * 0.9, t + k_ * 0.9 + 0.6, pt); M.at(t + k_ * 0.9 + 0.65, look=22); M.at(t + k_ * 0.9 + 0.85, look=10)
+    M.at(w("14-04", "となり同士") - 0.2, face=150); M.hop(w("14-04", "となり同士") + 0.1, h=0.15, d=0.4)
+    # 15-03：棒の根もとにゆっくり跳び乗る → 乗った棒が 1 本だけゆっくり上がって戻る（2 回、別の棒）（v5「まるロボが飛んで棒を踏んでるんじゃないの」）
+    bpy.context.view_layer.update()
+    base = lambda ch: (pv[ch].matrix_world.translation.x * 0.86, (pv[ch].matrix_world.translation.y - 0.6) * 0.86 + 0.6, 0.0)
+    M.walk(s("15-01"), s("15-02"), (0.2, 0.75, 0.0))
+    t = w("15-03", "わざと") + 0.6
     for i, ch in enumerate("GH"):
-        M.hop(t + i * 1.6, h=0.12, d=0.6); bar_up(pv[ch], t + i * 1.6 + 0.4, d=0.8); ev(t + i * 1.6 + 0.8, "clack", 0.4)
+        th = t + i * 1.9
+        M.hop(th, h=0.25, d=0.8); M.at(th, loc=M._last["loc"][1]); M.at(th + 0.8, loc=base(ch)); ev(th + 0.8, "land", 0.3)
+        bar_up(pv[ch], th + 0.85, d=1.0); ev(th + 1.2, "clack", 0.3)
     M.at(w("15-04", "ちょっと待って"), look=0); M.tilt(w("15-04", "ちょっと待って") + 0.1, 14); M.tilt(e("15-06"), 0)
+    M.at(w("15-09", "少しは"), look=24); M.at(e("15-09"), look=0)
+    for k_ in range(3): M.at(s("15-10") + 0.4 + 0.3 * k_, face=(20 if k_ % 2 else -20))
+    M.at(e("15-10"), face=0)
     if cl == "S12a":
-        cam((-1.3, -2.0, 0.55), (0.0, 0.4, 0.35), 26, s("12-01"), e("12-03") + 0.8, (-0.6, -1.8, 0.5), (0.0, 0.5, 0.4), 24)
+        cam((-1.3, -2.0, 0.85), (0.0, 0.0, 0.35), 26, s("12-02"), e("12-03") + 0.8, (-0.6, -1.8, 0.8), (0.0, 0.1, 0.4), 24)
     elif cl == "S13a":
         cam((0.5, -0.6, 1.0), (-0.45, 0.85, 0.55), 26, s("13-01"), e("13-05") + 0.8, (0.4, -0.55, 0.95), (-0.45, 0.85, 0.55), 27)
     elif cl == "S14a":
@@ -377,6 +493,8 @@ def b_tel(cl):
     click_seq(arm, w("18-02", "トントントン"), "... .", 0.1, 0.6)
     click_seq(arm, w("18-04", "トントントン"), "...", 0.1, 0.6); click_seq(arm, w("18-04", "E が") + 0.25, ".", 0.1, 0.6)
     M.at(s("18-05"), face=-30); M.at(s("18-05") + 0.6, face=30); M.tilt(e("18-05") - 0.2, 14); M.tilt(e("18-05") + 0.6, 0)
+    # 19-02：タイプライターの Z・S・E（字は 3D）が光る
+    for i, ch in enumerate("ZSE"): glow_plate(tk[ch], w("19-02", "この3つ") + 0.25 * i, e("19-02") + 0.6, "#FFD24A", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
     # 19a：打つ人が迷う（手が止まる）
     a0, a1 = op.arms
     for t_ in (s("19-01") + 0.4, s("19-01") + 1.2, s("19-01") + 2.0):
@@ -386,7 +504,7 @@ def b_tel(cl):
     elif cl == "S18a":
         cam((-0.9, -0.6, 1.3), (-0.6, 0.6, 0.98), 40, s("18-01"), e("18-05") + 0.8, (-0.8, -0.4, 1.25), (-0.6, 0.6, 0.98), 44)
     elif cl == "S19a":
-        cam((2.4, -1.0, 2.7), (0.4, 0.55, 0.95), 32, s("19-01"), e("19-02") + 0.6, (2.2, -0.9, 2.6), (0.4, 0.55, 0.95), 33)
+        cam((2.4, 0.15, 1.65), (0.55, 0.1, 1.1), 32, s("19-01"), e("19-02") + 0.6, (2.3, 0.25, 1.62), (0.55, 0.1, 1.1), 33)     # 横から、迷う顔とキー（頭が画面をふさがない）
 
 
 def b_school(cl):
@@ -417,7 +535,7 @@ def b_demo(cl):
     hall(col_wall="#CBB89A", floor=("#7A5233", "#6B4A30"))
     cube(mat("demotable", "#6B4A30", rough=0.5), (0, 0.8, 0.76), (3.0, 0.9, 0.05))
     mk_, lever = morse_key((-0.9, 0.75, 0.79))
-    boss = person((-0.9, 0.2, 0), 0, shirt="#1F2630", pants="#1A1E26", hair="#6A6A6A")
+    boss = person((-0.9, 0.2, 0), 180, shirt="#1F2630", pants="#1A1E26", hair="#6A6A6A")      # 机（音を出す機械）の方を向く
     cube(mat("bosschair", "#4A3220", rough=0.6), (-0.9, 0.0, 0.45), (0.55, 0.5, 0.06))
     tw, tk = modern_typewriter((0.8, 0.85, 0.79), name="tdm"); tw.scale = (0.45, 0.45, 0.45)
     tch = typist((0.8, 0.25, 0), 0, shirt="#6D5A44", hair="#3A2E24"); track("teacher", tch.root, 1.75)
@@ -457,7 +575,8 @@ def b_contest(cl):
     M = MaruR((-2.6, 0.2, 0.4), face=-20); track("maru", M.body, 0.1)
     M.at(s("22-03") + 0.5, face=20); M.at(s("22-03") + 1.6, face=-20); M.at(w("22-03", "勝ちました") + 0.3, face=10)
     M.hop(w("22-03", "勝ちました") + 0.3, h=0.15, d=0.4)
-    cam((0.0, -4.4, 2.2), (0.0, 0.9, 1.4), 30, s("22-03"), e("22-04") + 0.8, (0.6, -4.0, 2.0), (-0.3, 0.9, 1.4), 34)
+    # 打つ人は机（+y）を向くので、舞台の奥から顔と手を映す（手前の見ている人の頭がふさがないように）
+    cam((0.4, 3.4, 2.7), (0.0, 0.5, 1.2), 30, s("22-03"), e("22-04") + 0.8, (-0.3, 3.3, 2.6), (0.0, 0.5, 1.2), 32)
 
 
 def b_factory(cl):
@@ -488,15 +607,22 @@ def b_factory(cl):
         key(cart, "location", s("10-07") - 0.5, (-3.5, -0.4, 0)); key(cart, "location", s("10-07") + 2.0, (-0.6, -0.4, 0))
         key(pusher.root, "location", s("10-07") - 0.5, (-4.2, -0.4, 0)); key(pusher.root, "location", s("10-07") + 2.0, (-1.3, -0.4, 0))
         key(tw, "location", s("10-07") - 0.5, (-3.5, -0.4, 0.56)); key(tw, "location", s("10-07") + 2.0, (-0.6, -0.4, 0.56))
-        key(tw, "location", s("10-07") + 2.6, (0.4, -0.25, 0.89))
-        ev(s("10-07") + 0.2, "motor_on", 1.0); ev(s("10-07") + 2.0, "motor_off", 1.0); ev(s("10-07") + 2.6, "clank", 0.4)
-        dot = tk["."]; rk = cyl(mat("fx_keytop", "#F1EEE6", rough=0.3, coat=0.5), (dot.location.x, dot.location.y, dot.location.z + 0.5), 0.13 * 0.34, 0.025, parent=tw)
+        # 台車から作業台へ：一度持ち上げてから、台の上へ下ろす（v5「ミシンが貫通してる机を」：まっすぐ動かして台を突き抜けていた）
+        key(tw, "location", s("10-07") + 2.3, (-0.6, -0.4, 1.15)); key(tw, "location", s("10-07") + 2.8, (0.4, -0.25, 1.15)); key(tw, "location", s("10-07") + 3.1, (0.4, -0.25, 0.89))
+        ev(s("10-07") + 0.2, "motor_on", 1.0); ev(s("10-07") + 2.0, "motor_off", 1.0); ev(s("10-07") + 3.1, "clank", 0.4)
+        dot = tk["."]; dz0 = dot.location.z      # 先に高さを覚えておく（キーを打つと location が変わる。v5 は R が 0.6 上に浮いたままで「Rが入ってない」）
+        rk = cyl(mat("fx_keytop", "#F1EEE6", rough=0.3, coat=0.5), (dot.location.x, dot.location.y, dz0 + 0.6), 0.13 * 0.34, 0.025, parent=tw)
+        key_label(rk, "R", 0.13, "#1E2530", size=0.72, h=0.045)
         track("f_R", rk, 0.03)
         hide_key(rk, -100.0, True)
-        t = w("10-08", "外され"); key(dot, ("location", 2), t, dot.location.z); key(dot, ("location", 2), t + 0.4, dot.location.z + 0.6); hide_key(dot, t + 0.45, True)
-        ev(t + 0.05, "pop", 0.5)
-        t = w("10-08", "R が"); hide_key(rk, t, False); key(rk, ("location", 2), t, dot.location.z + 0.6); key(rk, ("location", 2), t + 0.35, dot.location.z)
-        ev(t + 0.35, "snap", 0.6)
+        t = w("10-08", "外され"); key(dot, ("location", 2), t, dz0); key(dot, ("location", 2), t + 0.4, dz0 + 0.6); hide_key(dot, t + 0.45, True)
+        ev(t + 0.05, "pop", 0.5, "f_dot")
+        t = w("10-08", "R が"); hide_key(rk, t, False); key(rk, ("location", 2), t, dz0 + 0.6); key(rk, ("location", 2), t + 0.35, dz0)
+        ev(t + 0.35, "snap", 0.5, "f_R")
+        glow_plate(rk, t + 0.35, e("10-09") + 0.6, "#FFD24A", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
+        # 10-09：上の列 Q W E R T Y が順に光る
+        for i, ch in enumerate("QWE"): glow_plate(tk[ch], w("10-09", "クワーティ") + 0.15 * i, e("10-09") + 0.6, "#7FB0FF", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
+        for i, ch in enumerate("TY"): glow_plate(tk[ch], w("10-09", "クワーティ") + 0.15 * (i + 4), e("10-09") + 0.6, "#7FB0FF", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
         M.at(-100.0, loc=(1.4, -0.9, 0.0), face=40)
         M.hop(s("10-08") - 0.6, h=1.0, d=0.6); M.at(s("10-08") - 0.6, loc=(1.3, -0.9, 0.0)); M.at(s("10-08"), loc=(1.0, -0.45, 0.89))
         M.at(s("10-08") + 0.2, face=60, look=12); M.hop(s("10-09") + 0.4, h=0.12, d=0.4)
@@ -598,6 +724,13 @@ def b_office(cl):
     for kb in kbs:
         key(kb, ("rotation_euler", 2), t_if, 0.0); key(kb, ("rotation_euler", 2), t_if + 0.8, R(360))
     ev(t_if + 0.1, "whoosh", 0.4)
+    # 24-05：キーを探して、1 字ずつゆっくり打つ人（手が止まり、首をかしげる）（v5「ゆっくり打ってる感じにして」）
+    sl = T_[5]; track("slowhand", sl.arms[0], 0.0)
+    for k_, tt in enumerate((s("24-05") + 0.3, s("24-05") + 1.6, s("24-05") + 3.0)):
+        a = sl.arms[k_ % 2]
+        key(a, ("rotation_euler", 0), tt - 0.4, R(-45)); key(a, ("rotation_euler", 0), tt, R(-60)); key(a, ("rotation_euler", 0), tt + 0.15, R(-55)); key(a, ("rotation_euler", 0), tt + 0.6, R(-45))
+        key(a, ("rotation_euler", 2), tt - 0.4, R(0)); key(a, ("rotation_euler", 2), tt - 0.2, R(8 if k_ % 2 else -8)); key(a, ("rotation_euler", 2), tt, R(0))
+        ev(tt, "key", 0.12, "slowhand")
     M = MaruR((0.2, -2.6, 0.0), face=0.0); track("maru", M.body, 0.1)
     M.walk(s("24-02") + 0.2, s("24-03") + 1.0, (-0.6, -1.0, 0.0))
     M.at(t_if + 0.8, face=-30); M.at(t_if + 1.6, face=30); M.wobble(s("24-05"), e("24-05"), 8, 0.4)
@@ -653,11 +786,13 @@ CUTS = [   # (名前, 舞台, 切り替わる時刻, カメラ（None＝舞台�
     ("S10b", b_shop_day, s("10-04"), None, "S10b"), ("S10b1", b_shop_day, s("10-05"), C((-0.25, 0.15, 1.95), (-0.25, 0.36, 1.15), 35, (-0.2, 0.15, 1.9)), "S10b"), ("S10b2", b_shop_day, s("10-06"), lambda t0: F((0.4, -0.6, 0.25), 38), "S10b"),
     ("S10c", b_factory, s("10-07"), None, "S10c"), ("S10c2", b_factory, s("10-08"), C((0.95, -1.1, 1.4), (0.4, -0.2, 0.95), 40, (0.8, -1.0, 1.35)), "S10c"),
     ("S11a", b_shop_day, s("11-01"), None, "S11a"), ("S11b", b_shop_day, s("11-03"), C((-0.6, -3.6, 1.6), (-0.6, 0.3, 0.9), 28, (-0.3, -3.3, 1.5)), "S11a"),
-    ("S12a", b_inside, s("12-01"), None, "S12a"), ("S12b", b_inside, s("12-03"), C((0.3, -0.9, 1.3), (-0.1, 0.85, 0.1), 26, (0.2, -0.8, 1.25)), "S12a"),
-    ("S13a", b_inside, s("13-01"), None, "S13a"), ("S13b", b_inside, s("13-03"), C((0.0, -0.5, 2.4), (0.0, 0.6, 0.0), 26, (0.2, -0.3, 2.2)), "S13a"),
+    ("S12o", b_shop_day, s("12-01"), C((0.55, -1.45, 1.75), (-0.05, 0.15, 1.12), 32, (0.45, -1.3, 1.65)), "S11a"),
+    ("S12a", b_inside, s("12-02"), None, "S12a"), ("S12b", b_inside, s("12-03"), C((0.0, -1.7, 1.5), (0.0, 0.6, 0.45), 28, (0.15, -1.6, 1.45)), "S12a"),
+    ("S13a", b_inside, s("13-01"), C((0.85, -0.55, 1.05), (-0.28, 0.72, 0.45), 30, (0.8, -0.5, 1.0)), "S13a"), ("S13b", b_inside, s("13-03"), C((0.0, -0.5, 2.4), (0.0, 0.6, 0.0), 26, (0.2, -0.3, 2.2)), "S13a"),
     ("S13c", b_inside, s("13-05"), lambda t0: F((0.35, -0.75, 0.25), 36), "S13a"),
-    ("S14a", b_inside, s("14-01"), None, "S14a"), ("S14b", b_inside, s("14-03"), C((0.3, -0.6, 1.1), (-0.25, 1.0, 0.05), 30, (0.25, -0.55, 1.05)), "S14a"),
-    ("S14b2", b_inside, s("14-05"), C((1.0, -0.9, 0.5), (-0.1, 0.6, 0.25), 30, (0.9, -0.85, 0.5)), "S14a"), ("S15a", b_inside, s("15-01"), None, "S15a"), ("S15b", b_inside, s("15-03"), lambda t0: F((-0.75, -0.55, 0.28), 34), "S15a"),
+    ("S14a", b_inside, s("14-01"), None, "S14a"), ("S14p", b_shop_day, s("14-02"), C((-1.95, 0.0, 1.45), (-1.35, 1.05, 0.97), 34, (-1.9, 0.05, 1.4)), "S11a"),
+    ("S14b", b_inside, s("14-03"), C((0.95, -1.0, 1.9), (0.0, 0.8, 0.2), 30, (0.85, -0.9, 1.85)), "S14a"),
+    ("S14b2", b_inside, s("14-05"), C((0.65, 0.05, 0.85), (-0.3, 1.1, 0.3), 30, (0.6, 0.1, 0.8)), "S14a"), ("S15a", b_inside, s("15-01"), None, "S15a"), ("S15b", b_inside, s("15-03"), lambda t0: F((-0.75, -0.55, 0.28), 34), "S15a"),
     ("S15c", b_inside, s("15-05"), C((0.0, -0.4, 2.5), (0.0, 0.6, 0.0), 26, (-0.2, -0.3, 2.3)), "S15a"),
     ("S15d", b_inside, s("15-07"), C((-1.6, -2.0, 0.45), (0.2, 0.6, 0.35), 24, (-1.2, -2.2, 0.5)), "S15a"),
     ("S15e", b_inside, s("15-09"), lambda t0: F((-0.7, 0.4, 0.3), 32), "S15a"),
@@ -678,7 +813,7 @@ CUTS = [   # (名前, 舞台, 切り替わる時刻, カメラ（None＝舞台�
     ("S20e", b_shop_night, s("20-07"), C((0.45, -1.35, 1.3), (0.85, -0.25, 1.05), 36, (0.55, -1.25, 1.25)), "S20a"),
     ("S21a", _desk, s("21-01"), None, "S21a"), ("S21b", _desk, s("21-03"), TOP((0.0, 0.2, 1.8), (0.4, 0.2, 3.4)), "S21a"),
     ("S22a", b_school, s("22-01"), None, "S22a"),
-    ("S22a2", b_school, s("22-02"), lambda t0: F((0.4, -0.8, 0.3), 36), "S22a"), ("S22b", b_contest, s("22-03"), None, "S22b"), ("S22b2", b_contest, s("22-04"), C((-1.6, -0.2, 1.7), (-1.0, 1.2, 1.3), 34, (-1.5, -0.1, 1.65)), "S22b"),
+    ("S22a2", b_school, s("22-02"), lambda t0: F((0.4, -0.8, 0.3), 36), "S22a"), ("S22b", b_contest, s("22-03"), None, "S22b"), ("S22b2", b_contest, s("22-04"), C((-3.6, 1.0, 2.0), (-0.9, 0.9, 1.3), 30, (-3.5, 1.1, 1.95)), "S22b"),
     ("S22c", b_factory, s("22-05"), None, "S22c"),
     ("S22d", b_merge, s("22-06"), None, "S22d"), ("S22d2", b_merge, s("22-07"), lambda t0: F((0.8, -1.4, 0.3), 30, 0.4), "S22d"),
     ("S22e", b_evolve, s("22-08"), None, "S22e"),
@@ -686,13 +821,18 @@ CUTS = [   # (名前, 舞台, 切り替わる時刻, カメラ（None＝舞台�
     ("S23a3", _desk, s("23-04"), TOP((1.05, 0.2, 3.4), (1.05, 0.2, 3.9)), "S23a"),
     ("S23a1", _desk, s("23-02"), None, "S23a"), ("S23b", b_lab, s("23-05"), None, "S23b"), ("S23c", b_lab, s("23-06"), None, "S23c"),
     ("S23c2", b_lab, s("23-07"), lambda t0: F((0.4, -0.8, 0.3), 36), "S23c"), ("S24a", b_office, s("24-01"), None, "S24a"), ("S24a2", b_office, s("24-03"), C((-1.9, -3.0, 1.5), (-0.6, -0.6, 0.6), 30, (-1.6, -2.8, 1.45)), "S24a"),
-    ("S24b", b_office, s("24-04"), None, "S24b"),
+    ("S24b", b_office, s("24-04"), None, "S24b"), ("S24b2", b_office, s("24-05"), C((-0.55, 0.35, 1.55), (-1.3, -0.95, 0.95), 34, (-0.6, 0.3, 1.5)), "S24b"),
     ("S24c", _desk, s("24-06"), None, "S24c"), ("S24c1", _desk, s("24-07"), TOP((-0.1, -1.6, 1.7), (-0.1, -1.5, 1.9)), "S24c"), ("S24c2", _desk, s("24-08"), lambda t0: F((0.4, -0.7, 0.3), 36), "S24c"),
     ("S24c3", _desk, s("24-09"), C((0.6, -3.4, 1.4), (0.2, 0.2, 0.3), 26, (0.8, -4.2, 1.8)), "S24c"),
     ("S27a", _desk, s("27-01"), None, "S27a"), ("S27b", _desk, s("27-03"), TOP((0.0, 0.2, 1.7), (0.2, 0.2, 2.1)), "S27a"),
     ("S27b2", _desk, s("27-04"), C((-1.2, -1.0, 0.5), (0.3, 0.3, 0.1), 28, (-1.0, -1.2, 0.55)), "S27a"), ("S27c", _desk, s("27-05"), lambda t0: F((0.35, -0.75, 0.25), 38), "S27a"),
     ("S27d", _desk, s("27-06"), C((0.3, -2.0, 0.7), (0.0, 0.5, 0.4), 30, (0.3, -3.4, 1.4), (0.0, 1.0, 0.9), d=9.0), "S27a"),
-    ("S28a", b_end, s("28-01"), None, "S28a"), ("S28a1", b_end, s("28-02"), C((0.0, -0.6, 0.6), (-0.2, 0.35, 0.1), 30, (0.1, -0.55, 0.55)), "S28a"), ("S28a2", b_end, s("28-04"), lambda t0: F((0.7, -1.7, 0.65), 30, 0.1), "S28a"),
+    ("S28a", b_end, s("28-01"), None, "S28a"), ("S28a1", b_end, s("28-02"), C((0.0, -0.6, 0.6), (-0.2, 0.35, 0.1), 30, (0.1, -0.55, 0.55)), "S28a"),
+    ("S28a15", b_end, s("28-03"), C((-0.72, -1.62, 0.32), (-1.08, -1.0, 0.04), 40, (-0.75, -1.58, 0.3)), "S28a"),
+    ("S28a2", b_end, s("28-04"), lambda t0: F((0.28, -0.5, 0.14), 42, 0.08), "S28a"),
+    ("S09a2", b_shop_day, s("09-03"), C((-0.35, -0.75, 1.5), (-0.8, 0.35, 1.1), 34, (-0.3, -0.7, 1.45)), "S09a"),
+    ("S15b2", b_inside, s("15-04"), lambda t0: F((0.45, -0.6, 0.25), 36), "S15a"),
+    ("S20a1", b_shop_night, s("20-02"), C((-0.6, -1.8, 1.5), (0.6, 0.3, 1.0), 30, (-0.4, -1.7, 1.45)), "S20a"),
     ("S28b", b_end, s("28-06"), None, "S28b"), ("S28b1", b_end, s("28-07"), C((2.4, 2.0, 2.0), (0.3, -0.6, 0.2), 28, (2.2, 1.8, 1.9)), "S28b"), ("S28b2", b_end, s("28-08"), C((1.5, -3.2, 2.2), (0.1, -0.35, 0.15), 28, (1.3, -3.0, 2.1)), "S28b"),
 ]
 END_T = e("28-08") + 2.5
@@ -702,7 +842,7 @@ for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     t0 = max(0.0, tc - 0.1)
     t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
     CLIPS[nm] = (fn, t0, t1, cm, par)
-CLIPS["S06p"] = (_desk, s("06-01"), e("06-04") + 0.5, None, "S06a")   # 小窓用：名前で比べた結果（07-06〜07-07）
+# v6：07 の小窓（S06p）はやめた（比べのグラフにした）
 
 if __name__ == "__main__" or True:
     if CLIPNAME == "--list":

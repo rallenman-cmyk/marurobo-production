@@ -20,3 +20,10 @@ def w(i, word, end=False):
 
 
 END = P[-1]["end"] + 2.5
+
+
+# 字を言う瞬間（voice/letter_times.json。声の大きさで測った、字ごとのかたまりの始まり）
+_LT = json.load(open(os.path.join(VO, "letter_times.json"), encoding="utf-8"))
+
+
+def lt(i, ch): return s(i) + _LT[i][ch]

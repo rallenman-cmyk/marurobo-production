@@ -52,9 +52,10 @@ def key_label(cap, ch, k=KEY, col="#1E2530", size=0.82, h=0.07):
     ob.data.materials.append(mat("key_ink", col, rough=0.55))
     bpy.context.view_layer.update()
     w = cap.matrix_world.translation
-    ob.location = (w.x, w.y - k * size * 0.04, w.z + h / 2 + 0.003)   # 光る板（+0.0005〜）より上
+    ob.location = (w.x, w.y - k * size * 0.04, w.z + h / 2 + 0.005)   # 光る板（+0.0005〜）より上
     bpy.context.view_layer.update()
     ob.parent = cap; ob.matrix_parent_inverse = cap.matrix_world.inverted()
+    ob.visible_shadow = False      # 字の影がキーに映って二重に見えないように
     return ob
 
 
@@ -265,13 +266,15 @@ def piano_typewriter(loc=(0, 0.55, 0.94), k=0.13):
     front = "ABCDEFGHIJKLMN"; back = "OPQRSTUVWXYZ"
     for i, ch in enumerate(front):
         keys[ch] = cube(white, ((i + 0.5) * k, -0.05, 0.14), (k * 0.92, 0.32, 0.06), bevel=0.01, parent=root)
+        key_label(keys[ch], ch, k, "#1E2530", size=0.9, h=0.06)
     for i, ch in enumerate(back):   # 右から左
         x = (n - 0.5 - i) * k - k * 0.5
         keys[ch] = cube(black, (x, 0.2, 0.2), (k * 0.7, 0.2, 0.06), bevel=0.01, parent=root)
+        key_label(keys[ch], ch, k, "#F2EBDD", size=0.72, h=0.06)
     return root, keys
 
 
-def modern_typewriter(loc=(0, 0.55, 0.94), k=0.13, period=True, layout=None, col="#2B2B2B", name="tw"):
+def modern_typewriter(loc=(0, 0.55, 0.94), k=0.13, period=True, layout=None, col="#2B2B2B", name="tw", labels=True):
     """1870年代のタイプライター（4 段の丸いキー・円く並ぶ棒の箱）。layout：上の段の字（R の所がピリオドなら '.'）"""
     root = empty(loc)
     body = mat(name + "_body", col, rough=0.3, coat=0.7, metal=0.2)
@@ -288,6 +291,7 @@ def modern_typewriter(loc=(0, 0.55, 0.94), k=0.13, period=True, layout=None, col
             x = -0.62 + (c + OFFS[r]) * k; y = -0.05 - r * k * 0.9; z = 0.28 - r * 0.04
             cyl(gold, (x, y, z - 0.02), k * 0.4, 0.03, parent=root)
             keys[ch] = cyl(km, (x, y, z), k * 0.34, 0.025, parent=root)
+            if labels: key_label(keys[ch], ch, k, "#1E2530", size=0.72 if ch != "." else 0.9, h=0.045)   # キーの上が少し丸いので、字を少し浮かせる   # 7本目 v6：タイプライターのキーにも字（2D をやめた）
     return root, keys
 
 
@@ -306,13 +310,14 @@ def typebar_basket(center=(0, 0, 0), r=1.2, n=36, bars=None):
         p = empty((r * math.cos(a), r * math.sin(a) * 0.55, 0)); p.parent = root
         p.rotation_euler = (0, 0, a + math.pi / 2)
         b = cube(steel, (0, -r * 0.45, 0.02), (0.035, r * 0.9, 0.025), parent=p)
-        cube(mat("typehead", "#2A2D31", rough=0.3, metal=0.7), (0, -r * 0.9, 0.04), (0.06, 0.06, 0.06), parent=p)
+        hd = cube(mat("typehead", "#2A2D31", rough=0.3, metal=0.7), (0, -r * 0.9, 0.04), (0.07, 0.07, 0.06), parent=p)
+        if ch.isalpha(): key_label(hd, ch, 0.1, "#F2EBDD", size=0.85, h=0.06)      # 棒の先にも字（7本目 v6）
         pv[ch] = p
     cyl(mat("guide", "#55504A", rough=0.4, metal=0.7), (0, 0, 0.9), 0.12, 0.1, parent=root)
     return root, pv
 
 
-def bar_up(p, t, d=0.35, back=True, ang=78):
+def bar_up(p, t, d=0.35, back=True, ang=150):     # 150 度：棒の先が、真ん中の打つ所へ集まる（v5 の 78 度は外向きのまま立つだけで、集まって見えなかった）
     key(p, ("rotation_euler", 0), t, 0.0); key(p, ("rotation_euler", 0), t + d * 0.5, R(-ang))   # 棒は x 軸の負の向きに回すと上がる（正だと床の下へ。7本目 v2 で見えなかった）
     if back: key(p, ("rotation_euler", 0), t + d, 0.0)
 
@@ -323,7 +328,8 @@ class Typist:
 
 
 def typist(loc, face=0.0, shirt="#5B6E86", sit=True, hair="#2B2220", skin="#F1C7A5", s=1.0, dress=False):
-    root = empty(loc, R(face), s)
+    # face=0 で机（+y の側）を向く。v5 までは -y を向いていて、机に背を向けて打っていた（ユーザー「人の向きがおかしい」3 件）
+    root = empty(loc, R(face + 180), s)
     p = person((0, 0, 0), 0, shirt=shirt, pants="#2D3640" if not dress else "#4A2F3A", skin=skin, hair=hair, sit=sit)
     p.parent = root
     sm = mat("shirt" + shirt, shirt, rough=0.7); km = mat("skin", skin, rough=0.55)
@@ -464,3 +470,19 @@ def smartphone(loc, s=1.0):
     scr = cube(glow_mat("phonescr", "#E9EEF5", 1.3), (0, 0, 0.081), (1.46, 3.0, 0.004), parent=root)
     cube(glow_mat("phonekbd", "#D5DBE3", 1.1), (0, -0.85, 0.084), (1.46, 1.2, 0.002), parent=root)
     return root, scr
+
+
+
+def glow_plate(ob, t0, t1, col="#FFD24A", size=(0.1, 0.1), dz=0.0, round_=False, strength=3.0):
+    """物の上の面を光らせる薄い板（キーなど。ob の子にするので一緒に動く）。t0〜t1 だけ見える"""
+    g = flat_mat("gp_%s_%s" % (ob.name, col), col, strength)
+    bpy.context.view_layer.update()
+    wm = ob.matrix_world.translation
+    if round_: pl = cyl(g, (wm.x, wm.y, wm.z + dz), size[0] / 2, 0.002)
+    else: pl = cube(g, (wm.x, wm.y, wm.z + dz), (size[0], size[1], 0.002))
+    pl.visible_shadow = False
+    bpy.context.view_layer.update()
+    pl.parent = ob; pl.matrix_parent_inverse = ob.matrix_world.inverted()
+    hide_key(pl, -100.0, True); hide_key(pl, t0, False)
+    if t1 is not None: hide_key(pl, t1, True)
+    return pl

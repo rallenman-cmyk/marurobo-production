@@ -23,7 +23,7 @@ FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv els
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
 FPS, SR, WV, HV = 24, 48000, 1280, 720
 CL = json.load(open(os.path.join(HERE, "clips.json")))
-PIP_ONLY = {"S06p"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
+PIP_ONLY = set()      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
 ORDER = sorted([k for k in CL if k not in PIP_ONLY], key=lambda k: CL[k][2])
 CHAPTER = {"S04a", "S08a", "S12a", "S16a", "S21a", "S27a", "S28a"}
 SEPIA = set()
