@@ -21,7 +21,7 @@ def post(model, body, timeout=240):
         try: return json.load(urllib.request.urlopen(req, timeout=timeout))
         except Exception as e:
             print("retry", repr(e)[:120], flush=True); time.sleep(20 * (k + 1))
-    raise SystemExit("API 失敗")
+    raise RuntimeError("API 失敗")
 
 
 def tts(lines):
@@ -97,23 +97,35 @@ for no in NOS:
     ctx = [FIX.get(str(k + 1), L[k]["tts"]) for k in (i - 1, i, i + 1) if 0 <= k < len(L)]
     mid = 1 if i > 0 else 0
     cands = []
+    stop = False
     for k in range(N):
-        x = tts(ctx)
+        try: x = tts(ctx)
+        except RuntimeError:   # 1 日の回数切れ：それまでの候補から選んで、ここで止める（6本目 v3：良い候補が残らず消えた）
+            print("回数切れ。候補 %d 個から選ぶ" % len(cands), flush=True); stop = True; break
         y = pick_middle(x, ctx) if len(ctx) == 3 else (pick_first(x, ctx) if mid == 0 and len(ctx) == 2 else x)
         if y is None: continue
-        h = heard(y); sc = difflib.SequenceMatcher(None, norm(e["text"]), norm(h)).ratio()
+        try: h = heard(y)
+        except RuntimeError: print("書き起こし失敗", flush=True); stop = True; break
+        sc = difflib.SequenceMatcher(None, norm(e["text"]), norm(h)).ratio()
         if os.environ.get("KANA"):
-            hk = heard_kana(y); ok = MUST in hk; h = h + " ／ " + hk
+            try: hk = heard_kana(y)
+            except RuntimeError: print("書き起こし失敗", flush=True); stop = True; break
+            ok = MUST in hk; h = h + " ／ " + hk
         else:
             ok = (not MUST) or (MUST in h or MUST.replace("まる", "マル") in h)
         cps = len(e["text"]) / (len(y) / 24000)
         cands.append((sc + (0.3 if ok else 0) - 0.05 * abs(cps - 7.0), y, h, sc, cps))
         print(no, e["id"], "候補", k, "一致 %.2f" % sc, "字/秒 %.1f" % cps, h, flush=True)
-    if not cands: print(no, "作れず"); continue
+    if not cands:
+        print(no, "作れず")
+        if stop: raise SystemExit("回数切れで止めた")
+        continue
     best = max(cands, key=lambda c: c[0])
     p = D + "/line_%03d.wav" % no
     if not os.path.exists(p.replace(".wav", "_before_retake.wav")): shutil.copy(p, p.replace(".wav", "_before_retake.wav"))
     open(p, "wb").write(wav_bytes(best[1]))
     V[str(no)]["dur"] = round(len(best[1]) / 24000, 3); V[str(no)]["retake"] = True
     print(no, e["id"], "→ 選んだ：", best[2], "（一致 %.2f）" % best[3], flush=True)
+    json.dump(V, open(D + "/lines.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)   # 1 文ごとに残す
+    if stop: raise SystemExit("回数切れで止めた（ここまでは保存した）")
 json.dump(V, open(D + "/lines.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)
