@@ -278,6 +278,10 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         if kind == "tag":
             # いろは歌の札が出ている間は、上の方の板の名前を出さない（札の下に隠れて半分だけ見えたため。7本目 v1 の 2:26）
             if any(k_ == "iroha" and a_ <= t < b_ for a_, b_, k_, _ in EVENTS) and not p.get("keep"): continue
+            if p.get("obj", "")[:2] in ("k_", "a_") and p.get("obj") in ("k_T", "a_E", "k_V", "a_V"):
+                # 2 台の名前・距離の札は、2 台とも画面に入った引きの絵だけに出す（寄った絵では、別のキーボードの上に出てしまった。7本目 v5 の 1:34〜2:16）
+                qa, qb = where("k_T", t), where("a_E", t)
+                if qa is None or qb is None or not all(20 <= q[0] <= 1260 and 20 <= q[1] <= SUB_TOP for q in (qa, qb)) or abs(qa[0] - qb[0]) < 380: continue
             if "pos" in p: cx, cy = p["pos"]
             else:
                 q = where(p["obj"], t)
