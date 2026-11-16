@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "5"
+$VER = "6"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -244,12 +244,15 @@ function Run-Job($job) {
           try { Heartbeat "描いています" $job @() $prog } catch { }
         }
         # 全部描きの途中に短い直しが来たら、いったん止めて直しを先に描く（できている所は残り、あとで続きから）
+        #   割り込むのは小さな直し（3000 コマまで・およそ 2 時間半）だけ。大きな直しは、いまの 1 件が終わってから先頭で描く
         if ($job.kind -ne "fix" -and -not $preempt -and ((Get-Date) - $lastCheck).TotalSeconds -ge 180) {
           $lastCheck = Get-Date
           try {
             if (Pull-Repo) {
               $q2 = Read-Queue
-              if ($q2.Count -gt 0 -and $q2[0].kind -eq "fix") {
+              $small = $false
+              if ($q2.Count -gt 0 -and $q2[0].kind -eq "fix") { $small = (-not $q2[0].frames) -or ([int]$q2[0].frames -le 3000) }
+              if ($small) {
                 $preempt = $true
                 Note ("短い直し（{0}）が来たので、{1} をいったん止めて、直しを先に描きます" -f $q2[0].id, $job.id)
                 Kill-Kit $kitdir
