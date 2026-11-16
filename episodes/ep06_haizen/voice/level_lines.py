@@ -20,19 +20,22 @@ def level(x, sr):
     return 20 * np.log10(np.sqrt(np.mean(on ** 2)) + 1e-9) if len(on) else -99.0
 
 
+# 前に一度そろえた文は、残してある元の声（_before_level）からはかる（何回使っても大きさが重ならないように。6本目 v3 で 2 回目に +2 dB ずつ重なった）
+src = lambda n: D + "/line_%03d_before_level.wav" % n if os.path.exists(D + "/line_%03d_before_level.wav" % n) else D + "/line_%03d.wav" % n
 lv = {}
 for k in V:
-    p = D + "/line_%03d.wav" % int(k)
-    x, sr, _ = rd(p); lv[int(k)] = level(x, sr)
+    x, sr, _ = rd(src(int(k))); lv[int(k)] = level(x, sr)
 med = float(np.median(list(lv.values())))
 print("中央値 %.1f dB" % med)
 for n, v in sorted(lv.items()):
     g = min(med - v, 2.0)   # 小さい文は上げすぎない（ささやく文はわざと小さい。例 27-04「すりすり」）
-    if abs(g) <= 1.0: continue
+    if abs(g) <= 1.0:
+        if os.path.exists(D + "/line_%03d_before_level.wav" % n) and not DRY: shutil.copy(D + "/line_%03d_before_level.wav" % n, D + "/line_%03d.wav" % n)   # 中央値が動いて、そろえなくてよくなった文は元に戻す
+        continue
     print("line_%03d  %.1f dB → %+.1f dB" % (n, v, g))
     if DRY: continue
     p = D + "/line_%03d.wav" % n; b = D + "/line_%03d_before_level.wav" % n
     if not os.path.exists(b): shutil.copy(p, b)
-    x, sr, prm = rd(p); y = np.clip(x * 10 ** (g / 20), -1, 1)
+    x, sr, prm = rd(b); y = np.clip(x * 10 ** (g / 20), -1, 1)
     with wave.open(p, "wb") as w:
         w.setparams(prm); w.writeframes((y * 32767).astype(np.int16).tobytes())
