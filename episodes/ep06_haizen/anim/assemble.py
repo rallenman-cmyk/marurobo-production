@@ -144,6 +144,12 @@ for nm in ORDER:
     a_, b_ = CL[nm][0], CL[nm][1]
     for t, kind, gain in LOG[nm]["events"]:
         EV[(round(t, 2), kind)] = gain
+# 同じ種類の音が 0.6 秒以内に続くときは 1 つに（場面ごとのログに、少しずれた時刻で同じ音が残ることがある。6本目 v6 0:41「SE何個か重なってる」）
+_ev = {}
+for (t, kind), gain in sorted(EV.items()):
+    if kind not in ("motor_on", "motor_off", "step", "rub") and any(k == kind and abs(t - t2) < 0.6 for (t2, k) in _ev): continue
+    _ev[(t, kind)] = gain
+EV = _ev
 SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
 fx = np.zeros(N, np.float32); moves = []; overl = []
 # 効果音と声の重なりは、声が本当に出ている所（文の中の「……」の間は除く）で見る
