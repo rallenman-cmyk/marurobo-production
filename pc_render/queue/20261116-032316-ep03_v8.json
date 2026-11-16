@@ -1,0 +1,14 @@
+{
+ "id": "20261116-032316-ep03_v8",
+ "name": "ep03_v8",
+ "kit_branch": "pc-kit/20261116-032316-ep03_v8",
+ "zip": "marurobo_ep03.zip",
+ "ps1": "run_pc_render_ep03.ps1",
+ "only": "s00,s02,s21",
+ "kind": "fix",
+ "order": 3,
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1603\u5e83\u544a",
+ "created": "2026-11-16T03:23:16Z"
+}
