@@ -288,7 +288,7 @@ def modern_typewriter(loc=(0, 0.55, 0.94), k=0.13, period=True, layout=None, col
     km = mat(name + "_keytop", "#F1EEE6", rough=0.3, coat=0.5)
     for r, row in enumerate(rows):
         for c, ch in enumerate(row):
-            x = -0.62 + (c + OFFS[r]) * k; y = -0.05 - r * k * 0.9; z = 0.28 - r * 0.04
+            x = -0.62 + (c + OFFS[r]) * k; y = -0.05 - r * k * 0.9; z = 0.30 - r * 0.015   # v6：3 段目が本体の中に埋まっていた（z 0.20 < 本体の上 0.24）ので、段の下げ方を小さく
             cyl(gold, (x, y, z - 0.02), k * 0.4, 0.03, parent=root)
             keys[ch] = cyl(km, (x, y, z), k * 0.34, 0.025, parent=root)
             if labels: key_label(keys[ch], ch, k, "#1E2530", size=0.72 if ch != "." else 0.9, h=0.045)   # キーの上が少し丸いので、字を少し浮かせる   # 7本目 v6：タイプライターのキーにも字（2D をやめた）

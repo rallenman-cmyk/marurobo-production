@@ -58,7 +58,7 @@ def ev_list():
     add(w("08-02", "ショールズさん"), e("08-02") + 0.3, "tag", dict(text="ショールズさん", obj="sholes", dy=-80, size=46, keep=True))
     add(w("08-02", "仲間"), e("08-02") + 0.3, "tag", dict(text="仲間", obj="nakama", dy=-80, size=46, keep=True))
     add(w("09-04", "左から右"), e("09-05") + 0.5, "arrow2", dict(a="p_A", b="p_N", dy=48, col=ORANGE))
-    add(w("09-05", "右から左"), e("09-05") + 0.5, "arrow2", dict(a="p_O", b="p_Z", dy=-46, col=NAVY))
+    add(w("09-05", "右から左"), e("09-05") + 0.5, "arrow2", dict(a="p_O", b="p_Z", dy=-46, col=(90, 200, 255))   # 暗い奥の列の上でも見える色（v6 の点検：紺では見えなかった）)
     # 10：1872年・1873年・クワーティ
     add(w("10-04", "1872年"), e("10-06") + 0.3, "tag", dict(text="1872年ごろ", pos=(1080, 80), size=56))
     add(w("10-07", "1873年"), e("10-09") + 0.3, "tag", dict(text="1873年", pos=(1100, 80), size=56))
