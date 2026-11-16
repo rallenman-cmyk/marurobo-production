@@ -51,8 +51,8 @@ def ev_list():
     # 06：上から結果（名前の札・数字。言うときに 1 つずつ）
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
-    add(w("06-02", "キー28個分"), e("06-04") + 0.4, "tag", dict(text="キー28個分", obj="k_V", dy=110, size=60, bg=YEL))
-    add(w("06-03", "キー31個分"), e("06-04") + 0.4, "tag", dict(text="キー31個分", obj="a_V", dy=110, size=60, bg=YEL))
+    add(w("06-02", "キー28個分"), e("06-04") + 0.4, "tag", dict(text="キー28個分", pos=(330, 500), size=60, bg=YEL))
+    add(w("06-03", "キー31個分"), e("06-04") + 0.4, "tag", dict(text="キー31個分", pos=(950, 500), size=60, bg=YEL))
     add(w("06-04", "ほとんど") - 0.1, e("06-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
     # 07：いろは歌（ひらがな → ローマ字）→ 結果の棒グラフ → 名前の結果を小窓で
     add(w("07-02", "いろはにほへと"), w("07-04", "結果"), "iroha", {})
