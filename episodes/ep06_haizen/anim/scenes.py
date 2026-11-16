@@ -171,7 +171,10 @@ def b_open(cl):
     sv = Sv(senpai_serve((0, 4.2), 0)); track("senpai", sv.root, 1.2); track("tray", sv.d["trays"][1], 0.05)
     # v4「無理ならラーメン受けとらず先輩停止したままでいい」（0:41）：受け取る動きはなし。ラーメンは 0:41 の間はトレーの上、
     #   次の場面（04-01 の切り替わり）からはテーブルの上（先輩がラーメンを持ったまま戻らないように）
-    tray_item(sv, "ramen", 1, t_hide=s("04-01") - 0.05); table_item(11, "ramen", s("04-01") - 0.05, toward=0.05)
+    # v5「ラーメン最後消えてシーン変わるんじゃなくて、そのままで、シーン変わったらなくなってる感じに」（0:41）：
+    #   S03d（止まった所）ではずっとトレーの上。次の S04a からは、はじめからテーブルの上（場面ごとに描くので、場面で分ける）
+    if cl == "S03d": tray_item(sv, "ramen", 1)
+    else: tray_item(sv, "ramen", 1, t_hide=s("04-01") - 0.3); table_item(11, "ramen", s("04-01") - 0.3, toward=0.05)
     ts = w("03-01", "ぴたっ")
     d1 = plan.Drive([(0, 4.2), (0, 2.2)], s("02-01") + 0.3, v=2.0 / (ts - 4.0 - s("02-01") - 0.3), face0=0)
     sv.drive(d1); d2 = plan.Drive([(0, 2.2), (0, 1.6)], d1.t1, v=0.6 / (ts - d1.t1), face0=0); sv.drive(d2, motor=False)

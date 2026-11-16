@@ -171,7 +171,7 @@ def arrow_sprite(p0, p1, col=YEL):
 def draw(t, base, where, frame_of=None, fontdir=None):
     """base（1280×720 RGBA）に、時刻 t の 2D を描く。where(名前, t, clip=None) → 画面の (x, y) か None。frame_of(clip, t) → 小窓の絵"""
     if fontdir and not D.FDIR[0]: D.FDIR[0] = fontdir
-    for t0, t1, kind, p in EVENTS:
+    for t0, t1, kind, p in sorted(EVENTS, key=lambda x: x[2] == "tag"):   # 札はいちばん前に（v5 3:14「テロップを最前面に」）
         if not (t0 <= t < t1): continue
         k, a = _pop(t, t0, t1)
         if kind == "tag":
