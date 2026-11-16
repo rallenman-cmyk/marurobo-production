@@ -21,7 +21,8 @@ _cache = {}
 def ev_list():
     E = []
     add = lambda *a: E.append(a)
-    kl = lambda t0, t1, keys, **kw: add(t0, t1, "keys", dict(keys=keys, **kw))
+    # 机のキーボード（k_・a_・d_・l_）は、キーの上に字を書いたので 2D の字は出さない（2026-11-16 ユーザー「最初っからＡってテロップあってもわかんない」「ボタンにそれぞれの文字表示して」）
+    kl = lambda t0, t1, keys, **kw: None if all(o.split("_")[0] in ("k", "a", "d", "l") for o, _ in keys) else add(t0, t1, "keys", dict(keys=keys, **kw))
     # 01〜02：A を打つ → 画面に A。B をさがす
     kl(s("01-01"), e("02-04") + 0.3, [("k_A", "A")])
     add(w("01-04", "カタッ") + 0.1, e("01-04") + 0.5, "tag", dict(text="A", obj="screen", dy=0, size=64))

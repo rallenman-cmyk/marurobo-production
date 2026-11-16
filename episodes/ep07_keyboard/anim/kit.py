@@ -36,9 +36,31 @@ def keycap(m, loc, k=KEY, parent=None, h=0.07, w=1.0):
     return o
 
 
+_KFONT = [None]
+
+
+def key_label(cap, ch, k=KEY, col="#1E2530", size=0.82, h=0.07):
+    """キーの上の面に字を書く（2026-11-16 ユーザー「キーボードには普通の文字配列をそれぞれのボタンにも表示して」）。
+    字は Blender の文字の部品（平たい板）。キーの子にするので、押すと一緒に沈む"""
+    if _KFONT[0] is None:
+        fp = os.environ.get("KEY_FONT", "")
+        _KFONT[0] = bpy.data.fonts.load(fp) if fp and os.path.exists(fp) else bpy.data.fonts["Bfont Regular"] if "Bfont Regular" in bpy.data.fonts else False
+    cu = bpy.data.curves.new("lbl_" + ch, "FONT"); cu.body = ch
+    cu.align_x = "CENTER"; cu.align_y = "CENTER"; cu.size = k * size; cu.extrude = 0.0006
+    if _KFONT[0]: cu.font = _KFONT[0]
+    ob = bpy.data.objects.new("lbl_" + ch, cu); bpy.context.scene.collection.objects.link(ob)
+    ob.data.materials.append(mat("key_ink", col, rough=0.55))
+    bpy.context.view_layer.update()
+    w = cap.matrix_world.translation
+    ob.location = (w.x, w.y - k * size * 0.04, w.z + h / 2 + 0.003)   # 光る板（+0.0005〜）より上
+    bpy.context.view_layer.update()
+    ob.parent = cap; ob.matrix_parent_inverse = cap.matrix_world.inverted()
+    return ob
+
+
 class Board:
     """キーボード：root（場所）、keys（字 → キー）。キーを押す（沈む）・光らせる。字は 2D（track 名は prefix+字）"""
-    def __init__(self, rows, origin=(0, 0), k=KEY, name="kb", case_col="#2A2F38", key_col="#E9ECEF", offs=OFFS, extra_rows=True, prefix="k_"):
+    def __init__(self, rows, origin=(0, 0), k=KEY, name="kb", case_col="#2A2F38", key_col="#E9ECEF", offs=OFFS, extra_rows=True, prefix="k_", labels=True, ink="#2B3340"):
         self.rows, self.k, self.origin, self.offs = rows, k, origin, offs
         self.root = empty((0, 0, KEY_TOP))
         cm = mat(name + "_case", case_col, rough=0.35, coat=0.3)
@@ -54,9 +76,11 @@ class Board:
             for c, ch in enumerate(row):
                 x, y = key_pos(rows, ch, origin, k, offs)
                 self.keys[ch] = keycap(kmat, (x, y, 0.045), k, parent=self.root)
+                if labels: key_label(self.keys[ch], ch, k, ink)
         if extra_rows:   # 数字の段・空白の段（字のない灰色のキー。本物らしさのため。字は出さない）
             for c in range(10):
-                keycap(mod_m, (origin[0] + (c + 0.5) * k - 0.25 * k, origin[1] + k, 0.045), k, parent=self.root)
+                kc = keycap(mod_m, (origin[0] + (c + 0.5) * k - 0.25 * k, origin[1] + k, 0.045), k, parent=self.root)
+                if labels: key_label(kc, "1234567890"[c], k, ink, size=0.62)
             keycap(mod_m, (origin[0] + 4.6 * k, origin[1] - len(rows) * k, 0.045), k, w=5.0, parent=self.root)
             keycap(mod_m, (origin[0] + w_ + 0.9 * k, origin[1] - 1 * k, 0.045), k, w=1.6, parent=self.root)
         self.glows = {}
@@ -70,13 +94,27 @@ class Board:
         key(o, ("location", 2), t - 0.01, z); key(o, ("location", 2), t + 0.04, z - 0.03); key(o, ("location", 2), t + d, z)
         if sound: ev(t, "key", gain)
 
+    def hold(self, ch, t0, t1, dz=0.03):
+        """まるロボが乗っている間、そのキーを沈ませておく（2026-11-16 ユーザー「まるロボが乗っているボタンは沈ませて」）"""
+        o = self.keys[ch]; z = o.location.z
+        key(o, ("location", 2), t0 - 0.01, z); key(o, ("location", 2), t0 + 0.06, z - dz)
+        key(o, ("location", 2), t1 - 0.01, z - dz); key(o, ("location", 2), t1 + 0.08, z)
+
+    def rise(self, ch, t0, t1, up=0.24, tilt=62):
+        """キーが浮き上がって、字をこちらに向ける（2026-11-16 ユーザー「それぞれのボタンが浮き上がって文字になる感じにして」）"""
+        o = self.keys[ch]; z = o.location.z
+        key(o, ("location", 2), t0, z); key(o, ("location", 2), t0 + 0.45, z + up)
+        key(o, ("rotation_euler", 0), t0, 0.0); key(o, ("rotation_euler", 0), t0 + 0.45, R(tilt))
+        key(o, ("location", 2), t1, z + up); key(o, ("location", 2), t1 + 0.45, z)
+        key(o, ("rotation_euler", 0), t1, R(tilt)); key(o, ("rotation_euler", 0), t1 + 0.45, 0.0)
+
     def light(self, ch, t0, t1=None, col="#FFD24A", strength=2.5, d=0.25):
         """キーを光らせる（その字のキーの上の面に光る板）。t1 で消す"""
         o = self.keys[ch]
         if ch not in self.glows:   # 大きさを scale で付けた物に scale_pop を使わない（SKILL）：空の親を弾ませる
             gm = flat_mat("kglow_" + ch + str(id(self)), col, strength)
-            g = empty((o.location.x, o.location.y, o.location.z + 0.038)); g.parent = self.root
-            gl = cube(gm, (0, 0, 0), (self.k * 0.8, self.k * 0.8, 0.004), parent=g); gl.visible_shadow = False
+            g = empty((o.location.x, o.location.y, o.location.z + 0.0358)); g.parent = self.root
+            gl = cube(gm, (0, 0, 0), (self.k * 0.8, self.k * 0.8, 0.001), parent=g); gl.visible_shadow = False
             self.glows[ch] = g; hide_key(g, -100.0, True)
         g = self.glows[ch]
         hide_key(g, t0, False); scale_pop(g, t0, 1.0, d)
