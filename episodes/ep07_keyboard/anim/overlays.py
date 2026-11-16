@@ -253,10 +253,14 @@ def phone_keys():
     return _cache[key]
 
 
+_TAGS = []
+
+
 def draw(t, base, where, frame_of=None, fontdir=None):
     global EVENTS
     if fontdir and not D.FDIR[0]: D.FDIR[0] = fontdir
     if EVENTS is None: EVENTS = ev_list()
+    _TAGS.clear()
     for t0, t1, kind, p in EVENTS:
         if not (t0 <= t < t1): continue
         k, a = _pop(t, t0, t1)
@@ -270,6 +274,14 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 cx, cy = q[0] + p.get("dx", 0), min(max(70, q[1] + p.get("dy", -120)), SUB_TOP - 60)
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), p.get("fg"))
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
+            # 札どうしが重なるときは、あとの札を下へずらす（7本目 v1 の 1:49 で「クワーティ」が「ABC 順」の下に隠れた）
+            x0 = cx + off[0] + spr.width / 2 - spr.width / 2
+            for _ in range(4):
+                y0 = cy + off[1]
+                hit = [r for r in _TAGS if x0 < r[2] and r[0] < x0 + spr.width and y0 < r[3] and r[1] < y0 + spr.height]
+                if not hit: break
+                cy = max(r[3] for r in hit) + 8 - off[1]
+            _TAGS.append((x0, cy + off[1], x0 + spr.width, cy + off[1] + spr.height))
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)
         elif kind == "keys":
             fl = p.get("flow", 0.0)
@@ -279,7 +291,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             sz = p.get("size", 46)
             if len(qs) > 1:
                 gap = min(((qa[0] - qb[0]) ** 2 + (qa[1] - qb[1]) ** 2) ** 0.5 for i_, qa in enumerate(qs) for qb in qs[i_ + 1:])
-                sz = max(30, min(sz, int(gap * 0.85)))
+                if gap * 0.85 < 30: continue     # 遠くて字が重なるだけなら出さない（7本目 v1 の 0:52〜0:58・1:55）
+                sz = min(sz, int(gap * 0.85))
             for i, (obj, ch) in enumerate(p["keys"]):
                 ti = t0 + fl * i
                 if t < ti: continue
