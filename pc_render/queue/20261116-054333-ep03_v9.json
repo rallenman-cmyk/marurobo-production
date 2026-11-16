@@ -11,6 +11,6 @@
  "samples": 24,
  "session": "\ud83e\udd1603\u5e83\u544a",
  "created": "2026-11-16T05:43:33Z",
- "frames": 0,
- "note": "big fix (10231 frames). frames=0 on purpose so it goes ahead of ep05 now (user decided: ep04 -> ep03 fix -> ep05)"
+ "frames": 10231,
+ "note": "big fix; ordered ahead of ep05 by user decision"
 }
