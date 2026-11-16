@@ -8,6 +8,7 @@ import mathutils
 ARGS = sys.argv[sys.argv.index("--") + 1:]
 _ANIM_HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(_ANIM_HERE, "common.py"), encoding="utf-8").read())
+exec(open(os.path.join(_ANIM_HERE, "set_rich.py"), encoding="utf-8").read())   # 作り込んだ舞台（電車・部屋）
 KEY, OUTDIR = ARGS[0], ARGS[1]
 N_SAMPLES = int(ARGS[2]) if len(ARGS) > 2 and ARGS[2].isdigit() else 32
 def opt(name, default):
@@ -39,7 +40,7 @@ def phone_screen(ph, img, glow):
 # ---------------- S00 いきなり夜：テントの広告に、まるロボがびくっ
 def s00():
     t0, t1 = span("S00")
-    room(night=True); person_sleep(0.15)
+    room_rich(night=True); person_sleep(0.15)
     ph = phone((0.35, -0.9, 0.0), 10, screen=None)
     ad = phone_screen(ph, "phone_ad.png", 2.5)
     L = night_lamp((0.35, -0.9, 0.6), 0)
@@ -56,11 +57,7 @@ def s00():
 # ---------------- S01 電車：ハルさんとソラさん、まるロボはわくわく
 def s01():
     t0, t1 = span("S01")
-    _m = globals()["maru"]; globals()["maru"] = lambda *a, **k: empty()
-    s5_train(); globals()["maru"] = _m
-    train_windows()
-    for o in list(bpy.data.objects):
-        if o.type == 'CAMERA': bpy.data.objects.remove(o)
+    train_rich()                                                     # v8「電車の中がチープすぎる」：作り込んだ電車
     mr = Maru((0.0, 1.05, 0.5), 0, s=0.55, hat=False, eye_glow=0.9)
     for k, tt in enumerate((s("01-01") + 1.0, s("01-01") + 2.5, s("01-01") + 4.0, s("01-02") + 1.5)):
         mr.at(tt, face=35 if k % 2 == 0 else -35)                 # 二人の顔を交互に見る
@@ -117,7 +114,7 @@ def soft_towel(n=(24, 20), size=(0.6, 0.5)):
 # ---------------- S02 その夜：ニュース → テントの広告 → タオルでマイクをふさぐ
 def s02():
     t0, t1 = span("S02")
-    room(night=True)
+    room_rich(night=True)
     # v4「ハルさんがスマホを見ていると言っているのに寝ている」(0:45)：ふとんに座って、前のスマホをのぞきこむ
     hr = person((0.8, -0.32, 0.0), 160, shirt="#3E7CB1", s=0.6)   # ふとんのはしに腰かける
     for bn, deg in (("chest", 12), ("neck", 22), ("head", 28)):
@@ -167,7 +164,7 @@ def s02():
 # ---------------- S04 フックの帽子をかぶって探偵に
 def s04():
     t0, t1 = span("S04")
-    room(night=False, hook_hat=True)
+    room_rich(night=False, hook_hat=True)
     # v4「帽子ちゃんとかぶってない、ベッドの上じゃなくてすり抜けてる」(1:11)：
     #   ふとんの外（x≥1.6）を歩く。落ちてきた帽子は、頭に乗った瞬間に、まるロボの本物の帽子（いつもの形・大きさ）に入れかえる
     HX, HY = 1.6, 1.4
@@ -432,13 +429,8 @@ def s12():
 
 # ---------------- S13〜S15 電車（ふり返り）
 def train_set(maru_kw=None):
-    _m = globals()["maru"]; globals()["maru"] = lambda *a, **k: empty()
-    s5_train(); globals()["maru"] = _m
-    train_windows()
-    cube(mat("wifi_box", "#F4F4F4", rough=0.4), (0, 0.6, 2.45), (0.5, 0.3, 0.1), bevel=0.03)
-    led = mat("wifi_led", "#2BB3A6", emit=3.0); sphere(led, (0, 0.44, 2.43), 0.025)
-    for o in list(bpy.data.objects):
-        if o.type == 'CAMERA': bpy.data.objects.remove(o)
+    train_rich(wifi=True)                                            # v8「電車の中がチープすぎる」：作り込んだ電車
+    led = mat("wifi_led", "#2BB3A6", emit=3.0); sphere(led, (0, 0.44, 2.54), 0.025)
     return Maru(**(maru_kw or dict(loc=(0.0, 1.05, 0.5), face=0, s=0.55, hat=False, eye_glow=0.9))), led
 
 
@@ -591,7 +583,7 @@ def s19():
 # ---------------- S21 その夜：こそこそ近づいて「ピポ、ピポ」→ 何も起きない → 丸くなる
 def s21():
     t0, t1 = span("S21")
-    room(night=True); person_sleep(0.15)
+    room_rich(night=True); person_sleep(0.15)
     phone((0.35, -0.9, 0.0), 10, screen=None)
     mr = Maru((-1.2, -1.9, 0), 40, s=0.42, hat=True, eye_glow=1.1)
     for k in range(3): mr.at(s("21-01") + 3.0 + 0.5 * k, face=40 + (40 if k % 2 == 0 else -40))   # 辺りを見回す
@@ -616,7 +608,7 @@ def s21():
 # ---------------- S22 次の朝：ひっくり返ったまるロボ → テントの広告 → 帽子を下げて目をかくす
 def s22():
     t0, t1 = span("S22")
-    room(night=False)
+    room_rich(night=False)
     ph = phone((0.35, -0.9, 0.0), 10, screen=None)
     phone_screen(ph, "phone_ad.png", 1.6)
     mr = Maru((-0.2, -1.2, 0.56), -200, s=0.45, hat=True, eye_glow=1.6)
