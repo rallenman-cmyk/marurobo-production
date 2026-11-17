@@ -43,6 +43,21 @@ new = '''    $common = @("--res", "1920", "1080", "--frames", "$a", "$b", "--gpu
     elseif ($py -like "anim\\scenes.py") { $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $ep $py), "--", $key, $out, "$Samples") + $common + @("--scr", $scr) }
     else { $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $ep $py), "--", $out, "$Samples") + $common }'''
 assert old in s; s = s.replace(old, new, 1)
+# 本物のまるロボで描く（2026-11-17）：story.blend が見つからなければ、代わりの体で描かずに止める
+o = '    $common = @('
+assert o in s; s = s.replace(o, '    $env:MARU_REQUIRE_REAL = "1"\n' + o, 1)
+# 本物のまるロボのファイル（story.blend）を 1 回だけ探し、描き手に渡す（Blender の中で毎回探すと遅いため）
+o = "# ---------------------------------------------------------------- 100 コマずつ mp4 で描く"
+assert o in s
+s = s.replace(o, '''# ---------------------------------------------------------------- 本物のまるロボ（story.blend）を探す
+if (-not $env:MARU_BLEND -or -not (Test-Path $env:MARU_BLEND)) {
+  $sb = Get-ChildItem $root -Recurse -Filter story.blend -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match "bt_production_v1.output" } | Select-Object -First 1
+  if (-not $sb) { $sb = Get-ChildItem $root -Recurse -Filter story.blend -ErrorAction SilentlyContinue | Select-Object -First 1 }
+  if ($sb) { $env:MARU_BLEND = $sb.FullName } else { Note "本物のまるロボ（story.blend）が C:\\marurobo の下に見つかりません"; exit 1 }
+}
+if ($Worker -eq 0) { Note ("本物のまるロボ：{0}" -f $env:MARU_BLEND) }
+
+''' + o, 1)
 bad = [l for l in s.splitlines() if "ep05" in l or "5本目を" in l]
 assert not bad, bad
 open(os.path.join(H, 'run_pc_render_ep04.ps1'), 'w', encoding='utf-8-sig').write(s)

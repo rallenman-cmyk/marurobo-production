@@ -5,7 +5,7 @@
 #   描く細かさ：-Samples 24（既定。光の跳ね返りを減らす --fast と合わせて、48 の約 3 倍速い）
 #   途中で止まったり窓を閉じたりしても、同じ行をもう一度走らせれば、できている所は飛ばして続きから描く
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
-#   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep04_v14 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
+#   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep04_v15 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
 #   5本目の手順と同じ作り。描き方は 3 種類：部屋の場面＝anim\clip_anim.py、0:44 のマウス＝anim\scenes.py、図の場面＝look\<名前>_3d.py
 param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 24)
 $ErrorActionPreference = "Continue"
@@ -58,7 +58,7 @@ $JOBS = @(
   @("c_s23a", 343, "anim\clip_anim.py")
 )
 if ($Only) { $want = @($Only.Split(",") | ForEach-Object { $_.Trim() }); $sel = New-Object System.Collections.ArrayList; foreach ($j in $JOBS) { if ($want -contains $j[0]) { [void]$sel.Add($j) } }; $JOBS = $sel.ToArray() }
-$out = Join-Path $root "render_ep04_v14"
+$out = Join-Path $root "render_ep04_v15"
 $log = Join-Path $root "render_log_ep04.txt"
 $done = Join-Path $out "_done"
 New-Item -ItemType Directory -Force -Path $done | Out-Null
@@ -86,7 +86,7 @@ function Left() { $n = 0; foreach ($c in (AllChunks)) { $tag = "{0}_{1:D4}-{2:D4
 # Google ドライブ（パソコン版）の場所。1 本できるたびに、そこへすぐコピーする（こちらで進み具合を見られるように）
 $gdrive = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
 $gep = $null
-if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep04_v14"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
+if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep04_v15"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
 
 # ---------------------------------------------------------------- Blender 4.3 を探す
 $blender = $Blender
@@ -111,6 +111,14 @@ if (-not (Test-Path $blender) -and $Worker -eq 0) {
 if (-not (Test-Path $blender)) { Note "Blender 4.3 が見つかりません。https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.msi を入れてから、もう一度走らせてください"; exit 1 }
 if (-not (Test-Path (Join-Path $ep "anim\clip_anim.py"))) { Note "見つかりません：$ep\anim\clip_anim.py（marurobo_ep04.zip を C:\marurobo に展開し直してください）"; exit 1 }
 
+# ---------------------------------------------------------------- 本物のまるロボ（story.blend）を探す
+if (-not $env:MARU_BLEND -or -not (Test-Path $env:MARU_BLEND)) {
+  $sb = Get-ChildItem $root -Recurse -Filter story.blend -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match "bt_production_v1.output" } | Select-Object -First 1
+  if (-not $sb) { $sb = Get-ChildItem $root -Recurse -Filter story.blend -ErrorAction SilentlyContinue | Select-Object -First 1 }
+  if ($sb) { $env:MARU_BLEND = $sb.FullName } else { Note "本物のまるロボ（story.blend）が C:\marurobo の下に見つかりません"; exit 1 }
+}
+if ($Worker -eq 0) { Note ("本物のまるロボ：{0}" -f $env:MARU_BLEND) }
+
 # ---------------------------------------------------------------- 100 コマずつ mp4 で描く（できている範囲と、ほかの描き手が描いている範囲は飛ばす）
 function Run-Jobs {
   $times = @()
@@ -125,6 +133,7 @@ function Run-Jobs {
     Note ("{0}：{1}〜{2} コマ目を描いています" -f $key, $a, $b)
     $t0 = Get-Date
     $blog = Join-Path $out ("blender_log{0}.txt" -f $Worker)
+    $env:MARU_REQUIRE_REAL = "1"
     $common = @("--res", "1920", "1080", "--frames", "$a", "$b", "--gpu", "--video", "--fast", "--tex", $tex)
     if ($py -like "anim\clip_anim.py") { $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $ep $py), "--", $key, (Join-Path $ep "anim\clips.json"), $out, "$Samples") + $common + @("--scr", $scr) }
     elseif ($py -like "anim\scenes.py") { $argv = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", (Join-Path $ep $py), "--", $key, $out, "$Samples") + $common + @("--scr", $scr) }
@@ -179,14 +188,14 @@ else {
   }
 }
 # 送るファイルをまとめる（mp4 と、場面ごとの記録 *_log.json）
-$dst = Join-Path $root "marurobo_render\ep04_v14"
+$dst = Join-Path $root "marurobo_render\ep04_v15"
 New-Item -ItemType Directory -Force -Path $dst | Out-Null
 Get-ChildItem $out -File | Where-Object { $_.Extension -eq ".mp4" -or $_.Name -like "*_log.json" } | ForEach-Object { Copy-Item $_.FullName $dst -Force }
 $left = Left
 $mb = [Math]::Round(((Get-ChildItem $dst -File | Measure-Object Length -Sum).Sum) / 1MB)
 Note ("送るファイルを {0} にまとめました（{1} MB）" -f $dst, $mb)
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
-if ($g) { $gd = Join-Path $g "marurobo_render"; New-Item -ItemType Directory -Force -Path $gd | Out-Null; Copy-Item $dst $gd -Recurse -Force; Note ("Google ドライブ（{0}\ep04_v14）にコピーしました" -f $gd) }
+if ($g) { $gd = Join-Path $g "marurobo_render"; New-Item -ItemType Directory -Force -Path $gd | Out-Null; Copy-Item $dst $gd -Recurse -Force; Note ("Google ドライブ（{0}\ep04_v15）にコピーしました" -f $gd) }
 [void][Maru.Power]::SetThreadExecutionState([uint32]2147483648)
 if ($left -gt 0) { Note ("終わりました（{0}）。まだ {1} 本そろっていません。同じ行をもう一度走らせると、足りない所だけ描きます" -f (Fmt ((Get-Date) - $tAll)), $left) }
 elseif ($g) { Note ("ぜんぶ終わりました（{0}）。Google ドライブへのアップロードは自動で進みます（終わるまで PC は入れたままに）。チャットで知らせてください" -f (Fmt ((Get-Date) - $tAll))) }

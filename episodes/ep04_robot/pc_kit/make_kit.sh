@@ -10,13 +10,16 @@ EP=$(cd "$(dirname "$0")/.." && pwd); REPO=$(cd "$EP/../.." && pwd); OUT=$(cd "$
 python3 $EP/pc_kit/make_ps1.py ${VER:-v13}
 python3 $REPO/skill/marurobo-video-production/scripts/ps_lint.py $EP/pc_kit/run_pc_render_ep04.ps1
 LOOKS="s06 s07 s08x s09 s10 s15 s19 s20 s22"
-for f in anim/common anim/clip_anim anim/scenes look/_head look/kit3d storyboard/board storyboard/rich; do python3 -m py_compile $EP/$f.py; done
+for f in anim/common anim/clip_anim anim/scenes anim/real_maru look/_head look/kit3d storyboard/board storyboard/rich; do python3 -m py_compile $EP/$f.py; done
 for n in $LOOKS; do python3 -m py_compile $EP/look/${n}_3d.py; done
 T=$(mktemp -d); K=$T/marurobo_ep04; E=$K/episodes/ep04_robot
-mkdir -p $K/pc_kit $E/anim $E/look $E/storyboard $E/voice $E/animatic $K/episodes/ep03_ad/storyboard $K/tex $K/scr
+mkdir -p $K/pc_kit $E/anim $E/look $E/storyboard $E/voice $E/animatic $K/episodes/ep03_ad/storyboard $K/tex $K/scr $K/skill/marurobo-video-production/scripts $K/episodes/ep01_earphone/stage/maru
 cp $EP/pc_kit/run_pc_render_ep04.ps1 $EP/pc_kit/README_PC.md $EP/pc_kit/はじめに.txt $K/pc_kit/
 cp $EP/pc_kit/はじめに.txt $EP/pc_kit/README_PC.md $K/
-cp $EP/anim/common.py $EP/anim/clip_anim.py $EP/anim/scenes.py $EP/anim/clips.json $E/anim/
+cp $EP/anim/common.py $EP/anim/clip_anim.py $EP/anim/scenes.py $EP/anim/clips.json $EP/anim/real_maru.py $E/anim/
+# 本物のまるロボ（2026-11-17）：置く道具・動きの道具・当てる道具。story.blend は PC の C:\marurobo の下を探す
+cp $REPO/skill/marurobo-video-production/scripts/maru_real.py $REPO/skill/marurobo-video-production/scripts/marumotion.py $K/skill/marurobo-video-production/scripts/
+cp $REPO/episodes/ep01_earphone/stage/maru/marurig.py $K/episodes/ep01_earphone/stage/maru/
 cp $EP/look/_head.py $EP/look/kit3d.py $E/look/
 for n in $LOOKS; do cp $EP/look/${n}_3d.py $E/look/; done
 cp $EP/storyboard/board.py $EP/storyboard/rich.py $E/storyboard/
