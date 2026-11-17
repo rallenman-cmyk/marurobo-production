@@ -69,6 +69,7 @@ class Maru:
     def groove(self, t, dur=4.0, bpm=96.0): self.cmds.append((t, "groove", dict(dur=dur, bpm=bpm)))
     def rest(self, t, dur=2.5): self.cmds.append((t, "rest", dict(dur=dur)))
     def wake(self, t): self.cmds.append((t, "wake", {}))
+    def bonk(self, t, hold=0.8): self.cmds.append((t, "bonk", dict(hold=hold)))       # ぶつかる（ゴツン）。5本目で足した動き
     def hops(self, t, n=3, height=0.06): self.cmds.append((t, "hops", dict(n=n, height=height)))
     def run(self, t, loc): self.cmds.append((t, "move", dict(p=(loc[0], loc[1]), how="run_to")))      # t＝着く時刻
     def back(self, t, loc): self.cmds.append((t, "move", dict(p=(loc[0], loc[1]), how="back_to")))
