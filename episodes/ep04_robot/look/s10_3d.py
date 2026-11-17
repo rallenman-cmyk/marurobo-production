@@ -176,5 +176,8 @@ aL = empty((cxL, Y + 0.3, 1.9)); TRACK["L_tube"] = (aL, 0.0)
 aR = empty((cxR, Y + 0.3, 1.9)); TRACK["R_tube"] = (aR, 0.0)
 cL = empty((cxL, Y + 0.3, 3.85)); TRACK["L_clock"] = (cL, 0.0)
 cR = empty((cxR, Y + 0.3, 3.85)); TRACK["R_clock"] = (cR, 0.0)
+_hd = open(os.path.join(_ANIM_HERE, "..", "look", "_head.py"), encoding="utf-8").read()
+exec(_hd[_hd.index("def real_maru"):_hd.index("def finish")])   # 本物のまるロボに入れ替える（_head.py と同じ）
+real_maru("s10")
 render("s10", T0, T1, OUTDIR, N_SAMPLES, (RESX, RESY), STEP)
 print("S10DONE")
