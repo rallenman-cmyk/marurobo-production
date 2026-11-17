@@ -45,10 +45,8 @@ KANA = "いろはにほへとちりぬるをわかよたれそつねならむう
 _M_ = [None]
 
 
-class MaruR(Maru):
-    """まるロボ（最後に作ったものを覚えておく。カット割りのカメラで追うため）"""
-    def __init__(self, *a, **k):
-        Maru.__init__(self, *a, **k); _M_[0] = self
+# まるロボ：本物の体を、動きの予定で動かす（2026-11-17 ユーザー「まるロボの動きは手で作らず、一覧の部品から選ぶ」）。MaruR は maru7.py
+exec(open(os.path.join(_K7, "maru7.py"), encoding="utf-8").read())
 
 
 def cam(loc, target, lens=35, t0=None, t1=None, loc1=None, target1=None, lens1=None):
@@ -62,6 +60,15 @@ def topcam(loc0, loc1=None, t0=None, t1=None, lens=30):
     c = cam_top(loc0, lens)
     if loc1 is not None: cam_top_move(c, t0, t1, loc0, loc1)
     return c
+
+
+def hop_across(M, p0, p1, t_land):
+    """キーボードからキーボードへ：机に跳び降りて歩き、となりのキーボードに跳び乗る（キーの上を宙に浮いて歩かない）"""
+    dx, dy = p1[0] - p0[0], p1[1] - p0[1]; L = math.hypot(dx, dy); ux, uy = dx / L, dy / L
+    # キーボードの手前（y が小さい方）の机へ降りる
+    a = (p0[0] + ux * 0.1, p0[1] - 0.62, 0.0); b = (p1[0] - ux * 0.1, p1[1] - 0.62, 0.0)
+    tw = math.hypot(b[0] - a[0], b[1] - a[1]) / (1.3 * M.s)
+    M.jump(t_land - tw - 3.2, a); M.walk(t_land - tw - 2.0, t_land - 1.6, b); M.jump(t_land, p1)
 
 
 # ======================================================================== A：夜の机（S01〜S07・S19b・S21・S23a・S24c・S27・S28）
@@ -89,18 +96,17 @@ def b_desk(cl):
     M.at(-100.0, loc=(QO[0] - 0.7, QO[1] - 0.85, 0.0), face=-40)
     M.walk(s("01-01") + 0.4, e("01-01") + 0.2, fl)
     M.wobble(w("01-02", "腕") - 0.2, e("01-02") + 0.1, 10, 0.5)      # 01-02：腕がない（体を左右にふる）
-    t = w("01-03", "跳ねて"); M.hop(t - 0.1, h=0.35, d=0.55); M.at(t - 0.1, loc=fl); M.at(t + 0.45, loc=P(Q, "A")); ev(t + 0.45, "land", 0.4)
+    t = w("01-03", "跳ねて"); M.jump(t + 0.45, P(Q, "A"))
     t = w("01-04", "ぴょん"); M.hop(t - 0.2, h=0.22, d=0.4); Q.press("A", t + 0.18, gain=0.7)
     Q.hold("A", t + 0.4, s("02-04") + 0.35)
     # 02：B をさがす（右に S・左は何もない・上に Q）
     # 向き：となりの S（右）を見る → 反対側（左）を見る（2026-11-16 ユーザー「まるロボ見てる方向が逆」で左右を入れかえた）
-    M.at(w("02-01", "すぐとなり") - 0.4, face=0.0); M.at(w("02-01", "すぐとなり"), face=35)
+    M.at(w("02-01", "すぐとなり"), face=35)
     M.at(s("02-02"), face=60); M.at(s("02-03") - 0.1, face=60); M.at(s("02-03") + 0.4, face=-70)
     Q.light("S", w("02-02", "S"), s("02-04"), col="#FFD24A")      # 02-02：となりの S
     t = s("02-04"); M.at(t, face=-70)
     SR = ("Q", "W", "S", "D", "K")      # 最後は K（上の段の QWERTY の前に立たない。03 でその 6 個が浮き上がるため）
-    for i, ch in enumerate(SR):
-        hop_path(Q, ("A" + ch) if i == 0 else (SR[i - 1] + ch), t + 0.4 + i * 0.55, 0.55, M, line=False)
+    hop_path(Q, "A" + "".join(SR), t + 0.4 - 0.55, 0.55, M, line=False)      # A から Q W S D K へ続けて跳ぶ
     Q.hold("K", t + 0.4 + 4 * 0.55 + 0.6, w("04-02", "遠く") - 0.1)
     M.wobble(e("02-04") - 0.6, e("02-04"), 8, 0.3)
     # 03：上から。まるロボは K で止まったまま（B へは行かない。2026-11-16 ユーザー「この話してるときにＢのとこ行ってるのおかしい」）
@@ -112,20 +118,20 @@ def b_desk(cl):
     M.at(e("03-05") + 0.4, face=0.0)
     # 04-01〜02：遠くのキーほど、たくさん跳ぶ（K → J は小さく、J → Q は大きく）
     Q.light("Q", w("04-01", "跳ねる距離"), e("04-02") + 0.2, col="#FFD24A")
-    ta = w("04-02", "遠く"); M.at(ta - 0.35, face=-90)
+    ta = w("04-02", "遠く"); M.at(e("04-01"), face=-90)
     hop_path(Q, "KJ", ta, 0.5, M, line=False, h=0.12)
     tb = w("04-02", "たくさん"); hop_path(Q, "JQ", tb, 1.0, M, line=False, h=0.45)
     Q.hold("J", ta + 0.1, tb - 0.85); Q.hold("Q", tb + 1.05, s("05-01") + 0.4)
     # 04-03〜04：ABC 順のキーボードが右にすべりこむ → まるロボはそちら（右）を向いて、跳ねてよろこぶ（v5「まるロボはabcのキーボードの方を向かせて」）
-    M.at(s("04-03") - 0.3, face=-60); M.at(s("04-03") + 0.6, face=80)
-    M.hop(s("04-04") + 0.3, h=0.2, d=0.4); M.hop(s("04-04") + 0.8, h=0.2, d=0.4)
+    M.at(s("04-03") - 0.3, face=-60); M.at(s("04-03") + 2.4, face=80)
+    M.hops(s("04-04") + 0.3, n=2)
     # 05：「マルロボ」を打つ（青 → 橙）。最初の M へ歩く
     M.walk(s("05-01") + 0.4, s("05-01") + 1.6, P(Q, "M"))
     t = w("05-04", "道のり"); dt = min(0.55, (e("05-04") + 0.4 - t) / 7)
     hop_path(Q, "MARUROBO", t, dt, M, col=BLUE_L, name="path_q")
-    t2 = s("05-05") - 0.2; M.at(t2 - 0.6, loc=P(Q, "O")); M.walk(t2 - 0.5, t2 + 0.2, P(A, "M"))
-    dt2 = min(0.55, (e("05-05") + 0.5 - t2) / 7)
-    hop_path(A, "MARUROBO", t2 + 0.4, dt2, M, col=ORANGE_L, name="path_a")
+    t2 = s("05-05") - 0.2; M.jump(t2 + 3.0, P(A, "M"), apex=0.3)      # となりのキーボードへ、大きく跳んで移る
+    dt2 = min(0.55, (e("05-05") + 0.5 - (t2 + 4.3)) / 7)
+    hop_path(A, "MARUROBO", t2 + 4.3, dt2, M, col=ORANGE_L, name="path_a")
     # 06：上から結果。まるロボは O の上できょとん（首をかしげる）
     M.at(s("06-04"), face=0.0); M.tilt(w("06-04", "ほとんど"), 14); M.tilt(e("06-04") + 0.3, 0)
     A.hold("O", e("05-05") + 0.9, s("07-03"))
@@ -133,44 +139,45 @@ def b_desk(cl):
     t0 = s("07-03") + 0.3; t1 = e("07-03") + 0.2; dt = (t1 - t0) / (len(IROHA) - 1)
     lq = hop_path(Q, IROHA, t0, dt, None, col=BLUE_L, name="iro_q", z=0.105)
     la = hop_path(A, IROHA, t0, dt, None, col=ORANGE_L, name="iro_a", z=0.105)
-    for k_ in range(int((t1 - t0) / 0.5)): M.hop(t0 + k_ * 0.5, h=0.1, d=0.45, sound=False)
+    M.hops(t0, n=max(2, int((t1 - t0) / 0.5)), height=0.04, sound=False)
     M.wobble(t1 + 0.1, s("07-05") + 1.0, 6, 0.6)
     for ob in (lq, la):        # 07 の終わりで消す（08 章から先の机の場面に残さない）。最初に「見える」を打っておく（打たないと、最初から隠れる）
         hide_key(ob, -100.0, False); hide_key(ob, s("08-01") - 0.5, True)
     for nm in ("path_q", "path_a"):
         hide_key(bpy.data.objects[nm], -100.0, False); hide_key(bpy.data.objects[nm], s("07-01"), True)
     # 19b：Z → S → E（となりへ 1 歩ずつ）
-    M.at(s("19-03") - 1.0, loc=P(Q, "Z"), face=0.0)
+    M.at(s("08-01"), loc=P(Q, "Z"), face=0.0, interp="CONSTANT")   # 机が映っていない間に置き直す
     for ch, wd in (("Z", "この3つ"), ("S", "光らせて"), ("E", "みると")):
         Q.light(ch, w("19-03", wd), e("19-05") + 0.5, col="#FFD24A")
     hop_path(Q, "ZSE", w("19-04", "S"), 0.9, M, line=False)
     Q.hold("Z", s("19-03") - 0.9, w("19-04", "S") - 0.3); Q.hold("E", w("19-04", "S") + 2 * 0.9 + 0.3, e("19-05") + 0.6)
     # 21：首をかしげる
-    M.at(s("21-01") - 0.5, loc=P(Q, "G"), face=0.0); M.tilt(w("21-02", "もっと"), 12); M.tilt(e("21-02"), 0)
+    M.at(s("20-01"), loc=P(Q, "G"), face=0.0, interp="CONSTANT"); M.tilt(w("21-02", "もっと"), 12); M.tilt(e("21-02"), 0)
     Q.hold("G", s("21-01") - 0.4, e("21-03") + 0.6); Q.hold("G", s("27-02") + 0.2, e("27-06") + 1.0)
     # 23：速い並び（23-02 ですべりこむ。まるロボは跳ねて「おお」→ 23-06 で首をかしげる）
-    M.walk(s("23-02") + 1.6, s("23-03") + 0.4, P(D, "A"))
+    M.jump(s("23-03") - 0.8, P(D, "A"), apex=0.32)      # 速い並びのキーボードへ、大きく跳んで移る
     hop_path(D, "AOEUIDHTNS", s("23-03") + 0.6, min(0.45, (e("23-04") - s("23-03")) / 11), M, line=False)
     for i, ch in enumerate("AOEUIDHTNS"): D.light(ch, w("23-03", "真ん中の列") + 0.12 * i, e("23-04") + 0.4, col="#7FD8A0")   # 2D の字の代わりに、真ん中の列を光らせる
     M.glow(s("23-04"), 1.6, 0.3); M.glow(e("23-04") + 0.2, 0.9, 0.3)
     # 24：スマホ（机に寝かせた大きなスマホ。棒のない、薄い機械）
     ph, scr = smartphone((-0.1, -1.6, 0.0), s=0.62); track("phone", scr, 0.05)
     key(ph, "location", -100.0, (-0.1, -6.0, 0.0)); key(ph, "location", s("24-06") - 1.0, (-0.1, -6.0, 0.0)); key(ph, "location", s("24-06"), (-0.1, -1.6, 0.0))
-    M.walk(s("24-06") + 0.2, s("24-07") - 0.2, (0.1, -1.25, 0.06))
-    M.hop(w("24-07", "スマホ"), h=0.2, d=0.4); M.at(e("24-07"), face=0.0)
-    key(ph, "location", s("27-01") - 0.6, (-0.1, -1.6, 0.0)); key(ph, "location", s("27-01") - 0.5, (-0.1, -6.0, 0.0))
+    M.at(s("24-01"), loc=(0.4, -0.75, 0.0), face=0.0, interp="CONSTANT")   # 机が映っていない間に、キーボードの手前の机へ
+    M.walk(s("24-06") + 0.2, s("24-06") + 3.5, (0.1, -0.95, 0.0)); M.jump(w("24-07", "スマホ") - 0.1, (0.1, -1.25, 0.06))
+    M.at(e("24-07"), face=0.0)
+    key(ph, "location", s("27-01") + 1.4, (-0.1, -1.6, 0.0)); key(ph, "location", s("27-01") + 2.4, (-0.1, -6.0, 0.0))   # まるロボが降りてから片づける
     # 27-01：スマホから歩いてキーボードの前へ → 跳ねて G に乗る（v5「まるロボがワープしてる」）
     gx, gy, gz = P(Q, "G")
-    M.at(s("27-01") - 0.7, loc=(0.1, -1.25, 0.06))
-    M.walk(s("27-01") - 0.5, s("27-02") - 0.4, (gx, gy - 0.42, 0.0))
-    M.hop(s("27-02") - 0.3, h=0.25, d=0.5); M.at(s("27-02") - 0.3, loc=(gx, gy - 0.42, 0.0)); M.at(s("27-02") + 0.2, loc=(gx, gy, gz)); ev(s("27-02") + 0.2, "land", 0.4)
-    M.at(s("27-03"), face=-25); M.at(s("27-04"), face=25)
+    M.jump(s("27-01") + 0.4, (0.25, -0.95, 0.0))
+    M.walk(s("27-01") + 0.5, e("27-02") - 0.2, (gx, gy - 0.42, 0.0))
+    M.jump(s("27-03") + 1.6, (gx, gy, gz))
+    M.at(s("27-03") + 5.0, face=-25); M.at(s("27-04") + 0.4, face=25)
     # 27-05：キーを横へ押してずらそうとする → 動かない（v5「まるロボがただいるだけになってる」）
     M.at(s("27-05"), face=80)
     hk = Q.keys["H"]; hx = hk.location.x
     for k_ in range(3):
         tp = s("27-05") + 0.6 + k_ * 0.9
-        M.at(tp, loc=(gx + 0.035, gy, gz), interp="LINEAR"); M.at(tp + 0.3, loc=(gx, gy, gz))
+        M.push(tp - 0.05, 0.35)
         key(hk, ("location", 0), tp, hx); key(hk, ("location", 0), tp + 0.12, hx + 0.006); key(hk, ("location", 0), tp + 0.3, hx)
         ev(tp + 0.1, "tick", 0.3, "k_H")
     M.wobble(e("27-05") - 0.5, e("27-05") + 0.2, 6, 0.3)
@@ -219,7 +226,7 @@ def b_end(cl):
     ix, iy, iz = L.pos("い", 0.075)
     M = MaruR((ix - 0.3, iy - 0.25, 0.0), face=0.0); track("maru", M.body, 0.1)
     M.at(-100.0, loc=(ix - 0.3, iy - 0.25, 0.0), face=30)
-    M.hop(tu + 0.7, h=0.2, d=0.5); M.at(tu + 0.7, loc=(ix - 0.3, iy - 0.25, 0.0)); M.at(tu + 1.2, loc=(ix, iy, iz)); ev(tu + 1.2, "land", 0.3)
+    M.jump(tu + 1.2, (ix, iy, iz))
     # キーがくるくる入れかわる（28-01〜28-02）：クワーティのキーが浮いて回る
     for i, (ch, o) in enumerate(list(Q.keys.items())[:18]):
         t_ = s("28-02") + 0.05 * i
@@ -229,7 +236,6 @@ def b_end(cl):
     # いろは歌を打つ：となりへ、となりへ 1 歩ずつ（緑の線）
     t0 = w("28-04", "打って"); n = 10; dt = 0.3
     hop_path(L, KANA[:n], t0, dt, M, col=GREEN_L, name="path_l", h=0.12)
-    M.at(s("28-05"), face=0.0)
     ln2 = line_path("path_l2", [L.pos(c)[:2] for c in KANA[n - 1:]], col=GREEN_L, width=0.018, z=KEY_TOP + 0.1, emit=3.0)
     ln2.data.bevel_factor_end = 0.0; ln2.data.keyframe_insert("bevel_factor_end", frame=f(t0 + n * dt))
     ln2.data.bevel_factor_end = 1.0; ln2.data.keyframe_insert("bevel_factor_end", frame=f(s("28-05") + 0.6))
@@ -277,29 +283,28 @@ def b_shop(cl, night=False):
     track("sholes", sh.head, 0.25); track("nakama", sh2.head, 0.25)
     if not night:
         M.at(-100.0, loc=(-2.6, -1.6, 0.0), face=-60)
-        M.walk(s("08-01") + 0.3, s("08-02"), (-1.8, -0.4, 0.0))
+        M.walk(s("08-01") + 0.3, s("08-02") - 2.4, (-1.8, -0.4, 0.0))
         M.at(s("08-02") + 0.1, face=0.0); M.at(s("08-02") + 0.5, look=18); M.at(e("08-03"), look=0)
-        M.hop(s("09-01") - 0.4, h=1.1, d=0.6); M.at(s("09-01") - 0.4, loc=(-1.8, -0.4, 0.0)); M.at(s("09-01") + 0.2, loc=(-1.0, 0.2, 0.94))
+        M.jump(s("09-01") + 0.2, (-1.0, 0.2, 0.94))
         # 09：A → B → C（となりへ）。キーに字（3D）。乗ったキーは沈み、降りたら戻る
         p = lambda ch: (pk[ch].matrix_world.translation.x, pk[ch].matrix_world.translation.y, 0.94 + 0.18)
         bpy.context.view_layer.update()
-        M.hop(s("09-03") - 0.9, h=0.15, d=0.5); M.at(s("09-03") - 0.9, loc=(-1.0, 0.2, 0.94)); M.at(s("09-03") - 0.4, loc=p("A"))
+        M.jump(s("09-03") - 0.4, p("A"))
         Z0 = {ch: o.location.z for ch, o in pk.items()}       # 高さは先に覚えておく（打ったあとに読み直すと、戻らなくなる）
         hold = lambda o, z, t0, t1: [key(o, ("location", 2), t0 - 0.01, z), key(o, ("location", 2), t0 + 0.06, z - 0.02),
                                      key(o, ("location", 2), t1, z - 0.02), key(o, ("location", 2), t1 + 0.08, z)]
         tab = [s("09-03") - 0.4]
         for i, ch in enumerate("BC"):
             ta = w("09-03", "ABC") + 0.3 + 0.6 * i
-            prv = p("AB"[i]); M.at(ta - 0.5, loc=prv, interp="LINEAR"); M.at(ta, loc=p(ch), interp="LINEAR"); M.hop(ta - 0.5, h=0.15, d=0.5)
             ev(ta, "key", 0.4, "p_" + ch); tab.append(ta)
+        M.path([p("B"), p("C")], [tab[1] - 0.03, tab[2] - 0.03])
         t_off = s("10-01") + 0.4
         hold(pk["A"], Z0["A"], tab[0], tab[1] - 0.5); hold(pk["B"], Z0["B"], tab[1], tab[2] - 0.5); hold(pk["C"], Z0["C"], tab[2], t_off)
         # 09-04〜05：手前の列が左から、奥の列が右から、順に光る
         for i, ch in enumerate("ABCDEFGHIJKLMN"): glow_plate(pk[ch], w("09-04", "手前") + 0.12 * i, e("09-05") + 0.5, "#FFB45C", (0.13 * 0.8, 0.26), 0.031)
         for i, ch in enumerate("OPQRSTUVWXYZ"): glow_plate(pk[ch], w("09-05", "奥") + 0.12 * i, e("09-05") + 0.5, "#7FA8FF", (0.13 * 0.6, 0.16), 0.031)
-        M.at(e("09-05") - 0.2, face=20)
         # 10-01：鍵盤から机へ跳び降りて歩く（浮かない。v5「まるロボ浮いてるように見える」）
-        M.hop(t_off, h=0.2, d=0.5); M.at(t_off, loc=p("C")); M.at(t_off + 0.5, loc=(-0.75, -0.35, 0.94)); ev(t_off + 0.5, "land", 0.3)
+        M.jump(t_off + 0.5, (-0.75, -0.35, 0.94))
         # 10-02：ピアノの機械が消え、今の形の機械が出る。まるロボは歩いて近づく（足音）
         ta = s("10-02")
         hide_key(ptw, -100.0, False); hide_key(ptw, ta + 0.6, True)
@@ -371,24 +376,22 @@ def b_shop_day(cl):
         key(top, "location", t + 1.8, L0); key(top, ("rotation_euler", 0), t + 1.8, 0.0)
         ev(t, "whoosh", 0.15)
     # 11：歩いて紙の束へ（滑らない）→ めくって、何も書いていないのを見る
-    M.walk(e("10-09") + 0.3, s("11-01") + 0.4, (-1.55, 0.6, 0.94))
+    M.walk(e("10-09") + 0.3, s("11-01") - 1.4, (-1.55, 0.6, 0.94))
     M.at(s("11-01") + 0.6, face=-20); M.at(s("11-01") + 0.9, look=25)
     flip(w("11-02", "書き残して") - 0.6)
-    M.tilt(w("11-02", "書き残して"), 15); M.tilt(e("11-03"), 0)
+    M.tilt(w("11-02", "書き残して"), 15); M.tilt(e("11-02"), 0)
     # 12-01：機械へ歩き、キーに跳び乗る → キーが外れる → 開いた穴から中へ飛びこむ（v5「まるロボがタイプライターのキーを外して中に入り込むみたいな演出にして」）
-    t0 = s("12-01") + 0.2
     gx, gy, gz = -0.0675, 0.233, 1.192
-    M.walk(t0, t0 + 1.6, (gx, -0.32, 0.94))
-    t1 = t0 + 1.9; M.hop(t1, h=0.25, d=0.5); M.at(t1, loc=(gx, -0.32, 0.94)); M.at(t1 + 0.5, loc=(gx, gy, gz)); ev(t1 + 0.5, "land", 0.3)
+    M.walk(s("11-03"), s("12-01") - 0.8, (gx, -0.32, 0.94))      # 11-03 のうちに歩き出す（遠いので）
+    t1 = s("12-01") + 2.6; M.jump(t1, (gx, gy, gz))
     G = TW_KEYS[0]["G"]; gl = TW_KEYS[0]["G"].location[:]
-    t2 = t1 + 1.0
+    t2 = t1 + 1.6
     key(G, "location", t2, gl); key(G, ("rotation_euler", 1), t2, 0.0)
     key(G, "location", t2 + 0.25, (gl[0] + 0.12, gl[1] - 0.05, gl[2] + 0.22)); key(G, ("rotation_euler", 1), t2 + 0.6, R(160))
     key(G, "location", t2 + 0.7, (gl[0] + 0.42, gl[1] - 0.35, -0.2)); ev(t2 + 0.05, "pop", 0.4)
-    M.hop(t2 - 0.15, h=0.2, d=0.4); M.at(t2 + 0.25, loc=(gx - 0.1, gy - 0.12, gz)); ev(t2 + 0.95, "land", 0.2, "")
-    t3 = t2 + 1.0
-    M.hop(t3, h=0.3, d=0.45); M.at(t3, loc=(gx - 0.1, gy - 0.12, gz)); M.at(t3 + 0.25, loc=(gx, gy, gz + 0.1)); M.at(t3 + 0.6, loc=(gx, gy, 0.8))
-    ev(t3 + 0.3, "whoosh", 0.4)
+    M.hopto(t2 + 0.3, (gx - 0.1, gy - 0.12, gz))      # キーから横へよける（キーが外れる）
+    M.hopto(t2 + 2.0, (gx, gy, 0.8))      # 開いた穴へ飛びこむ
+    ev(t2 + 1.7, "whoosh", 0.4)
     # 14-02：紙の束へ戻って、もう一度めくる（記録はどこにもない）
     M.at(s("14-02") - 0.3, loc=(-1.55, 0.6, 0.94), face=-20, interp="CONSTANT"); M.at(s("14-02") - 0.2, look=25)
     flip(w("14-02", "記録") - 0.3)
@@ -410,8 +413,7 @@ def b_inside(cl):
     area((1.8, -1.8, 2.2), (0, 0.2, 0.3), energy=700, size=3, col="#FFF1D6")
     M = MaruR((0.0, -0.9, 0.0), face=0.0, s=0.26); track("maru", M.body, 0.1)
     # 12：上から飛びこんできて着く → 棒が 1 本ずつ真ん中へ跳ね上がる
-    M.at(-100.0, loc=(0.0, -0.9, 1.6), face=0.0)
-    M.at(s("12-02") - 0.4, loc=(0.0, -0.9, 1.6)); M.at(s("12-02") + 0.1, loc=(0.0, -0.9, 0.0), interp="LINEAR"); ev(s("12-02") + 0.1, "land", 0.4)
+    M.drop(s("12-02") - 0.4, s("12-02") + 0.1, 1.6)
     M.at(s("12-02") + 0.5, look=15)
     for i, ch in enumerate("QAW"):
         bar_up(pv[ch], w("12-03", "跳ね上がって") + 0.5 * i, d=0.45); ev(w("12-03", "跳ね上がって") + 0.5 * i + 0.2, "clack", 0.35)
@@ -444,26 +446,20 @@ def b_inside(cl):
         g = glow_mat("barglow" + ch, "#FFD24A", 4.0)
         gl = cube(g, (0, -1.2 * 0.45, 0.05), (0.05, 1.2 * 0.9, 0.01), parent=pv[ch]); gl.visible_shadow = False
         hide_key(gl, -100.0, True); hide_key(gl, w("14-04", "となり同士"), False); hide_key(gl, e("14-05") + 0.6, True)
-    route = [(0.75, 0.75, 0.0), (0.45, 0.98, 0.0), (0.1, 1.08, 0.0), (-0.25, 1.02, 0.0)]
-    M.at(s("14-03") - 0.3, loc=(-0.05, 0.05, 0.0))
-    M.walk(s("14-03"), s("14-03") + 1.2, route[0])
-    t = w("14-04", "探して")
-    for k_, pt in enumerate(route[1:]):
-        M.walk(t + k_ * 0.9, t + k_ * 0.9 + 0.6, pt); M.at(t + k_ * 0.9 + 0.65, look=22); M.at(t + k_ * 0.9 + 0.85, look=10)
-    M.at(w("14-04", "となり同士") - 0.2, face=150); M.hop(w("14-04", "となり同士") + 0.1, h=0.15, d=0.4)
+    M.at(s("14-03") + 0.4, look=14)      # E と R の棒はどこ？（棒を見上げる。そのまま歩き出す）
+    t = w("14-04", "探して")      # 棒の方へ歩きながら、棒を見上げていく → 着いて見上げる → 跳ねる
+    M.walk(s("14-04"), w("14-04", "となり同士") + 0.3, (-0.25, 1.02, 0.0)); M.at(t + 0.4, look=18); M.at(w("14-04", "となり同士") + 0.4, look=24)
+    M.hop(e("14-04") - 0.3, h=0.15, d=0.4)
     # 15-03：棒の根もとにゆっくり跳び乗る → 乗った棒が 1 本だけゆっくり上がって戻る（2 回、別の棒）（v5「まるロボが飛んで棒を踏んでるんじゃないの」）
     bpy.context.view_layer.update()
     base = lambda ch: (pv[ch].matrix_world.translation.x * 0.86, (pv[ch].matrix_world.translation.y - 0.6) * 0.86 + 0.6, 0.0)
-    M.walk(s("15-01"), s("15-02"), (0.2, 0.75, 0.0))
-    t = w("15-03", "わざと") + 0.6
-    for i, ch in enumerate("GH"):
-        th = t + i * 1.9
-        M.hop(th, h=0.25, d=0.8); M.at(th, loc=M._last["loc"][1]); M.at(th + 0.8, loc=base(ch)); ev(th + 0.8, "land", 0.3)
-        bar_up(pv[ch], th + 0.85, d=1.0); ev(th + 1.2, "clack", 0.3)
+    M.walk(s("15-01"), s("15-03"), (0.2, 0.75, 0.0))
+    for ch, tl in (("G", w("15-03", "ぴょん") - 0.05), ("H", e("15-03") - 0.2)):     # 「ぴょん」で着く（その場から、ゆっくり 1 回ずつ）
+        M.hopto(tl, base(ch))
+        bar_up(pv[ch], tl + 0.05, d=1.0); ev(tl + 0.4, "clack", 0.3)
     M.at(w("15-04", "ちょっと待って"), look=0); M.tilt(w("15-04", "ちょっと待って") + 0.1, 14); M.tilt(e("15-06"), 0)
     M.at(w("15-09", "少しは"), look=24); M.at(e("15-09"), look=0)
-    for k_ in range(3): M.at(s("15-10") + 0.4 + 0.3 * k_, face=(20 if k_ % 2 else -20))
-    M.at(e("15-10"), face=0)
+    M.shake(s("15-10") + 0.4)      # 首をふる（胴ぜんぶでひねる）
     if cl == "S12a":
         cam((-1.3, -2.0, 0.85), (0.0, 0.0, 0.35), 26, s("12-02"), e("12-03") + 0.8, (-0.6, -1.8, 0.8), (0.0, 0.1, 0.4), 24)
     elif cl == "S13a":
@@ -525,7 +521,7 @@ def b_school(cl):
     M = MaruR((-3.4, 1.0, 0.0), face=-60); track("maru", M.body, 0.1)
     M.at(-100.0, loc=(-3.4, 1.4, 0.0), face=0.0)
     if cl == "S22a":
-        M.at(s("22-01"), loc=(-3.0, -1.4, 0.0), face=-30); M.hop(s("22-02") + 0.4, h=0.15, d=0.4)
+        M.at(-100.0, loc=(-3.0, -1.4, 0.0), face=-30); M.hop(s("22-02") + 0.4, h=0.15, d=0.4)
         cam((-4.5, -4.0, 2.4), (-0.4, 0.2, 0.8), 28, s("22-01"), e("22-02") + 0.8, (-4.0, -3.6, 2.2), (0.0, 0.2, 0.8), 30)
     else:
         cam((4.4, -3.8, 2.5), (0.0, 0.2, 0.8), 28, s("17-05"), e("17-05") + 0.8, (4.0, -3.4, 2.3), (-0.2, 0.2, 0.8), 30)
@@ -625,8 +621,8 @@ def b_factory(cl):
         for i, ch in enumerate("QWE"): glow_plate(tk[ch], w("10-09", "クワーティ") + 0.15 * i, e("10-09") + 0.6, "#7FB0FF", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
         for i, ch in enumerate("TY"): glow_plate(tk[ch], w("10-09", "クワーティ") + 0.15 * (i + 4), e("10-09") + 0.6, "#7FB0FF", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
         M.at(-100.0, loc=(1.4, -0.9, 0.0), face=40)
-        M.hop(s("10-08") - 0.6, h=1.0, d=0.6); M.at(s("10-08") - 0.6, loc=(1.3, -0.9, 0.0)); M.at(s("10-08"), loc=(1.0, -0.45, 0.89))
-        M.at(s("10-08") + 0.2, face=60, look=12); M.hop(s("10-09") + 0.4, h=0.12, d=0.4)
+        M.jump(s("10-08"), (1.0, -0.45, 0.89))
+        M.at(s("10-08") + 2.2, face=60); M.at(s("10-08") + 1.0, look=12); M.hop(s("10-09") + 0.4, h=0.12, d=0.4)
         cam((1.8, -3.2, 2.0), (0.0, -0.2, 0.9), 30, s("10-07"), e("10-09") + 0.8, (1.6, -2.2, 1.6), (0.4, -0.2, 0.95), 38)
     else:
         M.at(-100.0, loc=(0.6, 0.4, 0.0), face=0.0)
@@ -850,8 +846,16 @@ if __name__ == "__main__" or True:
         print(json.dumps({k: [round(v[1], 3), round(v[2], 3), round(([c[2] for c in CUTS if c[0] == k] or [v[1]])[0], 3), v[4]] for k, v in CLIPS.items()}))
     else:
         fn, t0, t1, cm, par = CLIPS[CLIPNAME]
-        CLOCK["T0"] = t0
+        CLOCK["T0"] = t0; CLOCK["T1"] = t1
         fn(par)
+        if os.environ.get("MARU_PLANONLY"):          # まるロボの予定だけ作って、間に合わない動きを出す（描かない）
+            for m_ in MARU_ALL:
+                m_.plan(END_T)
+                for i_, r_ in enumerate(m_.log):        # 命令の時刻・種類・その時の予定の時刻・次の命令の前の予定の時刻
+                    nx = m_.log[i_ + 1][2] if i_ + 1 < len(m_.log) else -1
+                    print("MARU_LOG", r_[0], r_[1], r_[2], "->", nx)
+            print("MARU_LATE", json.dumps(MARU_LATE, ensure_ascii=False)); sys.exit(0)
+        bake_maru(t0, t1)
         if cm is not None: cm(t0)
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)

@@ -346,6 +346,59 @@ class JumpSeg(Seg):
         return None
 
 
+class HopPathSeg(JumpSeg):
+    """続けて跳んで移る（キーからキーへ など。7本目で足した）：向きは変えずに、決めた点へ決めた時刻に着く。
+    pts：着く点 [(x, y, z)]、t_lands：着く時刻。最初だけしゃがんで蹴り、あとは着いた脚で弾んで次へ。最後は脚で受け止める。
+    宙では、等速と「なめらか」を半分ずつ混ぜて横へ動く（着いた所で速さが急に変わらない）"""
+    kind = "jump"
+
+    def __init__(self, t0, p0, psi0, z0, pts, t_lands, crouch=0.035, T_c=0.16, ext=0.03, depth=0.035, zeta=0.6, settle=0.6, T_b=0.12):
+        Seg.__init__(self, t0, t0, p0, psi0)
+        self.pieces = []; self.flights = []; self.T_l = 0.0
+        P = [np.array(p0, float)] + [np.array(q[:2], float) for q in pts]; Z = [z0] + [float(q[2]) for q in pts]
+        self.P, self.Z = P, Z
+        n = len(pts)
+        # 宙の時間：k 回目は（前に着いた時刻＋弾む時間）から着く時刻まで。最初は着く時刻の 0.42 秒前（短ければ詰める）
+        dz0 = Z[1] - Z[0]; v0 = math.sqrt(2 * G * max(0.12, dz0 + 0.15))       # 高い所へは頂点が着く所より 15cm 上、下りても少しは上へ跳ぶ
+        T_need = (v0 + math.sqrt(max(0.0, v0 * v0 - 2 * G * dz0))) / G
+        T_fl0 = max(min(0.42, max(0.18, t_lands[0] - t0 - T_c - 0.12)), T_need)
+        tk = [t_lands[0] - T_fl0] + [t_lands[k - 1] + T_b for k in range(1, n)]
+        vel = []
+        for k in range(n):
+            T = max(0.12, t_lands[k] - tk[k]); h0 = Z[k] + HIP_REST + ext; h1 = Z[k + 1] + HIP_REST + ext
+            v = (h1 - h0 + 0.5 * G * T * T) / T; vel.append((v, G * T - v, T))
+        v_up0 = vel[0][0]; T_p = push_time(crouch, ext, max(0.3, v_up0)); self.T_push = T_p
+        ts = tk[0] - T_p - T_c; self.t0 = min(t0, ts)
+        h = Z[0] + HIP_REST
+        self.pieces.append((ts, ts + T_c, lambda u, h=h: h - crouch * smooth(u / T_c)))
+        self.pieces.append((ts + T_c, tk[0], lambda u, h=h, T=T_p, v=v_up0: h + quintic(u, T, -crouch, 0, 0, ext, v, -G)[0]))
+        for k in range(n):
+            v_up, v_imp, T = vel[k]; h0 = Z[k] + HIP_REST + ext; h1 = Z[k + 1] + HIP_REST
+            self.pieces.append((tk[k], tk[k] + T, lambda u, h=h0, v=v_up: h + v * u - 0.5 * G * u * u))
+            fl = dict(t0=tk[k], t1=tk[k] + T, z0=Z[k], z1=Z[k + 1], v_up=v_up, v_imp=v_imp, ext_to=ext, ext_ld=ext, p0=P[k], p1=P[k + 1])
+            self.flights.append(fl); t = tk[k] + T
+            if k + 1 < n:
+                v_nx = vel[k + 1][0]; Tb = tk[k + 1] - t
+                self.pieces.append((t, t + Tb, lambda u, h=h1, T=Tb, a=v_imp, b=v_nx: h + quintic(u, T, ext, -a, -G, ext, b, -G)[0]))
+                fl["t_next"] = tk[k + 1]
+            else:
+                f, w = land_curve(ext, max(0.3, v_imp), depth, zeta); fl["omega"] = w
+                self.pieces.append((t, t + settle, lambda u, h=h1, f=f: h + f(u))); self.t_land = t; self.t1 = t + settle
+        self.p_end = P[-1]; self.psi_end = psi0; self.z_end = Z[-1]; self.D = float(np.linalg.norm(P[-1] - P[0]))
+        self.dir = np.zeros(2); self.vh = 0.0
+
+    def _pos(self, t):
+        if t <= self.flights[0]["t0"]: return self.P[0]
+        for fl in self.flights:
+            if t <= fl["t1"]:
+                if t < fl["t0"]: return fl["p0"]
+                u = (t - fl["t0"]) / (fl["t1"] - fl["t0"]); w = 0.5 * u + 0.5 * smooth(u)
+                return fl["p0"] + (fl["p1"] - fl["p0"]) * w
+        return self.P[-1]
+
+    def vel(self, t): return 0.0, 0.0
+
+
 # ================================================================ 予定
 class Plan:
     CHANNELS = ("gaze_yaw", "gaze_pitch", "twist", "pitch", "roll", "lift", "dx", "iris", "light", "zoom", "cradle", "ant")
@@ -613,6 +666,24 @@ class Plan:
         for f in seg.flights:
             self.layer(f["t0"] - 0.05, f["t1"] + 0.3, lambda t, a=f["t0"], b=f["t1"]: {"light": 2.5 * env(t, a, 0.04, b - a - 0.04, 0.2), "pitch": -5.0 * hump(t, a - 0.05, b - a + 0.15)})
         self.event(t0 + 0.1, "beep_happy", 1.0)
+        self.t = seg.t1; self._lb_end(lid); return self
+
+    def hop_path(self, pts, t_lands, height=None, label=None):
+        """続けて跳んで移る（キーからキーへ。7本目で足した）：向きは変えず、pts の点 [(x, y, z)] へ t_lands の時刻に着く。
+        1回の間は 0.4 秒くらいから。最初にしゃがむ分（約 0.3 秒）は、最初に着く時刻より前に始まる。予定の時刻は最後の着地の受け止めのあと"""
+        lid = self._lb(label)
+        t0 = self.t; self._neutral(t0, 0.12)
+        ground = self._ground(); psi = self._psi
+        seg = HopPathSeg(t0, self._p, psi, ground, pts, t_lands); self._seg_add(seg)
+        for k, f in enumerate(seg.flights):
+            for j in (0, 1):
+                self._lift_foot(j, f["t0"]).ext_to = f["ext_to"]
+                p = f["p1"] + rgt(psi) * (-1 if j == 0 else 1) * HIP_X
+                c = self._place(j, f["t1"], (*p, f["z1"]), psi, kind="jump", tau=0.02); c.ext = f["ext_ld"]
+                if "t_next" in f: c.t_off = f["t_next"]
+            self.event(f["t0"], "takeoff", f["v_up"]); self.event(f["t1"], "land", f["v_imp"])
+            self.layer(f["t0"] - 0.06, f["t1"] + 0.2, lambda t, a=f["t0"], b=f["t1"]: {"pitch": -4.0 * hump(t, a - 0.05, b - a + 0.15), "light": 1.2 * env(t, a, 0.04, max(0.01, b - a - 0.04), 0.15)})
+        self._p = seg.p_end
         self.t = seg.t1; self._lb_end(lid); return self
 
     def jump_to(self, target, z1=0.0, apex=None, label=None):
@@ -1217,22 +1288,26 @@ class Cargo2D:
         self.x = self.x + self.v * h; self.th += self.w * h
 
 
-def simulate(plan, fps=FPS, sub=10, t_end=None, seed=11, ant_f=2.5, ant_z=0.20, cargo_f=2.2, cargo_z=0.35):
-    """毎コマの姿勢。アンテナ（2.5Hz・減衰0.2）と荷物（2.2Hz・減衰0.35）は、根元の加速度で揺れるバネとして積分する"""
+def simulate(plan, fps=FPS, sub=10, t_end=None, seed=11, ant_f=2.5, ant_z=0.20, cargo_f=2.2, cargo_z=0.35, t_start=0.0):
+    """毎コマの姿勢。アンテナ（2.5Hz・減衰0.2）と荷物（2.2Hz・減衰0.35）は、根元の加速度で揺れるバネとして積分する
+    t_start：この時刻のコマから計算する（長い予定の途中だけ描くとき。7本目で足した）。返す最初のコマは t_start×fps コマ目。
+    アンテナのばねは t_start で止まった所から始まるので、描く所より 1 秒以上前から計算する"""
     T = plan.t + 0.5 if t_end is None else t_end
-    h = 1.0 / (fps * sub); N = int(math.ceil(T / h)) + 1
+    t0s = math.floor(max(0.0, t_start) * fps + 1e-6) / fps
+    h = 1.0 / (fps * sub); N = int(math.ceil((T - t0s) / h)) + 1
     blinks = plan.blink_times(T, seed); plan.prep()
-    ks = [plan.kin(i * h, blinks) for i in range(N + 2)]
+    ks = [plan.kin(t0s + i * h, blinks) for i in range(N + 2)]
+    _ix = lambda tc: int(round((tc - t0s) / h))
     up = np.array([0.0, 0.0, G])
     # ---- アンテナ：先の玉に重さが集まった棒。根元の座標で見た見かけの力（加速度＋重力）で振れる
     P = np.array([k["ant_tip"] for k in ks]); acc = np.zeros_like(P); acc[1:-1] = (P[2:] - 2 * P[1:-1] + P[:-2]) / (h * h)
     cut_i = set()
     for tc in plan.cuts:
-        i0 = int(round(tc / h)); cut_i |= set(range(i0 - 2, i0 + 3))
+        i0 = _ix(tc); cut_i |= set(range(i0 - 2, i0 + 3))
     for i in cut_i:
         if 0 <= i < len(acc): acc[i] = 0.0
     w = 2 * math.pi * ant_f; ay = ax = vy = vx = 0.0; ant = []
-    pops = {int(round(tp_ / h)) for tp_ in plan.ant_pops()}
+    pops = {_ix(tp_) for tp_ in plan.ant_pops()}
     for i, k in enumerate(ks):
         if i in cut_i or k["ant_ext"] < 0.02: ay = ax = vy = vx = 0.0
         if i in pops: vy += 1.6                                   # ぱっと出て止まった瞬間：先の玉が前後に少し揺れる
@@ -1251,12 +1326,12 @@ def simulate(plan, fps=FPS, sub=10, t_end=None, seed=11, ant_f=2.5, ant_z=0.20, 
     un = plan.unloads[0] if plan.unloads else None; box = None; free_from = None; rest_at = None
     ld = plan.loads[0] if plan.loads else None
     if ld is not None:                                         # 積み込み口の高さ＝押し始めの荷台の上面
-        kr = ks[min(int(round(ld["tp"] / h)), len(ks) - 1)]
+        kr = ks[max(0, min(_ix(ld["tp"]), len(ks) - 1))]
         top = kr["cr_w"] + kr["Rcr"] @ np.array([0.0, 0.0, CRADLE_TOP])
         ld["deck"] = dict(top_z=float(top[2]), center=kr["cr_w"][:2].tolist(), psi=ld["psi"], edge=ld["x_deck"])
     upl = plan.unloads[0] if plan.unloads and plan.unloads[0].get("kind") == "pull" else None
     if upl is not None:                                         # 受け取り台の高さ＝引き取り始めの受け皿の上面
-        kr = ks[min(int(round(upl["tp"] / h)), len(ks) - 1)]
+        kr = ks[max(0, min(_ix(upl["tp"]), len(ks) - 1))]
         top = kr["cr_w"] + kr["Rcr"] @ np.array([0.0, 0.0, CRADLE_TOP])
         upl["deck"] = dict(top_z=float(top[2]), center=kr["cr_w"][:2].tolist(), psi=upl["psi"], edge=upl["x_deck"])
         un = None
@@ -1271,7 +1346,7 @@ def simulate(plan, fps=FPS, sub=10, t_end=None, seed=11, ant_f=2.5, ant_z=0.20, 
             box = _cargo_start(k, s); free_from = t; s_hand, sv_hand = s, sv
         if box is not None:
             if rest_at is None:
-                _cargo_step(box, ks, i, h, plan, un, s_hand if i == int(round(free_from / h)) else 0.0, sv_hand if i == int(round(free_from / h)) else 0.0)
+                _cargo_step(box, ks, i, h, plan, un, s_hand if i == _ix(free_from) else 0.0, sv_hand if i == _ix(free_from) else 0.0)
                 if t > un["t_back"] + 1.5 and abs(box.v).max() < 0.005 and abs(box.w) < 0.01: rest_at = t      # ロボが戻り終えてから止める
             cargo.append(("free", _cargo_world(box, plan, k)))
             continue

@@ -140,16 +140,10 @@ def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, li
             ln.data.bevel_factor_end = L[i] / L[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(t0 + i * dt))
         for fc in ln.data.animation_data.action.fcurves:
             for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
-    if M is not None:
-        for i, c in enumerate(word):
-            p = B.pos(c, z=0.075)
-            ta = t0 + i * dt
-            if i == 0:
-                M.at(ta - 0.3, loc=p)
-            else:
-                M.at(ta - dt * 0.85, loc=B.pos(word[i - 1], z=0.075), interp="LINEAR"); M.at(ta - 0.02, loc=p, interp="LINEAR")
-                M.hop(ta - dt * 0.85, h=h, d=dt * 0.83, sound=False)
-            B.press(c, ta, gain=0.35 if dt < 0.3 else 0.5)
+    if M is not None:      # まるロボ：キーからキーへ続けて跳ぶ（marumotion の hop_path。字を打つ瞬間の少し前に着く）
+        M.path([B.pos(c, z=0.075) for c in word], [t0 + i * dt - 0.03 for i in range(len(word))])
+    for i, c in enumerate(word):
+        B.press(c, t0 + i * dt, gain=0.35 if dt < 0.3 else 0.5)
     return ln
 
 
