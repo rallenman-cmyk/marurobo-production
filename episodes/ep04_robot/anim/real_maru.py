@@ -191,7 +191,7 @@ def P_s12a(p, C, g):
     s, said = g["s"], g["said"]
     tS = said("では、画面の中に")
     # 上から降りてくる：高い所（GROUND）に立っていて、字幕の頭で、いまの場所へ跳び降りて脚で受け止める
-    C.go(p, tS + 0.05)
+    C.go(p, tS - 1.9)                            # 画面の外で跳ぶ（落ちるのに約 2.7 秒）。字幕の頭から 0.4 秒で画面に入り、0.85 秒で着地
     p.jump_to((0.0, 0.0), z1=0.0)
     C.idle_to(p, s("12-01b"))
     p.turn_to(50); p.wait(0.3); p.turn_to(-50); p.wait(0.3); p.turn_to(0)
@@ -240,7 +240,7 @@ def _s17_18(p, C, g, name):
         sel = [o for o in bpy.data.objects if o.active_material and o.active_material.name.startswith("cell_sel_a")]
         if sel:
             g["vis"](sel, g["T0"] - 1, False); g["vis"](sel, t_on, True)
-            g["EVENTS"][:] = [e for e in g["EVENTS"] if not (e[1] == "pop_ui" and abs(e[0] - t_on) < 4)]; g["ev"](t_on + 0.05, "pop_ui")
+            g["EVENTS"][:] = [e for e in g["EVENTS"] if not (e[1] == "pop_ui" and abs(e[0] - t_on) < 4)]; g["ev"](t_on + 0.05, "pop_ui", 0.25)   # 声と重なるので小さく（ずらすとマスが光る絵とずれる）
     p.wait(0.2); p.walk_to(C.xy(cell_c(2, 0)), speed=1.0)
     C.go(p, said("まるロボ、慎重に") - 0.1)
     p.walk_to(C.xy(cell_c(3, 0)), speed=0.9); p.look(0, -12, hold=0.3)
