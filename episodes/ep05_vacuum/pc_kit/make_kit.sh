@@ -14,6 +14,10 @@ cp $EP/pc_kit/はじめに.txt $EP/pc_kit/README_PC.md $K/
 cp $EP/anim/scenes.py $EP/anim/kit.py $EP/anim/core.py $EP/anim/plan.py $EP/anim/pc_out.py $EP/anim/clips.json $K/episodes/ep05_vacuum/anim/
 cp $EP/voice/placement.json $EP/voice/script_v1_0.json $K/episodes/ep05_vacuum/voice/
 cp $REPO/episodes/ep03_ad/storyboard/scenes.py $K/episodes/ep03_ad/storyboard/
+# 本物のまるロボ（2026-11-17）：置く・動かす・当てる道具。story.blend は PC の C:\marurobo の下を探す（手順の ps1）
+mkdir -p $K/skill/marurobo-video-production/scripts $K/episodes/ep01_earphone/stage/maru
+cp $REPO/skill/marurobo-video-production/scripts/maru_real.py $REPO/skill/marurobo-video-production/scripts/maru_cmds.py $REPO/skill/marurobo-video-production/scripts/marumotion.py $K/skill/marurobo-video-production/scripts/
+cp $REPO/episodes/ep01_earphone/stage/maru/marurig.py $K/episodes/ep01_earphone/stage/maru/
 python3 $EP/anim/map_tex.py $K/tex > /dev/null
 (cd $T && rm -f "$OUT/marurobo_ep05.zip" && python3 -c "
 import zipfile,os

@@ -113,6 +113,15 @@ if (-not (Test-Path $blender) -and $Worker -eq 0) {
   } catch { Note ("Blender を落とせませんでした（{0}）。手で入れてください：https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.msi" -f $_.Exception.Message) }
 }
 if (-not (Test-Path $blender)) { Note "Blender 4.3 が見つかりません。https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.msi を入れてから、もう一度走らせてください"; exit 1 }
+
+# 本物のまるロボ（story.blend）を探す（2026-11-17：絵コンテ用の簡単な体はやめた。見つからなければ止める）
+if (-not $env:MARU_BLEND -or -not (Test-Path $env:MARU_BLEND)) {
+  $sb = Get-ChildItem $root -Recurse -Filter story.blend -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match "bt_production_v1.output" } | Select-Object -First 1
+  if (-not $sb) { $sb = Get-ChildItem $root -Recurse -Filter story.blend -ErrorAction SilentlyContinue | Select-Object -First 1 }
+  if ($sb) { $env:MARU_BLEND = $sb.FullName } else { Note "本物のまるロボ（story.blend）が C:\marurobo の下に見つかりません"; exit 1 }
+}
+Note ("本物のまるロボ：{0}" -f $env:MARU_BLEND)
+$env:MARU_REQUIRE_REAL = "1"
 if (-not (Test-Path (Join-Path $anim "scenes.py"))) { Note "見つかりません：$anim\scenes.py（marurobo_ep05.zip を C:\marurobo に展開し直してください）"; exit 1 }
 
 # ---------------------------------------------------------------- 100 コマずつ mp4 で描く（できている範囲と、ほかの描き手が描いている範囲は飛ばす）
