@@ -984,6 +984,17 @@ class Plan:
         self.event(t0 + 0.2, "takeoff", 0.6); self.event(t0 + 0.75, "land", 0.6)
         self.t = t0 + 1.4; self._lb_end(lid); return self
 
+    def bonk(self, hold=0.8, label=None):
+        """ぶつかる（ゴツン）：前の面で物に当たった瞬間、反応の遅れなしで胴が後ろへ 14° はね返り（0.12 秒）、少し沈んで戻る（0.6 秒）。
+        反射のまばたき・アンテナがはねる・光が一瞬。足は動かない（滑らない）。驚く（surprise）より短い（約 0.8 秒）。音：land（小）。5本目で足した
+        hold：次の動きを始めてよいまでの秒（はね返りのゆれは 0.95 秒まで続き、次の向きを変える・走るに重なる）。すぐ次へ動くときは 0.55"""
+        lid = self._lb(label); t0 = self.t
+        self.blinks.append((t0 + 0.02, "fast")); self.no_blink.append((t0 - 0.3, t0 + 1.0))
+        self.layer(t0, t0 + 0.95, lambda t, t0=t0: {"pitch": -14.0 * env(t, t0, 0.12, 0.05, 0.55), "lift": -0.015 * hump(t, t0 + 0.05, 0.3),
+                                                    "ant": 12.0 * env(t, t0, 0.06, 0.04, 0.45), "light": 1.5 * env(t, t0, 0.03, 0.05, 0.25)})
+        self.event(t0, "land", 0.8)
+        self.t = t0 + hold; self._lb_end(lid); return self
+
     def rub(self, dur=3.0, amp=14.0, label=None):
         """すりすり（頭をこすりつける。腕がないので）：前へ 16° かがみ、胴を左右に ±amp° ひねりながら小さく上下（1秒に 2.4 回）。
         目は細めてうれしそう。音：rub（ひねるたび）。終わると起きる"""

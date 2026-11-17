@@ -113,17 +113,22 @@ def face_to(p, q):
 #   早回し（予定をゆっくり作って速く流す）、レンズの光、まぶた、足音の大きさ
 def _maru_paths():
     here = os.path.dirname(os.path.abspath(KIT_HERE + "/core.py"))
-    for d in (os.path.join(here, "..", "..", "..", "skill", "marurobo-video-production", "scripts"),
-              os.path.join(here, "..", "..", "ep01_earphone", "stage", "maru"), here):     # PC の一式では anim に写しを入れる
+    # 共通の道具（skill/scripts）をいちばん先に読む。ep01 の stage/maru にも marumotion.py の古い写しがあり、
+    #   先に読むと 6本目以降で足した動き（lie_side・get_up など）がない（marurig.py だけ ep01 から読む）
+    for d in (here, os.path.join(here, "..", "..", "ep01_earphone", "stage", "maru"),
+              os.path.join(here, "..", "..", "..", "skill", "marurobo-video-production", "scripts")):
         d = os.path.abspath(d)
-        if os.path.isdir(d) and d not in sys.path: sys.path.insert(0, d)
+        if os.path.isdir(d):
+            if d in sys.path: sys.path.remove(d)
+            sys.path.insert(0, d)
 
 
 _maru_paths()
 import maru_cmds as MC
 import marumotion as MM
 
-STEP_GAIN = [0.1]          # 足音の大きさ（v2「歩く SE いれて」で 0.05 は聞こえなかった）
+STEP_GAIN = [0.5]          # 足音（共通の maru_sfx の step。予定の一歩ずつ）
+MARU_GAIN = 0.6            # 動きの電子音・跳ぶ音（共通の maru_sfx）
 MARUS = []
 
 
@@ -136,7 +141,7 @@ class Maru(MC.Maru):
         MC.Maru.__init__(self, (loc[0], loc[1], z), face, s=s, face_offset=180, name="maru%d" % len(MARUS))
         self.loc = Vector((loc[0], loc[1], z)); self.face = face; self._last = {}
         self.g_ref = glow; self.offs = [(-1e9, Vector((0.0, 0.0, z)))]      # 置き場所の親のずれ（時刻, 世界の位置）
-        self.warps = []; self.nosound = []
+        self.warps = []; self.nosound = []; self.layers05 = []; self.mutes = []
         self.lens = self._find_mat(("Optical blue", "Maru lens"))
         self.white = self._find_mat(("Porcelain", "Maru white"))
         MARUS.append(self)
@@ -166,17 +171,28 @@ class Maru(MC.Maru):
             key(par, "rotation_euler", t0, tuple(par.rotation_euler)); key(par, "rotation_euler", t1, tuple(R(v) for v in rot))
         self.offs.append((t1, b)); self.offs.sort(key=lambda x: x[0])
 
-    def jump(self, t, p_from, p_to, z_to=None, d=0.7, h=0.18, sound=True):
-        """p_from（世界）から p_to（世界）へ跳ぶ：p_from まで歩いておき、親を山なりに動かす。体は予定の小さな跳ね"""
+    def jump(self, t, p_from, p_to, z_to=None, **_):
+        """p_from（世界）まで歩いておき、t に一覧の jump_to（見る→向く→しゃがむ→蹴る→放物線→脚で受け止める）で p_to へ。
+        z_to：着く所の高さ（世界）。台に跳び乗る・机から跳び降りる"""
         self.at(t - 0.05, loc=p_from)
-        MC.Maru.hop(self, t, h=0.25)
-        z0 = self.poff(t).z
-        self.move_parent(t + 0.05, t + d, (p_to[0] - p_from[0], p_to[1] - p_from[1]), h=h, dz=(z_to - z0) if z_to is not None else 0.0)
-        if not sound: self.nosound.append(t)
+        z1 = (z_to if z_to is not None else self.poff(t).z) - self.poff(t).z
+        self.cmds.append((t, "jump", dict(p=self._rel(t, p_to), z1=z1)))
 
-    def bump(self, t, dp, d=0.12):
-        """ぶつかって押し返される（親を少しずらす）"""
-        self.move_parent(t, t + d, dp)
+    def act(self, t, kind, **kw):
+        """一覧（references/maru_motions.md）の部品を、そのまま呼ぶ（lie_side・get_up など）"""
+        self.cmds.append((t, kind, kw))
+
+    def teleport(self, t, loc, face):
+        """カットで置き直す（画面に映っていない所でだけ。一覧の teleport）"""
+        self.cmds.append((t, "teleport", dict(pos=self._pp(self._rel(t, loc)), heading=face + self.off)))
+
+    def eyes_closed(self, t0, t1):
+        """目を閉じたまま（目の内側の輪を、まばたきで閉じた形に保つ。一覧の blink のチャンネル）"""
+        self.layers05.append((t0, t1, lambda t: {"blink": 1.0}))
+
+    def mute(self, t0, t1):
+        """この間の動きの電子音を鳴らさない（同じ所に、場面で決めた音があるとき）"""
+        self.mutes.append((t0, t1))
 
     # ---- 前の書き方
     def at(self, t, loc=None, face=None, look=None, interp=None, hold=None, **_):
@@ -193,12 +209,6 @@ class Maru(MC.Maru):
     def hop(self, t, h=0.25, d=0.45, sound=True):
         MC.Maru.hop(self, t, h=h, d=d)
         if not sound: self.nosound.append(t)
-
-    def wobble(self, t0, t1, deg=10, period=0.5):
-        k = 0; t = t0
-        while t < t1 - 1e-6:
-            self.tilt(t, deg if k % 2 else -deg, period / 2); t += period / 2; k += 1
-        self.tilt(t1, 0, 0.3)
 
     def fast(self, t0, t1, slow):
         """t0〜t1 を早回しにする：予定はこの間を slow 倍の長さで作り、絵では速く流す（歩く速さの決まりは守ったまま）"""
@@ -226,24 +236,6 @@ class Maru(MC.Maru):
         self._lens_cur = g / self.g_ref
         inp.default_value = self._lens0 * self._lens_cur; inp.keyframe_insert("default_value", frame=f(t + d))
 
-    def eyelid(self, t, closed=1.0, d=0.35):
-        """まぶた（体と同じ白）を上から下ろす。本物の体は前が +Y（レンズ y 0.508・z 0.025）"""
-        if not hasattr(self, "_lid"):
-            L = MM.LENS
-            piv = empty((0, L["y"] - 0.05, L["z"] + 0.27)); piv.parent = self.torso
-            lid = sphere(self.white or bpy.data.materials.new("lidw"), (0, 0, -0.27), 0.31, scale=(1, 0.5, 1), parent=piv)
-            piv.scale = (1, 1, 0.001); self._lid = piv
-            key(piv, ("scale", 2), CLOCK["T0"] - 5, 0.001)
-            seam = empty((0, L["y"] + 0.11, L["z"] - 0.02)); seam.parent = self.torso
-            dk = mat("lidline", "#2B3440", rough=0.5)
-            for k in range(17):
-                a0 = math.radians(-60 + 7.5 * k)
-                cyl(dk, (0.13 * math.sin(a0), 0, -0.13 * math.cos(a0) + 0.1), 0.012, 0.022, rot=(0, R(90) + a0, 0), parent=seam)
-            self._seam = seam; hide_key(seam, CLOCK["T0"] - 5, True)
-        key(self._lid, ("scale", 2), t, max(0.001, self._lid.get("_v", 0.001)))
-        key(self._lid, ("scale", 2), t + d, max(0.001, closed)); self._lid["_v"] = max(0.001, closed)
-        hide_key(self._seam, t + d if closed >= 0.99 else t, closed < 0.99)
-
     # ---- 毎コマにする
     def _W(self, t):
         """場面の時刻 → 予定の時刻（早回しの間は slow 倍にのばす）"""
@@ -257,6 +249,8 @@ class Maru(MC.Maru):
         keep = self.cmds
         self.cmds = [(self._W(t), k, a) for (t, k, a) in keep]
         p = self.plan(self._W(t_end), self._W(T0b)); self.cmds = keep
+        W0_ = self._W(T0b)
+        for a_, b_, fn_ in self.layers05: p.layer(self._W(a_) - W0_, self._W(b_) - W0_, fn_)
         if os.environ.get("DBG_MARU"):
             for c in sorted(keep, key=lambda c: c[0]): print("DBGCMD %.2f %s %s" % (c[0], c[1], {k: (tuple(round(x, 2) for x in v) if isinstance(v, tuple) else v) for k, v in c[2].items()}))
         pf = MM.simulate(p, fps=FPS, t_end=p.t)
@@ -266,11 +260,13 @@ class Maru(MC.Maru):
         inv = lambda x: next((T0b + i / FPS for i in range(n) if self._W(T0b + i / FPS) - W0 >= x - 1e-6), t_end)
         for e_ in p.events:
             ts = inv(e_["t"])
-            if any(a <= ts <= b for a, b, _ in self.warps): continue           # 早回しの間は足音なし
-            if e_["kind"] in ("step", "step_turn"): ev(ts, "step", STEP_GAIN[0] * (0.6 if e_["kind"] == "step_turn" else 1.0))
-            elif e_["kind"] in ("takeoff", "land"):
-                if any(abs(ts - t_) < 0.6 for t_ in self.nosound): continue
-                ev(ts, "jump" if e_["kind"] == "takeoff" else "land", 0.5)
+            if any(a <= ts <= b for a, b, _ in self.warps): continue           # 早回しの間は音なし
+            k_ = e_["kind"]; g_ = e_.get("strength", 1.0)
+            if k_ in ("step", "step_turn"):
+                ev(ts, "maru:" + k_, STEP_GAIN[0] * min(1.5, g_)); continue
+            if any(abs(ts - t_) < 0.6 for t_ in self.nosound) and k_ in ("takeoff", "land"): continue
+            if any(a <= ts <= b for a, b in self.mutes): continue
+            ev(ts, "maru:" + k_, MARU_GAIN * min(1.5, g_))                    # 一覧の動きの音（共通の maru_sfx）
         self.p = p
 
 

@@ -4,7 +4,7 @@
 #   switch：電気のスイッチ（パチン）／light_on：目の光がぱっ／stop：先輩がぴたっと止まる／squish：着地（うんちのすぐ横）
 #   motor：先輩が走っている間の、小さなモーターの音（組み立てで motor_on〜motor_off の間に敷く）
 #   決まり（SKILL §6）：絵の動き 1 つに音 1 つ。同じ動きに 3D の音と札の音を重ねない。足音は小さく（0.05）
-import os, importlib.util
+import os, sys, importlib.util
 import numpy as np
 _sp = importlib.util.spec_from_file_location("sfx_ep03", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "ep03_ad", "anim", "sfx.py"))
 S3 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(S3)
@@ -12,6 +12,12 @@ _t, _n, _mx = S3._tone, S3._noise, S3._mx
 
 
 def make(kind, sr=48000):
+    if kind.startswith("maru:"):        # まるロボの動きの音（全部の回で共通の maru_sfx。予定の events の種類そのまま。references/maru_motions.md「音」）
+        d = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skill", "marurobo-video-production", "scripts")
+        if d not in sys.path: sys.path.insert(0, d)
+        import maru_sfx
+        x = maru_sfx.make(kind[5:], 1.0, sr)
+        return np.zeros(1) if x is None else np.asarray(x, dtype=float)
     if kind == "click":
         a = _mx(_n(0.025, sr, 2000, 9000, a=0.0005, d=0.004), 0.5 * _t(2600, 2400, 0.02, sr, a=0.0005, d=0.004))
         return 0.5 * np.concatenate([a, np.zeros(int(0.07 * sr)), 0.6 * a])
