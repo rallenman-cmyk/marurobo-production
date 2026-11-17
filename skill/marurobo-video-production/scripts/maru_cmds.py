@@ -102,7 +102,7 @@ class Maru:
                 q = copy.deepcopy(p); getattr(q, fn)(tgt); d = q.t - p.t
                 self._wait_to(p, tau - d, "%s %.1f秒" % (fn, t)); getattr(p, fn)(tgt)
             elif kind == "jump":
-                self._wait_to(p, tau, "跳び乗る %.1f秒" % t); p.jump_to(self._pp(a["p"]), z1=a["z1"] / self.s)
+                self._wait_to(p, tau, "跳び乗る %.1f秒" % t); p.jump_to(self._pp(a["p"]), z1=a["z1"] / self.s, apex=(a["apex"] / self.s if a.get("apex") is not None else None))     # apex：出発より上へ何 m（世界）上がるか。台のふちを越えて跳び降りるとき（5本目で足した）
             elif kind == "face":
                 h = a["face"] + self.off
                 q = copy.deepcopy(p); q.turn_to(h); d = q.t - p.t

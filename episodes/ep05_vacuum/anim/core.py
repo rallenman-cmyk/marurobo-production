@@ -171,12 +171,12 @@ class Maru(MC.Maru):
             key(par, "rotation_euler", t0, tuple(par.rotation_euler)); key(par, "rotation_euler", t1, tuple(R(v) for v in rot))
         self.offs.append((t1, b)); self.offs.sort(key=lambda x: x[0])
 
-    def jump(self, t, p_from, p_to, z_to=None, **_):
+    def jump(self, t, p_from, p_to, z_to=None, apex=None, **_):
         """p_from（世界）まで歩いておき、t に一覧の jump_to（見る→向く→しゃがむ→蹴る→放物線→脚で受け止める）で p_to へ。
         z_to：着く所の高さ（世界）。台に跳び乗る・机から跳び降りる"""
         self.at(t - 0.05, loc=p_from)
         z1 = (z_to if z_to is not None else self.poff(t).z) - self.poff(t).z
-        self.cmds.append((t, "jump", dict(p=self._rel(t, p_to), z1=z1)))
+        self.cmds.append((t, "jump", dict(p=self._rel(t, p_to), z1=z1, apex=apex)))     # apex：出発より何 m 上がるか（世界。None なら一覧の決まり）
 
     def act(self, t, kind, **kw):
         """一覧（references/maru_motions.md）の部品を、そのまま呼ぶ（lie_side・get_up など）"""
@@ -257,9 +257,10 @@ class Maru(MC.Maru):
         n = round((t_end - T0b) * FPS) + 1; W0 = self._W(T0b)
         frames = [pf[min(len(pf) - 1, max(0, round((self._W(T0b + i / FPS) - W0) * FPS)))] for i in range(n)]
         self.handle.bake(frames, f0=f(T0b))
-        inv = lambda x: next((T0b + i / FPS for i in range(n) if self._W(T0b + i / FPS) - W0 >= x - 1e-6), t_end)
+        inv = lambda x: next((T0b + i / FPS for i in range(n) if self._W(T0b + i / FPS) - W0 >= x - 1e-6), None)
         for e_ in p.events:
             ts = inv(e_["t"])
+            if ts is None: continue          # v6：このカットの終わりより後の音は、ここでは付けない（前は終わりの時刻にまとめて付いていた）
             if any(a <= ts <= b for a, b, _ in self.warps): continue           # 早回しの間は音なし
             k_ = e_["kind"]; g_ = e_.get("strength", 1.0)
             if k_ in ("step", "step_turn"):
