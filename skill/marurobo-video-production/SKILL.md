@@ -366,6 +366,7 @@ QR回は動画の直しが 154 件、うち 8 件は直したあとに戻され�
 | `cutfix.py`・`blurscan.py` | カットのつなぎ目のブレを見つけて、隣のコマに替える |
 | `overlay2d.py` | 3D の上の札・印・音符・「？」、カメラの記録から画面の位置、効果音（thump/clank/motor）、字幕の頭 |
 | `marumotion.py` | まるロボの動きの予定（歩く・回る・跳ぶ・うなずく…）。3D と同じ予定から足音の時刻も出る |
+| `maru_cmds.py` | 前の回と同じ書き方（`mr.at`・`walk`・`hop`・`tilt`・`glow`…声の時刻）を、marumotion の予定に時刻の順で並べて、`maru_real.place` の体に当てる（3本目で作成、2026-11-17）。間に合わない動きは `LATE` に出る |
 | `make_narration.py`・`split_narration.py`・`gemini_tts2.py` | 声を作る（Gemini TTS） |
 | `desumasu_check.py` | 台本の語尾で「です・ます」が何本続くか・全体の割合を出す |
 | `subs_check.py`・`subs_sample.py`・`still_sheet.py`・`still_grid.py` | 字幕の一覧・コマの一覧で目で確かめる |

@@ -1,0 +1,122 @@
+# まるロボを「前と同じ書き方」で動かす共通の部品（2026-11-17、3本目で作成。4〜6本目も使える）
+#   決まり：references/maru_walk.md（手で動かさない。marumotion の予定 → simulate → marurig）
+#   体を置いて毎コマを当てる所は、共通の maru_real.py（place / Handle.bake）を使う。
+#
+#   前の回の場面は、mr = Maru(場所, 向き, s=大きさ)、mr.at(t, loc=, face=, look=)、mr.walk(t0, t1, a, b)、mr.hop(t) …
+#   のように「声の時刻」で書いてある。この部品は、その命令をそのまま受け取ってためておき、最後に bake() で
+#   時刻の順に marumotion の予定（Plan）へ並べる：
+#     ・場所を変える（at の loc・walk）→ walk_to。着く時刻に間に合うように歩き出しを早める（ふつう 1.0m/s、だめなら急ぎ 1.3m/s）
+#     ・向き（at の face）→ turn_to（足踏みで回る）。見上げ（at の look）→ look（目と胴。体ごと傾けない）
+#     ・hop → hops（小さく跳ねる）。tilt → 首をかしげる（roll）。lean → 前後（pitch）。glow → アンテナの光
+#     ・surprise / nod / shake / think / peer / sigh / look_around → 予定の気持ちの動き
+#     間に合わなかった動きは LATE に入る（名前, 遅れた秒）。必ず見て、場面の時刻か動きを直す
+#   足音：予定の step・step_turn の時刻を steps に、takeoff・land を events に入れる
+#
+#   使い方（Blender の中）：
+#     import maru_cmds as MC
+#     mr = MC.Maru(loc=(x, y, z), face=度, s=0.7, face_offset=180)   # face_offset：その回の「向き 0」が本物の前（+Y）から何度か。
+#                                                                    # 3〜6本目の簡単な maru() は前が −Y なので 180
+#     mr.walk(...); mr.at(...); ...
+#     MC.bake_all(t_end, T0=場面の 0 コマ目の時刻, fps=24, steps=STEPS, events=EVENTS)
+#   mr.torso：体の中心（帽子・札を付ける親）。mr.handle：maru_real の Handle（real＝本物かどうか）
+import copy, math, os, sys
+HERE = os.path.dirname(os.path.abspath(__file__))
+if HERE not in sys.path: sys.path.insert(0, HERE)
+import marumotion as mm
+import maru_real as MR
+
+LATE = []
+ALL = []
+
+
+class Maru:
+    def __init__(self, loc, face, s=1.0, face_offset=180.0, look_up=0.0, name="maru", **_):
+        z = loc[2] if len(loc) > 2 else 0.0
+        self.s = s; self.off = face_offset
+        self.handle = MR.place(loc=(0.0, 0.0, z), heading=0.0, scale=s, name=name)   # 親は世界の原点・回転なし・大きさ s
+        self.root = self.handle.root; self.torso = self.handle.torso; self.body = self.torso
+        self.cmds = []; self.p0 = (loc[0] / s, loc[1] / s); self.h0 = face + face_offset; self.look0 = look_up
+        self._last = {}
+        ALL.append(self)
+
+    # ---- 命令（時刻は場面の時刻）
+    def at(self, t, loc=None, face=None, look=None, **_):
+        if loc is not None: self.cmds.append((t, "go", dict(p=(loc[0], loc[1]))))
+        if face is not None and loc is None: self.cmds.append((t, "face", dict(face=face)))
+        if look is not None: self.cmds.append((t, "look", dict(pitch=look)))
+
+    def walk(self, t0, t1, a, b=None, face=None, end_face=None, **_):
+        if b is None: b = a                                   # walk(t0, t1, b) の書き方にも
+        self.cmds.append((t1, "go", dict(p=(b[0], b[1]), end_face=end_face)))
+
+    def hop(self, t, h=0.3, d=0.45): self.cmds.append((t, "hop", dict(h=h)))
+    def tilt(self, t, deg, d=0.3): self.cmds.append((t, "roll", dict(deg=deg, d=d)))
+    def lean(self, t, deg, d=0.3): self.cmds.append((t, "pitch", dict(deg=deg, d=d)))
+    def glow(self, t, s0, s1=None, d=0.25): self.cmds.append((t, "light", dict(v=(s1 if s1 is not None else s0), d=d)))
+    def blink(self, t, d=0.25): self.cmds.append((t, "blink", {}))
+    def surprise(self, t): self.cmds.append((t, "surprise", {}))
+    def nod(self, t, n=2): self.cmds.append((t, "nod", dict(n=n)))
+    def shake(self, t): self.cmds.append((t, "shake", {}))
+    def think(self, t, dur=2.2): self.cmds.append((t, "think", dict(dur=dur)))
+    def peer(self, t, dur=1.6): self.cmds.append((t, "peer", dict(dur=dur)))
+    def sigh(self, t): self.cmds.append((t, "sigh", {}))
+    def look_around(self, t): self.cmds.append((t, "look_around", {}))
+
+    # ---- 予定にする
+    def _pp(self, p): return (p[0] / self.s, p[1] / self.s)
+
+    def _wait_to(self, p, tau, name):
+        if tau < p.t - 1e-6: LATE.append((name, round(p.t - tau, 2)))
+        gap = tau - p.t
+        if gap > 3.2: p.idle(gap - 0.4, shifts=True, glance=True)
+        p.wait(max(0.0, tau - p.t))
+
+    def plan(self, t_end, T0):
+        p = mm.Plan(pos=self.p0, heading=self.h0)
+        if self.look0: p.look(0, self.look0, hold=0.0, at=0.0)
+        for t, kind, a in sorted(self.cmds, key=lambda c: c[0]):
+            tau = t - T0
+            if kind == "go":
+                tgt = self._pp(a["p"])
+                if math.hypot(tgt[0] - p._p[0], tgt[1] - p._p[1]) < 0.03: continue
+                for v in (1.0, 1.3):                                     # ふつう → 急ぎ
+                    q = copy.deepcopy(p); q.walk_to(tgt, speed=v); d = q.t - p.t
+                    if tau - d >= p.t - 1e-6: break
+                self._wait_to(p, tau - d, "歩く %.1f秒" % t); p.walk_to(tgt, speed=v)
+                if a.get("end_face") is not None: p.turn_to(a["end_face"] + self.off)
+            elif kind == "face":
+                h = a["face"] + self.off
+                q = copy.deepcopy(p); q.turn_to(h); d = q.t - p.t
+                if d < 0.05: continue
+                self._wait_to(p, tau - d, "向く %.1f秒" % t); p.turn_to(h)
+            elif kind == "look":
+                p.look(0, a["pitch"], hold=0.0, at=max(tau, 0.0))
+            elif kind == "hop":
+                self._wait_to(p, tau, "跳ぶ %.1f秒" % t); p.hops(n=1, height=max(0.05, min(0.16, a["h"] * 0.35)))
+            elif kind == "roll":
+                p.tracks["roll"].set(max(tau, 0.0), a["d"], -a["deg"])
+            elif kind == "pitch":
+                p.tracks["pitch"].set(max(tau, 0.0), a["d"], a["deg"])
+            elif kind == "light":
+                p.tracks["light"].set(max(tau, 0.0), a["d"], a["v"] / 1.6 - 1.0)
+            elif kind == "blink":
+                p.blinks.append(max(tau, 0.0))
+            else:
+                self._wait_to(p, tau, "%s %.1f秒" % (kind, t)); getattr(p, kind)(**a)
+        if p.t < t_end - T0 + 0.5: p.idle(t_end - T0 + 0.5 - p.t)
+        return p
+
+    def bake(self, t_end, T0=0.0, fps=24, steps=None, events=None):
+        p = self.plan(t_end, T0)
+        frames = mm.simulate(p, fps=fps, t_end=p.t)
+        self.handle.bake(frames, f0=0)
+        for e in p.events:
+            if steps is not None and e["kind"] in ("step", "step_turn"): steps.append(round(T0 + e["t"], 3))
+            elif events is not None and e["kind"] in ("takeoff", "land"): events.append((round(T0 + e["t"], 3), "jump" if e["kind"] == "takeoff" else "land"))
+        self.p, self.frames = p, frames
+        return frames
+
+
+def bake_all(t_end, T0=0.0, fps=24, steps=None, events=None):
+    for m in ALL: m.bake(t_end, T0, fps, steps, events)
+    if LATE: print("【まるロボ】間に合わなかった動き（秒）：", LATE)
