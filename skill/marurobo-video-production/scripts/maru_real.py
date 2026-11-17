@@ -4,10 +4,14 @@
 #   使い方（Blender の中で）：
 #     import maru_real as MR
 #     h = MR.place(loc=(x, y, z), heading=度, scale=1.0)        # 置き場所（場面の座標）・向き・大きさ（机の上なら 0.22 など）
-#     p = mm.Plan(pos=(0, 0), heading=0)                           # 予定の座標は「置き場所から見た座標」（大きさ 1 の m）
+#     p = mm.Plan(pos=(0, 0), heading=0)                           # 予定の座標は「置き場所の親の中の座標」＝本物の寸法の m（大きさ 1）。
+#                                                                  #   世界の点 w は ((w − loc) を −heading 回して) ÷ scale で直す（4本目 anim/real_maru.py の Conv.xy）
 #     p.wait(1.0); p.walk_to((0.3, 0)); ...
 #     h.bake(mm.simulate(p, fps=24), f0=0)                         # 毎コマを当てる（コマ番号 f0 から）
 #     h.torso → 札や記録に使う体の中心（Object）。h.real → 本物なら True
+#     予定にない動き（ころぶ・寝ころぶ・人に運ばれる など）は、h.parent（置き場所の親）にキーを足して重ねる。
+#       marurig は親の中の座標で当てるので、親を回す・動かすと、歩きや姿勢ごとまとめて動く
+#   本物には荷台がある：荷台（cradle・cargo）と、marurig が頭に作る受け皿（saddle）は描かない（帽子のない回で頭の上に見えるため）
 #
 #   本物の体（PC）：story.blend の「Maru」を読みこみ、ep01 の marurig で当てる。story.blend の場所は
 #     ① place(blend=...)  ② 環境変数 MARU_BLEND  ③ コマンドの --blend <path>  ④ C:\marurobo の下を探す（bt_production_v1\output\story.blend）
@@ -148,5 +152,9 @@ def place(loc=(0, 0, 0), heading=0.0, scale=1.0, blend=None, name="maru", coll=N
     root.parent = par; root.matrix_parent_inverse = Matrix.Identity(4); root.location = (0, 0, 0); root.rotation_euler = (0, 0, 0)
     bpy.context.view_layer.update()
     rig = mr.MaruRig(root)
+    if getattr(rig, "saddle", None):                     # 頭の受け皿（荷物用）は使わないので隠す
+        rig.saddle.hide_render = True; rig.saddle.hide_viewport = True
+    for o in hier(root):
+        if "cradle" in o.name.lower() or o.name.startswith(("Cradle", "Maru cargo")): o.hide_render = True; o.hide_viewport = True
     print("MARU", "REAL" if real else "STANDIN", path or "")
     return Handle(par, root, rig, real)
