@@ -8,7 +8,8 @@
 #     ・場所を変える（at の loc・walk）→ walk_to。着く時刻に間に合うように歩き出しを早める（ふつう 1.0m/s、だめなら急ぎ 1.3m/s）
 #     ・向き（at の face）→ turn_to（足踏みで回る）。見上げ（at の look）→ look（目と胴。体ごと傾けない）
 #     ・hop → hops（小さく跳ねる）。tilt → 首をかしげる（roll）。lean → 前後（pitch）。glow → アンテナの光
-#     ・surprise / nod / shake / think / peer / sigh / look_around → 予定の気持ちの動き
+#     ・surprise / nod / shake / think / peer / sigh / look_around / confused / present / greet / awe / groove / rest / wake / hops
+#       → 予定の気持ちの動き。run・back・jump も（動きの一覧と見え方は references/maru_motions.md）
 #     間に合わなかった動きは LATE に入る（名前, 遅れた秒）。必ず見て、場面の時刻か動きを直す
 #   足音：予定の step・step_turn の時刻を steps に、takeoff・land を events に入れる
 #
@@ -61,6 +62,17 @@ class Maru:
     def peer(self, t, dur=1.6): self.cmds.append((t, "peer", dict(dur=dur)))
     def sigh(self, t): self.cmds.append((t, "sigh", {}))
     def look_around(self, t): self.cmds.append((t, "look_around", {}))
+    def confused(self, t): self.cmds.append((t, "confused", {}))
+    def present(self, t, yaw=45.0): self.cmds.append((t, "present", dict(yaw=yaw)))
+    def greet(self, t): self.cmds.append((t, "greet", {}))
+    def awe(self, t, dur=3.2, pitch=20.0): self.cmds.append((t, "awe", dict(dur=dur, pitch=pitch)))
+    def groove(self, t, dur=4.0, bpm=96.0): self.cmds.append((t, "groove", dict(dur=dur, bpm=bpm)))
+    def rest(self, t, dur=2.5): self.cmds.append((t, "rest", dict(dur=dur)))
+    def wake(self, t): self.cmds.append((t, "wake", {}))
+    def hops(self, t, n=3, height=0.06): self.cmds.append((t, "hops", dict(n=n, height=height)))
+    def run(self, t, loc): self.cmds.append((t, "move", dict(p=(loc[0], loc[1]), how="run_to")))      # t＝着く時刻
+    def back(self, t, loc): self.cmds.append((t, "move", dict(p=(loc[0], loc[1]), how="back_to")))
+    def jump(self, t, loc, z1=0.0): self.cmds.append((t, "jump", dict(p=(loc[0], loc[1]), z1=z1)))  # t＝跳び始める時刻
 
     # ---- 予定にする
     def _pp(self, p): return (p[0] / self.s, p[1] / self.s)
@@ -84,6 +96,12 @@ class Maru:
                     if tau - d >= p.t - 1e-6: break
                 self._wait_to(p, tau - d, "歩く %.1f秒" % t); p.walk_to(tgt, speed=v)
                 if a.get("end_face") is not None: p.turn_to(a["end_face"] + self.off)
+            elif kind == "move":                                       # 走る・後ろへ下がる（着く時刻＝t）
+                tgt = self._pp(a["p"]); fn = a["how"]
+                q = copy.deepcopy(p); getattr(q, fn)(tgt); d = q.t - p.t
+                self._wait_to(p, tau - d, "%s %.1f秒" % (fn, t)); getattr(p, fn)(tgt)
+            elif kind == "jump":
+                self._wait_to(p, tau, "跳び乗る %.1f秒" % t); p.jump_to(self._pp(a["p"]), z1=a["z1"] / self.s)
             elif kind == "face":
                 h = a["face"] + self.off
                 q = copy.deepcopy(p); q.turn_to(h); d = q.t - p.t
