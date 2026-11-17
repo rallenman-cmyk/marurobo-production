@@ -51,7 +51,7 @@ def s04():
     seq_screen(find_screen(), SCR, "s04")
     mr = Maru(find_maru()); ms = find_mouse()
     TRACK["maru"] = (mr.body, 0.12)                                  # 体の少し上（札のしっぽの先）
-    click = said("カチッ"); a0, a1 = said("マウスで") + 0.3, click - 0.75   # screens.py と同じ時刻
+    click = said("カチッ"); a0, a1 = said("マウスで") + 0.3, click - 1.75   # screens.py と同じ時刻（本物は跳び乗る前にしゃがむ）
     test_t = said("代わりに") - 0.35   # 前の文の声が終わってすぐ（ピッが声と重ならない）
     M1 = (M0[0] - 0.24, M0[1] + 0.11, M0[2])                       # 矢印の動き（左上へ）と同じ向きにマウスが動く
     off = (0.0, -0.2, 0.0)
@@ -108,6 +108,13 @@ def s04():
 
 
 t0, t1 = globals()[KEY]()
+# 2026-11-17 ユーザー「本物に替えて描き直す」：簡単なまるロボを隠し、本物（PC）か代わりの体（クラウド）を marumotion の予定で動かす
+if os.environ.get("MARU_SIMPLE") != "1":
+    sys.path.insert(0, _ANIM_HERE); import real_maru as RM
+    _r = find_maru(); _h, _C, _p = RM.swap(_r, t0, name=KEY)
+    RM.PLANS_SCENE[KEY](_p, _C, dict(globals()))
+    RM.finish(_h, _p, t0, t1, EVENTS, STEPS)
+    TRACK["maru"] = (_h.torso, TRACK["maru"][1] if "maru" in TRACK else 0.12)
 if "--dbg" in ARGS: exec(open(ARGS[ARGS.index("--dbg") + 1]).read()); raise SystemExit
 bpy.context.view_layer.update()
 render(KEY, t0, t1, OUTDIR, N_SAMPLES, (RESX, RESY), STEP, FR if FR != [0, 0] else None)

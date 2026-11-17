@@ -321,6 +321,15 @@ if _nd:
 mr = M(find_maru()); ms = find_mouse()
 TRACK["maru"] = (mr.body, 0.12 if base.startswith(("b0", "b1", "b2")) and base in ("b01", "b02", "b03", "b04a", "b04b", "b05a", "b05b", "b11", "b22", "b23") else 0.6)
 ACT.get(NAME, a_idle)(mr, ms)
+# 2026-11-17 ユーザー「本物に替えて描き直す」：簡単なまるロボを隠し、本物（PC）か代わりの体（クラウド）を marumotion の予定で動かす
+#   表：絵コンテ表_本物.md。MARU_SIMPLE=1 なら前の簡単なまるロボのまま（見比べ用）
+if os.environ.get("MARU_SIMPLE") != "1":
+    sys.path.insert(0, _ANIM_HERE); import real_maru as RM
+    _h, _C, _p = RM.swap(mr.root, T0, name=NAME)
+    _g = dict(globals()); _g.update(ms=ms)
+    RM.PLANS.get(NAME, RM.P_idle_look)(_p, _C, _g)
+    RM.finish(_h, _p, T0, T1, EVENTS, STEPS)
+    TRACK["maru"] = (_h.torso, TRACK["maru"][1])
 bpy.context.view_layer.update()
 render(NAME, T0, T1, OUTDIR, N_SAMPLES, (RESX, RESY), STEP)
 print("DONE", NAME, T0, T1)

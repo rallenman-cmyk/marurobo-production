@@ -21,7 +21,17 @@ def span(t0, t1):
     sc.frame_start, sc.frame_end = 0, round((T1 - T0) * FPS)
 
 
+def real_maru(name):
+    """2026-11-17 ユーザー「本物に替えて描き直す」：簡単なまるロボ（root）を隠し、本物（PC）か代わりの体（クラウド）を予定で動かす"""
+    if os.environ.get("MARU_SIMPLE") == "1": return
+    sys.path.insert(0, _ANIM_HERE); import real_maru as RM
+    g = globals(); h, C, p = RM.swap(g["root"], T0, name=name)
+    RM.PLANS_LOOK[name](p, C, dict(g)); RM.finish(h, p, T0, T1, EVENTS, STEPS)
+    TRACK["maru"] = (h.torso, TRACK["maru"][1] if "maru" in TRACK else 0.6)
+
+
 def finish(name):
+    real_maru(name)
     glare()
     render(name, T0, T1, OUTDIR, N_SAMPLES, (RESX, RESY), STEP)
     print(name.upper() + "DONE")
