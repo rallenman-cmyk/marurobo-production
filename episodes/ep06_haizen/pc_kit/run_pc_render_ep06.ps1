@@ -11,6 +11,7 @@ param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker
 $ErrorActionPreference = "Continue"
 $kit = Split-Path -Parent $PSScriptRoot                      # ...\marurobo_ep06
 $anim = Join-Path $kit "episodes\ep06_haizen\anim"
+$env:MARU_REQUIRE_REAL = "1"   # 本物のまるロボ（story.blend）がないときは止める（代わりの体で本番を描かない）
 $root = "C:\marurobo"
 if (-not (Test-Path $root)) { $root = Split-Path -Parent $kit }
 $JOBS = @(

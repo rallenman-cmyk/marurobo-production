@@ -150,7 +150,20 @@ for (t, kind), gain in sorted(EV.items()):
     if kind not in ("motor_on", "motor_off", "step", "rub", "maru:step", "maru:step_turn", "maru:rub", "maru:beep_think") and any(k == kind and abs(t - t2) < 0.6 for (t2, k) in _ev): continue
     _ev[(t, kind)] = gain
 EV = _ev
-SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
+# まるロボの音は、まるロボが画面に入っている間だけ鳴らす（6本目 v8 の点検：先輩のアップの間、画面の外を歩く足音・跳ねる音が 38 個鳴っていた。
+#   SKILL.md「音は絵が見えている動きにだけ付ける」）。場所は描いたときの記録（track の maru）で見る
+offscreen = []
+for (t, kind) in list(EV):
+    if not kind.startswith("maru:"): continue
+    pos = where("maru", t)
+    if pos is None or not (-20 < pos[0] < WV + 20 and -20 < pos[1] < HV + 10):
+        offscreen.append((t, kind)); del EV[(t, kind)]
+SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify",
+         # まるロボの電子音も、1 つで鳴る大事な音なので声のすき間へ（6本目 v8 の点検：15 個のうち 9 個が声と重なっていた）
+         "maru:beep_hello", "maru:beep_happy", "maru:beep_surprise", "maru:beep_question", "maru:beep_yes", "maru:beep_no",
+         "maru:boot", "maru:power_down", "maru:zoom"}
+# 音ごとの大きさの直し（6本目 v8 の点検：すりすりが声より 15 dB 下で、ほとんど聞こえない。「すりすり」と言う音なので上げる）
+GAIN_FIX = {"maru:rub": 2.0}
 fx = np.zeros(N, np.float32); moves = []; overl = []
 # 効果音と声の重なりは、声が本当に出ている所（文の中の「……」の間は除く）で見る
 _hop = int(0.02 * SR); _m = N // _hop
@@ -170,7 +183,7 @@ for (t, kind), gain in sorted(EV.items()):
         continue
     x = sfx.make(kind, SR)
     if x is None: continue
-    x = x.astype(np.float32) * gain
+    x = x.astype(np.float32) * gain * GAIN_FIX.get(kind, 1.0)
     dur = len(x) / SR
     if kind in SHIFT and voiced(t, t + dur):
         best = None
@@ -239,6 +252,7 @@ chk.append("1.0 秒未満の字幕：" + ("、".join("%.1f秒 %.2f 秒「%s」" 
 over = [t for a, c, t in SUBS if any(SJ.width(r) > 25 for r in t.split("\\N")) or t.count("\\N") > 1]
 chk.append("25 字・2 行をこえる字幕：" + ("、".join(over) or "なし"))
 chk.append("絵の足りないクリップ：" + ("、".join(sorted(missing)) or "なし"))
+chk.append("まるロボが画面の外なので鳴らさなかった音：%d 個（%s）" % (len(offscreen), "、".join(sorted({"%.0f秒" % t for t, _ in offscreen})) or "なし"))
 chk.append("声のすき間へずらした効果音：" + ("、".join("%.2f %s → %+.2f 秒" % m for m in moves) or "なし"))
 chk.append("声と重なるので半分の大きさにした効果音（札が言葉の瞬間に出る音）：" + ("、".join("%.2f %s" % m for m in overl) or "なし"))
 small = [p.get("text") for t0_, t1_, kind, p in OV.EVENTS if kind == "tag" and p.get("size", 48) < 44]
