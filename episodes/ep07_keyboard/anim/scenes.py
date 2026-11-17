@@ -452,7 +452,10 @@ def b_inside(cl):
     M.hop(e("14-04") - 0.3, h=0.15, d=0.4)
     # 15-03：棒の根もとにゆっくり跳び乗る → 乗った棒が 1 本だけゆっくり上がって戻る（2 回、別の棒）（v5「まるロボが飛んで棒を踏んでるんじゃないの」）
     bpy.context.view_layer.update()
-    base = lambda ch: (pv[ch].matrix_world.translation.x * 1.12, (pv[ch].matrix_world.translation.y - 0.6) * 1.12 + 0.6, 0.0)   # 根もとの外の端（シーソーのように押す。v7：内側に立つと上がる棒が体を突き抜けた）
+    def base(ch):     # 棒の根もとの真横（となりの動かない棒の上）。上がる棒は自分の縦の面だけを回るので、真横なら体に当たらない（v7：棒の上や外の端に立つと、上がる棒が体を突き抜けた）
+        x, y = pv[ch].matrix_world.translation.x, pv[ch].matrix_world.translation.y - 0.6
+        r = math.hypot(x, y); tx, ty = -y / r, x / r
+        return (x * 0.86 + tx * 0.17, y * 0.86 + 0.6 + ty * 0.17, 0.0)
     M.walk(s("15-01"), s("15-03"), (0.2, 0.75, 0.0))
     for ch, tl in (("G", w("15-03", "ぴょん") - 0.05), ("H", e("15-03") - 0.2)):     # 「ぴょん」で着く（その場から、ゆっくり 1 回ずつ）
         M.hopto(tl, base(ch))
