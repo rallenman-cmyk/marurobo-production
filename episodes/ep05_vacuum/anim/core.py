@@ -2,7 +2,7 @@
 #   前提：exec する側で KIT_HERE・CLIP（t0, t1）を決めてから読む
 #   4本目の anim/common.py と同じ考え方：声の置き場所（voice/placement.json）から文ごとの時刻を出し、動きを声に合わせる
 import os, sys, json, math, bpy
-from mathutils import Vector
+from mathutils import Vector, Matrix
 VO = os.path.join(KIT_HERE, "..", "voice")
 _P = json.load(open(os.path.join(VO, "placement.json"), encoding="utf-8"))
 _L = {e["no"]: e for e in json.load(open(os.path.join(VO, "script_v1_0.json"), encoding="utf-8"))}
@@ -105,90 +105,179 @@ def face_to(p, q):
     return plan.face_deg(q[0] - p[0], q[1] - p[1])
 
 
-class Maru:
-    """まるロボ：root（場所・向き）、body（跳ぶ・見上げる・傾く）、レンズの光"""
+# ---------------------------------------------------------------- まるロボ（本物の体・決まりどおりの動き）
+# 2026-11-17 ユーザー「描画を止めて直す」：3本目の絵コンテ用の簡単な体（maru()）と、体を滑らせる歩きをやめた。
+#   体：共通の maru_real.py（PC は story.blend の本物、クラウドは同じ寸法の代わりの体）
+#   動き：共通の maru_cmds.py（前の書き方の命令をためて、marumotion の予定に並べ、marurig で毎コマ当てる）。references/maru_walk.md
+#   5本目だけの足し：置き場所の親を動かす跳び（机から降りる・先輩に乗る・段差で落ちる・うんちから跳ぶ）とぶつかり、
+#   早回し（予定をゆっくり作って速く流す）、レンズの光、まぶた、足音の大きさ
+def _maru_paths():
+    here = os.path.dirname(os.path.abspath(KIT_HERE + "/core.py"))
+    for d in (os.path.join(here, "..", "..", "..", "skill", "marurobo-video-production", "scripts"),
+              os.path.join(here, "..", "..", "ep01_earphone", "stage", "maru"), here):     # PC の一式では anim に写しを入れる
+        d = os.path.abspath(d)
+        if os.path.isdir(d) and d not in sys.path: sys.path.insert(0, d)
+
+
+_maru_paths()
+import maru_cmds as MC
+import marumotion as MM
+
+STEP_GAIN = [0.1]          # 足音の大きさ（v2「歩く SE いれて」で 0.05 は聞こえなかった）
+MARUS = []
+
+
+class Maru(MC.Maru):
     S = 0.26
 
     def __init__(self, loc, face=0.0, glow=0.9, s=None):
-        self.s = s or Maru.S
-        self.root = maru(loc, face_deg=face, s=self.s, hat=False, eye_glow=glow)
-        self.body = self.root.children[0]
-        self.z0 = self.body.location.z
-        self.lens = bpy.data.materials["maru_lens"]
-        self._last = {}
-        self.loc = Vector(loc); self.face = face
+        s = s or Maru.S
+        z = loc[2] if len(loc) > 2 else 0.0
+        MC.Maru.__init__(self, (loc[0], loc[1], z), face, s=s, face_offset=180, name="maru%d" % len(MARUS))
+        self.loc = Vector((loc[0], loc[1], z)); self.face = face; self._last = {}
+        self.g_ref = glow; self.offs = [(-1e9, Vector((0.0, 0.0, z)))]      # 置き場所の親のずれ（時刻, 世界の位置）
+        self.warps = []; self.nosound = []
+        self.lens = self._find_mat(("Optical blue", "Maru lens"))
+        self.white = self._find_mat(("Porcelain", "Maru white"))
+        MARUS.append(self)
 
-    def at(self, t, loc=None, face=None, look=None, interp="BEZIER", hold=True):
-        for ch, v in (("loc", loc), ("face", face), ("look", look)):
-            if v is None: continue
-            if hold and ch in self._last and t - self._last[ch][0] > 1.0:
-                th = max(self._last[ch][0], t - 0.8); self._set(ch, th, self._last[ch][1], interp)
-            self._last[ch] = (t, v); self._set(ch, t, v, interp)
+    # ---- 部品さがし
+    def _find_mat(self, keys):
+        for o in [self.root] + list(self.root.children_recursive):
+            if o.type != 'MESH': continue
+            for m in o.data.materials:
+                if m and any(m.name.startswith(k) for k in keys): return m
+        return None
 
-    def _set(self, ch, t, v, interp):
-        if ch == "loc": key(self.root, "location", t, tuple(v), interp)
-        elif ch == "face": key(self.root, ("rotation_euler", 2), t, R(v), interp)
-        else: key(self.body, ("rotation_euler", 0), t, R(-v), interp)
+    # ---- 置き場所の親のずれ
+    def poff(self, t):
+        return [v for (tt, v) in self.offs if tt <= t + 1e-6][-1]
+
+    def _rel(self, t, p):
+        o = self.poff(t); return (p[0] - o.x, p[1] - o.y)
+
+    def move_parent(self, t0, t1, dp, h=0.0, dz=0.0, rot=None):
+        """置き場所の親を、t0〜t1 で dp（世界の xy）・dz だけ動かす（h：途中の山の高さ）。rot：親の回転 (x, y, z) 度"""
+        par = self.handle.parent; a = self.poff(t0); b = a + Vector((dp[0], dp[1], dz))
+        key(par, "location", t0, tuple(a), "LINEAR")
+        if h: key(par, "location", (t0 + t1) / 2, tuple((a + b) / 2 + Vector((0, 0, h))))
+        key(par, "location", t1, tuple(b), "LINEAR" if not h else "BEZIER")
+        if rot is not None:
+            key(par, "rotation_euler", t0, tuple(par.rotation_euler)); key(par, "rotation_euler", t1, tuple(R(v) for v in rot))
+        self.offs.append((t1, b)); self.offs.sort(key=lambda x: x[0])
+
+    def jump(self, t, p_from, p_to, z_to=None, d=0.7, h=0.18, sound=True):
+        """p_from（世界）から p_to（世界）へ跳ぶ：p_from まで歩いておき、親を山なりに動かす。体は予定の小さな跳ね"""
+        self.at(t - 0.05, loc=p_from)
+        MC.Maru.hop(self, t, h=0.25)
+        z0 = self.poff(t).z
+        self.move_parent(t + 0.05, t + d, (p_to[0] - p_from[0], p_to[1] - p_from[1]), h=h, dz=(z_to - z0) if z_to is not None else 0.0)
+        if not sound: self.nosound.append(t)
+
+    def bump(self, t, dp, d=0.12):
+        """ぶつかって押し返される（親を少しずらす）"""
+        self.move_parent(t, t + d, dp)
+
+    # ---- 前の書き方
+    def at(self, t, loc=None, face=None, look=None, interp=None, hold=None, **_):
+        if loc is not None:      # 場所と向きを一緒に言われたら、着いてからその向きへ（前の書き方）
+            self.cmds.append((t, "go", dict(p=self._rel(t, loc), end_face=face)))
+            if look is not None: MC.Maru.at(self, t, look=look)
+        else:
+            MC.Maru.at(self, t, face=face, look=look)
+
+    def walk(self, t0, t1, p1, step=None, turn=True, gain=None, speeds=None, **_):
+        if speeds == "run": self.cmds.append((t1, "move", dict(p=self._rel(t1, p1), how="run_to")))     # 走って着く（共通の部品の run）
+        else: MC.Maru.walk(self, t0, t1, self._rel(t1, p1))
 
     def hop(self, t, h=0.25, d=0.45, sound=True):
-        z = self.z0
-        key(self.body, ("location", 2), t, z); key(self.body, ("location", 2), t + d / 2, z + h); key(self.body, ("location", 2), t + d, z)
-        if sound: ev(t, "jump", 0.5); ev(t + d, "land", 0.5)
+        MC.Maru.hop(self, t, h=h, d=d)
+        if not sound: self.nosound.append(t)
 
-    def tilt(self, t, deg, d=0.3):
-        key(self.body, ("rotation_euler", 1), t, self.body.rotation_euler[1]); key(self.body, ("rotation_euler", 1), t + d, R(deg))
+    def wobble(self, t0, t1, deg=10, period=0.5):
+        k = 0; t = t0
+        while t < t1 - 1e-6:
+            self.tilt(t, deg if k % 2 else -deg, period / 2); t += period / 2; k += 1
+        self.tilt(t1, 0, 0.3)
+
+    def fast(self, t0, t1, slow):
+        """t0〜t1 を早回しにする：予定はこの間を slow 倍の長さで作り、絵では速く流す（歩く速さの決まりは守ったまま）"""
+        self.warps.append((t0, t1, slow))
+
+    def route_fast(self, ts, te, pts):
+        """早回しで pts を順に歩く：本当の速さの歩きで何秒かかるかを先に測り、ts〜te に入るように速く流す"""
+        q = MM.Plan(pos=self._pp(self._rel(ts, pts[0])), heading=0.0); q.turn_to(math.degrees(math.atan2(-(pts[1][0] - pts[0][0]), pts[1][1] - pts[0][1])) % 360)
+        tk = []
+        for pt in pts[1:]: q.walk_to(self._pp(self._rel(ts, pt))); tk.append(q.t)
+        k = max(1.0, q.t / (te - ts) * 1.03)
+        self.fast(ts, te, k)
+        for pt, ti in zip(pts[1:], tk): self.cmds.append((ts + ti / k, "go", dict(p=self._rel(ts, pt))))
+        return [ts + ti / k for ti in tk]          # 各点に着く時刻（場面の時刻）
 
     def glow(self, t, g, d=0.3, g0=None):
-        if g0 is not None: emit_key(self.lens, t, g0)
-        else: emit_key(self.lens, t, self.lens.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value)
-        emit_key(self.lens, t + d, g)
+        """レンズ（目）の光。g は前の書き方の強さ（作ったときの glow が 1 倍）"""
+        m = self.lens
+        if m is None: return
+        nd = m.node_tree.nodes.get("Principled BSDF")
+        inp = nd.inputs["Emission Strength"] if nd else [n for n in m.node_tree.nodes if n.type == 'EMISSION'][0].inputs["Strength"]
+        if not hasattr(self, "_lens0"): self._lens0 = inp.default_value; self._lens_cur = 1.0
+        if g0 is not None: self._lens_cur = g0 / self.g_ref
+        inp.default_value = self._lens0 * self._lens_cur; inp.keyframe_insert("default_value", frame=f(t))
+        self._lens_cur = g / self.g_ref
+        inp.default_value = self._lens0 * self._lens_cur; inp.keyframe_insert("default_value", frame=f(t + d))
 
     def eyelid(self, t, closed=1.0, d=0.35):
-        """まぶた（体と同じ白）を上から下ろす。closed＝0（開く）〜1（閉じる）。v3：5本目 v2「目の光を消しました → 目を閉じさせて」"""
+        """まぶた（体と同じ白）を上から下ろす。本物の体は前が +Y（レンズ y 0.508・z 0.025）"""
         if not hasattr(self, "_lid"):
-            piv = empty((0, -0.485, 0.04 + 0.235)); piv.parent = self.body
-            lid = sphere(bpy.data.materials["maru_white"], (0, 0, -0.235), 0.238, scale=(1, 0.55, 1), parent=piv)
+            L = MM.LENS
+            piv = empty((0, L["y"] - 0.05, L["z"] + 0.27)); piv.parent = self.torso
+            lid = sphere(self.white or bpy.data.materials.new("lidw"), (0, 0, -0.27), 0.31, scale=(1, 0.5, 1), parent=piv)
             piv.scale = (1, 1, 0.001); self._lid = piv
             key(piv, ("scale", 2), CLOCK["T0"] - 5, 0.001)
-            # 閉じた目の線（「︶」）：閉じ終わってから出る
-            seam = empty((0, -0.62, 0.04)); seam.parent = self.body
+            seam = empty((0, L["y"] + 0.11, L["z"] - 0.02)); seam.parent = self.torso
             dk = mat("lidline", "#2B3440", rough=0.5)
             for k in range(17):
                 a0 = math.radians(-60 + 7.5 * k)
-                o_ = cyl(dk, (0.13 * math.sin(a0), 0, -0.13 * math.cos(a0) + 0.1), 0.012, 0.022, rot=(0, R(90) + a0, 0), parent=seam)
+                cyl(dk, (0.13 * math.sin(a0), 0, -0.13 * math.cos(a0) + 0.1), 0.012, 0.022, rot=(0, R(90) + a0, 0), parent=seam)
             self._seam = seam; hide_key(seam, CLOCK["T0"] - 5, True)
-        cur = self._lid.scale[2]
         key(self._lid, ("scale", 2), t, max(0.001, self._lid.get("_v", 0.001)))
         key(self._lid, ("scale", 2), t + d, max(0.001, closed)); self._lid["_v"] = max(0.001, closed)
         hide_key(self._seam, t + d if closed >= 0.99 else t, closed < 0.99)
 
-    def blink(self, t, g=0.9, d=0.22):
-        emit_key(self.lens, t, g); emit_key(self.lens, t + d / 2, 0.0); emit_key(self.lens, t + d, g)
+    # ---- 毎コマにする
+    def _W(self, t):
+        """場面の時刻 → 予定の時刻（早回しの間は slow 倍にのばす）"""
+        x = t
+        for a, b, k in sorted(self.warps):
+            if t > a: x += (min(t, b) - a) * (k - 1)
+        return x
 
-    def walk(self, t0, t1, p1, step=0.24, turn=True, gain=0.05):
-        """t0〜t1 で p1 まで歩く（向きは歩く前の 0.3 秒で変える。一歩ずつ小さく上下・足音）"""
-        v3 = lambda p: Vector((p[0], p[1], p[2] if len(p) > 2 else 0.0))
-        p0 = v3(self._last["loc"][1]) if "loc" in self._last else v3(self.loc)
-        p1 = v3(p1)
-        if turn and (p1 - p0).length > 0.01:
-            fd = face_to(p0, p1)
-            cur = self._last["face"][1] if "face" in self._last else self.face
-            fd = cur + ((fd - cur + 180) % 360 - 180)
-            self.at(t0 - 0.35, face=cur); self.at(t0, face=fd)
-        self.at(t0, loc=p0, interp="LINEAR"); self.at(t1, loc=p1, interp="LINEAR", hold=False)   # hold=False：1 秒より長い歩きで、止まったまま最後に走る（5本目 v4 の点検で見つけた）
-        if os.environ.get("DBG_WALK"): print("DBGWALK %.2f %.2f %.2f" % (t0, t1, t1 - t0))
-        n = max(1, int((t1 - t0) / step)); z = self.z0
-        for k in range(n):
-            ta = t0 + k * (t1 - t0) / n
-            key(self.body, ("location", 2), ta, z); key(self.body, ("location", 2), ta + (t1 - t0) / n / 2, z + 0.06)
-            ev(ta, "step", gain)
-        key(self.body, ("location", 2), t1, z)
+    def bake05(self, t_end):
+        T0b = min([CLOCK["T0"]] + [c[0] for c in self.cmds]) - 1.0
+        keep = self.cmds
+        self.cmds = [(self._W(t), k, a) for (t, k, a) in keep]
+        p = self.plan(self._W(t_end), self._W(T0b)); self.cmds = keep
+        if os.environ.get("DBG_MARU"):
+            for c in sorted(keep, key=lambda c: c[0]): print("DBGCMD %.2f %s %s" % (c[0], c[1], {k: (tuple(round(x, 2) for x in v) if isinstance(v, tuple) else v) for k, v in c[2].items()}))
+        pf = MM.simulate(p, fps=FPS, t_end=p.t)
+        n = round((t_end - T0b) * FPS) + 1; W0 = self._W(T0b)
+        frames = [pf[min(len(pf) - 1, max(0, round((self._W(T0b + i / FPS) - W0) * FPS)))] for i in range(n)]
+        self.handle.bake(frames, f0=f(T0b))
+        inv = lambda x: next((T0b + i / FPS for i in range(n) if self._W(T0b + i / FPS) - W0 >= x - 1e-6), t_end)
+        for e_ in p.events:
+            ts = inv(e_["t"])
+            if any(a <= ts <= b for a, b, _ in self.warps): continue           # 早回しの間は足音なし
+            if e_["kind"] in ("step", "step_turn"): ev(ts, "step", STEP_GAIN[0] * (0.6 if e_["kind"] == "step_turn" else 1.0))
+            elif e_["kind"] in ("takeoff", "land"):
+                if any(abs(ts - t_) < 0.6 for t_ in self.nosound): continue
+                ev(ts, "jump" if e_["kind"] == "takeoff" else "land", 0.5)
+        self.p = p
 
-    def wobble(self, t0, t1, deg=10, period=0.5):
-        k = 0; t = t0
-        while t < t1:
-            key(self.body, ("rotation_euler", 1), t, R(deg if k % 2 else -deg)); t += period / 2; k += 1
-        key(self.body, ("rotation_euler", 1), t1, 0.0)
+
+def maru_bake_all(t_end):
+    MC.LATE.clear()
+    for m in MARUS: m.bake05(t_end)
+    if MC.LATE: print("【まるロボ】間に合わなかった動き（秒）：", MC.LATE)
 
 
 class Sp:

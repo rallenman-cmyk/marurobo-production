@@ -80,25 +80,22 @@ def b_open(cl):
     m.at(s("02-05") + 0.2, face=f0, look=-14)
     # 03：感心 → 待って → 見回す → 首をかしげる
     m.at(s("03-01") - 0.3, face=fp, look=-25); m.at(s("03-01") + 0.6, face=f0, look=-12)
-    for k in range(2):
-        key(m.body, ("rotation_euler", 0), w("03-01", "偉い") + k * 0.45, R(18)); key(m.body, ("rotation_euler", 0), w("03-01", "偉い") + k * 0.45 + 0.22, R(4))
+    m.nod(w("03-01", "偉い"), n=2)          # 本物の体：うなずきは予定の nod（体を手で回さない）
     m.at(s("03-02") + 0.1, look=0); m.blink(s("03-02") + 0.15)
     m.at(s("03-03") + 0.2, face=f0 - 60); m.at(s("03-03") + 1.6, face=f0 + 50); m.at(s("03-03") + 3.0, face=fp)
     m.at(s("03-04") + 0.2, face=fp, look=-25); m.at(s("03-04") + 2.0, face=f0, look=-10); m.tilt(s("03-04") + 2.2, 14); m.tilt(e("03-04") + 0.3, 0)
-    m.hop(s("03-05") + 0.5, 0.12, 0.35)
     # 04：机から降りて、先輩の前へ。あいさつ
+    #   v6（本物の歩きは大きさ 0.26 で約 0.26 m/秒。短い歩きも向きを変えると 3 秒ほど）：「確かめに行ってみます」で机の前のふちへ歩き、
+    #   床へ跳び、「まるロボが、掃除機の前へ」で斜め前（GREET）へ歩く。あいさつの「ピポ」の前に着く
     ta = s("04-01")
-    m.at(ta - 0.2, loc=MARU_DESK, face=face_to(MARU_DESK, (1.55, 1.45)), look=-12)
-    key(m.root, "location", ta + 0.3, (1.85, 1.82, DESK_Z), "LINEAR"); key(m.root, "location", ta + 0.62, (1.7, 1.62, DESK_Z + 0.18))
-    key(m.root, "location", ta + 1.0, (1.55, 1.45, 0.0)); ev(ta + 0.3, "jump", 0.6); ev(ta + 1.0, "land", 0.7)
-    m._last["loc"] = (ta + 1.0, (1.55, 1.45, 0.0))
-    m.walk(ta + 1.3, ta + 2.6, (0.3, 1.5, 0.0), gain=0.14); m.at(ta + 2.9, face=180, look=5)   # v3：足音が聞こえない（5本目 v2「歩く SE いれて」）→ 少し大きく
+    GREET = (1.05, 1.5)
+    m.jump(s("03-05") + 2.5, (1.85, 1.80), (1.65, 1.55), z_to=0.0, d=0.7, h=0.18)     # 置き場所ごと山なりに床へ（足音・跳ぶ音は予定から）
+    m.at(s("04-02") - 0.6, loc=(GREET[0], GREET[1], 0.0), look=5)       # 歩いて来た向き（ほぼ先輩の方）のまま止まる
     ev(s("04-02") - 0.35, "pipo", 0.6); m.hop(s("04-02") - 0.35, 0.06, 0.25, sound=False)   # あいさつの「ピポ」は声の前のすき間に
     sp.pi(s("04-02") + 0.98, n=2)          # 先輩の返事は、声の「……」の間（声の頭から 0.95〜1.53 秒の無音）に
-    m.hop(s("04-04") + 0.6, 0.12, 0.35); m.hop(s("04-04") + 1.2, 0.12, 0.35)
-    # 05：先輩の体をぐるりと（まるロボは左へ歩いて、カメラの通り道をあける）
-    mp = (-0.3, 1.65, 0.0)
-    m.walk(e("04-04") + 0.1, e("04-04") + 1.2, mp); m.at(e("04-04") + 1.6, face=face_to(mp, DOCKP), look=10)
+    m.hop(s("04-04") + 0.6, 0.12, 0.35); m.hop(s("04-04") + 2.0, 0.12, 0.35)
+    # 05：先輩の体をぐるりと（v6：まるロボは GREET にいたまま。カメラが左側から回る）
+    m.at(e("04-04") + 1.0, face=face_to(GREET, DOCKP), look=10)
     d = sp.d
     lr = ring_marker((0.3, 2.155), 0.075, YELLOW, w=0.004, z=d["top_z"] + 0.03); show_between(lr, s("05-02") + 0.1, e("05-02") + 0.6); scale_pop(lr, s("05-02") + 0.1); ev(s("05-02") + 0.1, "pop", 0.4)
     bm = bpy.data.materials["sp_bumper"]; bm.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = srgb(YELLOW)
@@ -140,11 +137,12 @@ def b_open(cl):
         cam_move(c, tg, s("04-01") + 1.2, e("04-02") + 0.4, (1.55, -0.1, 0.85), (1.2, 0.3, 0.55), (1.3, 1.7, 0.3), (0.5, 1.9, 0.15))
         cam_move(c, tg, e("04-02") + 0.4, e("04-04") + 0.5, (1.2, 0.3, 0.55), (1.0, 0.75, 0.32), (0.5, 1.9, 0.15), (0.4, 1.85, 0.12)); dof(c, m.root, 4.0)
     elif cut(cl, "S05a"):
-        c, tg = cam_rig((1.2, 1.0, 0.6), (0.3, 2.1, 0.08), 38)
-        cam_move(c, tg, s("05-01") - 0.8, e("05-02") + 0.3, (1.25, 1.05, 0.6), (0.65, 1.25, 0.55), (0.3, 2.12, 0.1), (0.3, 2.15, 0.12), 38, 46)
-        cam_move(c, tg, e("05-02") + 0.3, e("05-03") + 0.3, (0.65, 1.25, 0.55), (0.75, 1.45, 0.2), (0.3, 2.15, 0.12), (0.3, 1.98, 0.06), 46, 46)
-        cam_move(c, tg, e("05-03") + 0.3, e("05-04") + 0.3, (0.75, 1.45, 0.2), (0.55, 1.6, 0.03), (0.3, 1.98, 0.06), (0.3, 2.0, 0.01), 46, 50)
-        cam_move(c, tg, e("05-04") + 0.3, e("05-05") + 0.6, (0.55, 1.6, 0.03), (0.85, 1.05, 0.5), (0.3, 2.0, 0.01), (0.1, 2.0, 0.1), 50, 32)
+        # v6：まるロボが右前（GREET）にいるので、左側から回る（前の動きを x＝0.3 で左右に映した形）
+        c, tg = cam_rig((-0.6, 1.0, 0.6), (0.3, 2.1, 0.08), 38)
+        cam_move(c, tg, s("05-01") - 0.8, e("05-02") + 0.3, (-0.65, 1.05, 0.6), (-0.05, 1.25, 0.55), (0.3, 2.12, 0.1), (0.3, 2.15, 0.12), 38, 46)
+        cam_move(c, tg, e("05-02") + 0.3, e("05-03") + 0.3, (-0.05, 1.25, 0.55), (-0.15, 1.45, 0.2), (0.3, 2.15, 0.12), (0.3, 1.98, 0.06), 46, 46)
+        cam_move(c, tg, e("05-03") + 0.3, e("05-04") + 0.3, (-0.15, 1.45, 0.2), (0.05, 1.6, 0.03), (0.3, 1.98, 0.06), (0.3, 2.0, 0.01), 46, 50)
+        cam_move(c, tg, e("05-04") + 0.3, e("05-05") + 0.6, (0.05, 1.6, 0.03), (-0.25, 1.05, 0.5), (0.3, 2.0, 0.01), (0.5, 2.0, 0.1), 50, 32)
     track("maru", m.root, 0.42); track("senpai", sp.root, 0.15)
 
 
@@ -248,13 +246,12 @@ def b_blind(cl):
     m.eyelid(tg_off + 0.25, 1.0, 0.45)                     # v3：目の光を消して、まぶたを閉じる（正面のアップ S07b で見せる）
     th1 = w("07-03", "ゴツン") + 0.05
     m.walk(s("07-03") + 0.1, th1, (B[0] + 0.03, B[1], 0), turn=False)
-    m.at(th1 + 0.12, loc=(B[0] + 0.12, B[1], 0)); m.tilt(th1, 16, 0.1); m.tilt(th1 + 0.25, -8, 0.15); m.tilt(th1 + 0.5, 0, 0.2)
+    m.bump(th1, (0.09, 0.0)); m.tilt(th1, 16, 0.1); m.tilt(th1 + 0.25, -8, 0.15); m.tilt(th1 + 0.5, 0, 0.2)
     ev(th1, "bonk", 0.8)
     th2 = w("07-04", "ゴツン") + 0.05
-    m.at(s("07-04") + 0.1, face=-90); m.at(s("07-04") + 0.6, face=-90 + ((face_to(B, Cp) + 90 + 180) % 360 - 180))
-    m._last["loc"] = (th1 + 0.12, (B[0] + 0.12, B[1], 0))
-    m.walk(s("07-04") + 0.7, th2, (Cp[0], Cp[1] - 0.02, 0), turn=False)
-    m.at(th2 + 0.12, loc=(Cp[0] - 0.03, Cp[1] - 0.1, 0)); m.tilt(th2, -16, 0.1); m.tilt(th2 + 0.25, 8, 0.15); m.tilt(th2 + 0.5, 0, 0.2)
+    m.walk(s("07-04") + 0.7, th2, (Cp[0], Cp[1] - 0.02, 0), speeds="run")     # 向きを変えて「またまっすぐ……ゴツン」：2 回目は走ってぶつかる（歩きでは間に合わない）
+    th2 = th2 + 0.26          # 走って着くのが声の「ゴツン」より 0.26 秒あと：ぶつかる絵と音は、着いた時に
+    m.bump(th2, (-0.03, -0.08)); m.tilt(th2, -16, 0.1); m.tilt(th2 + 0.25, 8, 0.15); m.tilt(th2 + 0.5, 0, 0.2)
     ev(th2, "bonk", 0.8)
     m.wobble(s("07-05") + 0.2, e("07-05") + 0.2, 9, 0.6)
     ev(e("07-05") - 2.6, "ouch", 0.8)      # v3：いたそうな音（ぐるぐるの吹き出しと一緒に。5本目 v2「いたそうなまるロボの SE」）
@@ -264,13 +261,9 @@ def b_blind(cl):
     Ls = [0.0]
     for i in range(1, len(rest)): Ls.append(Ls[-1] + math.dist(rest[i - 1], rest[i]))
     tot = Ls[-1]
-    m._last["loc"] = (th2 + 0.12, (Cp[0] - 0.03, Cp[1] - 0.1, 0))
-    m.at(ts - 0.1, loc=(Cp[0], Cp[1] - 0.1, 0), interp="LINEAR")
-    for i, p in enumerate(rest[1:], 1):
-        t = ts + (te - ts) * Ls[i] / tot
-        m.at(t, loc=(p[0], p[1], 0), interp="LINEAR", hold=False)
-        m.at(t - 0.02, face=face_to(rest[i - 1], p), hold=False)
-        ev(t, "bonk_soft", 0.18)
+    # 早回し：予定は本当の速さ（大きさ 0.26 なので約 0.26 m/秒）で歩かせ、ts〜te に入るように速く流す（route_fast）
+    hits = m.route_fast(ts, te, [(Cp[0], Cp[1] - 0.1)] + list(rest[1:]))
+    for th_ in hits: ev(th_, "bonk_soft", 0.18)
     full = [A, B] + rest
     ln = line_path("marupath", full, YELLOW, 0.016, emit=3.0)
     Lf = [0.0]
@@ -280,7 +273,7 @@ def b_blind(cl):
     ln.data.bevel_factor_end = Lf[1] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(th1))
     ln.data.bevel_factor_end = Lf[2] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(th2))
     for i in range(3, len(full)):
-        ln.data.bevel_factor_end = Lf[i] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(ts + (te - ts) * (Lf[i] - Lf[2]) / (Lf[-1] - Lf[2])))
+        ln.data.bevel_factor_end = Lf[i] / Lf[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(hits[i - 3]))     # まるロボが着く時刻に合わせて線がのびる
     for fc in ln.data.animation_data.action.fcurves:
         for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
     show_between(ln, s("08-01") - 0.5)
@@ -332,7 +325,7 @@ def b_lidar(cl):
     m = Maru((-1.0, -0.4, 0), face=face_to((-1.0, -0.4), (-1.6, 0.2)))
     m.at(s("09-01") - 1.0, loc=(-1.0, -0.4, 0)); m.at(s("09-02") + 0.1, face=face_to((-1.0, -0.4), (-2.38, 0.3)))
     m.hop(s("09-02") + 0.3, 0.1, 0.3)
-    m.walk(e("09-02") + 0.1, e("09-03"), (-1.5, 0.55, 0))
+    m.walk(e("09-02") + 0.1, e("09-03") + 0.9, (-1.5, 0.55, 0))      # 1.1 m に約 4.5 秒
     # 09-04 ふたが光る
     le = bpy.data.materials["lid_eye"]
     emit_key(le, w("09-04", "頭の上") - 0.1, 4.0); emit_key(le, w("09-04", "頭の上") + 0.3, 16.0); emit_key(le, e("09-04") + 0.6, 6.0)
@@ -340,16 +333,13 @@ def b_lidar(cl):
     show_between(lr, w("09-04", "丸いふた"), e("09-04") + 0.8); scale_pop(lr, w("09-04", "丸いふた")); ev(w("09-04", "丸いふた"), "pop", 0.4)
     # 10：まるロボが先輩の上にぴょん（先輩の子にして、上に乗せる）
     tj = w("10-01", "ぴょん")
-    m.walk(e("09-04") + 0.2, tj - 0.4, (-1.3, 0.62, 0))
-    m.at(tj - 0.3, face=0)
-    ride = empty((0, 0, 0)); ride.parent = sp.root
+    m.at(tj - 0.9, loc=(-1.3, 0.62, 0), face=face_to((-1.3, 0.62), (-1.215, 0.95)))      # 跳ぶ所まで歩き、跳ぶ先を向く
     # まるロボを先輩の上に移す：跳ぶ弧は世界の座標で打ち、着いた瞬間から先輩の子にする（子の場所は先輩の上）
-    mr = Maru((0, 0, 0), face=0); mr.root.parent = sp.root
+    mr = Maru((0, 0, 0), face=180)          # 先輩の上（置き場所の親を先輩の子に。前はふたの方 +Y）
     MRY = -0.112          # v4「まるロボが乗るときにセンサー貫通しないように」：ふた（y 0.035・半径 0.052）から離して前のふちに
-    mr.root.location = (0, MRY, sp.d["top_z"] + 0.004); mr.root.rotation_euler = (0, 0, R(180))
+    hp = mr.handle.parent; hp.parent = sp.root; hp.matrix_parent_inverse = Matrix.Identity(4); hp.location = (0, MRY, sp.d["top_z"] + 0.004)
     show_between(mr.root, tj + 0.5); hide_key(m.root, s("09-01") - 1.5, False); hide_key(m.root, tj + 0.5, True)
-    key(m.root, "location", tj, (-1.3, 0.62, 0.0)); key(m.root, "location", tj + 0.25, (-1.25, 0.8, 0.24)); key(m.root, "location", tj + 0.5, (-1.215, 0.95, sp.d["top_z"] + 0.004))
-    ev(tj, "jump", 0.5); ev(tj + 0.5, "land", 0.35)
+    m.jump(tj, (-1.3, 0.62), (-1.215, 0.95), z_to=sp.d["top_z"] + 0.004, d=0.5, h=0.24)    # 床から先輩の上へ（着いたら先輩に乗ったまるロボに入れかわる）
     mr.at(tj + 0.6, look=-30); mr.tilt(tj + 0.8, 10); mr.tilt(e("10-01") + 0.5, 0)
     # ふたを透かす
     for nm in ("lid_glass", "lid_base", "lid_cap"):
@@ -538,8 +528,8 @@ def b_dark(cl):
     # 14：まるロボ、こんがらがる
     fc = face_to((-1.25, -0.62), (-0.75, -1.4))            # 14：カメラの方（見ている人の方）を向いて、こんがらがる
     m.at(s("14-01") - 0.5, look=10, face=fc)
-    for k in range(6):
-        m.at(s("14-01") + k * 1.1, face=fc + (25 if k % 2 else -25))
+    for k in range(4):
+        m.at(s("14-01") + k * 1.7, face=fc + (25 if k % 2 else -25))
     m.at(e("14-05") + 0.3, face=face_to((-1.25, -0.62), SP13))
     m.glow(s("14-04"), 2.4, 0.3, g0=1.2); m.wobble(s("14-04") + 0.2, e("14-04") + 0.3, 14, 0.5); m.glow(e("14-04") + 0.4, 1.2)
     # 15：車輪を数える（アップ）→ 「だいたい」の丸 → いま見えている形（白い点）を地図と重ねる → 「ぴったり」
@@ -603,7 +593,7 @@ def b_dark(cl):
         key(disc, "location", tk + 1.3, (xk, yk, 0.02)); key(disc, "scale", tk + 1.3, (0.12, 0.12, 1)); ev(tk + 1.3, "snap", 0.3)
     dalpha(e("15-10") + 0.3, 0.35); dalpha(e("15-10") + 0.9, 0.0)
     m.walk(s("15-02") - 0.5, s("15-02") + 1.4, (-1.15, 0.3, 0)); m.at(s("15-04"), face=face_to((-1.15, 0.3), PX)); m.at(s("15-08") + 0.5, look=15)
-    key(m.body, ("rotation_euler", 0), tp + 0.2, R(20)); key(m.body, ("rotation_euler", 0), tp + 0.6, R(0)); key(m.body, ("rotation_euler", 0), tp + 1.0, R(20)); key(m.body, ("rotation_euler", 0), tp + 1.4, R(-15))
+    m.at(tp + 0.2, look=20); m.at(tp + 0.6, look=0); m.at(tp + 1.0, look=20); m.at(tp + 1.4, look=-15)     # 本物の体：見上げは目と胴（予定の look）
     if cut(cl, "S13a"):
         c, tg = cam_rig((-0.6, -2.4, 1.5), (-2.0, -0.2, 0.1), 28)
         cam_move(c, tg, s("13-01") - 0.8, e("13-05"), (-0.5, -2.5, 1.55), (-1.2, -2.1, 1.25), (-2.0, -0.2, 0.1), (-2.1, -0.2, 0.15))
@@ -663,36 +653,41 @@ def b_rug(cl):
     room(rug=True); door_leaf(False)
     rug = RUGOBJ[-1]
     tr_ = w("16-02", "じゅうたん")
-    # v4「じゅうたんはまるロボが転がして広げる感じに」：巻いたじゅうたんの左にまるロボ。「じゅうたん」でまるロボが押すと、
-    #   転がりながら右へ広がる（広がった所だけ見せる・巻きは残りの長さで細くなる）。押し終わったら、まるロボはもとの場所へ
-    rx0, ry0, rx1, ry1 = plan.RUG; yc_ = (ry0 + ry1) / 2; LW = rx1 - rx0; TH = 0.024
-    tp0, tp1 = tr_ - 0.5, e("16-02") - 0.15
+    # v4「じゅうたんはまるロボが転がして広げる感じに」→ v6（本物の歩きは約 0.26 m/秒）：巻いたじゅうたんを右はしに置き、
+    #   右にいるまるロボが数歩（0.4 m）押すと、巻きはそのまま左へ転がって広がる（広がった所だけ見せる・巻きは残りの長さで細くなる）
+    rx0, ry0, rx1, ry1 = plan.RUG; yc_ = (ry0 + ry1) / 2; LW = rx1 - rx0; TH = 0.024; PUSH = 0.4; MG = 0.17
+    Ta = tr_ + 0.6                       # 押し終わり（まるロボが着く時刻）
+    tp0, tp1 = Ta - 1.9, Ta + 3.0        # 巻きが動き出す・左はしに着く
     rmat = bpy.data.materials["rug"]
     roll = empty((0, 0, 0)); rcyl = cyl(rmat, (0, 0, 0), 1.0, ry1 - ry0 + 0.02, rot=(R(90), 0, 0), parent=roll, verts=48)
     for sy in (-1, 1):     # 両はしだけ、ふちの色（巻いた渦の面）
         cyl(mat("rugedge_r", "#E9D8C4", rough=0.95), (0, sy * ((ry1 - ry0) / 2 + 0.018), 0), 1.0, 0.03, rot=(R(90), 0, 0), parent=roll, verts=48)
-    rad = lambda xr: math.sqrt(0.0035 ** 2 + TH * max(0.0, rx1 - xr) / math.pi)
-    ang = 0.0; nst = 40; prev = rx0
+    rad = lambda xr: math.sqrt(0.0035 ** 2 + TH * max(0.0, xr - rx0) / math.pi)
+    def xr_at(t):            # 巻きの右はし（広がった所の左はし）の x
+        if t <= tp0: return rx1
+        if t <= Ta: u = (t - tp0) / (Ta - tp0); return rx1 - PUSH * u * u * (3 - 2 * u) if u < 1 else rx1 - PUSH
+        u = min(1.0, (t - Ta) / (tp1 - Ta))      # 最後のひと押しで勢いがつき、だんだん止まる
+        return rx1 - PUSH - (LW - PUSH) * (1 - (1 - u) ** 2)
+    ang = 0.0; nst = 48; prev = rx1
     for i in range(nst + 1):
-        u = i / nst; uu = u; tt = tp0 + (tp1 - tp0) * u; xr = rx0 + LW * uu; r_ = rad(xr)
-        ang += (xr - prev) / max(r_, 0.02); prev = xr
-        key(roll, "location", tt, (xr + r_, yc_, r_), "LINEAR"); key(roll, "scale", tt, (r_, 1, r_), "LINEAR"); key(roll, ("rotation_euler", 1), tt, ang, "LINEAR")
-        key(rug, "location", tt, (rx0 + (xr - rx0) / 2 + 0.0001, yc_, 0), "LINEAR"); key(rug, "scale", tt, (max(0.001, (xr - rx0) / LW), 1, 1), "LINEAR")
+        tt = tp0 + (tp1 - tp0) * i / nst; xr = xr_at(tt); r_ = rad(xr)
+        ang += (prev - xr) / max(r_, 0.02); prev = xr
+        key(roll, "location", tt, (xr - r_, yc_, r_), "LINEAR"); key(roll, "scale", tt, (r_, 1, r_), "LINEAR"); key(roll, ("rotation_euler", 1), tt, -ang, "LINEAR")
+        key(rug, "location", tt, (rx1 - (rx1 - xr) / 2 - 0.0001, yc_, 0), "LINEAR"); key(rug, "scale", tt, (max(0.001, (rx1 - xr) / LW), 1, 1), "LINEAR")
     show_between(roll, CLOCK["T0"] - 1.0, tp1 + 0.05)
-    ev(tp0 + 0.1, "whoosh", 0.3)
+    ev(Ta + 0.1, "whoosh", 0.3)
     sp = Sp(senpai_lidar((0.3, 1.95), 0)); sp.spin(CLOCK["T0"] - 2, e("17-11") + 3, 0.6)
     d1, d2, d3 = rug_drive()
     sp.place(s("16-01") - 1.5, 0.3, 1.95, plan.face_deg(0, -1))
     sp.drive(d1); sp.drive(d2, wheel_scale=4.0); sp.drive(d3)
     xe, ye, ae = d3.pose(d3.t1); sp.place(e("17-11") + 3, xe, ye, ae)
-    MG = 0.17      # まるロボの中心と巻きの左はしの間（体がちょうど触れるくらい）
-    m = Maru((rx0 - MG, yc_, 0), face=plan.face_deg(1, 0))
-    m.at(s("16-01") - 1.5, loc=(rx0 - MG, yc_, 0), face=plan.face_deg(1, 0))
-    m.walk(tp0, tp1, (rx1 - MG, yc_, 0), turn=False)                       # 巻きを押して歩く
-    m.walk(tp1 + 0.3, s("16-03") + 0.6, (0.9, -0.3, 0)); m.at(s("16-03") + 0.7, face=face_to((0.9, -0.3), (-0.6, 0.0)))
-    m.at(s("16-03") + 1.0, face=face_to((0.9, -0.3), (-1.0, -0.2)))
+    MP16 = (rx1 + MG - PUSH, yc_)       # 押したあと、そのまま立って見る所
+    m = Maru((rx1 + MG, yc_, 0), face=plan.face_deg(-1, 0))
+    m.walk(tp0, Ta, (MP16[0], MP16[1], 0))                       # 巻きを押して数歩
+    m.at(s("16-03") + 1.4, face=face_to(MP16, (-0.6, 0.0)))
+    m.at(s("16-03") + 2.6, face=face_to(MP16, (-1.0, -0.2)))
     m.tilt(s("16-06") + 0.1, 18, 0.35); m.tilt(e("16-06") + 0.8, 0)
-    m.walk(s("17-01") + 0.2, s("17-02"), (0.9, 0.9, 0)); m.at(s("17-02") + 0.4, face=face_to((0.9, 0.9), (0.3, 2.0)))
+    m.walk(s("17-01") + 0.2, s("17-02"), (0.9, 0.9, 0))      # MP16 から 1.4 m（約 5.6 秒。16-06 のうちに歩き出す）; m.at(s("17-02") + 0.4, face=face_to((0.9, 0.9), (0.3, 2.0)))
     # 16-05 から暗い地図：もとの地図（青緑）＋ ずれて置かれた新しい点（青緑）→ 壁が二重
     tdark = s("16-05") - 0.25
     lights_off(tdark, tdark + 0.25, sky=DARK_SKY, world_s=DARK_W)
@@ -810,7 +805,7 @@ def b_cam(cl):
     m.at(s("18-01") - 1.5, loc=(-0.3, 0.3, 0), face=180)
     m.at(t1 + 0.2, face=face_to((-0.3, 0.3), (-1.6, 1.3))); m.hop(t1 + 0.8, 0.12, 0.35)
     m.at(s("18-03"), face=face_to((-0.3, 0.3), CAMP)); m.at(s("18-03") + 1.6, face=face_to((-0.3, 0.3), LIDP)); m.at(s("18-03") + 3.0, face=face_to((-0.3, 0.3), CAMP))
-    m.walk(e("18-04") + 0.1, s("19-01") + 0.6, (0.75, 0.75, 0)); m.at(s("19-01") + 1.0, face=face_to((0.75, 0.75), (0.0, -0.3)))   # 先輩の通り道をあける
+    m.walk(e("18-04") + 0.1, s("19-01") + 4.5, (0.75, 0.75, 0)); m.at(s("19-03"), face=face_to((0.75, 0.75), (0.0, -0.3)))     # 1.1 m に約 5 秒。19 章のカメラの目の絵の間に歩く   # 先輩の通り道をあける
     cr = bpy.data.materials["cam_ring"]
     emit_key(cr, w("18-04", "カメラ") - 0.1, 1.2); emit_key(cr, w("18-04", "カメラ") + 0.3, 8.0); emit_key(cr, e("18-04") + 0.6, 1.2); ev(w("18-04", "カメラ"), "pi", 0.35)
     # 19：天井の照明を見ながら進む（カメラの先輩から見た絵）。目印＝光る点（線で結ばない）
@@ -849,14 +844,23 @@ def b_cam(cl):
     # 21：まるロボが目の光で天井を照らす → 目印がまた見える → カメラの先輩が動き出す
     tp = w("21-01", "ぱっ")
     m.glow(tp - 0.1, 9.0, 0.15, g0=1.0); ev(tp, "light_on", 0.6)
+    # v6：本物の体は見上げても胴が少ししか傾かないので、光の筋は体の場所だけについていき、向きは天井の光の丸へ固定する
+    mx0, my0 = xc + 0.45, yc - 0.35; ux, uy = xc - mx0, yc - my0; ul = math.hypot(ux, uy); ux, uy = ux / ul, uy / ul
+    reach = (plan.CEIL - 0.2) / math.tan(R(60)); SPOTP = Vector((mx0 + ux * reach, my0 + uy * reach, plan.CEIL - 0.006))
+    eye0 = Vector((mx0, my0, MM.TORSO_Z * Maru.S))
+    anc = empty(tuple(eye0)); anc.scale = (Maru.S,) * 3
+    anc.rotation_euler = (SPOTP - eye0).to_track_quat('Y', 'Z').to_euler()     # 体の +Y を天井の丸へ
+    cl_ = anc.constraints.new('COPY_LOCATION'); cl_.target = m.torso
     bpy.ops.object.light_add(type='SPOT', location=(0, 0, 0)); spl = bpy.context.object
-    spl.parent = m.body; spl.location = (0, -0.5, 0.05); spl.rotation_euler = (R(-90), 0, 0)
+    spl.parent = anc; spl.location = (0, 0.55, MM.LENS["z"]); spl.rotation_euler = (R(90), 0, 0)
     spl.data.spot_size = R(40); spl.data.spot_blend = 0.5; spl.data.color = srgb("#BFFFF6")[:3]
     spl.data.energy = 0.0; spl.data.keyframe_insert("energy", frame=f(tp - 0.1)); spl.data.energy = 1400.0; spl.data.keyframe_insert("energy", frame=f(tp + 0.15))
     CD = 9.6   # 円すいの長さ（体の中の大きさ。まるロボは 0.26 倍なので、本当は約 2.5 m＝天井まで）
     # v4「まるロボ側が細くて、天井側の光が広いように」：円すいの +z（radius2）が目の側に来るので、目の側を細く
     bpy.ops.mesh.primitive_cone_add(radius1=1.6, radius2=0.1, depth=CD, vertices=48, location=(0, 0, 0)); cone = bpy.context.object
-    cone.parent = m.body; cone.location = (0, -0.5 - CD / 2, 0.05); cone.rotation_euler = (R(-90), 0, 0)   # 目の光の筋（光の円すい。天井まで）
+    CD = ((SPOTP - eye0).length - 0.55 * Maru.S) / Maru.S          # 目から天井の丸まで（体の中の大きさで）
+    cone.data.transform(Matrix.Scale(CD / 9.6, 4, Vector((0, 0, 1))))
+    cone.parent = anc; cone.location = (0, 0.55 + CD / 2, MM.LENS["z"]); cone.rotation_euler = (R(90), 0, 0)   # 目の光の筋（光の円すい。天井まで）
     cm_ = bpy.data.materials.new("eyecone"); cm_.use_nodes = True; nt_ = cm_.node_tree
     for n_ in list(nt_.nodes): nt_.nodes.remove(n_)
     o_ = nt_.nodes.new("ShaderNodeOutputMaterial"); em_ = nt_.nodes.new("ShaderNodeEmission"); tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); mx_ = nt_.nodes.new("ShaderNodeMixShader")
@@ -866,9 +870,7 @@ def b_cam(cl):
     for a_ in ("visible_diffuse", "visible_glossy", "visible_transmission"): setattr(cone, a_, False)
     show_between(cone, tp)
     # 天井に当たった光の丸（はっきり見えるように）
-    mx0, my0 = xc + 0.45, yc - 0.35; ux, uy = xc - mx0, yc - my0; ul = math.hypot(ux, uy); ux, uy = ux / ul, uy / ul
-    reach = (plan.CEIL - 0.2) / math.tan(R(60))
-    spot = cyl(glow_mat("ceilspot", "#DFFFFA", 3.0), (mx0 + ux * reach, my0 + uy * reach, plan.CEIL - 0.006), 0.42, 0.004, verts=64); spot.visible_shadow = False
+    spot = cyl(glow_mat("ceilspot", "#DFFFFA", 3.0), tuple(SPOTP), 0.42, 0.004, verts=64); spot.visible_shadow = False
     for a_ in ("visible_diffuse", "visible_glossy"): setattr(spot, a_, False)
     show_between(spot, tp); scale_pop(spot, tp, d=0.2)
     for o in marks:
@@ -917,10 +919,8 @@ def b_step(cl):
     # まるロボは横の列を歩いて、そのまま段差の先へ → ころん
     tf = w("22-05", "ころん")
     m.walk(s("22-05") - 0.6, tf - 0.45, (plan.STEP_X + 0.05, -2.05, 0))
-    key(m.root, "location", tf - 0.45, (plan.STEP_X + 0.05, -2.05, 0.0)); key(m.root, "location", tf - 0.2, (plan.STEP_X - 0.12, -2.05, -0.04))
-    key(m.root, "location", tf, (plan.STEP_X - 0.25, -2.05, -plan.STEP_H)); ev(tf, "land", 0.9)
+    m.move_parent(tf - 0.45, tf, (-0.30, 0.0), dz=-plan.STEP_H); ev(tf, "land", 0.9)     # 段差の先へ出て、置き場所ごと下へ落ちる
     m.tilt(tf - 0.2, 35, 0.2); m.tilt(tf + 0.3, 70, 0.3)
-    m._last["loc"] = (tf, (plan.STEP_X - 0.25, -2.05, -plan.STEP_H))
     m.blink(s("22-06") + 0.2); m.blink(s("22-06") + 0.6)
     m.tilt(s("23-01") + 1.0, 0, 0.5); m.at(s("23-01") + 1.5, face=plan.face_deg(1, 0), look=25)
     # 23：おなかの下の光（体を少し透かして見せる）。床では行って返る、段差の上では返ってこない
@@ -1002,9 +1002,9 @@ def b_avoid(cl):
     m.walk(e("24-04") + 0.3, w("25-02", "うんち") - 0.8, mp1); m.at(tpo + 0.1, face=face_to(mp1, POOP))
     m.at(s("25-05") + 0.3, face=face_to(mp1, (0.0, 0.6)))
     tj = s("25-07") + 0.2
-    m.at(tj, look=-35); key(m.root, "location", tj, (mp1[0], mp1[1], 0)); key(m.root, "location", tj + 0.25, ((mp1[0] + mp2[0]) / 2, (mp1[1] + mp2[1]) / 2, 0.18)); key(m.root, "location", tj + 0.5, (mp2[0], mp2[1], 0))
+    m.at(tj, look=-35); m.jump(tj, mp1, mp2, d=0.5, h=0.18, sound=False)      # のけぞって後ろへ跳ぶ（置き場所ごと）
     ev(tj, "jump", 0.6); ev(tj + 0.5, "squish", 0.8)
-    m._last["loc"] = (tj + 0.5, (mp2[0], mp2[1], 0)); m.at(tj + 0.9, look=-5)
+    m.at(tj + 0.9, look=-5)
     m.glow(s("25-08") + 0.2, 0.3, 0.3, g0=0.9)
     m.at(e("25-08") + 0.2, look=-40); m.glow(e("25-08") + 0.5, 1.6, 0.2, g0=0.3); m.hop(e("25-08") + 0.6, 0.1, 0.3)
     if cut(cl, "S24a"):
@@ -1105,15 +1105,16 @@ def b_end(cl):
     # 27：次の日。まるロボは部屋の真ん中で見守る。光の先輩がまわりを掃除してよけて通る → 台へ
     MC = (0.0, 0.2)
     T27 = s("27-01")
-    m.walk(T27 - 0.3, T27 + 0.5, (MC[0], MC[1], 0)); m.at(T27 + 0.8, face=0, look=0)
+    m.move_parent(T27 - 0.40, T27 - 0.39, (MC[0] - 0.2, MC[1] + 0.3))      # 「次の日」：場面が変わるので、はじめから部屋の真ん中に（26 章の終わりは昔の場面に差しかわっていて見えない）
+    m.at(e("26-05") - 1.2, face=0, look=0)      # 26 章の終わり（昔の場面に差しかわって見えない間）に向きを変えておく
     ring = [(MC[0] + 0.45 * math.cos(a), MC[1] + 0.45 * math.sin(a)) for a in [math.radians(-90 + k * 30) for k in range(13)]]
     d27 = plan.Drive([DOCKP, (0.3, -0.25)] + ring[1:] + [(0.3, -0.25), (0.3, 1.7)], T27 + 0.8, v=0.45, turn=260, face0=360)
     ls.drive(d27, T27 + 0.8, d27.t1)
     a27 = d27.pose(d27.t1)[2]; ls.place(d27.t1 + 0.1, 0.3, 1.7, a27); ls.place(d27.t1 + 1.2, 0.3, 1.7, a27 + 180); ls.place(d27.t1 + 2.0, 0.3, DOCKP[1], a27 + 180)
-    for k in range(3): m.at(T27 + 1.5 + k * 1.5, face=(k * 120) % 360)
+    for k in range(3): m.at(T27 + 2.0 + k * 2.0, face=(k * 120) % 360)
     m.at(s("27-03") + 0.2, face=face_to(MC, (1.55, 1.93)), look=-10)
     m.at(s("27-04") + 0.2, look=-40)
-    m.glow(w("27-05", "家具") - 0.2, 0.25, 0.6, g0=0.9); key(m.body, ("rotation_euler", 0), w("27-05", "家具"), R(25)); m.tilt(w("27-05", "家具") + 0.3, -6, 0.5)
+    m.glow(w("27-05", "家具") - 0.2, 0.25, 0.6, g0=0.9); m.at(w("27-05", "家具"), look=25); m.tilt(w("27-05", "家具") + 0.3, -6, 0.5)
     ev(w("27-05", "家具") + 0.2, "pi_low", 0.5)
     if cut(cl, "S26a"):
         c, tg = cam_rig((1.8, -3.0, 2.4), (0.4, 0.8, 0.0), 26)
@@ -1161,5 +1162,6 @@ if __name__ == "__main__" or True:
         fn, t0, t1 = CLIPS[CLIPNAME]
         CLOCK["T0"] = t0
         fn(CLIPNAME)
+        maru_bake_all(t1)          # まるロボの毎コマ（本物の体・決まりどおりの動き）
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None     # PC：--frames 0 99（この範囲だけ、1 コマずつ）
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)
