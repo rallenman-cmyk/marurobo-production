@@ -82,6 +82,9 @@ def made(fn, *a, **k):
     return e, r, list(set(bpy.data.objects) - before)
 
 
+exec(open(os.path.join(_ANIM_HERE, "maru_walk.py"), encoding="utf-8").read())   # ペンギン歩き（v10）
+
+
 class Maru:
     """まるロボ：root（場所・向き）、body（跳ぶ・見上げる・傾く）、アンテナの光"""
     def __init__(self, loc, face, **kw):
@@ -90,6 +93,7 @@ class Maru:
         self.z0 = self.body.location.z
         self.ant = bpy.data.materials["maru_orange"]
         self.lens = bpy.data.materials["maru_lens"]
+        rig_legs(self)                                   # v10：脚を胴から分ける（ペンギン歩き。maru_walk.py）
 
     def at(self, t, loc=None, face=None, look=None, interp="BEZIER", hold=True):
         # v4「まるロボ徐々に動いてひっくり返ってる」(3:57)：前の置き場所から何秒も離れた時刻に次を置くと、その間ずっとゆっくり動き続けていた。
@@ -111,14 +115,11 @@ class Maru:
         key(self.body, ("location", 2), f(t), self.z0)
         key(self.body, ("location", 2), f(t + d / 2), self.z0 + h)
         key(self.body, ("location", 2), f(t + d), self.z0)
+        hop_legs(self, t, h, d)
 
-    def walk(self, t0, t1, a, b, face=None, h=0.06, step=0.32):
-        """a から b へ歩く（小さく弾む。足音は組み立てで、この弾みの着地に付ける）"""
-        self.at(t0, a, face); self.at(t1, b, face, hold=False)
-        n = max(1, int((t1 - t0) / step))
-        for k in range(n):
-            self.hop(t0 + k * step, h, step)
-        STEPS.extend(t0 + (k + 1) * step for k in range(n))
+    def walk(self, t0, t1, a, b, face=None, end_face=None, **_):
+        """a から b へペンギン歩き（maru_walk.py）。向きは進む向き。足音は足が着く時刻"""
+        return walk_penguin(self, t0, t1, a, b, end_face=end_face)
 
     def tilt(self, t, deg, d=0.3):
         key(self.body, ("rotation_euler", 1), f(t), self.body.rotation_euler[1])
