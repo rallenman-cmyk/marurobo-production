@@ -1,0 +1,4013 @@
+{
+ "fetched_at": "2026-11-17T16:12:24.613383+00:00",
+ "sort": null,
+ "queries": {
+  "仕組み 解説": [
+   {
+    "id": "lAxKiwd1QLo",
+    "title": "【知らないとヤバい】半導体とは何なのか？",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 1475550,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "9:46"
+   },
+   {
+    "id": "y7NQiNER6r4",
+    "title": "LLMの仕組み（簡単バージョン）",
+    "channel": "3Blue1BrownJapan",
+    "channel_id": "UCBevyiJ2ierZY-0yZhfLrmQ",
+    "views": 417150,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "7:44"
+   },
+   {
+    "id": "VWVqqyhlcu0",
+    "title": "【小学生でもわかる】半導体とは何か？【大人の学びなおし】",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 3508760,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "18:18"
+   },
+   {
+    "id": "VXH1ghbuon0",
+    "title": "【ゆっくり解説】火とは何か？",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 1457124,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:57"
+   },
+   {
+    "id": "UMgbyhA2FOo",
+    "title": "【ゆっくり解説】音とは何か？",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 229257,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:38"
+   },
+   {
+    "id": "nr3wzZ9d5ig",
+    "title": "クラッチの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 7819896,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "7:04"
+   },
+   {
+    "id": "ICVxChQDokw",
+    "title": "【ゆっくり解説】生成AIの核心に迫る！最新生成AI技術【完全版】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 3704,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "14:40"
+   },
+   {
+    "id": "GmN_uR1BK2U",
+    "title": "トランジスタの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 872572,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "7:34"
+   },
+   {
+    "id": "NvgbeR78IEI",
+    "title": "【ゆっくり解説】説明できる？ なぜコンピュータは0と1だけで全てを表現できる？",
+    "channel": "ド文系でも分かる【ゆっくり数学】",
+    "channel_id": "UCw-RnrHWa-rI5KL8aCP43YA",
+    "views": 153137,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:22"
+   },
+   {
+    "id": "tc8RTtwvd5U",
+    "title": "ニューラルネットワークの仕組み | Chapter 1, 深層学習（ディープラーニング）",
+    "channel": "3Blue1BrownJapan",
+    "channel_id": "UCBevyiJ2ierZY-0yZhfLrmQ",
+    "views": 676887,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "17:53"
+   },
+   {
+    "id": "09pUUstB_Rs",
+    "title": "【ゆっくり解説】人間に「意識」が存在する本当の理由",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 2535313,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "23:20"
+   },
+   {
+    "id": "prlpvHhJjZk",
+    "title": "【電磁砲】レールガンの仕組みを解説【自衛隊】",
+    "channel": "メカのロマンを探究する会",
+    "channel_id": "UCF6wuHiDCITXvafXYP93TMw",
+    "views": 290317,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "26:06"
+   },
+   {
+    "id": "6fzLjhoO-yk",
+    "title": "量子コンピューターとは何か？超わかりやすく解説します【5年後の技術革命】",
+    "channel": "大人の学び直しTV",
+    "channel_id": "UCNJRaN9NIAbCXpDa_hAKd3g",
+    "views": 321138,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "33:56"
+   },
+   {
+    "id": "8ugmd6PBrPw",
+    "title": "コンピュータが計算する仕組み",
+    "channel": "仕組みチャンネル",
+    "channel_id": "UCFIFAinqRitrg-WJIoerl8A",
+    "views": 212061,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "8:53"
+   },
+   {
+    "id": "yzNPC_QzgFM",
+    "title": "【基本知識】GitHubとは？できることや基礎用語を解説！",
+    "channel": "SAMURAI ENGINEER [侍エンジニア]",
+    "channel_id": "UCCFOQO5aDK0xXam4cUQXT8g",
+    "views": 57614,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "12:20"
+   },
+   {
+    "id": "JlfP3nHOXwM",
+    "title": "【宇宙論】ニュートンやアインシュタインが追い求めた重力の正体とは？",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 1114869,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:21"
+   },
+   {
+    "id": "azIuJmtXCto",
+    "title": "【相対性理論】宇宙に隠された時間の本当の姿とは何か？",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 2270474,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:05"
+   },
+   {
+    "id": "buweV-p_ZAs",
+    "title": "AIってなに? ①AIの「本質」を理解すれば恐ろしさがわかる【解説】【人工知能】【ディープラーニング】",
+    "channel": "たてはま / CGBeginner",
+    "channel_id": "UC8AQxRa-WTwfWCJgkOKWxOQ",
+    "views": 431519,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "23:26"
+   },
+   {
+    "id": "QOka4GWrtUM",
+    "title": "【ゆっくり解説】電気の正体は一体何なのか？",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 1628325,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "14:28"
+   },
+   {
+    "id": "1SnVORaWw98",
+    "title": "【誰でもわかる！】電波とは？電波が飛ぶ仕組み・原理を世界一わかりやすく超説明！(無線通信の仕組み) #無線 #電波",
+    "channel": "RFエンジニア育成所【無線・電波を教える学校】",
+    "channel_id": "UCw64Fd-CqTkfBhtXA6ZvrqQ",
+    "views": 147990,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:37"
+   }
+  ],
+  "身近な仕組み": [
+   {
+    "id": "HaqXCzjPNR4",
+    "title": "意外と身近な「構造」の話｜卵・人体・建築に共通するしくみ",
+    "channel": "建築雑談チャンネル",
+    "channel_id": "UCdfebgxp5xIL_Ctp7obeaZg",
+    "views": 55,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "22:50"
+   },
+   {
+    "id": "CoeMQJmpomk",
+    "title": "【ITパスポート】8-2 身近なシステム｜ストラテジ分野",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 11351,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:59"
+   }
+  ],
+  "身近な疑問 解説": [
+   {
+    "id": "zZQe_9KPd24",
+    "title": "【チみラジ】#05 「日常の“おかしくない？”は誰に持っていけばいいですか？」ゲスト：林士平氏【安野貴博×石井玄｜ポッドキャスト】",
+    "channel": "「チームみらい」公式チャンネル",
+    "channel_id": "UC72A_x2FKHkJ8Nc2eIzqj8Q",
+    "views": 1801,
+    "published": "3 時間前",
+    "age_days": 0,
+    "length": "44:34"
+   },
+   {
+    "id": "lAXKZjSGYAU",
+    "title": "もしも恐竜を滅ぼした隕石が落ちなかったら？｜恐竜は今も生きていたのか、最新研究の答え",
+    "channel": "なぜ研 - 身近な謎・雑学",
+    "channel_id": "UC8kwAG4NfyE4J_I9_J4erdQ",
+    "views": 231,
+    "published": "4 時間前",
+    "age_days": 0,
+    "length": "9:28"
+   },
+   {
+    "id": "7Pwew1Jmk7I",
+    "title": "【2026年最新研究】まだ信じてる？筋トレと減量の「間違った常識」15選",
+    "channel": "論文で解決 ~筋肉と栄養を科学する~",
+    "channel_id": "UCrxyF4F-ComNkP_1laEsRBw",
+    "views": 8648,
+    "published": "5 時間前",
+    "age_days": 0,
+    "length": "26:33"
+   },
+   {
+    "id": "rCB8r6ZLZdE",
+    "title": "最近よく見るAI製の解説動画の実態【解説】【作り方】",
+    "channel": "ネット動画研究所",
+    "channel_id": "UCBZ21I11cEfaMUWse5rTm5A",
+    "views": 24397,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "8:01"
+   },
+   {
+    "id": "9uqg8IQNGsM",
+    "title": "【話題】明日使える！日常にある疑問の答え【ゆっくり解説】",
+    "channel": "雑に学ぶ雑学チャンネル",
+    "channel_id": "UClk-ySUqbhNYqLcw84Ml9Fg",
+    "views": 232,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:51"
+   },
+   {
+    "id": "XOxekJm3lA8",
+    "title": "【自由研究に迷ったらコレ！】元気先生が教える1日でできる化学実験ベスト5",
+    "channel": "子ども化学チャンネル",
+    "channel_id": "UCIv8lOmHLbta8mqLeZew6kA",
+    "views": 109818,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "19:43"
+   },
+   {
+    "id": "DNQze-zvxOI",
+    "title": "【お天気自由研究】温暖前線・寒冷前線ってなに？身近な道具で再現してみよう！【解説】",
+    "channel": "tenki.jp",
+    "channel_id": "UCnywNO-FpXDyQYKDf3EECJg",
+    "views": 10498,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:31"
+   },
+   {
+    "id": "sUzlOsQ-SFc",
+    "title": "約1万7000基のエレベーター停止！地震研究家 レッサー",
+    "channel": "みんなのニュース2",
+    "channel_id": "UCVqh4QpfEmRuVufvIEK7DiA",
+    "views": 16106,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "27:39"
+   }
+  ],
+  "日常の疑問 なぜ": [
+   {
+    "id": "6KwfSKEAlgs",
+    "title": "政府広報に陰謀論YouTuberナオキマン起用！なぜ受けたの・・",
+    "channel": "政経プラスチャンネル",
+    "channel_id": "UC-XcLyfIh3bfc6GikZAcWjw",
+    "views": 178,
+    "published": "2 時間前",
+    "age_days": 0,
+    "length": "19:20"
+   },
+   {
+    "id": "iIqPkRu00as",
+    "title": "日常の「なんで？」は研究になる？｜AIで広がる心理学の研究テーマ",
+    "channel": "ばっちこい心理学【心理学を使って生活を豊かに】",
+    "channel_id": "UCP4-g_Hw0BNtTgNnqLXjWOg",
+    "views": 418,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "14:04"
+   },
+   {
+    "id": "q5G25QVesK0",
+    "title": "【ゆっくり解説】なぜ日常生活で10進法を使うのか？【数学の疑問】",
+    "channel": "ガチ文系でもハマる【ゆっくり数学】",
+    "channel_id": "UChqe4mlvGFQQ5IjWJUr4Qeg",
+    "views": 11719,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "12:12"
+   },
+   {
+    "id": "lvjqQlC5B-o",
+    "title": "なぜ人間は宇宙へ行こうとしたの！【なぜのくん】#アニメ解説 #すぺーすうちゅう #なるほど #なぜのくん #雑学 #アポロ#nazenokun #いーろん #スペース #ホンダ#うちゅう #スペースX",
+    "channel": "なぜのくんの雑学アニメ",
+    "channel_id": "UCGbt3x2CL9mj7gD-v4QT5Zg",
+    "views": 4,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "5:31"
+   },
+   {
+    "id": "pYME_soL0Ac",
+    "title": "【疑問】日常で何故なのと思うことあるある【漫画動画】",
+    "channel": "BUSON【あるあるちゃんねる】",
+    "channel_id": "UCtRCF2NLRULCmf-oLAF455w",
+    "views": 57184,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:34"
+   },
+   {
+    "id": "rUrJ6B8xnl8",
+    "title": "【日常の疑問】　なぜあくびは出るのか！～意外と知らないあくびのこと～",
+    "channel": "雑学の教室",
+    "channel_id": "UCCo57UBONOETDrt5P1Db3fw",
+    "views": 189,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:38"
+   },
+   {
+    "id": "W5rXFCXuoFg",
+    "title": "【牛丼にもラーメンにも】なぜ何にでも卵黄を乗せるのか【ゆっくり解説】",
+    "channel": "ゆっくり料理科学館",
+    "channel_id": "UCme9iGD7W3YBc5jgOTLLUvA",
+    "views": 5456,
+    "published": "7 時間前",
+    "age_days": 0,
+    "length": "31:11"
+   },
+   {
+    "id": "FIlr2g5iook",
+    "title": "【雑学/日常の疑問】洗面所の下のパイプはなぜ曲がっているの？【子どもからの答えにくい疑問の答えを考えよう】",
+    "channel": "ときめきパパ",
+    "channel_id": "UCZ-aw0fQz4RJMWWbMcslBKw",
+    "views": 42,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:25"
+   },
+   {
+    "id": "OUP64PCT7os",
+    "title": "なぜ車輪を作ったの【なぜのくん】#アニメ解説 #歴史 #なるほどでわかる #なぜのくん #雑学 #なぜ生きる #日常の疑問 #ディズニー #素朴な疑問",
+    "channel": "なぜのくんの雑学アニメ",
+    "channel_id": "UCGbt3x2CL9mj7gD-v4QT5Zg",
+    "views": 112,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "5:09"
+   }
+  ],
+  "素朴な疑問 解説": [
+   {
+    "id": "XvztMJ-llXQ",
+    "title": "野球選手はベンチで何を飲んでるの？プロ野球選手の飲み物事情をお教えします。【Q2：野球界の素朴な疑問】",
+    "channel": "JOH×ジョウチャンネル",
+    "channel_id": "UCaqc4dehAPvc47IiXs1rPpA",
+    "views": 12942,
+    "published": "8 時間前",
+    "age_days": 0,
+    "length": "14:40"
+   },
+   {
+    "id": "zZQe_9KPd24",
+    "title": "【チみラジ】#05 「日常の“おかしくない？”は誰に持っていけばいいですか？」ゲスト：林士平氏【安野貴博×石井玄｜ポッドキャスト】",
+    "channel": "「チームみらい」公式チャンネル",
+    "channel_id": "UC72A_x2FKHkJ8Nc2eIzqj8Q",
+    "views": 1801,
+    "published": "3 時間前",
+    "age_days": 0,
+    "length": "44:34"
+   },
+   {
+    "id": "9VbmSZq7y2E",
+    "title": "【おとな六法】法律のプロが素朴な疑問を徹底解説！《前編》",
+    "channel": "さらば青春のテレビ大阪チャンネル",
+    "channel_id": "UC9y1pmCh89IkpeYcAfCG9rg",
+    "views": 489908,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:12"
+   },
+   {
+    "id": "aLwKiCkT5QM",
+    "title": "【JGC修行】JALグローバルクラブってどんなカード？基本から徹底解説！【素朴なギモン】",
+    "channel": "鳥海高太朗のPTA 鳥ちゃんねる",
+    "channel_id": "UCLlCsbKu4yaKUuEyCzI8dGA",
+    "views": 40841,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "23:57"
+   },
+   {
+    "id": "eyzzMVGfsrY",
+    "title": "【素朴な疑問】なぜ太陽はブラックホールにならないのか？【ゆっくり解説】",
+    "channel": "9割が知らない素朴な疑問【ゆっくり解説】",
+    "channel_id": "UCdqSPl49pJQkzlihLC2q4Mw",
+    "views": 1254,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:39"
+   },
+   {
+    "id": "d8OJwf70oh8",
+    "title": "【2026年版】飛蚊症のすべて｜手遅れになる前に!!　危険なサイン・原因・検査・治療まで眼科医が徹底解説",
+    "channel": "100年生きる！眼科チャンネル",
+    "channel_id": "UC0L7F652u_2kIsirLNI6ZLQ",
+    "views": 17142,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "16:10"
+   },
+   {
+    "id": "7StCIT9ht3w",
+    "title": "【末梢静脈路確保】素朴な疑問 解説編 【研修Assist】",
+    "channel": "メディックメディア医学",
+    "channel_id": "UCJ-avLhtV97X-0K5M0H1m5w",
+    "views": 63,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "1:19"
+   },
+   {
+    "id": "YNl3ItyEZ08",
+    "title": "【日本刀】ゆっくり解説・日本刀に関する意外と素朴な疑問",
+    "channel": "勝風神刀流ー外伝ー",
+    "channel_id": "UCGhLgGksnXEInLhxzWxuGpw",
+    "views": 932,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:22"
+   },
+   {
+    "id": "0ZLFez0U7os",
+    "title": "春風亭一之輔の寄席・落語の素朴な疑問Q&A 入門編",
+    "channel": "春風亭一之輔チャンネル",
+    "channel_id": "UC2ROW2uDlhb-9rXzY2tqV3Q",
+    "views": 145471,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "18:07"
+   }
+  ],
+  "意外と知らない 仕組み": [
+   {
+    "id": "rqVvxs6EBco",
+    "title": "[意外と知らない!?]自動改札機の歴史と仕組み",
+    "channel": "Technology & History(T&H)",
+    "channel_id": "UCWTrrv1Z6mOWGc_pU_76EZw",
+    "views": 131,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:00"
+   },
+   {
+    "id": "jb17N55yUj0",
+    "title": "【意外とみんな知らない】脳が若返り血管もツルツルになって脳梗塞・認知症リスクも激減させるスーパーフードを紹介します！",
+    "channel": "腰痛・肩こり駆け込み寺【山内義弘】",
+    "channel_id": "UCS2c1gBDV-y26r2tJ3ED5FA",
+    "views": 50901,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "7:12"
+   },
+   {
+    "id": "Au80QK0Lrd4",
+    "title": "意外と知らないかも？磁石のしくみを知ろう！！【おもしろ実験】",
+    "channel": "保育士バンク！チャンネル【公式】",
+    "channel_id": "UCJ22_wy-c6q76Uzi938riVA",
+    "views": 21258,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:50"
+   },
+   {
+    "id": "bNsRcIQXuDI",
+    "title": "意外と知らない「ビットコイン」暗号通貨の仕組みを解説【教えて堀江さん】",
+    "channel": "堀江貴文 ホリエモン",
+    "channel_id": "UCXjTiSGclQLVVU83GVrRM4w",
+    "views": 538195,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "21:32"
+   },
+   {
+    "id": "3Lfwy_x-srU",
+    "title": "【漫画】意外と知らない食べ放題の秘密。店側が儲かる仕組みとは？【メシのタネ総集編】",
+    "channel": "メシのタネ",
+    "channel_id": "UCFhcNbijKU0_0chLSrKgAug",
+    "views": 119808,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "1:09:15"
+   },
+   {
+    "id": "t5SLMJGv6qQ",
+    "title": "意外と知らない電線／Something You Didn’t Know About Electrical Wires",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 322928,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:01"
+   },
+   {
+    "id": "NhpO0FZYKYI",
+    "title": "意外と知らない？小学生でも分かるように税金のしくみを徹底解説",
+    "channel": "1から学ぶ大人の教養【聞き流すだけで人生が好転】",
+    "channel_id": "UCgYyz3Xigp9nr6KdcWk-w8Q",
+    "views": 1935,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "9:13"
+   },
+   {
+    "id": "Xf2F_xtWEzE",
+    "title": "【意外と知らない】ノイズキャンセリングのしくみ【5分でわかるシリーズ】",
+    "channel": "しくみスクール",
+    "channel_id": "UC1x4fl58kbWMfl4If2Esw-w",
+    "views": 332,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "5:48"
+   },
+   {
+    "id": "r_LqzWMZ6ck",
+    "title": "【ゆっくり解説】意外と知らないジャンプ傘の仕組み【物理エンジン】",
+    "channel": "新フィズ物理学",
+    "channel_id": "UC5PIloBnLtr3MYols83EtVw",
+    "views": 1913,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:31"
+   },
+   {
+    "id": "qwsvRIakph4",
+    "title": "AIがなぜ賢いのか？意外と知らないAIの仕組みを解説【ひろゆき 切り抜き】",
+    "channel": "ひろゆきの人生攻略【切り抜き】",
+    "channel_id": "UCfxREpxrr51A6XKIOtfmBIQ",
+    "views": 9194,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "16:07"
+   },
+   {
+    "id": "aCadfENImrY",
+    "title": "意外と知らない？　ガソリンコックの仕組み",
+    "channel": "LIFE",
+    "channel_id": "UCQh3Ea4gL04Vf1_AO3G59iA",
+    "views": 202775,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "18:28"
+   }
+  ],
+  "なぜ こうなった 身近": [
+   {
+    "id": "0dqDlAZRGSw",
+    "title": "【なんでこうなった！？】身近なあの人の因果応報アドバイスタロット",
+    "channel": "さーちたろっと",
+    "channel_id": "UCA_6nDklHDTOADgjaZYUgSw",
+    "views": 1368,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "46:19"
+   },
+   {
+    "id": "Ov1tjK3jmis",
+    "title": "なぜ「雑用」を一人に押し付けてはいけないのか【人類学】",
+    "channel": "考えすぎる葦",
+    "channel_id": "UCwkAl3Fxd69mDEcQjX7NZsQ",
+    "views": 20207,
+    "published": "7 時間前",
+    "age_days": 0,
+    "length": "24:08"
+   },
+   {
+    "id": "t8hyg_38ELk",
+    "title": "【東芝(6502)】なぜこうなった？原発損失からTOBまでの経緯まとめ！Cashの重要性がカギ！　2021年4月15日",
+    "channel": "公認会計士ひねけんの株式投資チャンネル",
+    "channel_id": "UCQFzzXa_uh9-f-LirdDCEHw",
+    "views": 9941,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:11"
+   },
+   {
+    "id": "6KwfSKEAlgs",
+    "title": "政府広報に陰謀論YouTuberナオキマン起用！なぜ受けたの・・",
+    "channel": "政経プラスチャンネル",
+    "channel_id": "UC-XcLyfIh3bfc6GikZAcWjw",
+    "views": 178,
+    "published": "2 時間前",
+    "age_days": 0,
+    "length": "19:20"
+   },
+   {
+    "id": "tpLfVxjaDh0",
+    "title": "タッパーウェアはなぜ、世界中で売れたのに破産したのか？売れない容器を救った「売り方」と、3つの心理学",
+    "channel": "仕掛けの心理学",
+    "channel_id": "UCTHKeIT7zDiGvcG7ZeV1Rag",
+    "views": 20229,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "30:25"
+   },
+   {
+    "id": "dsIYLB2ub58",
+    "title": "なぜ昭和の仕組みのままで、長生きするほど不安な国になったのか",
+    "channel": "なぜ日本はこうなった",
+    "channel_id": "UC_X3E1SJe0PhU-JZnSTUdEg",
+    "views": 309,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "14:29"
+   }
+  ],
+  "身の回り 技術 すごい": [
+   {
+    "id": "GAa-qVq9DHQ",
+    "title": "【海外の反応】なんと日本が世界最先端バッテリーを開発！あまりの性能に海外から注文殺到",
+    "channel": "凄いぞNIPPON劇場",
+    "channel_id": "UCLa-UMQMYPVjqct1ren99ow",
+    "views": 6351,
+    "published": "16 時間前",
+    "age_days": 0,
+    "length": "52:31"
+   },
+   {
+    "id": "LtxT7c2HsTg",
+    "title": "【衝撃】イーロン・マスクも苦戦する「ロボットの手」…ホンダはどうやって、力と繊細さを同じ指に宿したのか",
+    "channel": "ニッポンNO.1",
+    "channel_id": "UCKEzls0Hx5dPL0W4eK79AQg",
+    "views": 37576,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "22:38"
+   },
+   {
+    "id": "mgFx-RcB4YA",
+    "title": "【衝撃】日本がついに開発！ASMLが最も恐れていた技術とは？",
+    "channel": "テクノパルス",
+    "channel_id": "UC3Jv1zmHCHHTsu870zVrkPg",
+    "views": 150258,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "13:40"
+   },
+   {
+    "id": "QDQAUY9Y_yg",
+    "title": "折りたたみスマホの折り目を支える日本の技術 曲がるガラスと有機ELの裏側",
+    "channel": "【海外の反応】世界に誇る日本の技術 【日本すごい】",
+    "channel_id": "UC1Q8zbLTENmcXqvUW8RcJ9A",
+    "views": 39888,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "23:07"
+   },
+   {
+    "id": "4JDpLLmCTMA",
+    "title": "日本の隠れた最強技術トップ20！！世界が手放せない企業ランキング",
+    "channel": "気になる科学",
+    "channel_id": "UCoYPljhPYDFBTXDZl3nkXaA",
+    "views": 1410030,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "24:21"
+   },
+   {
+    "id": "2s-vhii32QA",
+    "title": "【海外の反応】「これだけはパクれない…」世界が真似出来ない衝撃の日本技術TOP.7",
+    "channel": "世界が驚いた日本の力【海外の反応】",
+    "channel_id": "UCmSwBtf6cL9dJTJ_tYXbX-Q",
+    "views": 41396,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "21:53"
+   },
+   {
+    "id": "EC-h073dj3A",
+    "title": "「なぜ日本だけがここまで恵まれたのか？」世界が真似することすらできない国土の正体",
+    "channel": "誇りの日本技術",
+    "channel_id": "UCJa7kzxb1IgApd9QnqEDgrQ",
+    "views": 310092,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "17:08"
+   },
+   {
+    "id": "MpX1jT6ZAbk",
+    "title": "【衝撃】銅の時代が終了？日本が見つけた「炭素の電線」カーボンナノチューブが凄すぎる｜住友電工・日本ゼオン",
+    "channel": "【海外の反応】世界に誇る日本の技術 【日本すごい】",
+    "channel_id": "UC1Q8zbLTENmcXqvUW8RcJ9A",
+    "views": 198287,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "20:31"
+   },
+   {
+    "id": "6dauefp64EY",
+    "title": "【USスチール】アメリカ初の新技術が稼働...34カ所を監視する巨大高炉の進化がヤバい",
+    "channel": "日本の底力研究所、Sekai ga Mitometa Nihonryoku",
+    "channel_id": null,
+    "views": 26572,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "40:12"
+   },
+   {
+    "id": "folQOssFRzg",
+    "title": "ドリーム燃料終了！その裏でとんでもない技術が動く！",
+    "channel": "日本が誇る技術力",
+    "channel_id": "UCZBafs6F10MxajIcYeFD6jQ",
+    "views": 4952,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "23:50"
+   },
+   {
+    "id": "CAXirEQbX2k",
+    "title": "【日本製鉄】世界最大級の圧延機がついに完成...日本車を軽く強くする巨大設備の実力",
+    "channel": "日本の底力研究所",
+    "channel_id": "UCE188YcwoUq-JF9jidCD3vw",
+    "views": 12785,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "47:05"
+   },
+   {
+    "id": "EVz9NPox_uM",
+    "title": "【海外の反応】「日本の技術力は異常だ」世界が40年間支配した重要技術→日本が生んだ驚異の制御システムに海外が絶句",
+    "channel": "世界が驚く日本の真価 LTV",
+    "channel_id": "UC4vyu5a-5mY2qDXLoxKv6JA",
+    "views": 10624,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "1:37:13"
+   },
+   {
+    "id": "UaiIkXxfIPQ",
+    "title": "全米が泣きつく「0.2ミリ」の正体──AI社会を支える日本の狂気じみた技術",
+    "channel": "ニッポンものづくり透視図鑑",
+    "channel_id": "UCPsFMtDYulIRciTHoryiStg",
+    "views": 11088,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "19:10"
+   },
+   {
+    "id": "Qs9d_PtSfpI",
+    "title": "何十年も修業した人間の職人技は、AIに再現できるのか？【ゆっくり解説】",
+    "channel": "AI解剖【ゆっくり解説】",
+    "channel_id": "UCHStUsFz_mugcP65kethqvQ",
+    "views": 348,
+    "published": "9 時間前",
+    "age_days": 0,
+    "length": "17:30"
+   },
+   {
+    "id": "tqmgsjParTk",
+    "title": "【海外の反応】「日本の技術力は異常だ」世界が40年間支配した重要技術→日本が生んだ驚異の制御システムに海外が絶句",
+    "channel": "世界が嫉妬した日本の実力",
+    "channel_id": "UCdOMYUz3QLKK7cEw9jO3Xjw",
+    "views": 5668,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "1:37:13"
+   },
+   {
+    "id": "ENihZOctHxY",
+    "title": "【衝撃】自動車業界を震撼させた…日本の超技術 5選",
+    "channel": "NEX工業",
+    "channel_id": "UCf8arBDjvsjcoFyMVuB1YEg",
+    "views": 25287,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:33"
+   },
+   {
+    "id": "my4DWk0mHHk",
+    "title": "シールドマシンは地下でどうやって進み、どうやって曲がるのか",
+    "channel": "技術の種明かし",
+    "channel_id": "UCghMFIZ0dLlFq-2O_JuX5Rg",
+    "views": 86535,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "12:54"
+   },
+   {
+    "id": "qg5WqXrB1j8",
+    "title": "【DVDで磨いた技術がAIの最前線に】世界が奪い合う「光」…光電融合を支える三菱・住友ほか日本企業4社",
+    "channel": "【日本】ものづくり見守り隊",
+    "channel_id": "UC0CewtFKv-L2O_XHhieqr9w",
+    "views": 6551,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "55:57"
+   },
+   {
+    "id": "CwHC9pUIg54",
+    "title": "【三菱重工】捨てていた熱が電気に変わる...サウジの巨大工場で動き出した13MW発電技術",
+    "channel": "日本の底力研究所",
+    "channel_id": "UCE188YcwoUq-JF9jidCD3vw",
+    "views": 8231,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "48:57"
+   },
+   {
+    "id": "IisQDNIiSTA",
+    "title": "【海外の反応】技術大国の誇りが粉々に…日本の水処理技術なしでは生きられない世界の現実！アメリカもドイツも韓国も完全敗北の理由とは!?",
+    "channel": "世界が見た日本【海外の反応】",
+    "channel_id": "UC1mj_2O-LaXE_BYK7xNGL6w",
+    "views": 631,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "1:11:30"
+   }
+  ],
+  "日本 技術 身近 なぜ": [
+   {
+    "id": "XHA8OT1f1So",
+    "title": "日本だけが持つ核心的な名品技術 |  ドイツ人技術者が選んだ「日本でしか作れないもの」10選 | 「これだけは日本から買うしかない」",
+    "channel": "ゴールドバーの経済学",
+    "channel_id": "UCsrabpWDdQRU6mRkkwFOMPg",
+    "views": 124212,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "28:34"
+   },
+   {
+    "id": "97zs_qka0Jw",
+    "title": "【衝撃】1800度の熱を無効化する日本の「糸」。航空エンジンの常識が崩壊する",
+    "channel": "【海外の反応】世界に誇る日本の技術 【日本すごい】",
+    "channel_id": "UC1Q8zbLTENmcXqvUW8RcJ9A",
+    "views": 6454,
+    "published": "7 時間前",
+    "age_days": 0,
+    "length": "21:45"
+   },
+   {
+    "id": "eEKzJ8S4uLs",
+    "title": "【日本の技術力】「時代遅れ」と笑われた技術が、なぜ世界に選ばれるのか？捨てなかった日本企業の逆転ランキング10選【ものづくり日本】",
+    "channel": "ニッポンの裏側",
+    "channel_id": "UCaTEOKr2M0pnqs54s1Cn2Bw",
+    "views": 348,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "25:02"
+   },
+   {
+    "id": "kv7PlJ57Mvo",
+    "title": "【誇り】日本だけが持つ「隠れた最強技術」TOP25｜中韓も絶対にマネできない衝撃の理由",
+    "channel": "データで証明チャンネル",
+    "channel_id": "UCps9hAxPbxREeYaSEhBkiuQ",
+    "views": 994332,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "3:01"
+   },
+   {
+    "id": "onXOrOkJ5vY",
+    "title": "【海外の反応】アメリカ「なぜ日本しか出来ない…？」技術大国でもパクれない日本の技術力5選とは？【世界の反応】",
+    "channel": "日本の絆",
+    "channel_id": "UCRkBle4ddFTjghsPYYmNb6g",
+    "views": 78886,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:46"
+   },
+   {
+    "id": "Qi794DXlR14",
+    "title": "標的に当たるのに なぜ使えない？ 日本のレールガン 実用化の壁",
+    "channel": "ニッポン技術探訪",
+    "channel_id": "UCIfCe7PcheZ1QFcFT9T14KQ",
+    "views": 324324,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "9:00"
+   },
+   {
+    "id": "hjU1L_vvDaE",
+    "title": "なぜ日本の新しい家の外壁は、8割が偽物なのか",
+    "channel": "建物の深層",
+    "channel_id": "UCx0PzH2K_ocRT2By7aNNT_g",
+    "views": 235425,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "18:39"
+   },
+   {
+    "id": "s-XpYCNvzu0",
+    "title": "「日本の防衛技術は異常だ...」戦後80年の封印を解かれた14社がNATOで初公開→欧米の軍事専門家が\"日本の民間技術\"の軍事転用レベルに震えた理由【海外の反応】",
+    "channel": "日本の技彩",
+    "channel_id": "UCchlHQ1m3asND_4lB-8XeYg",
+    "views": 59944,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "38:52"
+   },
+   {
+    "id": "2gL90jwaJe0",
+    "title": "「高断熱」の家なのに、なぜ窓は結露するのか",
+    "channel": "建物の答え",
+    "channel_id": "UCX-sLtE3gXxHb-jb_O9XUMQ",
+    "views": 17639,
+    "published": "17 時間前",
+    "age_days": 0,
+    "length": "11:22"
+   },
+   {
+    "id": "EoxFXe5DS94",
+    "title": "【世界シェア90％超の秘密】なぜ日本企業が選ばれる？簡単には代替できない10の技術",
+    "channel": "政界のホンネ帳",
+    "channel_id": "UCKWiwFmgxMg6qdgk7v6UOkQ",
+    "views": 24,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "23:28"
+   },
+   {
+    "id": "5vMJoW5EvFs",
+    "title": "【東芝】『2028年に1台も売れない』と言われて3年、なぜハードディスクもメモリも足りないのか",
+    "channel": "源さんの日本技術図鑑",
+    "channel_id": "UCzJSCvjjMrJbJYVX081kddA",
+    "views": 10977,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "49:39"
+   },
+   {
+    "id": "GAa-qVq9DHQ",
+    "title": "【海外の反応】なんと日本が世界最先端バッテリーを開発！あまりの性能に海外から注文殺到",
+    "channel": "凄いぞNIPPON劇場",
+    "channel_id": "UCLa-UMQMYPVjqct1ren99ow",
+    "views": 6351,
+    "published": "16 時間前",
+    "age_days": 0,
+    "length": "52:31"
+   },
+   {
+    "id": "njtN2k-SZgc",
+    "title": "なぜ車はダイナモを捨て、オルタネーターに切り替えたのか？",
+    "channel": "昔の人の知恵",
+    "channel_id": "UCYJ2D_D1q7_sYGorIB2_6iA",
+    "views": 336587,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "13:34"
+   }
+  ],
+  "雑学 仕組み 解説": [
+   {
+    "id": "5ofQO71UPhQ",
+    "title": "【雑学】眠れない夜に聴きたいゾッとする人体の不思議【勉強や作業中にもおすすめ】",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 1003243,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:02:55"
+   },
+   {
+    "id": "yXG2zEvuemc",
+    "title": "【雑学】エネルギーから物質は作られるのか？【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 630414,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "13:22"
+   },
+   {
+    "id": "IigamhW02_4",
+    "title": "【作業・睡眠用】人生の役に立つ雑学＆人生相談まとめ24選！【岡田斗司夫/切り抜き/雑学/人生相談/おもしろ雑学/睡眠学習/聞き流し/まとめ】",
+    "channel": "おかだ録【岡田斗司夫切り抜き】",
+    "channel_id": "UChpmCcZIn7YTGD9k17T3cEQ",
+    "views": 3206105,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:15:20"
+   },
+   {
+    "id": "ayusReyQsWA",
+    "title": "【知らなきゃよかった雑学】人体の欠陥4選【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 4157207,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:09"
+   },
+   {
+    "id": "zaJKRSKx1Yc",
+    "title": "【脳科学の雑学】IQや賢さは何に比例するのか？【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 877241,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "9:38"
+   },
+   {
+    "id": "VT7tmiUpyOY",
+    "title": "【動画アリ】別の血液型の血を混ぜると体内でどうなるのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 1265341,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "18:17"
+   },
+   {
+    "id": "McGzFjhTR9E",
+    "title": "【雑学】生物に必ず炭素が含まれている理由【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 1325483,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:53"
+   },
+   {
+    "id": "7x_0UwxgNx4",
+    "title": "【意識の起源】元々物質だった生物はいつ意識を獲得したのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 490561,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:26"
+   },
+   {
+    "id": "x5OY3XAdrWU",
+    "title": "思わず「へぇ」と言ってしまう夢に関する雑学 #雑学 #夢",
+    "channel": "雑学レンジャー",
+    "channel_id": "UCyF4DSQOpqr9XAfCjYqTkwg",
+    "views": 1592049,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:08"
+   },
+   {
+    "id": "dlLI7Xr5KSM",
+    "title": "【雑学】9割の人は説明できない謎の記号、デシベル(dB)って何？",
+    "channel": "圧縮雑学チャンネル",
+    "channel_id": "UC7_B1Zw6Cq5YjJRbykSXclw",
+    "views": 157423,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:14"
+   },
+   {
+    "id": "yrPUe06Cbjc",
+    "title": "【雑学】実は人体でよく分かっていないこと 【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 628815,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:52"
+   },
+   {
+    "id": "zNs6_IQqH54",
+    "title": "【超衝撃】夜眠る前に聴きたい大人の雑学【勉強や作業にも最適】",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 2470282,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:24:58"
+   },
+   {
+    "id": "YzWNS8G8pwo",
+    "title": "【人生雑学】60代以上に聞いた、人生で実はどうでも良かった事とは・・・！！",
+    "channel": "毎日がホリデー【人生健康雑学】",
+    "channel_id": "UCIGfL6-wTBc6314nnEOEhFA",
+    "views": 431498,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:41"
+   },
+   {
+    "id": "IXvlIJtvJGk",
+    "title": "【時間の正体】時間は本当に存在するのかー時間とは何かー【雑学】【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 2237465,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:00"
+   },
+   {
+    "id": "1jDnsJNE6vU",
+    "title": "【クルマの雑学】ロータリーエンジンの仕組み・歴史を徹底解説【ゆっくり解説】",
+    "channel": "カーメカニズムTV【クルマの技術ゆっくり解説】",
+    "channel_id": "UCrf-c3fkUEOA3OwEX37eNbA",
+    "views": 171246,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "14:33"
+   },
+   {
+    "id": "YYNBSS46H1Y",
+    "title": "【雑学】実はほとんどの人が左右を説明できないという事実【ゆっくり解説】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 1907095,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:05"
+   }
+  ],
+  "ゆっくり解説 身近 仕組み": [],
+  "ずんだもん 仕組み 解説": [
+   {
+    "id": "ZpCEJ-RBv90",
+    "title": "信じると貧乏になる社会の仕組み【ずんだもん解説】",
+    "channel": "ずんだもん末路ストーリー",
+    "channel_id": "UC_JY1bKNWd2fjf2RxM3xLLQ",
+    "views": 285568,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "17:10"
+   },
+   {
+    "id": "LTXyCgCkJOI",
+    "title": "【ネタ解説】ずんだもんと学ぶ「エセ科学」",
+    "channel": "あもとっと",
+    "channel_id": "UCSB1tAOc6vNbVg9XhQ8wn3g",
+    "views": 1103861,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:44"
+   },
+   {
+    "id": "9Ju8tFrxISQ",
+    "title": "キオクシアベギラゴンで焼かれた一般人【ずんだもん解説】",
+    "channel": "ずんだもん末路ストーリー",
+    "channel_id": "UC_JY1bKNWd2fjf2RxM3xLLQ",
+    "views": 55149,
+    "published": "6 時間前",
+    "age_days": 0,
+    "length": "17:22"
+   },
+   {
+    "id": "vYOFkOlIe7w",
+    "title": "【VOICEVOX解説】ずんだもんと学ぶ「ヘ◯イン」【ゆっくり解説】",
+    "channel": "ずんだもんと学ぶハームリダクション",
+    "channel_id": "UCBYgR3tgW6T9EryWL-1hHoA",
+    "views": 157344,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:48"
+   },
+   {
+    "id": "iQhuO-x-L7g",
+    "title": "【悲報】売上1位の営業も0件の新人もボーナス同じにした会社、その結果…【ずんだもん解説・ゆっくり解説】",
+    "channel": "ずんだだょ!全員集合",
+    "channel_id": "UCIxkMt6CLVBhuHOdrqvujQg",
+    "views": 44730,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "24:06"
+   },
+   {
+    "id": "b94vrF-Z55U",
+    "title": "颯爽と現れた合成音声「ずんだもん」って何のキャラクター？経緯から解説するぜ！",
+    "channel": "ぷらぐら",
+    "channel_id": "UC9yE5zNQtT-sItF53GfQs7w",
+    "views": 1517497,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:28"
+   },
+   {
+    "id": "HotdjSoq4P4",
+    "title": "金持ちが庶民に絶対教えない裏常識とは【ずんだもん&ゆっくり解説】",
+    "channel": "えだまめストーリー",
+    "channel_id": "UCazH99MFhU6Xm6zK-c0tR5g",
+    "views": 32635,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "16:42"
+   },
+   {
+    "id": "-u_grDJhm6s",
+    "title": "資産額別に見るFIREの実態【ずんだもん解説】",
+    "channel": "お金の達人ずんだもん",
+    "channel_id": "UC7f4zm07c_Fms28rRpQl0iQ",
+    "views": 109634,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "14:46"
+   },
+   {
+    "id": "pfXk0gwTRNA",
+    "title": "【総集編】貧乏が生まれる仕組み【ずんだもん解説】",
+    "channel": "ずんだもん末路ストーリー",
+    "channel_id": "UC_JY1bKNWd2fjf2RxM3xLLQ",
+    "views": 209688,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "1:04:16"
+   },
+   {
+    "id": "k0a30u3d7BM",
+    "title": "貧乏から抜け出せない仕組み【ずんだもん解説】",
+    "channel": "ずんだもん末路ストーリー",
+    "channel_id": "UC_JY1bKNWd2fjf2RxM3xLLQ",
+    "views": 287664,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "16:00"
+   },
+   {
+    "id": "V4YtDWcpbkY",
+    "title": "【ネタ解説】ずんだもんと学ぶ「Youtubeとニコニコ動画」",
+    "channel": "あもとっと",
+    "channel_id": "UCSB1tAOc6vNbVg9XhQ8wn3g",
+    "views": 877083,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "17:04"
+   },
+   {
+    "id": "susKz6eoP40",
+    "title": "人生を楽にする思考法とは【ずんだもん&ゆっくり解説】",
+    "channel": "えだまめストーリー",
+    "channel_id": "UCazH99MFhU6Xm6zK-c0tR5g",
+    "views": 21706,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "13:53"
+   },
+   {
+    "id": "lewMO3Vsk_0",
+    "title": "【ネタ解説】ずんだもんと学ぶ「マルチ商法」",
+    "channel": "あもとっと",
+    "channel_id": "UCSB1tAOc6vNbVg9XhQ8wn3g",
+    "views": 1302196,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:57"
+   },
+   {
+    "id": "CCFS0oE9y5s",
+    "title": "職場に蔓延るフレネミーの特徴とは【ずんだもん&ゆっくり解説】",
+    "channel": "えだまめストーリー",
+    "channel_id": "UCazH99MFhU6Xm6zK-c0tR5g",
+    "views": 16764,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "14:39"
+   },
+   {
+    "id": "pcig1v_B1y8",
+    "title": "みんな教えてくれない人生で早く気づいた方がいい裏ルール10選【ずんだもん】",
+    "channel": "ずんだもんの末路",
+    "channel_id": "UCSnCdVZyIwuw7RPGYs6XjGg",
+    "views": 462740,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "20:39"
+   },
+   {
+    "id": "Bu5i8rPjtI4",
+    "title": "社会には貧乏人が必要なのだ【ずんだもん解説】",
+    "channel": "ずんだもん末路ストーリー",
+    "channel_id": "UC_JY1bKNWd2fjf2RxM3xLLQ",
+    "views": 235919,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "14:50"
+   },
+   {
+    "id": "FupoKXxL41g",
+    "title": "生活保護で人生終了！？働かずに暮らそうとした者の悲惨な末路【ずんだもんアニメ解説】",
+    "channel": "ずんだもんの落とし穴",
+    "channel_id": "UCDXN9qACgBfZr5RzHp5Q96w",
+    "views": 133456,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "26:27"
+   },
+   {
+    "id": "uBhbQQxCS0s",
+    "title": "【総集編】貧乏人がより貧乏に落ちる社会の仕組み【ずんだもん解説】",
+    "channel": "ずんだもん末路ストーリー",
+    "channel_id": "UC_JY1bKNWd2fjf2RxM3xLLQ",
+    "views": 152410,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "50:21"
+   },
+   {
+    "id": "ZURWwSH_MSQ",
+    "title": "【VOICEVOX解説】ずんだもんと学ぶ「コ◯イン」【ゆっくり解説】",
+    "channel": "ずんだもんと学ぶハームリダクション",
+    "channel_id": "UCBYgR3tgW6T9EryWL-1hHoA",
+    "views": 152098,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:05"
+   }
+  ],
+  "トイレ 仕組み": [
+   {
+    "id": "j6qGF2w_YM4",
+    "title": "【物理エンジン】水洗トイレが流れる仕組みを視覚的に解説した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 3034570,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:37"
+   },
+   {
+    "id": "vLiBp2tHNas",
+    "title": "トイレの仕組みを解説！",
+    "channel": "好奇心のまま",
+    "channel_id": "UCA_mH18N2l4L7T7OLpdFUzA",
+    "views": 86,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "3:00"
+   },
+   {
+    "id": "PV6h4KqNaBk",
+    "title": "トイレの構造 しくみ（水漏れなどの修理前に）",
+    "channel": "jisyukanri",
+    "channel_id": "UCIO55NIcGgsuUKiTeaafWTQ",
+    "views": 692536,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "4:33"
+   },
+   {
+    "id": "TGIZxaf1c2c",
+    "title": "水洗トイレの仕組み",
+    "channel": "ブライトサイド | Bright Side Japan",
+    "channel_id": "UC1bmnUH1ffc63zohkPvtXcQ",
+    "views": 20623,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:35"
+   },
+   {
+    "id": "staoJuKGMRU",
+    "title": "なぜトイレに流したものは、レバーを回すだけで一気に消える？（水で押し出すだけじゃない）",
+    "channel": "しくみの正体",
+    "channel_id": "UCS_EEYRtiF4Hl8aMjyu3xWA",
+    "views": 49204,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:29"
+   },
+   {
+    "id": "9lpu4c-0rvs",
+    "title": "トイレの構造 しくみ【水漏れなどの修理前に 音声あり】",
+    "channel": "jisyukanri",
+    "channel_id": "UCIO55NIcGgsuUKiTeaafWTQ",
+    "views": 46634,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "5:20"
+   },
+   {
+    "id": "TomV_J54X0w",
+    "title": "JALの整備士による動画de航空教室 第6弾～トイレでうんちをするとどこへ行くか？トイレの仕組みを解説！～",
+    "channel": "JAL 日本航空【公式】",
+    "channel_id": "UC866LucISVOcPmrK2kvx2hg",
+    "views": 100763,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:25"
+   },
+   {
+    "id": "S-JWJBRxYhQ",
+    "title": "知ってた？トイレタンクから水が流れる仕組みを解説！",
+    "channel": "米原市 長浜市の給湯器の交換や　水漏れトラブル ガス工事はカトリ住設",
+    "channel_id": "UC09qSFsjTLSBJcoXopnL5fg",
+    "views": 6615,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:09"
+   },
+   {
+    "id": "QPEs1KkM4_M",
+    "title": "トイレ便器をハンマーで破壊｜割れていく過程でトイレの構造がわかる。（TOTO/LIXIL/INAX）",
+    "channel": "トイレTV",
+    "channel_id": "UCxB95LclScuFvHm6MsV782g",
+    "views": 3648,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:43"
+   },
+   {
+    "id": "q_uG8M--gfI",
+    "title": "家庭内の水つまりを一発で解決する方法！【Mr.Pungオールインワン】",
+    "channel": "信禎貿易株式会社SHINJUNG TRADE CO., LTD",
+    "channel_id": "UCoJS66RZrjIT0a0YqJ23CsA",
+    "views": 236047,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:21"
+   },
+   {
+    "id": "G0YFYOOL8yg",
+    "title": "トイレは、なぜ詰まると逆流するのか？",
+    "channel": "世界の仕組み",
+    "channel_id": "UCX1IiVytYoUQ6juEsR71lxw",
+    "views": 736,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:08"
+   },
+   {
+    "id": "dY_NV_etJTE",
+    "title": "トイレの仕組み",
+    "channel": "MrNagisan",
+    "channel_id": "UChV3TzRf-6-lzkO7YJeQ2Dw",
+    "views": 1912,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "3:09"
+   },
+   {
+    "id": "73_EHSuoIyw",
+    "title": "TOTOベッドサイド水洗トイレの仕組み",
+    "channel": "Kazumichi Moriyama",
+    "channel_id": "UCiPjQ-sCzcvLENLdcELkmDg",
+    "views": 17233,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "0:35"
+   },
+   {
+    "id": "4FL5CbpS14o",
+    "title": "どうなってるの？フラッシュバルブ？ギミック解析挑戦！",
+    "channel": "まじめなTSK",
+    "channel_id": "UCs88WjImkIx3VUkb8XpUiQQ",
+    "views": 120327,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:41"
+   }
+  ],
+  "自動改札 仕組み": [
+   {
+    "id": "98-YATwz9bQ",
+    "title": "#JR #駅 ＃JR東日本　 自動改札機 仕組み",
+    "channel": "Japan JPBR",
+    "channel_id": "UC8hxoo0PmeQP792hV4pb9Dw",
+    "views": 52333,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:59"
+   },
+   {
+    "id": "jcooOByEz5U",
+    "title": "【運輸部人材育成センターに潜入！】改札機の仕組みや券売機の便利機能について解説しまっせ【Ｎティーチャー参戦！】",
+    "channel": "【公式】阪急電車ファン全員集合!",
+    "channel_id": "UCly6FCcclDVBobU3L41-wQQ",
+    "views": 71377,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "14:34"
+   },
+   {
+    "id": "sfmwAvZuNvs",
+    "title": "【タモリさん】新・日本の最先端 自動改札機の最先端技術【ヨルタモリ】",
+    "channel": "ヨルタモリ切り抜きの樹 ― 懐かしいチャンネル別館",
+    "channel_id": "UCF2hwpL8-3zk5ONkMzttUNQ",
+    "views": 213937,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:04"
+   },
+   {
+    "id": "A8pUeLq-p0I",
+    "title": "交通系ICカードの仕組みってなんだろ【3分ぐらいでちょっとわかる雑学】",
+    "channel": "きになる！【3分ぐらいでちょっとわかる雑学動画】",
+    "channel_id": "UC0Ezu14jiOhJrcdnaWKj25A",
+    "views": 3141,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:56"
+   },
+   {
+    "id": "rqVvxs6EBco",
+    "title": "[意外と知らない!?]自動改札機の歴史と仕組み",
+    "channel": "Technology & History(T&H)",
+    "channel_id": "UCWTrrv1Z6mOWGc_pU_76EZw",
+    "views": 131,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:00"
+   },
+   {
+    "id": "Z0lZzumfJ_A",
+    "title": "徳島駅で自動改札機の運用開始",
+    "channel": "徳島新聞動画 TPV(Tokushima Press Video)",
+    "channel_id": "UC9eeT2NRk0U7eczUemANEwA",
+    "views": 505569,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "1:00"
+   },
+   {
+    "id": "lKYZzz5GBZQ",
+    "title": "代々木駅を練り歩く　新型自動改札機があった！",
+    "channel": "スーツ / Suit Channel",
+    "channel_id": "UCxBR2bnAFAavDHpHtQrTA9Q",
+    "views": 221213,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:51"
+   },
+   {
+    "id": "Pv7XY-iwZMs",
+    "title": "京都鉄道博物館　自動改札機の仕組み解説",
+    "channel": "Yokokawa Rokusaburou",
+    "channel_id": "UCMAWxCpbDhVz9gTUtq1P0mQ",
+    "views": 2778,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:06"
+   },
+   {
+    "id": "qt7UJE12a0k",
+    "title": "自動改札はなぜ歩きながら切符を判定できるのか？内部に隠された高速処理の仕組み",
+    "channel": "モノづくりの科学",
+    "channel_id": "UCl6e9kFkefFRWI3xEgVONKQ",
+    "views": 451,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "25:28"
+   },
+   {
+    "id": "NzCmJALNXAE",
+    "title": "1992年 開けてびっくり！自動改札機",
+    "channel": "atarimeshi122",
+    "channel_id": "UCG_jQAzhC9j7ryg5kgkKA2w",
+    "views": 127741,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "37:55"
+   },
+   {
+    "id": "_a-pItmgggE",
+    "title": "～身近な仕組みを再現しよう～自動改札機",
+    "channel": "スイッチエデュケーション",
+    "channel_id": "UCbbXsZRSF1F9JbWobOFDNSw",
+    "views": 23471,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:08"
+   },
+   {
+    "id": "DeJppVjtVAw",
+    "title": "駅の自動改札は何を確認しているの？｜子どもにわかるしくみ",
+    "channel": "なるほど!しくみ図鑑",
+    "channel_id": "UCWzVcLGFpPyzMPBR64Po9ag",
+    "views": 13,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "2:33"
+   },
+   {
+    "id": "-cI1e-klPW4",
+    "title": "日本初の地下鉄はなんと自動改札だった！？",
+    "channel": "一般社団法人日本地下鉄協会",
+    "channel_id": "UCFcrAIBHBoe0wrkRjvqIdGw",
+    "views": 5076,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "0:22"
+   }
+  ],
+  "信号機 仕組み": [
+   {
+    "id": "xo8jPvQf4Jk",
+    "title": "信号サイクル観察のススメ　信号機の動きを基礎から発展パターンまで見てみよう！",
+    "channel": "やたてつの秘密基地【鉄道･道路･交通系チャンネル】 Yata-Tetsu's Man Cave",
+    "channel_id": "UCzvnZnPqtgP4TYFK5XzTLhw",
+    "views": 46637,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "15:39"
+   },
+   {
+    "id": "wCkK9utXUCc",
+    "title": "信号機のヒミツとは？",
+    "channel": "ABS秋田放送",
+    "channel_id": "UCVRs8dYm9OH-_g4V84BfbQw",
+    "views": 79300,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:08"
+   },
+   {
+    "id": "uZkVyvig5Y4",
+    "title": "【授業用動画】信号機のしくみ",
+    "channel": "Takeyuki Suetsugu",
+    "channel_id": "UCB1YvQfyvLI_Lbqte0dCElw",
+    "views": 783,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:45"
+   },
+   {
+    "id": "J4Tp12hVd4k",
+    "title": "信号は誰が切り替えているの？｜子どもにわかるしくみ",
+    "channel": "なるほど!しくみ図鑑",
+    "channel_id": "UCWzVcLGFpPyzMPBR64Po9ag",
+    "views": 71,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "2:50"
+   },
+   {
+    "id": "HdLq8x3_XZ4",
+    "title": "鉄道の信号の仕組みがよくわかる86秒の動画",
+    "channel": "every dayday",
+    "channel_id": "UCYG1OlG7arajnBvPJPy5gsg",
+    "views": 37586,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:26"
+   },
+   {
+    "id": "jt6RzTdRS68",
+    "title": "信号機の奥深き世界へようこそ！知られざる種類と驚きの仕組みを大公開！",
+    "channel": "ともさんカーライフ",
+    "channel_id": "UCui60ksbUKPRMMpzXmm4pVw",
+    "views": 205,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:16"
+   },
+   {
+    "id": "GPweo2Y6DB4",
+    "title": "【日常解説】意外と知らない『感応式信号機』の仕組み！",
+    "channel": "ゆっくり交通調査会",
+    "channel_id": "UC1HeVJlobzoSELSSJCpYw4A",
+    "views": 2594,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:02"
+   },
+   {
+    "id": "l0xbODzTT18",
+    "title": "手作り電信機／Handmade Electrical Telegraph",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 34778,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "spJbxs_yySQ",
+    "title": "「信号によく引っかかる」は偶然じゃない？スムーズに運転できる“青信号の流れ”に乗るための注意点（2024年6月18日）",
+    "channel": "RKK NEWS DIG",
+    "channel_id": "UCG1ApxYbWaC9xUxgHCWyR5Q",
+    "views": 48366,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:18"
+   },
+   {
+    "id": "wTpDmzuLFqU",
+    "title": "信号機はどうやって車の流れを見ている？交差点を動かす仕組み",
+    "channel": "街のしくみ図鑑",
+    "channel_id": "UCVYxRFd8DKGkyhF2bMkB-8A",
+    "views": 28,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "10:01"
+   },
+   {
+    "id": "fEzOT0pEt_E",
+    "title": "【鉄道信号】＊一瞬だけ現示される警戒信号の謎＊安全と効率を両立させる仕組み＊",
+    "channel": "ユウTube鉄道 総合研修センター",
+    "channel_id": "UC_un0NLi7f9HHlvK1xKFU_A",
+    "views": 60219,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "17:59"
+   },
+   {
+    "id": "IeCjRqoECNs",
+    "title": "信号について　必ず聞いたことのある言葉「信号」。正体は一体何なのでしょうか",
+    "channel": "組込みちゃんねる",
+    "channel_id": "UCChVzz1bTzQrorPqg7Uhnog",
+    "views": 6084,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:30"
+   },
+   {
+    "id": "Sf1Rg8Gde0Q",
+    "title": "ドライバー必見、「変な信号機」大集合！　あなたはちゃんと理解できる？",
+    "channel": "やたてつの秘密基地【鉄道･道路･交通系チャンネル】 Yata-Tetsu's Man Cave",
+    "channel_id": "UCzvnZnPqtgP4TYFK5XzTLhw",
+    "views": 499192,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:34"
+   },
+   {
+    "id": "LNkF_iHP5AM",
+    "title": "信号機が1個しかない？！黄色が点滅する理由と、赤との意外な違い！【まちのしくみ図鑑】",
+    "channel": "スクールスクリプト",
+    "channel_id": "UC3N6SsiMBJLCSvvw26tBUPQ",
+    "views": 24,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "9:16"
+   },
+   {
+    "id": "HMlRDEw884o",
+    "title": "【鉄道の自由研究】近鉄社員が解説する「鉄道信号の種類と意味」【3本連続企画・第3弾】",
+    "channel": "【公式】近畿日本鉄道チャンネル",
+    "channel_id": "UCKuCPoJZsYiOpVLawGdtY7w",
+    "views": 15834,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:44"
+   },
+   {
+    "id": "PubWgSXGmWE",
+    "title": "元電車運転士が教える！鉄道の標識２～信号機の種類と役割を解説します",
+    "channel": "KOHの雑学チャンネル",
+    "channel_id": "UCZ8u9jHN8D8QTgpbul7RZLw",
+    "views": 11611,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "15:46"
+   },
+   {
+    "id": "s7qBh5D5sQk",
+    "title": "第1段階 項目2「信号に従うこと」【9分で分かる】",
+    "channel": "マルコ教官",
+    "channel_id": "UC0WrgBzrGp3qbdp6D0S8rMg",
+    "views": 92310,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:11"
+   },
+   {
+    "id": "WanVYbIeh68",
+    "title": "【信号附属機】＊進路表示器＊進路予告機＊",
+    "channel": "ユウTube鉄道 総合研修センター",
+    "channel_id": "UC_un0NLi7f9HHlvK1xKFU_A",
+    "views": 83557,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "17:22"
+   },
+   {
+    "id": "H44ssxXbNwY",
+    "title": "【従属信号機】＊主信号機を支える信号機＊中継信号機＊遠方信号機＊通過信号機＊",
+    "channel": "ユウTube鉄道 総合研修センター",
+    "channel_id": "UC_un0NLi7f9HHlvK1xKFU_A",
+    "views": 55558,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "16:42"
+   },
+   {
+    "id": "F5btayjIZJY",
+    "title": "【小田急密着】信号機を“手動”で操る 知られざる専門職「信号扱者」養成の90日に潜入",
+    "channel": "小田急電鉄公式チャンネル「OdakyuMovie」",
+    "channel_id": "UCf06zwF878TfyMOgUOx1Klw",
+    "views": 98929,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "6:51"
+   }
+  ],
+  "踏切 仕組み": [
+   {
+    "id": "UwHiaEUUKW0",
+    "title": "【鉄道CG】踏切しゃ断機(1) - 踏切の仕組み",
+    "channel": "GCY.jp(GPSCycling)",
+    "channel_id": "UCggt-_gSWBsEEy-XX8AnHqQ",
+    "views": 20637,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:03"
+   },
+   {
+    "id": "29DXpilelNU",
+    "title": "【踏切①】＊踏切の分類＊動作の仕組み＊踏切は運転士泣かせ？＊",
+    "channel": "ユウTube鉄道 総合研修センター",
+    "channel_id": "UC_un0NLi7f9HHlvK1xKFU_A",
+    "views": 29134,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "15:26"
+   },
+   {
+    "id": "53Dpkaf-Utc",
+    "title": "【#線路マニア】何のためのレール？敷板踏切の構造を解説",
+    "channel": "線路マニア",
+    "channel_id": "UCY_AycFDrUiNok5Zpw-1MWQ",
+    "views": 332622,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:26"
+   },
+   {
+    "id": "EjT6rW720Rc",
+    "title": "【電車の仕組み】踏切はなぜ電車が来るずっと前から鳴り始めるのか",
+    "channel": "Kath Engineering Lab | かとひエンジニアリングラボ",
+    "channel_id": "UCTDPWsB6d2by5K3AJljX12A",
+    "views": 392,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "7:19"
+   },
+   {
+    "id": "qU9c47-X9Ys",
+    "title": "踏切はどのような仕組みで鳴るのか？【賢い踏切ってなに？】",
+    "channel": "右衛門【鉄道・交通】",
+    "channel_id": "UCEPib8GiqSECUuBVe09t6xA",
+    "views": 4503,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:44"
+   },
+   {
+    "id": "uy18TkLeBKU",
+    "title": "踏切は停電したらどうなる？遮断機が\"下りる側\"に作られている理由【踏切の仕組み】",
+    "channel": "ペンで解くしくみ",
+    "channel_id": "UCrOksThe0955XI95SBW00ww",
+    "views": 18,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "7:49"
+   },
+   {
+    "id": "9dB8i_XK7Cc",
+    "title": "踏切は電車の35秒前に鳴り出す――見えない電車に気づく「踏切」の正体",
+    "channel": "建築奇譚",
+    "channel_id": "UCzXS1kOBPdeB-Yfp9Vpy18g",
+    "views": 15455,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "5:39"
+   },
+   {
+    "id": "lXzV5PbVviM",
+    "title": "【踏切②】＊賢い踏切＊開かずの踏切対策＊遮断時間を短縮する仕組み＊",
+    "channel": "ユウTube鉄道 総合研修センター",
+    "channel_id": "UC_un0NLi7f9HHlvK1xKFU_A",
+    "views": 10634,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "16:17"
+   },
+   {
+    "id": "l5zOUHqjXnI",
+    "title": "踏切の仕組み。列車をどうやって見つけ、何秒で閉まるのか【遮断機・警報機・非常ボタン】",
+    "channel": "まどろみ研究所",
+    "channel_id": "UCZmvI78ibTfS53vQGbSglag",
+    "views": 41,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "6:55"
+   },
+   {
+    "id": "VIUgRmOzyX4",
+    "title": "ふみきりは どうして でんしゃが くるのが わかるの？ レールの でんきの ひみつ｜しくみ探検",
+    "channel": "ミミとトト",
+    "channel_id": "UCb5ANdsrp6zLa7qxhJWwkKg",
+    "views": 30211,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "2:31"
+   },
+   {
+    "id": "EvtTtChMYjo",
+    "title": "ふみきりはどうやって電車を見つけるの？｜見張り・遮断機・警報機のしくみ",
+    "channel": "キッズコンパスチャンネル",
+    "channel_id": "UC-I0sYZa44qm1AHyJLw8ClQ",
+    "views": 6026,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:31"
+   },
+   {
+    "id": "1_udviPqr7k",
+    "title": "本邦初公開!? 「電鐘式踏切」の内部を見てみた！",
+    "channel": "藤原たぬき 【鉄道】ちゃんねる",
+    "channel_id": "UC5qhTAZFg6ZcZ23xVFiQIFw",
+    "views": 56268,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:07"
+   },
+   {
+    "id": "xef9ckQ-vwE",
+    "title": "単線なのに「約7分」も遮断機が上がらない踏切…その理由を調べてみた",
+    "channel": "ちゃんねるテレポート山陰",
+    "channel_id": "UC9J9Zv8m2nsOpiGk7FITvRw",
+    "views": 40424,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:06"
+   },
+   {
+    "id": "hb9X65ChFKQ",
+    "title": "踏切は、電車が見える前になぜ鳴り始めるのか。【ずんだもん解説】",
+    "channel": "ずんだもんと、しくみをほどく。",
+    "channel_id": "UCkEymaaXTnR_myq1WY0Z5GQ",
+    "views": 92,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "3:07"
+   },
+   {
+    "id": "N-kFh7zC-n0",
+    "title": "踏切は、電車が来る前になぜ閉まる？",
+    "channel": "街のなぜ図解室",
+    "channel_id": "UCnerXOBL_21iiBiM2YVzbVA",
+    "views": 10,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:16"
+   },
+   {
+    "id": "r5sI_e0vOvU",
+    "title": "園児にもわかる踏切の仕組み",
+    "channel": "トッティ博士のデジタル化推進アカデミー",
+    "channel_id": "UCXFbCzycExRxvOpOttbKTMA",
+    "views": 658,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:36"
+   }
+  ],
+  "ATM 仕組み": [
+   {
+    "id": "0ZSkgi0sSTM",
+    "title": "ATMにカードを入れた瞬間、裏で何が起きているのか？あなたの想像とは違います",
+    "channel": "なにがギモン【雑学解説】",
+    "channel_id": "UCoryGG-HTyFRBF5zeeACH-w",
+    "views": 65821,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "6:46"
+   },
+   {
+    "id": "RApRSv0PfTk",
+    "title": "Stories of Techonoogy 「ATM」編 - 日立",
+    "channel": "Hitachi",
+    "channel_id": "UC1uLQAHSG6VXSypf5ng-hCQ",
+    "views": 42920,
+    "published": "13 年前",
+    "age_days": 4745,
+    "length": "13:15"
+   },
+   {
+    "id": "AhAu412znEw",
+    "title": "実はお客様は「あなた」じゃない。コンビニATMの賢すぎるビジネスモデル",
+    "channel": "マネーのからくり図解室",
+    "channel_id": "UClmvStWJmLs1OpBKsoPHFyA",
+    "views": 634327,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "20:07"
+   },
+   {
+    "id": "39ooUvok4w4",
+    "title": "手数料は誰のもの？コンビニATMが儲かる驚きの仕組み",
+    "channel": "なぜ?のカラクリ",
+    "channel_id": "UCUGJRRj5iNTUZa2W0efchNA",
+    "views": 72,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "26:49"
+   },
+   {
+    "id": "SpQZyPBAtA0",
+    "title": "【工場見学】私たちの生活を支えるATMができるまで｜日立チャネルソリューションズ",
+    "channel": "AMAZING FACTORY",
+    "channel_id": "UCuCLpfycF-65dRaPXdnpc1g",
+    "views": 53271,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "11:37"
+   },
+   {
+    "id": "XhSFRsyKdLI",
+    "title": "How An ATM Really Works | Machines: How They Work | CGI Animation | Full Documentary",
+    "channel": "Machina",
+    "channel_id": "UChDl30jdrg7HlHlqtiLQTKA",
+    "views": 174414,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "43:41"
+   },
+   {
+    "id": "YxLm_ifBBhE",
+    "title": "ATM はどのようにして正確な支払額を判断しているのか？",
+    "channel": "Logic Gap 日本語",
+    "channel_id": "UCYDmxwlJ_BsU3MurDtUQoBA",
+    "views": 118,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "26:25"
+   },
+   {
+    "id": "QLivNwPOO6c",
+    "title": "ATM はどうやっていくらの現金を出すべきかを知るのでしょうか?",
+    "channel": "History of Simple Things",
+    "channel_id": "UC95ANqPeSKRNEH1CaCOs2ew",
+    "views": 74683,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "8:22"
+   },
+   {
+    "id": "i-BI4XFXBIA",
+    "title": "小銭大量に持って行ったら銀行の凄いマシーンに案内された",
+    "channel": "あさひ",
+    "channel_id": "UCUW72rEthyinm0kp5iG_Sow",
+    "views": 4608688,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:43"
+   },
+   {
+    "id": "Q9DMDXTwH3c",
+    "title": "コンビニATMはなぜ儲かる？お金をほとんど貸さないセブン銀行のカラクリ【図解】",
+    "channel": "売れるの正体",
+    "channel_id": "UCx8EviHn1H_fpSQDN5OUgTA",
+    "views": 107,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "19:06"
+   },
+   {
+    "id": "Zf3B4LUS_MY",
+    "title": "セブン銀行を生んだ「ATM特化」の経営判断｜融資をしない銀行の収益構造",
+    "channel": "日本企業の決断史",
+    "channel_id": "UCjASb35-xE-oUgdPxXA6_Mw",
+    "views": 1269,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "9:48"
+   },
+   {
+    "id": "tmaClULvM2Y",
+    "title": "利用者は手数料無料なのにどうして儲かるのか。コンビニATMの知られざる収益モデル",
+    "channel": "経済の裏側",
+    "channel_id": "UCCjj_tlMmbS56MRv-InEh3g",
+    "views": 183,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "8:59"
+   },
+   {
+    "id": "PJKeQPts3n0",
+    "title": "知っておいて損はない事＠ATMの裏技",
+    "channel": "黒柴豆太郎",
+    "channel_id": "UCw-7rwloKSSqitOqkF4eu_A",
+    "views": 7307091,
+    "published": "13 年前",
+    "age_days": 4745,
+    "length": "0:58"
+   },
+   {
+    "id": "H1XFmzqThV4",
+    "title": "ATMの中身とは？",
+    "channel": "叛_夜鷹",
+    "channel_id": "UC3EEJsfEG8BNn--Trc7zoNA",
+    "views": 24694,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:16"
+   },
+   {
+    "id": "AbJRCSUHRxY",
+    "title": "ATMの仕組み l 自動現金自動預け払い機の仕組み説明 l",
+    "channel": "Get Think",
+    "channel_id": "UCYSdBJm4y73dhvYy6HGFDBA",
+    "views": 34080,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:59"
+   },
+   {
+    "id": "yeqPc5zhxbI",
+    "title": "【当初は6桁の予定だった】ATMの暗証番号はなぜ4桁なのか",
+    "channel": "Tech History - テクノロジーの物語",
+    "channel_id": "UCKHpaCcBRqjaAR-RVD24bcg",
+    "views": 250,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:21"
+   },
+   {
+    "id": "IrUT3mzEHzY",
+    "title": "なぜATMは24時間動かないのか？ 手数料110円が明かす“無料”の正体",
+    "channel": "経済の解剖室",
+    "channel_id": "UCUC2Sw-5IrkV7b3bS9RSeYg",
+    "views": 82,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "7:31"
+   },
+   {
+    "id": "5TZvPNL8SP0",
+    "title": "【ゆうちょのカードの方】ファミマで下ろす前に確かめて｜2027年から順に、平日の昼も1回220円",
+    "channel": "定年前後のお金の教室",
+    "channel_id": "UCOn82fXXU5TbAXcZNydidPA",
+    "views": 262,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "17:11"
+   },
+   {
+    "id": "96pCDlbor2A",
+    "title": "ファミマのATMがセブン銀行に？ゆうちょATMはどうなる｜手数料0円でもお金が入る仕組み【コンビニATM雑学・ゆうちょ手数料・ローソン銀行・ビジネスモデル】",
+    "channel": "さちの実は深い会社と商品の話",
+    "channel_id": "UCJwnJ7lvo7GCIdW3CUe2uBw",
+    "views": 24,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "15:16"
+   },
+   {
+    "id": "Ade2fz-ZH64",
+    "title": "コンビニATMの手数料は誰のもの？銀行とATMの会社のお金の流れを図解",
+    "channel": "身近なお金のしくみ図鑑",
+    "channel_id": "UCk2Ujo5boYR02YAVJLFfOHA",
+    "views": 15,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "11:41"
+   }
+  ],
+  "バーコード 仕組み": [],
+  "セルフレジ 仕組み": [
+   {
+    "id": "qimyahLFJ1Y",
+    "title": "RFIDとは？1分でわかるセルフレジの仕組み｜サトーRFID",
+    "channel": "SATO Global",
+    "channel_id": "UC3Nfr1czCUftLNznfQ-QsJw",
+    "views": 5650,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:01"
+   },
+   {
+    "id": "CrQZx2Zey5A",
+    "title": "セルフレジの使い方を簡単解説！【1分でわかる】",
+    "channel": "TERAOKA セルフレジ Channel",
+    "channel_id": "UCgzqGIThIM9FqeVQpVIb9LA",
+    "views": 51612,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:55"
+   },
+   {
+    "id": "gj3E8YmLkv8",
+    "title": "【誰でもわかる！】ユニクロ(UNIQLO)無人レジICタグ（RFID）の仕組み",
+    "channel": "RFエンジニア育成所【無線・電波を教える学校】",
+    "channel_id": "UCw64Fd-CqTkfBhtXA6ZvrqQ",
+    "views": 31737,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:19"
+   },
+   {
+    "id": "pUQmcFEiR48",
+    "title": "セブン－イレブン「セルフレジ」２０２５年までに全国展開へ",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 90671,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "0:42"
+   },
+   {
+    "id": "tCS82-G7bkw",
+    "title": "【日本の服屋】ユニクロのセルフレジの使用方法 一連の流れ",
+    "channel": "コミュ症チャンネル",
+    "channel_id": "UCI8ncQMpTPSJ-TI_5iTZHEA",
+    "views": 48431,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:06"
+   },
+   {
+    "id": "GTGbzVsFpK8",
+    "title": "狙われる“セルフレジ”　多い手口とは…　「万引きＧメン」が対策を指導【香川】 (23/02/08 18:01)",
+    "channel": "OHK公式チャンネル",
+    "channel_id": "UCDveJHk8JXfw2ubmixMkogg",
+    "views": 174991,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:39"
+   },
+   {
+    "id": "q625NeuXo8Y",
+    "title": "※釣銭機エラー【新潟市 中央区】ウオロク 関屋店 セルフレジ（現金で支払い）",
+    "channel": "おでかけチャンネル/Outing channel",
+    "channel_id": "UCz7fS3DD75-YzAlNHgpF5NQ",
+    "views": 109472,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:36"
+   },
+   {
+    "id": "S-H43sECuNQ",
+    "title": "【センサーだらけ？】ユニクロで不正ができないのはなぜか",
+    "channel": "ラムダ技術部",
+    "channel_id": "UC8g17oXkRt8buwQL8GU-NSw",
+    "views": 526241,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "4:26"
+   }
+  ],
+  "鍵 仕組み": [
+   {
+    "id": "XMMOawXDPPg",
+    "title": "鍵の内部構造とマスターキーの仕組みを解説する【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 2619944,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:28"
+   },
+   {
+    "id": "i-_oiXsqDy0",
+    "title": "鍵の仕組み",
+    "channel": "KAMIKUN23",
+    "channel_id": "UCMldB3HIMZoH2bUgGtALMGA",
+    "views": 197164,
+    "published": "13 年前",
+    "age_days": 4745,
+    "length": "0:08"
+   },
+   {
+    "id": "BAv6dQuwaZY",
+    "title": "世界最古の鍵、エジプト錠の仕組みが凄い【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 143482,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:05"
+   },
+   {
+    "id": "iBZ71ACskJQ",
+    "title": "ダイヤルキーの仕組み、内部構造を解説する【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 731876,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:54"
+   },
+   {
+    "id": "Wq9TwFoVgy4",
+    "title": "【鍵の仕組み】鍵が回る構造をディスクシリンダーとU9をバラしてただ見るだけの動画です。※鍵開けの解説ではありません Japanese LockSmith",
+    "channel": "カギ屋タウンロックちゃんねる",
+    "channel_id": "UC6UvOP2uiabOIHjO3x7TYbQ",
+    "views": 16146,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "9:32"
+   },
+   {
+    "id": "Kip8ZSUCHUo",
+    "title": "【鍵の仕組み】ピッキングしている時、内部でどの様に動いているかを解説！※これを見たからと言って鍵開けが出来るわけではありません。 LockSmith",
+    "channel": "カギ屋タウンロックちゃんねる",
+    "channel_id": "UC6UvOP2uiabOIHjO3x7TYbQ",
+    "views": 79773,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:45"
+   },
+   {
+    "id": "X86BDV7Z7Nc",
+    "title": "【物理エンジン】下駄箱などに良くある鍵の仕組みを説明する",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 763556,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:13"
+   },
+   {
+    "id": "smIdInCQ-kU",
+    "title": "ピンタンブラー錠の仕組みとは？",
+    "channel": "Jared Owen",
+    "channel_id": "UCbsfyGlrjrKQC0gbzK0-EiA",
+    "views": 5098083,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "3:05"
+   },
+   {
+    "id": "yyfUpAbGTek",
+    "title": "マスターキーは、なぜ1本で全部の部屋を開けられる？",
+    "channel": "しくみの正体",
+    "channel_id": "UCS_EEYRtiF4Hl8aMjyu3xWA",
+    "views": 248127,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:29"
+   },
+   {
+    "id": "mOpkRDFLl8c",
+    "title": "【鍵の仕組み】合鍵作成が失敗する時の鍵内部の仕組みをバラして解説します！LockSmith",
+    "channel": "カギ屋タウンロックちゃんねる",
+    "channel_id": "UC6UvOP2uiabOIHjO3x7TYbQ",
+    "views": 4511,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:27"
+   },
+   {
+    "id": "1LQ9hMk1W8M",
+    "title": "ドアの鍵の仕組み",
+    "channel": "柳田理科雄の1日1科学by栄光ゼミナール",
+    "channel_id": "UCfGev97nL44qTwj7rwZSaKA",
+    "views": 18560,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "3:14"
+   },
+   {
+    "id": "BbuGVf_oNSc",
+    "title": "共通鍵暗号方式と公開鍵暗号方式の仕組みをわかりやすく解説【情報I基礎】4-12 暗号化の仕組み",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 74387,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:37"
+   },
+   {
+    "id": "DU343XFnlNk",
+    "title": "【悪用禁止】自転車カギ壊して中の仕組みを研究！ディンプルキー",
+    "channel": "feMarフェマール【道路・交通系・廃道】",
+    "channel_id": "UCKIS2hBibhhOZD8c25aJDuQ",
+    "views": 103442,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "7:59"
+   },
+   {
+    "id": "IA3UPHiBpf0",
+    "title": "鍵の仕組みを3Dで解説｜合う鍵でしか回らない理由と、ピッキングとの戦い",
+    "channel": "カラクリ研究所",
+    "channel_id": "UCUcBSAOY2-Aknvzn4zUo09A",
+    "views": 0,
+    "published": "6 時間前",
+    "age_days": 0,
+    "length": "7:46"
+   },
+   {
+    "id": "cNk4WN_7OY8",
+    "title": "【仕組み】マスターキーの構造を3Dプリントで再現！ How Master Keys Work? [ENG SUB] #3dprinting #鍵",
+    "channel": "もえ屋 Moeya 3D Designs",
+    "channel_id": "UC3Z0kX4Dr84hw6N-hnim4lA",
+    "views": 182488,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "2:04"
+   },
+   {
+    "id": "dBAewkKNYZk",
+    "title": "【MIWA,美和ロック】鍵の仕組みがこれ1本でわかる！各部の名称と働き【完全解説】",
+    "channel": "鍵の卸売りセンターYouTubeチャンネル",
+    "channel_id": "UCVbtZFadweAZLwadpZ_--NQ",
+    "views": 891,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "1:54"
+   }
+  ],
+  "蛇口 仕組み": [
+   {
+    "id": "2gAUhjn3gF4",
+    "title": "水道水栓蛇口の構造仕組み",
+    "channel": "jisyukanri",
+    "channel_id": "UCIO55NIcGgsuUKiTeaafWTQ",
+    "views": 299109,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "3:43"
+   },
+   {
+    "id": "0sVUF8xv4EM",
+    "title": "【DIY初心者用】水栓の構造と仕組みと交換部品の解説動画です",
+    "channel": "かんたん!自分で直す水まわりチャンネル",
+    "channel_id": "UCxweMeDJbyKdcdf8BozjApA",
+    "views": 4733,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:58"
+   },
+   {
+    "id": "BejiTJ5FaaA",
+    "title": "蛇口はなぜレバー1本で温度と水量が同時に変わる？中に入っている板2枚のしくみ",
+    "channel": "フタのむこう側",
+    "channel_id": "UCbpw7unIuQXBbf7h2yIlvQg",
+    "views": 65,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "5:07"
+   },
+   {
+    "id": "TbG884qQsvQ",
+    "title": "蛇口のコマ、結局どれ買う？水道屋が違いを解説",
+    "channel": "かんたん!自分で直す水まわりチャンネル",
+    "channel_id": "UCxweMeDJbyKdcdf8BozjApA",
+    "views": 44289,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "8:04"
+   },
+   {
+    "id": "BgBZ1O2FBo0",
+    "title": "水栓器具の構成部品",
+    "channel": "jisyukanri",
+    "channel_id": "UCIO55NIcGgsuUKiTeaafWTQ",
+    "views": 7170,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "3:07"
+   },
+   {
+    "id": "j6qGF2w_YM4",
+    "title": "【物理エンジン】水洗トイレが流れる仕組みを視覚的に解説した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 3034570,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:37"
+   },
+   {
+    "id": "o3nkaNjJI38",
+    "title": "【水栓金具とは】サーモスタット水栓",
+    "channel": "鈴木航介",
+    "channel_id": "UCmtPLypK3D-my1LWB7SCzWg",
+    "views": 43543,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "0:15"
+   },
+   {
+    "id": "qoFhb0boYrc",
+    "title": "【蛇口の構造が分かる】蛇口を分解！！パッキン交換などの参考にどうぞ。",
+    "channel": "親指プリン味なDIY",
+    "channel_id": "UC7R-vj0b-AtzkDCf0stC1UQ",
+    "views": 3972,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "5:02"
+   },
+   {
+    "id": "GxwBQsJ7c8o",
+    "title": "蛇口の水道水はどのようにして家まで届くのか",
+    "channel": "日常の裏側",
+    "channel_id": "UC9DscOHQj4fO8VbbeOOSDLQ",
+    "views": 316,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "9:09"
+   },
+   {
+    "id": "hBMAT0oJ8s8",
+    "title": "自動で止まるシャワーの仕組み【銭湯・温泉】",
+    "channel": "AZAMI STUDIO（あざみスタジオ）",
+    "channel_id": "UCuTj0xvDYxZNNnMvBSVEpkw",
+    "views": 11532,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:30"
+   }
+  ],
+  "クオーツ 時計 仕組み": [
+   {
+    "id": "udhlqZtg6AQ",
+    "title": "【面白い物理】クオーツ時計の仕組み。なんで正確に時を刻めるのか？【圧電効果】【周波数】",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 18133,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:09"
+   },
+   {
+    "id": "B22N0zifYfo",
+    "title": "クォーツって何？時計の歴史を変えた鉱石のひみつ",
+    "channel": "詳細エンジニアリング",
+    "channel_id": "UCPYNtEuzSKRsYJxpPDqmgEA",
+    "views": 14231,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "7:31"
+   },
+   {
+    "id": "cg6BwUhhJkw",
+    "title": "​【図解】クォーツ時計はなぜ正確に時を刻めるのか？「水晶の振動」を「針の動き」に変える驚異のテクノロジー",
+    "channel": "ニッチな時計士・時計修理と知識チャンネル",
+    "channel_id": "UCmJvMkw4yW3TFwHvlpSfDlA",
+    "views": 9074,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:12"
+   },
+   {
+    "id": "IEzXTO7-6Lc",
+    "title": "【腕時計】クオーツムーブメントの中身を見てみよう！！",
+    "channel": "歩いて探すWATCHブログ ! CAPO",
+    "channel_id": "UC6_3iwC2xK14EJ29tQsMaGQ",
+    "views": 9416,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:34"
+   },
+   {
+    "id": "r4DRNRow3is",
+    "title": "クォーツ時計のクォーツは【水晶】水晶が時間を作るってどういうこと？ #クォーツ #圧電効果 #発振回路 #32,768Hz #ステップモーター #雑学",
+    "channel": "きねこぷう",
+    "channel_id": "UCCtLMPHb0Q73vEBOv47zLCw",
+    "views": 234,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "3:55"
+   },
+   {
+    "id": "ohlcJPzgyWI",
+    "title": "何が違う？どっちがいい？機械式とクオーツ式の腕時計比較【 腕時計の基礎知識 】",
+    "channel": "腕時計のななぷれ チャンネル",
+    "channel_id": "UCFpuEas3vchRBPJ-qtv0dLw",
+    "views": 23339,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "18:46"
+   },
+   {
+    "id": "Id_Ij85qUh8",
+    "title": "本当に知っていますか？腕時計の機械式とクオーツの違い(クオーツ編)",
+    "channel": "腕時計専門店ベルモンド 中野店",
+    "channel_id": "UCfyzPYBn1et4R6VPnQuDhqQ",
+    "views": 905,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:40"
+   },
+   {
+    "id": "gTEva1oycHo",
+    "title": "【実話】スイス高級時計に日本がガチギレした結果（ずんだもん×ゆっくり解説）",
+    "channel": "世界まる見えずんだもん",
+    "channel_id": "UCXzt6u4VooLQcyc3-yIFIcw",
+    "views": 1205624,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "21:58"
+   },
+   {
+    "id": "tIYpgtqhs8E",
+    "title": "山田五郎氏の腕時計講座セイコー編 クオーツショックは誰のせい?セイコーの歴史や魅力を解説!",
+    "channel": "EYE EYE ISUZU",
+    "channel_id": "UCThKtm_RWJtsBv_gf01EKPA",
+    "views": 149984,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "30:56"
+   },
+   {
+    "id": "VgAac-TnQqI",
+    "title": "古いクォーツ、それ直せるかもしれません。",
+    "channel": "藤本信和 / オンラインウォッチアカデミー",
+    "channel_id": "UCO5Ho926sEZ4gKDMm5vd8eg",
+    "views": 167459,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "24:27"
+   },
+   {
+    "id": "56YrrIH9ZAI",
+    "title": "【挑戦】11分でわかる機械式時計とクオーツ式時計。",
+    "channel": "NEX工業",
+    "channel_id": "UCf8arBDjvsjcoFyMVuB1YEg",
+    "views": 42187,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:40"
+   },
+   {
+    "id": "BwR0DWTjIa8",
+    "title": "クオーツ腕時計を作った人たち",
+    "channel": "fm1484",
+    "channel_id": "UC-E5ZgtITeTMl2xP0hK01qw",
+    "views": 212430,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "25:24"
+   },
+   {
+    "id": "7it4ucSdmuA",
+    "title": "夢を描く挑戦者たち　水晶振動子編｜京セラ",
+    "channel": "京セラ株式会社",
+    "channel_id": "UC87ZbnzgePsVPdwxgq8LJnA",
+    "views": 30131,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "5:03"
+   },
+   {
+    "id": "Z3GYivagT8E",
+    "title": "【ゆっくり解説】色んな種類の時計の仕組みを解説。原子時計/クォーツ時計/機械式時計/光格子時計",
+    "channel": "サルの思考",
+    "channel_id": "UCuBf8UJ60kz0WZ7HD65o8zg",
+    "views": 12800,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:06"
+   }
+  ],
+  "オートフォーカス 仕組み": [
+   {
+    "id": "iduKtUUt8mc",
+    "title": "これ1本で完結。EOS R6 Mark IIIのAF・フォーカス機能を基礎から徹底的に解説",
+    "channel": "Aki / KOBE FINDER",
+    "channel_id": "UCan_KZOBP4W5XwMiq3_BNBw",
+    "views": 15774,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "34:07"
+   },
+   {
+    "id": "QkY_4DfXSgA",
+    "title": "【AF】カメラのオートフォーカスの種類と使い方解説！",
+    "channel": "TAKUYA Cinema",
+    "channel_id": "UCC-d1H94b5ZnDqqFIoM_xdw",
+    "views": 1028,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:14"
+   },
+   {
+    "id": "S17h8ZMrCQs",
+    "title": "【いまさら聞けない】位相差AFとコントラストAF　～結局どっちがいいの？～",
+    "channel": "カメラ部TV",
+    "channel_id": "UCppaD2aunuip_c89XxpIx6w",
+    "views": 84822,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:02"
+   },
+   {
+    "id": "-naPRKWbjm4",
+    "title": "カメラのオートフォーカスを学ぼう。コントラストAF 像面位相差AF 位相差AF それぞれのメリットを解説します。",
+    "channel": "カメラ塾【JimaTube】 ",
+    "channel_id": "UCVD5FFC1ZctcCrueblVhQNg",
+    "views": 10601,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "21:17"
+   },
+   {
+    "id": "d3H1oxBMAOQ",
+    "title": "【最新のAFを使ってみよう】AIによる認識AFはスゴいぞ！",
+    "channel": "写真家 井上浩輝の写真表現ゼミ  -  Hiroki INOUE",
+    "channel_id": "UC9yK7q19QN4pkmKOibxipgA",
+    "views": 21589,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:37"
+   },
+   {
+    "id": "p5j_ypi41Q0",
+    "title": "もうピンボケで後悔しない！AF-SとAF-Cの使い分け",
+    "channel": "天才カメラマンRuu ",
+    "channel_id": "UCepoVVjaN-lxhowRmuJCJ_Q",
+    "views": 16655,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "17:40"
+   },
+   {
+    "id": "3AKxzM5tFqM",
+    "title": "AF（オートフォーカス）の種類と使い方は？3分で解説します。",
+    "channel": "高澤 けーすけ",
+    "channel_id": "UCxR3l8_ZzI2PMG4ajG7ouRw",
+    "views": 85012,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:57"
+   },
+   {
+    "id": "NlzhEvAlSss",
+    "title": "【完全保存版】一緒に覚えよう！SONYのAF攻略ガイド｜状況別に最適な方法も解説します！！",
+    "channel": "AKIYA MOVIE",
+    "channel_id": "UCXeGg0Pv1hAkAUYrhyf0aVg",
+    "views": 300372,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "21:51"
+   },
+   {
+    "id": "pKpOCJ3DDnw",
+    "title": "【初心者カメラ講座】図解でわかるAF-SとAF-Cの違いと使い方",
+    "channel": "star view studio 〜カメラで人生を楽しく〜",
+    "channel_id": "UCsUbz7ilkJbfqe9Py6RdxPw",
+    "views": 145560,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "14:17"
+   },
+   {
+    "id": "itI35w5PpLI",
+    "title": "#03 AFとMFの違いを理解しよう＜カメラの基礎マスター＞",
+    "channel": "なべカメラ",
+    "channel_id": "UCrjN5WDl7aY5RQZBdTo6hWA",
+    "views": 1762,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:36"
+   },
+   {
+    "id": "k6ZOlGOW3so",
+    "title": "カメラで写真が撮れる仕組み",
+    "channel": "仕組みチャンネル",
+    "channel_id": "UCFIFAinqRitrg-WJIoerl8A",
+    "views": 38052,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "19:08"
+   },
+   {
+    "id": "nZB77B7Gxks",
+    "title": "「オートフォーカス双眼鏡」の闇。Amazonや楽天で売られている正体を暴露します",
+    "channel": "双眼鏡の教科書【観劇・ライブ専門】",
+    "channel_id": "UC1Gq3lc-jmI86QAHvxII7pg",
+    "views": 2189,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "3:04"
+   },
+   {
+    "id": "RA_C12IdBLQ",
+    "title": "元カメラ開発者がAF方式について説明する動画",
+    "channel": "NIIYAチャンネル",
+    "channel_id": "UCUQJM5jmOqRu2QTr1iNKlRA",
+    "views": 449,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "10:59"
+   },
+   {
+    "id": "o8m0Fv54Euk",
+    "title": "ピントが外れて絶望したくない人へ。AF任せはもう卒業。一瞬でできる「AF/MF切替」の極意",
+    "channel": "Yosuke Kawakami | 映像クリエイター",
+    "channel_id": "UC107R-WYMbRMeqLCJD-ReEQ",
+    "views": 754,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "4:35"
+   },
+   {
+    "id": "FBekL-KAL90",
+    "title": "【AFとは？】オートフォーカスって何？種類と使い方を紹介【ニコン初心者向け】",
+    "channel": "star view studio 〜カメラで人生を楽しく〜",
+    "channel_id": "UCsUbz7ilkJbfqe9Py6RdxPw",
+    "views": 26658,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "17:21"
+   },
+   {
+    "id": "fuGyDjGaLTk",
+    "title": "【初心者カメラ講座】オートフォーカスの種類と特徴を完全解説 【実例でわかる AFエリア/フォーカスモード、ピントの合わせ方】ピン甘写真をなくす撮影の上達法。",
+    "channel": "カメラ塾【JimaTube】 ",
+    "channel_id": "UCVD5FFC1ZctcCrueblVhQNg",
+    "views": 101595,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:13:23"
+   },
+   {
+    "id": "O10oYPjm_bE",
+    "title": "【保存版!!】動画のオートフォーカス徹底解説！Sony A7IV、A7sIII、FX3、A7III、FX30、A6600、A7c",
+    "channel": "映像とまと",
+    "channel_id": "UC4kLp7HjBOLi2hl1m4rusZw",
+    "views": 29266,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:56"
+   },
+   {
+    "id": "sz6MNGmEkd4",
+    "title": "【初心者向け】マニュアルフォーカスとオートフォーカスの使い分け！",
+    "channel": "北の映像舎",
+    "channel_id": "UCtdazPbwpVRlqNjZhP2m3Tw",
+    "views": 1520,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:25"
+   },
+   {
+    "id": "ASHABjtGspE",
+    "title": "【なぜかピントが合わない？】AF-S / AF-C とエリア選択の基本＆裏技を徹底解説【初心者〜中級者必見】#オートフォーカス #ピンボケ解消  #ミラーレス一眼",
+    "channel": "なんくるフォト塾",
+    "channel_id": "UCmNPEbUdTMjkLNPfBbFj4dg",
+    "views": 1432,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:37"
+   },
+   {
+    "id": "zMro98CdTl0",
+    "title": "【オートフォーカス設定】狙いどおりにピントを合わせる方法【Sony α7 Ⅳ、α7S III、α7R Ⅳ、α7C、α1、α9対応】",
+    "channel": "かつきしょうへい",
+    "channel_id": "UC3HOWiYMLNYDA0rnPKSFmaw",
+    "views": 163500,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "7:49"
+   }
+  ],
+  "タッチパネル 仕組み": [
+   {
+    "id": "5y3cHuyXNzA",
+    "title": "【解説】タッチパネルの仕組みは意外と簡単だった？",
+    "channel": "マキシンCHANNEL",
+    "channel_id": "UCs4CWblHTvlFI22YYPckNRg",
+    "views": 514,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:58"
+   },
+   {
+    "id": "Y_drCeaj1SU",
+    "title": "【ゆっくり解説】タッチパネルはなぜ触った場所がわかるか？【抵抗膜方式、静電容量方式】",
+    "channel": "ゆっくり解説「すまーとテクノロジー」",
+    "channel_id": "UCc1wB4qaIesWumAl6STmcdg",
+    "views": 5754,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:37"
+   },
+   {
+    "id": "t2YJd803W88",
+    "title": "【面白い物理】タッチパネルはなぜ触って操作できるのか？【静電容量方式】【スマホ】",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 3845,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:27"
+   },
+   {
+    "id": "KuT8v9NZlXE",
+    "title": "タッチスクリーンの仕組み",
+    "channel": "ブライトサイド | Bright Side Japan",
+    "channel_id": "UC1bmnUH1ffc63zohkPvtXcQ",
+    "views": 55411,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "12:46"
+   },
+   {
+    "id": "B6_8eb1Emzk",
+    "title": "スマホのタッチパネルが反応する仕組み｜静電容量方式を徹底解説",
+    "channel": "ちょこっといい雑学 Ι 身近な疑問や豆知識・ライフハックをお届け",
+    "channel_id": "UCYWCN7cGlFIm78PxxoEk-ig",
+    "views": 49,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:16"
+   },
+   {
+    "id": "yocpRAY69sc",
+    "title": "【スマホ】今さら聞けないタッチパネルの仕組み。【今学べ！】",
+    "channel": "今さら聞けないをこっそり学ぶ",
+    "channel_id": "UCwhE4BX5Myo4Rae1z1l4fyw",
+    "views": 250,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:03"
+   },
+   {
+    "id": "ZAf0s1vUCGA",
+    "title": "スマホ タッチパネル 仕組み｜画面に触れた一瞬、スマホの中で起きていること【身近な物の仕組み】",
+    "channel": "まどろみ研究所",
+    "channel_id": "UCZmvI78ibTfS53vQGbSglag",
+    "views": 1,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "15:21"
+   },
+   {
+    "id": "34hTI4POz78",
+    "title": "スマホのタッチパネルは、なぜ指の場所が分かる？｜静電容量から座標・スワイプまで図解",
+    "channel": "ずんだもんとあんこもんの ITつまみ食い",
+    "channel_id": "UCyt762UJtYyOU0AAospY_Vw",
+    "views": 28,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "11:03"
+   },
+   {
+    "id": "eR6FOMCCbKg",
+    "title": "【スマホ】誰でも10分でマスター！こんなに簡単だった！タッチパネルの仕組み！",
+    "channel": "わたぽんち",
+    "channel_id": "UCdhsMSx1Ulux7xFJS9ioStQ",
+    "views": 4700,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:08"
+   },
+   {
+    "id": "Os1RsuYt4WA",
+    "title": "抵抗膜方式 | タッチパネルの仕組み",
+    "channel": "タッチパネル研究所",
+    "channel_id": "UCiVZdufe7mfyHp_9JcrmZAg",
+    "views": 2588,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:24"
+   },
+   {
+    "id": "RrTzsMVT1Lg",
+    "title": "超音波方式 | タッチパネルの仕組み",
+    "channel": "タッチパネル研究所",
+    "channel_id": "UCiVZdufe7mfyHp_9JcrmZAg",
+    "views": 952,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:39"
+   },
+   {
+    "id": "TOJSamRI1TI",
+    "title": "タッチパネルはどうやって指を検知する？仕組みと違い",
+    "channel": "今更だけど、一歩前に進むための小さな学び",
+    "channel_id": "UCr5EZ5HnzvU9uMPxpNOQUAg",
+    "views": 0,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "2:37"
+   },
+   {
+    "id": "G8jaVsWkhKA",
+    "title": "タッチパネルはなぜ指に反応する？｜しくみのひとコマ",
+    "channel": "しくみのひとコマ",
+    "channel_id": "UCi-W5boAt_pPjloeglxNNwQ",
+    "views": 18,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:38"
+   },
+   {
+    "id": "Wu5WV-Tpqgw",
+    "title": "赤外線方式 | タッチパネルの仕組み",
+    "channel": "タッチパネル研究所",
+    "channel_id": "UCiVZdufe7mfyHp_9JcrmZAg",
+    "views": 2795,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:01"
+   }
+  ],
+  "液晶 仕組み": [],
+  "電池 仕組み": [
+   {
+    "id": "bqUbHGXoRyQ",
+    "title": "【面白い化学】乾電池の仕組み。イオン化を使った美しいマンガン電池の製品構造。",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 10044,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:00"
+   },
+   {
+    "id": "FsKEQcMHcJo",
+    "title": "【絶対やってはいけない】アルカリ電池分解！やってみた・・・",
+    "channel": "GENKI LABO",
+    "channel_id": "UC46u5qG6vqDdrNYgqRVvq3Q",
+    "views": 440717,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:59"
+   },
+   {
+    "id": "hwPt_-ts_Ao",
+    "title": "【中３】ダニエル電池どんな感じ？【中学理科総復習】【化学変化イオン・電池】",
+    "channel": "ぽにょん 中学理科あにめ！",
+    "channel_id": "UCn6MBerG82B0G25S62rZCZg",
+    "views": 131452,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:39"
+   },
+   {
+    "id": "x_CEZFzBIv0",
+    "title": "木炭電池／Charcoal Battery",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 42336,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:01"
+   },
+   {
+    "id": "F646xqJSfUY",
+    "title": "手づくり電池／ Handmade Batteries",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 35145,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "Too2-pJPsYY",
+    "title": "【ゆっくり解説】電池の仕組み 電気ってなに？",
+    "channel": "Easy Science - おうちで出来る簡単科学 -",
+    "channel_id": "UCTOWb8Ojn7_VOzRk39QH5nA",
+    "views": 17375,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:22"
+   },
+   {
+    "id": "iapCwGiAqXI",
+    "title": "乾電池の仕組み　電池の原理と乾電池の構造【ゆっくり解説】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 6547,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:06"
+   },
+   {
+    "id": "u-90YUThotk",
+    "title": "【化学】電池の考え方がクリアに理解できる動画",
+    "channel": "カサニマロ【べんとう・ふきのとうの授業動画】",
+    "channel_id": "UCZ3daKzWhRfpCYhfC6qrT-g",
+    "views": 288969,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "18:14"
+   },
+   {
+    "id": "nht4tadCc-s",
+    "title": "【電気の知識シリーズ】バッテリーってどうなっているの？ ～電池のしくみ～",
+    "channel": "一般社団法人電気学会IEEJ",
+    "channel_id": "UCL88CjinmTAIMQhuBvWYVBg",
+    "views": 2589,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "9:24"
+   },
+   {
+    "id": "ve0LA6gcm9g",
+    "title": "【化学基礎】　物質の変化46　電池の原理　（８分）",
+    "channel": "映像授業 Try IT（トライイット）",
+    "channel_id": "UCcj-cHmS0uD91MLjtdiN89Q",
+    "views": 181158,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "7:34"
+   },
+   {
+    "id": "tNaYaSbDWBE",
+    "title": "ボルタ電池／The Voltaic Pile",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 58818,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:01"
+   },
+   {
+    "id": "F06DhyeP9zo",
+    "title": "【中学理科】ダニエル電池を誰でも理解できる動画～イメージで理解～ 1-4.5【中３理科】",
+    "channel": "【楽しい授業動画】あきとんとん",
+    "channel_id": "UCl1m-E6cjzpBmyhmxJB4zeQ",
+    "views": 222557,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:05"
+   },
+   {
+    "id": "LhFYd9FEz_8",
+    "title": "自動車のバッテリーの仕組みを解説！劣化で上がりやすくなる理由は？【容量と寿命】",
+    "channel": "メカのロマンを探究する会",
+    "channel_id": "UCF6wuHiDCITXvafXYP93TMw",
+    "views": 212153,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "15:01"
+   },
+   {
+    "id": "CKuFGeEmaQk",
+    "title": "化学基礎　マンガン電池の仕組み",
+    "channel": "Nagira Academy",
+    "channel_id": "UCOx0BVShchb6RhqxYH8Uw5A",
+    "views": 44920,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "5:20"
+   },
+   {
+    "id": "PUVV3D8Xg70",
+    "title": "リチウムイオン電池はなぜ最強の電池なのか？仕組み・原理・長所を解説",
+    "channel": "もろぴー有機化学・研究ちゃんねる",
+    "channel_id": "UCVdqfcGIhXFEe4JDV97X1ig",
+    "views": 9818,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "7:35"
+   },
+   {
+    "id": "UA5z8Nzlqfw",
+    "title": "【中学理科】ボルタ電池を世界一分かりやすく～イメージで理解しよう～ 1-4【中３理科】",
+    "channel": "【楽しい授業動画】あきとんとん",
+    "channel_id": "UCl1m-E6cjzpBmyhmxJB4zeQ",
+    "views": 113064,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:32"
+   },
+   {
+    "id": "04m8lV0m69Y",
+    "title": "5分で分かるリチウムイオンバッテリーの仕組み（充放電時のリチウムイオンと電子の動き/電解質・セパレーター・集電体・外部回路の役割）",
+    "channel": "DIYと掃除機ときどき猫",
+    "channel_id": "UC0mTur_TH1_0EXpzMyJi0Qw",
+    "views": 21093,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:21"
+   },
+   {
+    "id": "DA3mjoxQJf8",
+    "title": "「ものしりッス」電池って、どうして電気をためられるの？",
+    "channel": "SBSnews6",
+    "channel_id": "UCOLVB0iYK8ahQ0mFn-lF-8g",
+    "views": 5000,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:17"
+   },
+   {
+    "id": "PZckGA_LQ_g",
+    "title": "電池には液体？固体？（ゆっくり化学解説番外地4）",
+    "channel": "高杉晋作の余談だらけのゆっくり化学解説",
+    "channel_id": "UCOWNqU3svMapjmGwT5FGnSg",
+    "views": 12279,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:49"
+   }
+  ],
+  "LED 仕組み": [
+   {
+    "id": "fxZpRqbxHwA",
+    "title": "LEDの「光」の仕組み｜Panasonic",
+    "channel": "Channel Panasonic - Official",
+    "channel_id": "UCOcdBuUur7MiKPdHQUM_8IA",
+    "views": 141643,
+    "published": "13 年前",
+    "age_days": 4745,
+    "length": "1:48"
+   },
+   {
+    "id": "3YoN5RLrHj4",
+    "title": "【衝撃】LEDってこんなにすごいんだ！知らないと損する仕組みを数式なしで感覚的に理解する【ダイオード】【PN接合】",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 3851,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:07"
+   },
+   {
+    "id": "r5-XTb4U7G0",
+    "title": "LEDの面白い性質／The Fascinating Properties of LEDs",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 66818,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "gFmZtkUG7jg",
+    "title": "ＬＥＤ照明のナゾ／The Mystery of LEDs",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 43896,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "RgP4uPyhyCI",
+    "title": "【なぜ光る？】LEDの仕組みを知ろう！【エンジニア】",
+    "channel": "Care Cube 【公式】",
+    "channel_id": "UCaCBYyagIw4Ox1iY5vZdIbw",
+    "views": 2759,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:19"
+   },
+   {
+    "id": "LeWiaxt-3jc",
+    "title": "【電子部品】LEDはなぜ光る？LEDの原理解説",
+    "channel": "STCソルダリングテクノロジセンター 佐竹正宏",
+    "channel_id": "UCW0jRjKtmc7VT2C8v0rEFDQ",
+    "views": 21941,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "12:40"
+   },
+   {
+    "id": "tldXlala2hs",
+    "title": "ＬＥＤとは何だろう？",
+    "channel": "柳田理科雄の1日1科学by栄光ゼミナール",
+    "channel_id": "UCfGev97nL44qTwj7rwZSaKA",
+    "views": 10517,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "3:14"
+   },
+   {
+    "id": "NUR9tebFDRc",
+    "title": "LEDの仕組みと利点 | 半導体 | 物理学 | カーンアカデミー",
+    "channel": "Khan Academy India - English",
+    "channel_id": "UCg4BkaHyyE_4-RvEMJ2PTtA",
+    "views": 217489,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:47"
+   },
+   {
+    "id": "QF9hZM7N-OY",
+    "title": "【物理エンジン】LEDはなぜ安いのか？発光原理を物理的に説明した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 813615,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "8:12"
+   },
+   {
+    "id": "jJImKK9rMnE",
+    "title": "【電気雑学】LEDの仕組み｜経歴20年の電気技術者が「超」噛み砕いて解説！文系でも分かる！",
+    "channel": "秘密の電気回路教室",
+    "channel_id": "UCZXLt-XbtnaqpUP7H4GRRpQ",
+    "views": 3868,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "23:53"
+   },
+   {
+    "id": "WgpVOniCGOM",
+    "title": "【1分解説】LEDのしくみ",
+    "channel": "1分解説",
+    "channel_id": "UC811T0Y-tFMV0fjGVJ7Sprg",
+    "views": 2,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "1:00"
+   },
+   {
+    "id": "ccWTYTqnv3U",
+    "title": "LED・白熱電球・蛍光灯は何が違う？構造・電気代・寿命を比較｜しくみのひとコマ",
+    "channel": "しくみのひとコマ",
+    "channel_id": "UCi-W5boAt_pPjloeglxNNwQ",
+    "views": 536,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "6:25"
+   },
+   {
+    "id": "wBEOjv3rkv0",
+    "title": "1.5Vで光る懐中電灯のしくみと、LEDやインダクターを解説します",
+    "channel": "まさやん",
+    "channel_id": "UCtZaPo15cki7797-SALhA1A",
+    "views": 7037,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:41"
+   },
+   {
+    "id": "9BDTtcRMxpA",
+    "title": "LEDの仕組み ⚡ LED（発光ダイオード）とは",
+    "channel": "VirtualBrain [ENG]",
+    "channel_id": "UCuQx7p1UZA0CMlxnGwy34eg",
+    "views": 1674881,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:37"
+   },
+   {
+    "id": "2ZEr0rsDJNI",
+    "title": "LED（発光ダイオード）。LEDは豆電球とどこがちがうの？実験を交えて説明しました。",
+    "channel": "観るだけで賢くなる理科の話",
+    "channel_id": "UC5-lOB3_zMkjr2ji8sYBfvg",
+    "views": 12413,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "19:39"
+   },
+   {
+    "id": "r1LQV_fuIrQ",
+    "title": "発光ダイオード(LED)の発光の原理・仕組みや違いとは",
+    "channel": "FiberLabs Inc.",
+    "channel_id": "UCno_lBbOV01qzOtB5QpPf6g",
+    "views": 13227,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "3:37"
+   },
+   {
+    "id": "kWBx3kKoMn4",
+    "title": "なぜLED電球はあんなに少ない電力で光るのか？",
+    "channel": "なにがギモン【雑学解説】",
+    "channel_id": "UCoryGG-HTyFRBF5zeeACH-w",
+    "views": 7081,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "6:13"
+   },
+   {
+    "id": "5YlvQMZyxgA",
+    "title": "LEDってなんで光るの？照明の歴史と原理、半導体について【ゆっくり解説】【科学】",
+    "channel": "notime図書館",
+    "channel_id": "UC7rmxqOgwR75Pp1oH_HZWUg",
+    "views": 6990,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:07"
+   },
+   {
+    "id": "45_AgNumano",
+    "title": "【面白い物理】実はそれぞれ違うライトの仕組み。白熱電球、蛍光灯、LEDの違いを解説。ライトの進化は人類の進化の歴史。",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 5239,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:31"
+   },
+   {
+    "id": "qa5T2_KnkiU",
+    "title": "1分（5分半）解説　LDEライトってどんな仕組み？",
+    "channel": "えんどうの化学",
+    "channel_id": "UCzlB1BCFBUsCcq3QK9KGxmQ",
+    "views": 128,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:40"
+   }
+  ],
+  "Wi-Fi 仕組み": [
+   {
+    "id": "Wtf_hRpigFw",
+    "title": "【今さら聞けない】Wi Fiってなに？【小学生でもわかる・ざっくり解説】",
+    "channel": "ぺんぺん特報",
+    "channel_id": "UCmiAcub8tOL6WBF106Lh64A",
+    "views": 217627,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "12:04"
+   },
+   {
+    "id": "GmPp8tFsJY8",
+    "title": "WiFiとは？超初心者向けにわかりやすく説明します【無線LAN｜WiFiのメリット】",
+    "channel": "NETGEAR Japan",
+    "channel_id": "UCs7AbfkyLvZNSP-NsJPNemA",
+    "views": 24505,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:41"
+   },
+   {
+    "id": "AFEhHGzidNI",
+    "title": "WIFI が実際にどのように機能するか。",
+    "channel": "The Default Guy",
+    "channel_id": "UCb7fgFCDfeqBUIqS0AFBikQ",
+    "views": 881416,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:22"
+   },
+   {
+    "id": "xtKhnIf2Hfk",
+    "title": "欠点だらけのWi-Fiは、なぜ世界標準になれたのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 99480,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "24:47"
+   },
+   {
+    "id": "3AprahXMA5A",
+    "title": "【Wi-Fiの基本】Wi-Fiと無線LANの違いとは？ | Wi-Fiネットワーク講座【入門編】",
+    "channel": "ファイバーゲートTV",
+    "channel_id": "UC-oEmkbCXf1tQfUdt65mLPg",
+    "views": 10291,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:18"
+   },
+   {
+    "id": "t8Ar70pZ_IA",
+    "title": "モデムとルーターの違いを、初心者にも分かりやすく解説！",
+    "channel": "ノジマ【公式】チャンネル",
+    "channel_id": "UCrFGUKtdBJbPLYNlhYDLPgw",
+    "views": 464861,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:46"
+   },
+   {
+    "id": "iki5mL6JoEE",
+    "title": "モデム・ルーター・ONUは一体何が違う？ホームゲートウェイや二重ルーターについても解説！",
+    "channel": "ネット回線アンバサダー",
+    "channel_id": "UCuMfQ0tD5_D-7Sn-6HlWI3Q",
+    "views": 1323266,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "13:30"
+   },
+   {
+    "id": "rIMeni0ZYZ8",
+    "title": "Wi Fiの基礎知識　無線LANの歴史と基本概念の探求【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 2070,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "16:01"
+   },
+   {
+    "id": "w_wqcIHCV3E",
+    "title": "Wi-Fiと携帯電波の違いや仕組みを知っていますか？",
+    "channel": "スマサポチャンネル",
+    "channel_id": "UCMXjwK6-rRw-la5SN5j0M6g",
+    "views": 248000,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:05"
+   },
+   {
+    "id": "BPODklKbx5s",
+    "title": "インターネットはどんなしくみなのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1736973,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:16"
+   },
+   {
+    "id": "0apaPoVoIpY",
+    "title": "Wi-Fiって何ですか？接続の手順は？【今さら聞けない】",
+    "channel": "パソコン修理屋の豆知識",
+    "channel_id": "UCKPZsaXTuIgEfzeKVFMpn7Q",
+    "views": 93798,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "23:54"
+   },
+   {
+    "id": "Cgh_XgqytFY",
+    "title": "【今更聞けない】wi-fiとは何か？業界人が解説！",
+    "channel": "福永トーク",
+    "channel_id": "UCGuWfQRKh7Hrk9grHct_mpA",
+    "views": 103481,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:37"
+   },
+   {
+    "id": "71XkQPtYNyE",
+    "title": "Wi-Fiと無線LANとLTEの違いとは？わかりやすく初心者に説明【音速パソコン教室】",
+    "channel": "音速パソコン教室。1万人が自宅でパソコン上達。",
+    "channel_id": "UCYAPVqVW8hDn9K0zgpL0foQ",
+    "views": 2459657,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "13:44"
+   },
+   {
+    "id": "Rj_VmDAjagI",
+    "title": "【今さら聞けない】WiFiって何ですか？接続の手順は？",
+    "channel": "パソコン修理屋の豆知識",
+    "channel_id": "UCKPZsaXTuIgEfzeKVFMpn7Q",
+    "views": 988989,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "25:57"
+   },
+   {
+    "id": "VyLh1H9Q6SY",
+    "title": "ルーターとは?Wi-Fiとの違い・接続の仕組みを超わかりやすく解説",
+    "channel": "HONDA 街ネット研究部",
+    "channel_id": "UC97bk4a9Tb5T89GbWgLE4TA",
+    "views": 3967,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:16"
+   },
+   {
+    "id": "JK0aBHHp-pk",
+    "title": "2022年Wi-Fi、LTE、Bluetoothの違いとは？ネットに繋がる仕組みを初心者に解説",
+    "channel": "金子晃之",
+    "channel_id": "UCaxV7Sf7pdNjlahl6BtJBBw",
+    "views": 170938,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "19:44"
+   },
+   {
+    "id": "eC55CYMOkeY",
+    "title": "Wi-Fiってそもそも何？スマホ初心者向けに仕組みと使い方をわかりやすく解説！",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 457,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "5:20"
+   },
+   {
+    "id": "jgZVRhXXQQI",
+    "title": "Wi-Fiとは？仕組みと使い方を簡単に解説！",
+    "channel": "チョコとレイトとコスタリカチャンネル〜雑",
+    "channel_id": "UC50IkwYLSnRFF8xEyGaYC_Q",
+    "views": 427,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:06"
+   },
+   {
+    "id": "fkXPUdUSoWA",
+    "title": "Wi-Fiとは？無線でインターネットにつながる仕組みを初心者向けにわかりやすく解説",
+    "channel": "大人の知識ラボ",
+    "channel_id": "UCSnCgEGBEqyt8Ij8qTRyDcA",
+    "views": 72,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "3:41"
+   },
+   {
+    "id": "1OJOhvQP-Zo",
+    "title": "【発明者はハリウッド女優】BluetoothとWi-Fiの意外すぎる正体――魚雷誘導から生まれた無線【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 203962,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "41:14"
+   }
+  ],
+  "5G 仕組み": [
+   {
+    "id": "tboti6s5lD0",
+    "title": "5Gで変わる未来！4Gとの違いを高速道路で超わかりやすく解説",
+    "channel": "タトエノート │ 専門用語を「おもしろ例え」で解説",
+    "channel_id": "UC26DdNDNVR4pyNO6q1ka9Og",
+    "views": 625,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:20"
+   },
+   {
+    "id": "Eyc9S8JV_Ag",
+    "title": "次世代通信「5G」ってなに？ 移動体通信の歴史・5Gで何が変わるの？| VOICEVOX解説",
+    "channel": "ITぷらす from ガクセイハッカソン",
+    "channel_id": "UCC_tsG3GsudfuEsPbVyDgFw",
+    "views": 1997,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:01"
+   },
+   {
+    "id": "vIrvBKnKABQ",
+    "title": "【徹底解説】携帯電話基地局の構成と仕組み(5Gも仕組みは同じ！) #基地局 #無線 #電波",
+    "channel": "RFエンジニア育成所【無線・電波を教える学校】",
+    "channel_id": "UCw64Fd-CqTkfBhtXA6ZvrqQ",
+    "views": 46281,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:07"
+   },
+   {
+    "id": "hUBU4MzT_Ek",
+    "title": "【15分でわかる】次世代通信技術「５G」",
+    "channel": "NEX工業",
+    "channel_id": "UCf8arBDjvsjcoFyMVuB1YEg",
+    "views": 30933,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:02"
+   },
+   {
+    "id": "Jj47Kdx8hv8",
+    "title": "【5G】周波数が高いと高速通信できるのはなぜ",
+    "channel": "ラムダ技術部",
+    "channel_id": "UC8g17oXkRt8buwQL8GU-NSw",
+    "views": 269101,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:38"
+   },
+   {
+    "id": "r84FJ0HfLQY",
+    "title": "5Gのよくある誤解について解説",
+    "channel": "スマサポチャンネル",
+    "channel_id": "UCMXjwK6-rRw-la5SN5j0M6g",
+    "views": 302024,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:26"
+   },
+   {
+    "id": "U2reg5gIppY",
+    "title": "5Gの仕組み",
+    "channel": "仕組みLABO",
+    "channel_id": "UCeMjownxQXQrKQEpJMbIhtg",
+    "views": 149,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:28"
+   },
+   {
+    "id": "aRVlp7ttWl4",
+    "title": "【5Gのしくみ】これから来る5Gのために知識を得ておこう！",
+    "channel": "ぺりそんの休日",
+    "channel_id": "UCqucFV6GjH_vFYDM1CNi1Ww",
+    "views": 510,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:49"
+   },
+   {
+    "id": "2FpFbHFB3jM",
+    "title": "5Gで世界が変わる！スマートフォン以上の革命が起こる！5Gのすごさ、仕組みを解説",
+    "channel": "もふもふ不動産",
+    "channel_id": "UCsWTZ4nYODCwlE8rdv7DZzA",
+    "views": 46819,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "19:21"
+   },
+   {
+    "id": "iQeaK0NGMnA",
+    "title": "5Gの仕組みとメリット",
+    "channel": "CNET",
+    "channel_id": "UCOmcA3f_RrH6b9NmcNa4tdg",
+    "views": 463245,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:00"
+   },
+   {
+    "id": "mfWFs3V46YE",
+    "title": "通信の小難しい話【日本と海外の5Gの違い】遅い時の理由や5G+と表示される理由について",
+    "channel": "Kath Engineering Lab | かとひエンジニアリングラボ",
+    "channel_id": "UCTDPWsB6d2by5K3AJljX12A",
+    "views": 257,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "4:35"
+   },
+   {
+    "id": "7sVGf_JiU14",
+    "title": "2分でわかる5Gの仕組み",
+    "channel": "2 Minute Expert",
+    "channel_id": "UCT-wIVAD_l5HtyaqOlP0z9Q",
+    "views": 90,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "1:52"
+   },
+   {
+    "id": "BbCzxUPt8wE",
+    "title": "【5G SA】知ってるようで知らない、スタンドアローン型5Gについて解説！",
+    "channel": "ゆっくりガジェット",
+    "channel_id": "UCLHj-nzTeMVZLu5fjCmx-6g",
+    "views": 6990,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:34"
+   },
+   {
+    "id": "3854EANN-FE",
+    "title": "5Gを簡単解説！世界が変わる？未来革命？最新情報から現状を説明します！",
+    "channel": "コアラ先生の時事ネタ祭り",
+    "channel_id": "UCQ-0MkpvJZ0co7WD79DBt9w",
+    "views": 50359,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:31"
+   },
+   {
+    "id": "dWy6FM2ten0",
+    "title": "【ゆっくり解説】絶対に知るべき5Gの主要技術と必要性",
+    "channel": "ゆっくり科学解説大学",
+    "channel_id": "UCUAZ_pW-FzcAJMBOnLBHU5w",
+    "views": 21448,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:44"
+   },
+   {
+    "id": "RGkrbIDrGXI",
+    "title": "5G通信の仕組み",
+    "channel": "GoGo英語",
+    "channel_id": "UCSdANWveHqsazuvRqek9pQA",
+    "views": 7,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "1:24"
+   },
+   {
+    "id": "fkyMii0cjr0",
+    "title": "ドコモ5Gはなぜ遅い？基地局はau・ソフトバンクの半分以下…最新調査と対策",
+    "channel": "MIRAI LAB",
+    "channel_id": "UC_i3IFIrDBUS68WQV94oESA",
+    "views": 652,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "12:57"
+   },
+   {
+    "id": "QrEiOUzVgto",
+    "title": "光回線って何？Wi-Fiや5Gとの違いをやさしく解説",
+    "channel": "ネット回線アンバサダー",
+    "channel_id": "UCuMfQ0tD5_D-7Sn-6HlWI3Q",
+    "views": 6263,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "5:54"
+   },
+   {
+    "id": "5-0fUe7E6KI",
+    "title": "「THE 5G」徹底解説：次世代通信ファンドの仕組み、リスク、そして投資戦略における「集中」の考え方",
+    "channel": "最強オーディブル投資信託目論見書",
+    "channel_id": "UClhGHMFcdnC9-DUkN00aSnw",
+    "views": 248,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:46"
+   }
+  ],
+  "インターネット 仕組み": [
+   {
+    "id": "BPODklKbx5s",
+    "title": "インターネットはどんなしくみなのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1736973,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:16"
+   },
+   {
+    "id": "-jNFptYDc44",
+    "title": "インターネットの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 462619,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:03"
+   },
+   {
+    "id": "A11m1lWiUrs",
+    "title": "インターネットの仕組み入門～IPアドレス・DNS・MACアドレス【高校情報１・基本情報技術者・ITパスポート】高校情報Ⅰ教科書完全準拠版",
+    "channel": "情報処理技術者試験・高校情報教科対策の突破口ドットコム",
+    "channel_id": "UC_0LOFMRg60xDBfkzMAmkfA",
+    "views": 391788,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "43:47"
+   },
+   {
+    "id": "FJzeLWblobQ",
+    "title": "５分でわかるインターネットの仕組み【音速パソコン教室】",
+    "channel": "音速パソコン教室。1万人が自宅でパソコン上達。",
+    "channel_id": "UCYAPVqVW8hDn9K0zgpL0foQ",
+    "views": 106246,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "6:07"
+   },
+   {
+    "id": "iWfKp-Qv7Xk",
+    "title": "ネットワークとは何かやLAN・WAN・インターネットの違いを理解しよう【情報I基礎】4-1 ネットワークの基本",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 71248,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:54"
+   },
+   {
+    "id": "t0tVQkIAfos",
+    "title": "【入門】ネットワークの仕組み。Ethernet、TCP/IP、TLS、DNS。",
+    "channel": "直也テック",
+    "channel_id": "UCtiDTuG40ZOarubtFm1fbzg",
+    "views": 1153612,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "24:36"
+   },
+   {
+    "id": "OIgVcdZYqK8",
+    "title": "インターネットを提供する通信回線事業者とプロバイダー(ISP)とは🌐／ITパスポート・基本情報技術者試験・高校情報",
+    "channel": "ITすきま教室【ITパスポート.基本情報技術者試験.高校情報】",
+    "channel_id": "UCUARkmYU3gZK7WueJ-GlGig",
+    "views": 66783,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:18"
+   },
+   {
+    "id": "Bje9PXS0pMA",
+    "title": "【初心者向け】インターネットの仕組みがわかるキーワード６選【情報I基礎】4-8 webの仕組み",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 35141,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:54"
+   },
+   {
+    "id": "t8Ar70pZ_IA",
+    "title": "モデムとルーターの違いを、初心者にも分かりやすく解説！",
+    "channel": "ノジマ【公式】チャンネル",
+    "channel_id": "UCrFGUKtdBJbPLYNlhYDLPgw",
+    "views": 464861,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:46"
+   },
+   {
+    "id": "-bF3t5oaRTk",
+    "title": "ネットワーク通信とは【IPアドレス/サーバー/通信プロトコル】／ITパスポート・基本情報技術者・高校情報",
+    "channel": "ITすきま教室【ITパスポート.基本情報技術者試験.高校情報】",
+    "channel_id": "UCUARkmYU3gZK7WueJ-GlGig",
+    "views": 147974,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:00"
+   },
+   {
+    "id": "-5pq-u83NH0",
+    "title": "「インターネット回線、光回線の仕組み」スマホの学校 リーガルサローラ Regal Salaula",
+    "channel": "スマホの学校 リーガルサローラ",
+    "channel_id": "UC8itkenvH06qC20BZ1dnfHw",
+    "views": 1724,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:03"
+   },
+   {
+    "id": "iCuLBHEu5mU",
+    "title": "VPN ってなに？　とにかくわかりやすく解説しています。VPNという言葉を最近よく聞くようになりました一体どんな時に有効なのか。　コンピュータ・セキュリティ関連",
+    "channel": "Linux ちゃんねる　〜PC・インフラ・ITの仕組み〜",
+    "channel_id": "UCTS1YgULmZOdQ6KwONhK9zw",
+    "views": 706532,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:56"
+   },
+   {
+    "id": "Km5E4iTiqVY",
+    "title": "インターネットが繋がる0.2秒に、何が起きているのか？",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 396386,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "39:00"
+   },
+   {
+    "id": "p-J3iNHHEA8",
+    "title": "インターネットの仕組みは『水曜どうでしょう』と同じ【ネットワーク1】",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 203174,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "21:42"
+   },
+   {
+    "id": "eLs_xDQH5Hg",
+    "title": "YouTube/ネットの仕組み。動画がスマホに届くまで 🌏",
+    "channel": "ギズモード・ジャパン",
+    "channel_id": "UCZm3dECbQU33IWG5MQ-NAdw",
+    "views": 160799,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:30"
+   },
+   {
+    "id": "TjiDovbPyR0",
+    "title": "【軍事技術から世界標準へ】インターネットとは？ARPANETから始まったインターネット！電話回線とTCP/IPが社会を変えた！Webページのアクセスの仕組みとは？ No.188",
+    "channel": "ゆっくりITちゃんねる",
+    "channel_id": "UCXn1BeokidOdzY0DzcHszgA",
+    "views": 4454,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "17:34"
+   },
+   {
+    "id": "JgxbHgdDPnA",
+    "title": "インターネットはどうやって世界中とつながるのか？知られざる仕組みを徹底解説！",
+    "channel": "夜更かし科学 (Yofukashi Kagaku)",
+    "channel_id": "UCMb6xiQSUAhVpK4kBYre0XQ",
+    "views": 152,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "16:16"
+   },
+   {
+    "id": "x2peSgrTC9M",
+    "title": "インターネットとは？｜仕組みやウェブとの違いについて、図解を使って4分でわかりやすく解説",
+    "channel": "キノコード / AI・プログラミング学習チャンネル",
+    "channel_id": "UCGlgXjYVoHLD86TQQ799WIw",
+    "views": 9476,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:44"
+   },
+   {
+    "id": "yC3hG5ePO2c",
+    "title": "7分でインターネットとネットワークの仕組みを知ろう！【ネットワークとインターネット #2】「CCNA講座フルコース」",
+    "channel": "活学ITスクール",
+    "channel_id": "UCrvtmSsCDzQfKW_BDLo3TMw",
+    "views": 4760,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:48"
+   }
+  ]
+ }
+}

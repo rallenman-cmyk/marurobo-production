@@ -1,0 +1,2895 @@
+{
+ "fetched_at": "2026-11-17T16:16:32.901327+00:00",
+ "sort": "views",
+ "queries": {
+  "物理エンジン 仕組み 解説": [
+   {
+    "id": "7hzIhtbxhtM",
+    "title": "【物理エンジン】円板の組み合わせだけで何でも描けるフーリエ変換の話　Fourier transform",
+    "channel": "物理エンジンくん",
+    "channel_id": "UCI2-ki0BQzmQ_tE4mxG8rXQ",
+    "views": 4286151,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:40"
+   },
+   {
+    "id": "j6qGF2w_YM4",
+    "title": "【物理エンジン】水洗トイレが流れる仕組みを視覚的に解説した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 3034570,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:37"
+   },
+   {
+    "id": "XMMOawXDPPg",
+    "title": "鍵の内部構造とマスターキーの仕組みを解説する【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 2619944,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:28"
+   },
+   {
+    "id": "2yJFr7H5pD0",
+    "title": "【物理エンジン】連続運動を断続運動に変換する機構、ジェネバ機構の紹介",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1648997,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:38"
+   },
+   {
+    "id": "Kqu9C_tUqyQ",
+    "title": "イタイワニーのハズレの位置がランダムに変わる仕組みと意外な事実【物理エンジン】【ワニワニパニック】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 968880,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:41"
+   },
+   {
+    "id": "magGyLZ9HTk",
+    "title": "【物理エンジン】ヘッケンリンクという名のカッコよすぎるリンク機構",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 842011,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:52"
+   },
+   {
+    "id": "QF9hZM7N-OY",
+    "title": "【物理エンジン】LEDはなぜ安いのか？発光原理を物理的に説明した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 813615,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "8:12"
+   },
+   {
+    "id": "X86BDV7Z7Nc",
+    "title": "【物理エンジン】下駄箱などに良くある鍵の仕組みを説明する",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 763556,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:13"
+   },
+   {
+    "id": "iBZ71ACskJQ",
+    "title": "ダイヤルキーの仕組み、内部構造を解説する【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 731876,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:54"
+   },
+   {
+    "id": "BcPp0TlJ0nw",
+    "title": "【物理エンジン】ソニックブームはなぜ起こるのか、それとドップラー効果",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 680804,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:21"
+   },
+   {
+    "id": "oEFXdYs1VEQ",
+    "title": "【間違いだらけ】飛行機が飛ぶ仕組み。重い機体が浮く理由【揚力】【ベルヌーイの定理】/How do planes fly.",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 584993,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:45"
+   },
+   {
+    "id": "mM_yJIEIqkA",
+    "title": "【人工生命体】テオ・ヤンセンのストランドビーストがめちゃくちゃかっこいい【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 518989,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "3:22"
+   },
+   {
+    "id": "PynIUNLobdI",
+    "title": "熱エネルギーを機械的エネルギーに変える仕組みを物理エンジンで作った【むにむに】",
+    "channel": "むにむに",
+    "channel_id": "UCFDOXTSVu6oBXJciSTiqJ1w",
+    "views": 513048,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "2:21"
+   },
+   {
+    "id": "9VdM-DTj9Ig",
+    "title": "【物理エンジン】シートベルトがロックされる仕組みが天才すぎる",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 409729,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:35"
+   },
+   {
+    "id": "IXTVMQb5jv4",
+    "title": "【物理エンジン】トラバサミという罠の仕組みを視覚的に紹介する",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 381553,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:23"
+   },
+   {
+    "id": "9e5GcmOf4fU",
+    "title": "【物理エンジン】マイクラのような世界を自動生成出来るパーリンノイズが凄い Automatically generate Minecraft terrain",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 367619,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:37"
+   },
+   {
+    "id": "39SF1sp3rKk",
+    "title": "【物理エンジン】ルービックキューブの中身の構造を分かりやすく解説する",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 366512,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:54"
+   },
+   {
+    "id": "5rmfwg7m-9o",
+    "title": "【物理エンジン】扇風機の首振りの仕組みを視覚的に解説した【凄い】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 268060,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:19"
+   }
+  ],
+  "物理エンジン 視覚的に解説": [
+   {
+    "id": "j6qGF2w_YM4",
+    "title": "【物理エンジン】水洗トイレが流れる仕組みを視覚的に解説した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 3034570,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:37"
+   },
+   {
+    "id": "IXTVMQb5jv4",
+    "title": "【物理エンジン】トラバサミという罠の仕組みを視覚的に紹介する",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 381553,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:23"
+   },
+   {
+    "id": "5rmfwg7m-9o",
+    "title": "【物理エンジン】扇風機の首振りの仕組みを視覚的に解説した【凄い】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 268057,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:19"
+   },
+   {
+    "id": "MTtF1GSnwOw",
+    "title": "【視覚的に説明】100円の円周上に別の100円を転がすと2回転する理由【円周トリック?】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 260514,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:27"
+   },
+   {
+    "id": "BBx2Qrosf6c",
+    "title": "【物理エンジン】シャーペンの芯が出る仕組みを視覚的に分かりやすく解説した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 175991,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:56"
+   },
+   {
+    "id": "w_daz4etNq4",
+    "title": "緯度と経度を視覚的にくっそくっそ分かりやすく説明【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 47571,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:36"
+   },
+   {
+    "id": "Sr0vPbXMYM4",
+    "title": "【物理エンジン】コマ型日時計の仕組みを視覚的に解説する",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 31813,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:53"
+   },
+   {
+    "id": "Kant9THYcA8",
+    "title": "【物理エンジン】バックホーはなぜ倒れない？重心や慣性の影響を解説",
+    "channel": "ゆっくり土木ラボ",
+    "channel_id": "UCQM3U_-IYQKyOv4iqIfaz-Q",
+    "views": 595,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "10:50"
+   }
+  ],
+  "こーじ 物理エンジン": [
+   {
+    "id": "TIld5knbL34",
+    "title": "ニュートンのゆりかごは100個繋げても同じ挙動をするのか？【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 5969730,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:09"
+   },
+   {
+    "id": "M0ueQSpB6zk",
+    "title": "【物理エンジン】何回紙を折ったら宇宙まで到達するのか？",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 5849513,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "3:05"
+   },
+   {
+    "id": "AcDo6-TiWpw",
+    "title": "【物理エンジン】摩擦がなければビリヤードは一発で全て入るのか？",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 4734905,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "3:44"
+   },
+   {
+    "id": "j6qGF2w_YM4",
+    "title": "【物理エンジン】水洗トイレが流れる仕組みを視覚的に解説した",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 3034570,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:37"
+   },
+   {
+    "id": "XMMOawXDPPg",
+    "title": "鍵の内部構造とマスターキーの仕組みを解説する【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 2619944,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:28"
+   },
+   {
+    "id": "o3LK_rLG_D8",
+    "title": "追いかけるAIと逃げるAIを同時に学習して勝負させてみた結果【強化学習】【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 2123214,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:26"
+   },
+   {
+    "id": "SuxpeNVJlys",
+    "title": "【物理エンジン】巨大な時計、秒針の針先の速度は速いのか？",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1976628,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "3:38"
+   },
+   {
+    "id": "5_ePE2KQy7s",
+    "title": "もし降水量1000ミリの雨が降ったとしたらどんな感じなのか？【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 2152509,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:16"
+   },
+   {
+    "id": "8kKoM18o9Ro",
+    "title": "【物理エンジン】光速に近づくと時間の進みが遅くなるとはどういうことなのか？",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1788427,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "4:06"
+   },
+   {
+    "id": "o16BE938QC8",
+    "title": "【バタフライ効果】回転する10重振り子が描く美しすぎる軌跡",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1770894,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:47"
+   },
+   {
+    "id": "qEWxun_IFyA",
+    "title": "【物理エンジン】永久機関はなぜできないのか？その１【第一種永久機関】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1750505,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "3:05"
+   },
+   {
+    "id": "nxAkFWDVkZU",
+    "title": "紐の長さを変更、ニュートンのゆりかごを改造して色々試してみた【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1684773,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:33"
+   },
+   {
+    "id": "2yJFr7H5pD0",
+    "title": "【物理エンジン】連続運動を断続運動に変換する機構、ジェネバ機構の紹介",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1648997,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:38"
+   },
+   {
+    "id": "XgLPPZ9aMO8",
+    "title": "【物理エンジン】スキージャンプ台の角度を変更、色々試してみた【視聴者提案】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1456925,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "4:53"
+   },
+   {
+    "id": "JB8JNDq7MCg",
+    "title": "【ビュフォンの針】針を落とすだけで円周率を求める方法が凄い【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1303198,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:17"
+   },
+   {
+    "id": "M3-vIh4h-7I",
+    "title": "【強化学習】スーパーマリオブラザーズの1面を人工知能に学習させてプレイさせた結果【物理エンジン】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1300108,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "7:26"
+   },
+   {
+    "id": "Q7J08h6ZROU",
+    "title": "【物理エンジン】球を45度で投げたら本当に飛距離が最大になるのか試した結果【空気抵抗なし】",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1215824,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "4:34"
+   },
+   {
+    "id": "kzkSnSGBlEk",
+    "title": "【物理エンジン】時速何kmでうんこを飛ばせば人は100m飛ぶのか",
+    "channel": "こーじ",
+    "channel_id": "UCrkqNT0_Fd5_TIWdjey6K0A",
+    "views": 1203400,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "3:05"
+   }
+  ],
+  "でんでん 仕組み モデル": [],
+  "京都エレベータ": [
+   {
+    "id": "hJX5U-mEu0U",
+    "title": "エレベーターの隙間にカギを落とすとどうなるのか？",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 8188252,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:36"
+   },
+   {
+    "id": "ZJ7Q-Kobt1g",
+    "title": "【Twitterで話題】エレベーターに積載量以上のおもりを乗せたらどうなるのか問題を検証！　重量オーバーでロープが切れるのが先？床が抜けるのが先？",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 1597104,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:53"
+   },
+   {
+    "id": "2TinSfyi0hc",
+    "title": "JR京都駅のエレベーター（新幹線13・14番線側）",
+    "channel": "E7 Kagayakikakko",
+    "channel_id": "UCvZBJBVIlTV7PEp2krBk4dw",
+    "views": 1300094,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "2:11"
+   },
+   {
+    "id": "6HcD_V6_MPc",
+    "title": "【ダメ！ゼッタイ！】エレベーターの中で跳ぶとどうなるのか？※茶番劇の後にキチンと説明しているので最後まで見てね。",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 943543,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:07"
+   },
+   {
+    "id": "zEBRpc0jJzk",
+    "title": "エスカレーター手すりを交換！！",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 840665,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "5:42"
+   },
+   {
+    "id": "b0KfkZI_zuU",
+    "title": "エレベーターの戸開走行とは？　見ればどれほど危険なのかが分かります",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 676580,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:26"
+   },
+   {
+    "id": "_2i4S1QwyGI",
+    "title": "地震が起こったらどうなる？フジテック管制運転動作状況",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 644389,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:13"
+   },
+   {
+    "id": "MuvI7478iZE",
+    "title": "エレベーターがもし止まったらどうしたらいいの？？",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 595632,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:45"
+   },
+   {
+    "id": "pxM2vyoQ-p0",
+    "title": "日本一古いエレベーターに乗ってきた /  Japan's oldest elevator lift",
+    "channel": "鈴川絢子/Suzukawa Ayako",
+    "channel_id": "UCrd9neCNtPkvQukpNTYrP4Q",
+    "views": 565473,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "7:35"
+   },
+   {
+    "id": "Ds6h5K9Ni3Y",
+    "title": "えっ！？こんなにあるの？エスカレーターの安全装置",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 497350,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:16"
+   },
+   {
+    "id": "8ZLvZotRNw0",
+    "title": "どんな音がする！？エレベーター非常ベル音まとめ",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 462555,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:23"
+   },
+   {
+    "id": "qFgo246ViMs",
+    "title": "【衝撃映像】大変な事になりました！　ペットを連れてエレベーターに乗る方は気をつけて。",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 421159,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:31"
+   },
+   {
+    "id": "Zz1lpbBtMB0",
+    "title": "中国のエレベーター衝撃映像を解説します",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 414244,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:54"
+   },
+   {
+    "id": "eAbOTpCE72E",
+    "title": "エレベーターの隙間にカギ落としてしまいました",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 399458,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:29"
+   },
+   {
+    "id": "xQvTxmJwhBE",
+    "title": "エレベータメンテナンス/京都エレベータ株式会社",
+    "channel": "株式会社萬丹屋",
+    "channel_id": "UCJWGYGFfq1fslHAb7IFNlfA",
+    "views": 377636,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "3:47"
+   },
+   {
+    "id": "6kex8DR4AZ8",
+    "title": "エレベーターの扉にはもう挟まらない！？　セフティーシュー交換",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 346240,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:53"
+   },
+   {
+    "id": "D8Ytw_4OmLg",
+    "title": "みんなの知らないエレベーター雑学",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 324230,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:38"
+   },
+   {
+    "id": "GXrRsz3KTkE",
+    "title": "地震が起こったらどうなる？　日立、管制運転動作状況",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 294880,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:48"
+   },
+   {
+    "id": "hwdx6a1TAMk",
+    "title": "映画みたいに、エレベーターから脱出できるのか！？エレベーター屋が試してみた",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 279802,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:41"
+   },
+   {
+    "id": "g6XkzNbXcgU",
+    "title": "エレベーターに自動で乗って物を運ぶロボットです",
+    "channel": "京都エレベータ_",
+    "channel_id": "UC-5UXqUsWh2z81dT0JIKVaw",
+    "views": 276137,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:16"
+   }
+  ],
+  "Sabin 機械工学": [
+   {
+    "id": "nr3wzZ9d5ig",
+    "title": "クラッチの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 7819896,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "7:04"
+   },
+   {
+    "id": "xiS5uQXXpIg",
+    "title": "差動装置（デフ）｜どのような仕組みになっている？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 2974578,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:11"
+   },
+   {
+    "id": "ADIPrfofzqo",
+    "title": "ガソリンエンジン VS ディーゼルエンジン",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 2253297,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "4:10"
+   },
+   {
+    "id": "UIouZrNrz0U",
+    "title": "タイタニック号はどういう経緯で沈没したのか？ | 物理学で完全解説",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 1881172,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "20:03"
+   },
+   {
+    "id": "PwxKAEHEmPk",
+    "title": "電車の車輪の形に隠されたおもしろい工学",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 1446313,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:50"
+   },
+   {
+    "id": "CR0voZGgMis",
+    "title": "ヘリコプターのエンジンを理解する | ターボシャフトエンジン",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 963958,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "6:03"
+   },
+   {
+    "id": "GmN_uR1BK2U",
+    "title": "トランジスタの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 872572,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "7:34"
+   },
+   {
+    "id": "krf6h3yIl6c",
+    "title": "トルクコンバータの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 849844,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "8:45"
+   },
+   {
+    "id": "PyPSXXt6skg",
+    "title": "同期リラクタンスモータ | 電気世界の新常識",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 808254,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:15"
+   },
+   {
+    "id": "LW_jxKldiLk",
+    "title": "誘導電動機の仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 792727,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "7:43"
+   },
+   {
+    "id": "NMVhSLtZQnQ",
+    "title": "掘削機 | 機械工学の驚異",
+    "channel": "Sabin Mechanical Engineering",
+    "channel_id": "UCxmCYDpMjQECGVaOlz2tMAA",
+    "views": 778191,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:41"
+   },
+   {
+    "id": "fgHGql9hMug",
+    "title": "自動変速機（オートマチックトランスミッション）の仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 771744,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "7:50"
+   },
+   {
+    "id": "ZaSiglem-bM",
+    "title": "ラムジェットエンジンの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 707977,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:18"
+   },
+   {
+    "id": "fg9qHLd_Zio",
+    "title": "差動装置が機能する仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 627226,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "5:31"
+   },
+   {
+    "id": "F22TPyv-5Nk",
+    "title": "を理解する遊星歯車機構",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 597113,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:55"
+   },
+   {
+    "id": "6_TEV_1wCkE",
+    "title": "インクジェットプリンター｜背後にある仕組みの面白い工学",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 527297,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "13:11"
+   },
+   {
+    "id": "hUnc6dhLLCk",
+    "title": "タイタニック号｜人類史上最大の船を沈めたたった一つのミス",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 516111,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "15:37"
+   },
+   {
+    "id": "-jNFptYDc44",
+    "title": "インターネットの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 462619,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:03"
+   },
+   {
+    "id": "7z7aOIrZNW0",
+    "title": "テスラモデル3のモーター‐その背後にある素晴らしい工学",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 410458,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "14:42"
+   },
+   {
+    "id": "0qG-01QGnHU",
+    "title": "直流モーターの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 405401,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "4:40"
+   }
+  ],
+  "日本科学情報 しくみ": [
+   {
+    "id": "leE02uqgaKg",
+    "title": "重力はどこまでが解明し何が分かっていないのか？アインシュタインと相対性理論【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 3828671,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "18:08"
+   },
+   {
+    "id": "YTcxSdtnNoI",
+    "title": "ボイジャー1号とはいつまで通信できるのか？【JST 午後正午】",
+    "channel": "JST GogoShogo",
+    "channel_id": "UCrn5izWUbCcEo1Aftfwd6KA",
+    "views": 3425720,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:17"
+   },
+   {
+    "id": "BCRS8tRpuFA",
+    "title": "最も謎に満ちた重力の長いお話【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 3120676,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:50:01"
+   },
+   {
+    "id": "Hh7T5Zqm8Bs",
+    "title": "不思議すぎる宇宙の長いお話【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 3023224,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:42:54"
+   },
+   {
+    "id": "BamTuLHul2Q",
+    "title": "思った以上に巨大な太陽系の大きさとは？惑星と構造【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 2608711,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "20:54"
+   },
+   {
+    "id": "K6NC5moCyjg",
+    "title": "究極の天体ブラックホールとは？情報パラドックスと宇宙最強エネルギーに迫る【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 2295871,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "21:35"
+   },
+   {
+    "id": "v9U-h3AgPMg",
+    "title": "GPSを完全に理解できる動画　なぜ日本は「みちびき」を打ち上げたのか？【日本軍事情報】",
+    "channel": "日本軍事情報",
+    "channel_id": "UC4h3X7qMLKpLT0yzbyYHj7Q",
+    "views": 2194073,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "22:59"
+   },
+   {
+    "id": "cB3Fs6NjYW8",
+    "title": "なぜ光の質量は0なのにエネルギーがあるのか？質量の正体に迫る【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 2011419,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "21:43"
+   },
+   {
+    "id": "okkM79RcROo",
+    "title": "潜水艦のメカニズム徹底解剖 原子力潜水艦はうるさいの？ 限界深度は？【日本軍事情報】",
+    "channel": "日本軍事情報",
+    "channel_id": "UC4h3X7qMLKpLT0yzbyYHj7Q",
+    "views": 1919519,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "29:14"
+   },
+   {
+    "id": "BPODklKbx5s",
+    "title": "インターネットはどんなしくみなのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1736973,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:16"
+   },
+   {
+    "id": "fp98Ke9uqvQ",
+    "title": "ワープドライブは実際のところ実現可能なのか？【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1703803,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "16:02"
+   },
+   {
+    "id": "VNs6VGm046U",
+    "title": "なぜブラックホールの中身が重要なのか？映画インターステラーをもっと楽しむための物理学【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1683703,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "24:01"
+   },
+   {
+    "id": "oBaHNI8DtHw",
+    "title": "量子コンピューターは通常のコンピューターと何が違うのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1614707,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:09"
+   },
+   {
+    "id": "rYBPXsyXh1A",
+    "title": "波でも粒子でもない光の本当の正体とは？【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1506364,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "17:26"
+   },
+   {
+    "id": "eslI8_s5blg",
+    "title": "宇宙とはそもそも何なのか？【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1472456,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "19:03"
+   },
+   {
+    "id": "DlSBkxMdGlI",
+    "title": "宇宙を支配するたった一つの究極理論とは？量子論と一般相対性理論を統合する超弦理論【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1422664,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "16:18"
+   },
+   {
+    "id": "TeCOgC7di7g",
+    "title": "宇宙の正体と”超”対称性とは？26次元と光速を超える粒子の謎【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1310674,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "23:14"
+   },
+   {
+    "id": "erH-hx8MHg8",
+    "title": "究極の天体 中性子星とは？誕生と終焉、そして中身に迫る【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1245437,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:10"
+   },
+   {
+    "id": "0m1OyTkUMF8",
+    "title": "太陽が光る仕組みは？ほぼ知られていない太陽終焉の結末【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1121651,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:24"
+   },
+   {
+    "id": "QHUfH01s468",
+    "title": "なぜ磁石は引き寄せるのか？【日本科学情報】【宇宙】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1081434,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "23:00"
+   }
+  ],
+  "なにがギモン 雑学解説": [],
+  "当たり前の謎 知ってるようで": [
+   {
+    "id": "d-EBP4M_UD4",
+    "title": "エベレストより高い山が、地球に「できない」理由を知っていますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 1095258,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "9:33"
+   },
+   {
+    "id": "AqZRNFq2nqk",
+    "title": "川はしょっぱくないのに、なぜ海だけ塩辛いのか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 807261,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "13:27"
+   },
+   {
+    "id": "bhzM9E6ikJk",
+    "title": "ゾウより大きい動物が、今の陸に「いない」理由を知っていますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 839732,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "12:02"
+   },
+   {
+    "id": "1CJYLzpETG8",
+    "title": "日本と同じ寒さなのに、ヨーロッパの人が湯船に「つからない」理由とは？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 437783,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "9:55"
+   },
+   {
+    "id": "4O4JBmfiGSY",
+    "title": "【衝撃】日本の硬貨に穴が開いている意外な理由を説明できますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 42790,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "10:25"
+   },
+   {
+    "id": "zjN-PExFNhs",
+    "title": "人を乗せて飛べる鳥が、地球に「いない」理由を知っていますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 67173,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "11:40"
+   },
+   {
+    "id": "qTGGABoyqTA",
+    "title": "【隠された真実】1日が24時間の理由を説明できますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 15857,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:12"
+   },
+   {
+    "id": "Ux0gx_LBfN8",
+    "title": "紙を「42回」折ると月に届くのに、人類が「13回」しか折れない理由を知っていますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 13524,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "9:38"
+   },
+   {
+    "id": "8hTCg59hzAk",
+    "title": "ゾウ100頭分の重さの「雲」が、空から落ちてこない理由を知っていますか？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 6042,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "9:03"
+   },
+   {
+    "id": "tEfto1AbttE",
+    "title": "ヨーロッパの紅葉は黄色なのに、日本の紅葉が「赤い」理由とは？",
+    "channel": "当たり前の謎【知ってるようで知らない話】",
+    "channel_id": "UCZgdrLA-V02S11zN5uWAbJQ",
+    "views": 617,
+    "published": "4 時間前",
+    "age_days": 0,
+    "length": "8:25"
+   }
+  ],
+  "がおがおザクっと解説": [
+   {
+    "id": "PzGm_E72iqE",
+    "title": "【異常】確率1/10^40000なのになぜ僅か8億年で地球に生命は誕生したのか？【小学生でもわかる】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 158249,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:03"
+   },
+   {
+    "id": "bafqrAdoZRc",
+    "title": "【宿命】最新PCでもたった数年で重くなる理由【小学生でもわかる】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 147853,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "17:00"
+   },
+   {
+    "id": "muoULLmH36I",
+    "title": "【異次元】光より速いものを小学生でもわかるように解説【宇宙・ざくっと解説】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 89997,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:04"
+   },
+   {
+    "id": "Ql2iAGNiMVI",
+    "title": "【普通は複数種】なぜ人類は1種しか生き残らなかったのか？【小学生でもわかる理系雑学】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 89197,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "16:36"
+   },
+   {
+    "id": "zK0oxetWc2A",
+    "title": "【現代科学の限界】温度の上限と極限の高温下で起こる物理現象とは？【小学生でもわかる宇宙】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 72242,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "14:27"
+   },
+   {
+    "id": "lq53cAnd7uI",
+    "title": "【衝撃】宇宙はDB超で描かれた通りかもしれない【宇宙・ざくっと解説】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 54257,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:07"
+   },
+   {
+    "id": "yX37fPQI8p0",
+    "title": "【衝撃】ﾌﾞﾗｯｸﾎｰﾙは人類の守り神！消滅すると物理法則が崩壊する理由とは？【小学生でもわかる宇宙】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 48529,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:46"
+   },
+   {
+    "id": "WlxQRS-7IHE",
+    "title": "【科学】天動説が有用だった根拠と地動説に敗れた理由【宇宙・ざくっと解説】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 33926,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "16:30"
+   },
+   {
+    "id": "UeSqcxEQzC8",
+    "title": "ユーチューバーのランク（階級）と収入についてザクっと解説",
+    "channel": "高橋真樹 / Masaki Takahashi",
+    "channel_id": "UCtyc706SMewWMxMcN-6XQhg",
+    "views": 16085,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "8:29"
+   },
+   {
+    "id": "K8JjzGms-4A",
+    "title": "【宇宙論の歴史】ﾌﾟﾗｲﾄﾞをかけた学者達の仁義なき戦いの物語【小学生でもわかる宇宙】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 15674,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:02"
+   },
+   {
+    "id": "oSbc1nded6c",
+    "title": "【自然界で超危険】進化過程で睡眠が淘汰されなかった理由【小学生でもわかる】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 13619,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "17:39"
+   },
+   {
+    "id": "rF36SGjn_Gk",
+    "title": "【進化生物学】1万年前から人類が幸せを失い続けている理由【小学生でもわかる】",
+    "channel": "がおがおザクっと解説【素朴な理系雑学】",
+    "channel_id": "UCbPmqSzLCUBeQaSiVFNBU1w",
+    "views": 11511,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "19:42"
+   }
+  ],
+  "昔の人の知恵 なぜ": [
+   {
+    "id": "njtN2k-SZgc",
+    "title": "なぜ車はダイナモを捨て、オルタネーターに切り替えたのか？",
+    "channel": "昔の人の知恵",
+    "channel_id": "UCYJ2D_D1q7_sYGorIB2_6iA",
+    "views": 336587,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "13:34"
+   },
+   {
+    "id": "PlYjmwP2yPQ",
+    "title": "送電線には、なぜあの奇妙な金属の重りが付いているのでしょうか？",
+    "channel": "昔の人の知恵",
+    "channel_id": "UCYJ2D_D1q7_sYGorIB2_6iA",
+    "views": 125235,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "20:32"
+   },
+   {
+    "id": "86j-YZtrEDQ",
+    "title": "【江戸の知恵】なぜ現代人はすぐ酔い潰れる？酒に飲まれない“意外すぎる作法”",
+    "channel": "江戸暮らし探訪",
+    "channel_id": "UCONKtWmcslBmvnwybTZdsNA",
+    "views": 2853,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "26:06"
+   },
+   {
+    "id": "yGfRL5S2AV4",
+    "title": "昔ながらの知恵袋が今も役立つ理由",
+    "channel": "10分知恵 by しまこ",
+    "channel_id": "UCMrwmWToTfUl5ia5deZObvg",
+    "views": 908,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "6:01"
+   },
+   {
+    "id": "vNXRVCRtgjE",
+    "title": "【人生の知恵】なぜか「舐められる人」と「一目置かれる人」の決定的な違い。言葉を増やさずに静かな威厳をまとう技術",
+    "channel": "心の余白【生き方の知恵】",
+    "channel_id": "UCtbG0Nb3ZpE1WEdKYyBz-sw",
+    "views": 1062,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "13:58"
+   },
+   {
+    "id": "ABG-w_8nkx0",
+    "title": "【生きる知恵】なぜあの人は話が通じないのか 脳科学的に説明します【A10神経群→前頭前野】",
+    "channel": "天野・占い師【電話相談】",
+    "channel_id": "UCtTTeD_lkIIj6n8LKWfJGog",
+    "views": 440,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:35"
+   },
+   {
+    "id": "H_I0FR8_-7w",
+    "title": "人生の知恵仕事の知恵『なぜ日本人から男らしい男が減ったのだろうか』",
+    "channel": "湯浅忠雄チャンネル",
+    "channel_id": "UCO9T-um8zZ9Zw023uoH8N1w",
+    "views": 122,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:32"
+   },
+   {
+    "id": "r7hyd4tmVs4",
+    "title": "【極北の生存知恵】なぜアイスランド人は「牛の体温」と「土の壁」で氷点下を生き抜けたのか？ラキ火山の悲劇と地熱の奇跡",
+    "channel": "荒野の思い出",
+    "channel_id": "UCl1khediMrSfKlT-WWZCJUA",
+    "views": 28,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "17:55"
+   },
+   {
+    "id": "dDWSBp-MY8k",
+    "title": "【仏教の知恵】なぜか人生がうまくいかない人の共通点5選｜ブッダの教え",
+    "channel": "ブッダの言葉",
+    "channel_id": "UCuIC8ckg5L83obFnL2H1Dvg",
+    "views": 2,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "16:41"
+   }
+  ],
+  "ゆっくりデジタルの裏側": [
+   {
+    "id": "BQUjChoc9kY",
+    "title": "なぜエプソンだけがPC 98の互換機を作れたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 254669,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "30:02"
+   },
+   {
+    "id": "i1ImTBnC5Tg",
+    "title": "なぜ任天堂はファミコン互換機を訴えないのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 635345,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "16:44"
+   },
+   {
+    "id": "3f8TMZ2_Td0",
+    "title": "なぜ大流行したMDは消滅したのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 292759,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:50"
+   },
+   {
+    "id": "WBhUhYqo7Uk",
+    "title": "なぜFF7は3枚組なのに中身はほぼ同じだったのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 406410,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "24:02"
+   },
+   {
+    "id": "Fl9wsMK2FFU",
+    "title": "なぜテレビから「時報」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 217949,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "25:00"
+   },
+   {
+    "id": "b4zMvDKSKg8",
+    "title": "なぜ一太郎は使われなくなったのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 188422,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:10"
+   },
+   {
+    "id": "cXCFm5t7qbc",
+    "title": "なぜドラゴンクエストは復活の呪文で冒険を再開できたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 210146,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "24:01"
+   },
+   {
+    "id": "DGgDv_AcB38",
+    "title": "なぜ初代プレステのディスクは黒かったのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 213711,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "23:10"
+   },
+   {
+    "id": "nlc7oMsLnyY",
+    "title": "なぜファミコンは「テレビの2チャンネル」で映ったのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 205273,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "27:15"
+   },
+   {
+    "id": "kNtwRlJ97qc",
+    "title": "なぜ初代マリオはあの広い世界を40KBに詰め込めたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 151686,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:04"
+   },
+   {
+    "id": "WE71JdH-H9Y",
+    "title": "なぜCPUはこれ以上小さくできないのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 134309,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:27"
+   },
+   {
+    "id": "u4QTIKnamYQ",
+    "title": "なぜパソコンは再起動すると直るのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 162248,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "21:22"
+   },
+   {
+    "id": "sxxX5uZDKDk",
+    "title": "なぜCPUの「足」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 263950,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "19:17"
+   },
+   {
+    "id": "_4qikJM2Vjc",
+    "title": "なぜデフラグはあんなに時間がかかったのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 111566,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:39"
+   },
+   {
+    "id": "zIC7hywnB8k",
+    "title": "なぜ自作PCの「相性問題」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 178445,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "28:42"
+   },
+   {
+    "id": "DOhFQ15EB7Y",
+    "title": "なぜケータイの「伸びるアンテナ」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 198819,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "26:15"
+   },
+   {
+    "id": "M9-gtA4qE5A",
+    "title": "なぜ「赤白黄ケーブル」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 173497,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "25:45"
+   },
+   {
+    "id": "cj5MkQJwb2o",
+    "title": "なぜ最先端だったISDNは消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 169417,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "32:28"
+   },
+   {
+    "id": "ellBEhnHpVw",
+    "title": "なぜ出遅れたAndroidはiPhoneより普及したのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 87843,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "22:14"
+   },
+   {
+    "id": "mVUZYkZc_Fo",
+    "title": "なぜ「電源を切る準備ができました」の画面は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 75938,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "24:48"
+   }
+  ],
+  "コンピュータのお話 ゆっくり解説": [
+   {
+    "id": "f7wpvsD0-Q0",
+    "title": "【ゆっくり鬱ゲー解説 】狂気のシナリオでトラウマ不可避の救わないRPG【ホラゲー】【リンダキューブ】",
+    "channel": "良作鬱ゲーサークル【ゆっくり解説】",
+    "channel_id": "UC54D3HEGG8xqnr0r2iMYZyw",
+    "views": 421093,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "39:07"
+   },
+   {
+    "id": "ORHjLRFRWdU",
+    "title": "CPUに当たり外れがあるって本当？（ゆっくり解説）",
+    "channel": "ハリフーン (hurriphoon)",
+    "channel_id": "UC4EAz9lsrBMMINUGRBDHwoA",
+    "views": 280270,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:53"
+   },
+   {
+    "id": "xj8am95rue0",
+    "title": "不評だったのに世界標準！なぜUSBは勝ったのか？",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 226485,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "24:25"
+   },
+   {
+    "id": "NvgbeR78IEI",
+    "title": "【ゆっくり解説】説明できる？ なぜコンピュータは0と1だけで全てを表現できる？",
+    "channel": "ド文系でも分かる【ゆっくり数学】",
+    "channel_id": "UCw-RnrHWa-rI5KL8aCP43YA",
+    "views": 153137,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:22"
+   },
+   {
+    "id": "AVdGJdOmYFw",
+    "title": "東方原作ストーリー完全解説【ゆっくり解説】「紅魔郷～神霊廟」",
+    "channel": "東方寺子屋『東方解説チャンネル』",
+    "channel_id": "UCb8RNf5pz2WC_hmGCaAPc9g",
+    "views": 127574,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "35:28"
+   },
+   {
+    "id": "AzmOtZCnBa4",
+    "title": "なぜデータは圧縮して小さくできるのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 115908,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "14:21"
+   },
+   {
+    "id": "WE71JdH-H9Y",
+    "title": "なぜCPUはこれ以上小さくできないのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 134309,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:27"
+   },
+   {
+    "id": "QGq_BdNDdS8",
+    "title": "【名作】バイオRE3ストーリー ゆっくり解説",
+    "channel": "ハンクのホラゲーチャンネル",
+    "channel_id": "UCNdKeYOBl4Kyf7ChwaJzX6g",
+    "views": 112093,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "24:28"
+   },
+   {
+    "id": "k2o6Df2Kh9I",
+    "title": "【小話】とも湯と見るダイパのストーリー【ポケモンゆっくり解説】",
+    "channel": "とも湯",
+    "channel_id": "UCDkias-7yx47INS20007yNQ",
+    "views": 107619,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "18:47"
+   },
+   {
+    "id": "q96AzIWfyrI",
+    "title": "なぜコンピューターウィルスは生まれたのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 108093,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "21:39"
+   },
+   {
+    "id": "k9qe9VRdyy0",
+    "title": "【ゆっくり解説】超名作のMOTHER2！感動のストーリーをお届け【マザー2】",
+    "channel": "ゆっくりゲームラボ",
+    "channel_id": "UC_hBlaJTJ6uhtK0eakHAbPw",
+    "views": 105957,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "48:38"
+   },
+   {
+    "id": "u4QTIKnamYQ",
+    "title": "なぜパソコンは再起動すると直るのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 162248,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "21:22"
+   },
+   {
+    "id": "sxxX5uZDKDk",
+    "title": "なぜCPUの「足」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 263950,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "19:17"
+   },
+   {
+    "id": "hJCmdJcS-OU",
+    "title": "【ゆっくり解説】元々軍用？パソコンの歴史",
+    "channel": "かもめの歴史ch【ゆっくり解説】",
+    "channel_id": "UC0y-4l9MjzVm7-2_F6DJvrg",
+    "views": 95689,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "22:22"
+   },
+   {
+    "id": "JvBgUrwxstA",
+    "title": "なぜゲームはWindowsPCじゃないと出来ないのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 94298,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "22:02"
+   },
+   {
+    "id": "zIC7hywnB8k",
+    "title": "なぜ自作PCの「相性問題」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 178445,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "28:42"
+   },
+   {
+    "id": "qDJgFZrAu8Y",
+    "title": "【ゆっくり解説】コンピュータは0と1でどうやって計算するの？PCやスマホの基本原理",
+    "channel": "ゆっくり科学解説大学",
+    "channel_id": "UCUAZ_pW-FzcAJMBOnLBHU5w",
+    "views": 88561,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:16"
+   },
+   {
+    "id": "LvKxGCYlKMk",
+    "title": "【夜勤事件】ゆっくり鬱ゲー解説【PCホラー】",
+    "channel": "鬱ゲー愛好会",
+    "channel_id": "UCZCM-sBjR44Mb_dd6z3eRJw",
+    "views": 89571,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "15:19"
+   },
+   {
+    "id": "YhlwcjVWfMc",
+    "title": "世界初なのに、なぜ東芝は消えたのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 77601,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "23:06"
+   },
+   {
+    "id": "yaa5mJqkss0",
+    "title": "【ファミコンゆっくり解説】SDガンダム ガチャポン戦士4 ニュータイプストーリー【レトロゲーム】【FC】",
+    "channel": "ぬこれのレトロゲーム解析室【ゆっくり解説】",
+    "channel_id": "UC9dhpsMIzUUVlv-p-TRtC9w",
+    "views": 79813,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "48:44"
+   }
+  ],
+  "ゆっくり情報科学ちゃんねる": [
+   {
+    "id": "q1V-GjwC8fY",
+    "title": "【Z80 vs Intel】Intelを飛び出した\"互換チップ\"は、なぜ日本を制し半世紀生き残ったのか【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 373959,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "55:23"
+   },
+   {
+    "id": "k0PhBemVpiE",
+    "title": "【プリンター戦争】なぜインクはドンペリの7倍なのか――時計屋・カメラ屋・ミシン屋が世界を制した理由【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 325518,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "49:52"
+   },
+   {
+    "id": "1OJOhvQP-Zo",
+    "title": "【発明者はハリウッド女優】BluetoothとWi-Fiの意外すぎる正体――魚雷誘導から生まれた無線【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 203962,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "41:14"
+   },
+   {
+    "id": "iDtjwSnpxCo",
+    "title": "【70年代の遺産】なぜ『SQL』は半世紀経っても現役なのか？IBMの天才が産んだ「データの革命」と、Googleすら勝てなかった数学的完成度【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 158561,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "30:09"
+   },
+   {
+    "id": "lsQcztD_IYo",
+    "title": "【メインフレームの正体】\"でかいサーバー\"と何が違うのか【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 177088,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "40:30"
+   },
+   {
+    "id": "U8vwkIHok0s",
+    "title": "【史上最も安定】なぜ技術者は今もWindows 2000を最高傑作と呼ぶのか【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 179430,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "49:19"
+   },
+   {
+    "id": "Ks8KPObYR-Q",
+    "title": "【Intelの終焉？】なぜ『x86』は『ARM』に勝てないのか？Apple Siliconが証明した「命令セット」の呪縛と40年の確執【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 159890,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "41:02"
+   },
+   {
+    "id": "4N0Uv7iaO7Y",
+    "title": "【60年前の言語に世界が泣きついた】なぜCOBOLは消したくても消せないのか",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 170272,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "45:54"
+   },
+   {
+    "id": "qXCE3X62JMw",
+    "title": "【Linuxの歴史】趣味から世界制覇へ！30年で「ITの支配者」になった衝撃の歴史【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 142793,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "35:13"
+   },
+   {
+    "id": "5ECUCvjyAFQ",
+    "title": "【初心者向け】実は知らない「OS」と「カーネル」の違い【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 142391,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "18:50"
+   },
+   {
+    "id": "jKf1_F9_3Vk",
+    "title": "【FORTRAN】なぜスパコンは\"70年前の不自由な言語\"を手放さないのか──今朝の天気予報を計算している言語の正体【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 261900,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "55:59"
+   },
+   {
+    "id": "SuHitCNd05M",
+    "title": "【CPU戦争】なぜ“弱い側”が世界を取ったのか【逆転の真相】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 133226,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "39:39"
+   },
+   {
+    "id": "_KOxwck-HjM",
+    "title": "【CPU vs GPU】なぜGPUはCPUより「1000倍」速いのか？【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 130740,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "30:33"
+   },
+   {
+    "id": "CwPo4h-IkDo",
+    "title": "【コンピュータの歴史】なぜコンピュータは“何でもできる”のか──チューリングマシンからノイマン型まで80年の真実【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 121792,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "19:25"
+   },
+   {
+    "id": "emtki0AovzQ",
+    "title": "【禁断の魔改造】なぜWindows 3.1は「OS」と名乗れなかったのか？MS-DOSという名の足枷と、ビル・ゲイツが仕掛けた大逆転劇【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 118059,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "46:29"
+   },
+   {
+    "id": "rvE2z6IVp6c",
+    "title": "【爆熱の限界】なぜCPUは『速さ』を捨てて『数』を増やしたのか？クロック神話の崩壊とマルチコアの夜明け【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 109609,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "24:04"
+   },
+   {
+    "id": "9VvtjkftZjQ",
+    "title": "【真の勝者は敗者だった】CD・DVD・Blu-ray規格戦争――ディスクを絶滅させた\"兵器\"は、負けた東芝が作っていた【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 149297,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "50:45"
+   },
+   {
+    "id": "MkDKHE4UOkg",
+    "title": "【衝撃】5万ドルが何千億ドルに！?MS-DOS誕生秘話を徹底解説【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 105415,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "17:31"
+   },
+   {
+    "id": "IDSQqNGlJWU",
+    "title": "【ファミコン vs MSX】同じ年に生まれた「ゲイツのパソコン」はなぜ任天堂に敗れたのか【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 127213,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "42:12"
+   },
+   {
+    "id": "sp8tnf3726E",
+    "title": "【インベーダー以前】CPUが入っていないテレビゲームは、なぜ動いたのか──\"配線と論理ゲートだけ\"でゲームを作った男が、それを捨てた日【ゆっくり解説】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 184055,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "53:25"
+   }
+  ],
+  "ゆるコンピュータ科学ラジオ": [
+   {
+    "id": "fe5kdBLS8wM",
+    "title": "ちょいガチ言語学ラジオ「意味論」#375",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 1491174,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "3:03:24"
+   },
+   {
+    "id": "0J3SC17Dau8",
+    "title": "離席したら悪口を言われるのか、検証しました。",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 1113396,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "2:53:29"
+   },
+   {
+    "id": "cJj0ZwwJFQk",
+    "title": "古いパソコン/スマホが重くなる本質的な理由",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 1089177,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "43:11"
+   },
+   {
+    "id": "X2pVkG6FHkI",
+    "title": "アダルトVR最前線。とうとう世界は4次元に突入した。",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 1021265,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "53:41"
+   },
+   {
+    "id": "rEMutn29HwM",
+    "title": "機械オンチに「サーバー」を説明する動画#136",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 1041377,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "45:37"
+   },
+   {
+    "id": "5NJ_tKtvjCs",
+    "title": "絵で物事を考える「視覚思考者」にはどんな世界が見えるのか？【ビジュアルシンカー1】#322",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 915333,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "43:21"
+   },
+   {
+    "id": "HmClYAes144",
+    "title": "徹底討論！ 「結論から喋る」は本当に正しいのか？ #373",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 924079,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:09:50"
+   },
+   {
+    "id": "WmVm81unxP4",
+    "title": "「論理的」は、地域によって違う #372",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 878062,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "44:57"
+   },
+   {
+    "id": "KKXQ4JRDLDo",
+    "title": "技術者に怒られないためのエクセル術。セルを結合するな。【データベース3】#89",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 874938,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "26:49"
+   },
+   {
+    "id": "fb-OfzOVDow",
+    "title": "自分がない。社会に適合しすぎる男の悲劇。",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 859991,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:32:40"
+   },
+   {
+    "id": "Gjt52U9vMs4",
+    "title": "心は存在しない。【ビジュアルシンカー3】#324",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 833522,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:19:00"
+   },
+   {
+    "id": "XDshkeytM64",
+    "title": "機械オンチに「API」を説明する動画",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 966432,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "30:54"
+   },
+   {
+    "id": "Sxo5vpoJGnM",
+    "title": "読書で挫折しないコツ「ギャルになる」#355",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 803011,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:22:06"
+   },
+   {
+    "id": "51oNvrijOKI",
+    "title": "利用価値のない0ルピー紙幣、なぜ発行された？【うんちくエウレーカクイズ】#262",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 790006,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:13:15"
+   },
+   {
+    "id": "QOb1SWOvbu4",
+    "title": "機械オンチに「Cookie」を説明する動画#148",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 765546,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "26:15"
+   },
+   {
+    "id": "ShgBk-SPFpo",
+    "title": "コンピュータはなぜ動くのか、2時間で原理を理解する【半導体1】",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 743041,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "32:52"
+   },
+   {
+    "id": "mS9vD3hxZjQ",
+    "title": "巨大IT企業はなぜ邪悪になるのか？",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 730959,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "50:16"
+   },
+   {
+    "id": "SehpE5FQDsQ",
+    "title": "努力中毒者の実態をお伝えします。",
+    "channel": "ゆる言語学ラジオ",
+    "channel_id": "UCmpkIzF3xFzhPez7gXOyhVg",
+    "views": 710734,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "46:10"
+   }
+  ],
+  "イチケン 仕組み": [
+   {
+    "id": "u2s90OwH9SA",
+    "title": "電気回路でよく見かけるこの部品は何?　【コンデンサ, キャパシタ】【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 2226820,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "14:34"
+   },
+   {
+    "id": "P6s0WI7jkKM",
+    "title": "電気回路でよく見かけるこの部品は何？→ 抵抗編 【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 1458392,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:54"
+   },
+   {
+    "id": "Zs7Z3ZSLMAk",
+    "title": "なぜトヨタのハイブリッド車は燃費が良いのか？プリウスの心臓部 \"遊星歯車機構\"が支える低燃費技術を解説します!",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 1475591,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "25:29"
+   },
+   {
+    "id": "tNEHJIiJ8BY",
+    "title": "電気回路でよく見かけるこの部品は何？【インダクタ】【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 1175995,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "15:03"
+   },
+   {
+    "id": "zNYvZxGD4v8",
+    "title": "【扇風機】ブラシレスDCモータって何？ 解説",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 1174139,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "14:45"
+   },
+   {
+    "id": "-Ac55B4fKeI",
+    "title": "半導体・電子部品の中身はどうなっている？ マイクロスコープで観察する。 【ハイロックス HRX-01】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 827367,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "27:41"
+   },
+   {
+    "id": "g18dOXJ1Lgc",
+    "title": "ステッピングモーターの動作原理, 構造について解説 【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 977895,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "18:07"
+   },
+   {
+    "id": "YvLAUj7ebfg",
+    "title": "電気自動車の仕組みについて解説 | Electric car How it works.",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 553506,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "18:51"
+   },
+   {
+    "id": "jtFpbAtqVqU",
+    "title": "コンデンサの役割と使い方 【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 567420,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "18:19"
+   },
+   {
+    "id": "PP3vOfbYHbY",
+    "title": "電気二重層コンデンサを解説！ 【EDLC スーパーキャパシタ】【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 497699,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "55:07"
+   },
+   {
+    "id": "On3GezJGjmE",
+    "title": "電圧を上昇させる不思議な回路「昇圧コンバータ」とは何？ 動作原理を解説",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 466047,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "16:16"
+   },
+   {
+    "id": "09j8sv168io",
+    "title": "CPUはこの回路で出来ています。みんなもCPU自作しよう！【論理ゲート】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 364714,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "27:28"
+   },
+   {
+    "id": "VukUHrX2b1U",
+    "title": "中国BYDの電気自動車のインバータを分解して解説します! 【BYD ATTO 3】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 332326,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "42:15"
+   },
+   {
+    "id": "xjkZtUyIt7I",
+    "title": "この回路の動作を説明できますか？【イチケン電子基礎シリーズ】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 255891,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "21:30"
+   },
+   {
+    "id": "APJvuYmZBl4",
+    "title": "電気回路でよく見るこの部品はなに? 半導体MOSFETについて解説します【パワー半導体】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 262660,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "16:56"
+   },
+   {
+    "id": "IaWrC74VBjI",
+    "title": "積層セラミックコンデンサとは何ですか?  MLCCの原理､構造､製造工程について解説します! #イチケン電子基礎シリーズ",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 171275,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "31:44"
+   },
+   {
+    "id": "dG8zfZ2rCH8",
+    "title": "かつて東芝が作っていた骨董品レベルの測定器を手に入れました!!!  はたして無事に動くのか??",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 147961,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "25:13"
+   },
+   {
+    "id": "KsK5kn4e9f4",
+    "title": "まだまだ現役 パワー半導体「IGBT」とはなんですか？ →  間違って使うとこうなります！  絶縁ゲートバイポーラトランジスタ。",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 115827,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "18:02"
+   },
+   {
+    "id": "UXDoVOxhGA4",
+    "title": "オペアンプを自作する! ディスクリートオペアンプ",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 80839,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "13:26"
+   },
+   {
+    "id": "Jb5rq3H5uoc",
+    "title": "【イチケン独占配信】直流モーターって何？仕組みと回転原理を詳しく解説",
+    "channel": "DigiKey日本公式チャンネル",
+    "channel_id": "UCc-7D4LcsxH2JP9TtylRuFQ",
+    "views": 21129,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "21:05"
+   }
+  ],
+  "身近な科学 なぜ ゆっくり": [
+   {
+    "id": "bgdCBbtdY30",
+    "title": "【ゆっくり解説】なぜ精神を壊さない麻薬は作れないのか？－薬物と相反過程理論－",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 608312,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "19:02"
+   },
+   {
+    "id": "r29RIuw_fUE",
+    "title": "【ゆっくり解説】猛毒のフッ素がなぜ身近な製品に利用されるのか？",
+    "channel": "るーいのゆっくり科学",
+    "channel_id": "UCJHZshDuIrd_6MaT8MIjFtg",
+    "views": 443146,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:03"
+   },
+   {
+    "id": "RzptJ1VgkBA",
+    "title": "空と海と大地とバッタ！なぜアフリカで大量発生してしまったのか？【ゆっくり解説】",
+    "channel": "ゆっくり科学解説大学",
+    "channel_id": "UCUAZ_pW-FzcAJMBOnLBHU5w",
+    "views": 144316,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:26"
+   },
+   {
+    "id": "mR8MZSVy-YI",
+    "title": "【ゆっくり解説】スイカの仕組み：なぜ電池がなくても動くのか？",
+    "channel": "ゆっくり科学解説大学",
+    "channel_id": "UCUAZ_pW-FzcAJMBOnLBHU5w",
+    "views": 126671,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:04"
+   },
+   {
+    "id": "vao9ELarcaU",
+    "title": "同じ温度なのになぜ気温は暑く、お湯はぬるく感じるのか？【ゆっくり解説】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 69062,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "5:25"
+   },
+   {
+    "id": "bJ9nYZKvdwM",
+    "title": "なぜ火を止めた瞬間に湯気がボワッと出るのか？【ゆっくり解説】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 68309,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:28"
+   },
+   {
+    "id": "_tHj7HuLRak",
+    "title": "【ゆっくり解説】死後に甘くなる⁉身近な深海生物…「甘エビ」とは何者なのか？を解説/なぜ日本人だけが甘エビを生で食べるのか？",
+    "channel": "ゆっくり生物チャンネル【ゆっくり解説】",
+    "channel_id": "UCY3WhU5uwwi4tUMgJUhEpcw",
+    "views": 45606,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "32:52"
+   },
+   {
+    "id": "_d_51QWinhA",
+    "title": "【ゆっくり解説】雷の原理　なぜギザギザ？なぜゴロゴロ音するのか？なぜ光る？",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 25713,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:27"
+   },
+   {
+    "id": "R-3c0z7z46Y",
+    "title": "【ゆっくり解説】静電気とは何か？原理と防ぎ方",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 19316,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:40"
+   },
+   {
+    "id": "DN5DwZp-rL0",
+    "title": "【ゆっくり解説】なぜ潮の満ち引きは起こるのか！？　満潮・干潮の仕組み　再アップ",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 15876,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:47"
+   },
+   {
+    "id": "jbTdN5_X3LM",
+    "title": "【ゆっくり解説】台風の科学　なぜ必ず台風は左回りなの？　発生原理解説",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 14708,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:29"
+   },
+   {
+    "id": "LOu_S79YImQ",
+    "title": "【ゆっくり解説】青酸カリとは何か？なぜ青酸カリで死ぬのか？",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 12845,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:05"
+   },
+   {
+    "id": "Sv6Uf93aNcI",
+    "title": "STAP細胞とは何だったのか？【ゆっくり解説】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 9509,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:57"
+   },
+   {
+    "id": "WvBXpDdiwrw",
+    "title": "なぜ炭は一度燃えているのにまた燃えるのか？【ゆっくり解説】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 8982,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:36"
+   },
+   {
+    "id": "rjov3UKM9Dc",
+    "title": "【ゆっくり解説】オーロラはなぜ綺麗なのか？【意外と知らない】色の科学",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 8199,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:18"
+   },
+   {
+    "id": "goOH1dEPkKY",
+    "title": "【ゆっくり解説】ガラスはなぜ透明なのか？【高校　大学化学】～結晶　光～",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 7984,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:13"
+   },
+   {
+    "id": "JpNLpRYo9uk",
+    "title": "【ゆっくり解説】虹とは何か？なぜアーチ状か？",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 7036,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:59"
+   },
+   {
+    "id": "sGgsjcdR9l8",
+    "title": "【ゆっくり解説】ポリゴンショックの科学的真実【大学物理　非線形科学リズム現象】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 6660,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:12"
+   },
+   {
+    "id": "iapCwGiAqXI",
+    "title": "乾電池の仕組み　電池の原理と乾電池の構造【ゆっくり解説】",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 6547,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:06"
+   },
+   {
+    "id": "XfhxuGoQ0es",
+    "title": "【ゆっくり解説】なぜ空は青いのか？夕焼けが赤い理由と海が青い理由も解説",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 5918,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:04"
+   }
+  ],
+  "ものの仕組み 図解": [],
+  "しくみ潜航": [
+   {
+    "id": "FuVGkUy4MFs",
+    "title": "【徹底解説】潜水艦の潜航の仕組み。500mの水圧に耐える驚きの船体構造とは？",
+    "channel": "ワールドミリタリー",
+    "channel_id": "UCrCCcJ862ywuLvwb5FpAERA",
+    "views": 419887,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:49"
+   },
+   {
+    "id": "D0Obd51cvic",
+    "title": "【無限の潜航能力】原子力潜水艦の仕組みと日本の潜水艦との違い。どっちが優れているのか？",
+    "channel": "ワールドミリタリー",
+    "channel_id": "UCrCCcJ862ywuLvwb5FpAERA",
+    "views": 410848,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:55"
+   },
+   {
+    "id": "wsnbH8HTgvY",
+    "title": "【潜水艦はなぜ沈む？】潜航・浮上のしくみ｜てつのくじら館",
+    "channel": "imotty",
+    "channel_id": "UC1rZgeClJN_2W-tIumxv65Q",
+    "views": 699,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "1:45"
+   },
+   {
+    "id": "y8HNBN3VFcI",
+    "title": "エスカレーターの階段、消えたあとどこへ行く？床下の仕組みを図解",
+    "channel": "しくみ潜航",
+    "channel_id": "UCQDxbJ0F5hz7UEvfBfQwVAA",
+    "views": 835,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "8:36"
+   },
+   {
+    "id": "bKB5fdFu7pQ",
+    "title": "自動ドアは、どこで人を見ている？開く・閉じる仕組みを図解",
+    "channel": "しくみ潜航",
+    "channel_id": "UCQDxbJ0F5hz7UEvfBfQwVAA",
+    "views": 108,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "6:14"
+   },
+   {
+    "id": "FawHq68IiF8",
+    "title": "玄関ドア、電気なしでなぜ閉まる？上の箱の仕組み",
+    "channel": "しくみ潜航",
+    "channel_id": "UCQDxbJ0F5hz7UEvfBfQwVAA",
+    "views": 56,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "4:32"
+   }
+  ],
+  "なぜそうなった 仕組み": [
+   {
+    "id": "TEiNQk2CKYo",
+    "title": "【9割が知らない】糖尿病になる仕組み【現役糖尿病内科医】",
+    "channel": "血糖おじさんのセルフ治療",
+    "channel_id": "UCz7-7HGtzfjlhUM3ex8owPQ",
+    "views": 222480,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "14:31"
+   },
+   {
+    "id": "UZTAEuorWqM",
+    "title": "【体内時計の仕組み。なぜ年を取ると、早起きになるのか？】時間生物学とは？／毎日同じルーティンが体に良い／規則性は創造性の土台／複数の時計／1日の変化／時差ボケで不調になる理由／社会的時差ボケとは？",
+    "channel": "PIVOT 公式チャンネル",
+    "channel_id": "UC8yHePe_RgUBE-waRWy6olw",
+    "views": 80212,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "36:06"
+   },
+   {
+    "id": "HRbyIV8E2tQ",
+    "title": "【中東情勢の転換点となるか？】イスラエル総選挙の仕組みとなぜそうなったのかを解説/アイゼンコットは『綺麗なネタニヤフ？』/選挙結果で外交政策に変化は？【鶴見太郎×山本期日前】｜選挙ドットコムちゃんねる",
+    "channel": "選挙ドットコムちゃんねる",
+    "channel_id": "UCpdtHm6VFP_Qc-IDIsyLh1A",
+    "views": 139855,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "1:11:09"
+   },
+   {
+    "id": "z-f5y7xzeH0",
+    "title": "なぜ繋がらないのにBluetoothは世界標準になったのか？",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 59948,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "21:12"
+   },
+   {
+    "id": "bTcEkEv7o3A",
+    "title": "【心理学】なぜ自分にだけ厳しくなるのか「生き残りの仕組み」と3つのほどき方",
+    "channel": "心理の栞",
+    "channel_id": "UCgbgPvf8nExREGj-Dkzu_oQ",
+    "views": 58168,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "17:01"
+   },
+   {
+    "id": "KxTow7FbcvM",
+    "title": "花粉症ってなぜ突然なるの？医者が仕組みを解説",
+    "channel": "ニート医師「井たくま」チャンネル",
+    "channel_id": "UC4OtRobhmEjQgT1vTKBib5Q",
+    "views": 49830,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "8:14"
+   },
+   {
+    "id": "pYkOzYxpB_g",
+    "title": "【航空工学】なぜ飛行機は視界ゼロで完璧に着陸できるのか？80年前に生まれた神技術の正体",
+    "channel": "なぜそうなった?",
+    "channel_id": "UC6R_OF1vP2K9yEym9GosM4A",
+    "views": 4938,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "19:21"
+   },
+   {
+    "id": "SeLMwKhaMDw",
+    "title": "【レイダース】冷凍を徹底検証！耐性の仕組み・全ガジェット比較・3連続冷凍",
+    "channel": "ラキシ",
+    "channel_id": "UCLj7uN2BQry2AGfcHBTrePg",
+    "views": 2242,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "10:57"
+   },
+   {
+    "id": "O4BZPNDYJt4",
+    "title": "【動物解説】なぜそうなった！？訳ありな名前の動物10選+α【新訂版】",
+    "channel": "SOTA M 生き物解説チャンネル",
+    "channel_id": "UCP93Z69tDayAC0F6cKMnMAQ",
+    "views": 2238,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:24"
+   },
+   {
+    "id": "uJIeSCs0duo",
+    "title": "【C++】なぜそう動く？標準ライブラリ(cout/cin/vector)の仕組みと『クセ』を紐解く",
+    "channel": "Programmer",
+    "channel_id": "UC6rB-zszkYqehnOYuKumrFg",
+    "views": 1346,
+    "published": "5 年前 に配信済み",
+    "age_days": 1825,
+    "length": "1:36:51"
+   },
+   {
+    "id": "rJ4LuS2gQ0Y",
+    "title": "相次ぐ緊急メンテ、何が起きた？ そもそもPHPって何？【ずんだもん解説】",
+    "channel": "なんでそうなった　しくみ図鑑",
+    "channel_id": "UC41bFknZlwZgMG-7BpNhEXg",
+    "views": 3078,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "8:07"
+   },
+   {
+    "id": "09pxPyooD5M",
+    "title": "【衝撃】自販機が硬貨を見抜く驚異の技術",
+    "channel": "なぜそうなった?",
+    "channel_id": "UC6R_OF1vP2K9yEym9GosM4A",
+    "views": 618,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "10:51"
+   },
+   {
+    "id": "j00NWc_xmVA",
+    "title": "なぜソナタは気持ちいい？シューベルトと紐解く音楽の仕組み",
+    "channel": "Urune Nokuto ch. 潤音ノクト",
+    "channel_id": "UCjZZ3025P6UvF6oYfwGhLUg",
+    "views": 1317,
+    "published": "10 日前 に配信済み",
+    "age_days": 10,
+    "length": "2:24:12"
+   },
+   {
+    "id": "NEw8lPzYmxo",
+    "title": "そろばん学習者が意外と知らない筆算の仕組み「なぜそうなるのか」",
+    "channel": "50代お一人様",
+    "channel_id": "UCvijxtxkLekDmdWloaHU_MA",
+    "views": 200,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "9:29"
+   },
+   {
+    "id": "OmS1qD1awWg",
+    "title": "なぜ店はポイントを配るのか？ 本当に損しない？【ずんだもん・四国めたん】",
+    "channel": "なんでそうなった　しくみ図鑑",
+    "channel_id": "UC41bFknZlwZgMG-7BpNhEXg",
+    "views": 913,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "15:24"
+   }
+  ],
+  "views": [
+   {
+    "id": "egK37yP_bAk",
+    "title": "Sharing Snacks! 🍡 Mighty Little Bheem | Netflix Jr #shorts",
+    "channel": "Netflix Jr.",
+    "channel_id": "UCAJnyTWJPpKXuwgWQDdNWrQ",
+    "views": 1321121440,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "0:54"
+   },
+   {
+    "id": "BxV14h0kFs0",
+    "title": "This Video Has 77,363,769 Views",
+    "channel": "Tom Scott",
+    "channel_id": "UCBa659QWEk1AI4Tg--mrJ2A",
+    "views": 77364160,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:39"
+   },
+   {
+    "id": "UF53cptEE5k",
+    "title": "SHINee 샤이니 'View' MV",
+    "channel": "SMTOWN",
+    "channel_id": "UCEf_Bc-KVd7onSeifS3py9g",
+    "views": 69231638,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "3:19"
+   },
+   {
+    "id": "oIkhgagvrjI",
+    "title": "Why do YouTube views freeze at 301?",
+    "channel": "Numberphile",
+    "channel_id": "UCoxcjq-8xIDTYp3uz647V5A",
+    "views": 301,
+    "published": "14 年前",
+    "age_days": 5110,
+    "length": "9:48"
+   },
+   {
+    "id": "FOqKN-ouAUE",
+    "title": "One Dance (feat. WizKid & Kyla) - Drake (Official Audio)",
+    "channel": "Drake Media",
+    "channel_id": "UCk4XGYjL1hU9bMccpLJBQGg",
+    "views": 44930253,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:55"
+   },
+   {
+    "id": "KLuTLF3x9sA",
+    "title": "Norway 4K • Scenic Relaxation Film with Peaceful Relaxing Music and Nature Video Ultra HD",
+    "channel": "Relaxation Film、Eterna Vista",
+    "channel_id": null,
+    "views": 42576380,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:59:14"
+   },
+   {
+    "id": "nBGMQ9Kx9iI",
+    "title": "Angelina Jordan (8) - Fly Me To The Moon - The View 2014",
+    "channel": "pa1189j",
+    "channel_id": "UC30mXtvk3IAao5TOhUVARVg",
+    "views": 41555222,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "4:21"
+   },
+   {
+    "id": "Z9kRVhQzll8",
+    "title": "OVER 794 MILLION VIEWS: the most-watched Blind Auditions of The Voice | TOP 10",
+    "channel": "Best of The Voice",
+    "channel_id": "UCBJh1lBd44OGUd5JrHZQvCQ",
+    "views": 33431983,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "20:42"
+   },
+   {
+    "id": "BHACKCNDMW8",
+    "title": "3 Hours of Amazing Nature Scenery & Relaxing Music for Stress Relief.",
+    "channel": "Cat Trumpet",
+    "channel_id": "UCI-Ho-GaKYbtMzXJWmWAsrg",
+    "views": 32189395,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "3:00:09"
+   },
+   {
+    "id": "BIBMEMUbZVg",
+    "title": "Eric Church - Hell Of A View (In Studio Performance)",
+    "channel": "Eric Church",
+    "channel_id": "UCO83-v8Iqb9yN2RnyBrZkwQ",
+    "views": 30967899,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:03"
+   },
+   {
+    "id": "s8nCo3RtqRE",
+    "title": "Baby Shark Dance | Celebrate 10 Billion Views! 🏆|  Most Viewed on YouTube | Pinkfong Songs for Kids",
+    "channel": "Baby Shark - Pinkfong Kids’ Songs & Stories",
+    "channel_id": "UCcdwLMPsaU2ezNSJU1nFoBQ",
+    "views": 30733108,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:40:23"
+   }
+  ]
+ }
+}
