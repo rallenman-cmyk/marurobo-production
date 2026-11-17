@@ -883,6 +883,51 @@ class Plan:
         self.event(t0, "boot", 1.0)
         self.t = t0 + 1.2; self._lb_end(lid); return self
 
+    # ---------------------------------------------------------------- 6本目で足した動き（2026-11-17 ユーザー「ない動きを作るときは marumotion に足して、一覧にも書く」）
+    #   どれも足は地面に着いたまま。胴を脚の付け根のまわりに大きく倒し（pitch・roll）、体を少し沈める（lift）。起きるまでそのまま
+    def tumble_back(self, label=None):
+        """ころん（見上げすぎて後ろへ転ぶ）：かかとに体重 → 胴が後ろへ 80° 倒れて、背中から床に座りこむ（0.4秒・少し弾む）。
+        目がくるっと回る（輪が小さく）。音：beep_surprise → land。起きるのは get_up()"""
+        lid = self._lb(label); t0 = self.t
+        self.event(t0, "beep_surprise", 0.7)
+        self.layer(t0, t0 + 1.2, lambda t, t0=t0: {"pitch": -6.0 * hump(t, t0 + 0.42, 0.25), "lift": -0.015 * hump(t, t0 + 0.42, 0.22)})
+        self.tracks["pitch"].set(t0 + 0.05, 0.4, -80.0); self.tracks["lift"].set(t0 + 0.05, 0.4, -0.04)
+        self.tracks["gaze_pitch"].set(t0, 0.3, 20.0); self.tracks["iris"].set(t0 + 0.4, 0.3, -0.35)
+        self.blinks.append((t0 + 0.45, "fast")); self.event(t0 + 0.45, "land", 2.0)
+        self.t = t0 + 1.0; self._lb_end(lid); return self
+
+    def lie_side(self, side=1, label=None):
+        """横に寝ころぶ（床に転がる係）：右（side=1）か左へ、胴を 80° 倒して横になる（0.5秒）。目は開いたまま。音：land。起きるのは get_up()"""
+        lid = self._lb(label); t0 = self.t
+        self.tracks["roll"].set(t0, 0.5, 80.0 * side); self.tracks["lift"].set(t0, 0.5, -0.05)
+        self.layer(t0, t0 + 1.1, lambda t, t0=t0, sd=side: {"roll": 5.0 * sd * hump(t, t0 + 0.52, 0.25)})
+        self.event(t0 + 0.5, "land", 1.5)
+        self.t = t0 + 0.9; self._lb_end(lid); return self
+
+    def get_up(self, label=None):
+        """起き上がる（tumble_back・lie_side のあと）：ぐっと力をためて（0.2秒）→ 胴を起こす（0.55秒・少し行き過ぎて戻る）→ ぷるっと震える。音：takeoff・land（小）"""
+        lid = self._lb(label); t0 = self.t
+        for ch in ("pitch", "roll", "lift", "gaze_pitch", "iris"): self.tracks[ch].set(t0 + 0.2, 0.55, 0.0)
+        self.layer(t0 + 0.7, t0 + 1.4, lambda t, a=t0 + 0.7: {"twist": 4.0 * math.sin(2 * math.pi * 6.0 * (t - a)) * env(t, a, 0.05, 0.2, 0.35),
+                                                              "lift": 0.012 * hump(t, a, 0.3)})
+        self.event(t0 + 0.2, "takeoff", 0.6); self.event(t0 + 0.75, "land", 0.6)
+        self.t = t0 + 1.4; self._lb_end(lid); return self
+
+    def rub(self, dur=3.0, amp=14.0, label=None):
+        """すりすり（頭をこすりつける。腕がないので）：前へ 16° かがみ、胴を左右に ±amp° ひねりながら小さく上下（1秒に 2.4 回）。
+        目は細めてうれしそう。音：rub（ひねるたび）。終わると起きる"""
+        lid = self._lb(label); t0 = self.t; t1 = t0 + dur
+        self.tracks["pitch"].set(t0, 0.35, 16.0); self.tracks["iris"].set(t0, 0.3, -0.3)
+        f_ = 2.4
+        self.layer(t0 + 0.3, t1, lambda t, a=t0 + 0.3, b=t1: {
+            "twist": amp * math.sin(2 * math.pi * f_ * (t - a) / 2) * env(t, a, 0.2, b - a - 0.4, 0.2),
+            "roll": 0.3 * amp * math.sin(2 * math.pi * f_ * (t - a) / 2) * env(t, a, 0.2, b - a - 0.4, 0.2),
+            "lift": 0.008 * abs(math.sin(2 * math.pi * f_ * (t - a) / 2)) * env(t, a, 0.2, b - a - 0.4, 0.2)})
+        k = 0
+        while t0 + 0.3 + k / f_ < t1 - 0.2: self.event(t0 + 0.3 + k / f_, "rub", 0.8); k += 1
+        self.tracks["pitch"].set(t1, 0.4, 0.0); self.tracks["iris"].set(t1, 0.3, 0.0)
+        self.t = t1 + 0.4; self._lb_end(lid); return self
+
     def unload(self, bow=0.9, table=None, label=None):
         """荷物を降ろす：少し反る（4°・0.25秒）→前へ36°のおじぎ（bow 秒）→荷台を10°傾ける→荷物が滑る（摩擦0.28）→戻る
         おじぎが速いと（バイブルの元の0.38秒）、荷台の後ろの端が 3m/s で上がり、荷物を前へ投げてしまう（物理で確認）→ 0.9秒

@@ -8,9 +8,12 @@ _sp = importlib.util.spec_from_file_location("sfx_ep05", os.path.join(os.path.di
 S5 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(S5)
 S3 = S5.S3
 _t, _n, _mx = S3._tone, S3._noise, S3._mx
+_sp2 = importlib.util.spec_from_file_location("maru_sfx", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skill", "marurobo-video-production", "scripts", "maru_sfx.py"))
+MS = importlib.util.module_from_spec(_sp2); _sp2.loader.exec_module(MS)   # まるロボの動きの音（共通。2026-11-17）。種類は "maru:<種類>"
 
 
 def make(kind, sr=48000):
+    if kind.startswith("maru:"): return MS.make(kind[5:], 1.0, sr)
     if kind == "piron":
         return 0.26 * np.concatenate([_t(1319, 1319, 0.09, sr, d=0.06), _t(1976, 1976, 0.22, sr, d=0.18)])
     if kind == "clink":

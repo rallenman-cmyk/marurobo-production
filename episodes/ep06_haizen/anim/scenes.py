@@ -75,7 +75,9 @@ sys.path.insert(0, os.path.join(KIT_HERE, "..", "..", "..", "skill", "marurobo-v
 sys.path.insert(0, os.path.join(KIT_HERE, "..", "..", "ep01_earphone", "stage", "maru"))
 import maru_real as MR
 import maru_plans as MP
-_SND = {"step": ("step", 0.06), "step_turn": ("step", 0.03), "takeoff": ("jump", 0.3), "land": ("land", 0.4), "rub": ("rub", 0.4), "power_down": ("power_down", 0.3)}
+from maru_sfx import KINDS as MS_KINDS
+# まるロボの予定の音は全部、共通の maru_sfx で鳴らす（references/maru_motions.md「音」：予定の events の時刻に置く）。足音は小さく
+_GAIN = {"step": 0.45, "step_turn": 0.45, "land": 0.8}
 
 
 class MaruR:
@@ -105,8 +107,9 @@ class MaruR:
         i0 = max(0, int((CLOCK["T0"] - 1.0) * FPS)); i1 = min(len(frames), int((CLOCK.get("T1", CLOCK["T0"] + 60) + 1.0) * FPS))
         h.bake(frames[i0:i1], f0=f(i0 / FPS))
         for e_ in p.events:
-            if e_["kind"] in _SND:
-                k_, g_ = _SND[e_["kind"]]; ev(e_["t"], k_, round(g_ * max(0.3, e_.get("strength", 1.0)), 3))
+            if e_["kind"] in MS_KINDS:
+                g_ = _GAIN.get(e_["kind"], 1.0) * (0.4 + 0.6 * min(1.0, e_.get("strength", 1.0)) if e_["kind"] == "step" else min(1.0, e_.get("strength", 1.0)) if e_["kind"] == "land" else 1.0)
+                ev(e_["t"], "maru:" + e_["kind"], round(g_, 3))
         if not shadow:
             for o in [h.parent] + list(h.parent.children_recursive): o.visible_shadow = False
 
@@ -221,7 +224,6 @@ def b_open(cl):
     sv.spin(CLOCK["T0"] - 1, 70)
     ev(ts, "stop", 0.6)
     sv.set_face(s("03-02") - 0.1, "dots"); sv.set_face(s("03-03"), "normal")
-    ev(ts + 0.1, "pi", 0.4)
     # 03-03：少し下がって、横によける → 奥の席（11 番）でぴたり
     tb = s("03-03") + 0.3
     sv.place(tb, 0, 1.6, 0); sv.place(tb + 1.0, 0, 1.85, 0, "BEZIER")
@@ -268,7 +270,6 @@ def b_meet(cl):
     ev(d0.t1, "stop", 0.5)
     sv.place(d0.t1 + 0.05, 0.0, 2.75, d0.pose(d0.t1)[2]); sv.place(d0.t1 + 1.3, 0.0, 2.75, 0.0, "BEZIER")   # くるっと前を向く
     M = MaruR(MP.plan_meet, "meet", 0.0); track("maru", M.root, 0.15)
-    ev(w("05-02", "ピポ"), "pipo", 0.6)
     sv.piron(w("05-03", "ピロン"), "happy")
     sv.set_face(s("05-05"), "normal")
     # 06：まるロボが先輩のまわりを回ってのぞく（歩いて移る）

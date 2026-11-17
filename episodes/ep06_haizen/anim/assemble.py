@@ -147,7 +147,7 @@ for nm in ORDER:
 # 同じ種類の音が 0.6 秒以内に続くときは 1 つに（場面ごとのログに、少しずれた時刻で同じ音が残ることがある。6本目 v6 0:41「SE何個か重なってる」）
 _ev = {}
 for (t, kind), gain in sorted(EV.items()):
-    if kind not in ("motor_on", "motor_off", "step", "rub") and any(k == kind and abs(t - t2) < 0.6 for (t2, k) in _ev): continue
+    if kind not in ("motor_on", "motor_off", "step", "rub", "maru:step", "maru:step_turn", "maru:rub", "maru:beep_think") and any(k == kind and abs(t - t2) < 0.6 for (t2, k) in _ev): continue
     _ev[(t, kind)] = gain
 EV = _ev
 SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
