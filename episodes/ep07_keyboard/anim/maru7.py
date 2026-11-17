@@ -36,6 +36,7 @@ class MaruR:
         self.root = empty((0, 0, 0)); self.root.name = "maru%d follow" % len(MARU_ALL)   # 追うカメラ用：足もとの真ん中（上下にはずまない）。bake で打つ
         self.cmds = []; self.silent = []; self.drops = []
         self._last = {"loc": (-100.0, tuple(loc))}
+        track("maru_c", self.torso, 0.0)                     # 効果音の「映っているか」は体の真ん中で見る（"maru" は頭の上の吹き出し用）
         MARU_ALL.append(self); _M_[0] = self
 
     # ---------------------------------------------------------------- 命令（時刻は場面の時刻）
@@ -65,7 +66,7 @@ class MaruR:
         loc = tuple(loc) + ((0.0,) if len(loc) < 3 else ())
         self.cmds.append((t_land, "path", dict(pts=[loc], ts=[t_land], silent=silent))); self._last["loc"] = (t_land, loc)
 
-    def hops(self, t, n=2, height=0.06, sound=True): self.cmds.append((t, "hops", dict(n=n, height=height, sound=sound)))
+    def hops(self, t, n=2, height=0.12, sound=True): self.cmds.append((t, "hops", dict(n=n, height=height, sound=sound)))
     def push(self, t, d=0.3): self.cmds.append((t, "push", dict(d=d)))
 
     def path(self, pts, ts, silent=True):
@@ -133,7 +134,7 @@ class MaruR:
                 self._wait_to(p, t - 0.3, nm); t_ = p.t; p.hops(n=a["n"], height=a["height"])
                 if not a["sound"]: self.silent.append((t_, p.t))
             elif kind == "push":                           # 前へ体重をかけて押す（ぐっ）
-                p.layer(t, t + a["d"] + 0.2, lambda u, t0=t, d=a["d"]: {"pitch": 12.0 * mm.hump(u, t0, d)})
+                p.layer(t, t + a["d"] + 0.2, lambda u, t0=t, d=a["d"]: {"pitch": 22.0 * mm.hump(u, t0, d)})
             elif kind == "face":
                 h = a["face"] + FACE_OFF
                 if a.get("cut"):
@@ -145,7 +146,7 @@ class MaruR:
             elif kind == "look":
                 p.look(0, a["pitch"], hold=0.0, at=t)
             elif kind == "hop":
-                self._wait_to(p, t - 0.3, nm); t_ = p.t; p.hops(n=1, height=0.08)
+                self._wait_to(p, t - 0.3, nm); t_ = p.t; p.hops(n=1, height=0.18)      # 声の「ぴょん」で見える高さ（v7 の点検）
                 if not a["sound"]: self.silent.append((t_, p.t))
             elif kind == "land":                           # 落ちてきて着く：脚で受け止める（沈んで戻る）
                 p.tracks["lift"].set(t, 0.08, -0.06); p.tracks["lift"].set(t + 0.1, 0.45, 0.0)
@@ -209,7 +210,7 @@ class MaruR:
             k_, g_ = snd[e_["kind"]]
             st = e_.get("strength", 1.0)
             g = g_ * (max(0.3, min(1.0, st / 3.0)) if e_["kind"] in ("takeoff", "land") else max(0.3, st))
-            ev(e_["t"], k_, round(g, 3), "maru")
+            ev(e_["t"], k_, round(g, 3), "maru_c")
         self.p = p
         return frames
 

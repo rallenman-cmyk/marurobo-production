@@ -38,7 +38,7 @@ def ev_list():
     add(w("05-03", "まるロボ"), e("05-03") + 0.3, "tag", dict(text="まるロボ：1字ずつ", pos=(950, 110), size=46, keep=True))
     # MARUROBO：押したキーから字が浮き上がって、左上に並ぶ（v5「該当のキーを押したらその文字が浮かび上がって まるろぼ になるように」）
     t = w("05-04", "道のり"); dt = min(0.55, (e("05-04") + 0.4 - t) / 7)
-    t2 = s("05-05") - 0.2 + 0.4; dt2 = min(0.55, (e("05-05") + 0.5 - (t2 - 0.4)) / 7)
+    t2 = s("05-05") - 0.2 + 4.3; dt2 = min(0.55, (e("05-05") + 0.5 - t2) / 7)      # scenes.py の path_a と同じ（v7：となりへ大きく跳んで移ってから打つ）
     it = [("k_" + ch, ch, t + i * dt, i, 0, BLUE) for i, ch in enumerate("MARUROBO")]
     it += [("a_" + ch, ch, t2 + i * dt2, i, 1, ORANGE) for i, ch in enumerate("MARUROBO")]
     add(t, e("05-05") + 0.6, "typed", dict(items=it))

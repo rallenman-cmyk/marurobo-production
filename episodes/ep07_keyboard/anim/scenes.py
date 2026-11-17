@@ -20,7 +20,7 @@ CLIPNAME, OUTDIR = _argv[0], _argv[1]
 _LT = json.load(open(os.path.join(_K7, "..", "voice", "letter_times.json"), encoding="utf-8"))
 def lt(i, ch): return s(i) + _LT[i][ch]
 # 効果音に「鳴らした物」（track の名前）を持たせる。組み立てで、その物が画面に映っているときだけ鳴らす（7本目 v5「まるロボが写ってないのにSE聞こえるのやめて」）
-_SRC_DEFAULT = {"step": "maru", "jump": "maru", "land": "maru", "takeoff": "maru", "step_turn": "maru"}
+_SRC_DEFAULT = {"step": "maru_c", "jump": "maru_c", "land": "maru_c", "takeoff": "maru_c", "step_turn": "maru_c"}
 
 
 def ev(t, kind, gain=1.0, src=None):
@@ -83,7 +83,7 @@ def b_desk(cl):
     A = Board(ROWS_ABC, AO, name="ka", key_col="#F3EDE2"); A.track_all("a_")
     # ABC 順：04-03 で右からすべりこむ（それまで画面の外）。08 章からは使わない
     key(A.root, "location", -100.0, (6.0, 0, KEY_TOP)); key(A.root, "location", s("04-03"), (6.0, 0, KEY_TOP))
-    key(A.root, "location", s("04-03") + 1.6, (0, 0, KEY_TOP)); ev(s("04-03") + 0.1, "whoosh", 0.4); ev(s("04-03") + 1.6, "land", 0.4)
+    key(A.root, "location", s("04-03") + 1.6, (0, 0, KEY_TOP)); ev(s("04-03") + 0.1, "whoosh", 0.4); ev(s("04-03") + 1.6, "land", 0.4, "")
     D = Board(ROWS_DV, DO_, name="kd", key_col="#E6F0EA"); D.track_all("d_")
     key(D.root, "location", -100.0, (6.0, 0, KEY_TOP)); key(D.root, "location", s("23-02"), (6.0, 0, KEY_TOP))
     key(D.root, "location", s("23-02") + 1.4, (0, 0, KEY_TOP))
@@ -106,7 +106,7 @@ def b_desk(cl):
     Q.light("S", w("02-02", "S"), s("02-04"), col="#FFD24A")      # 02-02：となりの S
     t = s("02-04"); M.at(t, face=-70)
     SR = ("Q", "W", "S", "D", "K")      # 最後は K（上の段の QWERTY の前に立たない。03 でその 6 個が浮き上がるため）
-    hop_path(Q, "A" + "".join(SR), t + 0.4 - 0.55, 0.55, M, line=False)      # A から Q W S D K へ続けて跳ぶ
+    hop_path(Q, "A" + "".join(SR), t + 0.4, 0.55, M, line=False)      # A から Q W S D K へ続けて跳ぶ（Q を押すのは t + 0.95。v6 と同じ）
     Q.hold("K", t + 0.4 + 4 * 0.55 + 0.6, w("04-02", "遠く") - 0.1)
     M.wobble(e("02-04") - 0.6, e("02-04"), 8, 0.3)
     # 03：上から。まるロボは K で止まったまま（B へは行かない。2026-11-16 ユーザー「この話してるときにＢのとこ行ってるのおかしい」）
@@ -452,7 +452,7 @@ def b_inside(cl):
     M.hop(e("14-04") - 0.3, h=0.15, d=0.4)
     # 15-03：棒の根もとにゆっくり跳び乗る → 乗った棒が 1 本だけゆっくり上がって戻る（2 回、別の棒）（v5「まるロボが飛んで棒を踏んでるんじゃないの」）
     bpy.context.view_layer.update()
-    base = lambda ch: (pv[ch].matrix_world.translation.x * 0.86, (pv[ch].matrix_world.translation.y - 0.6) * 0.86 + 0.6, 0.0)
+    base = lambda ch: (pv[ch].matrix_world.translation.x * 1.12, (pv[ch].matrix_world.translation.y - 0.6) * 1.12 + 0.6, 0.0)   # 根もとの外の端（シーソーのように押す。v7：内側に立つと上がる棒が体を突き抜けた）
     M.walk(s("15-01"), s("15-03"), (0.2, 0.75, 0.0))
     for ch, tl in (("G", w("15-03", "ぴょん") - 0.05), ("H", e("15-03") - 0.2)):     # 「ぴょん」で着く（その場から、ゆっくり 1 回ずつ）
         M.hopto(tl, base(ch))
