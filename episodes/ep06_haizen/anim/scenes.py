@@ -68,6 +68,49 @@ def crowd(skip=()):
     return P
 
 
+# ---------------------------------------------------------------- 本物のまるロボ（2026-11-17 ユーザー「止めて本物に替える」）
+#   共通の部品 skill/.../scripts/maru_real.py で置き（PC は story.blend の本物・クラウドは同じ寸法の代わりの体）、
+#   maru_plans.py の予定（marumotion）を毎コマ当てる。手で動かさない（references/maru_walk.md）
+sys.path.insert(0, os.path.join(KIT_HERE, "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
+sys.path.insert(0, os.path.join(KIT_HERE, "..", "..", "ep01_earphone", "stage", "maru"))
+import maru_real as MR
+import maru_plans as MP
+_SND = {"step": ("step", 0.06), "step_turn": ("step", 0.03), "takeoff": ("jump", 0.3), "land": ("land", 0.4), "rub": ("rub", 0.4), "power_down": ("power_down", 0.3)}
+
+
+class MaruR:
+    """予定の関数 fn（maru_plans.py）でまるロボを置いて動かす。name：EXTRA の名前（ころぶ・運ばれる）。root：札を追いかける体の中心"""
+
+    def __init__(self, fn, name, t0, *args, shadow=True):
+        from mathutils import Matrix, Vector, Quaternion
+        MP.EXTRA.pop(name, None)
+        p = fn(t0, *args)
+        frames = MP.mm.simulate(p, fps=FPS)
+        h = MR.place(loc=(0, 0, 0), heading=0.0, scale=MP.S, name="maru_" + name)
+        self.h, self.root = h, h.torso
+        ex = MP.EXTRA.get(name, {})
+        for k_ in ex.get("parent", []):   # 小さく置く親を動かす（テーブルの上・運ばれる）。loc か face が None ならそちらは打たない
+            t, loc, face = k_[:3]; ip = k_[3] if len(k_) > 3 else "BEZIER"
+            if loc is not None: key(h.parent, "location", t, loc, ip)
+            if face is not None: key(h.parent, ("rotation_euler", 2), t, R(face), ip)
+        if ex.get("tilt"):                           # 足もとを中心に体ごと倒す（ころぶ・寝ころぶ）
+            ta = ex["tilt"][0][0]; fr = frames[min(len(frames) - 1, int(round(ta * FPS)))]
+            P = Vector((fr["root"][0], fr["root"][1], 0.0)); psi = fr["psi"]
+            tl = bpy.data.objects.new("maru_" + name + " tilt", None); bpy.context.scene.collection.objects.link(tl)
+            tl.parent = h.parent; tl.location = P; tl.rotation_mode = "QUATERNION"
+            h.root.parent = tl; h.root.matrix_parent_inverse = Matrix.Translation(-P)
+            for t, pitch, roll, dz in ex["tilt"]:
+                q = Quaternion((0, 0, 1), psi) @ Quaternion((1, 0, 0), R(pitch)) @ Quaternion((0, 1, 0), R(roll)) @ Quaternion((0, 0, 1), -psi)
+                key(tl, "rotation_quaternion", t, tuple(q), "BEZIER"); key(tl, "location", t, tuple(P + Vector((0, 0, dz))), "BEZIER")
+        i0 = max(0, int((CLOCK["T0"] - 1.0) * FPS)); i1 = min(len(frames), int((CLOCK.get("T1", CLOCK["T0"] + 60) + 1.0) * FPS))
+        h.bake(frames[i0:i1], f0=f(i0 / FPS))
+        for e_ in p.events:
+            if e_["kind"] in _SND:
+                k_, g_ = _SND[e_["kind"]]; ev(e_["t"], k_, round(g_ * max(0.3, e_.get("strength", 1.0)), 3))
+        if not shadow:
+            for o in [h.parent] + list(h.parent.children_recursive): o.visible_shadow = False
+
+
 def maru_lie(M, t, d=0.45, back=False):
     """まるロボが床に転がる（横に倒れる）／起き上がる"""
     z0, z1 = M.z0, 0.5 * M.s * 0.0 + 0.13 / M.s if False else M.z0
@@ -154,12 +197,8 @@ def take_ramen(person_root, dr, t0, n=11):
 # ======================================================================== S01〜S04：人だらけの通路を、ラーメンが走ってくる
 def b_open(cl):
     restaurant(); P = crowd()
-    M = Maru((-0.15, 0.3, 0), face=0); track("maru", M.root, 0.4)
+    M = MaruR(MP.plan_open, "open", 0.0); track("maru", M.root, 0.15)
     # 01-02：きょろきょろしながら見て回る（歩いて移る）
-    M.at(s("01-02") - 0.3, face=0)
-    M.walk(s("01-02") + 0.2, s("01-02") + 2.2, (0.0, 0.9))
-    M.at(s("01-02") + 2.6, face=-50); M.at(e("01-02") - 0.2, face=50); M.at(e("01-02") + 0.6, face=0)
-    M.at(w("02-01", "奥から"), face=180)        # 奥を向く
     # 人：店員さんと、お客さん（ロボの道に入らない所を歩く）
     st = Wk(walker((-0.32, -1.9), 0, shirt="#2B2F36", apron=True))
     t_ = st.walk(0.3, [(-0.32, -1.9), (-0.32, -1.3), (-0.62, -1.85)], v=0.6); st.at(t_ + 0.4, -0.62, -1.85, -90)
@@ -182,7 +221,7 @@ def b_open(cl):
     sv.spin(CLOCK["T0"] - 1, 70)
     ev(ts, "stop", 0.6)
     sv.set_face(s("03-02") - 0.1, "dots"); sv.set_face(s("03-03"), "normal")
-    M.hop(ts + 0.1, h=0.12, d=0.35, sound=False); ev(ts + 0.1, "pi", 0.4)
+    ev(ts + 0.1, "pi", 0.4)
     # 03-03：少し下がって、横によける → 奥の席（11 番）でぴたり
     tb = s("03-03") + 0.3
     sv.place(tb, 0, 1.6, 0); sv.place(tb + 1.0, 0, 1.85, 0, "BEZIER")
@@ -192,13 +231,11 @@ def b_open(cl):
     d3 = drive_end(R11, w("03-04", "ぴたり"), v=0.42, turn=120, face0=0)
     d3 = plan.Drive(R11, max(tb + 1.2, d3.t0), 0.42, 120, 0)
     sv.drive(d3); ev(d3.t1, "stop", 0.5)
-    M.at(d3.t0 + 1.0, face=180); M.at(d3.t0 + 3.0, face=320)
     # v2：お客さんが、トレーのラーメンを手で受け取って、テーブルに置く（v1 0:44「ラーメンは人が受け取る感じにして」）
     sv.piron(e("03-05") + 0.2, "happy"); sv.set_face(e("04-01"), "normal")
     # 04-05 のあと：台所の出口へ戻る
     d4 = plan.Drive([STOP11, (0.25, 0.5), (0.25, 1.6), (0.0, 2.75)], s("04-05") + 0.2, 0.55, 120)
     sv.drive(d4)
-    M.walk(s("04-04") + 0.4, s("04-04") + 2.0, (-0.25, 0.9))
     if cut(cl, "S01a"): cam((0.3, -3.1, 1.55), (0.0, 0.9, 0.55), 24, 0.0, s("01-02") + 0.5, (0.25, -2.7, 1.45), (0.0, 1.0, 0.5))
     if cut(cl, "S01b"): cam((0.38, -0.35, 0.5), (0.0, 0.8, 0.25), 32, s("01-02") - 0.2, s("02-01"), (0.35, -0.2, 0.48), (0.0, 0.9, 0.25))
     if cut(cl, "S02a"):
@@ -230,23 +267,17 @@ def b_meet(cl):
     sv.drive(d0); sv.spin(CLOCK["T0"] - 1, 120)
     ev(d0.t1, "stop", 0.5)
     sv.place(d0.t1 + 0.05, 0.0, 2.75, d0.pose(d0.t1)[2]); sv.place(d0.t1 + 1.3, 0.0, 2.75, 0.0, "BEZIER")   # くるっと前を向く
-    M = Maru((-0.25, 0.9, 0), face=180); track("maru", M.root, 0.4)
-    M.walk(s("05-01") + 0.3, s("05-01") + 2.4, (0.0, 1.95))
-    M.at(s("05-01") + 2.8, face=180)
-    M.hop(w("05-02", "ピポ") - 0.1, h=0.18, d=0.4, sound=False); ev(w("05-02", "ピポ"), "pipo", 0.6)
+    M = MaruR(MP.plan_meet, "meet", 0.0); track("maru", M.root, 0.15)
+    ev(w("05-02", "ピポ"), "pipo", 0.6)
     sv.piron(w("05-03", "ピロン"), "happy")
     sv.set_face(s("05-05"), "normal")
     # 06：まるロボが先輩のまわりを回ってのぞく（歩いて移る）
-    M.walk(s("06-01") + 0.2, s("06-01") + 2.6, (0.6, 2.2))
-    M.walk(s("06-02") + 0.3, s("06-02") + 2.5, (0.35, 1.95)); M.at(s("06-02") + 2.8, face=150, look=12)
-    M.at(e("06-02") + 0.3, look=0)
-    M.walk(s("06-03") + 0.5, s("06-03") + 2.5, (-0.1, 2.0)); M.at(s("06-03") + 2.8, face=180)
     # 07：店の引きの絵（ほかの先輩も働いている）
     for (x, y, a) in ((-0.32, -0.25, 0), (0.32, -1.85, 180)):
         o = senpai_serve((x, y), a)
         for k, g in o["face"].items(): g.hide_render = (k != "normal")
         ramen(o["trays"][1], (0, 0, 0.012), steam=False)
-    sv.piron(s("07-03") + 0.4, "happy", sound=False); M.hop(s("07-03") + 0.6, h=0.15, d=0.4)
+    sv.piron(s("07-03") + 0.4, "happy", sound=False)
     if cut(cl, "S05a"): cam((-0.38, 0.75, 0.8), (0.0, 2.4, 0.7), 28, s("05-01") - 0.2, s("05-03"), (-0.33, 0.85, 0.78), (0.0, 2.45, 0.7))
     # v2：まるロボの体も入るように、通路の横から少し引いて（v1 1:11「まるロボもう少し体うつるように」）
     if cut(cl, "S05b"): cam((0.32, 0.3, 0.78), (0.0, 2.4, 0.56), 24, s("05-03") - 0.2, s("06-01"), (0.3, 0.4, 0.78), (0.0, 2.4, 0.58))
@@ -289,11 +320,9 @@ def b_order(cl):
     key(near, "rotation_euler", w("08-02", "置きました") + 0.2, aim_arm(near, (-0.55, 3.0, 0), R(120), tp)); key(near, "rotation_euler", w("08-02", "置きました") + 0.8, r0)
     st.arm_up(w("08-03", "押します") - 0.6, 1, 95, 0.5); key(st.w.arms[1], ("rotation_euler", 0), w("08-03", "12番") + 0.6, 0.0)
     ev(w("08-03", "押します"), "click", 0.6); ev(w("08-03", "12番"), "click", 0.6)
-    M = Maru((0.45, 2.0, 0), face=160); track("maru", M.root, 0.4)
-    M.at(w("08-03", "画面") , look=12); M.at(e("08-03"), look=0)
+    M = MaruR(MP.plan_order, "order", 0.0); track("maru", M.root, 0.15)
     dr = order_drive(); sv.drive(dr)
     sv.piron(s("08-04") + 0.05, "happy"); sv.set_face(s("08-04") + 1.5, "normal")
-    M.at(dr.t0 + 0.8, face=200)
     if cut(cl, "S08a"): cam((0.55, 0.75, 1.4), (-0.2, 2.85, 1.15), 26, s("08-01") - 0.2, s("08-03"), (0.52, 0.85, 1.38), (-0.2, 2.85, 1.15))   # v3 点検：店員さんの頭が切れていた
     if cut(cl, "S08b"): cam((0.55, 1.95, 1.35), (0.0, 2.8, 1.18), 30, s("08-03") - 0.2, s("08-04"), (0.5, 2.0, 1.33), (0.0, 2.8, 1.18))
     if cut(cl, "S08c"):
@@ -385,12 +414,7 @@ def b_ceil(cl):
     near = sorted(zip(plan.CEIL_MARKS, R_["marks"]), key=lambda q: (q[0][0]) ** 2 + (q[0][1] - 0.8) ** 2)[:3]
     for k, ((mx, my), o) in enumerate(near): track("mark%d" % k, o, 0.0)
     # 11-05：まるロボも見上げて……ころん
-    M = Maru((-0.35, 0.9, 0), face=32); track("maru", M.root, 0.4)
-    M.at(s("11-05") + 0.2, look=0); M.at(w("11-05", "見上げて") + 0.4, look=35)
-    t_ = w("11-05", "ころん") - 0.1
-    key(M.body, ("rotation_euler", 0), t_ - 0.3, R(-35)); key(M.body, ("rotation_euler", 0), t_ + 0.35, R(-95))
-    key(M.body, ("location", 2), t_ - 0.3, M.z0); key(M.body, ("location", 2), t_ + 0.35, 0.52)
-    ev(t_ + 0.35, "land", 0.6)
+    M = MaruR(MP.plan_ceil, "ceil", 0.0); track("maru", M.root, 0.15)
     if cut(cl, "S11a"):
         c, tg = cam((0.45, -0.6, 0.35), (0.0, 0.2, 2.6), 18, s("11-01") - 0.2, e("11-04"), (0.42, -0.2, 0.35), (0.0, 1.0, 2.6))
     if cut(cl, "S11b"): cam((0.2, 0.05, 0.4), (-0.35, 0.9, 0.3), 32, s("11-05") - 0.2, s("12-01"), (0.18, 0.12, 0.38), (-0.35, 0.9, 0.25))
@@ -439,8 +463,7 @@ def b_lidar(cl):
         h = plan.ray(pos[0], pos[1], a, S, 2.6)
         if h: P_.append((h[1][0], h[1][1], t))
     point_cloud("hits", P_, col=TEAL, radius=0.02, base=1.8, pop=6.0, decay=6.0, t_offset=CLOCK["T0"])
-    M = Maru((0.55, 0.15, 0), face=130); track("maru", M.root, 0.4)
-    M.at(s("13-02") + 0.5, look=-12); key(M.body, ("location", 2), s("13-02") + 0.5, M.z0); key(M.body, ("location", 2), s("13-02") + 1.0, M.z0 - 0.08)
+    M = MaruR(MP.plan_lidar, "lidar", 0.0); track("maru", M.root, 0.15)
     if cut(cl, "S13a"): cam((-0.35, -0.75, 0.95), (0.0, 0.6, 0.5), 28, s("13-01") - 0.2, s("13-02"), (-0.32, -0.6, 0.88), (0.0, 0.6, 0.45))
     if cut(cl, "S13b"): cam((0.45, -0.15, 0.36), (0.0, 0.6, 0.3), 34, s("13-02") - 0.2, s("14-01"), (0.45, -0.3, 0.5), (0.0, 0.6, 0.28), 26)
 
@@ -532,8 +555,8 @@ def b_dark(cl, maru_lying=False):
             C += feet(x, y, hd, t, mv)
         return C
     # まるロボ（止まっている＝青緑の点）。18 章の小窓では、床に転がっていて見えない
-    MP = (0.5, 2.15) if not maru_lying else (0.0, 0.2)
-    S = plan.segments() + ([] if maru_lying else plan._box(MP[0], MP[1], 0.12))
+    MPOS = (0.5, 2.15) if not maru_lying else (0.0, 0.2)
+    S = plan.segments() + ([] if maru_lying else plan._box(MPOS[0], MPOS[1], 0.12))
     t0 = s("14-02") - 0.2 if not maru_lying else CLOCK["T0"]
     t1 = (e("16-04") + 1.0) if not maru_lying else CLOCK["T0"] + 8.0
     still, moving = plan.scan(pose_at if not maru_lying else (lambda t: (0.0, 1.0)), t0, t1, rot_per_s=2.0, rays=150, S=S, people=people if not maru_lying else None, maxd=4.5)
@@ -550,10 +573,9 @@ def b_dark(cl, maru_lying=False):
             rg = ring_marker((0, 0), r=0.55, col=ORANGE_PT, w=0.015, z=0.02); rg.parent = wk.root
             show_between(rg, w("15-04", "近づきすぎない"))
     if maru_lying:   # v2：まるロボがいるはずの所に、点がないことを黄色い輪で示す（v1 5:20「わかりにくい」）
-        rq = ring_marker(MP, r=0.24, col="#FFD24A", w=0.022, z=0.03); show_between(rq, w("18-03", "映って") - 0.3); scale_pop(rq, w("18-03", "映って") - 0.3)
+        rq = ring_marker(MPOS, r=0.24, col="#FFD24A", w=0.022, z=0.03); show_between(rq, w("18-03", "映って") - 0.3); scale_pop(rq, w("18-03", "映って") - 0.3)
     if not maru_lying:
-        M = Maru((MP[0], MP[1], 0), face=200); track("maru", M.root, 0.4)
-        for o in [M.root] + list(M.root.children_recursive): o.visible_shadow = False
+        M = MaruR(MP.plan_dark, "dark", 0.0, shadow=False); track("maru", M.root, 0.15)
     track("orange", sv.root, 0.0)
     if cut(cl, "S14a"): cam((0.7, 3.3, 3.3), (0.0, 0.0, 0.0), 24, s("14-01") - 0.2, s("14-04"), (0.6, 3.2, 3.2), (0.0, -0.2, 0.0))
     if cut(cl, "S14b"): cam((1.8, 2.3, 2.4), (-0.3, 0.4, 0.2), 26, s("14-04") - 0.2, s("15-03"), (1.6, 2.2, 2.3), (-0.2, 0.3, 0.2))
@@ -575,7 +597,7 @@ def b_lit14(cl):
     pos0 = (0.0, 1.7)
     sv = Sv(senpai_serve(pos0, 0)); track("senpai", sv.root, 1.2); sv.spin(CLOCK["T0"] - 1, 300, rps=1.0)
     sv.hold(CLOCK["T0"], pose=(pos0[0], pos0[1], 0.0))
-    M = Maru((0.5, 2.15, 0), face=200); track("maru", M.root, 0.4)
+    M = MaruR(MP.plan_dark, "dark", 0.0); track("maru", M.root, 0.15)
     for k, legs in enumerate(dark_people()):
         pts = legs[0][0]
         wk = Wk(walker(pts[0], 0, shirt=("#7FB3A8", "#C0504D", "#6C8EBF")[k % 3]))
@@ -605,14 +627,10 @@ def b_test(cl):
     lp2, _ = light_plane(sv.root, r=1.0 / SVS); lp2.location = (0, 0, plan.LIDAR_Z / SVS)
     show_between(lp2, w("20-04", "回る光"), s("21-01")); scale_pop(lp2, w("20-04", "回る光"))   # v4「青い光だけ消えるの気になる」（6:30）：桃色の扇と同じ時に消す
     # 18：まるロボが転がる → 先輩が近づいて、手前で止まる
-    M = Maru((0.55, 0.45, 0), face=120); track("maru", M.root, 0.3)
-    M.walk(s("18-01") + 0.6, s("18-01") + 2.6, (0.0, 0.2)); M.at(s("18-01") + 3.0, face=180)
-    maru_lie(M, w("18-01", "転がって") + 0.9)
+    M = MaruR(MP.plan_test, "test", 0.0); track("maru", M.root, 0.1)
     d18 = drive_end([(0.0, 1.2), (0.0, 0.66)], w("18-04", "止まりました"), v=0.22, face0=0)
     sv.hold(d18.t0 - 0.1, pose=(0.0, 1.2, 0)); sv.drive(d18); ev(d18.t1, "stop", 0.6)
     # 19：起き上がって、横へ。先輩は出っぱった天板をよけて進む
-    maru_lie(M, s("19-01") - 0.9, back=True)
-    M.walk(s("19-01") - 0.2, s("19-01") + 1.6, (0.5, 0.55)); M.at(s("19-01") + 2.0, face=200)
     d19 = drive_end([(0.0, 0.66), (0.0, -0.2), (0.2, -0.65), (0.22, -1.25), (0.05, -1.75)], w("19-03", "よけて") + 1.2, v=0.38, turn=90, face0=0)
     d19 = plan.Drive([(0.0, 0.66), (0.0, -0.2), (0.2, -0.65), (0.22, -1.25), (0.05, -1.75)], max(s("19-03") - 0.6, d19.t0), 0.38, 90, 0)
     sv.hold(d19.t0 - 0.05, pose=(0.0, 0.66, 0)); sv.drive(d19)
@@ -754,9 +772,7 @@ def b_narrow(cl):
     sv.drive(db)
     track("gapL", empty((-0.645, -0.25, 0.05)), 0.0)
     gr = empty((0.855 - PULL - 0.21, -0.25, 0.05)); track("gapR", gr, 0.0)
-    M = Maru((-0.35, 1.3, 0), face=200); track("maru", M.root, 0.4)
-    M.at(s("23-03") + 0.3, face=180); M.hop(s("23-03") + 0.5, h=0.1, d=0.3, sound=False)
-    M.at(s("25-01"), face=210); M.hop(e("25-02") - 0.6, h=0.18, d=0.4)
+    M = MaruR(MP.plan_narrow, "narrow", 0.0); track("maru", M.root, 0.15)
     if cut(cl, "S23a"): cam((0.0, -2.95, 1.35), (0.0, 0.3, 0.45), 26, s("23-01") - 0.2, s("23-03"), (0.0, -2.8, 1.3), (0.0, 0.3, 0.45))
     if cut(cl, "S23b"): cam((0.15, -0.6, 1.15), (0.0, 0.55, 1.12), 34, s("23-03") - 0.2, s("24-01"), (0.12, -0.5, 1.13), (0.0, 0.55, 1.12))
     if cut(cl, "S24a"): cam((0.0, 1.55, 2.7), (0.0, -0.25, 0.0), 30, s("24-01") - 0.2, s("25-01"), (0.0, 1.45, 2.6), (0.0, -0.3, 0.0))
@@ -796,22 +812,12 @@ def b_face(cl):
     kid.walk(e("27-03") - 2.0, [(0.3, 1.0), (-0.6, 0.55), (-1.0, 0.55)], v=0.7)
     sv.set_face(e("27-03") - 0.5, "normal")
     # 28：まるロボがまねして、テーブルの上から頭ですりすり → しつこく → 怒った顔
-    M = Maru((1.15, 1.35, 0.742), face=-90); track("maru", M.root, 0.4)
+    M = MaruR(MP.plan_face, "face", 0.0); track("maru", M.root, 0.15)   # テーブルの上で、頭をすりすり（予定の nod）→ 怒られて下がる
     t_r = s("28-01") + 2.2
-    M.at(t_r - 0.3, loc=(1.15, 1.35, 0.742)); M.at(t_r + 0.3, loc=(1.02, 1.35, 0.742))
     t_ang = w("28-03", "怒った") - 0.15
-    n_rub = int((t_ang - 0.15 - (t_r + 0.4)) / 0.42) + 1   # v4「すりすりが途中で止まっている」（8:43）：怒った顔になるまで続ける
-    for k in range(n_rub):
-        tt = t_r + 0.4 + k * 0.42
-        key(M.body, ("rotation_euler", 0), tt, R(30 if k % 2 else 18)); key(M.body, ("rotation_euler", 1), tt, R(-8 if k % 2 else 8)); key(M.body, ("location", 2), tt, M.z0 + (0.14 if k % 2 else 0.08))
-        if k % 2 == 0: ev(tt, "rub", 0.4)
-    t_end = t_r + 0.4 + (n_rub - 1) * 0.42
-    sv.ears(t_r + 0.4, t_end, 8, 0.42)
+    sv.ears(t_r + 0.4, t_ang - 0.3, 8, 0.42)
     sv.set_face(t_r + 0.6, "happy")
     sv.set_face(t_ang, "angry"); ev(t_ang, "grr", 0.6)
-    key(M.body, ("rotation_euler", 0), max(t_end, t_ang + 0.1), R(18)); key(M.body, ("rotation_euler", 0), t_ang + 0.45, R(-10)); key(M.body, ("rotation_euler", 1), t_ang + 0.45, 0.0); key(M.body, ("location", 2), t_ang + 0.45, M.z0)
-    M.at(t_ang + 0.2, loc=(1.02, 1.35, 0.742)); M.at(t_ang + 0.6, loc=(1.32, 1.35, 0.742))
-    M.glow(t_ang + 0.3, 0.3, 0.3); M.glow(e("28-04"), 0.9, 0.5)
     sv.set_face(e("28-05") - 0.3, "normal")
     if cut(cl, "S26a"): cam((-0.5, -0.3, 1.25), (0.62, 1.35, 1.1), 30, s("26-01") - 0.2, s("26-02") + 0.6, (-0.4, -0.15, 1.22), (0.62, 1.35, 1.12))
     if cut(cl, "S26b"): cam((-0.35, 2.1, 1.6), (-0.1, -0.8, 0.6), 26, s("26-03") - 0.2, s("27-01"), (-0.3, 2.0, 1.55), (-0.1, -0.6, 0.6))
@@ -822,7 +828,7 @@ def b_face(cl):
 # ======================================================================== S29：まとめ（冒頭と同じ絵）
 def b_sum(cl):
     restaurant(); crowd()
-    M = Maru((-0.25, 0.9, 0), face=200); track("maru", M.root, 0.4)
+    M = MaruR(MP.plan_sum, "sum", 0.0); track("maru", M.root, 0.15)
     sv = Sv(senpai_serve(WAIT, 0)); track("senpai", sv.root, 1.2); sv.spin(CLOCK["T0"] - 1, 600)
     tray_item(sv, "ramen", 1, t_hide=s("29-04") + 1.0)
     d1 = plan.Drive([WAIT, (0.25, 1.6), (0.3, 0.4), SEAT11], s("29-01") + 0.5, 0.45, 100)
@@ -858,8 +864,8 @@ def b_end(cl):
     cnt = (1.35, 3.12); CZ = 0.86
     cube(mat("counter", "#E9E2D6", rough=0.5), (cnt[0], cnt[1] + 0.02, CZ / 2), (0.7, 0.42, CZ), bevel=0.02)
     cube(mat("countertop", "#8A5E3B", rough=0.3, coat=0.4), (cnt[0], cnt[1] + 0.02, CZ - 0.01), (0.74, 0.46, 0.03), bevel=0.008)
-    M = Maru((cnt[0], cnt[1] - 0.05, CZ + 0.005), face=200); track("maru", M.root, 0.4)
-    M.at(s("30-01") + 0.3, look=-8); M.glow(s("30-01") + 0.6, 0.45, 0.6)
+    # まるロボ：小さく置く親（PK）を運ぶ。体は予定（plan_end）で、休む → 起きる → おどろく。face は 6本目の向き（親は +180）
+    PK = [(CLOCK["T0"] - 1, (cnt[0], cnt[1] - 0.05, CZ + 0.005), 200 + 180)]
     st = Wk(walker((-0.6, 3.1), 120, shirt="#2B2F36", apron=True)); track("staff", st.root, 1.6)
     st.at(CLOCK["T0"] - 1, -0.6, 3.1, 120)
     t_l = w("30-02", "ひょいと"); t_p = w("30-02", "トレー") + 0.2
@@ -879,19 +885,19 @@ def b_end(cl):
     for i, (t, loc, lean, f) in enumerate(keys):
         if loc is None:   # 体の前に抱える
             th = R(f); fx, fy = math.sin(th), -math.cos(th); loc = (SP[0] + fx * 0.42, SP[1] + fy * 0.42, 0.78)
-        M.at(t, loc=loc, interp="BEZIER")
+        PK.append((t, loc, None))
         key(st.root, ("rotation_euler", 0), t, lean, "BEZIER"); key(st.root, ("rotation_euler", 2), t, R(f), "BEZIER")
         tgt = (loc[0], loc[1], loc[2] + MB)
         for arm in st.w.arms:
             key(arm, "rotation_euler", t, aim_arm_full(arm, (SP[0], SP[1], 0.0), (lean, 0.0, R(f)), tgt), "BEZIER")
-    M.at(t_p + 0.4, loc=tray0, interp="BEZIER")
+    PK.append((t_p + 0.4, tray0, None))
     for hp in st.w.hips:   # 持ち上げる間は、足をそろえて立つ
         key(hp, ("rotation_euler", 0), g - 0.3, 0.0); key(hp, ("rotation_euler", 0), s("30-03") + 0.5, 0.0)
     for arm in st.w.arms:   # 手をのばし始める・はなす
         key(arm, "rotation_euler", t_l - 1.0, (0, 0, 0)); key(arm, "rotation_euler", t_p + 0.8, (R(-20), 0, 0))
     key(st.root, ("rotation_euler", 0), t_p + 0.8, 0.0, "BEZIER")
-    M.at(g, face=200); M.at(g + 0.9, face=180); M.at(t_p + 0.15, face=0)
-    M.glow(g + 0.2, 0.9, 0.2); ev(g + 0.05, "jump", 0.35); ev(t_p + 0.4, "land", 0.5)
+    PK += [(g, None, 200 + 180), (g + 0.9, None, 180 + 180), (t_p + 0.15, None, 0 + 180)]
+    ev(g + 0.05, "jump", 0.35); ev(t_p + 0.4, "land", 0.5)
     st.at(t_p + 1.0, SP[0], SP[1], f_sv); st.walk(s("30-03") + 0.6, [SP, (1.0, 2.4)], v=0.6)
     sv.piron(w("30-03", "ピロン"), "happy")
     dr = plan.Drive([WAIT, (0.0, 2.2), SEAT10], w("30-03", "走り出し"), 0.4, 90, 0)
@@ -899,13 +905,14 @@ def b_end(cl):
     t = dr.t0
     while t <= dr.t1 + 0.6:
         x, y, a = dr.pose(min(t, dr.t1)); th = R(a)
-        dd = 0.02 * SVS; M.at(t, loc=(x + dd * math.sin(th), y - dd * math.cos(th), tray0[2]), face=a, interp="LINEAR", hold=False); t += 0.125
+        dd = 0.02 * SVS; PK.append((t, (x + dd * math.sin(th), y - dd * math.cos(th), tray0[2]), a + 180, "LINEAR")); t += 0.125
     # 席で、スプーンを持って待つお客さん
     p = seated(10, 'in', "#E8A04D")
     spn = empty((0.75, 1.15, 0.85)); spn.rotation_euler = (R(60), 0, R(20))
     cube(mat("spoon", "#D9DDE1", rough=0.2, metal=0.9), (0, 0, 0), (0.02, 0.012, 0.16), parent=spn); sphere(mat("spoon", "#D9DDE1", rough=0.2, metal=0.9), (0, 0, 0.09), 0.03, scale=(1, 0.4, 1.3), parent=spn)
     track("spoon", spn, 0.0)
-    M.glow(w("30-04", "デザート") - 0.4, 1.6, 0.2); M.wobble(w("30-04", "デザート") - 0.2, e("30-04") + 1.2, 6, 0.3)
+    PK.sort(key=lambda k_: k_[0])
+    M = MaruR(MP.plan_end, "end", 0.0, PK); track("maru", M.root, 0.15)
     if cut(cl, "S30a"): cam((0.4, 1.55, 1.15), (1.3, 3.1, 0.95), 30, s("30-01") - 0.2, s("30-02"), (0.42, 1.65, 1.12), (1.3, 3.1, 0.97))
     if cut(cl, "S30b"): cam((-0.45, 0.85, 1.6), (0.5, 2.95, 1.12), 24, s("30-02") - 0.2, s("30-03"), (-0.42, 0.95, 1.58), (0.45, 2.9, 1.08))   # v3 点検：店員さんの頭が切れていた
     if cut(cl, "S30c"):
@@ -950,7 +957,7 @@ if __name__ == "__main__" or True:
         print(json.dumps({k: [round(v[1], 3), round(v[2], 3), round(([c[2] for c in CUTS if c[0] == k] or [v[1]])[0], 3)] for k, v in CLIPS.items()}))
     else:
         fn, t0, t1 = CLIPS[CLIPNAME]
-        CLOCK["T0"] = t0
+        CLOCK["T0"] = t0; CLOCK["T1"] = t1
         fn(CLIPNAME)
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)
