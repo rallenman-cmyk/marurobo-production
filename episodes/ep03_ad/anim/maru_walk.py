@@ -1,22 +1,25 @@
-# まるロボのペンギン歩き（3本目用）。common.py と s07s08_gate.py が exec で読む
-#   2026-11-17 ユーザー「まるロボはペンギン歩きみたいなの前に作ってたよ」。1本目・2本目の marumotion.py と同じ数値で歩く
-#     ・脚を胴から分け、脚の付け根（hip）で前後に振る。地面に着いている足は、その場で止める（すべらない）
-#     ・支えている脚の側へ体が ±5° ゆれる（ペンギン歩き）。足の上げ幅 7cm。両足で支える所で体が少し沈む
-#     ・進む向きは自動で前を向く（歩き出しの前に向きを変える）。最後は両足をそろえて止まる
-#   前の版の walk() は、体ごと滑らせて上下にはずませるだけで、向きも手で決めていた（v9「後ろ向きにはずむ」「滑った動き」）
-#   3本目のまるロボの前は −Y（目の向き）。体の大きさは root の scale（s）。長さは s=1 のときの値
-import math
+# 【使わない】v10 で maru_real.py（1本目と同じ marumotion＋marurig）に置きかえた。自分で似せて作った歩きの残り（2026-11-17 ユーザー「歩き方全然違う」）
+# まるロボの歩き（3本目用）。common.py と s07s08_gate.py が exec で読む
+#   2026-11-17 ユーザー「まるロボはペンギン歩きみたいなの前に作ってたよ」「歩き方全然違うって」
+#   → 自分で似せて作るのをやめ、1本目・2本目と同じ道具 skill/.../scripts/marumotion.py の予定（Plan.walk_to）をそのまま使う。
+#     毎コマの姿勢（体の位置・向き・前後と左右の傾き・ひねり、両足の足首の場所・向き・かかとからつま先への転がり）を、
+#     3本目のまるロボ（storyboard/scenes.py の maru()）の部品に当てる。速さも前と同じ（1 m/s くらい。歩き出し・止まりの加減速つき）
+#   3本目のまるロボの前は −Y、marumotion の前は +Y（体の中では 180° 回した向き）。大きさは root の scale（s）
+import math, os, sys
 import bpy
+from mathutils import Vector, Quaternion, Euler
 
-ROLL_WALK = 8.0          # 支えている脚の側への横揺れ（度）。2026-11-17 ユーザー「横ゆれを大きく」で 5 → 8
-LIFT = 0.07              # 足の上げ幅（s=1 のとき）
-DIP = 0.018              # 両足で支える所での体の沈み
-HIP_Z = 0.25             # 脚の付け根の高さ（root から。胴の中に隠れる所）
-HIP_X = 0.17
-L_LEG = 0.22             # 付け根 → 足の裏
-STEP = 0.17              # 1 歩の長さのめやす（s=1）。これより長いと歩数をふやす
-CAD_MAX = 4.5            # 1 秒の歩数の上限（ちょこちょこ歩きの上限）
-TURN_T = 0.35            # 歩き出しの前に向きを変える時間
+_MM_DIR = os.path.join(_ANIM_HERE, "..", "..", "..", "skill", "marurobo-video-production", "scripts")
+if not os.path.exists(os.path.join(_MM_DIR, "marumotion.py")): _MM_DIR = _ANIM_HERE      # PC の一式では anim に入れる
+sys.path.insert(0, _MM_DIR)
+import marumotion as mm
+
+HIP_Z = 0.25              # 3本目の脚の付け根（root から。胴の中）
+HIP_X = 0.17              # 3本目の足の左右の位置（marumotion は 0.255）
+FOOT_Z = 0.03             # 立っているときの靴の中心の高さ
+PIVOT_Z = 0.40            # 胴を傾ける中心の高さ（marumotion の脚の付け根 0.42 にあたる）
+BODY_Z = 0.69             # 胴の中心
+SX = HIP_X / mm.HIP_X     # 左右の幅の比
 
 
 def _fc(ob, path, idx):
@@ -26,13 +29,12 @@ def _fc(ob, path, idx):
 
 
 def kf(ob, path, idx, frame, value, interp="LINEAR"):
-    """速い鍵打ち（毎コマ打つため。key() は毎回すべての鍵を調べるので遅い）"""
+    """速い鍵打ち（毎コマ打つため）"""
     p = _fc(ob, path, idx).keyframe_points.insert(frame, value, options={'FAST'})
     p.interpolation = interp
 
 
 def _clear(ob, path, idx, fa, fb):
-    """fa〜fb の間の鍵を消す（歩きの毎コマの鍵で上書きするため）"""
     ad = ob.animation_data
     if not ad or not ad.action: return
     fc = ad.action.fcurves.find(path, index=idx)
@@ -41,36 +43,33 @@ def _clear(ob, path, idx, fa, fb):
         fc.keyframe_points.remove(kp)
 
 
-def _eval(ob, path, idx, frame, default):
-    ad = ob.animation_data
-    if ad and ad.action:
-        fc = ad.action.fcurves.find(path, index=idx)
-        if fc and len(fc.keyframe_points): return fc.evaluate(frame)
-    return default
-
-
 def rig_legs(m):
-    """脚と靴を胴の子から外し、左右の付け根（空の物）の子にする。付け根は root の子"""
+    """脚（すね）は付け根の空（hip）の子、靴は足首の空（ankle）の子にする。どちらも root の子。
+    すねは付け根から足首へ向けて伸び縮みし、靴は地面に平らに置ける（marurig.py と同じ考え）"""
     bpy.context.view_layer.update()
-    parts = [c for c in m.body.children if c.active_material and c.active_material.name.startswith(("maru_leg", "maru_foot"))]
-    m.hips = []
+    legs = [c for c in m.body.children if c.active_material and c.active_material.name.startswith("maru_leg")]
+    shoes = [c for c in m.body.children if c.active_material and c.active_material.name.startswith("maru_foot")]
+    m.hips, m.ankles = [], []
     for sx in (-1, 1):
-        h = bpy.data.objects.new("maru_hip", None); h.empty_display_size = 0.05
-        for c in m.root.users_collection: c.objects.link(h)
-        h.parent = m.root; h.location = (sx * HIP_X, 0.0, HIP_Z)
+        h = bpy.data.objects.new("maru_hip", None); a = bpy.data.objects.new("maru_ankle", None)
+        for o in (h, a):
+            o.empty_display_size = 0.05
+            for c in m.root.users_collection: c.objects.link(o)
+            o.parent = m.root; o.rotation_mode = "QUATERNION"
+        h.location = (sx * HIP_X, 0.0, HIP_Z); a.location = (sx * HIP_X, 0.0, FOOT_Z)
         bpy.context.view_layer.update()
-        for c in parts:
-            if (c.location.x > 0) == (sx > 0):
-                mw = c.matrix_world.copy(); c.parent = h; c.matrix_parent_inverse.identity()
-                bpy.context.view_layer.update(); c.matrix_basis = h.matrix_world.inverted() @ mw
-        m.hips.append(h)
+        for c, tgt in [(c, h) for c in legs if (c.location.x > 0) == (sx > 0)] + [(c, a) for c in shoes if (c.location.x > 0) == (sx > 0)]:
+            mw = c.matrix_world.copy(); c.parent = tgt; c.matrix_parent_inverse.identity()
+            bpy.context.view_layer.update(); c.matrix_basis = tgt.matrix_world.inverted() @ mw
+        m.hips.append(h); m.ankles.append(a)
+    m.leg_len = HIP_Z - FOOT_Z
     bpy.context.view_layer.update()
 
 
 def hop_legs(m, t, h, d):
-    """跳ぶ間は脚も体と一緒に上がる（足が地面から離れる）"""
-    for hp in m.hips:
-        key(hp, ("location", 2), f(t), HIP_Z); key(hp, ("location", 2), f(t + d / 2), HIP_Z + h); key(hp, ("location", 2), f(t + d), HIP_Z)
+    """跳ぶ間は、脚と靴も体と一緒に上がる（足が地面から離れる）"""
+    for o, z in [(o, HIP_Z) for o in m.hips] + [(o, FOOT_Z) for o in m.ankles]:
+        key(o, ("location", 2), f(t), z); key(o, ("location", 2), f(t + d / 2), z + h); key(o, ("location", 2), f(t + d), z)
 
 
 def face_of(dx, dy):
@@ -78,99 +77,92 @@ def face_of(dx, dy):
     return math.degrees(math.atan2(dx, -dy))
 
 
-def walk_penguin(m, t0, t1, a, b, face=None, end_face=None):
-    """t0 に a を出て、t1 に b で止まる。向きは進む向き（face は使わない：前の呼び方との互換のため受け取るだけ）。
-    end_face：止まったあとに向く向き（度）。返り値：歩数"""
+def plan_walk(D, rel_heading, speed):
+    p = mm.Plan(pos=(0.0, 0.0), heading=rel_heading)
+    p.walk_to((0.0, D), speed=speed)
+    t_end = p.t
+    p.idle(0.6, shifts=False, glance=False)
+    return p, t_end
+
+
+def walk_penguin(m, t0, t1, a, b, end_face=None, speed=None):
+    """b に t1 で着いて止まる。歩き出しは、前と同じ速さ（1 m/s 前後）で間に合う時刻（t0 より前になることもある）。
+    向きを変えるときは、その場で足踏みして向く（marumotion の turn_to）。返り値：歩き出した時刻"""
     sc = m.root.scale.x
-    ax, ay = a[0], a[1]; bx, by = b[0], b[1]
-    dx, dy = bx - ax, by - ay; D = math.hypot(dx, dy)
-    if D < 1e-3: return 0
-    T = t1 - t0
-    yaw_w = face_of(dx, dy)
+    ax, ay = a[0], a[1]; dx, dy = b[0] - ax, b[1] - ay; Dw = math.hypot(dx, dy)
+    if Dw < 1e-3: return t0
+    D = Dw / sc                                                   # marumotion の大きさ（s=1）での距離
+    yaw = face_of(dx, dy)
     cur = m._last["face"][1] if "face" in m.__dict__.get("_last", {}) else math.degrees(m.root.rotation_euler[2])
-    yaw_w = cur + ((yaw_w - cur + 180) % 360 - 180)
-    if abs(yaw_w - cur) > 8:                              # 歩き出しの前に、その場で足踏みしながら向きを変える（足をすべらせない）
-        m.at(t0 - TURN_T, face=cur); m.at(t0, face=yaw_w)
-        for j, hp in enumerate(m.hips):
-            ts = t0 - TURN_T + j * TURN_T / 2
-            key(hp, ("location", 2), f(ts), HIP_Z); key(hp, ("location", 2), f(ts + TURN_T / 4), HIP_Z + LIFT * 0.7); key(hp, ("location", 2), f(ts + TURN_T / 2), HIP_Z)
-            key(m.body, ("rotation_euler", 1), f(ts + TURN_T / 4), math.radians(ROLL_WALK * 0.6) * (1 if j == 0 else -1))
-        key(m.body, ("rotation_euler", 1), f(t0), 0.0)
-    else:
-        m.at(t0, face=yaw_w)
-    m.at(t0, loc=(ax, ay, 0.0))
-    yaw = math.radians(yaw_w)
-    fwd = (math.sin(yaw), -math.cos(yaw))                 # 前（−Y）の世界の向き
-    rgt = (math.cos(yaw), math.sin(yaw))                  # 右（+X）の世界の向き
-    # 歩数：1 歩の長さが STEP くらい。速すぎるときは歩数の上限で、歩幅を広げる
-    v_l = D / sc / T
-    cad = min(CAD_MAX, max(2.0, v_l / STEP))
-    n = max(2, int(round(T * cad)))
-    if n % 2: n += 1                                      # 両足をそろえて止まるため偶数
-    dt = T / n
-
-    def pos(t):                                           # 体の位置（ゆっくり出て、ゆっくり止まる）
-        u = min(1.0, max(0.0, (t - t0) / T))
-        w = u * u * u * (10 - 15 * u + 6 * u * u) * 0.35 + u * 0.65
-        return (ax + dx * w, ay + dy * w)
-
-    # 足の置き場所：i 歩目は i%2 の足（0＝左 x−、1＝右 x+）。着く時刻の体の位置より半歩前。最後の 2 歩は横にそろえる
-    feet = []
-    for j, sx in enumerate((-1, 1)):
-        p = pos(t0)
-        feet.append([(t0 - 1.0, (p[0] + rgt[0] * sx * HIP_X * sc, p[1] + rgt[1] * sx * HIP_X * sc))])
-    for i in range(n):
-        j = i % 2; sx = (-1, 1)[j]
-        tl = t0 + (i + 1) * dt
-        p = pos(tl)
-        ahead = 0.0 if i >= n - 2 else 0.5 * (D / n) * 1.0
-        feet[j].append((tl, (p[0] + fwd[0] * ahead + rgt[0] * sx * HIP_X * sc, p[1] + fwd[1] * ahead + rgt[1] * sx * HIP_X * sc), t0 + i * dt))
-
-    def foot_at(j, t):
-        """足 j の世界の位置と上げ幅（s=1 の単位）"""
-        tr = feet[j]
-        cur_p = tr[0][1]
-        for e in tr[1:]:
-            tl, pl, ts = e
-            if t < ts: return cur_p, 0.0
-            if t < tl:
-                u = (t - ts) / (tl - ts); w = u * u * (3 - 2 * u)
-                return (cur_p[0] + (pl[0] - cur_p[0]) * w, cur_p[1] + (pl[1] - cur_p[1]) * w), LIFT * math.sin(math.pi * u)
-            cur_p = pl
-        return cur_p, 0.0
-
-    fa, fb = f(t0), f(t1)
-    for h in m.hips:
-        for idx in (1, 2): _clear(h, "location", idx, fa, fb)
-        _clear(h, "rotation_euler", 0, fa, fb)
-    for idx in (0, 1): _clear(m.root, "location", idx, fa + 1, fb - 1)
-    _clear(m.body, "rotation_euler", 1, fa, fb); _clear(m.body, "location", 2, fa, fb)
-    z0 = m.z0
+    rel = ((cur - yaw + 180) % 360) - 180                          # 歩く向きから見た、いまの向き（左回りが＋）
+    T = t1 - t0
+    if speed is None:                                             # t0〜t1 に収まる速さ（0.7〜1.3 m/s）。収まらなければ早く歩き出す
+        speed = 1.0
+        for v in (0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3):
+            speed = v
+            if plan_walk(D, rel, v)[1] <= T: break
+    p, t_end = plan_walk(D, rel, speed)
+    frames = mm.simulate(p)
+    # 歩き出しは、前の動き（最後に置いた場所・向き）が終わってから。間に合わないときだけ、予定を少し速めて流す（w 倍）
+    lastT = max([v[0] for v in m.__dict__.get("_last", {}).values()] + [-1e9])
+    early = max(t0 - 1.5, lastT + 0.1)
+    ts = t1 - t_end; w = 1.0
+    if ts < early:
+        w = t_end / max(0.3, t1 - early); ts = early
+        if w > 1.35: print("【歩き】速めすぎ %.2f 倍：%.2f〜%.2f 秒、%.2f m。場面の時刻を見直す" % (w, ts, t1, Dw))
+    u = (dx / Dw, dy / Dw); r = (u[1], -u[0])                      # 歩く向きと、その右（予定の +Y と +X）
+    yaw_r = math.radians(yaw)
+    fa = f(ts); fb = f(ts + (t_end + 0.5) / w)
+    for o in [m.root]:
+        for idx in (0, 1, 2): _clear(o, "location", idx, fa, fb)
+        _clear(o, "rotation_euler", 2, fa, fb)
+    for idx in (0, 1, 2): _clear(m.body, "rotation_euler", idx, fa, fb); _clear(m.body, "location", idx, fa, fb)
+    for o in m.hips + m.ankles:
+        for idx in range(4): _clear(o, "rotation_quaternion", idx, fa, fb)
+        for idx in range(3): _clear(o, "location", idx, fa, fb); _clear(o, "scale", idx, fa, fb)
+    last = None
     for fr in range(fa, fb + 1):
-        t = t0 + (fr - fa) / FPS * (T / max(1e-6, (fb - fa) / FPS))
-        p = pos(t)
-        kf(m.root, "location", 0, fr, p[0]); kf(m.root, "location", 1, fr, p[1]); kf(m.root, "location", 2, fr, 0.0)
-        # 足：root から見た前後（前は −Y）と上げ幅 → 付け根を前後に振る角度
-        i = min(n - 1, int((t - t0) / dt)); u = (t - t0 - i * dt) / dt
-        for j, h in enumerate(m.hips):
-            fp, lift = foot_at(j, t)
-            rx, ry = fp[0] - p[0], fp[1] - p[1]
-            ahead = (rx * fwd[0] + ry * fwd[1]) / sc            # 前へ＋（s=1 の単位）
-            th = math.asin(max(-0.8, min(0.8, ahead / L_LEG)))
-            kf(h, "rotation_euler", 0, fr, -th)                  # x 軸の回転：負で足が前（−Y）へ
-            kf(h, "location", 2, fr, HIP_Z + lift)
-            kf(h, "location", 1, fr, 0.0)
-        # 体：支えている脚の側へ ±5°（i 歩目に振っているのは i%2 の足 → 支えは反対）。両足で支える所で少し沈む
-        sup = 1 if i % 2 == 0 else -1
-        k = math.sin(math.pi * min(1.0, max(0.0, u)))
-        kf(m.body, "rotation_euler", 1, fr, math.radians(ROLL_WALK) * sup * k)
-        kf(m.body, "location", 2, fr, z0 - DIP * (1 - k))
-    # 止まったら、足をそろえ、体をまっすぐに
-    for h in m.hips:
-        key(h, "rotation_euler", f(t1) + 1, (0.0, 0.0, 0.0)); key(h, ("location", 2), f(t1) + 1, HIP_Z)
-    key(m.body, ("rotation_euler", 1), f(t1) + 2, 0.0); key(m.body, ("location", 2), f(t1) + 2, z0)
-    key(m.root, ("rotation_euler", 2), f(t1), math.radians(yaw_w))     # 歩き終わりまで向きを止める（打たないと次の向きへ回り続けた）
-    m._last["loc"] = (t1, (bx, by, 0.0)); m._last["face"] = (t1, yaw_w)
-    if end_face is not None: m.at(t1 + 0.4, face=end_face)
-    STEPS.extend(feet[j][k][0] for j in (0, 1) for k in range(1, len(feet[j])))   # 足音：足が着く時刻
-    return n
+        tau = (CLOCK_T0() + fr / FPS - ts) * w                  # 予定の時刻
+        k = frames[max(0, min(len(frames) - 1, int(round(tau * mm.FPS))))]
+        last = k
+        px, py, pz = k["root"]; psi = k["psi"]
+        wx = ax + sc * (px * r[0] + py * u[0]); wy = ay + sc * (px * r[1] + py * u[1])
+        kf(m.root, "location", 0, fr, wx); kf(m.root, "location", 1, fr, wy); kf(m.root, "location", 2, fr, sc * (pz - mm.ROOT_DZ))
+        rz = yaw_r + psi                                          # 予定の向き psi（左回り＋）を足す
+        kf(m.root, "rotation_euler", 2, fr, rz)
+        # 胴：脚の付け根の高さを中心に、前後（pitch）・左右（roll）に傾き、ひねる（3本目は体の中で 180° 回った向きなので、符号はそのまま）
+        P, R_, Tw = math.radians(k["pitch"]), math.radians(k["roll"]), math.radians(k["twist"])
+        kf(m.body, "rotation_euler", 0, fr, P); kf(m.body, "rotation_euler", 1, fr, R_); kf(m.body, "rotation_euler", 2, fr, Tw)
+        off = Euler((P, R_, Tw), "YXZ").to_matrix() @ Vector((0, 0, BODY_Z - PIVOT_Z))
+        kf(m.body, "location", 0, fr, off.x); kf(m.body, "location", 1, fr, off.y); kf(m.body, "location", 2, fr, PIVOT_Z + off.z)
+        # 足：足首の世界の場所 → 体（予定の向き psi）から見た右・前・高さ → 3本目の root から見た場所（右＝−X、前＝−Y、幅は SX 倍）
+        c, s_ = math.cos(psi), math.sin(psi)
+        for j in (0, 1):
+            ft = k["feet"][j]
+            qx, qy = ft["ankle"][0] - px, ft["ankle"][1] - py
+            right = qx * c + qy * s_; fwd = -qx * s_ + qy * c
+            lift = ft["ankle"][2] - mm.SOLE                     # 地面からの上げ幅
+            side = 0 if j == 0 else 1                             # marumotion 足0＝左（x−）。3本目は左＝+X（前が −Y のため）
+            o_ank = m.ankles[1 - side]
+            lx, ly = -right * SX, -fwd
+            kf(o_ank, "location", 0, fr, lx); kf(o_ank, "location", 1, fr, ly); kf(o_ank, "location", 2, fr, FOOT_Z + lift)
+            yaw_f = ft["psi"] - psi                               # 足の向き（体から見た）
+            q = Quaternion((0, 0, 1), yaw_f) @ Quaternion((1, 0, 0), math.radians(ft["pitch"]))
+            for i_, v in enumerate(q): kf(o_ank, "rotation_quaternion", i_, fr, v)
+            # すね：付け根から足首へ向け、長さを合わせる
+            h = m.hips[1 - side]; hp = Vector((h.location.x, 0.0, HIP_Z))
+            d = Vector((lx, ly, FOOT_Z + lift)) - hp; n = max(d.length, 1e-6)
+            qh = Vector((0, 0, -1)).rotation_difference(d / n)
+            for i_, v in enumerate(qh): kf(h, "rotation_quaternion", i_, fr, v)
+            kf(h, "scale", 2, fr, n / m.leg_len)
+    m.__dict__.setdefault("_last", {}); m._last["loc"] = (t1 + 0.5, (ax + dx, ay + dy, 0.0)); m._last["face"] = (t1 + 0.5, yaw)
+    if end_face is not None: m.at(t1 + 0.9, face=end_face)
+    # 足音：足が地面に着いた時刻
+    for j in (0, 1):
+        for c_ in p.feet[j][1:]:
+            if c_.t_on < t_end + 0.1: STEPS.append(round(ts + c_.t_on / w, 3))
+    return ts
+
+
+def CLOCK_T0():
+    return CLOCK["T0"] if "CLOCK" in globals() else T0
