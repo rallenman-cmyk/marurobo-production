@@ -107,7 +107,7 @@ a = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
 a = np.concatenate([a, np.zeros(max(0, int(END * SR) - len(a)), np.float32)])[:int(END * SR)].copy()
 VO = os.path.join(HERE, "..", "voice")
 P_ = json.load(open(os.path.join(VO, "placement.json"), encoding="utf-8"))
-nos, over, moved = set(), [], []
+nos, over, moved, dropped = set(), [], [], []
 _VE = {}
 def talking(t, d):
     """その時刻に声が出ているか（声の音そのものの大きさで見る。台詞の中の「……」の無音は、出ていない）"""
@@ -134,7 +134,9 @@ for c in CL + LCL:
             for sh in sorted((k_ * 0.02 for k_ in range(-25, 26)), key=abs):
                 if t_ + sh >= 0 and not talking(t_ + sh, len(x) / SR):
                     moved.append("%s %.1f→%.2f" % (kind, t_, t_ + sh)); t_ += sh; break
-            else: over.append("%s %.1f" % (kind, t_))
+            else:
+                if kind in sfx.MARU_BEEPS: dropped.append("%s %.1f" % (kind, t_)); continue   # まるロボの電子音は、声と重なるなら鳴らさない（声が大事）
+                over.append("%s %.1f" % (kind, t_))
         i = int(t_ * SR); a[i:i + len(x)] += (g * x)[:len(a) - i]
 a /= max(1.0, np.abs(a).max() / 0.95)
 wv = os.path.join(tmp, "audio.wav")
@@ -157,6 +159,7 @@ chk = ["3D のコマが足りない所（絵コンテの絵で代わりに出し
        "効果音のない種類：" + ("、".join(sorted(nos)) or "なし"),
        "大事な効果音が声と重なる所：" + ("、".join(over) or "なし"),
        "声のすき間へずらした効果音：" + ("、".join(moved) or "なし"),
+       "声と重なるので鳴らさなかった、まるロボの電子音：" + ("、".join(dropped) or "なし"),
        "3D のクリップ：%d" % len(CL)]
 open(os.path.splitext(OUT)[0] + "_check.txt", "w", encoding="utf-8").write("\n".join(chk) + "\n")
 print("\n".join(chk)); print(OUT, "%.1f MB" % (os.path.getsize(OUT) / 1e6))

@@ -231,7 +231,7 @@ def _s17_18(p, C, g, name):
     import numpy as np
     s, said, cell_c = g["s"], g["said"], g["cell_c"]
     C.T0 = S17_T0; p.T0_world = S17_T0
-    start = np.array(C.xy((-2.6, 0.2, 0.03))); tgt = np.array(C.xy(cell_c(2, 1))); d = tgt - start
+    start = np.array(C.xy((-2.3, 1.3, 0.03))); tgt = np.array(C.xy(cell_c(2, 1))); d = tgt - start   # 左下の角（字幕にかからない所）から
     p.teleport(tuple(start), math.degrees(math.atan2(-d[0], d[1])))     # 0 コマ目から、マスの方を向いて立っている
     C.go(p, S17_T0 + 0.3)
     p.walk_to(tuple(tgt), speed=1.35)
@@ -247,7 +247,7 @@ def _s17_18(p, C, g, name):
     p.walk_to(C.xy(EDGE_STOP), speed=0.9)        # 端っこのマスの手前へ。両足をそろえて止まる
     cx = EDGE_STOP[0]
     C.idle_to(p, said("このマス") - 0.3); p.look(0, -16, hold=0.6)
-    C.idle_to(p, s("18-03") - 0.8); p.walk_to(C.xy((cx, EDGE_STOP[1] - 0.4, 0.03)), speed=0.6); p.wait(0.2)   # 乗る
+    C.idle_to(p, s("18-03") - 3.5); p.walk_to(C.xy((cx, EDGE_STOP[1] - 0.4, 0.03)), speed=0.6); p.wait(0.2)   # 乗る（「信号機の端っこが」のあいだ）
     p.back_to(C.xy(EDGE_STOP))                   # 降りる（後ずさり）
     C.idle_to(p, s("18-04") - 0.1); p.walk_to(C.xy((cx, EDGE_STOP[1] - 0.18, 0.03)), speed=0.5); p.confused()   # また乗りかけて止まる
 
@@ -265,20 +265,28 @@ def P_s20e(p, C, g):
 
 
 def P_s23(p, C, g):
+    """10:28〜：眠そう（光とろん・ゆっくりまばたき）にカメラの方を向いて立っている → まばたき 2 回 → 足踏みでマウスの方へ向き →
+    ふらふらしながらゆっくり歩いて押す → カチッ → はっと起きる → カメラへ向き直って 2 回はねる"""
+    import numpy as np
     said, s = g["said"], g["s"]
     m_0, m_1 = said("次の夜") + 1.5, said("……あ、通りました") - 0.6; click = said("……あ、通りました") - 0.3
-    sleepy = lambda t: {"light": -0.7, "iris": -0.12}
-    p.layer(0.0, click - C.T0 + 0.2, sleepy)
-    for tt in (C.T0 + 1.0, said("……だいぶ") - 0.9, said("……だいぶ") + 0.6): p.blinks.append(tt - C.T0)
-    C.idle_to(p, m_0)
-    end = C.xy((0.98 - 0.24 + 0.17, 0.2 + 0.11 - 0.08, 0.75))
-    p.walk_to(end, speed=0.35)                   # 眠そうに、ゆっくり押して歩く（マウスは台本が動かす）
+    start, end = np.array(C.xy((0.98 + 0.17, 0.2 - 0.08, 0.75))), np.array(C.xy((0.98 - 0.24 + 0.17, 0.2 + 0.11 - 0.08, 0.75)))
+    d = end - start; hd_m = math.degrees(math.atan2(-d[0], d[1]))
+    p.teleport(tuple(start), C.hd(0))                             # カメラの方を向いている（眠そうな目が見える）
+    p.layer(0.0, click - C.T0 + 0.2, lambda t: {"light": -0.7, "iris": -0.14})
+    for tt in (C.T0 + 0.4, C.T0 + 1.1): p.blinks.append(tt - C.T0)   # ゆっくり、重いまばたき 2 回
+    p.layer(C.T0 + 0.5 - C.T0, C.T0 + 1.3 - C.T0, lambda t, a=0.5: {"pitch": 9.0 * mm.hump(t, a, 0.8)})   # こっくり
+    C.go(p, m_0 - 1.2); p.turn_to(hd_m, step=0.24, gap=0.03)
+    v = 1.25 * float(np.linalg.norm(d)) / max(1.0, (m_1 - 0.4) - (C.T0 + p.t))   # 歩き出し・止まりの遅れの分、少し速く
+    p.walk_to(tuple(end), speed=v)               # 眠そうに、ゆっくり押して歩く（マウスは台本が同じ時刻に動かす）
     for k, tt in enumerate((said("……だいぶ") - 1.2, said("……だいぶ") - 0.5, said("……だいぶ") + 0.2)):
-        tilt(p, tt - C.T0, 10 if k % 2 else -10, 0.35, 0.2)
-    C.idle_to(p, click + 0.15); p.surprise(); C.idle_to(p, s("23-04") + 0.8); p.hops(n=2, height=0.07)
+        tilt(p, tt - C.T0, 10 if k % 2 else -10, 0.35, 0.2)   # ふらふら
+    C.go(p, click + 0.1); p.surprise()
+    p.turn_to(C.hd(0), step=0.22, gap=0.03)
+    C.go(p, s("23-04") + 0.8); p.hops(n=2, height=0.07)
 
 
-GROUND["c_s12a"] = 3.0                # 3m 上から降りてくる
+GROUND["c_s12a"] = 9.0                # 画面の外（9m 上）から降りてくる（3m だと宙に立っているのが見えた）
 
 PLANS = dict(c_s01=P_s01, c_s02a=P_s02a, c_s03=P_s03, c_s05x=P_s05x, c_s05b=P_s05b, c_s06b=P_s06b, c_s08e=P_s08, c_s08f=P_s08,
              c_s11=P_s11, c_s11b=P_idle_look, c_s11c=P_idle_look, c_s11d=P_s11d, c_s12a=P_s12a, c_s13a=P_s13, c_s13b=P_s13, c_s13d=P_s13d,
