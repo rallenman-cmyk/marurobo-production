@@ -82,10 +82,7 @@ def made(fn, *a, **k):
     return e, r, list(set(bpy.data.objects) - before)
 
 
-exec(open(os.path.join(_ANIM_HERE, "maru_walk.py"), encoding="utf-8").read())   # ペンギン歩き（v10）
-
-
-class Maru:
+class MaruOld:   # v9 までの作り（体を滑らせる）。v10 から使わない
     """まるロボ：root（場所・向き）、body（跳ぶ・見上げる・傾く）、アンテナの光"""
     def __init__(self, loc, face, **kw):
         self.root = maru(loc, face_deg=face, **kw)
@@ -119,7 +116,7 @@ class Maru:
 
     def walk(self, t0, t1, a, b, face=None, end_face=None, **_):
         """a から b へペンギン歩き（maru_walk.py）。向きは進む向き。足音は足が着く時刻"""
-        return walk_penguin(self, t0, t1, a, b, end_face=end_face)
+        return walk_penguin(self, t0, t1, a, b, end_face=end_face)   # 返り値：歩き出した時刻（間に合う速さで早めに出る）
 
     def tilt(self, t, deg, d=0.3):
         key(self.body, ("rotation_euler", 1), f(t), self.body.rotation_euler[1])
@@ -131,6 +128,10 @@ class Maru:
     def blink(self, t, d=0.25):
         matkey(self.lens, f(t), strength=1.2); matkey(self.lens, f(t + d / 2), strength=0.0); matkey(self.lens, f(t + d), strength=1.2)
 
+
+
+
+exec(open(os.path.join(_ANIM_HERE, "maru_real.py"), encoding="utf-8").read())   # v10：本物のまるロボを marumotion＋marurig で動かす（Maru）
 
 STEPS = []          # まるロボの足の着地の時刻（効果音用。描いたあとで log に書く）
 EVENTS = []         # 効果音を付ける出来事（通しの秒, 種類）
