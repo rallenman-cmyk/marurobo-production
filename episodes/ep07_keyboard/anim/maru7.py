@@ -36,7 +36,7 @@ class MaruR:
         self.root = empty((0, 0, 0)); self.root.name = "maru%d follow" % len(MARU_ALL)   # 追うカメラ用：足もとの真ん中（上下にはずまない）。bake で打つ
         self.cmds = []; self.silent = []; self.drops = []
         self._last = {"loc": (-100.0, tuple(loc))}
-        track("maru_c", self.torso, 0.0)                     # 効果音の「映っているか」は体の真ん中で見る（"maru" は頭の上の吹き出し用）
+        track("maru_c", self.torso, 0.0); track("maru_c_f", self.root, 0.02)   # 体の真ん中と足もと（足だけ写す寄りの絵でも鳴らす）                     # 効果音の「映っているか」は体の真ん中で見る（"maru" は頭の上の吹き出し用）
         MARU_ALL.append(self); _M_[0] = self
 
     # ---------------------------------------------------------------- 命令（時刻は場面の時刻）

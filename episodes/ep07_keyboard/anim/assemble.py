@@ -140,7 +140,12 @@ g = ((cs_[kk:] - cs_[:-kk]) / kk)[:N].astype(np.float32)
 # 効果音（クリップのログを合わせ、同じ物は 1 つに）
 EV = {}
 def _seen(src, t):
-    """鳴らした物（track の名前）が、時刻 t に映っているクリップの画面の中にあるか"""
+    """鳴らした物（track の名前）が、時刻 t に映っているクリップの画面の中にあるか。src + "_f"（足もと）があれば、どちらかが入っていればよい"""
+    if _seen1(src + "_f", t): return True
+    return _seen1(src, t)
+
+
+def _seen1(src, t):
     nm = max(active(t), key=lambda q: q[1])[0]
     lg = LOG.get(nm)
     if not lg or src not in lg["track"]: return False
