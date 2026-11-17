@@ -65,3 +65,39 @@ def frames():
     p = plan(); return p, mm.simulate(p, fps=FPS, t_end=p.t + 0.5)
 if __name__ == '__main__':
     p, fr = frames(); print('frames', len(fr), 'LATE', U.LATE); print('WORLD', WORLD_RANGES)
+
+# ======================================================================== v14：机の上の本物の QR（インクの場面・ロゴの場面）。前は 2D の平らな絵だった（v13「急にめちゃくちゃチープ」）
+#   冒頭と同じ机・QR の紙（op_timeline の大きさ）。ロボの予定は 1 本（場面の間は cut で置き直す。カットの外なので見えない）
+import op_timeline as OPT
+DMOD = OPT.MOD
+def mxy(r, c): return ((c - 10) * DMOD, (10 - r) * DMOD)                 # 紙の上のマス（行・列）の中心
+INK_DROPS = [tuple(x) for x in E['ink12']['drops']]; LOGO_DROP = tuple(E['logo7_ink1']['drop'])
+T_TIP = s('30-01', -0.35)                                  # びんが倒れる（「あっ」の少し前）
+T_LOGO_PLACE, T_LOGO_PROUD, T_LOGO_DROP = 106.72, 110.39, 140.46      # 組み立ての言葉の時刻（「真ん中」「得意げ」「小さな汚れ」）
+BOTTLE = (2.32, 0.55); P_INK0 = (3.3, 1.25); P_INK1 = (2.78, 0.82)        # 倒れたびんが QR のマスにかからないよう、紙の右の外に
+P_LOGO0 = (-2.95, 0.2); P_LOGO1 = (-2.0, 0.1)          # ロゴは真ん中へ投げて置く。まるロボは QR のマスにかからない所に立つ
+DESK_SHOTS = [(s('30-01', -0.6), s('30-02'), 'D5a'), (s('30-02'), s('30-03'), 'D5b'), (s('30-03'), s('30-04', -0.4), 'D5a'),
+              (s('31-01'), s('31-02.7'), 'L5a'), (s('31-02.7'), s('31-03'), 'L5b'), (s('31-06'), s('31-06b'), 'L5c'), (s('31-07'), s('32-01'), 'L5d')]
+def _desk_ranges(pad=0.5):
+    out = []
+    for a, b, k in DESK_SHOTS:
+        if out and a - out[-1][1] < 1e-6: out[-1][1] = b
+        else: out.append([a, b])
+    return [(max(0.0, a - pad), b + pad) for a, b in out]
+DESK_RANGES = _desk_ranges()
+def desk_plan():
+    U.LATE.clear()
+    p = mm.Plan(pos=P_INK0, heading=hd(P_INK0, (0.0, 0.0)), ground=0.0)
+    at(p, T_TIP - 2.4, lambda q: q.walk_to(P_INK1, speed=0.9, label='びんの横へ（ぶつかる）'), 'ink walk')
+    at(p, T_TIP + 0.15, lambda q: q.surprise(label='あっ'), 'ink oops')
+    at(p, s('30-02', 0.2), lambda q: q.look(-20, -18, hold=2.4, body=True, label='しずくを見る'), 'ink look')
+    at(p, s('30-03', 1.2), lambda q: q.nod(n=2, amp=8.0, label='平気そう'), 'ink ok')
+    cut(p, s('31-01', -1.0), P_LOGO0, hd(P_LOGO0, (0.0, 0.0)), z=0.0)
+    at(p, T_LOGO_PLACE - 2.6, lambda q: q.walk_to(P_LOGO1, speed=1.0, label='ロゴを持って紙の横へ'), 'logo walk')
+    at(p, T_LOGO_PROUD, lambda q: q.hops(n=3, label='得意げ'), 'logo proud')
+    at(p, s('31-02.7', 0.4), lambda q: U.tilt(q, deg=16.0, hold=1.8, label='どうして？'), 'logo why')
+    at(p, T_LOGO_DROP + 0.2, lambda q: q.surprise(label='しずくが落ちた'), 'logo drop')
+    p.wait(max(0.0, DESK_RANGES[-1][1] + 0.5 - p.t))
+    return p
+def desk_frames():
+    p = desk_plan(); return p, mm.simulate(p, fps=FPS, t_end=p.t + 0.5)

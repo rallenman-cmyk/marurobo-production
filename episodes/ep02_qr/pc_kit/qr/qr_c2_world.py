@@ -165,7 +165,7 @@ for k, (a, b) in enumerate(((rc(3, -1), rc(3, 7.6)), (rc(-1, 3), rc(7.6, 3)), (r
 for k, key in enumerate((TL, TR, BL)): ring('ring24 %d' % k, key, CP.T_RINGS[k], 79.6, R=6.4)
 # ---------------------------------------------------------------- 12-01：大地ごと回る（回る向きの矢印）→ 元に戻りながら L 字・目印のない角
 arc = W.torus('spin arc', H * 1.35, 0.18, W.mat_emit('spin arc', W.srgb('#FFD640'), 2.5), arc=math.radians(110)); arc.location = (0, 0, 0.6); arc.rotation_euler = (0, 0, math.radians(20))
-show(arc, [(CP.T_SPIN[0] + 0.1, CP.T_UNSPIN[0])])
+arc.hide_render = True; arc.hide_viewport = True                                       # v14（8:06「奥に見える黄色い線」・8:11「上の方の黄色の半円」）：回る向きの弧は出さない
 beam('L top', (TR[0], TR[1], QW.TILE_H + 0.3), (TL[0], TL[1], QW.TILE_H + 0.3), col='#FFD640', r=0.22, strength=3.0, grow=0.6, t0=CP.T_LSHAPE, t1=148.4)
 beam('L left', (TL[0], TL[1], QW.TILE_H + 0.3), (BL[0], BL[1], QW.TILE_H + 0.3), col='#FFD640', r=0.22, strength=3.0, grow=0.6, t0=CP.T_LSHAPE + 0.6, t1=148.4)
 blink = [(CP.T_CORNER + 0.8 * k, CP.T_CORNER + 0.8 * k + 0.5) for k in range(4)] + [(CP.T_CORNER + 3.2, 148.4)]   # v12 #25：点滅は 5 回、あとは出したまま
@@ -190,7 +190,7 @@ for k, rc_ in enumerate(ticks): tile_state([rc_], 'restored', CP.T_TICK[k], 0.08
 # ---------------------------------------------------------------- 14：真上から。いまの QR（柄を重ねた後）→ 柄を外した並び。14-04b は光の線が通った所から入れ替わる
 BP = SYM['before_pattern']; REG = [rc_ for rc_ in TILES if FL[rc_[0]][rc_[1]] == 'data']
 cur = lambda rc_: TILES[rc_]['v']; raw = lambda rc_: BP[rc_[0]][rc_[1]]
-tile_value(REG + TIM, cur, 217.6 - 0.05, 0.02)                     # 役割の色を外して、ふつうの白黒に
+tile_value(TIM, cur, 217.6 - 0.05, 0.02); tile_value(REG, raw, 217.6 - 0.05, 0.02)   # 役割の色を外して、ふつうの白黒に。v15：下のマスは柄を重ねる前の並び（この上に柄のシートが重なる）
 tile_value(REG, raw, 223.5 - 0.05, 0.02)                           # 14-02：中身をそのまま書いた並び
 tile_value(REG, raw, 264.9 - 0.05, 0.02)                           # 14-04：下のマスは元の並び。その上に柄のシートが落ちてきて重なる（v12 #31）
 # v12 #31：スキャンの光ではなく「柄のシート」をめくる。シートには柄を重ねた後の白黒が刷ってある。下のマスは元の並び
@@ -218,36 +218,59 @@ def peel_sheet(t0, t1, rho=1.7, sub=4, z0=QW.TILE_H + 0.09):
     base = [Vector(v) for v in V_]; L = N * MOD
     sk0 = ob.shape_key_add(name='flat'); keys = []
     f0, f1 = fr_of(t0), fr_of(t1)
-    for f in range(f0, f1 + 1):
-        u = (f - f0) / max(1, f1 - f0); u = u * u * (3 - 2 * u)
+    def shape(nm, u):
         xp = L + 2.0 - (L + 2.0 + math.pi * rho) * u                 # めくれの折り目（右の外 → 左の外へ）
-        sk = ob.shape_key_add(name='peel %d' % f)
+        sk = ob.shape_key_add(name=nm)
         for i, v in enumerate(base):
             sarc = v.x - xp
             if sarc <= 0: co = Vector((v.x, v.y, 0.0))
             elif sarc < math.pi * rho: ph = sarc / rho; co = Vector((xp + rho * math.sin(ph), v.y, rho * (1 - math.cos(ph))))
             else: co = Vector((xp - (sarc - math.pi * rho), v.y, 2 * rho))
             sk.data[i].co = co
-        keys.append((f, sk))
+        return sk
+    for f in range(f0, f1 + 1):
+        u = (f - f0) / max(1, f1 - f0); u = u * u * (3 - 2 * u)
+        keys.append((f, shape('peel %d' % f, u)))
+    # v15（9:41「重ねてあるんですで、めくる時と逆の動きで重ねるようにして」）：14-01「上から柄が重ねてある」で、
+    # めくり終わりの形（左へ裏返って浮いた形）で上から降りてきて、めくりと逆の動きで右へ広がって重なる
+    T_DROP0, T_ON0, T_ON1 = 219.5, 220.1, 222.6
+    g0, g1 = fr_of(T_ON0), fr_of(T_ON1); on_keys = []
+    for f in range(g0, g1 + 1):
+        u = (f - g0) / max(1, g1 - g0); u = u * u * (3 - 2 * u)
+        on_keys.append((f, shape('lay %d' % f, 1.0 - u)))
+    for n_, (f, sk) in enumerate(on_keys):
+        pts = ((f - 1, 0.0), (f, 1.0), (f + 1, 0.0))
+        if n_ == 0: pts = ((fr_of(T_DROP0) - 1, 0.0), (fr_of(T_DROP0), 1.0), (f, 1.0), (f + 1, 0.0))   # 降りてくる間は、めくり終わりの形のまま
+        for ff, val in pts: sk.value = val; sk.keyframe_insert('value', frame=ff)
     for n_, (f, sk) in enumerate(keys):
         for ff, val in ((f - 1, 0.0), (f, 1.0), (f + 1, 0.0)):
             if n_ == len(keys) - 1 and ff == f + 1: continue          # 最後の形はそのまま残す（浮いて消えるまで）
             sk.value = val; sk.keyframe_insert('value', frame=ff)
+    # v14（9:41「白黒の配列が変わるのは柄を重ねたから？ なら重ねる感じのアニメを」）：K40 の間はシートが重なって見えていて、
+    # 14-02 で下のマスが元の並びに替わったあと、シートが浮いて外れる（中身＝柄を外した並び、が見える）
+    T_LIFT0 = 223.45
+    for t, z, s_ in ((T_DROP0, z0 + 9.0, 0.6), (T_ON0, z0, 1.0), (T_LIFT0, z0, 1.0), (T_LIFT0 + 0.7, z0 + 9.0, 0.6)):
+        ob.location = (-H, 0, z); ob.scale = (s_, s_, s_); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
     # 14-04 の頭：上から落ちてきて重なる
-    for t, z in ((264.95, z0 + 5.0), (265.55, z0)): ob.location = (-H, 0, z); ob.keyframe_insert('location', frame=fr_of(t))
+    for t, z in ((264.95, z0 + 5.0), (265.55, z0)): ob.location = (-H, 0, z); ob.scale = (1, 1, 1); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
     # めくり終わり：上へ浮いて小さくなって消える
     for t, z, s_ in ((t1, z0, 1.0), (t1 + 0.7, z0 + 9.0, 0.6)):
         ob.location = (-H, 0, z); ob.scale = (s_, s_, s_); ob.keyframe_insert('location', frame=fr_of(t)); ob.keyframe_insert('scale', frame=fr_of(t))
-    show(ob, [(264.95, t1 + 0.7)])
+    show(ob, [(T_DROP0, 223.45 + 0.7), (264.95, t1 + 0.7)])
     return ob
 SHEET = peel_sheet(*CP.T_UNMASK)
 tile_state(DATA_C, 'data', 276.2 - 0.05, 0.02); tile_state(SPARE_C, 'spare', 276.2 - 0.05, 0.02)     # v12 #26：タイミングの列は緑にしない
 # ---------------------------------------------------------------- 13：読み方の帯（紫）2本。札（字なし）→ 同じ中身（弧）→ 片方が汚れても、もう片方が光る
 tile_state(FMT, 'format', CP.T_FORMAT, 0.5)
-def tag(name, rr, t0, t1):
-    pl = W.box(name, (6.6, 2.2, 0.08), W.mat_emit(name, W.srgb('#8C55B8'), 1.4)); pl.location = (rc(rr, 3.5)[0], rc(rr, 3.5)[1], QW.TILE_H + 0.22); pl.rotation_euler = (math.radians(25), 0, 0)
-    show(pl, [(t0, t1)])
-tag('tag1', 10.6, CP.T_TAG1, 307.8); tag('tag2', 12.8, CP.T_TAG2, 307.8)
+# v13 #36：浮いた板はやめた。紫の帯の本物のマスを光らせる（1つ目＝予備の量 2 マス・2つ目＝柄の番号 3 マス。横の帯の左から）
+def tag(name, cells, t0, t1, col):
+    for k, (r_, c_) in enumerate(cells):
+        pl = W.box('%s %d' % (name, k), (MOD - 0.10, MOD - 0.10, 0.05), W.mat_emit('%s %d' % (name, k), W.srgb(col), 3.0), bevel=0.04)
+        pl.location = (rc(r_, c_)[0], rc(r_, c_)[1], QW.TILE_H + 0.035); pl.visible_shadow = False
+        for f, z in ((fr_of(t0), 0.2), (fr_of(t0) + 4, 1.25), (fr_of(t0) + 8, 1.0)):
+            pl.scale = (z, z, 1.0); pl.keyframe_insert('scale', frame=f)
+        show(pl, [(t0, t1)])
+tag('tag1', [(8, 0), (8, 1)], CP.T_TAG1, 307.8, '#C77DFF'); tag('tag2', [(8, 2), (8, 3), (8, 4)], CP.T_TAG2, 307.8, '#C77DFF')
 for k in range(2):                                                  # v12 #36：上へ出る線はやめた。2本が同時に光る（同じ中身）
     tile_state(FMT, 'restored', CP.T_LINK + 0.9 * k, 0.12); tile_state(FMT, 'format', CP.T_LINK + 0.9 * k + 0.45, 0.25)
 tile_state(FMT_A, 'broken', CP.T_DIRTY, 0.3)
@@ -307,7 +330,7 @@ VIEWS.update({
     'K34phone': (C(1.2, -5.0, 78.0), C(0, 0, 0), 32, 3.0),                       # #39：スマホから見た角度（真上から少し傾けた手持ち）
 })
 SPLIT = {
-    'K27': [(124.9, 125.85, 'K27'), (125.85, 130.8, 'K27u'), (130.8, 134.4, 'K27')],      # #24：よろけるのをアップで
+    'K27': [(124.9, 130.8, 'K27u'), (130.8, 134.4, 'K27')],      # #24：よろけるのをアップで（v13：場面の頭からアップ。大地が回るのはアップの中だけ）
     'K38': [(269.6, 276.2, 'K38peel')],
     'K34': [(321.3, CP.T_PHONE, 'K34'), (CP.T_PHONE, 344.0, 'K34phone')],
 }
@@ -332,7 +355,7 @@ def root_at(t): return Vector(FR[min(len(FR) - 1, max(0, int(round(t * FPS))))][
 for n_, (t0, t1, k) in enumerate(SH):
     if k in FOLLOW:
         off, hz, lens = FOLLOW[k]; cd = bpy.data.cameras.new('Cam %02d %s' % (n_, k)); cd.lens = lens; cd.clip_end = 900; cd.sensor_fit = 'HORIZONTAL'; cd.sensor_width = 36
-        cam = W.link(O.new('Cam %02d %s' % (n_, k), cd)); sm = None
+        cam = W.link(O.new('Cam %02d %s' % (n_, k), cd)); sm = root_at(t0 + 2.0 / FPS)          # v13：場面の頭のまるロボから追い始める（前の場面の位置から寄らない）
         for f in range(fr_of(t0) - 1, fr_of(t1) + 2):
             rt = root_at((f - 1) / FPS); sm = rt if sm is None else sm.lerp(rt, 0.35)        # 少し遅れて追う（揺れをやわらげる）
             T = sm + Vector((0, 0, hz)); L = T + off; cam.location = L; cam.rotation_euler = look_q(L, T, 0.0)

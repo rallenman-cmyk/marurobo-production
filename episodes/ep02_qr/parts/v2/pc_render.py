@@ -20,11 +20,13 @@ def own_prefix(tag, k, t):
     if tag == 'c2': return 'qrc2t_' if k in C2_DESK else 'qrc2w_'
     if tag == 'c3': return 'qrc3w_'
     if tag == 'c4': return {'crates': 'qrc4c_', 'factory': 'qrc4f_', 'world': 'qrc4w_'}.get(c4_stage(k))
-    if tag == 'c5': return 'qrc5w_' if k in ('W29', 'W30', 'W28', 'W31', 'W31b') else None
+    if tag == 'c5':
+        if k in ('D5a', 'D5b', 'L5a', 'L5b', 'L5c', 'L5d'): return 'qrc5d_'               # v14：机の場面（インク・ロゴ）
+        return 'qrc5w_' if k in ('W29', 'W30', 'W28', 'W31', 'W31b') else None
     return None
 # よその章の絵（使い回し）：絵コンテの置き場所（chapters.py の IMG）で決まる
 HOME = {'opening/sb2': 'op', 'ch1/sb': 'c1', 'ch2/sb': 'c2', 'ch3/sb': 'c3', 'ch4/sb': 'c4', 'c5/sb': 'c5'}
-ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30'), ('c1', 'K14top'): ('c5', 'W30', 0.4)}   # K14top：1章で「箱が9個に、予備が17個」を上から（5章の上からの 3D、しずくが落ちる前）   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
+ALIAS = {('c4', 'T35'): ('op', 'S07_sh_step'), ('c4', 'T28'): ('op', 'S05_sh_hello'), ('c5', 'W30b'): ('c5', 'W30', 12.0), ('c4', 'G9'): ('c3', 'G9', 6.43), ('c1', 'K14top'): ('c5', 'W30', 0.4)}   # c4 G9（v14「シーン細かく変わる」）：3章の終わりの箱が起き上がった絵が頭から流れ直していた → 3章の終わりのコマで止めて、ゆっくり寄る   # K14top：1章で「箱が9個に、予備が17個」を上から（5章の上からの 3D、しずくが落ちる前）   # W30b：5章の終わりで「さきほどのインク」を 3D で      # 絵コンテが冒頭の絵と同じもの
 # ---------------------------------------------------------------- 描画のファイル
 class Src:
     """頭の名前ごとの mp4 のかたまり（コマの範囲 → ファイル）。読むのは ffmpeg で順に（飛んだら開き直す）"""
@@ -55,13 +57,13 @@ class Src:
         if s.cur['last'] is None: return None
         return Image.frombuffer('RGB', size, s.cur['last'], 'raw', 'RGB', 0, 1).copy()
 # v12：直した所だけ新しい頭の名前で描き直す。新しい描画にそのコマがあればそれを、無ければ前の描画を使う（前の → 新しい の順に上書き）
-NEWER = {'qrc1w5_': 'qrc1w6_', 'qrc2w_': 'qrc2w2_', 'qrc2t_': 'qrc2t2_', 'qrc3w_': 'qrc3w2_', 'qrc4c_': 'qrc4c2_', 'qrc4w_': 'qrc4w2_'}
+NEWER = {'qrc1w5_': 'qrc1w6_', 'qrc2w_': 'qrc2w2_', 'qrc2w2_': 'qrc2w3_', 'qrc2w3_': 'qrc2w4_', 'qrc1t2_': 'qrc1t3_', 'qrc1w6_': 'qrc1w7_', 'qrc3w2_': 'qrc3w3_', 'qrc2t_': 'qrc2t2_', 'qrc3w_': 'qrc3w2_', 'qrc4c_': 'qrc4c2_', 'qrc4w_': 'qrc4w2_', 'qrc4f_': 'qrc4f2_', 'qrc1t3_': 'qrc1t4_', 'qrc2w4_': 'qrc2w5_'}
 class PC:
     def __init__(s, size=(1920, 1080)):
         s.size = size; s.srcs = {}; s.missing = {}; s.used = {}
         s.folders = {'qrop4_': 'qrop4', 'qrc1t2_': 'qrc1', 'qrc1w5_': 'qrc1', 'qrc1s2_': 'qrc1', 'qrc2w_': 'qrc2', 'qrc2t_': 'qrc2', 'qrc3w_': 'qrc3',
                      'qrc4c_': 'qrc4', 'qrc4f_': 'qrc4', 'qrc4w_': 'qrc4', 'qrc5w_': 'qrc5',
-                     'qrc1w6_': 'qrc1v12', 'qrc2w2_': 'qrc2v12', 'qrc2t2_': 'qrc2v12', 'qrc3w2_': 'qrc3v12', 'qrc4c2_': 'qrc4v12', 'qrc4w2_': 'qrc4v12'}   # v12 の描き直し（ドライブの別のフォルダ）
+                     'qrc1w6_': 'qrc1v12', 'qrc2w2_': 'qrc2v12', 'qrc2t2_': 'qrc2v12', 'qrc3w2_': 'qrc3v12', 'qrc4c2_': 'qrc4v12', 'qrc4w2_': 'qrc4v12', 'qrc4f2_': 'qrc4v12', 'qrc2w3_': 'qrc2v13', 'qrc1t3_': 'qrv14', 'qrc1w7_': 'qrv14', 'qrc2w4_': 'qrv14', 'qrc3w3_': 'qrv14', 'qrc5d_': 'qrv14', 'qrc1t4_': 'qrv15', 'qrc2w5_': 'qrv15'}   # v12 の描き直し（ドライブの別のフォルダ）
     def src(s, prefix):
         if prefix not in s.srcs: s.srcs[prefix] = Src(os.path.join(ROOT, s.folders[prefix]), prefix)
         return s.srcs[prefix]
@@ -74,7 +76,7 @@ class PC:
         hold = None
         if (tag, k) in ALIAS: src_tag, src_k = ALIAS[(tag, k)][:2]; hold = ALIAS[(tag, k)][2] if len(ALIAS[(tag, k)]) > 2 else None
         elif home and home != tag and not (tag == 'c1' and k == 'S10_low'): src_tag, src_k = home, k
-        if src_tag != tag:
+        if src_tag != tag or src_k != k:                                        # 同じ章の中の使い回し（5章 W30b → W30）も時刻を移す
             reuse = True; sa, sb = chapters.first_span(src_tag, src_k)
             if sa is None: return None, reuse
             tt = min(sa + (t - a), sb - 1.0 / FPS) if hold is None else sa + hold      # hold：その場面の 1 コマを止めて使う
@@ -82,7 +84,10 @@ class PC:
         if pre is None: return None, reuse
         f = fr_of(tt)
         if pre == 'qrc1s2_': f = fr_of(tt - chapters.c1_scan0())
-        if pre in NEWER and s.src(NEWER[pre]).has(f): pre = NEWER[pre]          # v12：描き直した所
+        q = pre                                                                   # v12：描き直した所。v13：さらに描き直した所（qrc2w_ → qrc2w2_ → qrc2w3_）も、いちばん新しい描画を使う
+        while q in NEWER:
+            q = NEWER[q]
+            if s.src(q).has(f): pre = q
         sr = s.src(pre); f = next((g for g in (f, f - 1, f + 1, f - 2, f + 2) if sr.has(g)), f)   # 区切りの端の 1〜2 コマは隣で
         im = sr.get(f, s.size) if sr.has(f) else None
         key = (tag, k, pre); s.last = (pre, f)

@@ -38,7 +38,7 @@ r = subprocess.run(['ffmpeg', '-v', 'error', '-i', BGM, '-ac', '1', '-ar', str(S
 bed = np.frombuffer(r.stdout, np.int16).astype(np.float32) / 32768
 sys.path.insert(0, '/home/user/qr_plan/parts/sfx_qr'); import sfx_qr as _SX
 music = _SX.bgm_loop(bed, n, 4.0)            # v11：くり返しの継ぎ目を 4 秒かけて重ねる（前は 3 分ごとにぶつっと頭へ戻っていた）
-music *= 0.034 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる
+music *= 0.023 / (np.sqrt(np.mean(music ** 2)) + 1e-9); music[-int(2.5 * SR):] *= np.linspace(1, 0, int(2.5 * SR))   # v5「BGMが大きい」：0.07 → 0.04、声の間は 9dB 下げる。v11：0.034。v13「全体的に少し下げて」：0.023（最後の大きさそろえ（loudnorm）が静かな所を持ち上げるので、声のない所で約 -2dB になるよう 0.034 から 3.4dB 下げた）
 mix = NA.mix_voice(music + sfx, 0.0, P=P, bus_peak=0.38, duck_db=9)
 aw = os.path.join(tmp, 'audio.wav')
 with wave.open(aw, 'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(mix, -1, 1) * 32767).astype(np.int16).tobytes())
@@ -60,6 +60,7 @@ def _pcmiss(d, tag):
     try: return bool(json.load(open(os.path.join(d, tag + '_pc.json')))['missing'])
     except Exception: return False
 for (d, tag), o in zip(PARTS, offs):
+    if FINAL: continue                                     # v14：本番には左上の章の札を出さない（「左上に章のテロップ残ってる」）
     ass.append('Dialogue: 1,%s,%s,Shot,,0,0,0,,%s' % (O2.ts(o), O2.ts(o + 4.0), (((('本番の組み立て %s：%s（3D は PC の描画・まだ届いていない所は絵コンテ）' if _pcmiss(d, tag) else '本番の組み立て %s：%s（3D は PC の描画）')) if os.environ.get('PC3D') else '本番の組み立ての試し %s：%s（3Dは仮の静止画）') if FINAL else '確認用 通し %s：%s（仮のまるロボの静止画・本番はPCの3D）') % (VER, labels.get(tag, tag))))
 ap = os.path.join(tmp, 'subs.ass'); open(ap, 'w', encoding='utf-8').write('\n'.join(ass) + '\n')
 json.dump(dict(offsets={tag: o for (d, tag), o in zip(PARTS, offs)}, total=T, subs=[dict(id=p.get('id', str(p['no'])), text=_re.sub(r'（間）', '', p['text']).strip(), t0=round(p['start'], 2), t1=round(p['end'], 2), chapter=p['chapter']) for p in P]),

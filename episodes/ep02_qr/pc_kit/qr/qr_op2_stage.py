@@ -161,7 +161,7 @@ def view_layer_only(phone_pass):
         if lc.collection == lines_coll: lc.exclude = phone_pass
     scr.hide_render = phone_pass                                    # スマホのカメラは自分の画面を映さない
 # ① スマホのカメラの絵
-pdir = os.path.join(A.out, 'phone4')                  # v1.2 の 'phone' とは別（古い絵を使い回さない）; os.makedirs(pdir, exist_ok=True)
+pdir = os.path.join(A.out, 'phone4'); os.makedirs(pdir, exist_ok=True)                  # v1.2 の 'phone' とは別（古い絵を使い回さない）
 view_layer_only(True); setup(A.phone_res, A.phone_samples)
 markers = list(sc.timeline_markers); saved = [(m, m.camera) for m in markers]
 for m in markers: m.camera = None

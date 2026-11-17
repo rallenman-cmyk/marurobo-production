@@ -19,8 +19,11 @@
 #   同時に描くときは、描き手ごとに小さな窓（最小化）が開く。止めるときは、この窓と「まるロボ 描き手」の窓をぜんぶ閉じる
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
 #   終わると、送るファイルだけを C:\marurobo\marurobo_render にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
-#   2026-11-13 v24：既定は v12（動画レビュー v10 の 3D の直し）。直した所だけ新しい名前で描く：1章 qrc1w6_ 26 本・2章 qrc2w2_ 55 本＋卓上 qrc2t2_ 3 本・3章 qrc3w2_ 11 本・4章 数字の空間 qrc4c2_ 53 本＋中の世界 qrc4w2_ 17 本（合わせて 165 本）。まとめ先は qrc1v12〜qrc4v12
-param([string]$Only = "v12", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
+#   2026-11-15 v27：既定は v15（動画レビュー v14 の見直し）。1章 卓上 qrc1t4_ 1 本（足を引き込み・体の真ん中で小さく）／2章 qrc2w5_ 2 本（柄のシートがめくりと逆の動きで重なる）。合わせて 3 本。まとめ先は qrv15
+#   2026-11-14 v26：既定は v14（動画レビュー v13 の直し）。1章 卓上 qrc1t3_ 1 本・中の世界 qrc1w7_ 46 本／2章 qrc2w4_ 5 本／3章 qrc3w3_ 4 本／5章 机の場面（新しい）qrc5d_ 17 本（合わせて 73 本）。まとめ先は qrv14
+#   2026-11-14 v25：既定は v13（動画レビュー v12 の直し）。2章だけ qrc2w3_ で 5 本：よろけるアップを場面の頭から（2990〜3150 コマ）・紫の帯の本物のマスを光らせる（7170〜7395 コマ）。まとめ先は qrc2v13
+#   2026-11-13 v24：既定は v12（動画レビュー v10 の 3D の直し）。直した所だけ新しい名前で描く：1章 qrc1w6_ 26 本・2章 qrc2w2_ 55 本＋卓上 qrc2t2_ 3 本・3章 qrc3w2_ 11 本・4章 数字の空間 qrc4c2_ 53 本＋中の世界 qrc4w2_ 17 本（合わせて 165 本）。v24b：4章の工場 qrc4f2_ 8 本を足した（合わせて 173 本）。まとめ先は qrc1v12〜qrc4v12
+param([string]$Only = "v15", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0)
 $ErrorActionPreference = "Continue"
 $tools = $PSScriptRoot
 $root = Split-Path -Parent $tools
@@ -252,6 +255,37 @@ function Run-Jobs {
     foreach ($r in @(@(1146, 1319), @(1666, 3076), @(3655, 7234))) { Render-Chunks "v12 4章（数字の空間）" $r[1] $o "qrc4c2_" $a $r[0] }
     $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc4w2_")
     foreach ($r in @(@(1, 303), @(982, 1170), @(1295, 1448), @(9724, 10568))) { Render-Chunks "v12 4章（中の世界）" $r[1] $o "qrc4w2_" $a $r[0] }
+    # v24b：4章の工場（机の上の紙の QR がちらつく #56）。紙と QR の板が同じ高さで重なっていた → 浮かせて描き直す
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c4_factory.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc4f2_")
+    foreach ($r in @(,@(279, 1006))) { Render-Chunks "v12 4章（工場）" $r[1] $o "qrc4f2_" $a $r[0] }
+  }
+  if ($jobs -contains "v13") {
+    # v25（v13 の直し）：2章の 2 か所だけ。よろけるアップ（#24）と、紫の帯の 1つ目・2つ目（#36）
+    $o = Join-Path $root "render_qrc2v13"
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c2_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc2w3_")
+    foreach ($r in @(@(2990, 3150), @(7170, 7395))) { Render-Chunks "v13 2章（中の世界）" $r[1] $o "qrc2w3_" $a $r[0] }
+  }
+  if ($jobs -contains "v15") {
+    # v27（v15 の直し）
+    $o = Join-Path $root "render_qrv15"
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c1_table.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc1t4_")
+    foreach ($r in @(,@(190, 252))) { Render-Chunks "v15 1章（卓上）" $r[1] $o "qrc1t4_" $a $r[0] }
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c2_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc2w5_")
+    foreach ($r in @(,@(5220, 5385))) { Render-Chunks "v15 2章（中の世界）" $r[1] $o "qrc2w5_" $a $r[0] }
+  }
+  if ($jobs -contains "v14") {
+    # v26（v14 の直し）。範囲が 1 つのときは @(,@(a, b)) と「,」を付ける
+    $o = Join-Path $root "render_qrv14"
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c1_table.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc1t3_")
+    foreach ($r in @(,@(190, 252))) { Render-Chunks "v14 1章（卓上）" $r[1] $o "qrc1t3_" $a $r[0] }
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c5_desk.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "32", "--vprefix", "qrc5d_")
+    foreach ($r in @(@(777, 1299), @(2335, 2841), @(3315, 3519), @(3579, 3729))) { Render-Chunks "v14 5章（机）" $r[1] $o "qrc5d_" $a $r[0] }
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c2_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc2w4_")
+    foreach ($r in @(@(2990, 3240), @(5220, 5385))) { Render-Chunks "v14 2章（中の世界）" $r[1] $o "qrc2w4_" $a $r[0] }
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c3_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc3w3_")
+    foreach ($r in @(,@(2540, 2860))) { Render-Chunks "v14 3章（中の世界）" $r[1] $o "qrc3w3_" $a $r[0] }
+    $a = @("-b", "--factory-startup", "--python-exit-code", "1", "--python", "$tools\qr\qr_c1_world.py", "--", "--blend", "$src\output\story.blend", "--font", "$src\assets\japanese.ttc", "--out", $o, "--res", "1920", "1080", "--samples", "48", "--vprefix", "qrc1w7_")
+    foreach ($r in @(,@(2000, 6559))) { Render-Chunks "v14 1章（中の世界）" $r[1] $o "qrc1w7_" $a $r[0] }
   }
   if ($jobs -contains "qrc5") {
     $outc = Join-Path $root "render_qrc5"
@@ -314,7 +348,16 @@ if ($jobs -contains "v12") {
   $okc["qrc1v12"] = Collect "qrc1v12" @("$root\render_qrc1v12\qrc1w6_*.mp4", "$root\render_qrc1v12\qrc1w_log.json") 26
   $okc["qrc2v12"] = Collect "qrc2v12" @("$root\render_qrc2v12\qrc2w2_*.mp4", "$root\render_qrc2v12\qrc2t2_*.mp4", "$root\render_qrc2v12\qrc2w_log_*.json", "$root\render_qrc2v12\qrc2t_log_*.json") 58
   $okc["qrc3v12"] = Collect "qrc3v12" @("$root\render_qrc3v12\qrc3w2_*.mp4", "$root\render_qrc3v12\qrc3w_log_*.json") 11
-  $okc["qrc4v12"] = Collect "qrc4v12" @("$root\render_qrc4v12\qrc4*2_*.mp4", "$root\render_qrc4v12\qrc4*_log_*.json") 70
+  $okc["qrc4v12"] = Collect "qrc4v12" @("$root\render_qrc4v12\qrc4*2_*.mp4", "$root\render_qrc4v12\qrc4*_log_*.json") 78
+}
+if ($jobs -contains "v13") {
+  $okc["qrc2v13"] = Collect "qrc2v13" @("$root\render_qrc2v13\qrc2w3_*.mp4", "$root\render_qrc2v13\qrc2w_log_*.json") 5
+}
+if ($jobs -contains "v15") {
+  $okc["qrv15"] = Collect "qrv15" @("$root\render_qrv15\qrc*_*.mp4", "$root\render_qrv15\qrc*_log*.json") 3
+}
+if ($jobs -contains "v14") {
+  $okc["qrv14"] = Collect "qrv14" @("$root\render_qrv14\qrc*_*.mp4", "$root\render_qrv14\qrc*_log*.json") 73
 }
 if ($jobs -contains "ch06") { $okc["ch06"] = Collect "ch06" @("$root\render_ch06_1080\ch06_stage_*.mp4", "$root\render_ch06_1080\ch06_log.json") 20 }
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1

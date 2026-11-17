@@ -128,6 +128,7 @@ def plan(t):
             r = _card(t, j, i, Q)
             if r is None: continue
             c = dp[j] + r[0] + (1.0 + _cut(t, j, Q[j]) if j > 0 else 0.0) + (3.0 if width(t[j:i]) < 6 else 0.0)
+            if j > 0 and t[:j].count("「") > t[:j].count("」"): c += 20.0      # v14：かぎかっこ「」の中で次の字幕へ分けない（「隠れていたのに、／どうして…」が変）
             if c < dp[i]: dp[i] = c; back[i] = (j, r[1])
     if dp[n] == INF: return [t]
     out = []; i = n
@@ -253,11 +254,16 @@ def plan_tame(t):
     return out
 
 
+# v14：機械では切り替わりを決めにくい文（数字を「・」で区切ってゆっくり読む文など）は、声の頭からの秒で決める
+SWITCH_AT = {'2・7・3。どれがすり替わったのか、見た目では分かりません。': [3.65]}      # 「さん」を言い終えてから替える（v13「テロップの表示タイミング早い」）
 def events_v(a, c, t, wav=None, speed=None):
     """events の改良（QR回 v11、2026-11-13）：切り替わりを「声が出ている時間」の割合で選ぶ。
     字数の割合で選ぶと、間の多い文（「あれ？……」「……1・1・3・1・1」）で、実際の声より何秒も遅れて替わった"""
     ps = plan_tame(t)
     if len(ps) == 1: return [(a, c, ps[0])]
+    if t in SWITCH_AT and len(SWITCH_AT[t]) == len(ps) - 1:
+        cuts = [a] + [a + x for x in SWITCH_AT[t]] + [c]
+        return [(cuts[k], cuts[k + 1], ps[k]) for k in range(len(ps))]
     p = _placement().get(t)
     if wav is None and p is not None: wav = p.get("wav") or os.path.join(VOICE, "line_%03d.wav" % p["no"])
     sp = speed or (p["speed"] if p is not None else 1.0)

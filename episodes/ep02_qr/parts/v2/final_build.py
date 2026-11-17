@@ -55,12 +55,13 @@ FAMILY = {'c3_alnum': ('c3_alnum', None), 'c3_alnum_hl': ('c3_alnum', 'hl'), 'c4
           'D1': ('c2_finder', None), 'K25a': ('c2_print', None), 'K25': ('c2_print', 'scan'), 'K26a': ('c2_chart', None), 'K26b': ('c2_chart', 'mark'),
           'c2_mask': ('c2_mask', None), 'c2_mask_fake': ('c2_mask', 'fake'), 'c2_mask_pats': ('c2_mask', 'pats'), 'c2_mask_over': ('c2_mask', 'over')}
 SINGLE = ['c5_blank', 'c5_levels', 'c5_boxbar', 'end_parts', 'c1_url', 'c1_bigger', 'c2_nearfar', 'c2_ruler', 'c2_times21', 'c2_three', 'c2_manual', 'c2_shop', 'c3_toc', 'c4_bignum', 'c5_drops', 'c5_thirty', 'end_world']
-def fig_segments(ch):
+def fig_segments(ch, tag=''):
     """SHOTS の図の所を、動く図の区間 [(a, b, 図の名前, cue)] にまとめる"""
     segs = []; cur = None
     for sh in ch.SHOTS:
         a, b, k = sh[:3]
         fam = FAMILY.get(k, (k, None) if k in SINGLE else None)
+        if tag == 'c5' and k in ('D5a', 'D5b'): fam = None   # v14：5章の D5a/D5b は 3D の机の場面（4章の図 c4_summary と同じ名前なので分ける）
         if fam is None: cur = None; continue
         name, role = fam
         if cur and cur[2] == name and abs(cur[1] - a) < 1e-6 and role:
@@ -93,6 +94,7 @@ OUTSIDE = ('qrop4_', 'qrc1t2_', 'qrc2t_', 'qrc1s2_')          # スマホの外�
 D_CUT, D_SPACE, D_CH = 0.35, 0.7, 0.6                         # v11 #42 #45 #92：つなぎの重ね（同じ所のカット／外と中が入れ替わる／章の変わり目）
 # v11（#1 #12 #20 #43 #57 #60 #70 #77）：長く動かない 3D の場面は、組み立てでゆっくり寄る・横へ移る（本当の動きは v12 で 3D を描き直す）
 #   (章, 絵の名前) → [(場面の中の割合 0〜1, 寄り, 中心 x, 中心 y)]
+NO_DISSOLVE = {('c1', 'K02')}                     # v14：重ねずに切る（1:35「歩いてる途中にディゾルブ入ってる」：まるロボが歩いている途中で 2 つの絵が重なって見えた）
 PUSH = {('op', 'S11_face'): [(0, 1.0, .5, .5), (.55, 1.32, .58, .42), (1, 1.32, .58, .42)],
         ('c1', 'R_number'): [(0, 1.0, .5, .5), (.3, 1.45, .33, .57), (.55, 1.45, .33, .57), (.8, 1.3, .72, .45), (1, 1.12, .6, .5)],
         ('c2', 'K24'): [(0, 1.0, .5, .5), (.35, 1.3, .8, .3), (.65, 1.3, .25, .72), (1, 1.05, .5, .5)],
@@ -110,7 +112,7 @@ def build(tag, _prev=True):
     pim0 = None
     if _prev and PCX and tag in PREV:                         # 前の章の最後のコマ（章の頭で重ねる）
         pc = build(PREV[tag], _prev=False); pim0 = pc.frame(pc.T_END - 1.0 / FPS)
-    _cards.clear(); _meters.clear(); ch = CH.build(tag); segs = fig_segments(ch)
+    _cards.clear(); _meters.clear(); ch = CH.build(tag); segs = fig_segments(ch, tag)
     for sg in segs:
         if (tag, sg[2]) in CUEW: sg[3].update({k: ch.cue(v) - sg[0] for k, v in CUEW[(tag, sg[2])].items()})
     base_frame = ch.frame
@@ -123,6 +125,30 @@ def build(tag, _prev=True):
         elif im is not None and (tag, k) in PUSH:
             z, x_, y_ = push_at(PUSH[(tag, k)], min(max((t - a) / max(b - a, 1e-6), 0), 1)); im = ch.kb(im, z, x_, y_)
         return im
+    EDGE = {}
+    def edge(ki, sh):
+        """v13：3D の中のカメラの切り替わりが、組み立ての場面の切り替わりと 1〜3 コマずれていると、1 コマだけ別の場面が映る（点滅）。
+        場面の頭と終わりの 5 コマで、急に絵が変わるコマを探し、その外側は使わない（いちばん近いよいコマで止める）"""
+        if ki in EDGE: return EDGE[ki]
+        a, b = sh[0], sh[1]; lo, hi = a, b - 1.0 / FPS
+        def small(t):
+            im = base3d(t, sh)
+            return None if im is None else np.asarray(im.convert('L').resize((96, 54)), dtype=np.float32)
+        if b - a > 12.0 / FPS:
+            ts = [b - k / FPS for k in range(5, 0, -1)]; ims = [small(t) for t in ts]
+            if all(x is not None for x in ims):
+                ds = [float(np.abs(ims[i + 1] - ims[i]).mean()) for i in range(4)]
+                for i in range(4):
+                    calm = min(ds[:i]) if i else (min(ds[1:]) if ds[1:] else ds[0])
+                    if ds[i] > 12 and ds[i] > 4 * (calm + 1): hi = ts[i]; break
+            ts = [a + k / FPS for k in range(0, 5)]; ims = [small(t) for t in ts]
+            if all(x is not None for x in ims):
+                ds = [float(np.abs(ims[i + 1] - ims[i]).mean()) for i in range(4)]
+                for i in range(3, -1, -1):
+                    calm = min(ds[i + 1:]) if i < 3 else min(ds[:3])
+                    if ds[i] > 12 and ds[i] > 4 * (calm + 1): lo = ts[i + 1]; break
+        if (lo, hi) != (a, b - 1.0 / FPS): print('edge', tag, sh[2], round(a, 2), round(b, 2), '->', round(lo, 3), round(hi, 3), flush=True)
+        EDGE[ki] = (lo, hi); return EDGE[ki]
     def space(sh):
         k = sh[2]; st, sk = tag, k; home = INFO.home_of(tag, k)
         if (tag, k) in PCR.ALIAS: st, sk = PCR.ALIAS[(tag, k)][:2]
@@ -138,12 +164,13 @@ def build(tag, _prev=True):
         if PCX:
             ki = next((j for j, x in enumerate(ch.SHOTS) if x[0] <= t < x[1]), len(ch.SHOTS) - 1); sh = ch.SHOTS[ki]
             a, b, k = sh[:3]
-            im = base3d(t, sh)
+            lo, hi = edge(ki, sh)
+            im = base3d(min(max(t, lo), hi), sh)
             if im is not None:
-                if ki > 0 and not any(x0 <= ch.SHOTS[ki - 1][1] - 0.05 < x1 for x0, x1, *_ in segs):   # つなぎ：前の 3D の最後のコマから重ねる
+                if ki > 0 and (tag, k) not in NO_DISSOLVE and not any(x0 <= ch.SHOTS[ki - 1][1] - 0.05 < x1 for x0, x1, *_ in segs):   # つなぎ：前の 3D の最後のコマから重ねる
                     pv = ch.SHOTS[ki - 1]; Dd = D_SPACE if space(pv) != space(sh) else D_CUT
                     if t - a < Dd:
-                        if ki not in pcache: pcache[ki] = base3d(pv[1] - 1.0 / FPS, pv)
+                        if ki not in pcache: pcache[ki] = base3d(edge(ki - 1, pv)[1], pv)
                         if pcache[ki] is not None:
                             u = ease((t - a) / Dd)
                             if Dd == D_SPACE: im = ch.kb(im, 1.06 - 0.06 * u)
@@ -178,6 +205,10 @@ def build(tag, _prev=True):
     for sh in ch.SHOTS:
         # v11：「F1」は 1章（たたむ）と 4章・結び（工場）で別の絵。たたむ音・ふたの音は 1章の 3D の時刻（c1_world_events.json）で鳴らす
         if sh[2] in ('C6a',): sfx.append((sh[1] - 0.05, SX.drop()))
+        if tag == 'c5' and sh[2] == 'D5a' and sh[0] < ch.cue(CH.s('30-02')):          # v14：机の場面（びんが倒れる・しずく）
+            tt = ch.cue(CH.s('30-01', -0.35)); sfx += [(tt + 0.30, SX.place(0.14))]   # v15：「インクの飛び散るSEいらない、倒れるSEは残して」
+        if tag == 'c5' and sh[2] == 'L5a': sfx += [(106.72 + 0.7, SX.place(0.10))]
+        if tag == 'c5' and sh[2] == 'L5c': sfx += [(140.46, SX.drop(0.10))]
         if sh[2] == 'B28b': sfx.append((sh[0] + 0.2, SX.gather(amp=0.08)))         # v11：大きすぎた（0.16 → 0.08）
         if sh[2] == 'B28c': sfx.append((sh[0], SX.assemble(amp=0.10)))            # 0.20 → 0.10
     if tag == 'c1' and os.path.exists(os.path.join(HERE, 'c1_world_events.json')):

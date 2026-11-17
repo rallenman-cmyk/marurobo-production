@@ -445,17 +445,18 @@ def arrows(pts):
     """3D の上に矢印と短いラベル。pts：[(x, y, ラベル, cue のキー, 向き 'down'|'up'|'left'|'right')]（座標は 1280×720）"""
     def f(t, dur, cue=None):
         im, d = clear()
-        for x, y, lab, key, dr in pts:
+        for pt in pts:
+            x, y, lab, key, dr = pt[:5]; col = pt[5] if len(pt) > 5 else RED   # v15：赤い所の上では別の色（6 番目に色）
             t0 = C(cue, key, 0.0); a = min(ease((t - t0) / 0.25), (dur - t) / 0.3)
             if a <= 0: continue
             bob = 6 * math.sin((t - t0) * 6) * (1 - min(1, (t - t0) / 1.5))
             vx, vy = {'down': (0, 1), 'up': (0, -1), 'left': (-1, 0), 'right': (1, 0)}[dr]; L = 70
             tx, ty = x - vx * (12 + bob), y - vy * (12 + bob); sx, sy = tx - vx * L, ty - vy * L
-            d.line((sx, sy, tx - vx * 20, ty - vy * 20), RED, 12, a=a)
-            px, py = -vy, vx; d.poly([(tx, ty), (tx - vx * 30 + px * 22, ty - vy * 30 + py * 22), (tx - vx * 30 - px * 22, ty - vy * 30 - py * 22)], RED, a=a)
+            d.line((sx, sy, tx - vx * 20, ty - vy * 20), col, 12, a=a)
+            px, py = -vy, vx; d.poly([(tx, ty), (tx - vx * 30 + px * 22, ty - vy * 30 + py * 22), (tx - vx * 30 - px * 22, ty - vy * 30 - py * 22)], col, a=a)
             if lab:
-                lx, ly = sx - vx * 34, sy - vy * 34; w = 22 + 30 * len(lab)
-                d.rect((lx - w / 2, ly - 30, lx + w / 2, ly + 30), fill=RED, r=14, a=a); d.text((lx, ly), lab, 44, WHITE, a=a)
+                lx, ly = sx - vx * 34, sy - vy * 34; w = 34 + 46 * len(lab)   # v14：字が札からはみ出ないよう（字の大きさ 44 に合わせる）
+                d.rect((lx - w / 2, ly - 30, lx + w / 2, ly + 30), fill=col, r=14, a=a); d.text((lx, ly), lab, 44, WHITE, a=a)
         return im
     return f
 def patterns8(t, dur, cue=None):
@@ -559,10 +560,10 @@ def _segs(d, xy, segs, size, a):
     """[(字, 色)] を真ん中ぞろえで並べて描く"""
     tw = sum(d.d.textlength(t_, font=F(size)) for t_, _ in segs); x = xy[0] * K - tw / 2
     for t_, col in segs: d.d.text((x, xy[1] * K), t_, font=F(size), fill=(*col, int(255 * a)), anchor='lm'); x += d.d.textlength(t_, font=F(size))
-def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False):
+def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False, fout=True):
     """m1・m2：(見出し, 1行目, 2行目 or None, 2行目の色)。extra：下に出す大きな一行。xlab：箱の下に ×1 ×2 ×3"""
     def f(t, dur, cue=None):
-        im, d = clear(); al = min(1.0, (t / 0.3) if fade else 1.0, (dur - t) / 0.25 if dur - t < 0.25 else 1.0)
+        im, d = clear(); al = min(1.0, (t / 0.3) if fade else 1.0, (dur - t) / 0.25 if (fout and dur - t < 0.25) else 1.0)      # v14：次も同じメモが続くときは消さない（fout=False。「メモ全体が点滅」）
         if al <= 0: return im
         for k, m in enumerate((m1, m2)):
             if not m: continue
@@ -581,3 +582,6 @@ def memo(m1, m2=None, extra=None, xlab=False, fade=True, glow2=False, diff=False
             d.line((688, 206, 676, 206, 676, 431, 688, 431), RED, 5, a=al); d.rect((572, 222, 668, 282), fill=WHITE, outline=RED, width=3, r=10, a=al); d.text((620, 252), '2倍', 44, RED, a=al)      # 白い札にのせて、箱の角と重ならないように
         return im
     return f
+def memo_c(*a, **k):
+    """v14：次の区切りも同じメモが続くとき（終わりで消さない）"""
+    k['fout'] = False; return memo(*a, **k)
