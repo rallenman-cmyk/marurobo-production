@@ -17,7 +17,9 @@ for _p in (os.path.join(_HERE, "..", "..", "..", "skill", "marurobo-video-produc
 import marumotion as mm
 import maru_real as MR
 
-MOTION_EV = ("step", "jump", "land")            # 簡単なまるロボのために書いた足音・跳ぶ音（予定から出し直すので消す）
+MOTION_EV = ("step", "jump", "land")
+BEEPS = ("beep_yes", "beep_no", "beep_surprise", "beep_happy", "beep_think", "beep_question", "beep_hello", "beep_present", "ding", "sigh", "zoom")
+BEEP_SAME = {"beep_surprise": "pi", "sigh": "down"}   # 動きの電子音と、前から付けている同じ役の音            # 簡単なまるロボのために書いた足音・跳ぶ音（予定から出し直すので消す）
 
 
 def hier(o):
@@ -108,6 +110,10 @@ def finish(h, p, T0, T1, EVENTS, STEPS):
         elif kind == "step_turn": EVENTS.append((tt, "step", 0.45))
         elif kind == "takeoff": EVENTS.append((tt, "jump", 0.6))
         elif kind == "land": EVENTS.append((tt, "land", 0.7))
+        elif kind in BEEPS:
+            same = BEEP_SAME.get(kind)                 # v14 で決まった音（pi・down）がすぐ近くにあれば、そちらを残す
+            if same and any(e[1] == same and abs(e[0] - tt) < 0.8 for e in EVENTS): continue
+            EVENTS.append((tt, kind, 0.8))
     return frames
 
 
