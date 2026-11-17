@@ -191,8 +191,11 @@ def P_s12a(p, C, g):
     s, said = g["s"], g["said"]
     tS = said("では、画面の中に")
     # 上から降りてくる：高い所（GROUND）に立っていて、字幕の頭で、いまの場所へ跳び降りて脚で受け止める
-    C.go(p, tS - 1.9)                            # 画面の外で跳ぶ（落ちるのに約 2.7 秒）。字幕の頭から 0.4 秒で画面に入り、0.85 秒で着地
-    p.jump_to((0.0, 0.0), z1=0.0)
+    p.jump_to((0.0, 0.0), z1=0.0)                # カットの頭から、画面の外で跳ぶ（見る・しゃがむ・落ちる）
+    t_land = C.T0 + p.t - 0.9                    # だいたいの着地（跳ぶ動きの終わりの手前）
+    for e in p.events:
+        if e["kind"] == "land": t_land = C.T0 + e["t"]
+    g["EVENTS"][:] = [e for e in g["EVENTS"] if e[1] != "dive"]; g["ev"](t_land - 0.55, "dive")   # 落ちてくる音は、画面に入るころから
     C.idle_to(p, s("12-01b"))
     p.turn_to(50); p.wait(0.3); p.turn_to(-50); p.wait(0.3); p.turn_to(0)
     C.idle_to(p, said("門番です") - 0.6); p.turn_to(25); p.look(0, 16, hold=0.4)
@@ -286,7 +289,7 @@ def P_s23(p, C, g):
     C.go(p, s("23-04") + 0.8); p.hops(n=2, height=0.07)
 
 
-GROUND["c_s12a"] = 9.0                # 画面の外（9m 上）から降りてくる（3m だと宙に立っているのが見えた）
+GROUND["c_s12a"] = 5.0                # 画面の外（5m 上）から降りてくる（3m だと宙に立っているのが見えた）
 
 PLANS = dict(c_s01=P_s01, c_s02a=P_s02a, c_s03=P_s03, c_s05x=P_s05x, c_s05b=P_s05b, c_s06b=P_s06b, c_s08e=P_s08, c_s08f=P_s08,
              c_s11=P_s11, c_s11b=P_idle_look, c_s11c=P_idle_look, c_s11d=P_s11d, c_s12a=P_s12a, c_s13a=P_s13, c_s13b=P_s13, c_s13d=P_s13d,
