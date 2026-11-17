@@ -7,6 +7,7 @@ description: まるロボ解説チャンネル（デジタル機器のしくみ�
 
 1 本目（EP01「Bluetooth イヤホン」、2026-11-04〜09、通し 18分10秒で完成・OK）で、ユーザーの直しから作った決まり。新しい回は最初の下組みからこの決まりで作る。直しを待ってから合わせるのではなく、出す前に自分で確かめる。
 
+- **このスキルの最新版は GitHub の `rallenman-cmyk/marurobo-production`（`skill/marurobo-video-production/`）。** 道具・各回の台本や組み立て・PC で描く一式もそこにある。セッションにこのリポジトリが付いていなければ、作業の前に付けて（add_repo）、そこの SKILL.md と資料を読む。claude.ai に保存したスキルは古いことがある。
 - 決めたことの元帳：**制作バイブル**（Claude Docs）https://claude.ai/artifact/H9g24qNzjBPUeafePMgxoz 。作業の前に関係する節を読む（とくに【指示】たとえの場面のルール 26 項目・台本の語り方とまるロボの役・光・動き・人の見た目）。バイブルとこのスキルが食い違うときはバイブルが新しい。
 - なぜそう決めたか（直しの記録）：`references/feedback_log.md`
 - 作り方の流れと数値：`references/pipeline.md`／道具の使い方：`references/toolkit.md`
