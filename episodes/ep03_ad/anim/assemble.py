@@ -87,8 +87,25 @@ def tent(d, cx, cy, r):
 
 
 SB = os.path.join(EP, "storyboard")
+def _xframe(part, sec):
+    """差し込み専用の場面（s05i・s22i。時刻は場面の外）の sec 秒にいちばん近い絵"""
+    d = next((d_ for d_ in DIRS if os.path.exists(os.path.join(d_, part + "_log.json"))), None)
+    if d is None: raise SystemExit("差し込み専用の場面 %s の絵がない（PC で描く一覧に入れる）" % part)
+    lg = json.load(open(os.path.join(d, part + "_log.json")))
+    fs = sorted(glob.glob(os.path.join(d, part + "_[0-9]*.png")) + glob.glob(os.path.join(d, part + "_[0-9]*.jpg")))
+    return min(fs, key=lambda x: abs(lg["t0"] + int(os.path.basename(x)[len(part) + 1:-4]) / 24 - sec))
+
+
 def night_inset():
-    """22-03：夜中、まるロボがスマホでキャンプの動画を見ている（小さな絵）"""
+    """22-03：夜中、まるロボがスマホでキャンプの動画を見ている（小窓）。v10「右上のまるロボの切り抜きも 3D に」(15:19)：3D の場面 s22i の絵を白いふちで囲む"""
+    sub = Image.open(_xframe("s22i", 3.0)).convert("RGB").resize((408, 230), Image.LANCZOS)
+    im = Image.new("RGBA", (420, 242), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle([0, 0, 419, 241], 16, fill=(255, 255, 255, 255)); im.paste(sub, (6, 6))
+    p = os.path.join(tmp, "inset22.png"); im.save(p); return p
+
+
+def night_inset_2d():
+    """（v9 まで）2D の小さな絵"""
     im = Image.new("RGBA", (420, 260), (12, 20, 38, 255)); d = ImageDraw.Draw(im)
     d.rounded_rectangle([0, 0, 419, 259], 18, outline=(255, 255, 255), width=5)
     d.rounded_rectangle([230, 60, 330, 230], 14, fill=(34, 38, 43)); im.paste(Image.open(os.path.join(SB, "tent.png")).convert("RGBA").resize((84, 112)), (238, 80))
