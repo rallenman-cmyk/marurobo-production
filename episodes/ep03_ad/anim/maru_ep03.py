@@ -14,6 +14,12 @@ for _d in (_RG, _SK, _ANIM_HERE):                     # PC の一式では anim 
 import maru_cmds as MC
 
 
+def face_to(a, b):
+    """a から b を向く向き（3本目の向き：前が −Y のときの角度）"""
+    import math
+    return math.degrees(math.atan2(b[0] - a[0], -(b[1] - a[1])))
+
+
 def _hat(torso):
     """探偵の帽子（3本目の帽子と同じ形・柄）。本物の頭のてっぺん（胴の中心から 0.49）に合わせる。本物の前は +Y"""
     plaid = checker_mat("hat_plaid", "#B88A55", "#8A6239", 9); band = mat("hat_band", "#5B3B22", rough=0.6)

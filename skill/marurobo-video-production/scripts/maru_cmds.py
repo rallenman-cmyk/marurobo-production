@@ -46,6 +46,7 @@ class Maru:
         self.s = s; self.off = face_offset
         self.handle = MR.place(loc=(0.0, 0.0, z), heading=0.0, scale=s, name=name)   # 親は世界の原点・回転なし・大きさ s
         self.root = self.handle.root; self.torso = self.handle.torso; self.body = self.torso
+        self.holder = self.handle.parent                        # 置き場所の親（落ちる・小さくして消す・ひっくり返る は、これを動かす）
         self.cmds = []; self.p0 = (loc[0] / s, loc[1] / s); self.h0 = face + face_offset; self.look0 = look_up
         self._last = {}
         ALL.append(self)
