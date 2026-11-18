@@ -376,17 +376,55 @@ def s11():
         Ln = math.dist((x0, y0, z0), (x1, y1, z1))
         o = cyl(road, ((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2), 0.05, Ln, verts=12)
         o.rotation_euler = Vector((x1 - x0, y1 - y0, z1 - z0)).to_track_quat('Z', 'Y').to_euler()
+    # v10「まるロボの動きと音がリアルじゃない」(7:49・7:55)→ ユーザー案「箱の 1 つにまるロボが乗って運ばれる」。
+    #   はじめの箱（しずく）は道の入口で待ち、まるロボはその上に乗っている。ほかの箱が先に飛んでいくのを見上げ、
+    #   「追いかけてみましょう」でうなずく → 箱が飛び立ち、電波の道を町・山の上へ。カメラは箱について行く
+    boxes = []
+    tgo = s("11-02") + 0.2                                               # 乗った箱が飛び立つ
     for i, k in enumerate(("drop", "square", "two", "drop", "square")):
         b = box(pts[0], k, s=2.0)
-        ta = t0 + i * 1.6
+        ta = tgo if i == 0 else t0 - 1.0 + (i - 1) * 1.6
+        key(b, "location", f(t0) - 1, (pts[0][0], pts[0][1], pts[0][2] + 0.05), "LINEAR")
+        if i:                                                           # 先の箱は、飛び立つ直前に入口へ出てくる（待っている間は乗った箱と重ならないように隠す）
+            key(b, "scale", f(t0) - 1, (0.001,) * 3, "CONSTANT"); key(b, "scale", f(ta - 0.3), (0.001,) * 3, "LINEAR"); key(b, "scale", f(ta), (2.0,) * 3, "LINEAR")
+            key(b, "location", f(ta - 0.3), (pts[0][0] + 1.5, pts[0][1] - 0.3, pts[0][2] + 0.05), "LINEAR")   # 乗った箱から 1.5m 横に出て、まっすぐ次の点へ（まるロボの横を通らない）
         for j, p in enumerate(pts):
+            if i and j == 0: continue
             key(b, "location", f(ta + j * 2.2), (p[0], p[1], p[2] + 0.05), "LINEAR")
-    mr = Maru((-4.0, -2.5, 0), -20, eye_glow=1.3)
-    mr.walk(t0 + 0.3, s("11-02") + 1.0, (-4.0, -2.5, 0), (-3.9, 0.3, 0), face=-10, h=0.12, step=0.25)   # v4「箱を貫通」(7:51)：箱の通り道から離れて追う
-    mr.at(s("11-02") + 1.5, look=28)
+        boxes.append((b, ta))
+    ride, _ = boxes[0]
+    if True:                                                            # 先の箱が出ていく音
+        for b, ta in boxes[1:]:
+            if t0 < ta < t1: ev(ta, "whoosh")
+    ev(tgo, "whoosh")
+    mr = Maru((0.0, 0.0, 0), face_to((0, 0), (-0.9, 1.0)), s=0.45, eye_glow=1.3)
+    hd = mr.holder; hd.parent = ride; hd.matrix_parent_inverse.identity()   # 箱の上に乗せる（箱の大きさ 2 の中なので、まるロボは半分に）
+    hd.location = (0.0, 0.0, 0.385); hd.scale = (0.45 / 2.0,) * 3
+    mr.at(t0 + 0.4, look=22)                                            # 先に飛んでいく箱を見上げる
+    mr.nod(W("11-01", "追いかけて"))                                    # 「追いかけてみましょう」
+    mr.glow(W("11-01", "追いかけて") + 0.6, 6.0)
+    mr.at(tgo + 0.6, look=-14)                                          # 飛び立つ：足元（町）を見下ろす
+    mr.at(W("11-02", "山を") - 0.2, look=10)
+    mr.awe(W("11-02", "山を") + 0.2, dur=2.4, pitch=16)                 # 山をこえる：見とれる
+    mr.surprise(W("11-02b", "大きな会場") - 0.1)                         # 「大きな会場！」
     sun((40, 0, 160), 3.0, "#C8D8FF"); area((-3, -5, 4), (0, 3, 2), 400, 5, "#BFD9FF")
+    Lr = area((-1.2, -2.2, 2.0), (0.0, 0.0, 0.6), 60, 1.2, "#FFF1DD")       # 乗った箱について行く明かり（山の上で暗くならないように）
+    Lr.parent = ride; Lr.matrix_parent_inverse.identity(); Lr.location = (-0.6, -1.1, 1.0); Lr.scale = (0.5,) * 3
     cam, tgt = cam_rig()
-    shots(cam, tgt, [(t0, t1, (-5.5, -6.0, 1.6), (-1.0, 2.0, 1.5), (-4.0, -4.0, 2.4), (2.0, 20.0, 6.0), 26)])
+    cam.data.lens = 30
+    # 箱の場所（キーと同じ直線のつなぎ）を、前後 0.6 秒でならしてカメラが追う（角でがくっとしないように）
+    def bpos(t):
+        u = (t - tgo) / 2.2
+        if u <= 0: return Vector(pts[0])
+        j = min(int(u), len(pts) - 2); a_ = u - j if int(u) <= len(pts) - 2 else 1.0
+        return Vector(pts[j]).lerp(Vector(pts[j + 1]), min(1.0, a_))
+    def spos(t): return sum((bpos(t + d) for d in (-0.6, -0.3, 0.0, 0.3, 0.6)), Vector()) / 5
+    for fr in range(f(t0), f(t1) + 1):
+        t = t0 + (fr - f(t0)) / FPS
+        p = spos(t); w = max(0.0, min(1.0, (t - (tgo - 0.4)) / 1.6)); w = w * w * (3 - 2 * w)
+        c0 = Vector((-4.6, -3.6, 1.7)); g0 = Vector((-2.4, 0.4, 1.3))                     # 道の入口：乗っているまるロボと、先に飛ぶ箱
+        c1 = p + Vector((-2.2, -3.2, 1.2)); g1 = p + Vector((0.4, 2.0, 0.95))             # ついて行く
+        key(cam, "location", fr, tuple(c0.lerp(c1, w)), "LINEAR"); key(tgt, "location", fr, tuple(g0.lerp(g1, w)), "LINEAR")
     return t0, t1
 
 

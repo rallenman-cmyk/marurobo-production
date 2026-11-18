@@ -54,6 +54,7 @@ def make(kind, strength=1.0, sr=48000):
     elif k == "beep_think": add(0, tone(520, 520, 0.05, 0.08))
     elif k == "beep_question": add(0, tone(520, 560, 0.10, 0.13)); add(0.14, tone(600, 980, 0.22, 0.14))
     elif k == "beep_hello": add(0, tone(784, 784, 0.10, 0.13)); add(0.13, tone(1047, 1047, 0.18, 0.13))
+    elif k == "beep_wow": add(0, tone(480, 900, 0.26, 0.14)); add(0.30, tone(900, 700, 0.34, 0.12, d=0.25))   # 見とれる（awe）。3本目 v10 で足した（予定は出すのに音がなかった）
     elif k == "power_down": add(0, tone(900, 180, 1.1, 0.10, d=0.8))
     elif k == "boot": add(0, tone(220, 1100, 0.35, 0.10, d=0.3)); add(0.38, tone(1319, 1319, 0.12, 0.12))
     elif k == "beep_present": add(0, tone(988, 988, 0.11, 0.14)); add(0.15, tone(1319, 1319, 0.16, 0.14))

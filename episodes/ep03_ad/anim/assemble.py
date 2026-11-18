@@ -359,10 +359,17 @@ for k, lg in logs.items():
     if not lg: continue
     ev_all += [(t, kd) for t, kd in lg.get("events", [])]
     ev_all += [(t, "step") for t in lg.get("steps", [])]
+sys.path.insert(0, os.path.join(EP, "..", "..", "skill", "marurobo-video-production", "scripts"))
+import maru_sfx                                                          # まるロボの気持ちの動きの電子音（maru_motions.md。3本目 v10 で足した）
+_nos = {}
 for t, kd in ev_all:
     x = sfx.make(kd, sr)
-    if x is None: continue
+    if x is None:
+        x = maru_sfx.make(kd, 1.0, sr)
+        if x is not None: x = np.asarray(x, np.float32)
+    if x is None: _nos[kd] = _nos.get(kd, 0) + 1; continue
     i = int(t * sr); sfx_bus[i:i + len(x)] += x[:max(0, len(sfx_bus) - i)]
+if _nos: print("【効果音】音のない種類：", _nos)
 # 声（アニマティックの声：ピー入り、24 kHz）を 48 kHz に
 _VW = W_ + "/animatic_tmp/voice_v10.wav"                              # v10「8分あたりから声がずっと高い」：高い文をそろえた声（voice/tools/README.md）
 if not os.path.exists(_VW): _VW = W_ + "/animatic_tmp/voice.wav"; print("【注意】高さをそろえた声がない。元の声を使う")
