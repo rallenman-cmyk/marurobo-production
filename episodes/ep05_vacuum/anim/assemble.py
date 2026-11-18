@@ -155,6 +155,7 @@ for nm in ORDER:
     if nm not in LOG: continue
     a_, b_ = CL[nm][0], CL[nm][1]
     for t, kind, gain in LOG[nm]["events"]:
+        if any(k_ == kind and abs(t_ - t) < 0.05 for (t_, k_) in EV if abs(t_ - t) < 0.05): continue     # v7：カットごとの記録で 0.01 秒ずれた同じ音は 1 つに
         EV[(round(t, 2), kind)] = gain
 SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
 fx = np.zeros(N, np.float32); moves = []; overl = []
