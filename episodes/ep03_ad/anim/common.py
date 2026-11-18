@@ -82,6 +82,29 @@ def made(fn, *a, **k):
     return e, r, list(set(bpy.data.objects) - before)
 
 
+def _load_wt(path):
+    # 言葉を言う瞬間の表（voice/word_times.json。wordtime.py の load_table と同じ。PC のキットでも動くよう、ここに置く）
+    tb = json.load(open(path, encoding="utf-8"))
+    yl = lambda t: max(0, sum(1 for ch in t if ch not in "、。？！…「」（）・ 　"))
+    def Wt(i, frag, o=0.0):
+        v = tb[i]; t = v["text"]; k = t.find(frag)
+        if k < 0: raise KeyError("%s に「%s」がない" % (i, frag))
+        if v["wt"] is None: return v["start"] + (v["end"] - v["start"]) * yl(t[:k]) / max(1, yl(t)) + o
+        ch, asg = v["wt"]
+        for (a, b), (g0, g1) in zip(ch, asg):
+            if a <= k < b: return v["start"] + (g0 + (g1 - g0) * yl(t[a:k]) / max(1, yl(t[a:b]))) / v["speed"] + o
+        return v["start"] + asg[-1][0] / v["speed"] + o
+    return Wt
+
+
+W = _load_wt(os.path.join(_ANIM_HERE, "..", "voice", "word_times.json"))   # W(文の番号, 言葉) → その言葉を言い始める本編の秒
+
+
+def face_to(a, b):
+    """a から b を向く向き（3本目の向き：前が −Y のときの角度）"""
+    return math.degrees(math.atan2(b[0] - a[0], -(b[1] - a[1])))
+
+
 class MaruOld:   # v9 までの作り（体を滑らせる）。v10 から使わない
     """まるロボ：root（場所・向き）、body（跳ぶ・見上げる・傾く）、アンテナの光"""
     def __init__(self, loc, face, **kw):

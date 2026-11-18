@@ -4,6 +4,8 @@
 #   ・前と同じ書き方（mr.at / walk / hop / tilt / glow …）を予定に並べる：skill/.../scripts/maru_cmds.py（3本目が作った共通の部品）
 #   ここでは 3本目だけのもの（探偵の帽子・目の光の材質）を足す。向きは前と同じ（前が −Y のときの角度 → face_offset=180）
 import os, sys
+import bpy
+from mathutils import Vector
 
 _SK = os.path.join(_ANIM_HERE, "..", "..", "..", "skill", "marurobo-video-production", "scripts")
 _RG = os.path.join(_ANIM_HERE, "..", "..", "ep01_earphone", "stage", "maru")
@@ -36,6 +38,7 @@ class Maru(MC.Maru):
             m = lens_o.data.materials[0].copy(); m.name = "maru_lens"; lens_o.data.materials[0] = m; self.lens = m
         self.hat_e, self.hat_parts = _hat(self.torso) if hat else (None, [])
         self.z0 = 0.0
+        self.post = []                                       # 予定を当てたあとにする仕事（体の場所に合わせて物を動かす など）
 
 
 def _parents(o):
@@ -46,6 +49,14 @@ def _parents(o):
 
 def bake_all(t_end):
     MC.bake_all(t_end, T0=CLOCK_T0(), fps=FPS, steps=STEPS, events=EVENTS)
+    for m in MC.ALL:
+        for fn in getattr(m, "post", []): fn(m)
+
+
+def head_top(m, t, up=0.49):
+    """時刻 t の、まるロボの頭のてっぺん（世界の座標）。予定を当てたあとに使う"""
+    sc_ = bpy.context.scene; sc_.frame_set(f(t)); bpy.context.view_layer.update()
+    return m.torso.matrix_world @ Vector((0, 0, up))
 
 
 def CLOCK_T0():

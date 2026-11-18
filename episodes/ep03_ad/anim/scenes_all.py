@@ -179,27 +179,21 @@ def s04():
     real_hat = [o for o in set(bpy.data.objects) - before if o.active_material and o.active_material.name.startswith(("hat_plaid", "hat_band"))]
     tj = s("04-02") + 0.8
     show(real_hat, 0, False)
-    mr.walk(t0 + 0.5, tj - 1.2, (1.75, -0.7, 0), (HX, HY, 0), face=175)
-    mr.at(tj - 0.6, look=-30)                                        # 見上げる
-    mr.hop(tj, 0.75, 0.8); ev(tj, "jump"); ev(tj + 0.8, "land")
-    key(hat_e, "location", f(tj + 0.3), (1.4, 1.73, 1.6))
-    key(hat_e, "location", f(tj + 0.4), (HX, HY + 0.02, 1.36))        # 頭の上（跳んだいちばん上）
-    ev(tj + 0.45, "hat")
-    _hm = [o for o in real_hat if o.type == "MESH" and o.active_material.name.startswith("hat_plaid")]
-    if _hm:                                                           # 届く所は、そのときの本物の帽子の場所ぴったりに
-        _hm = max(_hm, key=lambda o: o.dimensions.x * o.dimensions.y)
-        bpy.context.scene.frame_set(f(tj + 0.4)); bpy.context.view_layer.update()
-        key(hat_e, "location", f(tj + 0.4), tuple(_hm.matrix_world.translation))
-        key(hat_e, "rotation_euler", f(tj + 0.4), tuple(_hm.matrix_world.to_euler()))
+    # v10：決まりの部品で動かす。ふとんの外を歩いて掛けの下へ → 見上げる → 小さく跳んで帽子を落とす → 頭に落ちてくる → こちらを向いて喜ぶ
+    mr.walk(0, tj - 0.9, None, (HX, HY)); mr.at(tj - 0.6, look=30)
+    mr.hops(tj, n=1, height=0.12)
+    t_on = tj + 0.75                                                  # 帽子が頭に着く時刻（着地のあと）
+    def _hat_drop(m, hat_e=hat_e, t_on=t_on, tj=tj):
+        top = head_top(m, t_on)
+        key(hat_e, "location", f(tj + 0.25), (1.4, 1.73, 1.6), "LINEAR")      # 跳んだ頭が掛けに当たって、帽子が外れる
+        key(hat_e, "location", f(t_on), tuple(top), "BEZIER")
+        key(hat_e, "rotation_euler", f(tj + 0.25), (0, 0, 0)); key(hat_e, "rotation_euler", f(t_on), (0, 0, m.root.matrix_world.to_euler()[2] + math.pi))
         bpy.context.scene.frame_set(0)
-    # v5「帽子が最初引っかかってない」(1:06)：落ちた帽子は、頭に届いた瞬間（跳んだいちばん上）に本物の帽子へ入れかえる。
-    #   前は届いてから 0.4 秒、まっすぐ下がる帽子と、弧を描いて下りるまるロボがずれて、ななめに引っかかって見えた
+    mr.post.append(_hat_drop); ev(t_on, "hat")
     _fh = [o for o in bpy.data.objects if o.parent == hat_e] + [hat_e]
-    show(_fh, 0, True)                                                # 掛かっている・落ちてくる帽子は見せる（v4 は最初から隠れていて、急に頭に出た）
-    show(_fh, f(tj + 0.4), False)
-    show(real_hat, f(tj + 0.4), True)                                 # ここから本物の帽子（いっしょに動く）
-    mr.at(tj + 1.0, face=180, look=0); mr.at(tj + 1.8, face=10)       # かぶったら、こちらを向く
-    mr.at(s("04-03") + 0.3, look=12); mr.glow(s("04-03") + 0.3, 0.3, 6.0); ev(s("04-03") + 0.3, "pipo")   # 胸を張る
+    show(_fh, 0, True); show(_fh, f(t_on), False); show(real_hat, f(t_on), True)   # 頭に着いた瞬間に、いつもの帽子へ入れかえる
+    mr.at(tj + 2.0, face=face_to((HX, HY), (0.3, -2.6)))              # こちらを向く
+    mr.hops(s("04-03") + 0.3, n=2); mr.glow(s("04-03") + 0.3, 6.0)    # 探偵になって喜ぶ（跳ねる・光る）
     sun((50, 0, 200), 2.0)
     area((0, -3, 2.5), (1.2, 1.2, 1.2), 350, 3, "#FFF1DD")
     cam, tgt = cam_rig()
@@ -237,17 +231,16 @@ def s05():
     xs, Ls, Bs = ped_set()
     for i, idn in enumerate(("05-02", "05-03", "05-04")):
         light_on(Ls[i], Bs[i], s(idn) + 0.2)
-    mr = Maru((-3.6, -0.6, 0), 120, s=0.7, eye_glow=1.2)
-    # 台の右横に立って見上げる（台の前に立つと、寄りのショットで台の物が隠れる）
-    mr.walk(s("05-01"), s("05-02") + 0.3, (-3.6, -0.6, 0), (-1.6, -0.3, 0), face=-90)
-    mr.at(s("05-02") + 0.6, face=-135, look=24)
-    mr.walk(s("05-03") - 0.3, s("05-03") + 1.2, (-1.6, -0.3, 0), (0.7, -0.3, 0), face=-90)
-    mr.at(s("05-03") + 1.4, face=-135, look=22)
-    mr.walk(s("05-04") - 0.3, s("05-04") + 1.2, (0.7, -0.3, 0), (2.95, -0.25, 0), face=-90)
-    mr.at(s("05-04") + 1.5, face=-140, look=16)
-    tb = s("05-04b") + 0.4                                             # 鏡に映った自分にびっくり → 後ずさる
-    mr.hop(tb, 0.25, 0.35); ev(tb, "pi"); mr.at(tb + 0.1, (2.95, -0.25, 0)); mr.at(tb + 0.7, (3.3, -0.9, 0))
-    mr.at(s("05-05") + 1.5, (3.0, -0.45, 0), face=-140, look=10); mr.tilt(s("05-05") + 1.5, -10)   # そっとのぞく
+    # v10：決まり（maru_walk.md・maru_motions.md）どおり、本物のまるロボを予定の部品で動かす（v9「登場の仕方おかしい」「後ろ向きにはずむ」）
+    #   台の右手前まで歩いて行き、台の物を見上げる → 次の台へ歩く → 鏡の自分に驚く（surprise）→ のぞき込む（peer）→ こちらを向いてうなずく
+    mr = Maru((-3.6, -0.6, 0), face_to((-3.6, -0.6), (-1.6, -0.3)), s=0.7, eye_glow=1.2)
+    P1, P2, P3 = (-1.6, -0.3), (0.7, -0.3), (2.95, -0.25)
+    mr.walk(0, s("05-02") + 0.3, None, P1); mr.at(s("05-02") + 1.1, face=face_to(P1, (xs[0], 1.2))); mr.at(s("05-02") + 1.6, look=24)
+    mr.walk(0, s("05-03") + 1.2, None, P2); mr.at(s("05-03") + 2.0, face=face_to(P2, (xs[1], 1.2))); mr.at(s("05-03") + 2.5, look=20)
+    mr.walk(0, s("05-04") + 1.2, None, P3); mr.at(s("05-04") + 2.0, face=face_to(P3, (xs[2], 1.2))); mr.at(s("05-04") + 2.5, look=14)
+    mr.surprise(s("05-05") - 0.25)                                        # 「まるロボ、自分の姿にびっくり」：鏡に映った自分に驚く（後ろへ小さく跳ぶ・のけぞる）
+    mr.peer(W("05-05", "まさか") - 0.3, dur=2.0)                          # 「まさか探偵が、自分を疑う…」：鏡をそっとのぞき込む
+    mr.at(s("05-06") - 0.2, face=face_to(P3, (0.0, -6.4))); mr.nod(s("05-06") + 1.6)   # それでは順番に：こちらを向いてうなずく
     area((0, -4, 3), (0, 0.5, 1), 120, 4, "#A9C8FF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [
@@ -264,15 +257,29 @@ def s06a():
     t0, t1 = span("S06", b=s("06-04") + 0.5)   # 飛び込み（言い終えてから）が入るように、次の台詞の頭まで
     world("#0C1426", 0.15); ground("#E9E2D4", size=20)
     ph = phone((0, 0, 0.0), 0, screen=None, s=3.0)
+    # v10：決まりの部品で動かす（v9「この辺のまるロボの移動も」）。穴まで歩く → のぞき込む → スマホへ向く → 跳び乗る → 画面に吸い込まれる
     mr = Maru((-1.2, -2.0, 0), 30, eye_glow=1.4, s=0.5)
-    mr.walk(s("06-01"), s("06-02") + 0.5, (-1.2, -2.0, 0), (-0.45, -1.45, 0), face=40)
-    mr.at(s("06-02") + 1.0, look=-14); mr.at(s("06-02") + 2.5, face=70); mr.at(s("06-02") + 4.0, face=20)   # 穴をのぞき込む
-    tj = s("06-03", 1) + 0.05                                          # 言い終えてから跳ぶ
-    mr.at(tj - 0.3, face=0, look=0)
-    mr.at(tj, (-0.3, -1.4, 0)); mr.at(tj + 0.5, (0.0, -0.2, 0.25)); mr.hop(tj, 0.9, 0.7); ev(tj, "jump")
-    key(mr.root, "scale", f(tj + 0.45), (0.5,) * 3); key(mr.root, "scale", f(tj + 0.65), (0.01,) * 3)
-    rip = add(bpy.ops.mesh.primitive_torus_add, mat("ripple", "#7FE6F2", emit=3.0), (0.0, -0.1, 0.13), (0, 0, 0), major_radius=0.3, minor_radius=0.01)
-    key(rip, "scale", f(tj + 0.55), (0.01,) * 3); key(rip, "scale", f(tj + 1.1), (3.0,) * 3); show([rip], f(tj + 1.15), False); ev(tj + 0.55, "dive")
+    PH = (-0.45, -1.45); PJ = (0.0, -1.5)
+    mr.walk(0, s("06-02") + 0.4, None, PH)                             # 「この小さな穴」で穴の前に着く
+    mr.peer(s("06-02") + 0.6, dur=2.6)                                 # 穴をのぞき込む（レンズを前へ出して絞る）
+    mr.at(s("06-02b") + 0.3, look=12)                                  # 画面のほうを見上げる
+    mr.nod(W("06-02b", "確かめるには"))                                 # 中をのぞこう、とうなずく
+    mr.walk(0, s("06-03") + 2.2, None, PJ); mr.at(s("06-03") + 3.0, face=face_to(PJ, (0.0, 0.0)))
+    tj = s("06-03", 1) - 1.4                                           # 言い終わるころに跳び乗る（「入ってみましょう」）
+    mr.jump(tj, (0.0, -0.95), z1=0.12)                                 # スマホの上（高さ 0.12）へ跳び乗る
+    rip = add(bpy.ops.mesh.primitive_torus_add, mat("ripple", "#7FE6F2", emit=3.0), (0.0, -0.95, 0.13), (0, 0, 0), major_radius=0.3, minor_radius=0.01)
+    key(rip, "scale", 0, (0.01,) * 3); show([rip], 0, False)
+    def _dive(m, rip=rip):
+        lands = [e["t"] for e in m.p.events if e["kind"] == "land"]
+        tl = CLOCK_T0() + (lands[-1] if lands else tj - CLOCK_T0() + 1.2)
+        c = head_top(m, tl + 0.15, up=0.0)                             # 体の真ん中を中心に小さくする（決まり：足だけ残らない）
+        h = m.holder; s0 = h.scale.x
+        for tt, k in ((tl + 0.15, 1.0), (tl + 0.45, 0.02)):
+            key(h, "scale", f(tt), (s0 * k,) * 3); key(h, "location", f(tt), tuple(c * (1 - k)))
+        show([rip], f(tl + 0.3), True); key(rip, "scale", f(tl + 0.3), (0.01,) * 3); key(rip, "scale", f(tl + 0.85), (3.0,) * 3); show([rip], f(tl + 0.9), False)
+        EVENTS.append((round(tl + 0.3, 3), "dive"))
+        bpy.context.scene.frame_set(0)
+    mr.post.append(_dive)
     area((-2, -3, 3), (-0.5, 0, 0), 300, 3, "#BFD9FF"); area((2, 2, 2), (0, 0, 0), 80, 2, "#7F9CFF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [
@@ -286,10 +293,11 @@ def s06a():
 def s06b():
     t0, t1 = span("S06", a=s("06-04") + 0.5)
     city_floor()
+    # v10：上から落ちてきて着く（置き場所の親ごと落とす）→ 見回す（look_around）→ 部品の山を見上げて感心する（awe）
     mr = Maru((0, 0, 0), 0, eye_glow=1.3)
-    key(mr.root, "location", f(t0), (0, 0, 2.5)); key(mr.root, "location", f(t0 + 0.5), (0, 0, 0)); ev(t0 + 0.5, "land")
-    for k in range(4):
-        mr.at(s("06-04") + 1.5 + 1.6 * k, face=-60 + 40 * k, look=10)
+    key(mr.holder, "location", f(t0), (0, 0, 2.5), "LINEAR"); key(mr.holder, "location", f(t0 + 0.5), (0, 0, 0), "LINEAR"); ev(t0 + 0.5, "land")
+    mr.look_around(W("06-04", "見渡す") - 0.2)
+    mr.awe(W("06-04", "部品の山") + 0.2, dur=2.6)
     area((-2, -4, 3.5), (0, 0, 1), 350, 4, "#BFD9FF"); spot((0, -1.5, 6), (0, 1.5, 1), 1200, 45, "#E8F7FF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [(t0, t1, (0.5, -3.0, 1.0), (0.0, 0.0, 1.0), (-2.0, -5.0, 2.6), (0.0, 3.0, 1.6), 28)])
@@ -579,10 +587,22 @@ def s19():
     light_on(Ls[0], Bs[0], s("19-03") + 1.0, 0)
     light_on(Ls[1], Bs[1], s("19-04") + 0.8, 2400)
     light_on(Ls[2], Bs[2], s("19-06") + 0.8, 2400)
-    mr = Maru((-1.15, -1.0, 0), 200, s=0.75, eye_glow=1.4)
-    mr.walk(s("19-06") - 0.5, s("19-06") + 1.5, (-1.15, -1.0, 0), (2.0, -0.4, 0), face=180)   # 鏡に映る
-    mr.walk(s("19-07") - 0.6, s("19-07") + 0.6, (2.0, -0.4, 0), (0.0, -1.2, 0), face=0)
-    mr.at(s("19-07") + 1.0, look=-12); mr.glow(s("19-07") + 1.0, 0.3, 6.0)   # つばを上げるように上を向く
+    # v10：決まりの部品で動かす（v9「はずむように動くのやめて」「右の鏡にまるロボが写ってるのはおかしい」）
+    #   1人目へ向いて首を振る → 2人目へ向いてうなずく → 3人目（鏡）へ歩いて行き、鏡に映る自分を見てうなずく → 真ん中へ戻ってこちらを向く
+    P0, PM, PC = (-1.15, -1.0), (2.0, -0.4), (0.0, -1.2)
+    mr = Maru((P0[0], P0[1], 0), face_to(P0, (0.0, -6.0)), s=0.75, eye_glow=1.4)
+    mr.at(s("19-03") + 0.3, face=face_to(P0, (xs[0], 1.2))); mr.shake(W("19-03", "犯人では") + 0.1)
+    mr.at(s("19-04") + 0.4, face=face_to(P0, (xs[1], 1.2))); mr.nod(W("19-04", "犯人の一人"))
+    mr.walk(0, s("19-06") + 4.6, None, PM); mr.at(s("19-06") + 5.6, face=face_to(PM, (xs[2], 1.2))); mr.nod(W("19-06", "当たったとき"))
+    mr.walk(0, s("19-07") + 3.4, None, PC); mr.at(s("19-07") + 4.4, face=face_to(PC, (0.0, -6.0)))
+    mr.hops(s("19-08") - 0.1, n=1); mr.glow(s("19-08") - 0.1, 6.0)
+    # 鏡は、まるロボが前に来るまでは曇らせて何も映さない（離れた所のまるロボが映らない）。鏡の前に来たら映す
+    gl = bpy.data.materials.get("mir_glass")
+    if gl:
+        rin = gl.node_tree.nodes["Principled BSDF"].inputs["Roughness"]
+        rin.default_value = 0.55; rin.keyframe_insert("default_value", frame=0)
+        rin.keyframe_insert("default_value", frame=f(s("19-06") + 3.6)); rin.default_value = 0.02; rin.keyframe_insert("default_value", frame=f(s("19-06") + 4.4))
+        rin.keyframe_insert("default_value", frame=f(s("19-07") + 0.5)); rin.default_value = 0.55; rin.keyframe_insert("default_value", frame=f(s("19-07") + 1.5))
     area((0, -4, 3), (0, 0.5, 1), 120, 4, "#A9C8FF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [
