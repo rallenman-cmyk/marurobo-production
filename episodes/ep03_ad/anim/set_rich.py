@@ -182,7 +182,7 @@ def train_floor():
     cube(tex_mat("tr_floor2", "#7F7B73", "#737069", 25.0, rough=0.7), (0, 1.05, 0.001), (9.0, 0.22, 0.004))
 
 
-def train_rich(wifi=True, tents=(-2.8, 0.0, 2.8)):
+def train_rich(wifi=True, tents=(-1.4, 0.0, 1.4)):   # v10：テント 3 枚はとなり合う 3 か所（冒頭の引きの絵に 3 枚とも入る。±2.8 だと右の 1 枚が画面の外だった）。電車の場面はみな同じ
     """電車の中をまとめて作る。人（ハルさん・ソラさん）とつり広告（テント 3 枚）は前と同じ場所"""
     world("#F2E6D2", 0.5)
     train_floor(); train_wall(); train_seat(); train_ceiling(); train_doors(); train_outside()
