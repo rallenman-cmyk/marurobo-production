@@ -110,9 +110,17 @@ ov(s("01-01") + 0.8, s("01-02") + 0.55, "s01_a", [("tag", "今度、キャンプ
 ov(s("01-02") + 0.6, s("01-03") + 0.2, "s01_b", [("tag", "いいね！", 800, 285, (800, 345))])
 ovp(s("01-03"), s("01-03", 1) + 0.3, picbubble("s01_tent", 760, 330, 70, tent))
 ov(s("04-04"), s("04-04", 1) + 0.3, "s04_title", [("tag", "さっき話した物が、なぜ広告に出る？", 640, 110, None, False)])
-ov(W("05-02", "マイク"), s("05-06", 1), "s05_1", [("tag", "①マイク", 160, 70, None, False, SUS[0])])
-ov(W("05-03", "出ていく"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", 510, 70, None, False, SUS[1])])
-ov(W("05-04b", "わたしたち"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", 1010, 70, None, False, SUS[2])])   # v4「123 のテロップ同じ高さで」：①②③とも y=70
+# v10「①②③の札の間がばらばら」(1:48)：札の幅を測り、左右の余白と札どうしのすき間を同じにする
+def _even_x(texts, font=None, y_margin=30):
+    font = font or TAGF; _d = ImageDraw.Draw(Image.new("RGB", (8, 8)))
+    ws = [(_d.textbbox((0, 0), t, font=font)[2] - _d.textbbox((0, 0), t, font=font)[0]) + 44 for t in texts]   # 枠の幅（字＋左右 22）
+    gap = (1280 - sum(ws)) / (len(ws) + 1); xs = []; x = gap
+    for w in ws: xs.append(x + w / 2); x += w + gap
+    return xs
+_SX = _even_x(["①マイク", "②出ていく手がかり", "③わたしたちの記憶"])
+ov(W("05-02", "マイク"), s("05-06", 1), "s05_1", [("tag", "①マイク", _SX[0], 70, None, False, SUS[0])])
+ov(W("05-03", "出ていく"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", _SX[1], 70, None, False, SUS[1])])
+ov(W("05-04b", "わたしたち"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", _SX[2], 70, None, False, SUS[2])])   # ①②③とも y=70
 ov(W("06-02", "この小さな穴"), s("06-02", 1), "s06_ring", [("ring", 830, 392, 200, 62)])
 ov(W("07-02", "見張り番"), s("07-02b", 1), "s07_guard", [("tag", "見張り番", 1100, 120)])
 ov(W("07-04", "あの合言葉"), s("07-04", 1) + 0.3, "s07_word", [("tag", "Hey Siri", 640, 110, None, True), ("tag", "OK Google", 640, 230)])
@@ -356,7 +364,9 @@ for t, kd in ev_all:
     if x is None: continue
     i = int(t * sr); sfx_bus[i:i + len(x)] += x[:max(0, len(sfx_bus) - i)]
 # 声（アニマティックの声：ピー入り、24 kHz）を 48 kHz に
-with wave.open(W_ + "/animatic_tmp/voice.wav") as w:
+_VW = W_ + "/animatic_tmp/voice_v10.wav"                              # v10「8分あたりから声がずっと高い」：高い文をそろえた声（voice/tools/README.md）
+if not os.path.exists(_VW): _VW = W_ + "/animatic_tmp/voice.wav"; print("【注意】高さをそろえた声がない。元の声を使う")
+with wave.open(_VW) as w:
     v = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768; vsr = w.getframerate()
 v = np.interp(np.arange(int(len(v) * sr / vsr)) / sr, np.arange(len(v)) / vsr, v).astype(np.float32)
 voice = np.zeros_like(sfx_bus); voice[:min(len(v), len(voice))] = v[:len(voice)]
@@ -394,20 +404,17 @@ XF = sorted(x for x in XF if 0.5 < x[0] < END - 1 and not _covered(x[0]))   # �
 inputs = ["-i", lst]
 # 同じ絵が長く続く所は、ゆっくり寄る（QR回 v10「変わり映えしない」の横展開。動きの少ない所を測って選んだ：S05・S08 の門・S09・S14・S17〜S19・S20）。
 #   3D の中の物に合わせた輪（S06 の穴・S08 の画面の点・S15 のつり広告）がある所は寄らない（輪がずれるため）
-ZOOM = [(SCST["S05"], SCST["S06"]), (s("06-02", 1) + 0.1, 140.1), (SCST["S08"], 298.26), (SCST["S09"], SCST["S10"]), (SCST["S14"], SCST["S15"]),
-        (SCST["S17"], SCST["S19"]), (SCST["S19"], SCST["S20"]), (SCST["S20"], SCST["S21"])]
-# v8 見直し（3 秒ごとに並べて見た）：同じ引きの絵が長く続く所は、文の頭で寄りに切り替える（寄り, 中心の x, y は画面の割合）
-#   門の実験（3:42〜4:51 が 1 つの引き）・電車の問題のあと（11:12〜11:30）・会社の人（12:54〜13:15）
-PUNCH = [(s("08-03"), s("08-04") - 0.01, 1.3, 0.5, 0.5), (s("08-05"), s("08-06") - 0.01, 1.3, 0.5, 0.48),
-         (s("08-07"), s("08-07b") - 0.01, 1.3, 0.52, 0.5), (s("08-09"), s("08-10") - 0.01, 1.3, 0.5, 0.5),
-         (s("15-07"), s("15-08") - 0.01, 1.3, 0.5, 0.6),
-         (s("18-03"), s("18-04") - 0.01, 1.25, 0.45, 0.5), (s("18-05"), s("19-01") - 0.45, 1.25, 0.45, 0.5)]
+# v10「カメラが左右に揺れる」(2:13・13:33)・「2D が動いている」(6:23)・「寄りと引きのくり返し」(13:13)・「切り替えで一瞬変なのが映る」(13:01)：
+#   組み立ての寄り（ffmpeg の zoompan は 1 ピクセル単位で切るので揺れる）と、寄りの切り替え（PUNCH）をやめた。
+#   長い引きは、3D のカメラで別の角度のカットを作る（門・S15・S18）
+ZOOM = []
+PUNCH = []
 _zt = "(in/24)"
 _ze = "+".join("between(%s,%.3f,%.3f)*0.06*((%s-%.3f)/%.3f)" % (_zt, a, b, _zt, a, b - a) for a, b in ZOOM)
 _ze += "".join("+between(%s,%.3f,%.3f)*%.3f" % (_zt, a, b, z - 1) for a, b, z, cx, cy in PUNCH)
 _cx = "0.5" + "".join("+between(%s,%.3f,%.3f)*%.3f" % (_zt, a, b, cx - 0.5) for a, b, z, cx, cy in PUNCH)
 _cy = "0.5" + "".join("+between(%s,%.3f,%.3f)*%.3f" % (_zt, a, b, cy - 0.5) for a, b, z, cx, cy in PUNCH)
-fl = ["[0:v]scale=1280:720,fps=24,setsar=1,zoompan=z='1+%s':x='max(0,min(iw-iw/zoom,iw*(%s)-(iw/zoom/2)))':y='max(0,min(ih-ih/zoom,ih*(%s)-(ih/zoom/2)))':d=1:s=1280x720:fps=24[v0]" % (_ze, _cx, _cy)]
+fl = ["[0:v]scale=1280:720,fps=24,setsar=1[v0]"] if not (ZOOM or PUNCH) else ["[0:v]scale=1280:720,fps=24,setsar=1,zoompan=z='1+%s':x='max(0,min(iw-iw/zoom,iw*(%s)-(iw/zoom/2)))':y='max(0,min(ih-ih/zoom,ih*(%s)-(ih/zoom/2)))':d=1:s=1280x720:fps=24[v0]" % (_ze, _cx, _cy)]
 cur = "v0"; nin = 1
 for j, (T, dd) in enumerate(XF):
     _src = _frame_at(T - 0.1); _z = 1 + sum(0.06 * (T - 0.1 - a) / (b - a) for a, b in ZOOM if a <= T - 0.1 <= b)

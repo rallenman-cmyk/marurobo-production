@@ -254,9 +254,9 @@ def scene_gate():
         key(b, "location", f(t_go + 0.7), (x, 1.0, z)); key(b, "location", f(t_go + 1.6), (x * 0.5, -1.6, z + 0.1))
         key(b, "scale", f(t_go + 1.3), (1.0,) * 3); key(b, "scale", f(t_go + 1.7), (0.001,) * 3)
     P0, PB, PM, PD = (-0.6, -1.2), (0.25, 1.15), (0.4, -0.6), (1.1, -0.35)
-    mr = Maru((P0[0], P0[1], 0), 25, eye_glow=1.2)
-    mr.look_around(T0 + 0.3)                                           # 07-00 どこから？
-    mr.at(s("07-01") + 1.4, face=face_to(P0, (0.0, 2.0))); mr.at(s("07-01") + 1.8, look=16)    # 門を見上げる
+    mr = Maru((P0[0], P0[1], 0), 95, eye_glow=1.2)
+    mr.look_around(T0 + 0.1)                                           # 07-00 どこから？
+    mr.at(Wt("07-01", "この門") + 0.1, face=face_to(P0, (0.0, 2.0))); mr.at(Wt("07-01", "この門") + 0.3, look=16)    # 門を見上げる
     mr.at(s("07-02") + 0.2, face=face_to(P0, (2.35, 1.0)), look=10)   # 番犬のほうを向く
     ear_twitch(s("07-02b") + 0.8)                                     # 音を聞く係
     # 07-04b：合言葉の泡が外から来て、格子が上がり、中へ入っていく（予告）
