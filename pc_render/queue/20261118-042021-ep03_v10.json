@@ -1,0 +1,17 @@
+{
+ "id": "20261118-042021-ep03_v10",
+ "name": "ep03_v10",
+ "kit_branch": "pc-kit/20261118-042021-ep03_v10",
+ "zip": "marurobo_ep03.zip",
+ "ps1": "run_pc_render_ep03.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 3,
+ "frames": 20356,
+ "fresh": false,
+ "out": "render_ep03_v10",
+ "workers": 0,
+ "samples": 0,
+ "session": "\ud83e\udd1603\u5e83\u544a",
+ "created": "2026-11-18T04:20:21Z"
+}
