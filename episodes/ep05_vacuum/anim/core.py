@@ -257,9 +257,11 @@ class Maru(MC.Maru):
         n = round((t_end - T0b) * FPS) + 1; W0 = self._W(T0b)
         frames = [pf[min(len(pf) - 1, max(0, round((self._W(T0b + i / FPS) - W0) * FPS)))] for i in range(n)]
         self.handle.bake(frames, f0=f(T0b))
+        self.evs = []
         inv = lambda x: next((T0b + i / FPS for i in range(n) if self._W(T0b + i / FPS) - W0 >= x - 1e-6), None)
         for e_ in p.events:
             ts = inv(e_["t"])
+            self.evs.append((ts, e_["kind"]))       # 焼いたあとに使う（跳んで着いた時刻など。カットより後は None）
             if ts is None: continue          # v6：このカットの終わりより後の音は、ここでは付けない（前は終わりの時刻にまとめて付いていた）
             if any(a <= ts <= b for a, b, _ in self.warps): continue           # 早回しの間は音なし
             k_ = e_["kind"]; g_ = e_.get("strength", 1.0)
@@ -271,9 +273,13 @@ class Maru(MC.Maru):
         self.p = p
 
 
+AFTER_BAKE = []          # 焼いたあとに呼ぶ（まるロボの入れかえを、跳んで着いた本当の時刻に合わせる など）
+
+
 def maru_bake_all(t_end):
     MC.LATE.clear()
     for m in MARUS: m.bake05(t_end)
+    for fn in AFTER_BAKE: fn()
     if MC.LATE: print("【まるロボ】間に合わなかった動き（秒）：", MC.LATE)
 
 

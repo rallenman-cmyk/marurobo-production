@@ -975,6 +975,18 @@ class Plan:
         self.event(t0 + 0.5, "land", 1.5)
         self.t = t0 + 0.9; self._lb_end(lid); return self
 
+    def roll_over(self, side=1, label=None):
+        """ころんと転がる（段差から落ちて床に着いたとき など）：横へ転がって倒れ（0.35秒で 80°）、勢いで行き過ぎて
+        ゆらゆらと 2 回ゆれ、横に寝ころんだ形（80°）で止まる。目は開いたまま。場面では、転がった分（体の半径×角度）だけ
+        置き場所の親を横へ動かす（足が滑って見えないように）。音：land → land（小）。起きるのは get_up()。5本目で足した"""
+        lid = self._lb(label); t0 = self.t
+        self.tracks["roll"].set(t0, 0.35, 80.0 * side); self.tracks["lift"].set(t0, 0.35, -0.05)
+        self.layer(t0 + 0.25, t0 + 1.5, lambda t, a=t0 + 0.3, sd=side: {
+            "roll": sd * 16.0 * math.exp(-max(0.0, t - a) / 0.32) * math.sin(2 * math.pi * max(0.0, t - a) / 0.55)})
+        self.blinks.append((t0 + 0.3, "fast"))
+        self.event(t0 + 0.3, "land", 1.2); self.event(t0 + 0.85, "land", 0.4)
+        self.t = t0 + 1.3; self._lb_end(lid); return self
+
     def get_up(self, label=None):
         """起き上がる（tumble_back・lie_side のあと）：ぐっと力をためて（0.2秒）→ 胴を起こす（0.55秒・少し行き過ぎて戻る）→ ぷるっと震える。音：takeoff・land（小）"""
         lid = self._lb(label); t0 = self.t
