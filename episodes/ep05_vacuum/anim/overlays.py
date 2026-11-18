@@ -28,8 +28,8 @@ def ev_list():
     add(e("03-05") + 0.3, s("04-01") - 0.3, "title", {})
     # 05：ラベル（言うときに）
     add(w("05-02", "丸いふた"), e("05-02") + 0.5, "tag", dict(text="ふた", obj="senpai", dy=-150))
-    add(w("05-03", "バンパー"), e("05-03") + 0.4, "tag", dict(text="バンパー", obj="senpai", dy=-150))
-    add(w("05-04", "小さな窓"), e("05-04") + 0.4, "tag", dict(text="おなかの窓", obj="senpai", dy=-170))
+    add(w("05-03", "バンパー"), e("05-03") + 0.4, "tag", dict(text="バンパー", obj="bumper_pt", dx=210, dy=-60, aim=True))     # v6：右から、バンパーを指す
+    add(w("05-04", "小さな窓"), e("05-04") + 0.4, "tag", dict(text="おなかの窓", obj="belly_pt", dx=260, dy=-40, aim=True))     # v6：右から、おなかの下の窓を指す
     # 06：昔（セピアは組み立てで）・年
     add(w("06-02", "2002年"), e("06-03") + 0.3, "tag", dict(text="2002年ごろ", pos=(640, 110), size=56))
     # 07：まるロボ、目の光を消す
@@ -283,6 +283,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 if q is None: continue
                 cx, cy = q[0] + p.get("dx", 0), max(70, q[1] + p.get("dy", -120)); cy = min(cy, SUB_TOP - 60)
                 tail = (0, 46) if q[1] - cy > 60 else None      # v3：しっぽは決まった三角（物との距離で大きさが変わらない。5本目 v2「バンパー」）
+                if p.get("aim"):          # v6：札を物の横に置き、しっぽを物の方へ向ける（5本目 v6「バンパーの吹き出しは画面の右側から」）
+                    vx, vy = q[0] - cx, q[1] - cy; L_ = max(1.0, math.hypot(vx, vy)); tail = (round(46 * vx / L_), round(46 * vy / L_))
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), tail=tail)
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)

@@ -145,6 +145,9 @@ def b_open(cl):
         cam_move(c, tg, e("05-03") + 0.3, e("05-04") + 0.3, (-0.15, 1.45, 0.2), (0.05, 1.6, 0.03), (0.3, 1.98, 0.06), (0.3, 2.0, 0.01), 46, 50)
         cam_move(c, tg, e("05-04") + 0.3, e("05-05") + 0.6, (0.05, 1.6, 0.03), (-0.25, 1.05, 0.5), (0.3, 2.0, 0.01), (0.5, 2.0, 0.1), 50, 32)
     track("maru", m.root, 0.42); track("senpai", sp.root, 0.15)
+    # v6（ユーザー「バンパーの吹き出しは画面の右側からで、バンパーの位置をちゃんとわかるように」）：札が指す点を、物の上に置く
+    for nm_, lp_ in (("bumper_pt", (0.105, -0.12, 0.05)), ("belly_pt", (0.0, -0.13, 0.0))):
+        e_ = empty(lp_); e_.parent = sp.root; track(nm_, e_, 0.0)
 
 
 # ======================================================================== S06：昔の先輩（2002 年ごろ。セピアは組み立てで付ける）
@@ -324,6 +327,8 @@ def b_lidar(cl):
     pts, d9, d11, d12 = full_map_points()
     sp.place(s("09-01") - 1.0, -1.6, 0.2, plan.face_deg(-1, 0))
     sp.drive(d9); sp.spin(s("09-01") - 1, e("12-05") + 2, 0.6)
+    sp.drive(d11); sp.drive(d12)          # v6：先輩の動きは先に全部決める（まるロボが乗る所を、実際の先輩の場所と向きから求めるため）
+    xe, ye, ae = d12.pose(d12.t1); sp.place(e("12-05") + 2, xe, ye, ae)
     m = Maru((-1.15, -0.15, 0), face=face_to((-1.15, -0.15), (-1.6, 0.2)))
     m.at(s("09-01") - 1.0, loc=(-1.15, -0.15, 0)); m.at(s("09-02") + 0.1, face=face_to((-1.15, -0.15), (-2.38, 0.3)))
     m.surprise(s("09-02") + 0.1)       # 「あれ？　ぶつかる前に向きを変えた？」
@@ -335,14 +340,37 @@ def b_lidar(cl):
     show_between(lr, w("09-04", "丸いふた"), e("09-04") + 0.8); scale_pop(lr, w("09-04", "丸いふた")); ev(w("09-04", "丸いふた"), "pop", 0.4)
     # 10：まるロボが先輩の上にぴょん（先輩の子にして、上に乗せる）
     tj = w("10-01", "ぴょん")
-    m.at(tj - 1.4, face=face_to((-1.5, 0.55), (-1.215, 0.95)))      # v6：立っていた所（ふたを隠さない左）から、跳ぶ先を向く
-    # まるロボを先輩の上に移す：跳ぶ弧は世界の座標で打ち、着いた瞬間から先輩の子にする（子の場所は先輩の上）
-    mr = Maru((0, 0, 0), face=180)          # 先輩の上（置き場所の親を先輩の子に。前はふたの方 +Y）
-    MRY = -0.112          # v4「まるロボが乗るときにセンサー貫通しないように」：ふた（y 0.035・半径 0.052）から離して前のふちに
-    hp = mr.handle.parent; hp.parent = sp.root; hp.matrix_parent_inverse = Matrix.Identity(4); hp.location = (0, MRY, sp.d["top_z"] + 0.004)
-    show_between(mr.root, tj + 0.5); hide_key(m.root, s("09-01") - 1.5, False); hide_key(m.root, tj + 0.5, True)
-    m.jump(tj, (-1.5, 0.55), (-1.215, 0.95), z_to=sp.d["top_z"] + 0.004, d=0.5, h=0.24)    # 床から先輩の上へ（着いたら先輩に乗ったまるロボに入れかわる）
-    mr.peer(tj + 0.8, dur=2.4)        # 「ふたをのぞきこみました」（一覧の peer）
+    # v6（ユーザー「まるロボが上の位置にワープしている。ジャンプして乗る、そして向きを変える」）：
+    #   床のまるロボが「ぴょん」で跳んで先輩の上に着き、脚で受け止め終わってから、着いた所・同じ向きのまま先輩に乗ったまるロボに入れかわる。
+    #   入れかわったあとに、ふたの方へ向きを変えて、のぞき込む
+    # v6：乗る所は「跳んで来た向きのまま、ふたの手前」。着いたら向きを変えずに、そのままふたをのぞき込める（本物の体は回るのがゆっくり）
+    bpy.context.scene.frame_set(f(tj + 1.5)); spm = sp.root.matrix_world.copy()          # 入れかわるころの先輩（実際に置かれた場所と向き）
+    Lw = spm @ Vector((0, 0.035, 0)); F0 = Vector((-1.5, 0.55, 0))                        # ふたの真ん中（世界）・跳ぶ前に立つ所
+    u_ = (Lw - F0); u_.z = 0; u_.normalize()
+    Pw = Lw - u_ * 0.11                                                                   # ふた（半径 0.052）から足が離れる近さ
+    PL = spm.inverted() @ Pw; MRX, MRY = PL.x, PL.y                                       # 先輩の上の置き場所（先輩から見た所。半径 0.158 の内側）
+    TOP = (Pw.x, Pw.y)
+    sa_ = math.degrees(spm.to_euler()[2])
+    fj = face_to((F0.x, F0.y), TOP)                                     # 跳ぶ向き＝着いたときの向き＝ふたの方
+    m.at(tj - 2.4, face=fj)      # 立っていた所（ふたを隠さない左）から、跳ぶ先を向く
+    m.jump(tj - 0.95, (-1.5, 0.55), TOP, z_to=sp.d["top_z"] + 0.004, apex=0.17)    # 見る→しゃがむ→「ぴょん」で蹴る（一覧の jump_to）
+    mr = Maru((0, 0, 0), face=fj - sa_)      # 先輩の上（置き場所の親を先輩の子に）。床から跳んで来た向きのまま
+    hp = mr.handle.parent; hp.parent = sp.root; hp.matrix_parent_inverse = Matrix.Identity(4); hp.location = (MRX, MRY, sp.d["top_z"] + 0.004)
+    hide_key(m.root, s("09-01") - 1.5, False)
+    TSW = [tj + 1.6]           # 入れかえの時刻（焼いたあとに、着いた本当の時刻 ＋ 受け止め終わりへ直す）
+
+    def _swap(m=m, mr=mr, tj=tj):
+        lands = [ts for ts, k in m.evs if k == "land" and ts is not None and ts > tj - 1.0]
+        if lands: TSW[0] = lands[0] + 0.9
+        hide_key(m.root, TSW[0], True); show_between(mr.root, TSW[0])
+        if os.environ.get("DBG_SWAP"):
+            for tt in (TSW[0] - 0.05, TSW[0] + 0.05):
+                bpy.context.scene.frame_set(f(tt))
+                print("DBGSWAP sp", round(math.degrees(sp.root.matrix_world.to_euler()[2]), 1), "fj", round(fj, 1), "sa", round(sa_, 1), "MR", round(MRX, 3), round(MRY, 3))
+                for nm, h in (("床", m.handle), ("上", mr.handle)):
+                    mw = h.torso.matrix_world; print("DBGSWAP", round(tt, 2), nm, tuple(round(v, 3) for v in mw.translation), round(math.degrees(mw.to_euler()[2]), 1))
+    AFTER_BAKE.append(_swap)
+    mr.peer(tj + 1.75, dur=2.2)        # 入れかわったら、そのまま「ふたをのぞきこみました」（一覧の peer）        # 「ふたをのぞきこみました」（一覧の peer）
     # ふたを透かす
     for nm in ("lid_glass", "lid_base", "lid_cap"):
         mm = [x for x in bpy.data.materials if x.name.startswith(nm)][0]
@@ -372,7 +400,7 @@ def b_lidar(cl):
         L = (h[0] if h else 3.0)
         # v4「レーザーみたいなのもまるロボやソファに当たってるときは貫通させないで」：
         #   乗っているまるロボの足（先輩の上の円）と、ソファの形（本当は座面の下を通るが、絵では突きぬけて見える）で止める
-        if t > tj + 0.5: L = min(L, _ray_circle(xs, ys, dirx, diry, *_loc2world(xs, ys, R(angs), 0, MRY), 0.075))
+        if t > tj + 0.5: L = min(L, _ray_circle(xs, ys, dirx, diry, *_loc2world(xs, ys, R(angs), MRX, MRY), 0.075))
         L = min(L, _ray_rect(xs, ys, dirx, diry, plan.FURN["sofa"][:4]))
         key(bm_, ("scale", 1), t, L, "LINEAR"); t += 1 / FPS * 2
     show_between(bm_, s("10-03") - 0.3, s("11-01") + 0.2)
@@ -400,15 +428,14 @@ def b_lidar(cl):
     rp, rm = point_cloud("ring1", ring1, life=e("10-05") + 0.6 - w("10-05", "何回も") - 0.3, t_offset=CLOCK["T0"])
     # 11：明かりを落とす → 走りながら点を置く（まるロボは上に乗ったまま）
     lights_off(s("11-02") + 0.3, s("11-02") + 2.4, sky=DARK_SKY, world_s=DARK_W)
-    sp.drive(d11); sp.drive(d12)
-    xe, ye, ae = d12.pose(d12.t1); sp.place(e("12-05") + 2, xe, ye, ae)
     pc, pm = point_cloud("map", pts, t_offset=CLOCK["T0"])
     mr.at(s("11-07") - 0.2, look=-25); mr.awe(s("11-07"), dur=3.2, pitch=-10)     # 「すっかり見入っている」（一覧の awe。床の点を見下ろして）
     # 11-05「ここは壁。ここは、ソファの足」（点の上に輪）
-    rw = ring_marker((-2.97, -0.2), 0.22, YELLOW, w=0.012, z=plan.LIDAR_Z); rw.rotation_euler = (0, R(90), 0)
+    WPT = (0.82, plan.ROOM[3] - 0.02)          # v6（ユーザー「ここは壁の時に本棚に丸つけてる」）：前は左の壁の前（本棚に当たった点）→ 奥の壁（ソファと机のあいだ）の点に
+    rw = ring_marker(WPT, 0.22, YELLOW, w=0.012, z=plan.LIDAR_Z); rw.rotation_euler = (R(90), 0, 0)
     show_between(rw, w("11-05", "壁"), e("11-05") + 0.8); scale_pop(rw, w("11-05", "壁")); ev(w("11-05", "壁"), "pop", 0.4)
     lx, ly = plan.legs("sofa")[0]
-    track("wallpt", empty((-2.98, -0.2, plan.LIDAR_Z))); track("sofaleg", empty((lx, ly, plan.LIDAR_Z)))   # 2D の輪をつける所
+    track("wallpt", empty((WPT[0], WPT[1], plan.LIDAR_Z))); track("sofaleg", empty((lx, ly, plan.LIDAR_Z)))   # 2D の輪をつける所
     rs = ring_marker((lx, ly), 0.12, YELLOW, w=0.01, z=plan.LIDAR_Z)
     show_between(rs, w("11-05", "ソファ"), e("11-05") + 0.8); scale_pop(rs, w("11-05", "ソファ")); ev(w("11-05", "ソファ"), "pop", 0.4)
     # 12-03〜12-04：スマホの地図を上から重ねる（同じ間取りから描いた絵なので、ぴったり重なる）
@@ -429,8 +456,11 @@ def b_lidar(cl):
         cam_move(c, tg, e("09-03"), e("09-04") + 0.6, (-0.8, -1.2, 0.7), (-1.05, 0.35, 0.42), (-2.2, 0.7, 0.1), (-1.3, 0.95, 0.12), 30, 44)
     elif cut(cl, "S10a"):
         c, tg = cam_rig((-0.7, 0.2, 0.55), (-1.3, 0.95, 0.15), 34)
-        cam_move(c, tg, s("10-01") - 0.8, e("10-02") + 0.8, (-0.65, 0.15, 0.55), (-0.95, 0.55, 0.36), (-1.3, 0.9, 0.18), (-1.3, 0.95, 0.12), 34, 50)
-        cam_move(c, tg, e("10-02") + 0.8, e("10-04"), (-0.95, 0.55, 0.36), (0.2, -0.6, 1.4), (-1.3, 0.95, 0.12), (-1.5, 1.0, 0.0), 50, 24)
+        # v6：跳び乗るまでは今の側から。乗ったら、ふたの向こう側（ソファの側）へ回って、ふたをのぞき込むまるロボの顔を見せる（背中でふたを隠さない）
+        tj_ = w("10-01", "ぴょん")
+        cam_move(c, tg, s("10-01") - 0.8, tj_ + 1.0, (-0.65, 0.15, 0.55), (-0.72, 0.32, 0.52), (-1.3, 0.9, 0.18), (-1.33, 0.86, 0.18), 34, 34)
+        cam_move(c, tg, tj_ + 1.0, e("10-02") + 0.8, (-0.72, 0.32, 0.52), (-0.74, 1.45, 0.5), (-1.33, 0.86, 0.18), (-1.3, 0.92, 0.12), 34, 42)
+        cam_move(c, tg, e("10-02") + 0.8, e("10-04"), (-0.74, 1.45, 0.5), (0.2, -0.6, 1.4), (-1.3, 0.92, 0.12), (-1.5, 1.0, 0.0), 42, 24)
         cam_move(c, tg, e("10-04"), e("10-05") + 0.6, (0.2, -0.6, 1.4), (0.4, -1.4, 2.2), (-1.5, 1.0, 0.0), (-1.2, 0.6, 0.0), 24, 22)
     elif cut(cl, "S11a"):
         c, tg = cam_rig((1.6, -3.4, 3.4), (-0.6, 0.6, 0.0), 24)
@@ -693,7 +723,9 @@ def b_rug(cl):
     m.walk(s("17-01") + 0.2, e("17-02"), (0.9, 0.9, 0))      # MP16 から 1.4 m（本物の体の歩きで約 6 秒。先輩が一周するあいだに歩き、17-02 の終わりに着く）
     # 16-05 から暗い地図：もとの地図（青緑）＋ ずれて置かれた新しい点（青緑）→ 壁が二重
     tdark = s("16-05") - 0.25
-    lights_off(tdark, tdark + 0.25, sky=DARK_SKY, world_s=DARK_W)
+    # v6（ユーザー「ここのシーンの切り替わりのときに別のシーンみたいなのが一瞬うつる」）：車輪の寄り（S16b）は、次の真上の絵へ
+    #   重ねて切りかえる間も明るいまま・地図の点なし（前は寄りの絵が先に暗くなり、地図の点の線が横切っていた）
+    if not cut(cl, "S16b"): lights_off(tdark, tdark + 0.25, sky=DARK_SKY, world_s=DARK_W)
     base = [(x, y, -10.0) for x, y in plan.map_points()]
     first = [p for p in base if p[1] > 2.3 and -1.0 < p[0] < 1.4]
     restb = [p for p in base if not (p[1] > 2.3 and -1.0 < p[0] < 1.4)]
@@ -705,6 +737,8 @@ def b_rug(cl):
     dp = [(x, y, max(t, tdark + 0.3)) for x, y, t in dp]
     hold = empty((0, 0, 0))
     do, dom = point_cloud("drift", dp, t_offset=CLOCK["T0"]); do.parent = hold
+    if cut(cl, "S16b"):          # v6：車輪の寄りには地図の点を出さない（切りかえの間に線が横切って見えた）
+        for o in (bo, fo, do): hide_key(o, CLOCK["T0"] - 1.0, True); hide_key(o, tdark + 0.001, True); hide_key(o, tdark + 0.4, True)
     # 17-03：いま見えている（最初の壁の前で）形を白い点で
     xs, ys, _ = d3.pose(d3.t1)
     S_ = plan.segments(); cur = []
@@ -921,9 +955,13 @@ def b_step(cl):
     ev(tst, "stop", 0.5)
     # まるロボは横の列を歩いて、そのまま段差の先へ → ころん
     tf = w("22-05", "ころん")
+    ROLL_DP = (0.0, float(os.environ.get("ROLL_SIGN", "1")) * 0.12)
     m.walk(s("22-05") - 0.6, tf - 0.45, (plan.STEP_X + 0.05, -2.05, 0))
     m.move_parent(tf - 0.45, tf, (-0.30, 0.0), dz=-plan.STEP_H)     # 段差の先へ出て、置き場所ごと下へ落ちる
-    m.act(tf - 0.35, "lie_side", side=1)          # ころん：一覧の lie_side（横に寝ころぶ。音は land）
+    # v6（ユーザー「まるロボが落ちた時にコロンって転がる感じにして」）：床に着いたら、一覧の roll_over（5本目で足した）で横へ転がる。
+    #   転がった分（体の半径 約 0.085 m × 80°）だけ置き場所を横へ動かす
+    m.act(tf - 0.02, "roll_over", side=1)
+    m.move_parent(tf + 0.02, tf + 0.4, ROLL_DP)
     m.blink(s("22-06") + 0.2); m.blink(s("22-06") + 0.6)
     m.act(s("23-01") + 0.6, "get_up"); m.at(s("23-01") + 4.5, face=plan.face_deg(1, 0), look=25)      # 一覧の get_up
     # 23：おなかの下の光（体を少し透かして見せる）。床では行って返る、段差の上では返ってこない
@@ -1000,7 +1038,7 @@ def b_avoid(cl):
     d25 = plan.Drive([(x24, y24), (0.75, -0.85), (0.4, -0.78), (0.2, -0.25), (0.55, 0.2)], max(d24.t1, s("25-03") - 0.2), v=0.28, face0=a24)   # v3：まるロボ（mp1）から 0.37 m 離れて通る
     cs.drive(d25)
     # 25-07：まるロボ、のけぞって後ろへ跳ぶ → 足がうんちのすぐ横に（アップでは踏んだように見える）
-    mp2 = (POOP[0] - 0.13, POOP[1] + 0.05)
+    mp2 = (POOP[0] - 0.072, POOP[1] + 0.025)       # v6（ユーザー「まるロボのかかとが若干うんちを踏んでる感じに」）：前は 0.139 m 離れていた → かかとがうんちのふちにかかる近さ
     _u = (0.0 - mp2[0], 0.6 - mp2[1]); _l = math.hypot(*_u); mp1 = (mp2[0] + 0.035 * _u[0] / _l, mp2[1] + 0.035 * _u[1] / _l)   # v6：surprise の後ろ跳び（約 3 cm）で足がうんちの横に着く所
     # v3（5本目 v2「驚く前にうんちに近づくのが違和感」）：うんちが出る前（24-04 のあと）に歩いておく。うんちが出たら見て、25-05 で向こうを向く
     m.walk(e("24-04") + 0.3, w("25-02", "うんち") - 1.05, mp1); m.at(tpo + 0.1, face=face_to(mp1, POOP))
