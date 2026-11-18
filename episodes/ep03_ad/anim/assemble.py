@@ -520,7 +520,8 @@ for j, (a, b, pth, mv, fo_) in enumerate(INSV):
 for i, (a, b, pth, _) in enumerate(OVERLAYS):
     # v8 見直し：札は 0.25 秒でふわっと出て、0.2 秒で消える（他の回の決まり「札がいきなり出る」）
     inputs += ["-loop", "1", "-framerate", "24", "-t", "%.3f" % (b - a + 0.05), "-i", pth]
-    _ex = "".join("*not(between(t,%.3f,%.3f))" % (c, d) for c, d in INS_COVER if c < b and a < d)   # v5：差し込みの間は、元の場面の札・小窓を出さない
+    _ex = "".join("*not(between(t,%.3f,%.3f))" % (c, d) for c, d in INS_COVER if c < b and a < d and not (c - 0.05 <= a < d))   # v5：差し込みの間は、元の場面の札・小窓を出さない。
+    #   v10：差し込みが出ている間に出始める札（差し込みの絵に付けた札：数える輪・外れ／当たり）は、差し込みの上に出す（前は一緒に消えていた）
     fl.append("[%d:v]format=rgba,fade=t=in:st=0:d=0.25:alpha=1,fade=t=out:st=%.3f:d=0.2:alpha=1,setpts=PTS+%.3f/TB[t%d]" % (nin, max(0.3, b - a - 0.2), a, i))
     fl.append("[%s][t%d]overlay=0:0:eof_action=pass:enable='between(t,%.3f,%.3f)%s'[o%d]" % (cur, i, a, b, _ex, i)); cur = "o%d" % i; nin += 1
 fl.append("[%s]subtitles=%s:fontsdir=%s[vout]" % (cur, tmp + "/subs.ass", FONTS))
@@ -555,8 +556,8 @@ for a, b in zip(_cuts, _cuts[1:]):
     if b - a < INS_GAP and not _covered(m) and not any(a2 <= m <= b2 for a2, b2 in INS_COVER):
         if a > 0.5 and b < END - 0.5: _peek.append("%d:%04.1f（%.1f 秒）" % (a // 60, a % 60, b - a))
 chk.append("元の場面が一瞬のぞく所：%s" % ("／".join(_peek) or "なし"))
-_ovi = ["%s（%.1f）" % (bx[0][0], a) for a, b, pth, bx in OVERLAYS if bx and any(a < b2 - 0.3 and a2 + 0.3 < b for a2, b2 in INS_COVER)]
-chk.append("差し込みの上に出る札：%s" % ("／".join(_ovi) or "なし"))
+_ovi = ["%s（%.1f）" % (bx[0][0], a) for a, b, pth, bx in OVERLAYS if bx and any(a < b2 - 0.3 and a2 + 0.3 < b and not (a2 - 0.05 <= a < b2) for a2, b2 in INS_COVER)]
+chk.append("差し込みの間は隠れる札（元の場面の札）：%s" % ("／".join(_ovi) or "なし"))
 ov_sfx = []
 for t, kd in ev_all:
     for p in P:
