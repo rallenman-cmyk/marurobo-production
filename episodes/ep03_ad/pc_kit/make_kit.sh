@@ -8,6 +8,10 @@ cp $EP/pc_kit/run_pc_render_ep03.ps1 $EP/pc_kit/README_PC.md $EP/pc_kit/はじ�
 cp $EP/pc_kit/はじめに.txt $K/
   cp $EP/pc_kit/README_PC.md $K/
 cp $EP/anim/common.py $EP/anim/set_rich.py $EP/anim/scenes_all.py $EP/anim/s07s08_gate.py $EP/anim/pc_out.py $K/episodes/ep03_ad/anim/
+# v10：本物のまるロボを決まりどおりに動かす部品（maru_walk.md・maru_motions.md）。anim に入れる（maru_ep03.py が anim から読む）
+cp $EP/anim/maru_ep03.py $K/episodes/ep03_ad/anim/
+SK=$REPO/skill/marurobo-video-production/scripts
+cp $SK/maru_cmds.py $SK/maru_real.py $SK/marumotion.py $REPO/episodes/ep01_earphone/stage/maru/marurig.py $REPO/episodes/ep02_qr/pc_kit/qr/plan_util.py $K/episodes/ep03_ad/anim/
 cp $EP/storyboard/*.py $EP/storyboard/*.png $K/episodes/ep03_ad/storyboard/
 cp $EP/voice/placement.json $EP/voice/script_v1_0.json $EP/voice/word_times.json $K/episodes/ep03_ad/voice/
 cp $REPO/episodes/ep01_earphone/stage/human/{iconfig,hgen,hbuild,sdf}.py $K/episodes/ep01_earphone/stage/human/
