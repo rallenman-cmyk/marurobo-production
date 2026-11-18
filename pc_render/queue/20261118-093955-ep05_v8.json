@@ -1,0 +1,17 @@
+{
+ "id": "20261118-093955-ep05_v8",
+ "name": "ep05_v8",
+ "kit_branch": "pc-kit/20261118-093955-ep05_v8",
+ "zip": "marurobo_ep05.zip",
+ "ps1": "run_pc_render_ep05.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 5,
+ "frames": 18415,
+ "fresh": false,
+ "out": "render_ep05_v8",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1605\u6383\u9664\u6a5f",
+ "created": "2026-11-18T09:39:55Z"
+}
