@@ -171,9 +171,9 @@ ov(s("21-02"), s("21-02", 1), "s21", [("tag", "ピポ、ピポ", 980, 170)])
 ov(W("22-03", "キャンプの動画"), s("22-03", 1), "s22_inset", [("img", night_inset(), 820, 60, 420)])
 
 # 前の場面のことを言う所は、その場面の切り抜きを左上に小さく（QR回 v10 の指摘の横展開）。(出す始まり, 終わり, 元の時刻, 名前)
+# v10：15-01b の「あの鏡」の小窓はやめた（同じ時に、鏡の前のまるロボの差し込み s05i が出ていて、鏡が二重になる）
 PIPS = [(W("07-01", "柱の穴"), s("07-01", 1) + 0.3, W("06-02", "この小さな穴") + 2.6, "さきほどの穴"),   # v10：まるロボが穴の前に着いて、のぞき込んでいる所（歩いている所を使わない）
         (W("12-03", "あの枠"), s("12-04") + 0.3, 29.0, "ハルさんの画面"),
-        (W("15-01b", "あの鏡"), W("15-01b", "私たち自身"), 101.0, "あの鏡"),
         (W("10-02", "さきほどと同じ"), s("10-02", 1), 158.0, "さきほどのスマホの中")]
 
 
@@ -349,6 +349,12 @@ for _ in range(3):
         if _ins[i + 1][0] - _ins[i][1] < INS_GAP: _ins[i][1] = max(_ins[i][1], _ins[i + 1][0])
 INS_COVER = [(x[0], x[1]) for x in _ins]
 def _covered(t): return any(a + 0.01 < t < b - 0.01 for a, b in INS_COVER)
+if os.environ.get("BOARD_DUMP"):                                         # 絵コンテ表用：差し込み・札・小窓を書き出して終わる（make_board_table.py が読む）
+    json.dump(dict(ins=[[round(x[0], 2), round(x[1], 2), x[2], x[3] if not isinstance(x[3], float) else round(x[3], 2)] for x in _ins],
+                   ov=[[round(a_, 2), round(b_, 2), os.path.basename(p_)[3:-4], [bx[0] for bx in bxs if bx and isinstance(bx[0], str)]] for a_, b_, p_, bxs in OVERLAYS],
+                   pips=[[round(a_, 2), round(b_, 2), str(t_), l_] for a_, b_, t_, l_ in PIPS]),
+              open(os.environ["BOARD_DUMP"], "w"), ensure_ascii=False)
+    sys.exit(0)
 if os.environ.get("INS_DRY"):                                            # 差し込みの並びだけ見る
     for x in _ins: print("%6.2f %6.2f %-5s %s" % (x[0], x[1], x[2], x[3]))
     _c = sorted(set([0.0, END] + SCENE_TS + [a for a, b in INS_COVER] + [b for a, b in INS_COVER]))

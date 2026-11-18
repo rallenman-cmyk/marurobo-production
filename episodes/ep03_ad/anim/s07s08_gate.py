@@ -119,6 +119,7 @@ _nb = [0]
 EVENTS = []   # 効果音を付ける出来事（通しの秒, 種類）
 DOT2D = []    # 外のスマホの画面のオレンジの点の位置（2D の丸用）
 STEPS = []
+SHOTLOG = []   # カメラのカット（絵コンテ表用。PLAN_DUMP で書き出す）
 
 
 def sound_bubble(t_in, t_pop, icon=None, r=0.3, glow=0.0, path=None, burst_at=None, pop=True):
@@ -204,6 +205,7 @@ def shots(cam, tgt, S):
         key(cam, "location", a, l0, "LINEAR"); key(tgt, "location", a, g0, "LINEAR")
         key(cam.data, "lens", a, lens, "CONSTANT")
         key(cam, "location", b, l1, "CONSTANT"); key(tgt, "location", b, g1, "CONSTANT")
+        SHOTLOG.append((round(t0, 2), round(t1, 2), tuple(round(v, 2) for v in l0), tuple(round(v, 2) for v in g0), lens))   # 絵コンテ表用
 
 
 def _load_wt(path):
@@ -287,6 +289,7 @@ def scene_gate():
     tt = Wt("08-05", "ヘイ、テント")
     sound_bubble(tt, tt + 1.9, "icon_tent.png", r=0.42, path=(FAR(0.3, 1.6), (0.3, 2.3, 1.6))); ear_twitch(tt + 1.8); ear_twitch(tt + 2.2)
     mr.confused(s("08-06") + 0.5)                                    # 完全に無視：首をかしげる
+    mr.think(s("08-07") + 0.4, dur=2.4)                              # 「よく似た言葉では？」：考える
     tb = s("08-08") - 1.6 + 0.3                                  # 「ピー」の始まり
     sound_bubble(tb - 0.3, tb + 1.2, None, r=0.32, glow=0.4, path=(FAR(0.0, 1.5), OUTSIDE))
     show(D["closed"][1], f(tb + 1.2), False); show(D["open"][1], f(tb + 1.2), True)
@@ -370,6 +373,12 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 (scene_gate if MODE == "gate" else scene_phone)()
 bake_all(T1)                                       # v10：まるロボの予定 → 毎コマの姿勢
+
+if os.environ.get("PLAN_DUMP"):                # 絵コンテ表用：カット・まるロボの命令・効果音を書き出す（make_board_table.py が読む）
+    import maru_cmds as _MC
+    json.dump(dict(key="gate", t0=T0, t1=T1, shots=SHOTLOG, events=sorted(EVENTS), steps=len(STEPS),
+                   maru=[[(round(t, 2), k, {a: (round(v, 2) if isinstance(v, float) else v) for a, v in d.items() if a in ("deg", "pitch", "face", "n", "dur", "speed")}) for t, k, d in sorted(m.cmds, key=lambda c: c[0])] for m in _MC.ALL]),
+              open(os.path.join(os.environ["PLAN_DUMP"], "gate" + "_plan.json"), "w"), ensure_ascii=False)
 sc.frame_start = FR[0] if FR[1] else 0
 sc.frame_end = FR[1] if FR[1] else f(T1) - 1
 sc.frame_step = STEP

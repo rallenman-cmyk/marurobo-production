@@ -156,7 +156,8 @@ class MaruOld:   # v9 までの作り（体を滑らせる）。v10 から使わ
 
 exec(open(os.path.join(_ANIM_HERE, "maru_ep03.py"), encoding="utf-8").read())   # v10：本物のまるロボを共通の部品（maru_real・maru_cmds）で動かす（Maru）
 
-STEPS = []          # まるロボの足の着地の時刻（効果音用。描いたあとで log に書く）
+STEPS = []
+SHOTLOG = []   # カメラのカット（絵コンテ表用。PLAN_DUMP で書き出す）          # まるロボの足の着地の時刻（効果音用。描いたあとで log に書く）
 EVENTS = []         # 効果音を付ける出来事（通しの秒, 種類）
 
 
@@ -178,3 +179,4 @@ def shots(cam, tgt, S):
         key(cam, "location", a, l0, "BEZIER"); key(tgt, "location", a, g0, "BEZIER")
         key(cam.data, "lens", a, lens, "CONSTANT")
         key(cam, "location", b, l1, "CONSTANT"); key(tgt, "location", b, g1, "CONSTANT")
+        SHOTLOG.append((round(t0, 2), round(t1, 2), tuple(round(v, 2) for v in l0), tuple(round(v, 2) for v in g0), lens))   # 絵コンテ表用

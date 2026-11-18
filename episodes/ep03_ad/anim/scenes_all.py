@@ -571,6 +571,7 @@ def s15():
     mr, led = train_set()
     mr.think(s("15-03") + 0.3, dur=max(2.2, s("15-05") - s("15-03") - 1.4))   # 思い出そうとして考える → ひらめく
     mr.surprise(s("15-06") + 0.1)                                      # 「気づいていましたか？」
+    mr.greet(W("15-06b", "かわいらしさ") - 0.2)                         # 「まるロボのかわいらしさに気を取られて」：こちらへあいさつ
     cam, tgt = cam_rig()
     shots(cam, tgt, [                                                   # v10「寄りと引きのくり返し」(13:13 の横展開)：文の中身ごとに角度を変える
         (t0, s("15-02"), (0.0, -1.45, 1.2), (0.0, 1.0, 1.15), (0.0, -1.45, 1.2), (0.0, 1.0, 1.25), 24),         # 3 人目の容疑者（差し込みが上に重なる）
@@ -631,6 +632,7 @@ def s17():
     #   → まるロボを奥（y −0.2）へ、見る先を下げて画面の上へ。人が出る前から、まるロボと台にうすい光
     mr = Maru((-1.3, -0.2, 0), 25, eye_glow=1.6, look_up=10)
     mr.surprise(tr + 1.4)                                               # v10：人が出てきて驚く
+    mr.confused(s("17-03") + 0.3)                                       # 「やっぱり、聞いていた……？」：首をかしげる
     area((-3, -4, 3), (0, 1, 1), 150, 4, "#C8B8FF")
     spot((-1.3, -1.6, 3.5), (-0.9, 0.4, 0.4), 700, 40, "#C8D8FF")
     cam, tgt = cam_rig()
@@ -796,6 +798,12 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 t0, t1 = SC[KEY]()
 bake_all(t1)                                   # v10：まるロボの予定 → 毎コマの姿勢（maru_real.py）
+
+if os.environ.get("PLAN_DUMP"):                # 絵コンテ表用：カット・まるロボの命令・効果音を書き出す（make_board_table.py が読む）
+    import maru_cmds as _MC
+    json.dump(dict(key=KEY, t0=t0, t1=t1, shots=SHOTLOG, events=sorted(EVENTS), steps=len(STEPS),
+                   maru=[[(round(t, 2), k, {a: (round(v, 2) if isinstance(v, float) else v) for a, v in d.items() if a in ("deg", "pitch", "face", "n", "dur", "speed")}) for t, k, d in sorted(m.cmds, key=lambda c: c[0])] for m in _MC.ALL]),
+              open(os.path.join(os.environ["PLAN_DUMP"], KEY + "_plan.json"), "w"), ensure_ascii=False)
 sc.frame_start = FR[0] if FR[1] else 0
 sc.frame_end = FR[1] if FR[1] else f(t1) - 1
 sc.frame_step = STEP
