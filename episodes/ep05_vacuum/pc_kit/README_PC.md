@@ -14,7 +14,7 @@ $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-
    - 描き手ごとに小さな窓（「まるロボ 描き手 1〜3」、最小化）が開きます。進み具合は最初の窓と `C:\marurobo\render_log_ep05.txt` に出ます。
    - 止めるときは、最初の窓と描き手の窓をぜんぶ閉じる。同じ 1 行をもう一度走らせれば、できている所は飛ばして続きから描きます。
    - ほかの回の描画が動いていたら、それが終わるのを待ってから描き始めます。
-4. 終わると `C:\marurobo\marurobo_render\ep05_v3` にまとまり、Google ドライブ（パソコン版）があれば `marurobo_render\ep05_v3` へ自動でコピーされます。終わったらチャットで知らせてください。
+4. 終わると `C:\marurobo\marurobo_render\ep05_v8` にまとまり、Google ドライブ（パソコン版）があれば `marurobo_render\ep05_v8` へ自動でコピーされます。終わったらチャットで知らせてください。
 5. 止まった所があれば、`render_log_ep05.txt` と、そこに書いてある `blender_log*.txt` の最後の 20 行をチャットに貼ってください。
 
 ## 最初に 1 カットだけ試すとき（おすすめ）
@@ -24,7 +24,7 @@ $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-
 $f = Get-ChildItem C:\marurobo -Recurse -Filter run_pc_render_ep05.ps1 | Select-Object -First 1; if ($f) { powershell -ExecutionPolicy Bypass -File $f.FullName -Only S11a } else { "見つかりません" }
 ```
 
-`C:\marurobo\render_ep05_v3\S11a_0000-0099.mp4` を開いて見る。よければ、上の「やること」の 2 の 1 行で残りを描く（S11a は飛ばされます）。
+`C:\marurobo\render_ep05_v8\S11a_0000-0099.mp4` を開いて見る。よければ、上の「やること」の 2 の 1 行で残りを描く（S11a は飛ばされます）。
 
 ## 付けられるもの（1 行の最後に足す）
 - ` -Workers 2`：同時に描く本数（1〜4。既定 3）。パソコンが重いときは減らす。
