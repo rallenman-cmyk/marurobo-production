@@ -30,6 +30,16 @@ LATE = []
 ALL = []
 
 
+def _plan_util():
+    """QR回で足した動き（よろける・長くかしげる）：episodes/ep02_qr/pc_kit/qr/plan_util.py（PC の一式では同じフォルダに入れる）"""
+    import importlib.util
+    for d in (HERE, os.path.join(HERE, "..", "..", "..", "episodes", "ep02_qr", "pc_kit", "qr")):
+        f = os.path.join(d, "plan_util.py")
+        if os.path.exists(f):
+            sp = importlib.util.spec_from_file_location("plan_util", f); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); return m
+    raise ImportError("plan_util.py がない")
+
+
 class Maru:
     def __init__(self, loc, face, s=1.0, face_offset=180.0, look_up=0.0, name="maru", **_):
         z = loc[2] if len(loc) > 2 else 0.0
@@ -46,9 +56,9 @@ class Maru:
         if face is not None and loc is None: self.cmds.append((t, "face", dict(face=face)))
         if look is not None: self.cmds.append((t, "look", dict(pitch=look)))
 
-    def walk(self, t0, t1, a, b=None, face=None, end_face=None, **_):
+    def walk(self, t0, t1, a, b=None, face=None, end_face=None, speed=None, **_):
         if b is None: b = a                                   # walk(t0, t1, b) の書き方にも
-        self.cmds.append((t1, "go", dict(p=(b[0], b[1]), end_face=end_face)))
+        self.cmds.append((t1, "go", dict(p=(b[0], b[1]), end_face=end_face, speed=speed)))   # speed：そろりそろり（0.5）など
 
     def hop(self, t, h=0.3, d=0.45): self.cmds.append((t, "hop", dict(h=h)))
     def tilt(self, t, deg, d=0.3): self.cmds.append((t, "roll", dict(deg=deg, d=d)))
@@ -69,6 +79,7 @@ class Maru:
     def groove(self, t, dur=4.0, bpm=96.0): self.cmds.append((t, "groove", dict(dur=dur, bpm=bpm)))
     def rest(self, t, dur=2.5): self.cmds.append((t, "rest", dict(dur=dur)))
     def wake(self, t): self.cmds.append((t, "wake", {}))
+    def stagger(self, t, n=3): self.cmds.append((t, "stagger", dict(n=n)))     # よろける（QR回の plan_util.stagger）
     def bonk(self, t, hold=0.8): self.cmds.append((t, "bonk", dict(hold=hold)))       # ぶつかる（ゴツン）。5本目で足した動き
     def hops(self, t, n=3, height=0.06): self.cmds.append((t, "hops", dict(n=n, height=height)))
     def run(self, t, loc): self.cmds.append((t, "move", dict(p=(loc[0], loc[1]), how="run_to")))      # t＝着く時刻
@@ -92,7 +103,7 @@ class Maru:
             if kind == "go":
                 tgt = self._pp(a["p"])
                 if math.hypot(tgt[0] - p._p[0], tgt[1] - p._p[1]) < 0.03: continue
-                for v in (1.0, 1.3):                                     # ふつう → 急ぎ
+                for v in ([a["speed"]] if a.get("speed") else []) + [1.0, 1.3]:   # 決めた速さ → ふつう → 急ぎ
                     q = copy.deepcopy(p); q.walk_to(tgt, speed=v); d = q.t - p.t
                     if tau - d >= p.t - 1e-6: break
                 self._wait_to(p, tau - d, "歩く %.1f秒" % t); p.walk_to(tgt, speed=v)
@@ -120,6 +131,8 @@ class Maru:
                 p.tracks["light"].set(max(tau, 0.0), a["d"], a["v"] / 1.6 - 1.0)
             elif kind == "blink":
                 p.blinks.append(max(tau, 0.0))
+            elif kind == "stagger":                                    # QR回で足した動き（plan_util）
+                self._wait_to(p, tau, "よろける %.1f秒" % t); _plan_util().stagger(p, **a)
             else:
                 self._wait_to(p, tau, "%s %.1f秒" % (kind, t)); getattr(p, kind)(**a)
         if p.t < t_end - T0 + 0.5: p.idle(t_end - T0 + 0.5 - p.t)

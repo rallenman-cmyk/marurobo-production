@@ -48,7 +48,7 @@ def s00():
     lightkey(L, 0, 60)
     show([ad], 0, True)                                                   # 声（0.5 秒〜）の前に、びくっと跳ねる
     mr = Maru((-0.25, -1.0, 0), 40, s=0.42, hat=False, eye_glow=1.6)
-    mr.hop(0.05, 0.25, 0.4); ev(0.05, "pi"); mr.at(0.05, look=-5); mr.at(0.45, look=-14)
+    mr.surprise(t0 + 0.05); mr.at(t0 + 1.2, look=-14)                 # v10：広告にびっくり（跳ねるだけにしない）
     area((-3, 2, 3), (0, 0, 0), 120, 2, "#7F9CFF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [(t0, t1, (0.5, -3.3, 1.4), (0.1, -0.8, 0.3), (0.35, -2.7, 1.2), (0.1, -0.85, 0.32), 40)])
@@ -63,7 +63,7 @@ def s01():
     for k, tt in enumerate((s("01-01") + 1.0, s("01-01") + 2.5, s("01-01") + 4.0, s("01-02") + 1.5)):
         mr.at(tt, face=35 if k % 2 == 0 else -35)                 # 二人の顔を交互に見る
     mr.at(s("01-03") - 0.2, face=0, look=8)
-    mr.hop(s("01-03") + 0.3, 0.15, 0.35); mr.hop(s("01-03") + 0.8, 0.15, 0.35)   # 行く気まんまん
+    mr.hops(s("01-03") + 0.3, n=2)                                     # 行く気まんまん（喜んで跳ねる）
     cam, tgt = cam_rig()
     # v4「冒頭のテントも、この時点のと配置とか合わせて」(11:07)：つり広告（テント 3 枚）が全部入るように引いて、上も見せる
     shots(cam, tgt, [(t0, t1, (0.15, -1.45, 1.15), (0.0, 1.0, 1.55), (0.0, -1.45, 1.12), (0.0, 1.0, 1.5), 12)])
@@ -127,33 +127,32 @@ def s02():
     ta = s("02-02") - 0.2
     show([ad], f(ta), True); show([news], f(ta), False); ev(ta, "pop_ui")
     night_lamp((0.35, -0.9, 0.6), 50)
+    # v10：決まりの部品で動かす。広告を見て驚く（surprise）→ 見回す → タオルへ走る（run）→ タオルを頭にかぶって走って戻る
+    #   → スマホの下の端（マイクの穴）にかぶせる → 「気持ちは分かりますけどね」でほっとする（sigh）
     mr = Maru((-0.35, -1.05, 0), 40, s=0.42, hat=False, eye_glow=1.2)
-    mr.hop(ta + 0.25, 0.25, 0.4); ev(ta + 0.25, "pi")                       # 広告を見てびくっ
-    for k, tt in enumerate((s("02-04") + 0.2, s("02-04") + 0.9, s("02-04") + 1.6)):  # きょろきょろ
-        mr.at(tt, face=40 + (45 if k % 2 == 0 else -45))
-    # タオルを取りに走る → 頭にかぶって戻る → スマホの下の端（マイクの穴）にぱさり（v7：やわらかい布にして、頭にぴったり乗せて運ぶ）
+    mr.surprise(ta + 0.05)
+    mr.look_around(s("02-04") + 0.1)
     tw = soft_towel(); tw.location = (-1.6, -1.6, 0.0); tw.rotation_euler = (0, 0, R(30))
     kb = tw.data.shape_keys.key_blocks
-    tr = s("02-05") - 2.2
-    MX = (-0.06, -1.06, 0)                                            # 置く所（スマホの左。体がスマホにかからない）
-    mr.walk(tr - 1.0, tr, (-0.35, -1.05, 0), (-1.5, -1.5, 0), face=120)
-    mr.walk(tr + 0.4, tr + 1.4, (-1.5, -1.5, 0), MX, face=-60)
-    ant = [o for o in mr.body.children if o.active_material and o.active_material.name.startswith(("maru_grey", "maru_orange"))]
-    show(ant, f(tr + 0.25), False); show(ant, f(tr + 1.9), True)       # 布の下のアンテナは隠す（突き抜けないように）
+    MX = (-0.06, -1.06)                                               # 置く所（スマホの左。体がスマホにかからない）
+    TA, TB = s("02-05") - 2.4, s("02-05") + 0.5                       # タオルの所に着く・置く所に着く
+    mr.run(TA, (-1.5, -1.5)); mr.run(TB, MX); mr.at(TB + 0.5, face=face_to(MX, (0.35, -0.9)))
+    mr.sigh(s("02-06") + 0.2)
     def kshape(t, h, p):
         kb["頭"].value = h; kb["頭"].keyframe_insert("value", frame=f(t)); kb["スマホ"].value = p; kb["スマホ"].keyframe_insert("value", frame=f(t))
-    key(tw, "location", f(tr), (-1.6, -1.6, 0.0)); kshape(tr, 0, 0)
-    sc_ = bpy.context.scene
-    for fr in range(f(tr + 0.3), f(tr + 1.4) + 1):                     # 運ぶ間：頭のてっぺんに 1 コマずつ合わせる（浮かない）
-        sc_.frame_set(fr); bpy.context.view_layer.update()
-        top = mr.body.matrix_world @ mathutils.Vector((0, 0, 0.5))
-        key(tw, "location", fr, tuple(top)); key(tw, ("rotation_euler", 2), fr, mr.root.rotation_euler[2])
-    kshape(tr + 0.3, 1, 0); kshape(tr + 1.4, 1, 0)
-    PH = (0.35 + 0.2 * math.sin(R(10)), -0.9 - 0.2 * math.cos(R(10)), 0.0)
-    key(tw, "location", f(tr + 1.75), PH); key(tw, ("rotation_euler", 2), f(tr + 1.75), R(10)); ev(tr + 1.75, "towel")
-    kshape(tr + 1.6, 0.4, 0.4); kshape(tr + 1.75, 0, 1)
-    sc_.frame_set(0)
-    mr.at(tr + 2.0, look=-6); key(mr.body, ("location", 2), f(tr + 2.1), mr.z0); key(mr.body, ("location", 2), f(tr + 2.5), mr.z0 - 0.04)  # ふうっと沈む
+    def _towel(m, tw=tw, TA=TA, TB=TB):                               # 予定を当てたあと：運ぶ間は頭のてっぺんに 1 コマずつ合わせる（浮かない）
+        t_up, t_dn = TA + 0.35, TB + 0.9
+        key(tw, "location", f(t_up) - 1, (-1.6, -1.6, 0.0)); kshape(t_up - 0.05, 0, 0)
+        for fr in range(f(t_up), f(t_dn) + 1):
+            top = head_top(m, CLOCK_T0() + fr / FPS)
+            key(tw, "location", fr, tuple(top)); key(tw, ("rotation_euler", 2), fr, m.root.matrix_world.to_euler()[2])
+        kshape(t_up + 0.1, 1, 0); kshape(t_dn, 1, 0)
+        PH = (0.35 + 0.2 * math.sin(R(10)), -0.9 - 0.2 * math.cos(R(10)), 0.0)
+        key(tw, "location", f(t_dn + 0.35), PH); key(tw, ("rotation_euler", 2), f(t_dn + 0.35), R(10)); EVENTS.append((round(t_dn + 0.35, 3), "towel"))
+        kshape(t_dn + 0.2, 0.4, 0.4); kshape(t_dn + 0.35, 0, 1)
+        show(m.antenna_objs, f(t_up), False); show(m.antenna_objs, f(t_dn + 0.3), True)   # 布の下のアンテナは隠す（突き抜けない）
+        bpy.context.scene.frame_set(0)
+    mr.post.append(_towel)
     area((-3, 2, 3), (0, 0, 0), 120, 2, "#7F9CFF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [
@@ -464,7 +463,7 @@ def s13():
 def s14():
     t0, t1 = span("S14")
     mr, led = train_set(dict(loc=(-3.0, 1.05, 0.5), face=0, s=0.55, hat=False, eye_glow=1.2))
-    for k in range(3): mr.hop(s("14-01") + 0.2 + 0.45 * k, 0.15, 0.35)
+    mr.hops(s("14-01") + 0.2, n=3)                                     # v10：喜んで跳ねる
     mr.at(s("14-01b") - 0.2, face=170, look=12)                        # 窓の外を見つめる
     mr.glow(s("14-04") + 0.5, 0.3, 6.0); ev(s("14-04") + 0.5, "pipo")
     cam, tgt = cam_rig()
@@ -479,8 +478,7 @@ def s15():
     t0, t1 = span("S15")
     # v8 見直し：±2.8 の広告は画面の端（x 60・1220）で輪が切れた。この場面だけ、テントの広告を 1 つおき → となり合う 3 枚にし、少し狭い画角で 3 枚とも輪が入るように
     mr, led = train_set(tents=(-1.4, 0.0, 1.4))
-    mr.at(s("15-03"), look=4); mr.tilt(s("15-03") + 0.3, 14)          # 首をかしげて思い出そうとする
-    mr.tilt(s("15-05") - 0.2, 0)
+    mr.think(s("15-03") + 0.3, dur=max(2.2, s("15-05") - s("15-03") - 1.4))   # v10：思い出そうとして考える → ひらめく
     posters = [m for m in bpy.data.materials if m.name.startswith("tentposter")]
     for k, x in enumerate((-1.4, 0.0, 1.4)):
         mr.at(s("15-05") + 1.4 * k, face=-25 + 25 * k)
@@ -548,7 +546,7 @@ def s17():
     # v8 見直し（3 秒ごとに見た）：12:21 は画面がほぼ真っ黒で、まるロボが小さく暗いだけ／12:27〜 まるロボが字幕の帯にかかる
     #   → まるロボを奥（y −0.2）へ、見る先を下げて画面の上へ。人が出る前から、まるロボと台にうすい光
     mr = Maru((-1.3, -0.2, 0), 25, eye_glow=1.6, look_up=10)
-    mr.hop(tr + 1.6, 0.25, 0.35); ev(tr + 1.6, "pi"); mr.tilt(tr + 1.9, -10)
+    mr.surprise(tr + 1.4)                                               # v10：人が出てきて驚く
     area((-3, -4, 3), (0, 1, 1), 150, 4, "#C8B8FF")
     spot((-1.3, -1.6, 3.5), (-0.9, 0.4, 0.4), 700, 40, "#C8D8FF")
     cam, tgt = cam_rig()
@@ -570,7 +568,7 @@ def s18():
     ev(tf + 0.5, "clatter")
     spot((0, -0.5, 5.5), (0, 1.2, 1.4), 2200, 28, "#FFE9C7")
     mr = Maru((-1.3, -0.2, 0), 25, eye_glow=1.1, look_up=10)                # v8 見直し：字幕の帯から外すため奥へ（S17 と同じ所）
-    mr.tilt(tf + 0.6, 18, 0.25); mr.at(tf + 0.6, (-1.1, 0.0, 0)); mr.tilt(tf + 1.6, 0, 0.4)   # ずっこける
+    mr.stagger(tf + 0.5)                                               # v10：ずっこける（よろける。2本目の動き）
     area((-3, -4, 3), (0, 1, 1), 150, 4, "#C8B8FF")
     cam, tgt = cam_rig()
     shots(cam, tgt, [
@@ -617,18 +615,22 @@ def s21():
     t0, t1 = span("S21")
     room_rich(night=True); person_sleep(0.15)
     phone((0.35, -0.9, 0.0), 10, screen=None)
+    # v10：決まりの部品で動かす。こそこそ見回す → そろりそろり歩く（0.5m/s）→ スマホをのぞき込む → ピポピポ（光が 2 回）
+    #   → 「それでは伝わりませんよ」で首をかしげる → 「ひと安心」でほっとする（sigh）→ そのまま休む（rest）
     mr = Maru((-1.2, -1.9, 0), 40, s=0.42, hat=True, eye_glow=1.1)
-    for k in range(3): mr.at(s("21-01") + 3.0 + 0.5 * k, face=40 + (40 if k % 2 == 0 else -40))   # 辺りを見回す
-    mr.walk(s("21-01b") - 0.2, s("21-01b") + 3.0, (-1.2, -1.9, 0), (0.3, -1.55, 0), face=160, h=0.03, step=0.45)  # そろりそろり
-    mr.at(s("21-02") - 0.3, look=-18)
+    PP = (0.3, -1.55)
+    mr.look_around(W("21-01", "こそこそ") - 0.3)
+    mr.walk(0, s("21-01b") + 4.0, None, PP, speed=0.5)
+    mr.at(s("21-01b") + 4.8, face=face_to(PP, (0.35, -0.9)))
+    mr.peer(s("21-02") - 0.6, dur=1.2)
     bb = bubble((0.3, -1.6, 0.66), 0.11, "icon_tent.png")   # まるロボの頭の上（字のない絵の吹き出し）
     key(bb, "scale", f(s("21-02")) - 1, (0.001,) * 3)
     for k in range(2):
-        tp = s("21-02") + 0.1 + 0.7 * k; ev(tp, "pipo"); mr.hop(tp, 0.06, 0.25); mr.glow(tp, 0.3, 5.0, 0.15); mr.glow(tp + 0.3, 5.0, 0.3, 0.15)
+        tp = s("21-02") + 0.1 + 0.7 * k; ev(tp, "pipo"); mr.glow(tp, 5.0, d=0.12); mr.glow(tp + 0.3, 1.6, d=0.15)
     key(bb, "scale", f(s("21-02")) + 4, (1.0,) * 3); key(bb, "scale", f(s("21-03", 1)), (1.0,) * 3); key(bb, "scale", f(s("21-03", 1)) + 5, (0.001,) * 3)
-    tc = s("21-04") + 2.5                                                # 安心して、スマホの横で丸くなる
-    key(mr.body, ("location", 2), f(tc), mr.z0); key(mr.body, ("location", 2), f(tc + 1.0), mr.z0 - 0.08)
-    matkey(mr.lens, f(tc), strength=1.1); matkey(mr.lens, f(tc + 1.5), strength=0.15)
+    mr.confused(s("21-03") + 0.6)
+    mr.sigh(W("21-04", "ひと安心") - 0.2)
+    mr.rest(W("21-04", "ひと安心") + 2.0, dur=8.0)
     area((-3, 2, 3), (0, 0, 0), 120, 2, "#7F9CFF"); area((2, -3, 2.5), (0, -1, 0.3), 40, 2, "#FFE2B8")
     cam, tgt = cam_rig()
     shots(cam, tgt, [
@@ -643,13 +645,20 @@ def s22():
     room_rich(night=False)
     ph = phone((0.35, -0.9, 0.0), 10, screen=None)
     phone_screen(ph, "phone_ad.png", 1.6)
-    mr = Maru((-0.2, -1.2, 0.56), -200, s=0.45, hat=True, eye_glow=1.6)
-    mr.root.rotation_euler = (R(165), 0, R(-160)); mr.root.keyframe_insert("rotation_euler", frame=0)
-    tu = s("22-04") - 0.4                                                # 起き上がる
-    key(mr.root, "rotation_euler", f(tu), (R(165), 0, R(-160))); key(mr.root, "rotation_euler", f(tu + 0.6), (0, 0, R(30)))
-    key(mr.root, "location", f(tu), (-0.2, -1.2, 0.56)); key(mr.root, "location", f(tu + 0.6), (-0.2, -1.2, 0.0)); ev(tu + 0.6, "land")
-    mr.at(s("22-05") - 0.2, look=-25)                                    # 帽子を下げて目をかくす
-    matkey(mr.lens, f(s("22-05")), strength=1.6); matkey(mr.lens, f(s("22-05") + 0.6), strength=0.3)
+    # v10：ひっくり返った所から起き上がる（v9「ひっくり返りから元に戻るところも自然な動きにして」）
+    #   体の真ん中を軸に、2 回ゆらして勢いをつけ → 転がって足から着き → 行き過ぎて少し戻る（重さのある丸い体）。着いたら驚く・帽子を下げる
+    PX, PY, FACE = -0.2, -1.2, 30
+    mr = Maru((PX, PY, 0), FACE, s=0.45, hat=True, eye_glow=1.6)
+    c = Vector((PX, PY, 0.73 * 0.45))                                    # 体の真ん中（胴の中心）
+    piv = empty(tuple(c)); mr.holder.parent = piv; mr.holder.location = tuple(-c)
+    tu = s("22-04") - 0.9
+    rx = [(0.0, 165), (tu, 165), (tu + 0.35, 145), (tu + 0.7, 172), (tu + 1.0, 128), (tu + 1.45, -9), (tu + 1.7, 4), (tu + 1.9, 0)]
+    for tt, d in rx: key(piv, ("rotation_euler", 0), f(tt) if tt else 0, R(d), "BEZIER")
+    for tt, z in ((0.0, -0.22 * 0.45), (tu + 1.0, -0.22 * 0.45), (tu + 1.45, 0.0)): key(piv, ("location", 2), f(tt) if tt else 0, c.z + z)   # 寝ている間は帽子が床に着く高さ
+    ev(tu + 1.45, "land")
+    mr.surprise(tu + 1.9)                                                # 起きたら、画面の広告にもう一度びっくり
+    mr.at(s("22-05") - 0.2, look=-25)                                    # 帽子を下げて目をかくす（照れる）
+    mr.glow(s("22-05") + 0.2, 0.6, d=0.6)
     sun((50, 0, 200), 2.0); area((0, -3, 2.5), (0, -1, 0.3), 300, 3, "#FFF1DD")
     cam, tgt = cam_rig()
     # v8 見直し：まるロボが字幕の帯にかかっていた（15:05）→ 見る先を下げて、まるロボを画面の上へ
