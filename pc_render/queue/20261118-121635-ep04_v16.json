@@ -1,0 +1,17 @@
+{
+ "id": "20261118-121635-ep04_v16",
+ "name": "ep04_v16",
+ "kit_branch": "pc-kit/20261118-121635-ep04_v16",
+ "zip": "marurobo_ep04.zip",
+ "ps1": "run_pc_render_ep04.ps1",
+ "only": "c_s12a",
+ "kind": "fix",
+ "order": 4,
+ "frames": 498,
+ "fresh": false,
+ "out": "render_ep04_v16",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1604\u30ed\u30dc\u3058\u3083\u306a\u3044",
+ "created": "2026-11-18T12:16:35Z"
+}
