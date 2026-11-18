@@ -352,7 +352,7 @@ def b_lidar(cl):
     TOP = (Pw.x, Pw.y)
     sa_ = math.degrees(spm.to_euler()[2])
     fj = face_to((F0.x, F0.y), TOP)                                     # 跳ぶ向き＝着いたときの向き＝ふたの方
-    m.at(tj - 2.4, face=fj)      # 立っていた所（ふたを隠さない左）から、跳ぶ先を向く
+    m.at(tj - 1.0, face=fj)      # 立っていた所（09-04 のあいだは動かず、次のカットに入ってから向く）（ふたを隠さない左）から、跳ぶ先を向く
     m.jump(tj - 0.95, (-1.5, 0.55), TOP, z_to=sp.d["top_z"] + 0.004, apex=0.17)    # 見る→しゃがむ→「ぴょん」で蹴る（一覧の jump_to）
     mr = Maru((0, 0, 0), face=fj - sa_)      # 先輩の上（置き場所の親を先輩の子に）。床から跳んで来た向きのまま
     hp = mr.handle.parent; hp.parent = sp.root; hp.matrix_parent_inverse = Matrix.Identity(4); hp.location = (MRX, MRY, sp.d["top_z"] + 0.004)
