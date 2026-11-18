@@ -150,8 +150,8 @@ def sound_bubble(t_in, t_pop, icon=None, r=0.3, glow=0.0, path=None, burst_at=No
     return b
 
 
-# ---------------- まるロボ（root：場所と向き、body：跳ぶ・見上げる）
-class Maru:
+# ---------------- まるロボ（v9 までの作り。v10 から使わない）
+class MaruOld:
     def __init__(self, loc, face, **kw):
         self.root = maru(loc, face_deg=face, **kw)
         self.body = self.root.children[0]
@@ -194,6 +194,8 @@ class Maru:
     def glow(self, t, s):
         matkey(self.ant, f(t), strength=s)
 
+
+_MM_ = exec(open(os.path.join(_ANIM_HERE, "maru_ep03.py"), encoding="utf-8").read())   # v10：本物のまるロボを決まりの部品で動かす（Maru）
 
 # ---------------- カメラ（ショットごとに切り替え。ショットの中はゆっくり動く）
 def shots(cam, tgt, S):
@@ -242,76 +244,65 @@ def scene_gate():
             key(e, ("rotation_euler", 1), f(t), r0); key(e, ("rotation_euler", 1), f(t + 0.12), r0 + R(18) * (1 if e.location.x > 0 else -1))
             key(e, ("rotation_euler", 1), f(t + 0.35), r0)
 
-    mr = Maru((-1.7, -0.5, 0), 20, eye_glow=1.2, look_up=0)
-    # ---- S07
-    mr.at(T0, (-0.6, -1.2, 0), 25, 5)
-    for k, tt in enumerate((T0 + 0.3, T0 + 1.3, T0 + 2.3)):   # 07-00 きょろきょろ（どこから？）
-        mr.at(tt, face=25 + (35 if k % 2 == 0 else -35))
-    mr.at(s("07-01") - 0.3, face=10, look=16)                   # 門を見上げる
-    mr.at(s("07-01", 1) - 2.5, face=-10, look=22)                # 柱の穴と外の穴を見比べる（首を振る）
-    mr.at(s("07-01", 1) - 1.5, face=20, look=22)
-    mr.walk(s("07-02") - 0.2, s("07-02") + 0.4, (-0.6, -1.2, 0), (-0.8, -1.0, 0), 55); mr.at(s("07-02") + 0.4, look=18)   # 番犬の方を向く
-    ear_twitch(s("07-02b") + 0.8)                                 # 音を聞く係
-    # 07-04b：合言葉の泡が来たときだけ格子が上がる（予告。すぐ下りる）
-    #   v4「門を通ってから門が開いてる」：泡は門の外で待つ → 格子が上がりきってから → 中へ通る
+    # v10（v9 のコメント 3:08・3:27・4:00・4:13・4:56「泡がわからない」「門の外側からの映像に」「内側のまるロボが外の泡に触れるのはおかしい」）
+    #   泡は門の外の遠く（FAR）で生まれ、門へ流れてくる。合言葉でない泡は門の手前（OUTSIDE）ではじける。合言葉の泡は、格子が上がりきってから中へ入り、奥へ進んで消える。
+    #   泡が出る文は門の外から映し、見張り番とまるロボの様子は内側から映す（文ごとに切り替える）。まるロボは門の内側にいて、外の泡には触れない。
+    #   まるロボの動きは決まりの部品（maru_walk.md・maru_motions.md）。
+    FAR = lambda x=0.0, z=1.5: (x, 6.2, z)
+    def through(b, t_wait, t_go, x=0.2, z=1.4):                        # 合言葉の泡：門の前で待つ → 格子が上がったら中へ進み、奥で消える
+        key(b, "location", f(t_wait), (x, 2.3, z)); key(b, "location", f(t_go), (x, 2.3, z))
+        key(b, "location", f(t_go + 0.7), (x, 1.0, z)); key(b, "location", f(t_go + 1.6), (x * 0.5, -1.6, z + 0.1))
+        key(b, "scale", f(t_go + 1.3), (1.0,) * 3); key(b, "scale", f(t_go + 1.7), (0.001,) * 3)
+    P0, PB, PM, PD = (-0.6, -1.2), (0.25, 1.15), (0.4, -0.6), (1.1, -0.35)
+    mr = Maru((P0[0], P0[1], 0), 25, eye_glow=1.2)
+    mr.look_around(T0 + 0.3)                                           # 07-00 どこから？
+    mr.at(s("07-01") - 0.2, face=face_to(P0, (0.0, 2.0)), look=16)    # 門を見上げる
+    mr.at(s("07-02") + 0.2, face=face_to(P0, (2.35, 1.0)), look=10)   # 番犬のほうを向く
+    ear_twitch(s("07-02b") + 0.8)                                     # 音を聞く係
+    # 07-04b：合言葉の泡が外から来て、格子が上がり、中へ入っていく（予告）
     t4 = Wt("07-04b", "この合言葉")
-    pb = sound_bubble(t4 + 0.1, t4 + 1.1, None, r=0.32, glow=1.5, path=(GATE_IN, (0.2, 2.25, 1.4)), pop=False)
-    key(pb, "location", f(t4 + 2.2), (0.2, 2.25, 1.4)); key(pb, "location", f(t4 + 2.9), (0.2, -1.5, 1.4))
-    key(pb, "scale", f(t4 + 2.7), (1.0,) * 3); key(pb, "scale", f(t4 + 3.0), (0.001,) * 3)
-    bars_lift(bars, t4 + 1.2, t4 + 2.1, s("07-04b", 1) + 0.2, s("07-04b", 1) + 1.0)
-    lamps_on(lamps, lights, t4 + 1.7)
-    lamps_on(lamps, lights, s("07-04b", 1) + 0.6, on=False)
-    # 07-05：外の音の泡（時計・車）が流れてきて、番犬の耳の前で消える
-    icons = ["icon_clock.png", "icon_car.png", "icon_sleep.png", "icon_car.png", "icon_clock.png", "icon_sleep.png"]
-    tt = Wt("07-05", "この泡")
-    for k in range(6):
-        sound_bubble(tt, tt + 2.0, icons[k], path=(GATE_IN, (-0.6 + 0.24 * k, 2.25, 1.25 + 0.12 * (k % 3))))   # 門の外で止まってはじける
-        ear_twitch(tt + 1.9)
-        tt += 2.1
-    # 07-05b：まるロボが泡に跳びつく → 頭の上で消える
-    tj = s("07-05b") - 0.9
-    mr.walk(tj - 3.3, tj - 0.8, (-0.8, -1.0, 0), (0.3, 1.2, 0), 15); mr.at(tj - 0.8, look=25)   # 門の格子の前まで歩いて行って
-    sound_bubble(tj - 1.8, tj + 0.25, "icon_clock.png", path=(GATE_IN, (0.32, 2.2, 1.6)), burst_at=(0.32, 2.2, 1.6))   # 格子の向こうで消える
-    mr.hop(tj - 0.1, 0.4, 0.55)
-    mr.at(s("07-05b") + 1.0, look=30)                            # 消えた所を見上げる
-    mr.at(s("07-06") - 1.4, look=8)                               # 歩く前に見上げをやめる（体ごと傾いたまま歩かない）
-    mr.walk(s("07-06") - 1.4, s("07-06") + 0.5, (0.3, 1.2, 0), (0.4, -0.6, 0), 60); mr.at(s("07-06") + 0.5, look=14)   # 戻って番犬を見る
+    pb = sound_bubble(t4 - 0.6, t4 + 0.8, None, r=0.32, glow=1.5, path=(FAR(0.2, 1.4), (0.2, 2.3, 1.4)), pop=False)
+    bars_lift(bars, t4 + 0.9, t4 + 1.7, s("07-04b", 1) + 0.4, s("07-04b", 1) + 1.2)
+    through(pb, t4 + 0.8, t4 + 1.8)
+    lamps_on(lamps, lights, t4 + 1.3); lamps_on(lamps, lights, s("07-04b", 1) + 0.8, on=False)
+    # 07-05・07-05a：外の音（時計・車・寝息）が泡になって門へ流れてきて、門の手前ではじける
+    icons = ["icon_clock.png", "icon_car.png", "icon_sleep.png", "icon_car.png", "icon_clock.png"]
+    tt = Wt("07-05", "この泡") - 0.3
+    for k in range(5):
+        x = -0.55 + 0.27 * k; z = 1.25 + 0.12 * (k % 3)
+        sound_bubble(tt, tt + 1.9, icons[k], path=(FAR(x * 2.2, z + 0.3), (x, 2.3, z)))
+        ear_twitch(tt + 1.8); tt += 2.0
+    # 07-05b：まるロボは格子の内側まで歩いて行き、外から来る泡をのぞく → 泡は目の前（格子の外）ではじけて、驚く
+    mr.walk(0, s("07-05a") + 2.6, None, PB); mr.at(s("07-05a") + 3.4, face=face_to(PB, (0.25, 3.0)))
+    mr.peer(s("07-05b") - 1.6, dur=1.0)
+    tj = s("07-05b") + 0.2
+    sound_bubble(tj - 1.9, tj, "icon_clock.png", path=(FAR(0.3, 1.0), (0.3, 2.3, 0.9)))
+    mr.surprise(tj - 0.05)
+    mr.walk(0, s("07-06") + 2.4, None, PM); mr.at(s("07-06") + 3.2, face=face_to(PM, (2.35, 1.0)))   # 戻って番犬を見る
     # ---- S08 実験
-    mr.at(s("08-02") + 1.0, look=10)
-    mr.at(s("08-02") + 2.0, face=40)                             # 外を見て、うなずく
-    mr.hop(s("08-02", 1) - 1.2, 0.12, 0.3)
-    # 08-03 テント：泡は消える。まるロボは番犬の顔をのぞき込む
-    tt = Wt("08-03", "テント")                                   # 「テント」と言った瞬間に泡
-    sound_bubble(tt, tt + 1.6, "icon_tent.png", path=(GATE_IN, OUTSIDE)); ear_twitch(tt + 1.5)
-    mr.walk(s("08-04") - 1.2, s("08-04") - 0.2, (0.4, -0.6, 0), (1.35, -0.45, 0), 60); mr.at(s("08-04") - 0.2, look=14)   # 番犬の顔をのぞく（見上げすぎない。v4「ひっくり返ってる」）
-    mr.at(s("08-04", 1), (1.35, -0.45, 0), 60, 14)
-    # 08-05 ヘイ、テント（大きな泡）：耳がぴくっ。まるロボが目の前で左右に跳ねる
-    tt = Wt("08-05", "ヘイ、テント")                             # v4「音声に合わせて泡出して」(4:10)
-    sound_bubble(tt, tt + 1.8, "icon_tent.png", r=0.42, path=(GATE_IN, (0.3, 2.25, 1.6))); ear_twitch(tt + 1.6); ear_twitch(tt + 2.1)
-    for k in range(4):
-        x = 0.55 if k % 2 == 0 else 1.0                          # v8 見直し：1.6・1.35 だと引きの画面で番犬と重なって見えた
-        mr.at(s("08-06") + 0.6 * k, (x, -0.45, 0), 60, 14)       # 見上げ 30 は体ごと大きく傾くので 14; mr.hop(s("08-06") + 0.6 * k, 0.18, 0.4)
-    mr.walk(s("08-07") - 0.6, s("08-07"), (1.0, -0.45, 0), (0.5, -0.5, 0), 55); mr.at(s("08-07"), look=16)
-    # 08-08 似た言葉（ピー）：片目だけ開けて、すぐ閉じる。まるロボはのけぞる
+    mr.walk(0, s("08-02") + 3.4, None, PD); mr.at(s("08-02") + 4.2, face=face_to(PD, (2.35, 1.0)))   # 「目をはなさないで」：番犬の近くへ
+    tt = Wt("08-03", "テント")                                   # 「テント」と言った瞬間に、外で泡が生まれる
+    sound_bubble(tt, tt + 1.8, "icon_tent.png", path=(FAR(0.0, 1.5), OUTSIDE)); ear_twitch(tt + 1.7)
+    mr.peer(s("08-04") + 0.1, dur=1.6)                               # 番犬の顔をのぞく（知らん顔）
+    tt = Wt("08-05", "ヘイ、テント")
+    sound_bubble(tt, tt + 1.9, "icon_tent.png", r=0.42, path=(FAR(0.3, 1.6), (0.3, 2.3, 1.6))); ear_twitch(tt + 1.8); ear_twitch(tt + 2.2)
+    mr.confused(s("08-06") + 0.5)                                    # 完全に無視：首をかしげる
     tb = s("08-08") - 1.6 + 0.3                                  # 「ピー」の始まり
-    sound_bubble(tb, tb + 1.0, None, r=0.32, glow=0.4, path=(GATE_IN, OUTSIDE))   # 「ピー」と同時に泡。門の外で消える
-    show(D["closed"][1], f(tb + 1.0), False); show(D["open"][1], f(tb + 1.0), True)
+    sound_bubble(tb - 0.3, tb + 1.2, None, r=0.32, glow=0.4, path=(FAR(0.0, 1.5), OUTSIDE))
+    show(D["closed"][1], f(tb + 1.2), False); show(D["open"][1], f(tb + 1.2), True)
     show(D["closed"][1], f(s("08-08") + 2.6), True); show(D["open"][1], f(s("08-08") + 2.6), False)
-    mr.lean(tb + 1.1, -18, 0.25); mr.at(tb + 1.1, look=26)
-    mr.lean(s("08-08") + 3.0, 0, 0.4)
-    # 08-11 本物の合言葉（ピー）：両目をぱっと開け、耳が動き、格子が上がり、ランプがオレンジ
+    mr.surprise(tb + 1.25)                                           # 片目が開いた！
+    mr.nod(s("08-09") + 0.6)                                         # うっかり反応することもある
+    # 08-11 本物の合言葉：外で泡 → 門の前で待つ → 両目がぱっと開き、格子が上がり、ランプがオレンジ → 泡が中へ入って進む
     tb = s("08-11") - 1.6 + 0.3
-    #   v4「門を通ってから門が開いてる」(4:56)：泡は門の外で待つ → 「門が開きました」で格子が上がる → 上がりきってから中へ
     tg = Wt("08-11", "門が開きました")
-    rb = sound_bubble(tb, tb + 1.0, None, r=0.34, glow=1.5, pop=False, path=(GATE_IN, OUTSIDE))
-    key(rb, "location", f(tg + 0.5), OUTSIDE); key(rb, "location", f(tg + 1.3), (1.2, 0.9, 1.6))
-    key(rb, "scale", f(tg + 1.2), (1.0,) * 3); key(rb, "scale", f(tg + 1.5), (0.001,) * 3)
-    show(eyes_closed, f(tb + 1.0), False); show(D["open"][0] + D["open"][1], f(tb + 1.0), True)
-    ear_twitch(tb + 1.0)
+    rb = sound_bubble(tb - 0.3, tb + 1.2, None, r=0.34, glow=1.5, pop=False, path=(FAR(0.0, 1.5), OUTSIDE))
+    show(eyes_closed, f(tb + 1.2), False); show(D["open"][0] + D["open"][1], f(tb + 1.2), True)
+    ear_twitch(tb + 1.2)
     bars_lift(bars, tg - 0.5, tg + 0.4)
     lamps_on(lamps, lights, tg + 0.5)
-    mr.hop(tg + 0.7, 0.45, 0.55); mr.hop(tg + 1.4, 0.3, 0.45)
-    mr.glow(tg + 0.6, 0.3); mr.glow(tg + 0.9, 8.0)
+    through(rb, tb + 1.2, tg + 0.45, x=0.0, z=1.5)
+    mr.hops(tg + 0.6, n=2); mr.glow(tg + 0.6, 8.0)
     # ---- 光
     area((-2, -4, 3.5), (0, 0, 1), 350, 4, "#BFD9FF")
     area((4, -3, 3), (2.3, 1, 1.5), 250, 3, "#FFE9C7")
@@ -321,15 +312,27 @@ def scene_gate():
     tgt = empty((0, 0, 1))
     for c in list(cam.constraints): cam.constraints.remove(c)
     tc = cam.constraints.new("TRACK_TO"); tc.target = tgt; tc.track_axis = "TRACK_NEGATIVE_Z"; tc.up_axis = "UP_Y"
-    W = ((-0.9, -7.6, 2.0), (0.6, 1.0, 1.55))           # 門と番犬とまるロボの引き
+    W = ((-0.9, -7.6, 2.0), (0.6, 1.0, 1.55))           # 内側の引き：門と番犬とまるロボ
+    O = ((1.3, 8.6, 2.1), (0.2, 1.6, 1.25))             # 外側の引き：泡が生まれて門へ流れてくる所と、格子の向こうの番犬・まるロボ
+    DG = ((1.2, -2.2, 1.6), (2.3, 1.0, 1.75))           # 番犬の寄り
+    def sh(a, b, v, lens=32, d=(0.15, -0.3, 0.0)):
+        return (a, b, v[0], v[1], tuple(v[0][k] + d[k] for k in range(3)), v[1], lens)
+    tt3 = Wt("08-03", "テント"); tt5 = Wt("08-05", "ヘイ、テント"); tb8 = s("08-08") - 1.6; tb11 = s("08-11") - 1.6
     S = [
         (T0, s("07-01") - 0.2, (-1.9, -4.6, 1.2), (-0.5, -1.0, 0.9), (-1.8, -4.3, 1.2), (-0.5, -1.0, 0.95), 36),        # まるロボ（どこから？）
-        (s("07-01") - 0.2, s("07-02") - 0.2, (0.7, -2.2, 1.5), (0.1, 1.8, 1.9), (0.25, -1.1, 1.6), (0.0, 1.8, 2.5), 28),    # 門を見せる → 柱の穴へ寄る（v8 見直し：まるロボより前から映す。手前のまるロボが字幕の帯に大きくかかっていた 2:30〜2:42）
-        (s("07-02") - 0.2, s("07-04") - 0.2, (0.8, -3.0, 1.6), (2.3, 1.0, 1.7), (1.0, -2.6, 1.7), (2.3, 1.0, 1.8), 34),    # 番犬
-        (s("07-04") - 0.2, s("07-06") - 0.2, W[0], W[1], (-0.7, -7.0, 2.0), (0.6, 1.0, 1.5), 32),                           # 引き：予告・泡
-        (s("07-06") - 0.2, s("08-01") - 0.4, (1.2, -2.2, 1.6), (2.3, 1.0, 1.75), (1.35, -1.9, 1.65), (2.3, 1.0, 1.8), 36),  # 番犬に寄る（聞き分けているのはこの見張り番）
-        (s("08-01") - 0.4, s("08-12") - 0.2, W[0], W[1], (-0.6, -7.2, 2.0), (0.7, 1.0, 1.5), 32),                           # 実験の引き
-        (s("08-12") - 0.2, T1, (-1.0, -2.0, 2.3), (-1.3, 1.57, 2.42), (-1.15, -1.6, 2.35), (-1.3, 1.57, 2.42), 38),             # ランプに寄る
+        (s("07-01") - 0.2, s("07-02") - 0.2, (0.7, -2.2, 1.5), (0.1, 1.8, 1.9), (0.25, -1.1, 1.6), (0.0, 1.8, 2.5), 28),    # 門を見せる → 柱の穴へ寄る
+        sh(s("07-02") - 0.2, s("07-04b") - 0.2, DG, 34),                                                                   # 番犬
+        sh(s("07-04b") - 0.2, s("07-05b") + 1.4, O, 30, (-0.2, -0.5, 0.0)),                                                 # 外から：合言葉の泡が入る・外の音の泡がはじける・まるロボの目の前ではじける
+        sh(s("07-05b") + 1.4, s("08-01") - 0.4, DG, 36),                                                                    # 番犬に寄る（聞き分けているのはこの見張り番）
+        sh(s("08-01") - 0.4, tt3 - 0.6, W, 32),                                                                             # 内側の引き：これから試す
+        sh(tt3 - 0.6, s("08-04"), O, 30),                                                                                   # 外から：「テント」の泡
+        sh(s("08-04"), tt5 - 0.6, DG, 36),                                                                                  # 番犬：知らん顔
+        sh(tt5 - 0.6, s("08-06"), O, 30),                                                                                   # 外から：「ヘイ、テント」の泡
+        sh(s("08-06"), tb8 - 0.6, W, 32),                                                                                   # 内側：無視・首をかしげる
+        sh(tb8 - 0.6, s("08-08"), O, 30),                                                                                   # 外から：似た言葉の泡
+        sh(s("08-08"), tb11 - 0.6, DG, 36),                                                                                 # 番犬：片目だけ開ける
+        sh(tb11 - 0.6, s("08-12") - 0.2, O, 30, (-0.3, -0.6, 0.0)),                                                          # 外から：本物の合言葉 → 門が開いて、泡が中へ
+        (s("08-12") - 0.2, T1, (-1.0, -2.0, 2.3), (-1.3, 1.57, 2.42), (-1.15, -1.6, 2.35), (-1.3, 1.57, 2.42), 38),         # ランプに寄る
     ]
     shots(cam, tgt, S)
 
@@ -356,6 +359,7 @@ def scene_phone():
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 (scene_gate if MODE == "gate" else scene_phone)()
+bake_all(T1)                                       # v10：まるロボの予定 → 毎コマの姿勢
 sc.frame_start = FR[0] if FR[1] else 0
 sc.frame_end = FR[1] if FR[1] else f(T1) - 1
 sc.frame_step = STEP
