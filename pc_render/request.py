@@ -16,7 +16,7 @@ def sh(*a, inp=None, check=True):
 ap = argparse.ArgumentParser()
 ap.add_argument("zip"); ap.add_argument("--ps1", required=True); ap.add_argument("--name", required=True, help="回と版。例 ep05_v3")
 ap.add_argument("--only", default=""); ap.add_argument("--order", type=int, default=0)
-ap.add_argument("--workers", type=int, default=0); ap.add_argument("--samples", type=int, default=0)
+ap.add_argument("--workers", type=int, default=0); ap.add_argument("--samples", type=int, default=24, help="描く細かさ。決まりは 24（2026-11-15 ユーザー）。手順の既定が古くても、ここで 24 が渡る")
 ap.add_argument("--fresh", action="store_true", help="同じ出力フォルダに残っている前の絵を捨ててから描く（同じ版の名前で描き直すときは必ず付ける）")
 ap.add_argument("--replace", default="", help="置きかえる前の依頼の id（その依頼票を消す。描いている途中なら止まる）")
 ap.add_argument("--session", default="", help="頼んだセッションの名前（記録用）")
