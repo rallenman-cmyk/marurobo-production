@@ -405,17 +405,6 @@ for k, lg in logs.items():
     if not lg: continue
     ev_all += [(t, kd) for t, kd in lg.get("events", [])]
     ev_all += [(t, "step") for t in lg.get("steps", [])]
-sys.path.insert(0, os.path.join(EP, "..", "..", "skill", "marurobo-video-production", "scripts"))
-import maru_sfx                                                          # まるロボの気持ちの動きの電子音（maru_motions.md。3本目 v10 で足した）
-_nos = {}
-for t, kd in ev_all:
-    x = sfx.make(kd, sr)
-    if x is None:
-        x = maru_sfx.make(kd, 1.0, sr)
-        if x is not None: x = np.asarray(x, np.float32)
-    if x is None: _nos[kd] = _nos.get(kd, 0) + 1; continue
-    i = int(t * sr); sfx_bus[i:i + len(x)] += x[:max(0, len(sfx_bus) - i)]
-if _nos: print("【効果音】音のない種類：", _nos)
 # 声（アニマティックの声：ピー入り、24 kHz）を 48 kHz に
 _VW = W_ + "/animatic_tmp/voice_v10.wav"                              # v10「8分あたりから声がずっと高い」：高い文をそろえた声（voice/tools/README.md）
 if not os.path.exists(_VW): _VW = W_ + "/animatic_tmp/voice.wav"; print("【注意】高さをそろえた声がない。元の声を使う")
@@ -423,6 +412,42 @@ with wave.open(_VW) as w:
     v = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768; vsr = w.getframerate()
 v = np.interp(np.arange(int(len(v) * sr / vsr)) / sr, np.arange(len(v)) / vsr, v).astype(np.float32)
 voice = np.zeros_like(sfx_bus); voice[:min(len(v), len(voice))] = v[:len(voice)]
+_hs = int(0.01 * sr); _ve = np.abs(voice[:len(voice) // _hs * _hs]).reshape(-1, _hs).max(1)   # 10ms ごとの声の大きさ
+def talking(t, d):
+    a_, b_ = max(0, int(t / 0.01)), int((t + d) / 0.01) + 1
+    return bool((_ve[a_:b_] > 0.02).any())
+IMPORTANT = ("pi", "pipo", "win", "rise", "clatter", "lamp", "gate_up", "pop_ui", "hat", "towel", "dive")
+moved, dropped, over = [], [], []
+sys.path.insert(0, os.path.join(EP, "..", "..", "skill", "marurobo-video-production", "scripts"))
+import maru_sfx                                                          # まるロボの気持ちの動きの電子音（maru_motions.md。3本目 v10 で足した）
+_nos = {}
+_played = []
+for t, kd in ev_all:
+    beep = False
+    if kd.startswith("maru:"):                                          # まるロボの予定の音（maru_cmds：「maru:種類:強さ」）→ 共通の音を強さどおりに
+        _, k_, st_ = kd.split(":"); x = maru_sfx.make(k_, float(st_), sr)
+        if x is None: _nos[k_] = _nos.get(k_, 0) + 1; continue
+        x = np.asarray(x, np.float32); beep = k_ not in ("takeoff", "land", "step", "step_turn") and float(st_) >= 0.3
+    else:
+        x = sfx.make(kd, sr)
+        if x is None:
+            x = maru_sfx.make(kd, 1.0, sr)
+            if x is not None: x = np.asarray(x, np.float32)
+        if x is None: _nos[kd] = _nos.get(kd, 0) + 1; continue
+    # v10（4本目と同じ決まり）：大事な音・まるロボの電子音が声と重なるときは、前後 0.5 秒以内のいちばん近い声のすき間へずらす。
+    #   ずらせないとき、まるロボの電子音は鳴らさない（声が大事）。ほかの大事な音は報告する
+    hd = min(len(x) / sr, 0.35)                                         # 音の頭（はじめの 0.35 秒）が声のすき間に入ればよい（のびる尾は声の下で小さくなる）
+    if (beep or kd in IMPORTANT) and talking(t, hd):
+        for sh in sorted((k_ * 0.02 for k_ in range(-30, 31)), key=abs):   # 前後 0.6 秒まで
+            if t + sh >= 0 and not talking(t + sh, hd):
+                moved.append("%s %.1f→%.2f" % (kd, t, t + sh)); t += sh; break
+        else:
+            if beep: dropped.append("%s %.1f" % (kd, t)); continue
+            over.append("%s %.1f" % (kd, t))
+    _played.append((t, kd))
+    i = int(t * sr); sfx_bus[i:i + len(x)] += x[:max(0, len(sfx_bus) - i)]
+ev_all = _played
+if _nos: print("【効果音】音のない種類：", _nos)
 # 声のある所は効果音を 6 dB 下げる（上がり 0.12 秒・下がり 0.35 秒）
 env = np.ones_like(sfx_bus)
 for p in P:
@@ -436,6 +461,13 @@ mix = voice + sfx_bus * env * 0.5 + music * env
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 with wave.open(tmp + "/mix.wav", "wb") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes((mix * 32767).astype(np.int16).tobytes())
+# v10：全体の大きさを -14 LUFS・-1.5 dBTP にそろえる（SKILL §7 の concat_full と同じ値。v9 までは -22.5 LUFS で小さかった）。2 回測って、ゆがませずに上げる
+_m = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", tmp + "/mix.wav", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
+_j = json.loads(_m[_m.rindex("{"):_m.rindex("}") + 1])
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmp + "/mix.wav", "-af",
+                "loudnorm=I=-14:TP=-1.5:LRA=11:measured_I=%s:measured_TP=%s:measured_LRA=%s:measured_thresh=%s:offset=%s:linear=true" % (_j["input_i"], _j["input_tp"], _j["input_lra"], _j["input_thresh"], _j["target_offset"]),
+                "-ar", str(sr), "-ac", "1", tmp + "/mix_ln.wav"], check=True)
+os.replace(tmp + "/mix_ln.wav", tmp + "/mix.wav")
 
 # ---------------- 字幕（アニマティックと同じ）
 ev = json.load(open(os.path.join(EP, "animatic", "subs_events.json"), encoding="utf-8"))
@@ -528,9 +560,11 @@ chk.append("差し込みの上に出る札：%s" % ("／".join(_ovi) or "なし"
 ov_sfx = []
 for t, kd in ev_all:
     for p in P:
-        if p["start"] - 0.05 < t < p["end"] and kd in ("jump", "land", "pi", "pipo", "win", "rise", "clatter", "lamp", "gate_up"):
+        big = kd in ("jump", "land", "pi", "pipo", "win", "rise", "clatter", "lamp", "gate_up") or (kd.startswith("maru:land:") and float(kd.split(":")[2]) >= 1.5)   # まるロボの着地は強いものだけ
+        if p["start"] - 0.05 < t < p["end"] and big:
             ov_sfx.append("%.1f %s（%s）" % (t, kd, SID[p["no"]]["id"])); break
 chk.append("声と重なる大きめの効果音：%d か所 %s" % (len(ov_sfx), "／".join(ov_sfx[:20])))
+chk.append("声のすき間へずらした音：%d（%s）／声と重なるので鳴らさなかったまるロボの電子音：%s／ずらせなかった大事な音：%s" % (len(moved), "、".join(moved[:12]), "、".join(dropped) or "なし", "、".join(over) or "なし"))
 gaps = [(P[i + 1]["start"] - P[i]["end"], SID[P[i + 1]["no"]]["id"]) for i in range(len(P) - 1)]
 chk.append("2.2 秒以上の間：%s" % ([g for g in gaps if g[0] >= 2.2] or "なし"))
 chk.append("1.0 秒未満の字幕：%s" % ([e for e in ev if e[1] - e[0] < 1.0] or "なし"))

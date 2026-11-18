@@ -289,7 +289,7 @@ def scene_gate():
     tt = Wt("08-05", "ヘイ、テント")
     sound_bubble(tt, tt + 1.9, "icon_tent.png", r=0.42, path=(FAR(0.3, 1.6), (0.3, 2.3, 1.6))); ear_twitch(tt + 1.8); ear_twitch(tt + 2.2)
     mr.confused(s("08-06") + 0.5)                                    # 完全に無視：首をかしげる
-    mr.think(s("08-07") + 0.4, dur=2.4)                              # 「よく似た言葉では？」：考える
+    mr.think(s("08-07") + 0.4, dur=s("08-07", 1) - s("08-07") - 0.3)   # 「よく似た言葉では？」：考える → 文の終わりの切れ目でひらめく（ピン）
     tb = s("08-08") - 1.6 + 0.3                                  # 「ピー」の始まり
     sound_bubble(tb - 0.3, tb + 1.2, None, r=0.32, glow=0.4, path=(FAR(0.0, 1.5), OUTSIDE))
     show(D["closed"][1], f(tb + 1.2), False); show(D["open"][1], f(tb + 1.2), True)

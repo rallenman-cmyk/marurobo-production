@@ -11,7 +11,7 @@
 #     ・surprise / nod / shake / think / peer / sigh / look_around / confused / present / greet / awe / groove / rest / wake / hops
 #       → 予定の気持ちの動き。run・back・jump も（動きの一覧と見え方は references/maru_motions.md）
 #     間に合わなかった動きは LATE に入る（名前, 遅れた秒）。必ず見て、場面の時刻か動きを直す
-#   足音：予定の step・step_turn の時刻を steps に、takeoff・land を events に入れる。気持ちの動きの電子音（beep_…）も events に入れる（組み立てで maru_sfx.make）
+#   足音：予定の step・step_turn の時刻を steps に。跳ぶ・着く音と気持ちの動きの電子音（beep_…）は events に「maru:種類:強さ」で入れる（組み立てで maru_sfx.make(種類, 強さ)）
 #
 #   使い方（Blender の中）：
 #     import maru_cmds as MC
@@ -145,9 +145,10 @@ class Maru:
         self.handle.bake(frames, f0=0)
         for e in p.events:
             if steps is not None and e["kind"] in ("step", "step_turn"): steps.append(round(T0 + e["t"], 3))
-            elif events is not None and e["kind"] in ("takeoff", "land"): events.append((round(T0 + e["t"], 3), "jump" if e["kind"] == "takeoff" else "land"))
-            elif events is not None and not e["kind"].startswith("_"):   # 気持ちの動きの電子音（beep_surprise・beep_yes・sigh・ding…。maru_motions.md の音）。
-                events.append((round(T0 + e["t"], 3), e["kind"]))          # 組み立てでは maru_sfx.make(種類) で鳴らす（3本目 v10 で、渡していなかったのを直した）
+            elif events is not None and not e["kind"].startswith("_"):   # 跳ぶ・着く・気持ちの動きの電子音（beep_surprise・beep_yes・sigh・ding…。maru_motions.md の音）
+                events.append((round(T0 + e["t"], 3), "maru:%s:%.2f" % (e["kind"], e.get("strength", 1.0))))
+                #   「maru:種類:強さ」。組み立ては maru_sfx.make(種類, 強さ) で鳴らす（小さく跳ねる音は小さく。3本目 v10：
+                #   前は takeoff・land をその回の大きな「ピョン・ドン」で鳴らし、声と重なる大きな音が 57 か所出た／気持ちの音は渡していなかった）
         self.p, self.frames = p, frames
         return frames
 
