@@ -162,7 +162,8 @@ def mirror(loc, s=1.0, glow=0.0, card=False, maru_in=False):
     rim = mat("mir_rim", "#8E6CEF", rough=0.3, metal=0.5, emit=0.5 + glow)
     add(bpy.ops.mesh.primitive_torus_add, rim, (0, 0, 0.55), (R(90), 0, 0), major_radius=0.42, minor_radius=0.05, parent=e)
     gl = mat("mir_glass", "#DDE6F0", rough=0.02, metal=1.0)
-    cyl(gl, (0, 0.01, 0.55), 0.4, 0.02, rot=(R(90), 0, 0), parent=e)
+    g = cyl(gl, (0, 0.01, 0.55), 0.4, 0.02, rot=(R(90), 0, 0), parent=e)
+    g.data.polygons.foreach_set("use_smooth", [False] * len(g.data.polygons))   # 鏡の面は平らに（なめらか表示だと面がふくらんだ鏡になり、まるロボが遠く小さく映った。3本目 v10）
     cyl(rim, (0, 0.02, 0.06), 0.18, 0.08, parent=e)
     cyl(rim, (0, 0.02, 0.1), 0.03, 0.12, parent=e)
     if card:
