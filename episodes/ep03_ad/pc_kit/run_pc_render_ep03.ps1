@@ -2,11 +2,11 @@
 #   使い方：PowerShell に README_PC.md の 1 行を貼って Enter
 #   同時に描く本数：最後に -Workers 2 のように付ける（既定 3、1〜4）
 #   一部だけ描く：最後に -Only gate,phone のように付ける（場面の名前をカンマで区切る）
-#   描く細かさ：-Samples 48（既定）。大きくすると、きれいになるが時間がかかる
+#   描く細かさ：-Samples 24（既定。決まりの値）。大きくすると、きれいになるが時間がかかる
 #   途中で止まったり窓を閉じたりしても、同じ行をもう一度走らせれば、できている所は飛ばして続きから描く
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
 #   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep03_v10 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
-param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 48)
+param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 24)
 $ErrorActionPreference = "Continue"
 $kit = Split-Path -Parent $PSScriptRoot                      # ...\marurobo_ep03
 $anim = Join-Path $kit "episodes\ep03_ad\anim"
