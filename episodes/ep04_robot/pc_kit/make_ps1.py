@@ -3,7 +3,9 @@
 import os, sys
 VER = sys.argv[1] if len(sys.argv) > 1 else "v13"     # 版（出力とドライブのフォルダ名 ep04_<版>）。直しの描き直しは新しい版にする（できた印が前の版と混ざらない）
 H = os.path.dirname(os.path.abspath(__file__))
-src = open(os.path.join(H, '../../ep05_vacuum/pc_kit/run_pc_render_ep05.ps1'), encoding='utf-8-sig').read()
+# 5本目の手順は、あとで 5本目のセッションが変えることがあるので、作りを決めた時の版（520beb4）から読む
+import subprocess
+src = subprocess.run(["git", "show", "520beb4:episodes/ep05_vacuum/pc_kit/run_pc_render_ep05.ps1"], cwd=H, capture_output=True, check=True).stdout.decode("utf-8-sig")
 C, S, L = "anim\\clip_anim.py", "anim\\scenes.py", "look\\%s_3d.py"
 jobs = [("c_s01", 285, C), ("c_s02a", 320, C), ("c_s03", 408, C), ("s04", 650, S), ("c_s05b", 175, C), ("c_s05x", 227, C),
         ("s06", 277, L % "s06"), ("c_s06b", 271, C), ("s07", 1071, L % "s07"), ("c_s08e", 169, C), ("c_s08f", 318, C),
