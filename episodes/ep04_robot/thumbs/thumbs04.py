@@ -79,8 +79,64 @@ def comp(choice, boxes):
     return out
 
 
+# ---------------- 建物の深層（@tatemono-shinsou）の型（2026-11-19 ユーザー「このチャンネルのサムネとかすごいうまい」）
+#   上に黒い帯（高さの 17%）・白い極太字 1 行の問い、大事な言葉を黄色と赤。下は明るく清潔な 3D の絵。
+#   前→後の比べ（赤い矢印）と、おかしな一点を赤い丸で囲む。字は帯の中だけ。絵の中には字を入れない
+BRIGHT = ("Background art for a YouTube thumbnail, 16:9, bright clean soft 3D illustration (like a polished explainer: soft daylight, white and light "
+          "pastel colors, slightly low-poly smooth shading, crisp). ABSOLUTELY NO TEXT, no letters, no numbers, no logos, no speech bubbles. "
+          "The TOP 18% of the frame will be covered by a black title band, so put nothing important there. " + ROBOT)
+PLANS2 = {
+ "D": ("Split comparison in two halves side by side, both bright rooms with a white desk and a laptop. LEFT half: a cheerful young person (simple "
+       "rounded 3D character) clicking the mouse; on the laptop screen a white web card with a big GREEN CHECK MARK. RIGHT half: the robot standing on "
+       "the desk next to the laptop, pushing the mouse with its body; on its laptop screen a 3x3 grid of small street photos with traffic lights (an image "
+       "test) popped up, and a big soft red glow around that screen. The robot looks puzzled. Both laptops large and clearly visible."),
+ "E": ("A large bright white web verification card fills the middle (x 10-90%, y 22-80%): an EMPTY square checkbox on its left part, a blank area, a "
+       "small grey circular-arrows icon on its right. On the card surface, two mouse-cursor paths lead to the checkbox: one PERFECTLY STRAIGHT path of "
+       "teal dots coming from the lower right, and one WAVY wandering path of orange dots coming from the lower left. Two small black arrow cursors at the "
+       "start of each path. The robot (about 35% of the frame height) stands at the lower right (x 70-90%, y 55-98%) looking at the straight teal path."),
+ "F": ("Bright tidy room, white desk, a large open laptop in the center-left (x 15-65%, y 22-90%). On its screen: a 3x3 grid of small street photos with "
+       "traffic lights (an image test). The robot (about 40% of the frame height) stands ON the desk at the right (x 66-88%, y 45-98%), facing the "
+       "laptop, its single eye wide open in surprise, leaning back a little. A white computer mouse in front of the robot."),
+}
+T.PLANS.update(PLANS2)
+BAND = {   # 案 → [(字, 色)]
+ "D": [("なぜ", "W"), ("ロボット", "Y"), ("だけ", "W"), ("バレる", "R"), ("のか？", "W")],
+ "E": [("なぜ", "W"), ("チェック1つ", "Y"), ("で", "W"), ("見抜ける", "R"), ("のか？", "W")],
+ "F": [("ロボット", "Y"), ("が押すと", "W"), ("どうなる", "R"), ("？", "W")],
+}
+CIRCLES = {"D": [(2104, 744, 300)], "E": [(1330, 815, 230)]}   # 名前 → [(中心x, 中心y, 半径)]（2560×1440 で。絵を見て決めた：D は右の画面の絵のテスト、E はまっすぐの点線）
+BAND_LABEL = {"E": (416, 352, 2144, 714)}   # 絵のチェック欄に字を書く所（E_2.png の白い札）
+ARROWS = {}    # 名前 → [((x0, y0), (x1, y1))]
+
+
+def band_comp(choice):
+    out = []
+    RED2 = (240, 40, 40)
+    for name, src in choice.items():
+        k = name.split("_")[0]; im = T.bg(os.path.join(T.G, src))
+        if name in BAND_LABEL: im = label(im, BAND_LABEL[name])
+        bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
+        runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
+        px = T.fit(runs, W - 120, 220, track=-0.03)
+        f = T.F(px); tw = sum(f.getlength(ch) + px * -0.03 for t, _ in runs for ch in t)
+        b = f.getbbox("な"); y = (bh - (b[3] - b[1])) // 2 - b[1]
+        im, _ = T.line(im, ((W - tw) / 2, y), runs, px, (8, 8, 10), ew=0, track=-0.03, shadow=False)
+        for cx, cy, r in CIRCLES.get(name, []):
+            lay = Image.new("RGBA", (W, H)); dl = ImageDraw.Draw(lay)
+            dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
+            dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=RED2 + (255,), width=26)
+            im = Image.alpha_composite(im, lay)
+        for p0, p1 in ARROWS.get(name, []): im = T.arrow(im, p0, p1, bend=0.0, w=46, col=RED2)
+        out.append(T.save(im, "ep04_" + name))
+    return out
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "gen":
-        for a in sys.argv[2:]: T.gen(a, refs=("r1.png", "r2.png", "r3.png", "r4.png"))
+        for a in sys.argv[2:]:
+            T.BASE = BRIGHT if a in PLANS2 else BASE
+            T.gen(a, refs=("r1.png", "r2.png", "r3.png", "r4.png"))
+    elif sys.argv[1] == "band":
+        print("\n".join(band_comp(json.loads(sys.argv[2]))))
     else:
         print("\n".join(comp(json.loads(sys.argv[2]), json.loads(sys.argv[3]) if len(sys.argv) > 3 else {})))
