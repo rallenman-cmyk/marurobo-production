@@ -221,6 +221,7 @@ class MaruR:
         frames = mm.simulate(p, fps=FPS, t_end=T1 + 1.0, t_start=max(0.0, T0 - 2.0))
         self.h.bake(frames, f0=f(frames[0]["t"]))
         par = self.h.parent
+        z_base = par.location.z                              # 運ばれる前の高さ（運ぶキーを打つと location が最後の値に変わるので、先に取っておく）
         for t0, t1, zf in self.drops:                        # 上から落ちる（重さで速くなる）
             key(par, ("location", 2), t0 - 0.001, zf, "CONSTANT")
             n = 6
@@ -232,7 +233,7 @@ class MaruR:
                 tt = max(0.0, T0 - 2.0) + k / FPS
                 key(par, "location", tt, self.off(tt), "LINEAR")
         for fr in frames[::6] + frames[-1:]:                 # 追うカメラ用（0.25 秒ごと）
-            x, y, z = fr["root"]; zp = par.location.z if not self.drops else 0.0
+            x, y, z = fr["root"]; zp = z_base if not self.drops else 0.0
             o = self.off(fr["t"]) if self.carries else (0.0, 0.0, 0.0)
             key(self.root, "location", fr["t"], (x * self.s + o[0], y * self.s + o[1], z * self.s + zp + o[2]))
         snd = {"step": ("step", 0.06), "step_turn": ("step", 0.03), "takeoff": ("jump", 0.3), "land": ("land", 0.4)}
