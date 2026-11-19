@@ -137,8 +137,8 @@ PLANS3 = {
 T.PLANS.update(PLANS3); PLANS2.update(PLANS3)
 BAND.update({"G": BAND["D"], "H": BAND["E"], "I": BAND["F"]})
 CIRCLES.update({"G": [(2350, 680, 270)], "H": [(1600, 980, 200)], "I": [(1888, 700, 300)]})   # G＝右の絵のテスト、H＝まっすぐの線、I＝出てきた絵のテスト
-ARROWS.update({"I": [((1140, 760), (1430, 760))]})                                               # I：前→後（2 つの絵の間）
-BARS = {"H": [(432, 346, 1072, 480), (1728, 346, 2362, 480)]}                                      # 絵の灰色の帯（チェック欄の字の所）に字を書く
+ARROWS.update({"I": [((1140, 760), (1430, 760))], "L": [((1140, 900), (1430, 900))]})                                               # I：前→後（2 つの絵の間）
+BARS = {"H": [(432, 346, 1072, 480), (1728, 346, 2362, 480)], "K": [(1584, 618, 2208, 858)], "K2": [(1114, 493, 1600, 563)], "L": [(512, 637, 832, 701)]}                                      # 絵の灰色の帯（チェック欄の字の所）に字を書く
 
 
 def label_bar(im, box, txt="私はロボットではありません"):
@@ -147,6 +147,39 @@ def label_bar(im, box, txt="私はロボットではありません"):
     lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); d.rectangle(box, fill=(255, 255, 255, 255))
     b = f.getbbox(txt); d.text((x0 + 6, y0 + (y1 - y0 - (b[3] - b[1])) / 2 - b[1]), txt, font=f, fill=(40, 44, 52, 255))
     return Image.alpha_composite(im, lay)
+
+# 2026-11-19 ユーザー「1 は バレる＝信号機の絵 が一般的じゃない」「2 はマウスの軌跡が答えでわかっちゃう。チェック欄と押してる人のアップに」「3 も 1 と同じ」
+#   J＝1 の字（✓ と ✕ はこちらで描く）、K・K2＝2 の字（人のアップ／まるロボのアップ）、L＝3 の字（押したあとは「？」で隠す。こちらで描く）
+EMPTY = ("a big flat white web checkbox card facing the camera (a clean white rounded rectangle with an EMPTY square checkbox on its left and a blank "
+         "light-grey bar where a label would be, NO letters, NO check mark)")
+PLANS4 = {
+ "J": ("Two panels side by side separated by a thin white gap, same bright clean room. In EACH panel a laptop seen from the front, its screen filling "
+       "most of the panel, showing " + EMPTY + " large in the middle of the screen. LEFT panel: a friendly young person (simple rounded 3D character) sits "
+       "in front, relaxed, clicking the mouse. RIGHT panel: the robot stands on the desk in front of its laptop, pushing the mouse with its body, and "
+       "leans back in shock, eye wide open; a soft red glow from the screen. Nothing else on the screens."),
+ "K": ("Close-up shot. A large laptop screen fills the right 65% of the frame showing " + EMPTY + " very large; a black mouse arrow cursor hovers right "
+       "on the empty checkbox. In the left foreground, a close-up of a friendly young person (simple rounded 3D character, seen from the side-front, "
+       "head and shoulder) focused on the screen, their hand on a white computer mouse about to click. The robot is NOT in this image. Bright soft daylight."),
+ "K2": ("Close-up shot. A large laptop screen fills the upper right 65% of the frame showing " + EMPTY + " very large; a black mouse arrow cursor hovers "
+        "right on the empty checkbox. In the lower left foreground, close-up of the robot on the desk pushing a white computer mouse with its round body "
+        "(no arms), its big eye looking up at the checkbox, determined. Bright soft daylight."),
+ "L": ("Two panels side by side separated by a thin white gap (before / after), bright clean room, a laptop seen from the front in both, its screen "
+       "filling most of the panel. LEFT panel (before): the screen shows " + EMPTY + " and the robot stands on the desk pushing the mouse with its body, "
+       "determined. RIGHT panel (after): the same laptop, but its whole screen is a plain blank glowing white (nothing on it), and the robot leans back "
+       "a little, looking up at the screen, eye wide open."),
+}
+T.PLANS.update(PLANS4); PLANS2.update(PLANS4)
+BAND.update({"J": BAND["D"], "K": BAND["E"], "K2": BAND["E"], "L": BAND["F"]})
+MARKS = {"J_2": [("ok", 803, 773, 120), ("ng", 1360, 650, 120)], "L_1": [("q", 1920, 624, 230)]}   # 絵の名前 → [("ok"|"ng"|"q", 中心x, 中心y, 大きさ)]（2560×1440。絵を見て決める）
+
+
+def q_mark(im, c, r=260):
+    """大きな「？」の札（白い丸に赤い ？）。押したあとの画面を隠す"""
+    x, y = c; lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.ellipse((x - r + 10, y - r + 14, x + r + 10, y + r + 14), fill=(0, 0, 0, 110))
+    d.ellipse((x - r - 14, y - r - 14, x + r + 14, y + r + 14), fill=(255, 255, 255, 255)); d.ellipse((x - r, y - r, x + r, y + r), fill=(235, 40, 40, 255))
+    f = T.F(int(r * 1.5)); b = f.getbbox("？"); d.text((x - (b[0] + b[2]) / 2, y - (b[1] + b[3]) / 2), "？", font=f, fill=(255, 255, 255, 255))
+    return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
 
 
 def band_comp(choice):
@@ -157,6 +190,8 @@ def band_comp(choice):
         lb = BAND_LABEL.get(name, BAND_LABEL.get(src.split("_")[0]))
         if lb: im = label(im, lb)
         for bx in BARS.get(src.split("_")[0], []): im = label_bar(im, bx)
+        for kind, mx, my, r in MARKS.get(src.rsplit(".", 1)[0], []):
+            im = q_mark(im, (mx, my), r) if kind == "q" else T.badge(im, (mx, my), kind == "ok", r)
         bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
         runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
         px = T.fit(runs, W - 120, 220, track=-0.03)
