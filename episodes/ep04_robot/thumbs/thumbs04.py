@@ -168,8 +168,10 @@ PLANS4 = {
        "determined. RIGHT panel (after): the same laptop, but its whole screen is a plain blank glowing white (nothing on it), and the robot leans back "
        "a little, looking up at the screen, eye wide open."),
 }
+PLANS4["J3"] = PLANS4["J"].replace("showing " + EMPTY + " large in the middle of the screen", "with a plain blank screen (nothing on it)").replace(
+    "Nothing else on the screens.", "The LEFT screen is plain white, the RIGHT screen is plain soft red. Leave the upper middle of each panel calm (cards will be added).")
 T.PLANS.update(PLANS4); PLANS2.update(PLANS4)
-BAND.update({"J": BAND["D"], "K": BAND["E"], "K2": BAND["E"], "L": BAND["F"]})
+BAND.update({"J3": BAND["D"], "J": BAND["D"], "K": BAND["E"], "K2": BAND["E"], "L": BAND["F"]})
 MARKS = {"J_2": [("ok", 803, 773, 120), ("ng", 1360, 650, 120)], "L_1": [("q", 1920, 624, 230)]}   # 絵の名前 → [("ok"|"ng"|"q", 中心x, 中心y, 大きさ)]（2560×1440。絵を見て決める）
 
 
@@ -181,6 +183,55 @@ def q_mark(im, c, r=260):
     f = T.F(int(r * 1.5)); b = f.getbbox("？"); d.text((x - (b[0] + b[2]) / 2, y - (b[1] + b[3]) / 2), "？", font=f, fill=(255, 255, 255, 255))
     return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
 
+# 2026-11-19 ユーザー「124 でいきたい、ただチェックのところの文字が小さすぎて見えない」
+#   チェック欄は絵の AI の小さな欄の上に、こちらで大きく描く（2 行「私はロボット／ではありません」）。✓・✕・矢印の形の指もこちらで
+BIGCARDS = {   # 絵 → [(左, 上, 右, 下, 印 "ok"|"ng"|None, 矢印を描くか)]
+ "J_2": [(520, 600, 1275, 880, "ok", False), (1295, 470, 1955, 800, "ng", False)],   # もとの小さな欄を覆う・人の顔とまるロボにかけない
+ "J3_2": [(470, 330, 1270, 690, "ok", False), (1640, 330, 2540, 690, "ng", False)],   # 座標は 2560×1440。人の顔とまるロボ（アンテナ）にかけない
+ "K_1": [(1100, 470, 2440, 1010, None, True)],
+ "L_1": [(120, 420, 1200, 830, None, False)],
+}
+
+
+PATCH = {}   # まわりの色で消すと四角い跡が残ったので使わない。大きな欄で、もとの小さな欄を覆う   # 絵の AI の小さな欄を、近くの画面の色で消す：(左, 上, 右, 下, 色を取る点)
+
+
+def patch(im, box, at):
+    c = im.getpixel(at); lay = Image.new("RGBA", (W, H)); ImageDraw.Draw(lay).rounded_rectangle(box, 20, fill=c[:3] + (255,))
+    return Image.alpha_composite(im, lay.filter(ImageFilter.GaussianBlur(6)))
+
+
+def big_card(im, box, mark=None, cursor=False):
+    x0, y0, x1, y1 = box; h = y1 - y0; w = x1 - x0
+    lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.rounded_rectangle((x0 + 8, y0 + 14, x1 + 8, y1 + 14), int(h * 0.12), fill=(0, 0, 0, 110))
+    d.rounded_rectangle((x0, y0, x1, y1), int(h * 0.12), fill=(255, 255, 255, 255), outline=(210, 214, 220, 255), width=4)
+    bs = int(min(h * 0.48, w * 0.17)); pad = int(min(h * 0.2, w * 0.06)); bx, by = x0 + pad, y0 + (h - bs) // 2
+    col = {"ok": (40, 170, 70), "ng": (225, 40, 40)}.get(mark)
+    if col: d.rounded_rectangle((bx, by, bx + bs, by + bs), int(bs * 0.14), fill=col + (255,))
+    else: d.rounded_rectangle((bx, by, bx + bs, by + bs), int(bs * 0.14), fill=(255, 255, 255, 255), outline=(90, 98, 110, 255), width=max(6, bs // 16))
+    if mark == "ok": d.line([(bx + bs * 0.22, by + bs * 0.52), (bx + bs * 0.43, by + bs * 0.74), (bx + bs * 0.8, by + bs * 0.28)], fill=(255, 255, 255, 255), width=int(bs * 0.14), joint="curve")
+    if mark == "ng":
+        k = bs * 0.27; c = (bx + bs / 2, by + bs / 2)
+        d.line([(c[0] - k, c[1] - k), (c[0] + k, c[1] + k)], fill=(255, 255, 255, 255), width=int(bs * 0.14)); d.line([(c[0] - k, c[1] + k), (c[0] + k, c[1] - k)], fill=(255, 255, 255, 255), width=int(bs * 0.14))
+    tx = bx + bs + pad; best = None
+    for lines in (["私はロボット", "ではありません"], ["私は", "ロボットでは", "ありません"]):   # 狭い欄は 3 行の方が字が大きくなる
+        px = int(h * 0.8 / (len(lines) * 1.15)); f = T.F(px, 800)
+        while max(f.getlength(l) for l in lines) > x1 - tx - pad * 0.6 and px > 20: px -= 2; f = T.F(px, 800)
+        if not best or px > best[1] * 1.15: best = (lines, px, f)   # 3 行は、はっきり大きくなるときだけ
+    lines, px, f = best
+    lh = px * 1.15; ty = y0 + (h - lh * len(lines)) / 2
+    for i, l in enumerate(lines):
+        b = f.getbbox(l); d.text((tx, ty + i * lh - b[1] + (lh - (b[3] - b[1])) / 2), l, font=f, fill=(24, 34, 56, 255))
+    im = Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
+    if cursor:   # 矢印の形のカーソル（黒に白いふち）を □ の右下に
+        cx, cy = bx + bs * 0.62, by + bs * 0.6; u = bs * 0.62
+        pts = [(0, 0), (0, 1.0), (0.26, 0.77), (0.43, 1.12), (0.58, 1.05), (0.42, 0.7), (0.75, 0.7)]
+        P = [(cx + a * u, cy + b_ * u) for a, b_ in pts]; lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay)
+        d.polygon(P, fill=(255, 255, 255, 255), outline=(255, 255, 255, 255), width=int(u * 0.12)); d.polygon(P, fill=(15, 15, 18, 255))
+        im = Image.alpha_composite(im, lay)
+    return im
+
 
 def band_comp(choice):
     out = []
@@ -189,8 +240,10 @@ def band_comp(choice):
         k = name.split("_")[0]; im = T.bg(os.path.join(T.G, src))
         lb = BAND_LABEL.get(name, BAND_LABEL.get(src.split("_")[0]))
         if lb: im = label(im, lb)
-        for bx in BARS.get(src.split("_")[0], []): im = label_bar(im, bx)
-        for kind, mx, my, r in MARKS.get(src.rsplit(".", 1)[0], []):
+        for bx in ([] if src.rsplit(".", 1)[0] in BIGCARDS else BARS.get(src.split("_")[0], [])): im = label_bar(im, bx)
+        for pb in PATCH.get(src.rsplit(".", 1)[0], []): im = patch(im, pb[:4], pb[4])
+        for bc in BIGCARDS.get(src.rsplit(".", 1)[0], []): im = big_card(im, bc[:4], bc[4], bc[5])
+        for kind, mx, my, r in ([] if src.rsplit(".", 1)[0] in BIGCARDS and src.startswith("J") else MARKS.get(src.rsplit(".", 1)[0], [])):
             im = q_mark(im, (mx, my), r) if kind == "q" else T.badge(im, (mx, my), kind == "ok", r)
         bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
         runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
