@@ -28,7 +28,7 @@ def _top_path():
     z0 = -TREAD_DZ                    # 平らな所：踏む面が z=0 になる車輪の高さ
     z1 = H - TREAD_DZ
     segs = []
-    x = 0.0
+    x = -(DIP_LEN - 0.35)             # もぐる区間を長くした分（0.35→0.90）だけ左から始めて、平らな所・坂・上の床の場所を前と同じにする（場面のカメラ・立ち位置の数字が合うように）
     # 下の端：もぐった所から上がってくる（下のくしの先）
     segs.append(("L", (x, z0 - DIP), (x + DIP_LEN, z0)))
     x += DIP_LEN
@@ -71,7 +71,7 @@ TOP = _top_path()
 LTOP = sum(_seglen(s) for s in TOP)
 X_HI_END = TOP[-1][2][0]                       # 上の端（もぐり終わり）
 X_LO_END = TOP[0][1][0]
-COMB_LO_X = DIP_LEN + 0.18                     # 下のくし（の線 + 0.18）：段が上がりきって、平らに出てくる所
+COMB_LO_X = X_LO_END + DIP_LEN + 0.18                     # 下のくし（の線 + 0.18）：段が上がりきって、平らに出てくる所
 COMB_HI_X = X_HI_END - DIP_LEN + 0.18          # 上のくし（の線 + 0.18）：段がもぐり始める所
 LOOP = 2 * LTOP + 2 * math.pi * RG
 N_STEPS = round(LOOP / D)

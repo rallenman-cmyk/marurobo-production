@@ -427,6 +427,7 @@ def pit():
 def ojisan(loc, face=0.0):
     """点検のおじさん：作業着（紺）・ヘルメット（白）。立ち姿"""
     w_ = walker(loc, face, shirt="#2E4A6B", pants="#2E4A6B", skin="#E9BE98", hair="#3A3430")
+    if len(loc) > 2: w_.root.location.z = loc[2]          # walker は高さを 0 にするので、上の床に立たせるときは高さを入れ直す（9本目：おじさんが床の下に埋まっていた）
     sphere(mat("helmet", "#F4F4F0", rough=0.3), (0, 0, 0.09), 0.19, scale=(1.0, 1.05, 0.7), parent=w_.head)
     return w_
 
