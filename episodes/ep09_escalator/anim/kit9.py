@@ -37,7 +37,7 @@ Y_HR = YW + 0.17            # 手すり
 def _m(name, col, **kw): return mat(name, col, **kw)
 
 
-M = dict(tread=_m("tread", "#5B6168", rough=0.45, metal=0.6), cleat=_m("cleat", "#7B828A", rough=0.4, metal=0.7),
+M = dict(tread=_m("tread", "#4A5056", rough=0.55, metal=0.2), cleat=_m("cleat", "#8E959C", rough=0.4, metal=0.3),
          yellow=_m("yellow", YELLOW_C, rough=0.5), riser=_m("riser", "#4C5258", rough=0.5, metal=0.5),
          frame=_m("frame", "#3A3F45", rough=0.6, metal=0.4), fw=_m("fw", ORANGE_W, rough=0.5), rw=_m("rw", PURPLE_W, rough=0.5),
          chain=_m("chain", "#6E747A", rough=0.35, metal=0.9), gear=_m("gear", "#A7AEB6", rough=0.35, metal=0.55),
@@ -59,9 +59,13 @@ def make_step(k):
     # 溝（くしの歯がかみ合う細い山）：進む向きにのびる。配列で並べる
     rib = cube(M["cleat"], ((x0 + x1) / 2, -YW + 0.03, tz + 0.006), (x1 - x0 - 0.04, 0.012, 0.012), parent=root)
     ar = rib.modifiers.new("arr", "ARRAY"); ar.count = 20; ar.relative_offset_displace = (0, 0, 0)
-    ar.use_relative_offset = False; ar.use_constant_offset = True; ar.constant_offset_displace = (0, 0.0495 / rib.scale[1] if False else 0.0495, 0)
+    ar.use_relative_offset = False; ar.use_constant_offset = True; ar.constant_offset_displace = (0, 0.0495 / rib.scale[1], 0)          # 大きさを scale に持つので、ずらす量も scale で割る
     # 黄色いふち（前と左右）
-    cube(M["yellow"], (x1 - 0.02, 0, tz + 0.001), (0.04, G.WID, 0.03), parent=root)
+    # 前のふちは、溝の山と同じ形で黄色に（くしの歯が通れるように。べたの帯だと歯を突き抜ける）
+    cube(M["yellow"], (x1 - 0.02, 0, tz - 0.004), (0.04, G.WID, 0.01), parent=root)
+    yr = cube(M["yellow"], (x1 - 0.02, -YW + 0.03, tz + 0.006), (0.04, 0.013, 0.0125), parent=root)
+    ar = yr.modifiers.new("arr", "ARRAY"); ar.count = 20; ar.relative_offset_displace = (0, 0, 0)
+    ar.use_relative_offset = False; ar.use_constant_offset = True; ar.constant_offset_displace = (0, 0.0495 / yr.scale[1], 0)
     for sy in (-1, 1): cube(M["yellow"], ((x0 + x1) / 2, sy * (YW - 0.02), tz + 0.001), (x1 - x0, 0.04, 0.03), parent=root)
     # 立ち上がり（後ろ）
     cube(M["riser"], (x0 + 0.006, 0, tz - 0.1), (0.012, G.WID - 0.02, 0.2), parent=root)
@@ -258,9 +262,9 @@ class Esc:
             cube(M["plate"], (-d * 0.345, 0, 0.029), (0.41, 2 * hw, 0.018), parent=c)
             cube(M["plate"], (-d * 0.61, 0, 0.019), (0.125, 2 * hw, 0.01), rot=(0, R(-d * 17), 0), parent=c)
             # 歯：板のふちから段の溝（山と山の間）へ下がって、先が入る
-            tooth = cube(M["yellow"], (d * 0.05, -YW + 0.0548, 0.014), (0.12, 0.022, 0.012), rot=(0, R(d * 14), 0), parent=c)
+            tooth = cube(M["yellow"], (d * 0.05, -YW + 0.0548, 0.02), (0.12, 0.022, 0.012), rot=(0, R(d * 14), 0), parent=c)
             ar = tooth.modifiers.new("arr", "ARRAY"); ar.count = 19; ar.use_relative_offset = False
-            ar.use_constant_offset = True; ar.constant_offset_displace = (0, 0.0495 / tooth.scale[1] * 0 + 0.0495, 0)
+            ar.use_constant_offset = True; ar.constant_offset_displace = (0, 0.0495 / tooth.scale[1], 0)
             self.combs[nm] = c
 
     # ---------------------------------------------------------------- 手すり（輪。見える所は上の線と、両端の半円）
