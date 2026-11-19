@@ -171,6 +171,34 @@ class Maru(MC.Maru):
             key(par, "rotation_euler", t0, tuple(par.rotation_euler)); key(par, "rotation_euler", t1, tuple(R(v) for v in rot))
         self.offs.append((t1, b)); self.offs.sort(key=lambda x: x[0])
 
+    def flip(self, t0, dur, fwd, back=False, roll=0.15, bounce=True, at=None):
+        """ひっくり返る（5本目 v7。ユーザー「コロンってときはひっくり返る感じに」）：置き場所の親ごと、前へでんぐり返って
+        あお向け（脚が上）になる。本物の体の作り（胴は腰を中心に傾くだけ）では逆さにできないので、親を回す。
+        回る中心は「立った胴の中心」と「逆さで床に着いた胴の中心」の真ん中の高さで、転がった分（roll m）だけ前へ進む。
+        fwd：前の向き（世界の xy）。back=True で逆にたどって起き上がる（元の場所・向きへ戻る）"""
+        import mathutils
+        par = self.handle.parent; S_ = self.s
+        if at is not None: self._flip_xy = at          # ひっくり返る所（世界の xy。まるロボが着いた所）
+        c = MM.TORSO_Z * S_; r = 0.33 * S_; h = (c + r) / 2          # 胴の中心の高さ・胴の半径（世界）
+        fv = Vector((fwd[0], fwd[1], 0)).normalized(); ax = Vector((0, 0, 1)).cross(fv).normalized()     # 頭が前へ倒れる向きに回す軸
+        if not hasattr(self, "_flip0"):
+            bpy.context.scene.frame_set(f(t0)); self._flip0 = (par.matrix_world.copy(), par.location.copy(), par.rotation_euler.copy())
+        M0 = self._flip0[0]; L0 = M0.translation.copy()
+        P0 = Vector((self._flip_xy[0], self._flip_xy[1], L0.z + h))
+        def M_at(th, k):
+            P = P0 + fv * (roll * k)
+            return mathutils.Matrix.Translation(P) @ mathutils.Matrix.Rotation(math.radians(th), 4, ax) @ mathutils.Matrix.Translation(-P0) @ M0
+        seq = [(0.0, 0.0, 0.0), (0.35, 70, 0.4), (0.7, 150, 0.85), (1.0, 192, 1.0)] + ([(1.25, 172, 1.0), (1.5, 183, 1.0), (1.7, 180, 1.0)] if bounce else [(1.15, 180, 1.0)])
+        if back: seq = [(u, 180 - th if u > 0 else 180, 1.0 - k) for u, th, k in [(0.0, 0.0, 0.0), (0.3, 40, 0.3), (0.65, 120, 0.75), (1.0, 180, 1.0)]]
+        if os.environ.get("DBG_FLIP"): print("DBGFLIP M0", tuple(round(v, 3) for v in L0), "h", round(h, 3), "rot", tuple(round(math.degrees(v), 1) for v in self._flip0[2]), "par", par.parent)
+        T = seq[-1][0]; prev = None
+        for u, th, k in seq:
+            M = M_at(th, k); loc, q, sc = M.decompose(); eu = q.to_euler("XYZ", prev) if prev else q.to_euler("XYZ"); prev = eu
+            tt = t0 + dur * u / T
+            key(par, "location", tt, tuple(loc), "BEZIER"); key(par, "rotation_euler", tt, tuple(eu), "BEZIER")
+            if os.environ.get("DBG_FLIP"): print("DBGFLIP", round(tt, 2), th, tuple(round(v, 3) for v in loc), tuple(round(math.degrees(v), 1) for v in eu))
+        return t0 + dur
+
     def jump(self, t, p_from, p_to, z_to=None, apex=None, **_):
         """p_from（世界）まで歩いておき、t に一覧の jump_to（見る→向く→しゃがむ→蹴る→放物線→脚で受け止める）で p_to へ。
         z_to：着く所の高さ（世界）。台に跳び乗る・机から跳び降りる"""

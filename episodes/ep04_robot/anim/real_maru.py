@@ -97,6 +97,15 @@ def finish(h, p, T0, T1, EVENTS, STEPS):
     k0 = int(round(off * mm.FPS))
     frames = mm.simulate(p, fps=mm.FPS, t_end=off + n / mm.FPS)
     h.bake(frames[k0:k0 + n], f0=0)
+    if getattr(p, "hide_until", None) is not None:
+        fh = int(round((p.hide_until - off) * mm.FPS))
+        for o in MR.hier(h.root):
+            if o.hide_render: continue
+            o.hide_render = True; o.keyframe_insert("hide_render", frame=0)
+            o.hide_render = False; o.keyframe_insert("hide_render", frame=max(1, fh))
+            for fc in o.animation_data.action.fcurves:
+                if fc.data_path == "hide_render":
+                    for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
     if os.environ.get("MARU_DEBUG"):
         for nm, fr in (("START", frames[k0]), ("END", frames[min(k0 + n - 3, len(frames) - 1)])):
             M = h.parent.matrix_world; r = M @ Vector(fr["root"]); hd_w = math.degrees(fr["psi"]) + C_heading(h)
@@ -195,7 +204,9 @@ def P_s12a(p, C, g):
     t_land = C.T0 + p.t - 0.9                    # だいたいの着地（跳ぶ動きの終わりの手前）
     for e in p.events:
         if e["kind"] == "land": t_land = C.T0 + e["t"]
-    g["EVENTS"][:] = [e for e in g["EVENTS"] if e[1] != "dive"]; g["ev"](t_land - 0.55, "dive")   # 落ちてくる音は、画面に入るころから
+    g["EVENTS"][:] = [e for e in g["EVENTS"] if e[1] != "dive"]; g["ev"](t_land - 0.55, "dive")
+    for e in p.events:                           # 跳ぶまでは描かない（高い所で立っている・しゃがむのが画面の上に見えるため）
+        if e["kind"] == "takeoff": p.hide_until = e["t"] + 0.1; break   # 落ちてくる音は、画面に入るころから
     C.idle_to(p, s("12-01b"))
     p.turn_to(50); p.wait(0.3); p.turn_to(-50); p.wait(0.3); p.turn_to(0)
     C.idle_to(p, said("門番です") - 0.6); p.turn_to(25); p.look(0, 16, hold=0.4)
@@ -289,7 +300,7 @@ def P_s23(p, C, g):
     C.go(p, s("23-04") + 0.8); p.hops(n=2, height=0.07)
 
 
-GROUND["c_s12a"] = 5.0                # 画面の外（5m 上）から降りてくる（3m だと宙に立っているのが見えた）
+GROUND["c_s12a"] = 7.0                # 7m 上から降りてくる。跳ぶまでは描かない（5m だと跳ぶ前の姿が画面の上に見えた）
 
 PLANS = dict(c_s01=P_s01, c_s02a=P_s02a, c_s03=P_s03, c_s05x=P_s05x, c_s05b=P_s05b, c_s06b=P_s06b, c_s08e=P_s08, c_s08f=P_s08,
              c_s11=P_s11, c_s11b=P_idle_look, c_s11c=P_idle_look, c_s11d=P_s11d, c_s12a=P_s12a, c_s13a=P_s13, c_s13b=P_s13, c_s13d=P_s13d,
