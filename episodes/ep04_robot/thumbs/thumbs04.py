@@ -115,6 +115,39 @@ CIRCLES = {"D": [(2104, 744, 300)], "E": [(1330, 815, 230)]}   # 名前 → [(�
 BAND_LABEL = {"E": (416, 352, 2144, 714)}   # 絵のチェック欄に字を書く所（E_2.png の白い札）
 ARROWS = {}    # 名前 → [((x0, y0), (x1, y1))]
 
+# 2026-11-19 ユーザー「文字はいいけど絵がわかりにくい」→ 左右の比べ・大きな正面向きのチェック欄・物を少なく（G＝D の字、H＝E の字、I＝F の字）
+CARD = ("a big flat white web checkbox card facing the camera straight on (a clean white rounded rectangle, a square checkbox on its left, a blank "
+        "light-grey bar where a label would be, NO letters at all)")
+PLANS3 = {
+ "G": ("Two panels side by side separated by a thin white gap, same bright clean room in both. In EACH panel a laptop seen from the front, its screen "
+       "filling most of the panel, showing " + CARD + ". LEFT panel: a friendly young person (simple rounded 3D character) sits in front clicking the "
+       "mouse, and the checkbox on the screen has a big bright GREEN CHECK MARK. RIGHT panel: the robot stands on the desk in front of its laptop, "
+       "pushing the mouse with its body, and on its screen the checkbox stays EMPTY while a pop-up image test (a 3x3 grid of street photos with traffic "
+       "lights) covers the right part of the screen. Big, simple, readable at small size."),
+ "H": ("Two panels side by side separated by a thin white gap, bright clean background. In EACH panel " + CARD + " fills the upper half of the panel, "
+       "and a black mouse-cursor path leads up to its checkbox from below. LEFT panel: the path is a WAVY, wandering line of ORANGE dots; a friendly "
+       "young person (simple rounded 3D character) stands at the bottom holding a computer mouse, and the checkbox has a big GREEN CHECK MARK. RIGHT "
+       "panel: the path is a PERFECTLY STRAIGHT ruler-like line of TEAL dots; the robot stands at the bottom, and the checkbox stays EMPTY. "
+       "Big, simple, readable at small size."),
+ "I": ("Two panels side by side separated by a thin white gap (before / after), bright clean room, a laptop seen from the front in both, its screen "
+       "filling most of the panel. LEFT panel (before): the screen shows " + CARD + " and the robot stands on the desk pushing the mouse with its body, "
+       "determined. RIGHT panel (after): on the same screen a large pop-up image test (a 3x3 grid of street photos with traffic lights) has appeared over "
+       "the checkbox card, and the robot leans back in surprise, eye wide open. Big, simple, readable at small size."),
+}
+T.PLANS.update(PLANS3); PLANS2.update(PLANS3)
+BAND.update({"G": BAND["D"], "H": BAND["E"], "I": BAND["F"]})
+CIRCLES.update({"G": [(2350, 680, 270)], "H": [(1600, 980, 200)], "I": [(1888, 700, 300)]})   # G＝右の絵のテスト、H＝まっすぐの線、I＝出てきた絵のテスト
+ARROWS.update({"I": [((1140, 760), (1430, 760))]})                                               # I：前→後（2 つの絵の間）
+BARS = {"H": [(432, 346, 1072, 480), (1728, 346, 2362, 480)]}                                      # 絵の灰色の帯（チェック欄の字の所）に字を書く
+
+
+def label_bar(im, box, txt="私はロボットではありません"):
+    x0, y0, x1, y1 = box; px = int((y1 - y0) * 0.62); f = T.F(px, 600)
+    while f.getlength(txt) > (x1 - x0) * 0.96 and px > 16: px -= 2; f = T.F(px, 600)
+    lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); d.rectangle(box, fill=(255, 255, 255, 255))
+    b = f.getbbox(txt); d.text((x0 + 6, y0 + (y1 - y0 - (b[3] - b[1])) / 2 - b[1]), txt, font=f, fill=(40, 44, 52, 255))
+    return Image.alpha_composite(im, lay)
+
 
 def band_comp(choice):
     out = []
@@ -123,6 +156,7 @@ def band_comp(choice):
         k = name.split("_")[0]; im = T.bg(os.path.join(T.G, src))
         lb = BAND_LABEL.get(name, BAND_LABEL.get(src.split("_")[0]))
         if lb: im = label(im, lb)
+        for bx in BARS.get(src.split("_")[0], []): im = label_bar(im, bx)
         bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
         runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
         px = T.fit(runs, W - 120, 220, track=-0.03)
