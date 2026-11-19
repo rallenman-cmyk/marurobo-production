@@ -138,7 +138,11 @@ _SX = _even_x(["①マイク", "②出ていく手がかり", "③わたした�
 ov(W("05-02", "マイク"), s("05-06", 1), "s05_1", [("tag", "①マイク", _SX[0], 70, None, False, SUS[0])])
 ov(W("05-03", "出ていく"), s("05-06", 1), "s05_2", [("tag", "②出ていく手がかり", _SX[1], 70, None, False, SUS[1])])
 ov(W("05-04b", "わたしたち"), s("05-06", 1), "s05_3", [("tag", "③わたしたちの記憶", _SX[2], 70, None, False, SUS[2])])   # ①②③とも y=70
-ov(W("06-02", "この小さな穴"), s("06-02", 1), "s06_ring", [("ring", 830, 392, 200, 62)])
+# v10：穴の輪は 3D から計算した場所（s06a_log.json の pos2d）。カメラを変えたので手で決めた値は使わない
+_p06 = next((json.load(open(os.path.join(d_, "s06a_log.json"))).get("pos2d") for d_ in DIRS if os.path.exists(os.path.join(d_, "s06a_log.json"))), None)
+if not _p06: raise SystemExit("s06a_log.json に pos2d（穴の画面の場所）がない。s06a を描き直す")
+HOLE = tuple(_p06[0])
+ov(W("06-02", "この小さな穴"), s("06-02", 1), "s06_ring", [("ring", HOLE[0], HOLE[1], 150, 52)])
 ov(W("07-02", "見張り番"), s("07-02b", 1), "s07_guard", [("tag", "見張り番", 1100, 120)])
 ov(W("07-04", "あの合言葉"), s("07-04", 1) + 0.3, "s07_word", [("tag", "Hey Siri", 640, 110, None, True), ("tag", "OK Google", 640, 230)])
 ov(s("08-08") - 1.3, s("08-08") + 2.5, "s08_similar", [("tag", "Hey, Siri-al（ヘイ、シリアル）", 640, 110)])
@@ -284,7 +288,7 @@ for k, (a, b, tsrc, label) in enumerate(PIPS):
     im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     sub = Image.open(_frame_at(tsrc)).convert("RGB").resize((400, 225), Image.LANCZOS)
     if label == "さきほどの穴":                                              # 切り抜きにも、さきほどの穴の輪（06-02 と同じ所）を描く
-        ImageDraw.Draw(sub).ellipse([(830 - 200) * 400 / 1280, (392 - 62) * 225 / 720, (830 + 200) * 400 / 1280, (392 + 62) * 225 / 720], outline=(255, 138, 42), width=4)
+        ImageDraw.Draw(sub).ellipse([(HOLE[0] - 150) * 400 / 1280, (HOLE[1] - 52) * 225 / 720, (HOLE[0] + 150) * 400 / 1280, (HOLE[1] + 52) * 225 / 720], outline=(255, 138, 42), width=4)
     d.rounded_rectangle([24, 24, 24 + 412, 24 + 237], 14, fill="white", outline=NAVY, width=4); im.paste(sub, (30, 30))
     bb = d.textbbox((0, 0), label, font=TAGF); w = bb[2] - bb[0]; th = bb[3] - bb[1]
     d.rounded_rectangle([30, 272, 30 + w + 40, 272 + th + 26], 14, fill=NAVY); d.text((50 - bb[0], 285 - bb[1]), label, font=TAGF, fill="white")
