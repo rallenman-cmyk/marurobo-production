@@ -60,6 +60,7 @@ def C(loc, tgt, lens=35, loc1=None, tgt1=None, lens1=None, d=8.0):
 
 XLC = G.COMB_LO_X - 0.18          # 下のくしの線
 XHC = G.COMB_HI_X - 0.18          # 上のくしの線
+CP = 0.038                        # くしの板の上の面の高さ（床から。くしの線から 0.55 まで）
 HY = CLAD_Y + 0.01
 UP = G.H                           # 上の床の高さ
 ESC = [None]
@@ -130,7 +131,7 @@ def b_day(cl):
     # 04-01：段に乗ったまま入ってみる → 段へ跳び戻る（流れに逆らって）→ くしへ向く
     t_ret = s("04-01") + 5.2
     k2 = E.find_step(t_ret, XHC - 0.15 - 0.3 * (w("04-03", "ころん") - 0.15 - t_ret) + 0.18)
-    M.walk(s("04-01") + 0.6, s("04-01") + 2.8, (XHC + 0.45, -0.15, UP))
+    M.walk(s("04-01") + 0.6, s("04-01") + 2.8, (XHC + 0.45, -0.15, UP + CP))
     M.jump(t_ret, E.tread(k2, t_ret))
     t_sc = w("04-03", "ころん") - 0.15                  # くしに乗り上げる
     M.carry(t_ret + 0.05, t_sc, E.carry_fn(k2, t_ret + 0.05))
@@ -145,7 +146,7 @@ def b_day(cl):
     M.confused(w("04-06", "首") - 0.6)
     M.nod(w("05-04", "確かめて"))
     # ---------------------------------------------------------------- 1章：下へ移ってしるしを貼る → シールの段と一緒に上る → 上で降りる
-    M.at(s("07-01") - 0.05, loc=(XLC - 0.55, -0.32, 0.0), face=60.0, interp="CONSTANT")    # 06-06 の引きのあと、下の乗り口の場面で置き直す
+    M.at(s("07-01") - 0.05, loc=(XLC - 0.55, -0.32, CP), face=60.0, interp="CONSTANT")    # 06-06 の引きのあと、下の乗り口の場面で置き直す
     t_p = w("07-03", "ぺたっ")
     k3 = E.find_step(t_p, 0.42)
     stk = E.sticker(k3, t_p); track("sticker", stk, 0.02)
@@ -167,7 +168,7 @@ def b_day(cl):
     stair = [(7.6 - 0.3 * (i + 0.5), 2.6, UP - G.H / 18 * (i + 1)) for i in range(4)]
     M.path(stair, [t_off2 + 3.8 + 0.42 * i for i in range(4)], silent=False)
     t_cut2 = s("08-02") - 0.05
-    M.at(t_cut2, loc=(XLC - 0.6, -0.2, 0.0), face=80.0, interp="CONSTANT")
+    M.at(t_cut2, loc=(XLC - 0.6, -0.2, 0.03), face=80.0, interp="CONSTANT")
     M.wobble(s("08-02") + 0.3, e("08-02") + 0.4, 7, 0.55)
     t_out = w("08-03", "出てきました")
     s_now2 = (sp.pos(t_out) + k3 * G.PITCH) % G.LOOP
@@ -200,7 +201,7 @@ def b_day(cl):
     M.at(t_o, loc=E.tread(k5, t_o, ly=-0.1), face=90.0, interp="CONSTANT")
     t_j = w("40-02", "ぴょん") + 0.35
     M.carry(t_o + 0.02, t_j - 0.8, E.carry_fn(k5, t_o + 0.02, lx=-0.18))
-    M.jump(t_j, (XHC + 0.55, -0.15, UP), apex=0.35)
+    M.jump(t_j, (XHC + 0.55, -0.15, UP + CP), apex=0.35)
     M.hops(t_j + 0.9, n=1, height=0.08)
     # 40-04：着地でよろけて、おじさんの手の中へ（おじさんが腕を下ろして受け止める）
     t_c = w("40-04", "手の中")
@@ -339,13 +340,13 @@ def b_night(cl):
     rib = cube(mat("ribbon", "#E0457B", rough=0.5), (-0.12, -(YW - 0.012), G.TREAD_DZ + 0.02), (0.22, 0.02, 0.012), parent=E.steps[kr])
     track("ribbon", rib, 0.0)
     hide_key(rib, -100.0, True); hide_key(rib, t_rb, False); hide_key(rib, s("31-01") - 0.1, True)
-    M.at(s("30-01") - 0.05, loc=(XLC - 0.42, -0.3, 0.0), face=90.0, interp="CONSTANT")
+    M.at(s("30-01") - 0.05, loc=(XLC - 0.42, -0.3, CP), face=90.0, interp="CONSTANT")
     M.push(w("30-02", "はさんで"), 0.3)
     ev(w("30-03", "止まりました") - 0.2, "stop", 0.4, "ribbon")
     # ③ くし：小石
     peb = sphere(mat("pebble", "#7D7A74", rough=0.8), (XLC + 0.05, 0.0, 0.02), 0.03, scale=(1.2, 1, 0.8)); track("pebble", peb, 0.0)
     hide_key(peb, -100.0, True); hide_key(peb, w("31-02", "小石"), False); hide_key(peb, s("32-01"), True)
-    M.at(s("31-01") - 0.05, loc=(XLC - 0.45, 0.2, 0.0), face=90.0, interp="CONSTANT")
+    M.at(s("31-01") - 0.05, loc=(XLC - 0.45, 0.2, CP), face=90.0, interp="CONSTANT")
     M.push(w("31-02", "はさんで"), 0.3)
     ck = E.combs["lo"]
     key(ck, ("location", 0), -100.0, ck.location.x); key(ck, ("location", 0), w("31-03", "押されると"), ck.location.x)

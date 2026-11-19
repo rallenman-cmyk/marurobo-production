@@ -40,7 +40,7 @@ def _m(name, col, **kw): return mat(name, col, **kw)
 M = dict(tread=_m("tread", "#5B6168", rough=0.45, metal=0.6), cleat=_m("cleat", "#7B828A", rough=0.4, metal=0.7),
          yellow=_m("yellow", YELLOW_C, rough=0.5), riser=_m("riser", "#4C5258", rough=0.5, metal=0.5),
          frame=_m("frame", "#3A3F45", rough=0.6, metal=0.4), fw=_m("fw", ORANGE_W, rough=0.5), rw=_m("rw", PURPLE_W, rough=0.5),
-         chain=_m("chain", "#6E747A", rough=0.35, metal=0.9), gear=_m("gear", "#8D949B", rough=0.3, metal=0.9),
+         chain=_m("chain", "#6E747A", rough=0.35, metal=0.9), gear=_m("gear", "#A7AEB6", rough=0.35, metal=0.55),
          rail_f=_m("rail_f", ORANGE_W, rough=0.4, metal=0.3), rail_r=_m("rail_r", PURPLE_W, rough=0.4, metal=0.3),
          skirt=_m("skirt", "#C9CFD5", rough=0.25, metal=0.9), panel=_m("panel", "#E8E4DC", rough=0.5),
          clad=_m("clad", "#C3C8CD", rough=0.45, metal=0.15), hr=_m("hr", "#1E2226", rough=0.35), hr_mark=_m("hr_mark", "#9AA3AD", rough=0.4),
@@ -186,8 +186,10 @@ class Esc:
         for nm, (cx, cz) in self.gear_c.items():
             g = empty((cx, 0, cz)); g.name = "gear_" + nm
             for sy in (-1, 1):
-                d = cyl(M["gear"], (0, sy * Y_CHAIN, 0), G.RG - 0.02, 0.04, rot=(R(90), 0, 0), parent=g, verts=48)
-                if sy < 0: self.near.append(d)
+                bpy.ops.mesh.primitive_torus_add(location=(0, sy * Y_CHAIN, 0), rotation=(R(90), 0, 0), major_radius=G.RG - 0.05, minor_radius=0.035)
+                d = bpy.context.object; d.data.materials.append(M["gear"]); d.parent = g
+                hub = cyl(M["gear"], (0, sy * Y_CHAIN, 0), 0.1, 0.06, rot=(R(90), 0, 0), parent=g, verts=32)
+                if sy < 0: self.near += [d, hub]
                 for j in range(18):                      # 歯
                     a = 2 * math.pi * j / 18
                     t_ = cube(M["gear"], ((G.RG - 0.005) * math.cos(a), sy * Y_CHAIN, (G.RG - 0.005) * math.sin(a)), (0.05, 0.035, 0.035),
@@ -195,7 +197,7 @@ class Esc:
                     if sy < 0: self.near.append(t_)
                 for j in range(5):                       # 輻（回っているのが分かるように）
                     a = 2 * math.pi * j / 5
-                    sp = cube(M["frame"], (0.12 * math.cos(a), sy * (Y_CHAIN + 0.025), 0.12 * math.sin(a)), (0.22, 0.01, 0.04), rot=(0, -a, 0), parent=g)
+                    sp = cube(M["frame"], ((G.RG / 2) * math.cos(a), sy * Y_CHAIN, (G.RG / 2) * math.sin(a)), (G.RG - 0.12, 0.03, 0.05), rot=(0, -a, 0), parent=g)
                     if sy < 0: self.near.append(sp)
             cyl(M["gear"], (0, 0, 0), 0.04, 2 * Y_CHAIN + 0.1, rot=(R(90), 0, 0), parent=g, verts=24)
             self.gears[nm] = g
@@ -249,9 +251,14 @@ class Esc:
         for nm, xc, d in (("lo", G.COMB_LO_X - 0.18, +1), ("hi", G.COMB_HI_X - 0.18, -1)):
             z = 0.0 if nm == "lo" else G.H
             c = empty((xc, 0, z)); c.name = "comb_" + nm
-            cube(M["yellow"], (-d * 0.07, 0, -0.004), (0.14, G.WID + 0.02, 0.03), parent=c)
-            # 歯：段の溝（山と山の間）に先が入る。板のふちから段の上へ少し出て、先が下がる
-            tooth = cube(M["yellow"], (d * 0.055, -YW + 0.0548, 0.006), (0.12, 0.022, 0.014), rot=(0, R(d * 10), 0), parent=c)
+            # くしの板：段の上に少し浮いた板（下の面 +0.02）。平らになった段は、この板の下をすべって出入りする（2026-11-19 くしで段がはみ出た直し）
+            #   黄色い所（くし）0.14 ＋ 灰色の板 0.41 ＋ 床へ下りる坂 0.12
+            hw = CLAD_Y + 0.01
+            cube(M["yellow"], (-d * 0.07, 0, 0.029), (0.14, 2 * hw, 0.018), parent=c)
+            cube(M["plate"], (-d * 0.345, 0, 0.029), (0.41, 2 * hw, 0.018), parent=c)
+            cube(M["plate"], (-d * 0.61, 0, 0.019), (0.125, 2 * hw, 0.01), rot=(0, R(-d * 17), 0), parent=c)
+            # 歯：板のふちから段の溝（山と山の間）へ下がって、先が入る
+            tooth = cube(M["yellow"], (d * 0.05, -YW + 0.0548, 0.014), (0.12, 0.022, 0.012), rot=(0, R(d * 14), 0), parent=c)
             ar = tooth.modifiers.new("arr", "ARRAY"); ar.count = 19; ar.use_relative_offset = False
             ar.use_constant_offset = True; ar.constant_offset_displace = (0, 0.0495 / tooth.scale[1] * 0 + 0.0495, 0)
             self.combs[nm] = c
@@ -376,13 +383,13 @@ def station(night=False):
     box(M["floor"], rise_x, 26, -8, 8, -2.6, 0)
     box(M["floor"], lid_lo[0], rise_x, -8, -hy, -2.6, 0); box(M["floor"], lid_lo[0], rise_x, hy, 8, -2.6, 0)
     # 下のくしからふたまでの間の床の板（段の手前）
-    box(M["plate"], lid_lo[1], xl0, -hy, hy, -0.03, 0.0)
+    box(M["plate"], lid_lo[1], xl0 - 0.55, -hy, hy, -0.03, 0.0)
     # 上の床：左のふち SL。穴＝x が SL〜lid_hi[1]、|y|<hy
     SL = 7.6
     box(M["floor2"], lid_hi[1], 26, -8, 8, G.H - 0.45, G.H)
     box(M["floor2"], SL, lid_hi[1], -8, -hy, G.H - 0.45, G.H); box(M["floor2"], SL, lid_hi[1], hy, 8, G.H - 0.45, G.H)
     # 上のくしからふたまでの間の床の板
-    box(M["plate"], xh0, lid_hi[0], -hy, hy, G.H - 0.03, G.H)
+    box(M["plate"], xh0 + 0.55, lid_hi[0], -hy, hy, G.H - 0.03, G.H)
     lids = {}
     for nm, (xa, xb), z in (("lo", lid_lo, 0.0), ("hi", lid_hi, G.H)):
         lids[nm] = cube(M["plate"], ((xa + xb) / 2, 0, z - 0.012), (xb - xa, 2 * hy, 0.03), bevel=0.003)
@@ -475,7 +482,7 @@ def _esc_helpers():
         self.riders.append((wk, k, y))
 
     def _riders(self, p):
-        s_board, s_alight = 0.75, 10.25
+        s_board, s_alight = G.DIP_LEN + 0.45, G.LTOP - G.DIP_LEN - 0.3
         xb, _ = G.top_point(s_board)[0]; xa, _ = G.top_point(s_alight)[0]
         for wk, k, y in self.riders:
             sk = (p + k * G.PITCH) % G.LOOP
