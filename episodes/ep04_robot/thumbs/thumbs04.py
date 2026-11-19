@@ -103,6 +103,13 @@ BAND = {   # 案 → [(字, 色)]
  "D": [("なぜ", "W"), ("ロボット", "Y"), ("だけ", "W"), ("バレる", "R"), ("のか？", "W")],
  "E": [("なぜ", "W"), ("チェック1つ", "Y"), ("で", "W"), ("見抜ける", "R"), ("のか？", "W")],
  "F": [("ロボット", "Y"), ("が押すと", "W"), ("どうなる", "R"), ("？", "W")],
+ # 2026-11-19 ユーザー「ばれる・見抜ける・どうなるは言い方が分かりにくい」→ 言い換えの案
+ "V1": [("同じボタン", "Y"), ("なのに、なぜ", "W"), ("結果が違う", "R"), ("？", "W")],
+ "V2": [("押しただけ", "Y"), ("で、なぜ", "W"), ("ロボットと分かる", "R"), ("？", "W")],
+ "V3": [("なぜ", "W"), ("ロボット", "Y"), ("が押すと", "W"), ("止められる", "R"), ("のか？", "W")],
+ "V4": [("このチェック欄", "Y"), ("、", "W"), ("何を見ている", "R"), ("？", "W")],
+ "V5": [("なぜ", "W"), ("押し方", "R"), ("で", "W"), ("ロボット", "Y"), ("と分かる？", "W")],
+ "V6": [("ロボット", "Y"), ("が押したら", "W"), ("通れる", "R"), ("？", "W")],
 }
 CIRCLES = {"D": [(2104, 744, 300)], "E": [(1330, 815, 230)]}   # 名前 → [(中心x, 中心y, 半径)]（2560×1440 で。絵を見て決めた：D は右の画面の絵のテスト、E はまっすぐの点線）
 BAND_LABEL = {"E": (416, 352, 2144, 714)}   # 絵のチェック欄に字を書く所（E_2.png の白い札）
@@ -114,14 +121,15 @@ def band_comp(choice):
     RED2 = (240, 40, 40)
     for name, src in choice.items():
         k = name.split("_")[0]; im = T.bg(os.path.join(T.G, src))
-        if name in BAND_LABEL: im = label(im, BAND_LABEL[name])
+        lb = BAND_LABEL.get(name, BAND_LABEL.get(src.split("_")[0]))
+        if lb: im = label(im, lb)
         bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
         runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
         px = T.fit(runs, W - 120, 220, track=-0.03)
         f = T.F(px); tw = sum(f.getlength(ch) + px * -0.03 for t, _ in runs for ch in t)
         b = f.getbbox("な"); y = (bh - (b[3] - b[1])) // 2 - b[1]
         im, _ = T.line(im, ((W - tw) / 2, y), runs, px, (8, 8, 10), ew=0, track=-0.03, shadow=False)
-        for cx, cy, r in CIRCLES.get(name, []):
+        for cx, cy, r in CIRCLES.get(name, CIRCLES.get(src.split("_")[0], [])):
             lay = Image.new("RGBA", (W, H)); dl = ImageDraw.Draw(lay)
             dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
             dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=RED2 + (255,), width=26)
