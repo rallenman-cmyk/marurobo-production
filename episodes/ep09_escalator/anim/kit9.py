@@ -26,9 +26,9 @@ Y_SKIRT = YW + 0.005        # 段の横の壁（すき間 5mm）
 HR_H = 0.95                 # 手すりの高さ（踏む面から）
 CLAD_Y = YW + 0.24          # 外の板（骨組みのおおい）の y
 XR_PIT = G.X_HI_END + G.RG + 2.4      # 上の機械の部屋の右の端（歯車の右に、まるロボが立てる所とモーター）
-Z_PIT_HI = G.H - 1.6                  # 上の機械の部屋の床
+Z_PIT_HI = G.H - (2 * G.TREAD_DZ + G.DIP + 2 * G.RG + 0.2)   # 上の機械の部屋の床（戻る段のいちばん下より 0.2 下）
 XL_PIT = G.X_LO_END - G.RG - 1.5      # 下の機械の部屋の左の端（下の歯車の左に、まるロボが立てる所）
-Z_PIT_LO = -(2 * G.RG + G.TREAD_DZ + 0.55)   # 下の機械の部屋の床（戻る側の下）
+Z_PIT_LO = -(2 * G.TREAD_DZ + G.DIP + 2 * G.RG + 0.2)         # 下の機械の部屋の床（戻る段のいちばん下より 0.2 下）
 LID_HI = (G.X_HI_END + G.RG + 0.35, G.X_HI_END + G.RG + 1.75)   # 上のふた（歯車の右の上。下りると機械の部屋の床）
 LID_LO = (XL_PIT + 0.1, G.X_LO_END - G.RG - 0.3)                 # 下のふた
 Y_HR = YW + 0.17            # 手すり
@@ -121,7 +121,7 @@ def clad_profile(n=220):
         if x >= xs[-1]: return zs[-1]
         i = bisect.bisect_right(xs, x) - 1; u = (x - xs[i]) / max(1e-9, xs[i + 1] - xs[i]); return zs[i] + (zs[i + 1] - zs[i]) * u
     xl = XL_PIT; xr = XR_PIT
-    drop = 2 * G.RG + G.TREAD_DZ + 0.55; zr = Z_PIT_HI; xm = G.X_HI_END - 0.8
+    drop = 2 * G.RG + 2 * G.TREAD_DZ + G.DIP + 0.2; zr = Z_PIT_HI; xm = G.X_HI_END - 0.8
     out = []
     for k in range(n + 1):
         x = xl + (xr - xl) * k / n
