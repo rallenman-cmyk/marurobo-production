@@ -125,8 +125,14 @@ def arrow(im, p0, p1, bend=0.35, w=34, col=RED, edge=WHITE):
     lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay)
     sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
     ds.line([(x + 10, y + 14) for x, y in body], fill=(0, 0, 0, 110), width=w + 16, joint="curve"); ds.polygon([(x + 10, y + 14) for x, y in head], fill=(0, 0, 0, 110))
-    d.line(body, fill=edge + (255,), width=w + 16, joint="curve"); d.polygon(head, fill=edge + (255,), outline=edge + (255,), width=16)
-    d.line(body, fill=col + (255,), width=w, joint="curve"); d.polygon(head, fill=col + (255,))
+    # 線は点ごとに丸を押して描く（太い線を d.line でつなぐと、短い矢印や曲げの少ない矢印で切れ目が出た。2026-11-20）
+    def stroke(dr, r, c):
+        for (ax, ay), (bx_, by_) in zip(body, body[1:]):
+            n = max(1, int(math.hypot(bx_ - ax, by_ - ay) / 3))
+            for k in range(n + 1):
+                x_, y_ = ax + (bx_ - ax) * k / n, ay + (by_ - ay) * k / n; dr.ellipse((x_ - r, y_ - r, x_ + r, y_ + r), fill=c)
+    stroke(d, (w + 16) / 2, edge + (255,)); d.polygon(head, fill=edge + (255,), outline=edge + (255,), width=16)
+    stroke(d, w / 2, col + (255,)); d.polygon(head, fill=col + (255,))
     return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(8))), lay)
 def bg(path):
     return Image.open(path).convert("RGB").resize((W, H), Image.LANCZOS).convert("RGBA")

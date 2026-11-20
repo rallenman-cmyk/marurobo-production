@@ -30,18 +30,42 @@ PLANS = {
         "its back camera pointing at the code, the instant before scanning (we see the back of the phone, no screen). The robot is small at the lower "
         "left (x 4-24%, y 60-98%), looking up at the code, curious."),
 }
+PLANS.update({   # 2026-11-20 ユーザー「C はおけ、なぜこっちは読めるみたいな切り口も欲しい、あとは他の切り口も」
+ "QD": ("Same bright clean white desk across the whole frame. Two identical large crisp QR codes on white cards stand facing the camera straight on: "
+        "the LEFT card at x 4-40%, the RIGHT card at x 60-96%, both at y 25-92%. The middle (x 40-60%) is EMPTY plain background (an arrow will be added). "
+        "LEFT card: the robot SITS on its lower-right corner, covering a big part (about a third) of the code. RIGHT card: no robot; only a few small black "
+        "ink drops scattered on its white squares (small but clearly visible). Nothing else."),
+ "QE": ("Two panels side by side separated by a thin white gap (before / after), same bright clean desk. LEFT panel (before): a large crisp QR code "
+        "printed on white paper lies on the desk facing the camera; next to it a small glass ink bottle is tipping over, a first drop of black ink flying "
+        "toward the paper; the robot stands behind the bottle, surprised (it bumped the bottle with its body). RIGHT panel (after): a large smartphone seen "
+        "from the front standing upright, its whole screen plain blank glowing white (nothing on it). Leave the middle gap calm (an arrow will be added)."),
+ "QF": ("Close-up, bright soft daylight. One very large crisp QR code printed on a white card faces the camera straight on, filling x 30-92%, y 22-96%; its "
+        "three big square corner markers (top-left, top-right, bottom-left) are clearly visible and crisp. The robot is small at the lower left (x 4-24%, "
+        "y 58-98%), looking up at the top-left corner marker, curious."),
+ "QG": ("Close-up, bright soft daylight. One very large crisp QR code printed on a white card faces the camera straight on, filling x 30-92%, y 22-96%; "
+        "in its exact center a plain round teal badge with a simple white leaf shape covers the middle of the code (a logo, no letters). A smartphone "
+        "enters from the upper right, its back camera pointing at the code, the instant before scanning (no screen visible). The robot is small at the "
+        "lower left (x 4-24%, y 58-98%), looking up at the logo, curious."),
+})
 T.PLANS.update(PLANS)
 BAND = {   # 案 → [(字, 色)]。物の名前＝黄、おかしな所・結果＝赤
  "QA": [("なぜ", "W"), ("QRコード", "Y"), ("は", "W"), ("小さな汚れ", "R"), ("で読めない？", "W")],
  "QB": [("QRコード", "Y"), ("を体で隠すと", "W"), ("どうなる", "R"), ("？", "W")],
  "QC": [("なぜ", "W"), ("QRコード", "Y"), ("は", "W"), ("欠けても読める", "R"), ("のか？", "W")],
+ "QD": [("なぜ", "W"), ("こっち", "R"), ("の", "W"), ("QRコード", "Y"), ("だけ読める？", "W")],
+ "QE": [("QRコード", "Y"), ("にインクをこぼすと", "W"), ("どうなる", "R"), ("？", "W")],
+ "QF": [("なぜ", "W"), ("QRコード", "Y"), ("の角には", "W"), ("四角", "R"), ("があるのか？", "W")],
+ "QG": [("なぜ", "W"), ("QRコード", "Y"), ("は", "W"), ("ロゴ", "R"), ("があっても読める？", "W")],
 }
 # 印の位置は、10% の目盛りを重ねた一覧で絵を見て決めた（2560×1440）。QR・まるロボ・帯にかけない
 MARKS = {"QA_2": [("ok", 175, 470, 105), ("ng", 2390, 470, 105)],   # 左右の比べ：左＝隠しても ✓、右＝小さな汚れで ✕（QR の外の余白に）
-         "QB_1": [("q", 1958, 880, 200)]}                           # 前→後：右のスマホの画面に赤い ？（結果を隠す）
+         "QB_1": [("q", 1958, 880, 200)],
+         "P2C_2": [("ok", 880, 470, 100), ("ng", 2465, 365, 92)]}  # D は前に描いた比べの絵（P2C_2：左を空けて QR を右に寄せた絵）。Gemini が 402 で描けなかったため                           # 前→後：右のスマホの画面に赤い ？（結果を隠す）
 CIRCLES = {"QA_2": [(1840, 840, 150)],                              # 右の QR の汚れ
-           "QC_1": [(1720, 1170, 210)]}                             # 欠けた角
-ARROWS = {"QB_1": [((1290, 880), (1610, 880))]}                     # 前→後の赤い太い矢印（2 つの絵の間）
+           "QC_1": [(1720, 1170, 210)],
+           "P2C_2": [(2110, 560, 165)]}                              # D：右の QR の汚れ（小さい幅でも比べる物が分かるように）                             # 欠けた角
+ARROWS = {"QB_1": [((1290, 880), (1610, 880))],
+          "P2C_2": [((240, 820), (990, 820))]}                      # D：左の空いた所から、読める方（まるロボが座った左の QR）を指す                     # 前→後の赤い太い矢印（2 つの絵の間）
 RED2 = (240, 40, 40)
 
 
@@ -65,7 +89,7 @@ def band_comp(choice):
             dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
             dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=RED2 + (255,), width=26)
             im = Image.alpha_composite(im, lay)
-        for p0, p1 in ARROWS.get(key, []): im = T.arrow(im, p0, p1, bend=0.0, w=46, col=RED2)
+        for p0, p1 in ARROWS.get(key, []): im = T.arrow(im, p0, p1, bend=0.06, w=46, col=RED2)   # 曲げ 0 だと線に切れ目が出たので少しだけ曲げる
         bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
         runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
         px = T.fit(runs, W - 120, 220, track=-0.03)
