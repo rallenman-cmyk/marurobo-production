@@ -1,10 +1,10 @@
 {
-    "at":  "2026-11-21T01:04:14",
+    "at":  "2026-11-21T01:06:08",
     "ver":  "10",
     "state":  "描いています",
-    "job":  "20261120-095213-ep05_v8",
+    "job":  "20261119-092946-ep03_v10",
     "waiting":  [
 
                 ],
-    "progress":  "11/21 01:03  はじめます：5 カット・27 本（100 コマずつ）。残り 24 本。同時に 2 本。Blender：C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe"
+    "progress":  ""
 }
