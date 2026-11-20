@@ -774,11 +774,12 @@ class Plan:
         self.t = ta + 0.05; self.look(0, 0, hold=0.0); self.tracks["roll"].set(ta + 0.05, 0.4, 0.0)
         self.t = ta + 0.9; self._lb_end(lid); return self
 
-    def peer(self, dur=1.6, label=None):
-        """のぞき込む：腰から前へ 24° 曲げて 2cm 沈み、目のレンズを前へ出して絞る（ピント合わせ）。少し左右を見て戻る"""
+    def peer(self, dur=1.6, bend=24.0, label=None):
+        """のぞき込む：腰から前へ 24° 曲げて 2cm 沈み、目のレンズを前へ出して絞る（ピント合わせ）。少し左右を見て戻る
+        bend：前へ曲げる角度（すぐ前に物があって、レンズが当たるときは小さく。5本目で足した）"""
         lid = self._lb(label)
         t0 = self.t
-        self.tracks["pitch"].set(t0, 0.7, 24.0); self.tracks["lift"].set(t0, 0.7, -0.02)
+        self.tracks["pitch"].set(t0, 0.7, bend); self.tracks["lift"].set(t0, 0.7, -0.02 * bend / 24.0)
         self.tracks["gaze_pitch"].set(t0, 0.1, -18.0)
         self.tracks["zoom"].set(t0 + 0.45, 0.25, 0.016); self.tracks["iris"].set(t0 + 0.45, 0.25, -0.15)
         tm = t0 + 0.7

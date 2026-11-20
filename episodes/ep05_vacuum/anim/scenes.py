@@ -370,7 +370,7 @@ def b_lidar(cl):
                 for nm, h in (("床", m.handle), ("上", mr.handle)):
                     mw = h.torso.matrix_world; print("DBGSWAP", round(tt, 2), nm, tuple(round(v, 3) for v in mw.translation), round(math.degrees(mw.to_euler()[2]), 1))
     AFTER_BAKE.append(_swap)
-    mr.peer(tj + 1.75, dur=2.2)        # 入れかわったら、そのまま「ふたをのぞきこみました」（一覧の peer）        # 「ふたをのぞきこみました」（一覧の peer）
+    mr.peer(tj + 1.75, dur=2.2, bend=10.0)        # 入れかわったら、そのまま「ふたをのぞきこみました」（一覧の peer。本番の体で、24° だと目のレンズがふたに入ったので 10° に）        # 「ふたをのぞきこみました」（一覧の peer）
     # ふたを透かす
     for nm in ("lid_glass", "lid_base", "lid_cap"):
         mm = [x for x in bpy.data.materials if x.name.startswith(nm)][0]

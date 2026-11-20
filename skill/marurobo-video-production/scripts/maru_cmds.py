@@ -70,7 +70,7 @@ class Maru:
     def nod(self, t, n=2): self.cmds.append((t, "nod", dict(n=n)))
     def shake(self, t): self.cmds.append((t, "shake", {}))
     def think(self, t, dur=2.2): self.cmds.append((t, "think", dict(dur=dur)))
-    def peer(self, t, dur=1.6): self.cmds.append((t, "peer", dict(dur=dur)))
+    def peer(self, t, dur=1.6, bend=24.0): self.cmds.append((t, "peer", dict(dur=dur, bend=bend)))
     def sigh(self, t): self.cmds.append((t, "sigh", {}))
     def look_around(self, t): self.cmds.append((t, "look_around", {}))
     def confused(self, t): self.cmds.append((t, "confused", {}))
