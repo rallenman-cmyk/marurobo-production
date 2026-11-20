@@ -34,3 +34,8 @@ for k, (a, b, t) in enumerate(L):
     if abs(d) > 0.35 or abs(dr) > 0.35: bad.append((round(a, 2), round(d, 2), why, round(dr, 2), t.replace("\\N", " ")[:26]))
 print("字幕 %d 枚。0.35 秒をこえてずれる 1 枚：%d" % (len(L), len(bad)))
 for x in bad: print("  %7.2f  %+.2f（%s）  前の版から %+.2f  %s" % x)
+# 2 行の字幕の行の切れ目（句読点・閉じかっこ・助詞のあとでない物を出す。言葉の途中「手が／かり」を見つける）
+OKEND = "、。！？」』）…をがにはでともへのやか"
+br = [(a, t) for a, b, t in L if "\\N" in t and not (t.split("\\N")[0][-1] in OKEND or t.split("\\N")[0].endswith(("から", "て", "で")))]
+print("行の切れ目が句読点・助詞のあとでない 2 行の字幕：%d" % len(br))
+for a, t in br: print("  %7.2f  %s" % (a, t.replace("\\N", "／")))
