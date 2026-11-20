@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "8"
+$VER = "10"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -60,6 +60,32 @@ function Status-Ready {
   Note ("終わった印の枝を取れませんでした：{0}" -f ($o -join " "))
   return $false
 }
+# 印の枝が詰まったとき（取り込みの途中で止まった・ずれた）の立て直し：
+#   こちらだけにある新しい印（done の中で、まだ送れていない分）を脇に取っておき、枝を GitHub と同じ中身に戻してから、印を戻して送り直す
+function Status-Heal {
+  try {
+    [void](G -C $stat rebase --abort)
+    [void](G -C $stat fetch -q origin $sbranch)
+    $keep = @()
+    $mb = "$(G -C $stat merge-base HEAD "origin/$sbranch" | Select-Object -First 1)".Trim()
+    if ($mb -match '^[0-9a-f]{40}$') { $keep = @(G -C $stat diff --name-only --diff-filter=A "$mb..HEAD" -- done | Where-Object { $_ -match '^done/[A-Za-z0-9_.-]+\.json$' }) }
+    $tmp = Join-Path $root "status_keep"
+    if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
+    New-Item -ItemType Directory -Force -Path (Join-Path $tmp "done") | Out-Null
+    foreach ($f in $keep) { $src = Join-Path $stat ($f -replace "/", "\"); if (Test-Path $src) { Copy-Item $src (Join-Path $tmp "done") -Force } }
+    foreach ($f in "agent.json", "pc_workers.json") { $src = Join-Path $stat $f; if (Test-Path $src) { Copy-Item $src $tmp -Force } }
+    [void](G -C $stat reset -q --hard "origin/$sbranch")
+    New-Item -ItemType Directory -Force -Path (Join-Path $stat "done") | Out-Null
+    Get-ChildItem (Join-Path $tmp "done") -File -ErrorAction SilentlyContinue | ForEach-Object { Copy-Item $_.FullName (Join-Path $stat "done") -Force }
+    foreach ($f in "agent.json", "pc_workers.json") { $src = Join-Path $tmp $f; if (Test-Path $src) { Copy-Item $src $stat -Force } }
+    [void](G -C $stat add -A)
+    [void](G -C $stat -c user.name=marurobo-pc -c user.email=pc@marurobo.invalid commit -q -m "描画係：印の枝を立て直した")
+    $o = G -C $stat push -q origin $sbranch
+    if ($LASTEXITCODE -eq 0) { Note "印の枝を立て直して、送り直しました"; return $true }
+    Note ("印の枝の立て直しでも送れませんでした：{0}" -f ($o -join " "))
+  } catch { Note ("印の枝の立て直しで止まりました：{0}" -f $_.Exception.Message) }
+  return $false
+}
 function Status-Push([string]$msg) {
   if (-not (Status-Ready)) { return }
   for ($t = 0; $t -lt 3; $t++) {
@@ -70,6 +96,7 @@ function Status-Push([string]$msg) {
     [void](G -C $stat pull -q --rebase origin $sbranch)
     Start-Sleep -Seconds (5 * ($t + 1))
   }
+  if (Status-Heal) { return }
   Note "終わった印を送れませんでした（次の機会にまとめて送ります）"
 }
 function Write-Json([string]$path, $obj) {
@@ -325,7 +352,22 @@ function Run-Job($job) {
   }
   if ($preempt) { Start-Sleep -Seconds 5; return }
   $min = [int]((Get-Date) - $t0).TotalMinutes
-  Write-Json (Join-Path $stat ("done\{0}.json" -f $job.id)) ([ordered]@{ id = $job.id; state = $state; finished = (Get-Date).ToString("s"); minutes = $min; tail = @($tail | Select-Object -Last 12) })
+  # そろわなかったときは、原因が分かるように Blender の記録（blender_log*.txt）の最後と、足りないコマの範囲も印に入れる
+  $btail = @(); $missing = @()
+  if ($state -ne "done" -and -not $err) {
+    try {
+      $mo = [regex]::Match((Get-Content $ps1.FullName -Raw -Encoding UTF8), '\$out = Join-Path \$root "(render_[A-Za-z0-9_.-]+)"')
+      if ($mo.Success) {
+        $od = Join-Path $root $mo.Groups[1].Value
+        foreach ($bl in @(Get-ChildItem $od -File -Filter "blender_log*.txt" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 2)) {
+          $btail += ("--- {0}" -f $bl.Name)
+          $btail += @(Get-Content $bl.FullName -Tail 30 -Encoding UTF8 -ErrorAction SilentlyContinue | ForEach-Object { $x = "$_"; if ($x.Length -gt 300) { $x.Substring(0, 300) } else { $x } })
+        }
+      }
+      $missing = @($tail | Where-Object { $_ -match "が止まりました" } | ForEach-Object { ($_ -replace "^.*\]\s*", "") -replace "\s*が止まりました.*$", "" } | Select-Object -Unique)
+    } catch { }
+  }
+  Write-Json (Join-Path $stat ("done\{0}.json" -f $job.id)) ([ordered]@{ id = $job.id; state = $state; finished = (Get-Date).ToString("s"); minutes = $min; tail = @($tail | Select-Object -Last 12); stopped = @($missing); blender_tail = @($btail) })
   if ($state -eq "done") { Note ("終わりました：{0}（{1} 分）" -f $job.id, $min) }
   else { Note ("そろいませんでした：{0}（{1} 分）。印に記録して、次へ進みます" -f $job.id, $min) }
   Status-Push ("{0}：{1}" -f $job.id, $state)

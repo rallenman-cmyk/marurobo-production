@@ -211,10 +211,75 @@ class MaruR:
             st = e_.get("strength", 1.0)
             g = g_ * (max(0.3, min(1.0, st / 3.0)) if e_["kind"] in ("takeoff", "land") else max(0.3, st))
             ev(e_["t"], k_, round(g, 3), "maru_c")
-        self.p = p
+        self.p = p; self.frames = frames
         return frames
 
 
+PRESS_BAD = []
+
+
+def press_under(m, frames, step=2):
+    """まるロボの足が乗っている物（kit の PRESS）を、乗っている間だけ沈める（v8：2026-11-20「まるロボが乗ったボタンは沈ませて」6 件。
+    v7 までは乗るキーを手で 1 つずつ hold していて、本物の動きに替えたときに抜けた）。足が地面に着いている（stance）間だけ数える"""
+    from mathutils import Vector
+    if not PRESS: return
+    sc = bpy.context.scene; occ = {}; SINK = []
+    near = lambda o: True
+    for fr in frames[::step]:
+        sc.frame_set(f(fr["t"]))
+        pts = [Vector((a_ * m.s for a_ in ft["ankle"])) for ft in fr["feet"] if ft["mode"] == "stance"]
+        if not pts: continue
+        for o, dep, z0 in PRESS:
+            mw = o.matrix_world
+            if min((mw.translation - p_).length for p_ in pts) > 0.5: continue
+            inv = mw.inverted(); bb = [Vector(c) for c in o.bound_box]
+            x0, x1 = min(c.x for c in bb), max(c.x for c in bb); y0, y1 = min(c.y for c in bb), max(c.y for c in bb); ztop = max(c.z for c in bb)
+            top_w = (mw @ Vector((0, 0, ztop))).z
+            for p_ in pts:
+                q = inv @ p_
+                if x0 - 0.02 <= q.x <= x1 + 0.02 and y0 - 0.02 <= q.y <= y1 + 0.02 and -0.04 <= p_.z - top_w <= 0.06 + 0.25 * m.s:
+                    occ.setdefault(o, []).append(fr["t"]); break
+    dt = step / FPS + 1e-3
+    for o, dep, z0 in PRESS:
+        ts = occ.get(o)
+        if not ts: continue
+        iv = [[ts[0], ts[0]]]
+        for t in ts[1:]:
+            if t - iv[-1][1] <= dt * 1.6: iv[-1][1] = t
+            else: iv.append([t, t])
+        ad = o.animation_data
+        for t0, t1 in iv:
+            t1 += dt * 0.5; SINK.append((t0, t1, dep))
+            if ad and ad.action:                              # 乗っている間の手書きの上下（押す・浮き上がる）は消す
+                for fc in ad.action.fcurves:
+                    if fc.data_path == "location" and fc.array_index == 2:
+                        for kp in [kp for kp in fc.keyframe_points if f(t0) - 1 <= kp.co.x <= f(t1) + 2][::-1]: fc.keyframe_points.remove(kp)
+            key(o, ("location", 2), t0 - 0.05, z0, "LINEAR"); key(o, ("location", 2), t0 + 0.01, z0 - dep, "LINEAR")      # 足が着いた時には沈みきっている
+            key(o, ("location", 2), t1, z0 - dep, "LINEAR"); key(o, ("location", 2), t1 + 0.08, z0, "LINEAR")
+    # まるロボも、沈んだキーと一緒に沈む（足がキーの上に浮かない）。置き場所の親の高さで
+    if SINK and not m.drops:
+        par = m.h.parent; z = par.location.z
+        U = []                                               # 重なる区間（両足が別のキー）はまとめる（間で浮かない）
+        for t0, t1, dep in sorted(SINK):
+            if U and t0 - 0.06 <= U[-1][1] + 0.08: U[-1] = [U[-1][0], max(U[-1][1], t1), max(U[-1][2], dep)]
+            else: U.append([t0, t1, dep])
+        for t0, t1, dep in U:
+            key(par, ("location", 2), t0 - 0.05, z, "LINEAR"); key(par, ("location", 2), t0 + 0.01, z - dep, "LINEAR")
+            key(par, ("location", 2), t1, z - dep, "LINEAR"); key(par, ("location", 2), t1 + 0.08, z, "LINEAR")
+    # 点検：足が乗っているのに沈んでいない・乗っていないのに沈んだまま、のコマを出す（v8：2026-11-20「乗ってるのに沈んでたボタンが戻るとこあった」）
+    bad = []
+    for fr in frames[::step]:
+        sc.frame_set(f(fr["t"]))
+        for o, dep, z0 in PRESS:
+            ts_ = occ.get(o, ())
+            on = fr["t"] in ts_ and (fr["t"] - 0.1) in [x for x in ts_ if x >= fr["t"] - 0.11 and x <= fr["t"] - 0.09] or (fr["t"] in ts_ and any(abs(x - (fr["t"] - 0.1)) < 0.05 for x in ts_))   # 乗った最初の 0.1 秒（沈んでいく途中）は数えない
+            if on and o.location.z > z0 - dep * 0.7: bad.append((round(fr["t"], 2), o.name, "乗っているのに戻っている"))
+    sc.frame_set(0)
+    PRESS_BAD.extend(bad)
+    print("【まるロボ】乗って沈めた物：", sum(1 for o in occ), "個。乗っているのに戻ったコマ：", len(bad), bad[:6])
+
+
 def bake_maru(T0, T1):
-    for m in MARU_ALL: m.bake(T0, T1)
+    for m in MARU_ALL:
+        m.bake(T0, T1); press_under(m, m.frames)
     if MARU_LATE: print("【まるロボ】間に合わなかった動き（遅れた秒）：", MARU_LATE)

@@ -23,4 +23,4 @@ for x in sorted(ls.split()):
     if jid in told: continue
     d = show(x); q = "pc_render/queue/%s.json" % jid
     req = json.load(open(q)) if os.path.exists(q) else {}
-    print("未連絡", json.dumps(dict(id=jid, state=d["state"], minutes=d["minutes"], session=req.get("session", ""), name=req.get("name", ""), tail=d.get("tail", [])[-6:]), ensure_ascii=False))
+    print("未連絡", json.dumps(dict(id=jid, state=d["state"], minutes=d["minutes"], session=req.get("session", ""), name=req.get("name", ""), tail=d.get("tail", [])[-6:], stopped=d.get("stopped", []), blender_tail=d.get("blender_tail", [])), ensure_ascii=False))

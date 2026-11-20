@@ -356,7 +356,7 @@ def b_lidar(cl):
     m.jump(tj - 0.95, (-1.5, 0.55), TOP, z_to=sp.d["top_z"] + 0.004, apex=0.17)    # 見る→しゃがむ→「ぴょん」で蹴る（一覧の jump_to）
     mr = Maru((0, 0, 0), face=fj - sa_)      # 先輩の上（置き場所の親を先輩の子に）。床から跳んで来た向きのまま
     hp = mr.handle.parent; hp.parent = sp.root; hp.matrix_parent_inverse = Matrix.Identity(4); hp.location = (MRX, MRY, sp.d["top_z"] + 0.004)
-    hide_key(m.root, s("09-01") - 1.5, False)
+    m.hide(s("09-01") - 1.5, False)
     TSW = [tj + 1.6]           # 入れかえの時刻（焼いたあとに、着いた本当の時刻 ＋ 受け止め終わりへ直す）
 
     def _swap(m=m, mr=mr, tj=tj):
@@ -716,7 +716,7 @@ def b_rug(cl):
     MP16 = (rx1 + MG - PUSH, yc_)       # 押したあと、そのまま立って見る所
     m = Maru((rx1 + MG, yc_, 0), face=plan.face_deg(-1, 0))
     m.walk(tp0, Ta, (MP16[0], MP16[1], 0))                       # 巻きを押して数歩
-    if cut(cl, "S16b"): hide_key(m.root, CLOCK["T0"] - 1.0, True)     # v6：車輪の寄りでは、本物の大きい体がカメラの前を横切るので隠す
+    if cut(cl, "S16b"): m.hide(CLOCK["T0"] - 1.0, True)     # v6：車輪の寄りでは、本物の大きい体がカメラの前を横切るので隠す
     m.at(s("16-03") + 1.4, face=face_to(MP16, (-0.6, 0.0)))
     m.at(s("16-03") + 2.6, face=face_to(MP16, (-1.0, -0.2)))
     m.confused(s("16-06") + 0.1)       # 「首をかしげています」

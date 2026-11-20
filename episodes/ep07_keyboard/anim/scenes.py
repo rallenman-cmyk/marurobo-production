@@ -96,9 +96,9 @@ def b_desk(cl):
     M.at(-100.0, loc=(QO[0] - 0.7, QO[1] - 0.85, 0.0), face=-40)
     M.walk(s("01-01") + 0.4, e("01-01") + 0.2, fl)
     M.wobble(w("01-02", "腕") - 0.2, e("01-02") + 0.1, 10, 0.5)      # 01-02：腕がない（体を左右にふる）
-    t = w("01-03", "跳ねて"); M.jump(t + 0.45, P(Q, "A"))
-    t = w("01-04", "ぴょん"); M.hop(t - 0.2, h=0.22, d=0.4); Q.press("A", t + 0.18, gain=0.7)
-    Q.hold("A", t + 0.4, s("02-04") + 0.35)
+    # 01-04「ぴょん」で A に跳び乗り、「カタッ」で A が鳴る（v7「ぴょんって言葉の時に乗るようにして」）。乗っている間のキーは足の位置から自動で沈む
+    M.at(w("01-03", "跳ねて"), look=16); M.at(e("01-03"), look=0)      # 01-03：キーボードを見上げる
+    t = w("01-04", "ぴょん"); M.jump(t + 0.3, P(Q, "A")); Q.press("A", w("01-04", "カタッ"), gain=0.7, motion=False)
     # 02：B をさがす（右に S・左は何もない・上に Q）
     # 向き：となりの S（右）を見る → 反対側（左）を見る（2026-11-16 ユーザー「まるロボ見てる方向が逆」で左右を入れかえた）
     M.at(w("02-01", "すぐとなり"), face=35)
@@ -107,7 +107,6 @@ def b_desk(cl):
     t = s("02-04"); M.at(t, face=-70)
     SR = ("Q", "W", "S", "D", "K")      # 最後は K（上の段の QWERTY の前に立たない。03 でその 6 個が浮き上がるため）
     hop_path(Q, "A" + "".join(SR), t + 0.4, 0.55, M, line=False)      # A から Q W S D K へ続けて跳ぶ（Q を押すのは t + 0.95。v6 と同じ）
-    Q.hold("K", t + 0.4 + 4 * 0.55 + 0.6, w("04-02", "遠く") - 0.1)
     M.wobble(e("02-04") - 0.6, e("02-04"), 8, 0.3)
     # 03：上から。まるロボは K で止まったまま（B へは行かない。2026-11-16 ユーザー「この話してるときにＢのとこ行ってるのおかしい」）
     # 03-01：声が字を言う瞬間に光る（v5「音声に合わせて対象のキーを光らせて」。時刻は voice/letter_times.json）
@@ -121,7 +120,6 @@ def b_desk(cl):
     ta = w("04-02", "遠く"); M.at(e("04-01"), face=-90)
     hop_path(Q, "KJ", ta, 0.5, M, line=False, h=0.12)
     tb = w("04-02", "たくさん"); hop_path(Q, "JQ", tb, 1.0, M, line=False, h=0.45)
-    Q.hold("J", ta + 0.1, tb - 0.85); Q.hold("Q", tb + 1.05, s("05-01") + 0.4)
     # 04-03〜04：ABC 順のキーボードが右にすべりこむ → まるロボはそちら（右）を向いて、跳ねてよろこぶ（v5「まるロボはabcのキーボードの方を向かせて」）
     M.at(s("04-03") - 0.3, face=-60); M.at(s("04-03") + 2.4, face=80)
     M.hops(s("04-04") + 0.3, n=2)
@@ -134,7 +132,6 @@ def b_desk(cl):
     hop_path(A, "MARUROBO", t2 + 4.3, dt2, M, col=ORANGE_L, name="path_a")
     # 06：上から結果。まるロボは O の上できょとん（首をかしげる）
     M.at(s("06-04"), face=0.0); M.tilt(w("06-04", "ほとんど"), 14); M.tilt(e("06-04") + 0.3, 0)
-    A.hold("O", e("05-05") + 0.9, s("07-03"))
     # 07：いろは歌（2 台で同時に。道のりの線が伸びる。まるロボは跳ねつかれて、ぜえぜえ）
     t0 = s("07-03") + 0.3; t1 = e("07-03") + 0.2; dt = (t1 - t0) / (len(IROHA) - 1)
     lq = hop_path(Q, IROHA, t0, dt, None, col=BLUE_L, name="iro_q", z=0.105)
@@ -150,10 +147,8 @@ def b_desk(cl):
     for ch, wd in (("Z", "この3つ"), ("S", "光らせて"), ("E", "みると")):
         Q.light(ch, w("19-03", wd), e("19-05") + 0.5, col="#FFD24A")
     hop_path(Q, "ZSE", w("19-04", "S"), 0.9, M, line=False)
-    Q.hold("Z", s("19-03") - 0.9, w("19-04", "S") - 0.3); Q.hold("E", w("19-04", "S") + 2 * 0.9 + 0.3, e("19-05") + 0.6)
     # 21：首をかしげる
     M.at(s("20-01"), loc=P(Q, "G"), face=0.0, interp="CONSTANT"); M.tilt(w("21-02", "もっと"), 12); M.tilt(e("21-02"), 0)
-    Q.hold("G", s("21-01") - 0.4, e("21-03") + 0.6); Q.hold("G", s("27-02") + 0.2, e("27-06") + 1.0)
     # 23：速い並び（23-02 ですべりこむ。まるロボは跳ねて「おお」→ 23-06 で首をかしげる）
     M.jump(s("23-03") - 0.8, P(D, "A"), apex=0.32)      # 速い並びのキーボードへ、大きく跳んで移る
     hop_path(D, "AOEUIDHTNS", s("23-03") + 0.6, min(0.45, (e("23-04") - s("23-03")) / 11), M, line=False)
@@ -299,7 +294,6 @@ def b_shop(cl, night=False):
             ev(ta, "key", 0.4, "p_" + ch); tab.append(ta)
         M.path([p("B"), p("C")], [tab[1] - 0.03, tab[2] - 0.03])
         t_off = s("10-01") + 0.4
-        hold(pk["A"], Z0["A"], tab[0], tab[1] - 0.5); hold(pk["B"], Z0["B"], tab[1], tab[2] - 0.5); hold(pk["C"], Z0["C"], tab[2], t_off)
         # 09-04〜05：手前の列が左から、奥の列が右から、順に光る
         for i, ch in enumerate("ABCDEFGHIJKLMN"): glow_plate(pk[ch], w("09-04", "手前") + 0.12 * i, e("09-05") + 0.5, "#FFB45C", (0.13 * 0.8, 0.26), 0.031)
         for i, ch in enumerate("OPQRSTUVWXYZ"): glow_plate(pk[ch], w("09-05", "奥") + 0.12 * i, e("09-05") + 0.5, "#7FA8FF", (0.13 * 0.6, 0.16), 0.031)
@@ -859,6 +853,19 @@ if __name__ == "__main__" or True:
                     print("MARU_LOG", r_[0], r_[1], r_[2], "->", nx)
             print("MARU_LATE", json.dumps(MARU_LATE, ensure_ascii=False)); sys.exit(0)
         bake_maru(t0, t1)
+        if os.environ.get("MARU_PRESSCHECK"):     # 乗った物の点検だけ（描かない）
+            print("PRESSCHECK", CLIPNAME, len(PRESS_BAD), PRESS_BAD[:10])
+            for _t, _n, _ in PRESS_BAD[:3]:
+                _o = bpy.data.objects[_n]; _fc = [c for c in _o.animation_data.action.fcurves if c.data_path == "location" and c.array_index == 2][0]
+                print("  KEYS", _n, [(round(k.co.x / FPS + CLOCK["T0"], 2), round(k.co.y, 3), k.interpolation) for k in _fc.keyframe_points if abs(k.co.x / FPS + CLOCK["T0"] - _t) < 1.0])
+            sys.exit(0)
+        if os.environ.get("MARU_PROBE"):          # 物の高さを調べる（点検用）
+            _sc = bpy.context.scene
+            for _t in [float(x) for x in os.environ["MARU_PROBE"].split(",")]:
+                _sc.frame_set(f(_t)); bpy.context.view_layer.update()
+                _hi = sorted(((round(o.matrix_world.translation.z, 3), o.name) for o, _d, _z in PRESS ), reverse=True)[:8]
+                print("PROBE", _t, _hi)
+            sys.exit(0)
         if cm is not None: cm(t0)
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)

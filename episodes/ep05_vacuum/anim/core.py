@@ -141,7 +141,7 @@ class Maru(MC.Maru):
         MC.Maru.__init__(self, (loc[0], loc[1], z), face, s=s, face_offset=180, name="maru%d" % len(MARUS))
         self.loc = Vector((loc[0], loc[1], z)); self.face = face; self._last = {}
         self.g_ref = glow; self.offs = [(-1e9, Vector((0.0, 0.0, z)))]      # 置き場所の親のずれ（時刻, 世界の位置）
-        self.warps = []; self.nosound = []; self.layers05 = []; self.mutes = []
+        self.warps = []; self.nosound = []; self.hides = []; self.layers05 = []; self.mutes = []
         self.lens = self._find_mat(("Optical blue", "Maru lens"))
         self.white = self._find_mat(("Porcelain", "Maru white"))
         MARUS.append(self)
@@ -155,6 +155,10 @@ class Maru(MC.Maru):
         return None
 
     # ---- 置き場所の親のずれ
+    def hide(self, t, hidden):
+        """体を隠す・見せる印。体に動きを書き込んだ「あと」に付ける（v8：本番の PC で、書き込む前に付けたカットだけ止まったため）"""
+        self.hides.append((t, hidden))
+
     def poff(self, t):
         return [v for (tt, v) in self.offs if tt <= t + 1e-6][-1]
 
@@ -299,6 +303,7 @@ class Maru(MC.Maru):
             if any(a <= ts <= b for a, b in self.mutes): continue
             ev(ts, "maru:" + k_, MARU_GAIN * min(1.5, g_))                    # 一覧の動きの音（共通の maru_sfx）
         self.p = p
+        for th_, hd_ in getattr(self, "hides", []): hide_key(self.root, th_, hd_)
 
 
 AFTER_BAKE = []          # 焼いたあとに呼ぶ（まるロボの入れかえを、跳んで着いた本当の時刻に合わせる など）
