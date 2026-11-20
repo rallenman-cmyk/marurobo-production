@@ -56,6 +56,7 @@ for a, c, t in lines:
     _p = SJ._placement().get(t)
     ev_ = SO.events(a, c, t, os.path.join(SJ.VOICE, "line_%03d.wav" % _p["no"]), SJ, speed=_p.get("speed", 1.0), c_max=NEXT_START[a] - 0.05)
     SUBS += [(float(x), float(y), z) for x, y, z in ev_]
+SUBS = SO.balance(SUBS)      # v8：2 秒に足りない字幕は、となりから時間を借りる
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
