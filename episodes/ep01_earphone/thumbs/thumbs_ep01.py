@@ -194,8 +194,126 @@ def comp(choice):
     return made
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and sys.argv[1] in ("gen", "comp"):
     if sys.argv[1] == "gen":
         for a in sys.argv[2:]: gen(a)
     else:
         print("\n".join(comp(json.loads(sys.argv[2]))))
+
+
+# ======================================================================================================
+# 2026-11-20（2）サムネの構図の決まり（SKILL.md §9「サムネの構図の決まり」・4本目 thumbs04.py の band・big_card・q_mark）で作り直す
+#   上に黒い帯（高さの 17%）・白い極太字の 1 行の問い（物の名前は黄色、おかしな所・結果は赤）。帯の下は明るく清潔な 3D の絵
+#   形は 3 つ：L＝左右の比べ、M＝前→後、U＝アップ。印はだれでも分かる物（緑の ✓・赤の ✕・赤い ？・赤い丸・赤い矢印）。答えは見せない
+#   使い方: THUMB_WORK=… THUMB_FONT=… GEMINI_API_KEY=… python3 thumbs_ep01.py gen2 L M U ／ band '{"L": "L_1.png", …}'
+BRIGHT = ("Background art for a YouTube thumbnail, 16:9, bright clean soft 3D illustration (like a polished explainer channel: soft daylight, white "
+          "and light pastel colors, slightly low-poly smooth shading, crisp edges). ABSOLUTELY NO TEXT: no letters, no numbers, no words, no logos, "
+          "no speech bubbles, no signs with writing; phone screens plain and blank. The TOP 18% of the frame will be covered by a black title band, so "
+          "put nothing important there. Keep the bottom-right corner (x 86-100%, y 84-100%) free of important things.")
+HERO = ("The main character must match the reference images: a simple rounded 3D person with a smooth white round head, two small black dot eyes "
+        "and a small mouth, wearing a navy-and-white horizontally striped long-sleeve shirt and a yellow baseball cap. ")
+PLANS2 = {
+ # L：左右の比べ。同じ座席・同じスマホとイヤホン。違いは「曲の色」だけ。二つの曲が間で交わる所に赤い ？（答え＝つないだ相手を選ぶ・鍵 は見せない）
+ "L": (HERO + "Bright clean commuter train interior in soft daylight (white walls, light-blue bench seats, big windows with a pale city view). "
+       "Two passengers sit SIDE BY SIDE on the bench in the center, shoulder to shoulder, seen from the front in a chest-up framing so their heads "
+       "are large: LEFT is the main character; RIGHT is a similar simple rounded person with a smooth light-grey round head, black dot eyes and a "
+       "small mouth, wearing a dark blue jacket. Each wears ONE large glossy white wireless earbud in the ear on the side facing the other person, "
+       "and holds a smartphone at chest height. From the LEFT person's phone, a ribbon of glowing CYAN music notes curves up to HIS OWN earbud; "
+       "from the RIGHT person's phone, a ribbon of glowing YELLOW-ORANGE music notes curves up to HER OWN earbud. The two ribbons CROSS each "
+       "other in the empty air between their heads (an X shape), clearly, without mixing colors. Leave a clear empty space just above the crossing "
+       "point (a red question mark will be added there). Both look relaxed, enjoying their music."),
+ # M：前→後。左＝空いた電車でスマホとイヤホンが 1 本の光でつながる（✓）、真ん中に赤い矢印、右＝満員電車で光が入り乱れる（結果は赤い ？ で隠す）
+ "M": ("Split image: two equal panels side by side with a thin white vertical gap in the middle. Both panels show the same bright clean commuter "
+       "train interior in soft daylight. In BOTH panels, the SAME large white smartphone (screen plain blank light-blue) stands upright at the "
+       "lower middle of the panel and the SAME large glossy white wireless earbud floats front-facing beside it, at the same size and position. "
+       "LEFT panel: the train car is EMPTY and calm; a single clean glowing CYAN arc of light connects the phone to the earbud. RIGHT panel: the "
+       "train car is PACKED with simple rounded passengers (smooth round heads, dot eyes), all holding phones, and many glowing arcs of light in many "
+       "colors (cyan, yellow, pink, green) crisscross all around the phone and the earbud. Keep the area directly ABOVE each panel's earbud empty "
+       "(marks will be added there) and keep the middle gap area calm (a red arrow will be added there)."),
+ # U：アップ。音が止まった一瞬：主人公がイヤホンを手で押さえて「あれ？」。横に赤い ？（答え＝電波がぶつかる・間に合わない は見せない）
+ "U": (HERO + "Close-up, chest-up portrait of the main character sitting in a bright clean commuter train in soft daylight, other passengers "
+       "softly blurred in the background. He presses his left hand (a simple rounded mitten-like hand) lightly against his left ear, where ONE large "
+       "glossy white wireless earbud is clearly visible facing the camera; eyebrows raised and mouth a small 'o' in surprise, eyes glancing up to the "
+       "side as if listening for the sound. In his other hand a smartphone with a plain blank light screen. The face and the earbud are large, "
+       "centered slightly left (x 22-60%, y 18-100%). Keep the right side (x 66-92%, y 24-72%) calm and empty (a big red question mark will be "
+       "added there)."),
+}
+REFS2 = {"L": ("hero_ear.png", "hero_close.png", "train_crowd.png"), "M": ("giant_earbud.png", "train_crowd.png"), "U": ("hero_ear.png", "hero_close.png")}
+RED2 = (240, 40, 40)
+
+
+def gen2(name):
+    parts = [{"text": BRIGHT + "\n\n" + PLANS2[name] + "\n\nThe attached images are references from the video: match the character design and the "
+              "earbud shape, but redraw everything in the bright clean soft 3D illustration style described above."}]
+    for ref in REFS2[name]:
+        p = os.path.join(S, "src", ref)
+        if os.path.exists(p): parts.append({"inline_data": {"mime_type": "image/png", "data": base64.b64encode(open(p, "rb").read()).decode()}})
+    body = {"contents": [{"role": "user", "parts": parts}],
+            "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9", "imageSize": "2K"}}}
+    req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image:generateContent", data=json.dumps(body).encode(),
+                                 headers={"Content-Type": "application/json", "x-goog-api-key": os.environ["GEMINI_API_KEY"]})
+    r = json.load(urllib.request.urlopen(req, timeout=300)); k = len(glob.glob(os.path.join(G, name + "_*.png")))
+    for c in r.get("candidates", []):
+        for pt in c.get("content", {}).get("parts", []):
+            d = pt.get("inlineData") or pt.get("inline_data")
+            if d:
+                k += 1; fn = os.path.join(G, "%s_%d.png" % (name, k)); open(fn, "wb").write(base64.b64decode(d["data"])); print(fn)
+
+
+def q_mark(im, c, r=260):
+    """大きな「？」の札（白い丸に赤い ？）。4本目の thumbs04.py と同じ"""
+    x, y = c; lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.ellipse((x - r + 10, y - r + 14, x + r + 10, y + r + 14), fill=(0, 0, 0, 110))
+    d.ellipse((x - r - 14, y - r - 14, x + r + 14, y + r + 14), fill=(255, 255, 255, 255)); d.ellipse((x - r, y - r, x + r, y + r), fill=(235, 40, 40, 255))
+    f = F(int(r * 1.5)); b = f.getbbox("？"); d.text((x - (b[0] + b[2]) / 2, y - (b[1] + b[3]) / 2), "？", font=f, fill=(255, 255, 255, 255))
+    return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
+
+
+def badge(im, c, ok, r=110):
+    """緑の ✓ ／ 赤の ✕（白いふち）。2本目の thumbs_v3.py と同じ"""
+    x, y = c; lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.ellipse((x - r + 8, y - r + 12, x + r + 8, y + r + 12), fill=(0, 0, 0, 120))
+    d.ellipse((x - r - 12, y - r - 12, x + r + 12, y + r + 12), fill=WHITE + (255,)); d.ellipse((x - r, y - r, x + r, y + r), fill=((40, 170, 70) if ok else (220, 40, 40)) + (255,))
+    if ok: d.line([(x - r * 0.48, y + r * 0.02), (x - r * 0.12, y + r * 0.38), (x + r * 0.5, y - r * 0.36)], fill=WHITE + (255,), width=int(r * 0.24), joint="curve")
+    else:
+        k = r * 0.4; d.line([(x - k, y - k), (x + k, y + k)], fill=WHITE + (255,), width=int(r * 0.24)); d.line([(x - k, y + k), (x + k, y - k)], fill=WHITE + (255,), width=int(r * 0.24))
+    return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
+
+
+def band(im, runs):
+    """上の黒い帯（高さの 17%）に、白い極太字の 1 行の問い（ふちなし）。4本目の band_comp と同じ"""
+    bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
+    px = fit(runs, W - 120, 220, track=-0.03); f = F(px); tw = sum(f.getlength(ch) + px * -0.03 for t, _ in runs for ch in t)
+    b = f.getbbox("な"); y = (bh - (b[3] - b[1])) // 2 - b[1]
+    im, _ = line(im, ((W - tw) / 2, y), runs, px, (8, 8, 10), ew=0, track=-0.03, shadow=False)
+    return im, px
+
+
+BAND = {"L": [("なぜ", WHITE), ("隣の曲", YEL), ("は", WHITE), ("混ざらない", RED2), ("？", WHITE)],   # 「のか」を省いて字を大きく（210 幅で読めるように。見本の「なぜ家の窓は小さくなった？」の形）
+        "M": [("満員電車で", WHITE), ("イヤホン", YEL), ("は", WHITE), ("どうなる", RED2), ("？", WHITE)],
+        "U": [("なぜ", WHITE), ("イヤホン", YEL), ("の音は", WHITE), ("途切れる", RED2), ("？", WHITE)]}
+MARKS2 = {   # 絵の名前 → [("q"|"ok"|"ng", x, y, r) か ("arrow", x0, y0, x1, y1)]（2560×1440。描いた絵に 5% の目盛りを重ねて決めた）
+ "L_1": [("q", 1280, 440, 128)],                                   # 二つの曲が交わる所の上、二人の頭の間（顔・イヤホン・帯にかけない）
+ "M_2": [("ok", 1126, 576, 105), ("arrow", 1050, 346, 1510, 346), ("q", 1907, 475, 125)],   # 左のイヤホンの右に ✓、天井の高さで左→右の矢印、右は光の入り乱れる所に ？（人の顔にかけない）
+ "U_1": [("q", 2048, 677, 230)],                                   # 顔の右の窓の所（顔・イヤホン・右下にかけない）
+}
+
+
+def band_comp(choice):
+    out = []
+    for key, src in choice.items():
+        im = bg(os.path.join(G, src)); name = src.rsplit(".", 1)[0]
+        for m in MARKS2.get(name, []):
+            if m[0] == "q": im = q_mark(im, m[1:3], m[3])
+            elif m[0] in ("ok", "ng"): im = badge(im, m[1:3], m[0] == "ok", m[3])
+            elif m[0] == "arrow": im = arrow(im, m[1:3], m[3:5], bend=0.0, w=60, col=RED2)   # 前→後の赤い太い矢印
+        im, px = band(im, BAND[key])
+        out.append(save(im, "ep01b_%s" % key)); print(name, "帯の字", px, "px（1280 幅で", px // 2, "px）")
+    return out
+
+
+if __name__ == "__main__" and sys.argv[1] in ("gen2", "band"):
+    if sys.argv[1] == "gen2":
+        for a in sys.argv[2:]: gen2(a)
+    else:
+        print("\n".join(band_comp(json.loads(sys.argv[2]))))
