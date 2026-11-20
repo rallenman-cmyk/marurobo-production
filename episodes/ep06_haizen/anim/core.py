@@ -129,14 +129,14 @@ class Maru:
             piv = empty((0, -0.485, 0.04 + 0.235)); piv.parent = self.body
             lid = sphere(bpy.data.materials["maru_white"], (0, 0, -0.235), 0.238, scale=(1, 0.55, 1), parent=piv)
             piv.scale = (1, 1, 0.001); self._lid = piv
-            key(piv, ("scale", 2), CLOCK["T0"] - 5, 0.001)
+            key(piv, ("scale", 2), CLOCK.get("TI", CLOCK["T0"]) - 3, 0.001)
             # 閉じた目の線（「︶」）：閉じ終わってから出る
             seam = empty((0, -0.62, 0.04)); seam.parent = self.body
             dk = mat("lidline", "#2B3440", rough=0.5)
             for k in range(17):
                 a0 = math.radians(-60 + 7.5 * k)
                 o_ = cyl(dk, (0.13 * math.sin(a0), 0, -0.13 * math.cos(a0) + 0.1), 0.012, 0.022, rot=(0, R(90) + a0, 0), parent=seam)
-            self._seam = seam; hide_key(seam, CLOCK["T0"] - 5, True)
+            self._seam = seam; hide_key(seam, CLOCK.get("TI", CLOCK["T0"]) - 3, True)
         cur = self._lid.scale[2]
         key(self._lid, ("scale", 2), t, max(0.001, self._lid.get("_v", 0.001)))
         key(self._lid, ("scale", 2), t + d, max(0.001, closed)); self._lid["_v"] = max(0.001, closed)
@@ -174,7 +174,7 @@ class Sv:
     """先輩（配膳ロボット）：kit の senpai_serve の辞書を包む。走る・光の物差しを回す・顔を替える・ピロン"""
     def __init__(self, d, face="normal"):
         self.d = d; self.root = d["root"]; self.cur = None
-        self.set_face(CLOCK["T0"] - 5, face)
+        self.set_face(CLOCK.get("TI", CLOCK["T0"]) - 3, face)   # 最初の顔は決まった時刻に（後ろの場面で顔が戻らないように。6本目 v8）
 
     def place(self, t, x, y, ang, interp="LINEAR"):
         # 向きは前の向きに近い方へそろえる（180 度と -180 度を取り違えると、止まってから一回転してしまう。v1 の 21-03）
