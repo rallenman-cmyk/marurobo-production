@@ -195,6 +195,9 @@ class Sv:
         x, y, ang = pose if pose else dr.pose(t); self.place(t, x, y, ang)
 
     def spin(self, t0, t1, rps=1.0):
+        # 止まる時刻は、少なくとも場面の終わりより後に（6本目 v9 4:11「光がぐるぐる回ってないよ」：止まる時刻を 240 秒と書いたまま、
+        #   4:08 からの場面で使っていて、光の線が回らず長さだけ変わっていた）
+        t1 = max(t1, CLOCK.get("T1", t1) + 2.0)
         sp = self.d["spin"]
         key(sp, ("rotation_euler", 2), t0, t0 * rps * 2 * math.pi, "LINEAR"); key(sp, ("rotation_euler", 2), t1, t1 * rps * 2 * math.pi, "LINEAR")
 
