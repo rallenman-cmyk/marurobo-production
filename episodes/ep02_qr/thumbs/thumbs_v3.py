@@ -16,6 +16,16 @@ BASE = ("Background art for a YouTube thumbnail, 16:9, polished cinematic 3D ren
 LAYOUT = ("STRICT LAYOUT (like a pro YouTube thumbnail): the QR card occupies the RIGHT half (x 52-97%, y 5-88%). The robot is SMALL, about one third "
           "of the frame height, standing at x 22-40%, y 58-95%. The whole TOP-LEFT area (x 0-50%, y 0-56%) is empty, plain, softly lit background for a big headline. ")
 PLANS = {
+ "B3": (LAYOUT + "Bright clean light-grey studio with soft teal accent light. The large crisp QR code is printed on a thick white card standing upright, "
+        "slightly angled. A matte dark-grey square plate is sliding in from the right and already covers the lower-right third of the QR code (a clear "
+        "straight edge). The small robot stands at lower left, looking up at the card with curiosity. No marks, no arrows."),
+ "C3": (LAYOUT + "Warm soft daylight on a light wooden desk, cozy and realistic 3D render. The large crisp QR code is printed on a sheet of white paper lying "
+        "flat but tilted toward camera, filling the right half. In ONE area near the middle-right of the code, a few small black ink smudges and tiny drops "
+        "sit on the white squares (clearly visible, but small). The rest of the code is perfectly clean. The small robot stands at lower left, leaning "
+        "forward and peering at the smudges. No marks, no arrows."),
+ "E3": (LAYOUT + "Dark navy studio with subtle bokeh. On the right, a large QR code built from small 3D cubes standing upright like a wall. EXACTLY three "
+        "finder squares (top-left, top-right, bottom-left corners) in plain black and white. Of the other cubes, about two-thirds glow warm ORANGE and "
+        "one-third glow BLUE, mixed in clusters. The small robot stands at lower left, looking up at the glowing wall in awe. No marks, no arrows."),
  "P2C": ("Background art for a YouTube thumbnail, 16:9, polished 3D render. ABSOLUTELY NO TEXT and NO badges, icons, check marks or X marks anywhere (QR patterns "
         "are fine). Clean bright light-grey studio with a soft teal accent light on the right. STRICT LAYOUT: everything left of the frame's horizontal middle "
         "(x 0-52%) is completely empty plain background. Two identical crisp QR codes on thick white cards stand side by side ONLY in x 55-98%, vertically "
@@ -146,6 +156,21 @@ def badge(im, c, ok, r=110):
     else:
         k = r * 0.4; d.line([(x - k, y - k), (x + k, y + k)], fill=WHITE + (255,), width=int(r * 0.24)); d.line([(x - k, y + k), (x + k, y - k)], fill=WHITE + (255,), width=int(r * 0.24))
     return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
+# 下調べの型（白と黄色の極太字・黒の太いふち 14%・1 行 5 字ほど）で組む案。rows=[(字の並び, 最大の大きさ)]、arrows=[(始め, 終わり, 曲げ)]（2560×1440 で）
+SIMPLE = {
+ "B3_1.png": dict(rows=[([("どこまで", WHITE)], 250), ([("隠せる？", YEL)], 280)], y0=180, maxw=1150, arrows=[((1560, 470), (2230, 470), -0.25)]),
+ "C3_2.png": dict(rows=[([("この", WHITE), ("汚れ", YEL), ("で", WHITE)], 225), ([("読めない？", YEL)], 235)], y0=150, maxw=1250, arrows=[((1150, 470), (1770, 700), -0.2)]),   # まるロボの頭（高さ 42% から下）に字をかけない
+ "E3_1.png": dict(rows=[([("中身の", WHITE), ("3分の2", YEL), ("は", WHITE)], 220), ([("予備", YEL), ("だった", WHITE)], 290)], y0=200, maxw=1250, arrows=[((1100, 800), (1560, 800), 0.3)]),
+ "D2_1.png": dict(rows=[([("たった", WHITE), ("3%", YEL), ("で", WHITE)], 250), ([("読めない!?", YEL)], 280)], y0=200, maxw=1300, arrows=[]),
+}
+def simple(name, src):
+    cfg = SIMPLE[src]; im = bg(os.path.join(G, src))
+    im = tag(im, (70, 50), "QRコード", px=96, bg=TEAL, fg=WHITE)
+    y = cfg["y0"]
+    for runs, mxp in cfg["rows"]:
+        px = fit(runs, cfg["maxw"] - 70, mxp); im, _ = line(im, (60, y), runs, px, BLACK, ew=int(px * 0.14)); y += int(px * 1.08)
+    for a, b, bend in cfg["arrows"]: im = arrow(im, a, b, bend=bend, w=40)
+    return save(im, "v4_" + name)
 def comp(choice):
     made = []
     for name, src in choice.items():
@@ -181,5 +206,7 @@ def comp(choice):
 if __name__ == "__main__":
     if sys.argv[1] == "gen":
         for a in sys.argv[2:]: gen(a)
+    elif sys.argv[1] == "simple":
+        for name, src in json.loads(sys.argv[2]).items(): print(simple(name, src))
     else:
         print("\n".join(comp(json.loads(sys.argv[2]))))
