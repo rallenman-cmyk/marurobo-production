@@ -65,7 +65,9 @@ def ev_list():
     add(s("24-06"), e("24-06"), "pip_none", {})
     # 5章
     add(s("25-02") + 0.5, e("25-02") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(w("26-02", "くし"), e("26-04") + 0.3, "tag", dict(text="くし", obj="comb_hi", dy=-110, bg=YEL))
+    # 26-03（段の溝の絵）ではくしが画面の外なので出さない（外の札が画面の端に残った）
+    add(w("26-02", "くし"), e("26-02") + 0.3, "tag", dict(text="くし", obj="comb_hi", dy=-110, bg=YEL))
+    add(s("26-04"), e("26-04") + 0.3, "tag", dict(text="くし", obj="comb_hi", dy=-110, bg=YEL))
     add(s("26-05") + 0.3, e("26-05") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("26-09"), e("26-09") + 0.2, "pip_clip", dict(clip="A04c", src_t=w("04-03", "ころん") - 1.0))
     add(s("26-10") + 0.3, e("26-10") + 0.3, "ring", dict(obj="pebble", r=36))
@@ -260,7 +262,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             if "pos" in p: cx, cy = p["pos"]
             else:
                 q = where(p["obj"], t)
-                if q is None: continue
+                if q is None or not (-20 <= q[0] <= 1300 and -20 <= q[1] <= 740): continue   # 物が画面の外なら出さない（9本目 26-03：端に寄せた札が何もない所を指した）
                 cx, cy = q[0] + p.get("dx", 0), min(max(70, q[1] + p.get("dy", -120)), SUB_TOP - 60)
             spr, off = tag_sprite(p["text"], p.get("size", 48), p.get("bg", WHITE), p.get("fg"))
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
