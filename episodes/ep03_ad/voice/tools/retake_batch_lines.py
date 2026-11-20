@@ -1,4 +1,5 @@
 # 高すぎる文を、最初に声を作ったときと同じ「まとめ（batch_XX：5 文ずつ）」で読ませ直して差し替える（3本目 v11。2026-11-20 ユーザー「声はバッチファイルつかってやって」）
+#   頼み方は Gemini のバッチ（batchGenerateContent：まとめて頼んで、できたら受け取る。ふつうの頼み方の 1 日 100 回の上限とは別。7本目 gen_batch.py と同じ）
 #   ・1 文ずつ作るより、まわりの文と同じ流れ・調子で読まれる。声の AI の 1 日の上限（100 回）も、5 文で 1 回なので足りる
 #   ・機械で高さを下げない（v10 の「声おかしすぎる」）。伸び縮みは 8% まで
 #   MARU_WORK=<作業> python3 retake_batch_lines.py <元の声.wav> <出.wav> <作業フォルダ> 文ID…   （N=回数 既定 3）
@@ -63,11 +64,39 @@ def rms(v): v = v[np.abs(v) > 0.01]; return float(np.sqrt((v ** 2).mean())) if l
 def wr(p, x, r):
     with wave.open(p, "wb") as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(r); w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
 
-# ① まとめを N 回読ませる
-for b, j in batches.items():
-    for i in range(1, N + 1):
-        ok = tts(j["tts"], os.path.join(W, "%s_take%d.wav" % (b, i)))
-        if not ok: print("作れなかった：", b, i)
+# ① まとめを N 回読ませる（バッチで一度に頼む。できているものはとばす）
+def tts_batch(items):
+    """items：[(文のリスト, 書く場所)] → バッチで頼んで、できるまで待って書く"""
+    KEY = os.environ["GEMINI_API_KEY"]
+    reqs = [{"request": {"contents": [{"parts": [{"text": STYLE + "\n#### TRANSCRIPT\n" + "\n".join(lines)}]}],
+                         "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Achernar"}}}}},
+             "metadata": {"key": "k%03d" % i}} for i, (lines, _) in enumerate(items)]
+    req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:batchGenerateContent",
+                                 data=json.dumps({"batch": {"display_name": "maru-ep03-v11", "input_config": {"requests": {"requests": reqs}}}}).encode(),
+                                 headers={"Content-Type": "application/json", "x-goog-api-key": KEY})
+    name = json.load(urllib.request.urlopen(req, timeout=240))["name"]; print("バッチ", name, len(items), "本", flush=True)
+    t0 = time.time()
+    while True:
+        time.sleep(30)
+        r = json.load(urllib.request.urlopen(urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/" + name, headers={"x-goog-api-key": KEY}), timeout=120))
+        if r.get("done"): break
+        if time.time() - t0 > 3 * 3600: raise SystemExit("バッチが 3 時間で終わらない：" + name)
+    st = r.get("metadata", {}).get("state")
+    if st != "BATCH_STATE_SUCCEEDED": raise SystemExit("バッチ失敗 " + str(st))
+    n = 0
+    for it in r["response"]["inlinedResponses"]["inlinedResponses"]:
+        k = int(it.get("metadata", {}).get("key", "k-1")[1:])
+        try: dat = base64.b64decode(it["response"]["candidates"][0]["content"]["parts"][0]["inlineData"]["data"])
+        except Exception: continue
+        path = items[k][1]
+        if dat[:4] == b"RIFF": open(path, "wb").write(dat)
+        else:
+            with wave.open(path, "wb") as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000); w.writeframes(dat)
+        n += 1
+    print("できた", n, "/", len(items), flush=True)
+todo = [(j["tts"], os.path.join(W, "%s_take%d.wav" % (b, i))) for b, j in batches.items() for i in range(1, N + 1)]
+todo = [x for x in todo if not os.path.exists(x[1])]
+if todo: tts_batch(todo)
 # ② 1 文ずつに分けて、選ぶ文を測る
 cands = {k: [] for k in ids}
 jobs = []
