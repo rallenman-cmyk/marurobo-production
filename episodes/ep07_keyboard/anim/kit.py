@@ -59,6 +59,13 @@ def key_label(cap, ch, k=KEY, col="#1E2530", size=0.82, h=0.07):
     return ob
 
 
+PRESS = []      # まるロボが乗ると沈む物 [(物, 沈む深さ, ふだんの高さ)]（v8：足の位置から自動で沈める。maru7.py の press_under）
+
+
+def pressable(o, depth=0.03):
+    PRESS.append((o, depth, o.location.z)); return o
+
+
 class Board:
     """キーボード：root（場所）、keys（字 → キー）。キーを押す（沈む）・光らせる。字は 2D（track 名は prefix+字）"""
     def __init__(self, rows, origin=(0, 0), k=KEY, name="kb", case_col="#2A2F38", key_col="#E9ECEF", offs=OFFS, extra_rows=True, prefix="k_", labels=True, ink="#2B3340"):
@@ -76,23 +83,24 @@ class Board:
         for r, row in enumerate(rows):
             for c, ch in enumerate(row):
                 x, y = key_pos(rows, ch, origin, k, offs)
-                self.keys[ch] = keycap(kmat, (x, y, 0.045), k, parent=self.root)
+                self.keys[ch] = pressable(keycap(kmat, (x, y, 0.045), k, parent=self.root))
                 if labels: key_label(self.keys[ch], ch, k, ink)
         if extra_rows:   # 数字の段・空白の段（字のない灰色のキー。本物らしさのため。字は出さない）
             for c in range(10):
-                kc = keycap(mod_m, (origin[0] + (c + 0.5) * k - 0.25 * k, origin[1] + k, 0.045), k, parent=self.root)
+                kc = pressable(keycap(mod_m, (origin[0] + (c + 0.5) * k - 0.25 * k, origin[1] + k, 0.045), k, parent=self.root))
                 if labels: key_label(kc, "1234567890"[c], k, ink, size=0.62)
-            keycap(mod_m, (origin[0] + 4.6 * k, origin[1] - len(rows) * k, 0.045), k, w=5.0, parent=self.root)
-            keycap(mod_m, (origin[0] + w_ + 0.9 * k, origin[1] - 1 * k, 0.045), k, w=1.6, parent=self.root)
+            pressable(keycap(mod_m, (origin[0] + 4.6 * k, origin[1] - len(rows) * k, 0.045), k, w=5.0, parent=self.root))
+            pressable(keycap(mod_m, (origin[0] + w_ + 0.9 * k, origin[1] - 1 * k, 0.045), k, w=1.6, parent=self.root))
         self.glows = {}
 
     def pos(self, ch, z=0.09):
         x, y = key_pos(self.rows, ch, self.origin, self.k, self.offs)
         return (x, y, KEY_TOP + z)
 
-    def press(self, ch, t, d=0.14, sound=True, gain=0.5):
+    def press(self, ch, t, d=0.14, sound=True, gain=0.5, motion=True):
+        """motion=False：音だけ（まるロボが乗って押すキーは、足の位置から自動で沈む。maru7.py の press_under）"""
         o = self.keys[ch]; z = o.location.z
-        key(o, ("location", 2), t - 0.01, z); key(o, ("location", 2), t + 0.04, z - 0.03); key(o, ("location", 2), t + d, z)
+        if motion: key(o, ("location", 2), t - 0.01, z); key(o, ("location", 2), t + 0.04, z - 0.03); key(o, ("location", 2), t + d, z)
         if sound: ev(t, "key", gain, getattr(self, "tp", "") + ch if getattr(self, "tp", "") else "")
 
     def hold(self, ch, t0, t1, dz=0.03):
@@ -114,8 +122,12 @@ class Board:
         o = self.keys[ch]
         if ch not in self.glows:   # 大きさを scale で付けた物に scale_pop を使わない（SKILL）：空の親を弾ませる
             gm = flat_mat("kglow_" + ch + str(id(self)), col, strength)
-            g = empty((o.location.x, o.location.y, o.location.z + 0.0358)); g.parent = self.root
-            gl = cube(gm, (0, 0, 0), (self.k * 0.8, self.k * 0.8, 0.001), parent=g); gl.visible_shadow = False
+            bpy.context.view_layer.update()
+            wm = o.matrix_world.translation
+            g = empty((wm.x, wm.y, wm.z + 0.0358)); bpy.context.view_layer.update()
+            g.parent = o; g.matrix_parent_inverse = o.matrix_world.inverted()      # キーの子（v7：板が残って、浮き上がったキーや沈んだキーとずれた）
+            gl = cube(gm, (wm.x, wm.y, wm.z + 0.0358), (self.k * 0.8, self.k * 0.8, 0.001)); bpy.context.view_layer.update()
+            gl.parent = g; gl.matrix_parent_inverse = g.matrix_world.inverted(); gl.visible_shadow = False
             self.glows[ch] = g; hide_key(g, -100.0, True)
         g = self.glows[ch]
         hide_key(g, t0, False); scale_pop(g, t0, 1.0, d)
@@ -143,7 +155,7 @@ def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, li
     if M is not None:      # まるロボ：キーからキーへ続けて跳ぶ（marumotion の hop_path。字を打つ瞬間の少し前に着く）
         M.path([B.pos(c, z=0.075) for c in word], [t0 + i * dt - 0.03 for i in range(len(word))])
     for i, c in enumerate(word):
-        B.press(c, t0 + i * dt, gain=0.35 if dt < 0.3 else 0.5)
+        B.press(c, t0 + i * dt, gain=0.35 if dt < 0.3 else 0.5, motion=M is None)
     return ln
 
 
@@ -259,11 +271,11 @@ def piano_typewriter(loc=(0, 0.55, 0.94), k=0.13):
     keys = {}
     front = "ABCDEFGHIJKLMN"; back = "OPQRSTUVWXYZ"
     for i, ch in enumerate(front):
-        keys[ch] = cube(white, ((i + 0.5) * k, -0.05, 0.14), (k * 0.92, 0.32, 0.06), bevel=0.01, parent=root)
+        keys[ch] = pressable(cube(white, ((i + 0.5) * k, -0.05, 0.14), (k * 0.92, 0.32, 0.06), bevel=0.01, parent=root), 0.02)
         key_label(keys[ch], ch, k, "#1E2530", size=0.9, h=0.06)
     for i, ch in enumerate(back):   # 右から左
         x = (n - 0.5 - i) * k - k * 0.5
-        keys[ch] = cube(black, (x, 0.2, 0.2), (k * 0.7, 0.2, 0.06), bevel=0.01, parent=root)
+        keys[ch] = pressable(cube(black, (x, 0.2, 0.2), (k * 0.7, 0.2, 0.06), bevel=0.01, parent=root), 0.02)
         key_label(keys[ch], ch, k, "#F2EBDD", size=0.72, h=0.06)
     return root, keys
 
@@ -284,7 +296,7 @@ def modern_typewriter(loc=(0, 0.55, 0.94), k=0.13, period=True, layout=None, col
         for c, ch in enumerate(row):
             x = -0.62 + (c + OFFS[r]) * k; y = -0.05 - r * k * 0.9; z = 0.30 - r * 0.015   # v6：3 段目が本体の中に埋まっていた（z 0.20 < 本体の上 0.24）ので、段の下げ方を小さく
             cyl(gold, (x, y, z - 0.02), k * 0.4, 0.03, parent=root)
-            keys[ch] = cyl(km, (x, y, z), k * 0.34, 0.025, parent=root)
+            keys[ch] = pressable(cyl(km, (x, y, z), k * 0.34, 0.025, parent=root), 0.015)
             if labels: key_label(keys[ch], ch, k, "#1E2530", size=0.72 if ch != "." else 0.9, h=0.045)   # キーの上が少し丸いので、字を少し浮かせる   # 7本目 v6：タイプライターのキーにも字（2D をやめた）
     return root, keys
 
