@@ -293,10 +293,18 @@ BAND = {"L": [("なぜ", WHITE), ("隣の曲", YEL), ("は", WHITE), ("混ざら
         "M": [("満員電車で", WHITE), ("イヤホン", YEL), ("は", WHITE), ("どうなる", RED2), ("？", WHITE)],
         "U": [("なぜ", WHITE), ("イヤホン", YEL), ("の音は", WHITE), ("途切れる", RED2), ("？", WHITE)]}
 MARKS2 = {   # 絵の名前 → [("q"|"ok"|"ng", x, y, r) か ("arrow", x0, y0, x1, y1)]（2560×1440。描いた絵に 5% の目盛りを重ねて決めた）
- "L_1": [("q", 1280, 440, 128)],                                   # 二つの曲が交わる所の上、二人の頭の間（顔・イヤホン・帯にかけない）
+ "L_1": [("o", 1078, 600, 112), ("o", 1485, 623, 112)],            # 2026-11-20 ユーザー「ハテナはやめて、お互いのイヤホンを赤丸で囲って」：二人のイヤホンを赤い丸で（目にかけない）
  "M_2": [("ok", 1126, 576, 105), ("arrow", 1050, 346, 1510, 346), ("q", 1907, 475, 125)],   # 左のイヤホンの右に ✓、天井の高さで左→右の矢印、右は光の入り乱れる所に ？（人の顔にかけない）
  "U_1": [("q", 2048, 677, 230)],                                   # 顔の右の窓の所（顔・イヤホン・右下にかけない）
 }
+
+
+def red_circle(im, c, r):
+    """赤い丸（白いふちつき）。4本目の band_comp の CIRCLES と同じ形"""
+    cx, cy = c; lay = Image.new("RGBA", (W, H)); dl = ImageDraw.Draw(lay)
+    dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
+    dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=RED2 + (255,), width=26)
+    return Image.alpha_composite(im, lay)
 
 
 def band_comp(choice):
@@ -307,6 +315,7 @@ def band_comp(choice):
             if m[0] == "q": im = q_mark(im, m[1:3], m[3])
             elif m[0] in ("ok", "ng"): im = badge(im, m[1:3], m[0] == "ok", m[3])
             elif m[0] == "arrow": im = arrow(im, m[1:3], m[3:5], bend=0.0, w=60, col=RED2)   # 前→後の赤い太い矢印
+            elif m[0] == "o": im = red_circle(im, m[1:3], m[3])                              # 注目＝赤い丸（比べる物を囲む）
         im, px = band(im, BAND[key])
         out.append(save(im, "ep01b_%s" % key)); print(name, "帯の字", px, "px（1280 幅で", px // 2, "px）")
     return out
