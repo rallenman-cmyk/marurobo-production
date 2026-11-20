@@ -77,6 +77,9 @@ def ev_list():
     add(w("28-03", "見張り"), e("28-03") + 0.3, "tag", dict(text="見張り＝はさまったら止める", pos=(640, 100), size=46))
     add(s("29-01") + 0.3, e("29-01") + 0.3, "ring", dict(obj="inlet", r=48))
     add(s("31-01") + 0.3, e("31-01") + 0.3, "ring", dict(obj="comb_lo", r=52))
+    # 見張りの試しの小さな物（リボン・小石）を白い輪で示す（9本目 v2 の点検：小さくて見落とす）
+    add(w("30-02", "リボン"), e("30-03") + 0.3, "ring", dict(obj="ribbon", r=34))
+    add(w("31-02", "小石"), e("31-03") + 0.3, "ring", dict(obj="pebble", r=30))
     add(s("32-04"), e("32-04") + 0.2, "pip_clip", dict(clip="I24", src_t=w("24-02", "ころん") - 1.4))
     add(w("32-05", "2024年"), e("32-05") + 0.3, "tag", dict(text="2024年から", pos=(640, 110), size=58, bg=YEL))
     add(s("34-02") + 0.2, e("34-02") + 0.3, "ring", dict(obj="button", r=40, col=RED))
