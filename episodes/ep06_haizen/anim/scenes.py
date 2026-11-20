@@ -314,7 +314,7 @@ def b_order(cl):
     sv = Sv(senpai_serve(WAIT, 0)); track("senpai", sv.root, 1.2); track("head", sv.d["head"], 0.0); track("tray", sv.d["trays"][1], 0.0)
     sv.spin(CLOCK["T0"] - 1, 200)
     st = Wk(walker((-0.55, 3.0), 120, shirt="#2B2F36", apron=True)); track("staff", st.root, 1.7)
-    st.at(CLOCK["T0"], -0.55, 3.0, 120)
+    st.at(CLOCK["TI"], -0.55, 3.0, 120)
     tray_item(sv, "hamburg", 1, t_show=w("08-02", "置きました") - 0.2)
     # v3 点検：「料理をトレーに置きました」で、近い方の腕をトレーへ伸ばす（腕を少し上げるだけで、置く動きに見えなかった）
     import bpy as _bpy; _bpy.context.view_layer.update()
@@ -546,9 +546,9 @@ def b_dark(cl, maru_lying=False):
     # v2：よける道を通路のまん中寄りに（x 0.42 だと、いすの脚の点に重なって見えた。v1 4:48）
     dc = plan.Drive([(0.0, 0.55), (0.3, 0.2), (0.3, -0.9), (0.12, -1.6)], s("16-03") + 0.1, 0.4, 120, 0)
     if not maru_lying:
-        sv.hold(CLOCK["T0"], pose=(pos0[0], pos0[1], 0.0)); sv.drive(da); sv.drive(db, motor=False); sv.drive(dc)
+        sv.hold(CLOCK["TI"], pose=(pos0[0], pos0[1], 0.0)); sv.drive(da); sv.drive(db, motor=False); sv.drive(dc)
     else:   # v4「先輩の目線がどの向きなのか分かるようにして」（5:44）：小窓では、点を測る所（0, 0.62）に先輩を止め、前に向きの矢印
-        sv.hold(CLOCK["T0"], pose=(0.0, 1.0, 0.0))   # まるロボ（0, 0.2）から少し離して、間に向きの矢印
+        sv.hold(CLOCK["TI"], pose=(0.0, 1.0, 0.0))   # まるロボ（0, 0.2）から少し離して、間に向きの矢印
         am = glow_mat("dir_arrow", "#FFFFFF", 4.0); ar = empty((0.0, 1.0, 0.04))
         cube(am, (0, -0.33, 0), (0.08, 0.16, 0.02), parent=ar)
         hd = cyl(am, (0, -0.44, 0), 0.12, 0.02, parent=ar, verts=3); hd.rotation_euler = (0, 0, R(180))
@@ -610,7 +610,7 @@ def b_lit14(cl):
     restaurant(ceiling=False); crowd()   # カメラが天井より上にあるので、天井は外す
     pos0 = (0.0, 1.7)
     sv = Sv(senpai_serve(pos0, 0)); track("senpai", sv.root, 1.2); sv.spin(CLOCK["T0"] - 1, 300, rps=1.0)
-    sv.hold(CLOCK["T0"], pose=(pos0[0], pos0[1], 0.0))
+    sv.hold(CLOCK["TI"], pose=(pos0[0], pos0[1], 0.0))
     M = MaruR(MP.plan_dark, "dark", 0.0); track("maru", M.root, 0.15)
     for k, legs in enumerate(dark_people()):
         pts = legs[0][0]
@@ -779,7 +779,7 @@ def b_narrow(cl):
     tray_item(sv, "ramen", 1)
     t_st = w("23-02", "ぴたり")
     da = drive_end([(0.0, 2.3), (0.0, 0.55)], t_st, v=0.4, face0=0)
-    sv.hold(CLOCK["T0"], pose=(0.0, 2.3, 0)); sv.drive(da); ev(t_st, "stop", 0.6)
+    sv.hold(CLOCK["TI"], pose=(0.0, 2.3, 0)); sv.drive(da); ev(t_st, "stop", 0.6)
     sv.set_face(s("23-03") + 0.1, "trouble")
     sv.piron(w("25-02", "ピロン"), "happy")
     db = plan.Drive([(0.0, 0.55), (0.0, -1.2), SEAT12], w("25-02", "ピロン") + 0.6, 0.5, 90, 0)
