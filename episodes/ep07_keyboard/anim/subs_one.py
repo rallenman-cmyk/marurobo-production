@@ -137,6 +137,10 @@ def balance(L, MIN=MIN, CPS=8.0, BORROW_NEXT=0.35, BORROW_PREV=0.5):
             if need > 0.0 and i > 0 and abs(L[i - 1][1] - x[0]) < 0.06:   # まだ速いなら、前の 1 枚（ゆとりがあるとき）から頭を借りる（v8「もっと速く！」8.02 字/秒）
                 pv = L[i - 1]; room = min(BORROW_PREV, (pv[1] - pv[0]) - MIN, (pv[1] - pv[0]) - n_(pv[2]) / CPS)
                 d = max(0.0, min(need + 0.02, room))
-                if d > 0: pv[1] -= d; x[0] -= d
+                if d > 0: pv[1] -= d; x[0] -= d; need -= d
+            if need > 0.0 and i + 1 < len(L) and abs(L[i + 1][0] - x[1]) < 0.06:   # まだ速いなら、次の 1 枚の頭を少し遅らせる（次の 1 枚にゆとりがあるとき）
+                nx = L[i + 1]; room = min(BORROW_NEXT, (nx[1] - nx[0]) - MIN, (nx[1] - nx[0]) - n_(nx[2]) / CPS)
+                d = max(0.0, min(need + 0.02, room))
+                if d > 0: nx[0] += d; x[1] += d
     return [tuple(x) for x in L]
 
