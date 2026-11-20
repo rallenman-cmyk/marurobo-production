@@ -65,6 +65,10 @@ def ev_list():
     add(w("10-09", "クワーティ"), e("10-09") + 0.3, "tag", dict(text="クワーティ", pos=(640, 80), size=52, bg=BLUE, fg=WHITE))
     add(w("11-01", "どうして") - 0.2, e("11-01") + 0.3, "bubble", dict(obj="maru", icon="?"))
     # 13〜15：説（引用の札）・からまる・わざとゆっくり
+    add(s("13-01") + 0.3, e("13-02") + 0.4, "tag", dict(text="T", obj="bar_T", dy=-70, bg=ORANGE, fg=WHITE, size=46))      # v8：どの 2 本か
+    add(s("13-01") + 0.3, e("13-02") + 0.4, "tag", dict(text="Y", obj="bar_Y", dy=-70, bg=BLUE, fg=WHITE, size=46))
+    add(w("13-02", "ぶつかって"), e("13-02") + 0.4, "tag", dict(text="ぶつかって、からまった！", obj="jam", dy=-150, size=46))
+    add(s("12-03"), e("12-03") + 0.3, "tag", dict(text="紙", obj="paper", dy=-40, size=46))
     add(s("13-04"), e("13-04") + 0.3, "tag", dict(text="よく続けて打つ字を、わざと離した？", pos=(640, 80), size=46))
     add(s("13-02") + 0.6, e("13-02") + 0.4, "bubble", dict(obj="maru", icon="!"))
     add(w("14-05", "おかしい") - 0.2, e("14-05") + 0.3, "bubble", dict(obj="maru", icon="?"))

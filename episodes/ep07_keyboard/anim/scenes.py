@@ -398,10 +398,15 @@ def b_inside(cl):
     fm = noise_mat("insidefloor", "#5A5048", "#4A423A", scale=8, rough=0.6, bump=0.1)
     cube(fm, (0, 0, -0.05), (8, 8, 0.1))
     root, pv = typebar_basket((0, 0.6, 0.02), r=1.2, n=36)
-    for ch in "ER": track("bar_" + ch, pv[ch].children[1] if len(pv[ch].children) > 1 else pv[ch], 0.05)
-    # 上の方のキーの裏（暗い）・紙の筒（真ん中の打つ所）
-    cyl(mat("platen_in", "#15171A", rough=0.4), (0, 1.0, 1.25), 0.25, 3.2, rot=(0, R(90), 0))
-    cube(mat("paper_in", "#F4EFE3", rough=0.8), (0, 1.1, 1.7), (2.2, 0.02, 0.9))
+    for ch in "ERTY": track("bar_" + ch, pv[ch].children[1] if len(pv[ch].children) > 1 else pv[ch], 0.05)
+    # 打つ所：棒の先が集まる所の向こうに、すけた紙と、紙を押さえる黒い筒（v7「上にはすかした紙みたいなの写してほしい」「棒の上にある丸いのはなに？」）
+    hit = (0.0, 0.6, 0.92)
+    cyl(mat("platen_in", "#15171A", rough=0.4), (hit[0], hit[1] + 0.3, hit[2] + 0.02), 0.16, 1.8, rot=(0, R(90), 0))
+    pm_ = bpy.data.materials.new("paper_see"); pm_.use_nodes = True; bs_ = pm_.node_tree.nodes["Principled BSDF"]
+    bs_.inputs["Base Color"].default_value = (0.5, 0.49, 0.46, 1); bs_.inputs["Alpha"].default_value = 0.3; bs_.inputs["Roughness"].default_value = 0.9
+    pm_.blend_method = "BLEND" if hasattr(pm_, "blend_method") else None
+    paper = cube(pm_, (hit[0], hit[1] + 0.16, hit[2] + 0.28), (1.1, 0.008, 0.6)); paper.rotation_euler = (R(-15), 0, 0)
+    track("paper", paper, 0.3)
     spot((0.0, -1.5, 2.6), (0, 0.6, 0.3), energy=3200, angle=60, col="#FFE3BC")
     area((-2.0, 1.5, 2.0), (0, 0.6, 0.3), energy=600, size=3, col="#9FB3E0")
     area((1.8, -1.8, 2.2), (0, 0.2, 0.3), energy=700, size=3, col="#FFF1D6")
@@ -414,7 +419,7 @@ def b_inside(cl):
     M.hop(w("12-03", "跳ね上がって") + 0.05, h=0.18, d=0.4)
     # 13：T と Y（となり同士）が光る → T が真ん中へ上がる途中に Y も上がり、真ん中の手前でぶつかって交差したまま止まる（赤い光・ふるえる）
     a_, b_ = pv["T"], pv["Y"]
-    for o in (a_, b_): glow_plate(o.children[0], s("13-01") + 0.3, e("13-02") + 0.4, "#FFD24A", (0.05, 1.2 * 0.9), 0.0135)
+    for o, col in ((a_, "#FF9A3C"), (b_, "#4FB3FF")): glow_plate(o.children[0], s("13-01") + 0.3, e("13-02") + 0.4, col, (0.05, 1.2 * 0.9), 0.0135)   # T＝橙・Y＝青（どの 2 本か分かるように）
     t = w("13-01", "続けて") + 0.6
     key(a_, ("rotation_euler", 0), t, 0.0); key(a_, ("rotation_euler", 0), t + 0.5, R(-128))
     key(b_, ("rotation_euler", 0), t + 0.2, 0.0); key(b_, ("rotation_euler", 0), t + 0.6, R(-122))
@@ -422,12 +427,8 @@ def b_inside(cl):
     for k_ in range(8):      # からまって、小さくふるえる
         key(a_, ("rotation_euler", 0), tj + 0.12 * k_, R(-128 + (2 if k_ % 2 else -2))); key(b_, ("rotation_euler", 0), tj + 0.12 * k_, R(-122 + (-2 if k_ % 2 else 2)))
     key(a_, ("rotation_euler", 0), tj + 1.0, R(-128)); key(b_, ("rotation_euler", 0), tj + 1.0, R(-122))
-    fl = sphere(glow_mat("jamflash", "#FF5A3C", 12.0), (0, 0, 0), 0.06); fl.visible_shadow = False
-    bpy.context.view_layer.update()
-    hp = a_.children[1].matrix_world.translation
-    key(a_, ("rotation_euler", 0), t + 0.6, R(-128)); bpy.context.view_layer.update()
-    fl.location = (-0.12, 0.38, 0.58); hide_key(fl, -100.0, True); hide_key(fl, t + 0.6, False); hide_key(fl, e("13-02") + 0.3, True)
-    scale_pop(fl, t + 0.6, 1.0, 0.25)
+    # ぶつかった所：赤い光の玉はやめ、2D の札「ぶつかって からまった！」で指す（v7「丸い光が何かわかんない」）
+    jam = empty((-0.12, 0.38, 0.58)); track("jam", jam, 0.0)
     ev(t + 0.6, "clank", 0.6)
     M.walk(s("13-03") - 0.2, s("13-03") + 0.8, (-0.05, 0.05, 0.0)); M.at(s("13-03") + 1.0, look=20)
     M.wobble(s("13-03") + 1.0, s("13-04"), 8, 0.3)
@@ -440,20 +441,33 @@ def b_inside(cl):
         g = glow_mat("barglow" + ch, "#FFD24A", 4.0)
         gl = cube(g, (0, -1.2 * 0.45, 0.05), (0.05, 1.2 * 0.9, 0.01), parent=pv[ch]); gl.visible_shadow = False
         hide_key(gl, -100.0, True); hide_key(gl, w("14-04", "となり同士"), False); hide_key(gl, e("14-05") + 0.6, True)
+    # v8：棒は輪（根もと）から外へのびている。まるロボは輪の内がわ（棒のない床）だけを歩く（v7「足が棒に貫通」）
+    bpy.context.view_layer.update()
+    def inn(ch, d):        # 棒の根もとから、輪の内がわへ d の点
+        x, y = pv[ch].matrix_world.translation.x, pv[ch].matrix_world.translation.y - 0.6
+        rr = math.hypot(x, y); return (x - x / rr * d, y - y / rr * d + 0.6, 0.0)
+    def face_out(ch):      # その棒の根もとの方を向く face（前の体は前が −Y）
+        x, y = pv[ch].matrix_world.translation.x, pv[ch].matrix_world.translation.y - 0.6
+        rr = math.hypot(x, y); return math.degrees(math.atan2(x / rr, -y / rr))
     M.at(s("14-03") + 0.4, look=14)      # E と R の棒はどこ？（棒を見上げる。そのまま歩き出す）
     t = w("14-04", "探して")      # 棒の方へ歩きながら、棒を見上げていく → 着いて見上げる → 跳ねる
-    M.walk(s("14-04"), w("14-04", "となり同士") + 0.3, (-0.25, 1.02, 0.0)); M.at(t + 0.4, look=18); M.at(w("14-04", "となり同士") + 0.4, look=24)
+    M.walk(s("14-04"), w("14-04", "となり同士") + 0.3, inn("E", 0.45)); M.at(t + 0.4, look=18); M.at(w("14-04", "となり同士") + 0.4, look=24)
     M.hop(e("14-04") - 0.3, h=0.15, d=0.4)
-    # 15-03：棒の根もとにゆっくり跳び乗る → 乗った棒が 1 本だけゆっくり上がって戻る（2 回、別の棒）（v5「まるロボが飛んで棒を踏んでるんじゃないの」）
-    bpy.context.view_layer.update()
-    def base(ch):     # 棒の根もとの真横（となりの動かない棒の上）。上がる棒は自分の縦の面だけを回るので、真横なら体に当たらない（v7：棒の上や外の端に立つと、上がる棒が体を突き抜けた）
+    # 15-03：輪の内がわに置いた「踏み板」（字のあるキー）に跳び乗る → 板が沈み、同じ字の棒がゆっくり上がって戻る（v7「まるロボが乗ったところが動いてない」）
+    #   板は根もとから 0.35 内がわ。棒は 100 度まで（ほぼまっすぐ上へ）上げるので、まるロボの頭より上を通る（v7 は根もとの近くに立って、寝た角度の棒が体を突き抜けた）
+    #   2 本は G と L（となり同士にすると、板が重なる）
+    M.walk(s("15-01"), s("15-03") - 1.2, inn("G", 0.7)); M.at(s("15-03") - 0.2, face=face_out("G"))
+    pedal_m = mat("pedal", "#E9ECEF", rough=0.4)
+    for ch, tl in (("G", w("15-03", "ぴょん") - 0.05), ("L", e("15-03") - 0.2)):     # 「ぴょん」で着く
+        px, py, _ = inn(ch, 0.35)
+        pd = pressable(cube(pedal_m, (px, py, 0.03), (0.16, 0.16, 0.06)), 0.03)
         x, y = pv[ch].matrix_world.translation.x, pv[ch].matrix_world.translation.y - 0.6
-        r = math.hypot(x, y); tx, ty = -y / r, x / r
-        return (x * 0.86 + tx * 0.17, y * 0.86 + 0.6 + ty * 0.17, 0.0)
-    M.walk(s("15-01"), s("15-03"), (0.2, 0.75, 0.0))
-    for ch, tl in (("G", w("15-03", "ぴょん") - 0.05), ("H", e("15-03") - 0.2)):     # 「ぴょん」で着く（その場から、ゆっくり 1 回ずつ）
-        M.hopto(tl, base(ch))
-        bar_up(pv[ch], tl + 0.05, d=1.0); ev(tl + 0.4, "clack", 0.3)
+        pd.rotation_euler = (0, 0, math.atan2(y, x) - math.pi / 2)
+        key_label(pd, ch, 0.16, "#2B3340", size=0.5, h=0.06)
+        hide_key(pd, -100.0, True); hide_key(pd, s("15-01"), False)      # 15 章から（12〜14 章に白い箱が見えないように）
+        for c_ in pd.children: hide_key(c_, -100.0, True); hide_key(c_, s("15-01"), False)
+        M.hopto(tl, (px, py, 0.06))
+        bar_up(pv[ch], tl + 0.05, d=1.0, ang=100); ev(tl + 0.4, "clack", 0.3)
     M.at(w("15-04", "ちょっと待って"), look=0); M.tilt(w("15-04", "ちょっと待って") + 0.1, 14); M.tilt(e("15-06"), 0)
     M.at(w("15-09", "少しは"), look=24); M.at(e("15-09"), look=0)
     M.shake(s("15-10") + 0.4)      # 首をふる（胴ぜんぶでひねる）
@@ -786,7 +800,7 @@ CUTS = [   # (名前, 舞台, 切り替わる時刻, カメラ（None＝舞台�
     ("S13c", b_inside, s("13-05"), lambda t0: F((0.3, 0.7, 0.25), 36), "S13a"),
     ("S14a", b_inside, s("14-01"), None, "S14a"), ("S14p", b_shop_day, s("14-02"), C((-1.95, 0.0, 1.45), (-1.35, 1.05, 0.97), 34, (-1.9, 0.05, 1.4)), "S11a"),
     ("S14b", b_inside, s("14-03"), C((0.95, -1.0, 1.9), (0.0, 0.8, 0.2), 30, (0.85, -0.9, 1.85)), "S14a"),
-    ("S14b2", b_inside, s("14-05"), C((0.65, 0.05, 0.85), (-0.3, 1.1, 0.3), 30, (0.6, 0.1, 0.8)), "S14a"), ("S15a", b_inside, s("15-01"), None, "S15a"), ("S15b", b_inside, s("15-03"), lambda t0: F((-0.75, -0.55, 0.28), 34), "S15a"),
+    ("S14b2", b_inside, s("14-05"), C((0.65, 0.05, 0.85), (-0.3, 1.1, 0.3), 30, (0.6, 0.1, 0.8)), "S14a"), ("S15a", b_inside, s("15-01"), None, "S15a"), ("S15b", b_inside, s("15-03"), lambda t0: F((0.85, 0.55, 0.34), 32), "S15a"),
     ("S15c", b_inside, s("15-05"), C((0.0, -0.4, 2.5), (0.0, 0.6, 0.0), 26, (-0.2, -0.3, 2.3)), "S15a"),
     ("S15d", b_inside, s("15-07"), C((-1.6, -2.0, 0.45), (0.2, 0.6, 0.35), 24, (-1.2, -2.2, 0.5)), "S15a"),
     ("S15e", b_inside, s("15-09"), lambda t0: F((-0.7, 0.4, 0.3), 32), "S15a"),
@@ -859,6 +873,7 @@ if __name__ == "__main__" or True:
                 _o = bpy.data.objects[_n]; _fc = [c for c in _o.animation_data.action.fcurves if c.data_path == "location" and c.array_index == 2][0]
                 print("  KEYS", _n, [(round(k.co.x / FPS + CLOCK["T0"], 2), round(k.co.y, 3), k.interpolation) for k in _fc.keyframe_points if abs(k.co.x / FPS + CLOCK["T0"] - _t) < 1.0])
             sys.exit(0)
+        if os.environ.get("DBG_PY"): exec(open(os.environ["DBG_PY"]).read()); sys.exit(0)
         if os.environ.get("MARU_PROBE"):          # 物の高さを調べる（点検用）
             _sc = bpy.context.scene
             for _t in [float(x) for x in os.environ["MARU_PROBE"].split(",")]:

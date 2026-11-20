@@ -319,7 +319,7 @@ def typebar_basket(center=(0, 0, 0), r=1.2, n=36, bars=None):
         hd = cube(mat("typehead", "#2A2D31", rough=0.3, metal=0.7), (0, -r * 0.9, 0.04), (0.07, 0.07, 0.06), parent=p)
         if ch.isalpha(): key_label(hd, ch, 0.1, "#F2EBDD", size=0.85, h=0.06)      # 棒の先にも字（7本目 v6）
         pv[ch] = p
-    cyl(mat("guide", "#55504A", rough=0.4, metal=0.7), (0, 0, 0.9), 0.12, 0.1, parent=root)
+    # v8：真ん中の上に浮いていた丸い部品（字の通り道）は消した（v7「棒の上にある丸いのはなに？」）。打つ所には紙と紙を押さえる筒（b_inside）
     return root, pv
 
 
