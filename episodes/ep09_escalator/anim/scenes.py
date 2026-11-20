@@ -748,8 +748,8 @@ def _rider_avoid(t0, t1):
             elif u <= Lr: (fx, fz), _ = G.top_point(sk); rx, rz = fx - 0.18, fz + G.TREAD_DZ
             else: rx, rz = xa + (u - Lr), G.H
             if math.hypot(rx - mx, ry - my) < 0.7 and rz - 0.4 < mz < rz + 1.8: off.add(i)
-            # カメラのすぐ近く（1.2m 以内）を通る人も出さない（手前を大きな頭や体が横切る。02-05 の見直しで見つけた）
-            if cam_p is not None and any(math.dist((rx, ry, rz + h_), cam_p) < 1.2 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+            # カメラの近く（2.4m 以内）を通る人も出さない（手前を大きな頭や体が横切る。02-05 の見直しで 1.2m にしたが、08-01 で 1.2m より外の足が画面の半分をふさいだので広げた）
+            if cam_p is not None and any(math.dist((rx, ry, rz + h_), cam_p) < 2.4 for h_ in (0.4, 1.0, 1.6)): off.add(i)
     E.rider_off = off
     print("RIDER_OFF", CLIPNAME, sorted(off))
 
