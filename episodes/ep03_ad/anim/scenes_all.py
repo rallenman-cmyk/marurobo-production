@@ -143,27 +143,37 @@ def s02():
     P0 = (-0.85, -1.38)                                               # v10：タオルのすぐ横に立っている（行って戻ると向きを 180° 変えるので間に合わない）
     mr = Maru((P0[0], P0[1], 0), face_to(P0, (0.35, -0.9)), s=0.42, hat=False, eye_glow=1.2)
     mr.surprise(ta + 0.05)
-    TWP = (-1.08, -1.6)
+    # v12（v11 41「まるロボの形がグチャグチャ」・41.7「元々置いてあるタオルがなくて急にまるロボの上に乗ってる」）：
+    #   タオルは、はじめから見える所（まるロボのすぐ左奥の床。引きの絵でまるロボに隠れない）に、たたんで置く。まるロボはそちらを向いて（歩くと次の動きが間に合わない）、
+    #   見下ろしてから、タオルが床から頭へ上がる（0.35 秒）。運ぶ間は、たたんだ平らなまま頭にのせる（頭にかぶせる形は、本物の体の頭と合わず、ぐしゃっと見えた）
+    TWP = (-1.12, -1.12)
     tw = soft_towel(); tw.location = (TWP[0], TWP[1], 0.0); tw.rotation_euler = (0, 0, R(30))
+    FOLD = (0.5, 0.55, 1.0); tw.scale = FOLD                          # たたんだ大きさ（床の上・頭の上）
     kb = tw.data.shape_keys.key_blocks
     MX = (-0.06, -1.06)                                               # 置く所（スマホの左。体がスマホにかからない）
     TA, TB = s("02-04") + 1.6, s("02-05") + 1.8                       # タオルを取る・置く所に着く（「まさか…聞かれていた？」で動き出す）
-    mr.at(TA - 1.2, face=face_to(P0, TWP)); mr.at(TA - 0.4, look=-22); mr.at(TA + 0.25, look=0)   # タオルへ向いて、見下ろして、頭にかぶる
+    mr.at(TA - 1.2, face=face_to(P0, TWP))                            # タオルへ向く
+    mr.at(TA - 0.5, look=-22); mr.at(TA + 0.35, look=0)               # 見下ろして、頭にのせる
     mr.run(TB, MX); mr.at(TB + 0.5, face=face_to(MX, (0.35, -0.9)))
     mr.sigh(s("02-06") - 1.0)                                          # ほっとする（電子音が文の切れ目に入るように）
     def kshape(t, h, p):
         kb["頭"].value = h; kb["頭"].keyframe_insert("value", frame=f(t)); kb["スマホ"].value = p; kb["スマホ"].keyframe_insert("value", frame=f(t))
     def _towel(m, tw=tw, TA=TA, TB=TB, TWP=TWP):                               # 予定を当てたあと：運ぶ間は頭のてっぺんに 1 コマずつ合わせる（浮かない）
-        t_up, t_dn = TA + 0.1, TB + 0.5
-        key(tw, "location", f(t_up) - 1, (TWP[0], TWP[1], 0.0)); kshape(t_up - 0.05, 0, 0)
-        for fr in range(f(t_up), f(t_dn) + 1):
-            top = head_top(m, CLOCK_T0() + fr / FPS)
-            key(tw, "location", fr, tuple(top)); key(tw, ("rotation_euler", 2), fr, m.root.matrix_world.to_euler()[2])
-        kshape(t_up + 0.1, 1, 0); kshape(t_dn, 1, 0)
+        t_up, t_dn = TA - 0.1, TB + 0.5
+        kshape(t_up, 0, 0)
+        key(tw, "location", f(t_up), (TWP[0], TWP[1], 0.0)); key(tw, "scale", f(t_up), FOLD)
+        r0 = tw.rotation_euler[2]; key(tw, ("rotation_euler", 2), f(t_up), r0)
+        t_on = t_up + 0.35
+        for fr in range(f(t_up) + 1, f(t_dn) + 1):
+            top = head_top(m, CLOCK_T0() + fr / FPS); k = min(1.0, (fr - f(t_up)) / max(1, f(t_on) - f(t_up)))
+            k = k * k * (3 - 2 * k)
+            loc = tuple(TWP[i] * (1 - k) + top[i] * k for i in range(2)) + (0.0 * (1 - k) + (top[2] + 0.01) * k + 0.12 * math.sin(math.pi * k),)
+            key(tw, "location", fr, loc); key(tw, ("rotation_euler", 2), fr, r0 * (1 - k) + m.root.matrix_world.to_euler()[2] * k)
         PH = (0.35 + 0.2 * math.sin(R(10)), -0.9 - 0.2 * math.cos(R(10)), 0.0)
+        key(tw, "scale", f(t_dn), FOLD); key(tw, "scale", f(t_dn + 0.35), (1.0, 1.0, 1.0))      # 置くときに広げる
         key(tw, "location", f(t_dn + 0.35), PH); key(tw, ("rotation_euler", 2), f(t_dn + 0.35), R(10)); EVENTS.append((round(t_dn + 0.35, 3), "towel"))
-        kshape(t_dn + 0.2, 0.4, 0.4); kshape(t_dn + 0.35, 0, 1)
-        show(m.antenna_objs, f(t_up), False); show(m.antenna_objs, f(t_dn + 0.3), True)   # 布の下のアンテナは隠す（突き抜けない）
+        kshape(t_dn + 0.2, 0, 0.4); kshape(t_dn + 0.35, 0, 1)
+        show(m.antenna_objs, f(t_on), False); show(m.antenna_objs, f(t_dn + 0.3), True)   # 布の下のアンテナは隠す（突き抜けない）
         bpy.context.scene.frame_set(0)
     mr.post.append(_towel)
     area((-3, 2, 3), (0, 0, 0), 120, 2, "#7F9CFF")
@@ -305,7 +315,7 @@ def s05i():
 
 # ---------------- S06a スマホの下の小さな穴 → 画面に飛び込む
 def s06a():
-    t0, t1 = span("S06", b=s("06-04") + 0.5)   # 飛び込み（言い終えてから）が入るように、次の台詞の頭まで
+    t0, t1 = span("S06", b=s("06-04") - 0.7)   # v12（v11 141「スマホに入る前にここがスマホの中と言っている」）：06-04 の前に 1.5 秒足し、飛び込みの輪が消えてから中の町へ
     world("#0C1426", 0.15); ground("#E9E2D4", size=20)
     ph = phone((0, 0, 0.0), 0, screen=None, s=3.0)
     # v10：決まりの部品で動かす（v9「この辺のまるロボの移動も」）。穴まで歩く → のぞき込む → スマホへ向く → 跳び乗る → 画面に吸い込まれる
@@ -347,7 +357,7 @@ def s06a():
 
 # ---------------- S06b スマホの中の町に着地して、ぐるりと見渡す
 def s06b():
-    t0, t1 = span("S06", a=s("06-04") + 0.5)
+    t0, t1 = span("S06", a=s("06-04") - 0.7)   # v12：中の町に落ちて着いてから「ここが、スマホの中」
     city_floor()
     # v10：上から落ちてきて着く（置き場所の親ごと落とす）→ 見回す（look_around）→ 部品の山を見上げて感心する（awe）
     mr = Maru((0, 0, 0), 0, eye_glow=1.3)
@@ -808,7 +818,9 @@ bake_all(t1)                                   # v10：まるロボの予定 →
 
 if os.environ.get("PLAN_DUMP"):                # 絵コンテ表用：カット・まるロボの命令・効果音を書き出す（make_board_table.py が読む）
     import maru_cmds as _MC
-    json.dump(dict(key=KEY, t0=t0, t1=t1, shots=SHOTLOG, events=sorted(EVENTS), steps=len(STEPS),
+    import maru_vis as _MV                     # v12：まるロボが映っているか（組み立てで、映っていない時の足音・電子音を外す）
+    _VIS = _MV.visible_times(t0, t1, f, [m.torso for m in _MC.ALL])
+    json.dump(dict(key=KEY, t0=t0, t1=t1, shots=SHOTLOG, events=sorted(EVENTS), steps=len(STEPS), vis=_VIS,
                    maru=[[(round(t, 2), k, {a: (round(v, 2) if isinstance(v, float) else v) for a, v in d.items() if a in ("deg", "pitch", "face", "n", "dur", "speed")}) for t, k, d in sorted(m.cmds, key=lambda c: c[0])] for m in _MC.ALL]),
               open(os.path.join(os.environ["PLAN_DUMP"], KEY + "_plan.json"), "w"), ensure_ascii=False)
 sc.frame_start = FR[0] if FR[1] else 0

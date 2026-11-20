@@ -233,6 +233,7 @@ for name, mode in (("ads_many", 0), ("ads_forget", 1), ("ad_notice", 2)):
         for a in range(0, 360, 30):
             r0, r1 = 210, 260; x0 = 640 + r0 * math.cos(math.radians(a)); y0 = 274 + r0 * 0.75 * math.sin(math.radians(a))
             d.line([(x0, y0), (640 + r1 * math.cos(math.radians(a)), 274 + r1 * 0.75 * math.sin(math.radians(a)))], fill=YEL, width=10)
+        save(im, "ad_notice_pre")                                    # v12（v11 708「あっの表示も音声と合ってない」）：「あっ」と言うまでは札なし
         label(d, "あっ！", 960, 120, 64, NAVY, YEL, NAVY)
     save(im, name)
 

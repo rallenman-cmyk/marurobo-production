@@ -226,7 +226,8 @@ INS = [
     (_w("15-01b", "私たち自身"), s("15-01b", 1) + 0.2, "img", "mirror_us"),
     (s("16-01"), s("16-02") - 0.05, "img", "ads_many"),                               # 11:35〜12:00 記憶の場面を絵で
     (s("16-02"), s("16-03") - 0.05, "img", "ads_forget"),
-    (s("16-03"), s("16-04") - 0.05, "img", "ad_notice"),
+    (s("16-03"), _w("16-03", "あっ") - 0.05, "img", "ad_notice_pre"),            # v12：「あっ！」の札は「あっ」と言う 1 枚から（下で字幕の切り替わりにそろえる）
+    (_w("16-03", "あっ"), s("16-04") - 0.05, "img", "ad_notice"),
     (s("16-04"), s("16-05") - 0.05, "img", "memory_strong"),
     (s("16-05"), s("16-06") - 0.05, "img", "miss_forgot"),
     (s("16-06"), s("16-06", 1) + 0.3, "img", "tally"),
@@ -333,6 +334,12 @@ def _xclip(name, part, src, dur):
 #   ②場面の始まり・終わりの近くの差し込みは、切り替わりまでのばす（切り替わりは差し込みの中で済ませ、元の場面の重ねは使わない）
 INS_GAP, INS_FD = 2.0, 0.3
 SCENE_TS = sorted(set([t for k, t in SCST.items() if k != "S00"] + [298.26]))
+# v12（v11 708・713・718・848「シーンの切り替わりが早い」）：差し込みの絵の切り替わりを、いちばん近い字幕の切り替わり（0.8 秒以内）にそろえる。
+#   字幕は 2 秒にするため声より遅れて替わることがあり、絵だけ先に替わっていた（ep04 v10「メインのテロップとそれ以外の切り替わりがズレてる」と同じ決まり）
+_SUBST = [a_ for a_, b_, t_ in json.load(open(os.path.join(EP, "animatic", "subs_events.json"), encoding="utf-8"))]
+def _snap_sub(t, lim=0.8):
+    c = min(_SUBST, key=lambda v: abs(v - t)); return c if abs(c - t) <= lim else t
+INS = [(_snap_sub(a_), (_snap_sub(b_ + 0.05) - 0.05) if b_ - a_ > 0.3 else b_, k_, g_) for a_, b_, k_, g_ in INS]
 _ins = sorted([list(x) for x in INS if x[1] - x[0] >= 0.3], key=lambda x: x[0])
 for _ in range(4):
     for x in _ins:
@@ -427,6 +434,13 @@ sys.path.insert(0, os.path.join(EP, "..", "..", "skill", "marurobo-video-product
 import maru_sfx                                                          # まるロボの気持ちの動きの電子音（maru_motions.md。3本目 v10 で足した）
 _nos = {}
 _played = []
+_MVIS = json.load(open(os.path.join(HERE, "maru_vis.json"))) if os.path.exists(os.path.join(HERE, "maru_vis.json")) else None   # make_maru_vis.py が作る
+if _MVIS is None: raise SystemExit("maru_vis.json がない（make_maru_vis.py で作る）")
+MARU_KINDS = ("step", "takeoff", "land", "step_turn", "pi", "pipo", "towel", "hat", "dive", "sigh")
+def _is_maru(kd): return kd.startswith("maru:") or kd.startswith("beep_") or kd in MARU_KINDS
+def _maru_on(t):                                                         # 映っている区間の中で、差し込みの絵がかぶっていない
+    return any(a - 0.15 <= t <= b + 0.15 for _, a, b in _MVIS) and not _covered(t)   # 0.15：数えた間隔（0.125 秒）のぶん
+offs = []
 for t, kd in ev_all:
     beep = False
     if kd.startswith("maru:"):                                          # まるロボの予定の音（maru_cmds：「maru:種類:強さ」）→ 共通の音を強さどおりに
@@ -449,10 +463,13 @@ for t, kd in ev_all:
         else:
             if beep: dropped.append("%s %.1f" % (kd, t)); continue
             over.append("%s %.1f" % (kd, t))
+    if _is_maru(kd) and not _maru_on(t):                                # v12（v11 38.5・93.2・165.5・275.6・505.7・714.1）：まるロボが映っていない時（カメラの外・差し込みの絵の間）は、まるロボの音を鳴らさない
+        offs.append("%s %.2f" % (kd, t)); continue
     _played.append((t, kd))
     i = int(t * sr); sfx_bus[i:i + len(x)] += x[:max(0, len(sfx_bus) - i)]
 ev_all = _played
 if _nos: print("【効果音】音のない種類：", _nos)
+print("【効果音】まるロボが映っていないので鳴らさなかった音：%d" % len(offs)); open(os.path.join(tmp, "maru_offscreen.txt"), "w").write("\n".join(offs))
 # 声のある所は効果音を 6 dB 下げる（上がり 0.12 秒・下がり 0.35 秒）
 env = np.ones_like(sfx_bus)
 for p in P:

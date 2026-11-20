@@ -283,6 +283,7 @@ def scene_gate():
     mr.walk(0, s("07-06") + 3.6, None, PM); mr.at(s("07-06") + 4.6, face=face_to(PM, (2.35, 1.0)))   # 戻って番犬を見る
     # ---- S08 実験
     mr.walk(0, s("08-02") + 3.4, None, PD); mr.at(s("08-02") + 4.2, face=face_to(PD, (2.35, 1.0)))   # 「目をはなさないで」：番犬の近くへ
+    mr.nod(s("08-02", 1) + 0.25)                                     # v12（v11 234.4「目をはなさないでと言われたら返事させて」）：言い終えたあとの 1.2 秒で、ピポッとうなずく（ユーザーの選択）
     tt = Wt("08-03", "テント")                                   # 「テント」と言った瞬間に、外で泡が生まれる
     sound_bubble(tt, tt + 1.8, "icon_tent.png", path=(FAR(0.0, 1.5), OUTSIDE)); ear_twitch(tt + 1.7)
     mr.peer(s("08-04") + 0.1, dur=1.6)                               # 番犬の顔をのぞく（知らん顔）
@@ -376,9 +377,11 @@ bake_all(T1)                                       # v10：まるロボの予定
 
 if os.environ.get("PLAN_DUMP"):                # 絵コンテ表用：カット・まるロボの命令・効果音を書き出す（make_board_table.py が読む）
     import maru_cmds as _MC
-    json.dump(dict(key="gate", t0=T0, t1=T1, shots=SHOTLOG, events=sorted(EVENTS), steps=len(STEPS),
+    import maru_vis as _MV                     # v12：まるロボが映っているか（組み立てで、映っていない時の足音・電子音を外す）
+    _VIS = _MV.visible_times(T0, T1, f, [m.torso for m in _MC.ALL])
+    json.dump(dict(key="gate", t0=T0, t1=T1, shots=SHOTLOG, events=sorted(EVENTS), steps=len(STEPS), vis=_VIS,
                    maru=[[(round(t, 2), k, {a: (round(v, 2) if isinstance(v, float) else v) for a, v in d.items() if a in ("deg", "pitch", "face", "n", "dur", "speed")}) for t, k, d in sorted(m.cmds, key=lambda c: c[0])] for m in _MC.ALL]),
-              open(os.path.join(os.environ["PLAN_DUMP"], "gate" + "_plan.json"), "w"), ensure_ascii=False)
+              open(os.path.join(os.environ["PLAN_DUMP"], MODE + "_plan.json"), "w"), ensure_ascii=False)
 sc.frame_start = FR[0] if FR[1] else 0
 sc.frame_end = FR[1] if FR[1] else f(T1) - 1
 sc.frame_step = STEP
