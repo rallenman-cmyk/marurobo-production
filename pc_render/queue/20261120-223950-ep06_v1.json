@@ -8,7 +8,7 @@
  "kind": "full",
  "order": 6,
  "frames": 15847,
- "fresh": false,
+ "fresh": true,
  "out": "render_ep06_v1",
  "workers": 0,
  "samples": 24,
