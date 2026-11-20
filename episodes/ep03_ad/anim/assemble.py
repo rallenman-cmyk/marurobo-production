@@ -361,7 +361,8 @@ for _ in range(3):
     for x in _ins:
         for _T in SENT_TS:
             if 0 <= _T - x[1] < 1.2: x[1] = _T + 0.6
-            if -0.4 < x[0] - _T < 1.2: x[0] = min(x[0], _T - 0.4 - INS_FD)   # v6 の点検：10:15 に、0.4 秒前の切り替わりが 0.1 秒のぞいていた
+            _chain = any(y is not x and y[0] < x[0] - 0.01 and y[1] >= x[0] - INS_GAP for y in _ins)   # v12：前の差し込みから続けて替わる所（下の 3D がのぞかない）は前倒ししない
+            if -0.4 < x[0] - _T < 1.2 and not _chain: x[0] = min(x[0], _T - 0.4 - INS_FD)   # v6 の点検：10:15 に、0.4 秒前の切り替わりが 0.1 秒のぞいていた
     for i in range(len(_ins) - 1):
         if _ins[i + 1][0] - _ins[i][1] < INS_GAP: _ins[i][1] = max(_ins[i][1], _ins[i + 1][0])
 INS_COVER = [(x[0], x[1]) for x in _ins]
