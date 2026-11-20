@@ -27,7 +27,7 @@ for i, txt, show in rows:
     a, b = T.s(i), T.e(i)
     ks = sorted({clip_at(a + (b - a) * u / 8) for u in range(9)})
     out = []
-    for nm, words in (("maru", ("まるロボ",)), ("ojisan", ("おじさん",))):
+    for nm, words in (("maru_c", ("まるロボ",)), ("ojisan", ("おじさん",))):
         if not any(wd in show for wd in words): continue
         best = max([v for v in (vis(k, nm, a, b) for k in ks) if v is not None] or [-1])
         if best < 0.5: out.append(f"{nm} {best:.2f}")

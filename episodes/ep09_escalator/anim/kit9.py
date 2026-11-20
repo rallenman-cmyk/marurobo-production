@@ -298,7 +298,7 @@ class Esc:
         for nm, xa, xb, z0 in (("lo", x0 - 0.05, tl[0][0] - 0.25, 0.0), ("hi", tl[-1][0] + 0.25, x1 + 0.05, G.H)):
             for sy in (-1, 1):
                 nb = cube(M["panel"], ((xa + xb) / 2, sy * Y_HR, z0 + (HR_H - 0.12) / 2), (xb - xa, 0.11, HR_H - 0.12), bevel=0.02)
-                cap = cube(M["hr"], (x0 if nm == "lo" else x1, sy * Y_HR, z0 + HR_H - 0.13), (0.1, 0.12, 0.05), bevel=0.015)   # ゴムのカバー（入口）
+                cap = cube(M["hr"], (x0 if nm == "lo" else x1, sy * Y_HR, z0 + HR_H - 2 * r), (0.1, 0.12, 0.05), bevel=0.015)   # ゴムのカバー（入口）。手すりが台の中へ入る所（端の半円の下）
                 if sy < 0: self.near += [nb, cap]; self.inlets[nm] = cap
         self.hrs, self.marks = [], []
         for sy in (-1, 1):
