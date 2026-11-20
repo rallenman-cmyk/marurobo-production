@@ -21,6 +21,8 @@ RD, FONTDIR, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv else 0.0
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
 FPS, SR, WV, HV = 24, 48000, 1280, 720
+FINAL = os.environ.get("MARU_FINAL") == "1"          # 本番：PC の絵（pc_frames.py の jpg・1 フォルダにまとめて）を 1920×1080 で組む。札は 1280×720 で描いて広げる
+if FINAL: WV, HV = 1920, 1080
 CL = json.load(open(os.path.join(HERE, "clips.json")))
 ORDER = sorted(CL, key=lambda k: CL[k][2])
 CHAPTER = {"S04a", "S06a", "S09a", "S13a", "S18a", "S22a", "S26a", "S27a"}
@@ -62,9 +64,10 @@ SUB_STARTS = sorted(x[0] for x in SUBS)
 LOG, FR = {}, {}
 for nm in ORDER:
     d = os.path.join(RD, nm)
+    if FINAL: d = RD
     lg = os.path.join(d, nm + "_log.json")
     if os.path.exists(lg): LOG[nm] = json.load(open(lg))
-    fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9]*.png")))
+    fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9]*.png")) + glob.glob(os.path.join(d, nm + "_[0-9]*.jpg")))
     FR[nm] = {int(os.path.basename(f)[len(nm) + 1:-4]): f for f in fs}
 _img = {}
 
@@ -212,7 +215,7 @@ json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-
 ffdir = os.path.join(FONTDIR, "700Bold")
 cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "%dx%d" % (WV, HV), "-r", str(FPS), "-i", "-",
        "-i", os.path.join(tmp, "mix.wav"), "-vf", "subtitles=%s:fontsdir=%s" % (os.path.join(tmp, "subs.ass"), ffdir),
-       "-c:v", "libx264", "-preset", "veryfast", "-crf", "30", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-shortest", OUT]
+       "-c:v", "libx264"] + (["-preset", "medium", "-crf", "18"] if FINAL else ["-preset", "veryfast", "-crf", "30"]) + ["-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k" if FINAL else "96k", "-shortest", OUT]
 pr = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 missing = set(); last = None; OVL = {}
 nf = int((TO - FROM) * FPS)
@@ -232,7 +235,11 @@ for fi in range(nf):
     if im is None: im = last if last is not None else Image.new("RGB", (WV, HV), (20, 24, 32))
     last = im
     base = im.convert("RGBA")
-    OV.draw(t, base, where, frame_of=frame, fontdir=FONTDIR)
+    if FINAL:
+        lay = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); OV.draw(t, lay, where, frame_of=frame, fontdir=FONTDIR)
+        if lay.getbbox(): base.alpha_composite(lay.resize((WV, HV), Image.LANCZOS))
+    else:
+        OV.draw(t, base, where, frame_of=frame, fontdir=FONTDIR)
     for pr_ in OV.overlaps(): OVL.setdefault(pr_, []).append(t)
     pr.stdin.write(base.convert("RGB").tobytes())
     if fi % 1200 == 0: print("%.0f 秒" % t, flush=True)
