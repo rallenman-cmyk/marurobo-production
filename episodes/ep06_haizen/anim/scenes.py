@@ -820,15 +820,18 @@ def b_face(cl):
     ear_p = sv.d["ears"][1].matrix_world.translation.copy()
     arm = kid.w.arms[0]; r0 = tuple(arm.rotation_euler); arm.animation_data_clear()
     kl, kr = (0.3, 1.0, 0.0), R(133)
-    key(arm, "rotation_euler", CLOCK["TI"], r0); key(arm, "rotation_euler", s("27-01") + 0.1, r0)
-    tt = s("27-01") + 0.5; k = 0
+    # v10 の点検：0.4 秒で腕を上げていて 1 コマ 33 度 → 1.2 秒かけて上げる。腕の向きの数は前の向きから近いほうで続ける（ぐるっと回らない）
+    from mathutils import Euler as _Eu
+    key(arm, "rotation_euler", CLOCK["TI"], r0); key(arm, "rotation_euler", s("27-01") - 0.4, r0)
+    tt = s("27-01") + 0.8; k = 0; prev_e = _Eu(r0)     # 1.2 秒かけて耳まで上げる（下から 150 度ほど）
     while tt < e("27-02") + 0.1:
         dx = (0.05 if k % 2 else -0.05)
-        key(arm, "rotation_euler", tt, aim_arm(arm, kl, kr, (ear_p.x + dx, ear_p.y + dx * 0.6, ear_p.z + 0.02), sc=0.78), "BEZIER"); tt += 0.32; k += 1
-    key(arm, "rotation_euler", e("27-02") + 0.7, r0)
+        e_ = _Eu(aim_arm(arm, kl, kr, (ear_p.x + dx, ear_p.y + dx * 0.6, ear_p.z + 0.02), sc=0.78)); e_.make_compatible(prev_e); prev_e = e_
+        key(arm, "rotation_euler", tt, tuple(e_), "BEZIER"); tt += 0.32; k += 1
+    e_ = _Eu(r0); e_.make_compatible(prev_e); key(arm, "rotation_euler", e("27-02") + 1.2, tuple(e_))   # 下ろすのも近いほうの向きで、ゆっくり
     sv.set_face(s("27-02") - 0.2, "happy"); sv.ears(s("27-01") + 0.4, e("27-02"), 10, 0.45); ev(s("27-02") - 0.1, "purr", 0.5)
     # v8 8:23「子供がなでながら回転してる」：向きのキーが、なで始め（133°）から歩き出しまでゆっくり回っていた → 歩き出す直前まで向きを止める
-    kid.at(e("27-03") - 2.6, 0.3, 1.0, 133)    # 0.6 秒で歩く向きへ回ってから歩き出す
+    kid.at(e("27-03") - 3.2, 0.3, 1.0, 133)    # 1.2 秒かけて歩く向き（164 度ふり向く）へ回ってから歩き出す（v10 の点検：0.6 秒では 1 コマ 17 度で速すぎた）
     kid.walk(e("27-03") - 2.0, [(0.3, 1.0), (-0.6, 0.55), (-1.0, 0.55)], v=0.7)
     sv.set_face(e("27-03") - 0.5, "normal")
     # 28：まるロボがまねして、テーブルの上から頭ですりすり → しつこく → 怒った顔

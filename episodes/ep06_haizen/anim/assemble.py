@@ -40,7 +40,12 @@ for k, p in enumerate(P):
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
 # 波形で確かめた切り替わり（文の頭からの秒）。自動で選ぶと外れた所（5本目 v2 のコメント：「これを」が早い・「あれ」が遅い・「ぱっ」がだいぶ早い・改行の位置がおかしい）
 #   ID: (分け方（None＝自動の分け方のまま）, [切り替わりの秒, …])。最後の 1 枚が 1.0 秒未満なら、次の文の前までのばす
-FIX_AT = {}
+FIX_AT = {
+    # v10 関所（1 行 25 字まで）：「2022年の1年間で、約3,000台まで増えました。」が 1 行 27 字 → 声の切れ目（4.76 秒）で 2 枚に
+    # v10 関所（2 秒以上）：「ぴたっ。」だけの 1 枚は 1.8 秒にしかならない → 同じ文の前とまとめて 1 行に（7本目の決まり：1 行に入るならまとめる）
+    "16-02": (["もっと近いと……ぴたっ。"], []),
+    "07-02": (["すかいらーくグループでは、\\N2022年の1年間で、", "約3,000台まで増えました。"], [4.76]),
+}
 ID_OF = {v: k for k, v in T.TEXT.items()}
 NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
 # 文ごとの声の切れ目（0.25 秒以上の無音のあと、言葉が始まる時刻）
@@ -84,6 +89,10 @@ for a, c, t in lines:
         a0, c0, t0 = ev_[i]; a1, c1, t1 = ev_[i + 1]
         if c0 - a0 < 1.0 and c1 - (a0 + 1.0) >= 1.0: ev_[i] = (a0, a0 + 1.0, t0); ev_[i + 1] = (a0 + 1.0, c1, t1)
     SUBS += ev_
+# v10 関所（1 枚 2 秒以上・1 秒 8 字まで）：短い 1 枚は、となりの字幕・声のない間から時間を借りる（7本目と同じ方法）
+sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
+import subs_balance
+SUBS = subs_balance.balance(SUBS)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
@@ -240,6 +249,8 @@ for a, c, t in SUBS:
     ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c), t.replace("\n", "\\N")))
 open(os.path.join(tmp, "subs.ass"), "w", encoding="utf-8").write("\n".join(ass) + "\n")
 json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+if os.environ.get("MARU_SUBS_ONLY"):   # 字幕だけ作って数える（絵は組まない）
+    print("字幕だけ：", os.path.join(tmp, "subs.ass")); sys.exit(0)
 
 # ---------------------------------------------------------------- 絵（1 コマずつ組んで、ffmpeg へ流す）
 ffdir = os.path.join(FONTDIR, "700Bold")
