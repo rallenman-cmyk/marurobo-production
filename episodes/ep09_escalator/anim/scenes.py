@@ -423,9 +423,9 @@ def b_bench(cl):
     rr_ = md.rear_line; mx_ = (rr_[0][0] + rr_[1][0]) / 2 - 0.15; mz_ = (rr_[0][1] + rr_[1][1]) / 2 - 0.15
     track("rear_rail_pt", empty((mx_, 0.6 - Y_RW, mz_)), 0.0); track("rear_rail_lo", empty((mx_, 0.6 - Y_RW, mz_ - 0.45)), 0.0)
     oj = ojisan((-2.2, 1.45, 0.0), face=-90.0); track("ojisan", oj.root, 1.2)   # 台の向こう：段を台に置く（15-01）
-    M = MaruR((-3.6, -0.8, 0.0), face=30.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
+    M = MaruR((-3.3, -0.8, 0.0), face=30.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
     # 15：段のまわりを歩いて車輪をのぞきこむ
-    M.walk(s("15-04") + 0.1, s("15-04") + 2.6, (-1.3, -0.25, 0.0)); M.at(s("15-04") + 3.0, face=-60.0); M.peer(e("15-04") - 1.0, 1.4)
+    M.walk(s("15-04") + 0.1, s("15-04") + 2.6, (-2.4, -0.45, 0.0)); M.at(s("15-04") + 3.4, face=170.0); M.peer(e("15-04") - 0.9, 1.3)
     t_put = s("15-01") + 0.3
     for a_ in oj.arms:                                       # おじさんが段を台に置く（腕を前へ → 戻す）
         key(a_, ("rotation_euler", 0), -100.0, 0.0); key(a_, ("rotation_euler", 0), t_put, R(-55)); key(a_, ("rotation_euler", 0), t_put + 1.0, R(-55))
@@ -438,6 +438,8 @@ def b_bench(cl):
     for a_ in oj.arms:
         key(a_, ("rotation_euler", 0), t_a - 0.7, 0.0); key(a_, ("rotation_euler", 0), t_a - 0.1, R(-60)); key(a_, ("rotation_euler", 0), t_a + 1.2, R(-60))
         key(a_, ("rotation_euler", 0), t_a + 1.8, 0.0)
+    if CLIPNAME == "C17e":                                   # 17-10 のまるロボの寄り：おじさんの頭が映りこむので、この絵だけ奥へ（前の絵とは溶けてつながる）
+        key(oj.root, "location", s("16-01") + 0.01, (3.3, 1.9, 0.0), "CONSTANT")
     md.set_rot(-100.0, 0.0); md.set_rot(t_a, 0.0); md.set_rot(t_a + 1.2, -37.0)
     for i in range(3): ev(t_a + 0.3 * i, "click", 0.3, "model%d" % i)
     M.at(s("17-01") - 0.05, loc=(0.2, -0.55, 0.0), face=60.0, interp="CONSTANT")
