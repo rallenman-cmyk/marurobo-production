@@ -138,7 +138,7 @@ class Board:
         for ch, o in self.keys.items(): track(prefix + ch, o, dz)
 
 
-def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, line=True, times=None):
+def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, line=True, times=None, press=True):
     """まるロボが word の字を順に跳ねて打つ（dt 秒ごと）。跳ねた道のりを光る線で残す（言った字まで伸びる）"""
     word = [c for c in word.upper() if c in B.keys]
     pts = [B.pos(c)[:2] for c in word]
@@ -156,7 +156,7 @@ def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, li
     if M is not None:      # まるロボ：キーからキーへ続けて跳ぶ（marumotion の hop_path。字を打つ瞬間の少し前に着く）
         M.path([B.pos(c, z=0.075) for c in word], [x - 0.03 for x in T_])
     for i, c in enumerate(word):
-        B.press(c, T_[i], gain=0.35 if dt < 0.3 else 0.5, motion=M is None)
+        if press: B.press(c, T_[i], gain=0.35 if dt < 0.3 else 0.5, motion=M is None)      # press=False：線だけ（まるロボは別の動きで跳ぶ）
     return ln
 
 

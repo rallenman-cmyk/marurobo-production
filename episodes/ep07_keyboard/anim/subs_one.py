@@ -17,12 +17,18 @@ PIECES = {             # 文の最初の字 → 分け方（ユーザーの指�
 }
 
 
-def pieces(t, SJ):
-    if t in PIECES: return list(PIECES[t])
+def pieces(t, SJ, sid=None):
+    """sid にリストを渡すと、それぞれの 1 枚がどの文（。？！で区切った文）から来たかを入れる"""
+    if t in PIECES:
+        if sid is not None: sid[:] = list(range(len(PIECES[t])))
+        return list(PIECES[t])
     out = []
-    for sen in [x for x in re.split(r'(?<=[。？！])(?=[^」』）])', t) if x.strip()]:
+    for k, sen in enumerate([x for x in re.split(r'(?<=[。？！])(?=[^」』）])', t) if x.strip()]):
         for card in SJ.plan_tame(sen):
-            out += [x for x in card.split("\\N") if x]
+            for x in card.split("\\N"):
+                if x:
+                    out.append(x)
+                    if sid is not None: sid.append(k)
     return out
 
 
@@ -33,7 +39,7 @@ def _vlen(p):
 def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
     """文 t（声 a〜c 秒）の 1 行ずつの字幕 [(始め, 終わり, 字), …]。c_max：最後の 1 枚をのばしてよい時刻"""
     c_max = max(c, c_max or c)
-    ps = pieces(t, SJ)
+    sid = []; ps = pieces(t, SJ, sid)
     try: runs, dur = SJ.gaps(wav, speed)
     except Exception: runs, dur = [], c - a
     if len(ps) == 1: return [(a, max(c, min(c_max, a + MIN)), ps[0])]
@@ -74,8 +80,9 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
         merged = False
         for k in sorted(short, key=lambda i: lens[i]):
             for j in sorted([k - 1, k + 1], key=lambda j: lens[j] if 0 <= j < len(ps) else 99):
-                if 0 <= j < len(ps) and _vlen(ps[min(j, k)] + ps[max(j, k)]) <= LINE_MAX:
-                    i0, i1 = min(j, k), max(j, k); ps = ps[:i0] + [ps[i0] + ps[i1]] + ps[i1 + 1:]; merged = True; break
+                # 別の文（「。」「？」のあと）とはまとめない（v8 で「なるほど、と思いますよね。ところが……。」が 1 枚になった。ユーザー「ところがはテロップ別にして」）
+                if 0 <= j < len(ps) and sid[j] == sid[k] and _vlen(ps[min(j, k)] + ps[max(j, k)]) <= LINE_MAX:
+                    i0, i1 = min(j, k), max(j, k); ps = ps[:i0] + [ps[i0] + ps[i1]] + ps[i1 + 1:]; sid = sid[:i1] + sid[i1 + 1:]; merged = True; break
             if merged: break
         if not merged:
             # まとめられない短い 1 枚は、次の 1 枚の頭を 0.6 秒まで遅らせて MIN にする（次の 1 枚も MIN 以上残るときだけ）
@@ -123,8 +130,13 @@ def balance(L, MIN=MIN, CPS=8.0, BORROW_NEXT=0.35, BORROW_PREV=0.5):
                 if d > 0: pv[1] -= d; x[0] -= d; need -= d
         for i, x in enumerate(L):                                            # 速すぎる（1 秒 CPS 字こえ）1 枚は、うしろの声のない間へのばす
             need = n_(x[2]) / CPS - (x[1] - x[0])
-            if need > 0.005:
+            if need > -0.01:
+                need += 0.02                                                 # ちょうど 8.0 字/秒は、数え方の丸めで「こえ」になるので少しゆとりを持たせる
                 lim = (L[i + 1][0] - 0.05) if i + 1 < len(L) else x[1] + 1.0
-                x[1] += max(0.0, min(need, lim - x[1]))
+                d = max(0.0, min(need, lim - x[1])); x[1] += d; need -= d
+            if need > 0.0 and i > 0 and abs(L[i - 1][1] - x[0]) < 0.06:   # まだ速いなら、前の 1 枚（ゆとりがあるとき）から頭を借りる（v8「もっと速く！」8.02 字/秒）
+                pv = L[i - 1]; room = min(BORROW_PREV, (pv[1] - pv[0]) - MIN, (pv[1] - pv[0]) - n_(pv[2]) / CPS)
+                d = max(0.0, min(need + 0.02, room))
+                if d > 0: pv[1] -= d; x[0] -= d
     return [tuple(x) for x in L]
 
