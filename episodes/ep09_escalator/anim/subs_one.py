@@ -123,5 +123,13 @@ def balance(L, MIN=MIN, CPS=8.0, BORROW_NEXT=0.35, BORROW_PREV=0.5):
             if need > 0.005:
                 lim = (L[i + 1][0] - 0.05) if i + 1 < len(L) else x[1] + 1.0
                 x[1] += max(0.0, min(need, lim - x[1]))
+                need = n_(x[2]) / CPS - (x[1] - x[0])
+                if need > 0.005 and i > 0 and abs(L[i - 1][1] - x[0]) < 0.06:  # まだ速いなら、すぐ前の 1 枚から借りる（前の 1 枚は、その前の声のない間へ頭を早める。9本目 v2）
+                    pv = L[i - 1]
+                    lim2 = (L[i - 2][1] + 0.05) if i > 1 else pv[0] - 0.35
+                    pv[0] -= max(0.0, min(need, 0.35, pv[0] - lim2))
+                    room = min((pv[1] - pv[0]) - MIN, (pv[1] - pv[0]) - n_(pv[2]) / CPS)
+                    d = max(0.0, min(need, room))
+                    if d > 0: pv[1] -= d; x[0] -= d
     return [tuple(x) for x in L]
 

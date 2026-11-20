@@ -57,7 +57,8 @@ for a, c, t in lines:
     _p = SJ._placement().get(t)
     ev_ = SO.events(a, c, t, os.path.join(SJ.VOICE, "line_%03d.wav" % _p["no"]), SJ, speed=_p.get("speed", 1.0), c_max=NEXT_START[a] - 0.05)
     SUBS += [(float(x), float(y), z) for x, y, z in ev_]
-SUBS = SO.balance(sorted(SUBS))      # 2 秒に足りない字幕は、となりから時間を借りる（7本目 v8 の作り）
+SUBS = [(a_, c_, t_.strip("　 ")) for a_, c_, t_ in SUBS]   # 分けた頭に残る空白を取る（9本目 v2「　すぐに止まった…」）
+SUBS = SO.balance(sorted(SUBS), MIN=2.02, CPS=7.9)      # 2 秒に足りない字幕は、となりから時間を借りる（7本目 v8 の作り）   # 時刻を 1/100 秒に切り捨てても 2 秒・8 字を割らないよう、少しゆとりを持たせる（9本目 v2：2.00 秒が 1.99 秒・8.0 字が 8.01 字になった）
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
