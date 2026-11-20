@@ -456,23 +456,27 @@ def b_lidar(cl):
     restaurant(); crowd()
     pos = (0.0, 0.6)
     sv = Sv(senpai_serve(pos, 0)); track("senpai", sv.root, 1.2); track("window", sv.d["lidwin"], 0.0)
-    sv.spin(CLOCK["T0"] - 1, 240, rps=0.5)
-    # 光の線（回る頭から、まわりへ。13-03「光を当てて」から）
+    # v9 4:11「光がぐるぐる回ってないよ」：細い 3 本・0.5 回/秒では、上から見ると線がちらつくだけで回って見えない
+    #   → 太い 1 本＋後ろに薄くなる光の扇（レーダーのように）。1 回り 4 秒（0.25 回/秒）にして、目で追える速さに
+    RPS = 0.25
+    sv.spin(CLOCK["T0"] - 1, 240, rps=RPS)
     S = plan.segments(); P_ = []
-    for k in range(3):
-        bm = beam(sv.d["spin"], length=2.6, col=TEAL, r=0.012, strength=10.0); bm.rotation_euler = (0, 0, R(120 * k))   # v8 4:11：上から見て回るのが分かる太さに
-        show_between(bm, w("13-03", "光を当てて"))
-        # 光の線は、当たった所（脚・壁）で止める（突き抜けて遠くまで伸びない）。回る角度は spin と同じ計算（0.5 回/秒）
-        tt = max(CLOCK["T0"] - 1, w("13-03", "光を当てて") - 0.2)
+    t_on = w("13-03", "光を当てて")
+    TRAIL = [(0, 0.022, 14.0)] + [(j * 2.5, 0.016, 7.0 * (1 - j / 17) ** 2) for j in range(1, 17)]   # (後ろへの角度, 太さ, 明るさ)
+    for k, (off, rr, st) in enumerate(TRAIL):
+        bm = beam(sv.d["spin"], length=2.6, col=TEAL, r=rr, strength=st); bm.rotation_euler = (0, 0, R(-off))
+        show_between(bm, t_on)
+        # 光の線は、当たった所（脚・壁）で止める（突き抜けて遠くまで伸びない）。回る角度は spin と同じ計算
+        tt = max(CLOCK["T0"] - 1, t_on - 0.2)
         while tt < CLOCK.get("T1", tt + 10) + 1:
-            h_ = plan.ray(pos[0], pos[1], -math.pi / 2 + 2 * math.pi * 0.5 * tt + R(120 * k), S, 2.6)
+            h_ = plan.ray(pos[0], pos[1], -math.pi / 2 + 2 * math.pi * RPS * tt + R(-off), S, 2.6)
             key(bm, ("scale", 1), tt, h_[0] if h_ else 2.6, "LINEAR"); tt += 1 / 24
-    # 当たった所に点（壁・脚）
-    t0 = w("13-03", "返ってきた")
-    for i in range(400):
-        t = t0 + i * 0.012; a = -math.pi / 2 + 2 * math.pi * 0.5 * t + R(120 * (i % 3))
-        h = plan.ray(pos[0], pos[1], a, S, 2.6)
+    # 当たった所に点（壁・脚）。太い光が通った所に順に残り、お店の形が描かれていく
+    t0 = w("13-03", "返ってきた"); t = t0
+    while t < CLOCK.get("T1", t0 + 8) + 1:
+        h = plan.ray(pos[0], pos[1], -math.pi / 2 + 2 * math.pi * RPS * t, S, 2.6)
         if h: P_.append((h[1][0], h[1][1], t))
+        t += 0.008
     point_cloud("hits", P_, col=TEAL, radius=0.035, base=1.8, pop=6.0, decay=6.0, t_offset=CLOCK["T0"])
     M = MaruR(MP.plan_lidar, "lidar", 0.0); track("maru", M.root, 0.15)
     if cut(cl, "S13a"): cam((-0.35, -0.75, 0.95), (0.0, 0.6, 0.5), 28, s("13-01") - 0.2, s("13-02"), (-0.32, -0.6, 0.88), (0.0, 0.6, 0.45))
@@ -816,15 +820,18 @@ def b_face(cl):
     ear_p = sv.d["ears"][1].matrix_world.translation.copy()
     arm = kid.w.arms[0]; r0 = tuple(arm.rotation_euler); arm.animation_data_clear()
     kl, kr = (0.3, 1.0, 0.0), R(133)
-    key(arm, "rotation_euler", CLOCK["TI"], r0); key(arm, "rotation_euler", s("27-01") + 0.1, r0)
-    tt = s("27-01") + 0.5; k = 0
+    # v10 の点検：0.4 秒で腕を上げていて 1 コマ 33 度 → 1.2 秒かけて上げる。腕の向きの数は前の向きから近いほうで続ける（ぐるっと回らない）
+    from mathutils import Euler as _Eu
+    key(arm, "rotation_euler", CLOCK["TI"], r0); key(arm, "rotation_euler", s("27-01") - 0.4, r0)
+    tt = s("27-01") + 0.8; k = 0; prev_e = _Eu(r0)     # 1.2 秒かけて耳まで上げる（下から 150 度ほど）
     while tt < e("27-02") + 0.1:
         dx = (0.05 if k % 2 else -0.05)
-        key(arm, "rotation_euler", tt, aim_arm(arm, kl, kr, (ear_p.x + dx, ear_p.y + dx * 0.6, ear_p.z + 0.02), sc=0.78), "BEZIER"); tt += 0.32; k += 1
-    key(arm, "rotation_euler", e("27-02") + 0.7, r0)
+        e_ = _Eu(aim_arm(arm, kl, kr, (ear_p.x + dx, ear_p.y + dx * 0.6, ear_p.z + 0.02), sc=0.78)); e_.make_compatible(prev_e); prev_e = e_
+        key(arm, "rotation_euler", tt, tuple(e_), "BEZIER"); tt += 0.32; k += 1
+    e_ = _Eu(r0); e_.make_compatible(prev_e); key(arm, "rotation_euler", e("27-02") + 1.2, tuple(e_))   # 下ろすのも近いほうの向きで、ゆっくり
     sv.set_face(s("27-02") - 0.2, "happy"); sv.ears(s("27-01") + 0.4, e("27-02"), 10, 0.45); ev(s("27-02") - 0.1, "purr", 0.5)
     # v8 8:23「子供がなでながら回転してる」：向きのキーが、なで始め（133°）から歩き出しまでゆっくり回っていた → 歩き出す直前まで向きを止める
-    kid.at(e("27-03") - 2.6, 0.3, 1.0, 133)    # 0.6 秒で歩く向きへ回ってから歩き出す
+    kid.at(e("27-03") - 3.2, 0.3, 1.0, 133)    # 1.2 秒かけて歩く向き（164 度ふり向く）へ回ってから歩き出す（v10 の点検：0.6 秒では 1 コマ 17 度で速すぎた）
     kid.walk(e("27-03") - 2.0, [(0.3, 1.0), (-0.6, 0.55), (-1.0, 0.55)], v=0.7)
     sv.set_face(e("27-03") - 0.5, "normal")
     # 28：まるロボがまねして、テーブルの上から頭ですりすり → しつこく → 怒った顔
@@ -868,6 +875,54 @@ def aim_arm_full(arm, root_loc, rot_xyz, target):
     return tuple(d.to_track_quat('-Z', 'Y').to_euler())
 
 
+def hold_arms(st, M, t_a, t_g, t_r, t_e, hold):
+    """店員さんの両手で、まるロボの体の左右をはさむ。1 コマずつ、まるロボの本当の場所（運ばれる親・体の動きを入れた後）をねらう。
+    v9 9:49「店員の置く時の腕がぐわんぐわんゆれてる」：前は 5 か所だけ腕の向き（オイラー角）を打ち、あいだを曲線でつないでいた。
+      角度が一回りの境目をまたぐと、あいだで腕がぐるっと回ってしまう → 毎コマ、前のコマに近い角度で打つ（make_compatible）。
+    t_a〜t_g：下ろした腕から、つかむ形へなめらかに。t_g〜t_r：はさんだまま。t_r〜t_e：はなして、少し前に下ろした形へ"""
+    from mathutils import Vector, Euler, Quaternion
+    sc = bpy.context.scene
+    f0, f1 = f(t_a), f(t_e)
+    for arm in st.w.arms:
+        ad = arm.animation_data
+        if ad and ad.action:
+            for fc in ad.action.fcurves:
+                if fc.data_path != "rotation_euler": continue
+                for kp in [k for k in fc.keyframe_points if f0 < k.co[0] <= f1 + 0.5][::-1]: fc.keyframe_points.remove(kp)
+    sc.frame_set(f0)
+    q_start = {arm.name: arm.rotation_euler.to_quaternion() for arm in st.w.arms}
+    q_end = Euler((R(-20), 0, 0)).to_quaternion()
+    prev = {arm.name: arm.rotation_euler.copy() for arm in st.w.arms}
+    sm = lambda x: x * x * (3 - 2 * x)
+    out = {arm.name: [] for arm in st.w.arms}
+    for fr in range(f0 + 1, f1 + 1):
+        sc.frame_set(fr); t = CLOCK["T0"] + fr / FPS
+        body = M.root.matrix_world.translation
+        for arm in st.w.arms:
+            pm = arm.parent.matrix_world
+            side = pm.to_3x3() @ Vector((1, 0, 0)); side.z = 0; side.normalize()
+            sd = 1.0 if arm.location.x > 0 else -1.0
+            tgt = body + side * (sd * hold)
+            sh = pm @ arm.location
+            d = pm.to_3x3().inverted() @ (tgt - sh)
+            q_aim = Vector((0, 0, -1)).rotation_difference(d)   # ねじれない向け方（to_track_quat は、腕が横を向くとねじれが急に変わる）
+            if t <= t_g: q = q_start[arm.name].slerp(q_aim, sm(max(0.0, min(1.0, (t - t_a) / (t_g - t_a)))))
+            elif t <= t_r: q = q_aim
+            else:
+                q_rel = out[arm.name][-1][2] if out[arm.name] else q_aim
+                q = q_rel.slerp(q_end, sm(max(0.0, min(1.0, (t - t_r) / (t_e - t_r)))))
+                out[arm.name].append((fr, q.to_euler('XYZ', prev[arm.name]), q_rel)); prev[arm.name] = out[arm.name][-1][1]; continue
+            e_ = q.to_euler('XYZ', prev[arm.name]); prev[arm.name] = e_
+            out[arm.name].append((fr, e_, q))
+    for arm in st.w.arms:
+        for fr, e_, _ in out[arm.name]:
+            arm.rotation_euler = e_; arm.keyframe_insert("rotation_euler", frame=fr)
+        for fc in arm.animation_data.action.fcurves:
+            if fc.data_path == "rotation_euler":
+                for kp in fc.keyframe_points:
+                    if f0 < kp.co[0] <= f1: kp.interpolation = 'LINEAR'
+
+
 def b_end(cl):
     # v2：まるロボは台所の出口の横の台でひと休み → 店員さんが両手で持ち上げ、先輩のいちばん下のトレーへ（v1 9:23「動きおかしい」）。
     #     まるロボ（高さ約 0.40 m）はトレーの間（0.21 m）に入らないので、この場面だけ、まん中と上のトレーを外しておく（v1 9:28「貫通してる」）
@@ -899,7 +954,8 @@ def b_end(cl):
     g = t_l - 0.45                                      # つかむ（「ひょいと」の少し前）
     keys = [(g, (cnt[0], cnt[1] - 0.05, CZ + 0.005), 0.0, f_cnt),
             (g + 0.35, (cnt[0] - 0.12, cnt[1] - 0.1, CZ + 0.16), 0.0, f_cnt),
-            (g + 0.9, None, 0.0, f_sv),
+            # v9 9:49「腕がぐわんぐわんゆれてる」：持ち上げてから 0.55 秒で 170 度ふり向いていた（毎秒 300 度）→ トレーの上に来るまで 1.4 秒かけて回る
+            ((g + 0.35 + t_p - 0.25) / 2, None, 0.0, (f_cnt + f_sv) / 2),
             (t_p - 0.25, (tray0[0] + 0.1, tray0[1] - 0.05, tray0[2] + 0.36), 0.0, f_sv),
             (t_p + 0.15, (tray0[0] + 0.03, tray0[1], tray0[2] + 0.3), 0.0, f_sv)]   # ここで手をはなし、まるロボがぽんと乗る
     for i, (t, loc, lean, f) in enumerate(keys):
@@ -907,18 +963,12 @@ def b_end(cl):
             th = R(f); fx, fy = math.sin(th), -math.cos(th); loc = (SP[0] + fx * 0.42, SP[1] + fy * 0.42, 0.78)
         PK.append((t, loc, None))
         key(st.root, ("rotation_euler", 0), t, lean, "BEZIER"); key(st.root, ("rotation_euler", 2), t, R(f), "BEZIER")
-        # v8 9:49「店員の手がまるロボを貫通してる」：両手で体のまん中をねらっていた → 体の左右（半径 0.13 m＋手の厚み）を、横からはさむ
-        for arm in st.w.arms:
-            sd = 1.0 if arm.location.x > 0 else -1.0
-            tgt = (loc[0] + sd * HOLD * math.cos(R(f)), loc[1] + sd * HOLD * math.sin(R(f)), loc[2] + MB)
-            key(arm, "rotation_euler", t, aim_arm_full(arm, (SP[0], SP[1], 0.0), (lean, 0.0, R(f)), tgt), "BEZIER")
     PK.append((t_p + 0.4, tray0, None))
     for hp in st.w.hips:   # 持ち上げる間は、足をそろえて立つ
         key(hp, ("rotation_euler", 0), g - 0.3, 0.0); key(hp, ("rotation_euler", 0), s("30-03") + 0.5, 0.0)
-    for arm in st.w.arms:   # 手をのばし始める・はなす
-        key(arm, "rotation_euler", t_l - 1.0, (0, 0, 0)); key(arm, "rotation_euler", t_p + 0.8, (R(-20), 0, 0))
     key(st.root, ("rotation_euler", 0), t_p + 0.8, 0.0, "BEZIER")
-    PK += [(g, None, 200 + 180), (g + 0.9, None, 180 + 180), (t_p + 0.15, None, 0 + 180)]
+    # まるロボも店員さんと同じ向きへ、一緒にゆっくり回る（前は 380→180 と逆回り。数を 360 足して、同じ回り方に）
+    PK += [(g, None, 200 + 180), ((g + 0.35 + t_p - 0.25) / 2, None, 290 + 180), (t_p + 0.15, None, 360 + 180)]
     ev(g + 0.05, "jump", 0.35); ev(t_p + 0.4, "land", 0.5)
     st.at(t_p + 1.0, SP[0], SP[1], f_sv); st.walk(s("30-03") + 0.6, [SP, (1.0, 2.4)], v=0.6)
     sv.piron(w("30-03", "ピロン"), "happy")
@@ -927,7 +977,7 @@ def b_end(cl):
     t = dr.t0
     while t <= dr.t1 + 0.6:
         x, y, a = dr.pose(min(t, dr.t1)); th = R(a)
-        dd = 0.02 * SVS; PK.append((t, (x + dd * math.sin(th), y - dd * math.cos(th), tray0[2]), a + 180, "LINEAR")); t += 0.125
+        dd = 0.02 * SVS; PK.append((t, (x + dd * math.sin(th), y - dd * math.cos(th), tray0[2]), a + 540, "LINEAR")); t += 0.125
     # 席で、スプーンを持って待つお客さん
     p = seated(10, 'in', "#E8A04D")
     spn = empty((0.75, 1.15, 0.85)); spn.rotation_euler = (R(60), 0, R(20))
@@ -935,6 +985,7 @@ def b_end(cl):
     track("spoon", spn, 0.0)
     PK.sort(key=lambda k_: k_[0])
     M = MaruR(MP.plan_end, "end", 0.0, PK); track("maru", M.root, 0.15)
+    hold_arms(st, M, t_l - 1.0, g, t_p + 0.15, t_p + 0.8, HOLD)
     if cut(cl, "S30a"): cam((0.4, 1.55, 1.15), (1.3, 3.1, 0.95), 30, s("30-01") - 0.2, s("30-02"), (0.42, 1.65, 1.12), (1.3, 3.1, 0.97))
     if cut(cl, "S30b"): cam((-0.45, 0.85, 1.6), (0.5, 2.95, 1.12), 24, s("30-02") - 0.2, s("30-03"), (-0.42, 0.95, 1.58), (0.45, 2.9, 1.08))   # v3 点検：店員さんの頭が切れていた
     if cut(cl, "S30c"):
@@ -984,6 +1035,25 @@ if __name__ == "__main__" or True:
         #   後ろの場面だけ、すでに動いた物が最初の場所へ戻される（6本目 v8 9:52「まるロボがトレイの上から移動してる」）
         CLOCK["TI"] = min(v[1] for v in CLIPS.values() if v[0] is fn) - 1.5
         fn(CLIPNAME)
+        if "--spincheck" in sys.argv:
+            # 点検（6本目 v9 9:49「腕がぐわんぐわんゆれてる」）：場面の全部のコマで、自分で回る物（腕・足・体など）の
+            #   1 コマあたりの回り方を測り、速すぎる所（既定 12 度/コマ＝毎秒 290 度）を書き出す。描かない
+            lim = float(_opt("--spincheck", 1, "12"))
+            sc = bpy.context.scene; prev = {}; worst = {}
+            obs = [o for o in sc.objects if o.animation_data and o.animation_data.action and
+                   any(fc.data_path.startswith("rotation") for fc in o.animation_data.action.fcurves)]
+            for fr in range(f(t0), f(t1) + 1):
+                sc.frame_set(fr)
+                for o in obs:
+                    q = o.matrix_world.to_quaternion()
+                    if o.name in prev:
+                        a = math.degrees(2 * math.acos(min(1.0, abs(prev[o.name].dot(q)))))   # q と -q は同じ向き
+                        if a > worst.get(o.name, (0, 0))[0]: worst[o.name] = (a, CLOCK["T0"] + fr / FPS)
+                    prev[o.name] = q
+            nm_ = lambda n: n + ("（" + sc.objects[n].parent.name + " の子）" if sc.objects[n].parent else "")
+            bad = sorted([(round(a, 1), round(t, 2), nm_(n)) for n, (a, t) in worst.items() if a > lim], reverse=True)
+            json.dump(bad, open(os.path.join(OUTDIR, CLIPNAME + "_spin.json"), "w"))
+            print("SPIN", CLIPNAME, len(bad), bad[:8]); sys.exit(0)
         if "--probe" in sys.argv:
             # 点検（6本目 v8 9:52）：同じ組み立ての場面どうしで、物の動きが場面によって変わらないかを比べるため、
             #   決まった時刻（--probe a b：a〜b 秒を 0.5 秒ごと）の、全部の物の場所・向きを書き出す。描かない

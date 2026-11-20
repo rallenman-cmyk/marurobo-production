@@ -12,6 +12,9 @@ sys.path.insert(0, os.path.join(HERE, "..", "..", "ep04_robot", "look"))
 import design as D
 import timing as T
 s, e, w = T.s, T.e, T.w
+import json as _json
+_LT = _json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "voice", "letter_times.json"), encoding="utf-8"))
+def lt(i, ch): return s(i) + _LT[i][ch]      # 声が字を言う瞬間（scenes.py と同じ）
 YEL = (255, 210, 74); NAVY = D.NAVY; NAVY2 = D.NAVY2; WHITE = (255, 255, 255); RED = (226, 58, 48)
 BLUE = (61, 139, 255); ORANGE = (255, 154, 60); GREEN = (60, 203, 106)
 SUB_TOP = 560
@@ -31,17 +34,17 @@ def ev_list():
     add(w("03-04", "なぜ") - 0.2, e("03-04") + 0.4, "bubble", dict(obj="maru", icon="?"))
     add(e("03-05") + 0.3, s("04-01") - 0.3, "title", {})
     # 04〜05：名前の札（引きの絵だけ）・打つ言葉・人とまるロボの札（2 つ同時に）
-    add(s("04-03") + 1.6, e("05-05") + 0.5, "tag", dict(text="クワーティ", obj="k_T", dy=-150, bg=BLUE, fg=WHITE))
-    add(s("04-03") + 1.6, e("05-05") + 0.5, "tag", dict(text="ABC 順", obj="a_E", dy=-150, bg=ORANGE, fg=WHITE))
+    add(s("04-03") + 1.6, e("05-06") + 0.5, "tag", dict(text="クワーティ", obj="k_T", dy=-150, bg=BLUE, fg=WHITE))
+    add(s("04-03") + 1.6, e("05-06") + 0.5, "tag", dict(text="ABC 順", obj="a_E", dy=-150, bg=ORANGE, fg=WHITE))
     add(w("05-02", "マルロボ"), s("05-04"), "tag", dict(text="マルロボ ＝ M A R U R O B O", pos=(640, 80), size=52))
     add(w("05-03", "人は") - 0.1, e("05-03") + 0.3, "tag", dict(text="人：10本の指", pos=(330, 110), size=46, keep=True))
     add(w("05-03", "まるロボ"), e("05-03") + 0.3, "tag", dict(text="まるロボ：1字ずつ", pos=(950, 110), size=46, keep=True))
     # MARUROBO：押したキーから字が浮き上がって、左上に並ぶ（v5「該当のキーを押したらその文字が浮かび上がって まるろぼ になるように」）
     t = w("05-04", "道のり"); dt = min(0.55, (e("05-04") + 0.4 - t) / 7)
-    t2 = s("05-05") - 0.2 + 4.3; dt2 = min(0.55, (e("05-05") + 0.5 - t2) / 7)      # scenes.py の path_a と同じ（v7：となりへ大きく跳んで移ってから打つ）
+    TA = [lt("05-06", k_) for k_ in ("M", "A", "R", "U", "R2", "O", "B", "O2")]      # scenes.py の path_a と同じ（v8：05-06 の声が字を言う瞬間）
     it = [("k_" + ch, ch, t + i * dt, i, 0, BLUE) for i, ch in enumerate("MARUROBO")]
-    it += [("a_" + ch, ch, t2 + i * dt2, i, 1, ORANGE) for i, ch in enumerate("MARUROBO")]
-    add(t, e("05-05") + 0.6, "typed", dict(items=it))
+    it += [("a_" + ch, ch, TA[i], i, 1, ORANGE) for i, ch in enumerate("MARUROBO")]
+    add(t, e("05-06") + 0.6, "typed", dict(items=it))
     # 06：結果（名前の札は引きの絵だけ。距離の札は決まった場所）
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))
@@ -65,6 +68,10 @@ def ev_list():
     add(w("10-09", "クワーティ"), e("10-09") + 0.3, "tag", dict(text="クワーティ", pos=(640, 80), size=52, bg=BLUE, fg=WHITE))
     add(w("11-01", "どうして") - 0.2, e("11-01") + 0.3, "bubble", dict(obj="maru", icon="?"))
     # 13〜15：説（引用の札）・からまる・わざとゆっくり
+    add(s("13-01") + 0.3, e("13-02") + 0.4, "tag", dict(text="T", obj="bar_T", dy=-70, bg=ORANGE, fg=WHITE, size=46))      # v8：どの 2 本か
+    add(s("13-01") + 0.3, e("13-02") + 0.4, "tag", dict(text="Y", obj="bar_Y", dy=-70, bg=BLUE, fg=WHITE, size=46))
+    add(w("13-02", "ぶつかって"), e("13-02") + 0.4, "tag", dict(text="ぶつかって、からまった！", obj="jam", dy=-150, size=46))
+    add(s("12-03"), e("12-03") + 0.3, "tag", dict(text="紙", obj="paper", dy=-40, size=46))
     add(s("13-04"), e("13-04") + 0.3, "tag", dict(text="よく続けて打つ字を、わざと離した？", pos=(640, 80), size=46))
     add(s("13-02") + 0.6, e("13-02") + 0.4, "bubble", dict(obj="maru", icon="!"))
     add(w("14-05", "おかしい") - 0.2, e("14-05") + 0.3, "bubble", dict(obj="maru", icon="?"))
@@ -84,9 +91,12 @@ def ev_list():
     add(w("17-07", "学校の先生"), e("17-08") + 0.3, "tag", dict(text="学校の先生", obj="teacher", dy=-90, size=44, keep=True))
     add(w("17-08", "もっと速く"), e("17-08") + 0.5, "tag", dict(text="「もっと速く！」", pos=(640, 170), size=56, bg=YEL))
     # 18：Z と SE
-    add(w("18-02", "Z"), e("18-05") + 0.4, "morse", dict(t_z=w("18-02", "Z"), t_s=w("18-03", "S"), t_e=w("18-04", "E が"), t_same=w("18-04", "あれ")))
+    add(w("18-02", "Z"), e("18-05") + 0.4, "morse", dict(t_z=w("18-02", "Z"), t_s=w("18-03", "S"), t_e=w("18-04", "E が"), t_same=w("18-04", "あれ"),
+        z_ts=[lt("18-02", k_) for k_ in ("t1", "t2", "t3", "t4")], s_ts=[lt("18-04", k_) for k_ in ("s1", "s2", "s3", "e")]))      # 点は声の「トン」の瞬間に 1 つずつ
     # 19：迷う
     add(w("19-01", "迷って") - 0.1, e("19-01") + 0.3, "bubble", dict(obj="op", icon="?"))
+    add(w("19-03", "この3つ"), e("19-05") + 0.4, "tag", dict(text="Z ・・・ ・", obj="k_Z", dy=90, bg=ORANGE, fg=WHITE, size=44))       # v8：Z と S＋E がどれか
+    add(w("19-03", "みると"), e("19-05") + 0.4, "tag", dict(text="S＋E ・・・ ・", obj="k_E", dy=-110, bg=(60, 200, 180), fg=WHITE, size=44))
     # 20：予想・からみの小窓・特許の書類・1889年
     add(w("20-01", "予想"), e("20-01") + 0.3, "tag", dict(text="研究者の予想", pos=(640, 80), size=50))
     add(w("20-02", "棒のからみ"), e("20-02") + 0.3, "pip_clip", dict(clip="S13a", src_t=s("13-02") - 0.2))
@@ -207,15 +217,19 @@ def bars_sprite(p, t, t0):
 def morse_sprite(t, p):
     """Z ＝ ・・・　・ と、S ＋ E ＝ ・・・　・（2 段。ほとんど同じ）"""
     def dr(d, W_, H_, ss, img):
-        def dots(x, y, pat, col):
+        def dots(x, y, pat, col, ts):
+            k = 0
             for c in pat:
                 if c == " ": x += 46 * ss; continue
-                d.ellipse([x, y - 15 * ss, x + 30 * ss, y + 15 * ss], fill=col); x += 48 * ss
+                if k < len(ts) and t >= ts[k]:
+                    big = 1.0 + 0.35 * max(0.0, 1 - (t - ts[k]) / 0.25)      # 出た瞬間だけ少し大きく
+                    r = 15 * ss * big; d.ellipse([x + 15 * ss - r, y - r, x + 15 * ss + r, y + r], fill=col)
+                k += 1; x += 48 * ss
         if t >= p["t_z"]:
-            D.ctext(d, (110 * ss, 90 * ss), "Z", D.font(64 * ss), NAVY); dots(230 * ss, 90 * ss, "... .", NAVY)
+            D.ctext(d, (110 * ss, 90 * ss), "Z", D.font(64 * ss), NAVY); dots(230 * ss, 90 * ss, "... .", NAVY, p.get("z_ts", [0] * 4))
         if t >= p["t_s"]:
             D.ctext(d, (110 * ss, 210 * ss), "S E", D.font(56 * ss), D.TEAL_D)
-            dots(230 * ss, 210 * ss, "..." if t < p["t_e"] else "... .", D.TEAL_D)
+            dots(230 * ss, 210 * ss, "... .", D.TEAL_D, p.get("s_ts", [0] * 4))
         if t >= p["t_same"]:
             d.rounded_rectangle([210 * ss, 40 * ss, 470 * ss, 260 * ss], 20 * ss, outline=RED + (255,), width=6 * ss)
     return D.card(560, 300, draw=dr)[0]

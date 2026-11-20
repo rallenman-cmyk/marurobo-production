@@ -195,6 +195,9 @@ class Sv:
         x, y, ang = pose if pose else dr.pose(t); self.place(t, x, y, ang)
 
     def spin(self, t0, t1, rps=1.0):
+        # 止まる時刻は、少なくとも場面の終わりより後に（6本目 v9 4:11「光がぐるぐる回ってないよ」：止まる時刻を 240 秒と書いたまま、
+        #   4:08 からの場面で使っていて、光の線が回らず長さだけ変わっていた）
+        t1 = max(t1, CLOCK.get("T1", t1) + 2.0)
         sp = self.d["spin"]
         key(sp, ("rotation_euler", 2), t0, t0 * rps * 2 * math.pi, "LINEAR"); key(sp, ("rotation_euler", 2), t1, t1 * rps * 2 * math.pi, "LINEAR")
 
@@ -224,7 +227,14 @@ class Wk:
 
     def at(self, t, x, y, face=None, interp="BEZIER"):
         key(self.root, ("location", 0), t, x, interp); key(self.root, ("location", 1), t, y, interp)
-        if face is not None: key(self.root, ("rotation_euler", 2), t, R(face), interp)
+        if face is not None:
+            # 向きは、すでに打った向き（その時刻の値）から近いほうへ回る数にする（6本目 v10 の点検：なでる子どもが歩き出すとき、
+            #   133 度から -153 度へ、近い 74 度でなく逆向きに 286 度回っていた。1 コマ 20 度）
+            a = R(face); ad = self.root.animation_data
+            fc = ad.action.fcurves.find("rotation_euler", index=2) if ad and ad.action else None
+            if fc and len(fc.keyframe_points):
+                cur = fc.evaluate(f(t)); a = cur + ((a - cur + math.pi) % (2 * math.pi) - math.pi)
+            key(self.root, ("rotation_euler", 2), t, a, interp)
 
     def walk(self, t0, pts, v=1.0, swing=24, face=None):
         """pts を速さ v で歩く。返り値：歩き終わる時刻。向きは進む向き"""

@@ -119,8 +119,8 @@ class Board:
 
     def light(self, ch, t0, t1=None, col="#FFD24A", strength=2.5, d=0.25):
         """キーを光らせる（その字のキーの上の面に光る板）。t1 で消す"""
-        o = self.keys[ch]
-        if ch not in self.glows:   # 大きさを scale で付けた物に scale_pop を使わない（SKILL）：空の親を弾ませる
+        o = self.keys[ch]; gk = (ch, col)
+        if gk not in self.glows:      # 色ごとに別の板（v8：同じキーを別の色で光らせると、前の色のままだった）   # 大きさを scale で付けた物に scale_pop を使わない（SKILL）：空の親を弾ませる
             gm = flat_mat("kglow_" + ch + str(id(self)), col, strength)
             bpy.context.view_layer.update()
             wm = o.matrix_world.translation
@@ -128,8 +128,8 @@ class Board:
             g.parent = o; g.matrix_parent_inverse = o.matrix_world.inverted()      # キーの子（v7：板が残って、浮き上がったキーや沈んだキーとずれた）
             gl = cube(gm, (wm.x, wm.y, wm.z + 0.0358), (self.k * 0.8, self.k * 0.8, 0.001)); bpy.context.view_layer.update()
             gl.parent = g; gl.matrix_parent_inverse = g.matrix_world.inverted(); gl.visible_shadow = False
-            self.glows[ch] = g; hide_key(g, -100.0, True)
-        g = self.glows[ch]
+            self.glows[gk] = g; hide_key(g, -100.0, True)
+        g = self.glows[gk]
         hide_key(g, t0, False); scale_pop(g, t0, 1.0, d)
         if t1 is not None: hide_key(g, t1, True)
 
@@ -138,24 +138,25 @@ class Board:
         for ch, o in self.keys.items(): track(prefix + ch, o, dz)
 
 
-def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, line=True):
+def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, line=True, times=None):
     """まるロボが word の字を順に跳ねて打つ（dt 秒ごと）。跳ねた道のりを光る線で残す（言った字まで伸びる）"""
     word = [c for c in word.upper() if c in B.keys]
     pts = [B.pos(c)[:2] for c in word]
+    T_ = list(times) if times else [t0 + i * dt for i in range(len(word))]      # times：字ごとの時刻（声が字を言う瞬間。v8）
     ln = None
     if line and len(pts) > 1:
         ln = line_path(name, pts, col=col, width=0.018, z=KEY_TOP + z, emit=3.0)
-        ln.data.bevel_factor_end = 0.0; ln.data.keyframe_insert("bevel_factor_end", frame=f(t0))
+        ln.data.bevel_factor_end = 0.0; ln.data.keyframe_insert("bevel_factor_end", frame=f(T_[0]))
         L = [0.0]
         for a, b in zip(pts, pts[1:]): L.append(L[-1] + math.dist(a, b))
         for i in range(1, len(pts)):
-            ln.data.bevel_factor_end = L[i] / L[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(t0 + i * dt))
+            ln.data.bevel_factor_end = L[i] / L[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(T_[i]))
         for fc in ln.data.animation_data.action.fcurves:
             for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
     if M is not None:      # まるロボ：キーからキーへ続けて跳ぶ（marumotion の hop_path。字を打つ瞬間の少し前に着く）
-        M.path([B.pos(c, z=0.075) for c in word], [t0 + i * dt - 0.03 for i in range(len(word))])
+        M.path([B.pos(c, z=0.075) for c in word], [x - 0.03 for x in T_])
     for i, c in enumerate(word):
-        B.press(c, t0 + i * dt, gain=0.35 if dt < 0.3 else 0.5, motion=M is None)
+        B.press(c, T_[i], gain=0.35 if dt < 0.3 else 0.5, motion=M is None)
     return ln
 
 
@@ -272,11 +273,11 @@ def piano_typewriter(loc=(0, 0.55, 0.94), k=0.13):
     front = "ABCDEFGHIJKLMN"; back = "OPQRSTUVWXYZ"
     for i, ch in enumerate(front):
         keys[ch] = pressable(cube(white, ((i + 0.5) * k, -0.05, 0.14), (k * 0.92, 0.32, 0.06), bevel=0.01, parent=root), 0.02)
-        key_label(keys[ch], ch, k, "#1E2530", size=0.9, h=0.06)
+        key_label(keys[ch], ch, k, "#1E2530", size=1.45, h=0.06)      # v8：字を大きく（v7「文字もう少し大きくして」）
     for i, ch in enumerate(back):   # 右から左
         x = (n - 0.5 - i) * k - k * 0.5
         keys[ch] = pressable(cube(black, (x, 0.2, 0.2), (k * 0.7, 0.2, 0.06), bevel=0.01, parent=root), 0.02)
-        key_label(keys[ch], ch, k, "#F2EBDD", size=0.72, h=0.06)
+        key_label(keys[ch], ch, k, "#F2EBDD", size=1.1, h=0.06)
     return root, keys
 
 
@@ -319,7 +320,7 @@ def typebar_basket(center=(0, 0, 0), r=1.2, n=36, bars=None):
         hd = cube(mat("typehead", "#2A2D31", rough=0.3, metal=0.7), (0, -r * 0.9, 0.04), (0.07, 0.07, 0.06), parent=p)
         if ch.isalpha(): key_label(hd, ch, 0.1, "#F2EBDD", size=0.85, h=0.06)      # 棒の先にも字（7本目 v6）
         pv[ch] = p
-    cyl(mat("guide", "#55504A", rough=0.4, metal=0.7), (0, 0, 0.9), 0.12, 0.1, parent=root)
+    # v8：真ん中の上に浮いていた丸い部品（字の通り道）は消した（v7「棒の上にある丸いのはなに？」）。打つ所には紙と紙を押さえる筒（b_inside）
     return root, pv
 
 

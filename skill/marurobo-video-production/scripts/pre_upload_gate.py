@@ -1,6 +1,6 @@
 # 動画レビューに上げる前の関所（2026-11-20、7本目 v7 のコメント 43 件の振り返り。決まりを書いても守れていなかったので、守らないと上げられない形にした）
 #   python3 pre_upload_gate.py <回のフォルダ> <版の番号> <通し.mp4> <字幕.ass>
-#   ① 字幕の数：1 枚 2 秒未満・1 秒 8 字こえ・1 行 25 字こえ（Main の字幕だけ）が 1 枚でもあれば不合格
+#   ① 字幕の数：1 枚 2 秒未満・1 秒 8 字こえ・1 行 25 字こえ・3 行以上（Main の字幕だけ）が 1 枚でもあれば不合格
 #   ② 点検表 <回のフォルダ>/点検_v<番号>.md（ひな形：references/点検表_ひな形.md）：
 #      全部の項目の「結果：」が書いてあり、「まだ・未・あとで・確かめていない・見ていない」がなく、「OK・問題なし・見た」だけで終わっていないこと
 #   合格なら <通し.mp4>.gate.json（動画の sha256・字幕の数・時刻）を作る。vr_version.py build は、この印がないと止まる
@@ -25,7 +25,7 @@ def subs(ass):
         p = l.split(",", 9)
         if p[3] != "Main": continue
         f = lambda x: sum(float(v) * m for v, m in zip(x.split(":"), (3600, 60, 1)))
-        L.append((f(p[1]), f(p[2]), re.sub(r"\{.*?\}", "", p[9].strip()).replace("\\N", "")))
+        L.append((f(p[1]), f(p[2]), re.sub(r"\{.*?\}", "", p[9].strip())))   # 行の分け目（\N）は残す（1 行ごとに数える）
     return sorted(L)
 
 
@@ -34,8 +34,10 @@ def main():
     bad = []
     L = subs(ass)
     for a, b, t in L:
+        # 2026-11-20 ユーザー（6本目）「2 行のまま・道具を決まりに合わせる」：決まりは「1 行 25 字まで」。2 行の字幕は 1 行ごとに数え、3 行以上は外
+        rows = t.split("\\N"); t = "".join(rows)
         n = len(t.replace(" ", "")); d = b - a
-        if d < MIN_DUR - 0.01 or n / d > MAX_CPS or n > MAX_LEN: bad.append("  字幕 %6.2f 秒  %.2f 秒  %.1f 字/秒  %d 字  %s" % (a, d, n / d, n, t))
+        if d < MIN_DUR - 0.01 or n / d > MAX_CPS or max(len(r.replace(" ", "")) for r in rows) > MAX_LEN or len(rows) > 2: bad.append("  字幕 %6.2f 秒  %.2f 秒  %.1f 字/秒  %d 字  %s" % (a, d, n / d, n, t))
     print("字幕 %d 枚（いちばん短い %.2f 秒・まん中 %.2f 秒）。決まりの外：%d 枚" % (len(L), min(b - a for a, b, _ in L), statistics.median(b - a for a, b, _ in L), len(bad)))
     for x in bad: print(x)
     sheet = os.path.join(ep, "点検_v%s.md" % num)
