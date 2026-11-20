@@ -30,6 +30,27 @@ def make(kind, sr=48000):
         n = int(0.9 * sr); tt = np.arange(n) / sr; f = 95 - 40 * tt / 0.9
         x = np.sin(2 * np.pi * np.cumsum(f) / sr) * np.linspace(1, 0, n) ** 1.5
         return 0.25 * (x + 0.3 * _n(0.9, sr, 60, 400, a=0.01, d=0.8)[:n])
+    if kind == "start":     # 動き出す（静かな所から低いうなりが上がる。stop の逆）
+        n = int(0.9 * sr); tt = np.arange(n) / sr; f = 55 + 40 * tt / 0.9
+        x = np.sin(2 * np.pi * np.cumsum(f) / sr) * np.linspace(0, 1, n) ** 1.5
+        return 0.25 * (x + 0.3 * _n(0.9, sr, 60, 400, a=0.8, d=1e9)[:n] * np.linspace(0, 1, n))
+    if kind == "hum":       # エスカレーターの低いうなり（2 秒でつながる輪。ずっと流す床の音）
+        n = 2 * sr; tt = np.arange(n) / sr
+        x = np.sin(2 * np.pi * 95 * tt) + 0.5 * np.sin(2 * np.pi * 190 * tt) + 0.25 * np.sin(2 * np.pi * 285 * tt)
+        return (x / 1.75 + 0.35 * _n(2.0, sr, 80, 600, a=0.0001, d=1e9)).astype(np.float32)
+    if kind == "murmur":    # 駅のざわめき（人の声のような帯の雑音。ゆっくり大きさが揺れる。4 秒でつながる輪）
+        n = 4 * sr; tt = np.arange(n) / sr
+        x = _n(4.0, sr, 250, 1800, a=0.0001, d=1e9) * (0.75 + 0.25 * np.sin(2 * np.pi * tt / 4.0)) * (0.85 + 0.15 * np.sin(2 * np.pi * 3 * tt / 4.0))
+        return x.astype(np.float32)
+    if kind == "katan":     # 段がくしの下へ入る小さな「カタン」（軽い金属の当たる音）
+        return 0.26 * _mx(_n(0.05, sr, 400, 3500, a=0.0004, d=0.018), 0.5 * _t(520, 470, 0.08, sr, a=0.0004, d=0.03))
+    if kind == "gotton":    # 段が歯車で回る「ゴトン」（低く、ゆっくり）
+        return 0.34 * _mx(_n(0.18, sr, 60, 700, a=0.003, d=0.07), 0.8 * _t(85, 60, 0.3, sr, a=0.003, d=0.12))
+    if kind == "chain":     # 鎖の音（小さなカチャカチャが続く。1.2 秒）
+        n = int(1.2 * sr); x = np.zeros(n)
+        for i in range(12):
+            c = _n(0.025, sr, 1500, 6000, a=0.0003, d=0.008) * (0.5 + 0.5 * ((i * 7) % 3) / 2); j = int(i * 0.095 * sr); x[j:j + len(c)] += c[:n - j]
+        return 0.2 * x * np.sin(np.linspace(0, np.pi, n)) ** 0.5
     if kind == "click":     # ボタン（カチッ）
         return 0.3 * _mx(_n(0.02, sr, 1500, 6000, a=0.0002, d=0.006), 0.4 * _t(1800, 1700, 0.03, sr, a=0.0002, d=0.01))
     if kind == "thunk":     # ガクン（低くて重い）

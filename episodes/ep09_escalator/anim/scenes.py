@@ -230,6 +230,13 @@ def b_day(cl):
     track("shoe", shoe, 0.0)
     hide_key(shoe, -100.0, True); hide_key(shoe, t27, False); hide_key(shoe, e("27-05") + 1.0, True)
     key(shoe, ("location", 1), -100.0, -(YW - 0.12)); key(shoe, ("location", 1), w("27-02", "つま先"), -(YW - 0.12)); key(shoe, ("location", 1), w("27-02", "つま先") + 1.0, -(YW - 0.07))
+    # 絵コンテの音の欄（2026-11-20 の点検で足した）。エスカレーター全体・場面全体の音なので、映る物の条件は付けない
+    ev(s("01-02") + 0.6, "whoosh", 0.12, "")                                       # 01-02：体を左右にふる「くるっ」
+    ev(s("03-02") + 1.5, "katan", 0.15, "")                                        # 03-02：段がくしの下へ（小）
+    ev(w("03-03", "1枚") + 0.1, "katan", 0.2, ""); ev(w("03-03", "また") + 0.45, "katan", 0.2, "")   # 03-03：1枚、また1枚
+    ev(s("06-01") + 1.0, "katan", 0.15, "")                                        # 06-01：降り口（小）
+    ev(w("07-05", "消えました") - 0.25, "katan", 0.2, "")                         # 07-05：シールの段が消える
+    ev(s("25-01") + 1.05, "clank", 0.2, ""); ev(s("25-01") + 1.4, "land", 0.3, "")   # 25-01：04-03 の絵をもう一度（くしに乗り上げて、ころん）
     return dict(E=E, M=M, k3=k3, k2=k2, oj=oj, bt=bt)
 
 
@@ -293,13 +300,17 @@ def b_night(cl):
     ev(t_lid + 0.1, "clank", 0.3, "ojisan")
     M.peer(s("09-04") + 0.2, 1.6)
     t_go = w("09-05", "動かして")                          # 09-05：おじさんがうなずいて、段を動かす合図
+    # 動き出す音（エスカレーター全体の音なので、映っている物に関係なく鳴らす）：09-05 と、見張りで止まったあとおじさんが動かし直す所
+    ev(t_go + 0.05, "click", 0.3, ""); ev(t_go + 0.25, "start", 0.35, "")
+    for t_rs in (s("30-01") + 0.4, s("31-01") + 0.4, s("32-01") + 0.4, s("34-01") + 0.6):
+        ev(t_rs, "start", 0.35, "")
     key(oj.head, ("rotation_euler", 0), -100.0, 0.0); key(oj.head, ("rotation_euler", 0), t_go - 0.5, 0.0)
     key(oj.head, ("rotation_euler", 0), t_go - 0.2, R(14)); key(oj.head, ("rotation_euler", 0), t_go + 0.2, 0.0)
     x_room = (LID_HI[0] + LID_HI[1]) / 2 - 0.05
-    t_dn = s("10-01") - 0.4
+    t_dn = s("10-01") + 0.15                               # 10-01 の絵（機械の部屋の中）で、跳び降りてくる所を見せる
     M.jump(t_dn, (x_room, -0.2, Z_PIT_HI))
     M.at(s("10-01") + 2.6, face=-90.0)                     # 左（くしの方）を向く
-    M.at(s("10-01") + 1.0, look=38); M.at(e("10-04"), look=10)
+    M.at(s("10-01") + 1.3, look=38); M.at(e("10-04"), look=10)
     M.at(s("11-04"), look=0)
     M.walk(w("11-04", "たどって"), e("11-04") + 0.8, (G.X_HI_END + G.RG + 0.55, -0.2, Z_PIT_HI))
     M.act(w("11-05", "歯車") + 0.2, "awe", dur=2.4, pitch=24)
@@ -320,6 +331,7 @@ def b_night(cl):
     want = G.LTOP + math.pi * G.RG + G.LTOP - 2.2               # 戻る側の下の端の少し手前
     sp.skips.append((t_c13, (want - s_kb) % G.LOOP))
     M.at(s("13-01") + 0.3, loc=(XL_PIT + 0.55, -0.2, Z_PIT_LO), face=90.0, interp="CONSTANT")
+    ev(w("13-03", "すき間") + 0.1, "clank", 0.12, "comb_lo")     # 13-03：段がすき間から出る小さな「カタン」
     lid_lo = bpy.data.objects[[o.name for o in bpy.data.objects if o.type == 'MESH' and abs(o.location.x - (LID_LO[0] + LID_LO[1]) / 2) < 0.01 and abs(o.location.z - (-0.012)) < 0.01][0]]
     key(lid_lo, "location", -100.0, tuple(lid_lo.location)); key(lid_lo, "location", s("13-01"), (lid_lo.location.x, -HY - 0.75, 0.02))
     # 13-01 の切りかわり（地下を映している間）に、おじさんを下のふたの横へ移す（13-04：開けて待っている）
@@ -349,7 +361,7 @@ def b_night(cl):
     ev(t_p + 0.3, "roll", 0.3, "ball")
     M.walk(s("28-04") + 0.4, s("29-01") + 1.0, (mx, -(Y_HR), 0.0)); M.at(s("29-01") + 3.5, face=90.0)
     M.push(t_p, 0.35)
-    ev(w("29-03", "止まりました") - 0.2, "stop", 0.4, "inlet")
+    ev(w("29-03", "止まりました") - 0.2, "stop", 0.4, "")
     M.sigh(s("29-05") + 0.2)
     # ② 段の横：リボン
     t_rb = w("30-02", "はさんで") + 0.1
@@ -359,7 +371,7 @@ def b_night(cl):
     hide_key(rib, -100.0, True); hide_key(rib, t_rb, False); hide_key(rib, s("31-01") - 0.1, True)
     M.at(s("30-01") - 0.05, loc=(XLC - 0.42, -0.3, CP), face=90.0, interp="CONSTANT")
     M.push(w("30-02", "はさんで"), 0.3)
-    ev(w("30-03", "止まりました") - 0.2, "stop", 0.4, "ribbon")
+    ev(w("30-03", "止まりました") - 0.2, "stop", 0.4, "")
     # ③ くし：小石
     peb = sphere(mat("pebble", "#7D7A74", rough=0.8), (XLC + 0.05, 0.0, 0.02), 0.03, scale=(1.2, 1, 0.8)); track("pebble", peb, 0.0)
     hide_key(peb, -100.0, True); hide_key(peb, w("31-02", "小石"), False); hide_key(peb, s("32-01"), True)
@@ -368,11 +380,11 @@ def b_night(cl):
     ck = E.combs["lo"]
     key(ck, ("location", 0), -100.0, ck.location.x); key(ck, ("location", 0), w("31-03", "押されると"), ck.location.x)
     key(ck, ("location", 0), w("31-03", "押されると") + 0.3, ck.location.x - 0.012); key(ck, ("location", 0), s("32-01"), ck.location.x)
-    ev(w("31-03", "止まりました") - 0.2, "stop", 0.4, "comb_lo")
+    ev(w("31-03", "止まりました") - 0.2, "stop", 0.4, "")
     # ④ 手すりを頭で押さえる（下の乗り口の近く）
     M.at(s("32-01") - 0.05, loc=(XLC - 0.65, -(Y_HR - 0.42), 0.0), face=90.0, interp="CONSTANT")
     M.tilt(w("32-02", "押さえる") - 0.3, 18); M.push(w("32-02", "押さえる"), 0.6); M.tilt(e("32-03") + 0.2, 0)
-    ev(t_all + 0.2, "stop", 0.4, "inlet")
+    ev(t_all + 0.2, "stop", 0.4, "")
     M.sigh(s("33-02") + 0.1)
     for a_ in oj.arms: key(a_, ("rotation_euler", 0), -100.0, 0.0)
     key(oj.head, ("rotation_euler", 0), -100.0, 0.0); key(oj.head, ("rotation_euler", 0), s("33-03") + 0.3, 0.0)
@@ -385,7 +397,7 @@ def b_night(cl):
     M.push(w("34-03", "えいっ") - 0.05, 0.3)
     key(bt[1], ("location", 1), -100.0, bx.y); key(bt[1], ("location", 1), t_btn - 0.05, bx.y)
     key(bt[1], ("location", 1), t_btn + 0.05, bx.y + 0.015); key(bt[1], ("location", 1), t_btn + 0.5, bx.y)
-    ev(t_btn, "click", 0.4, "button"); ev(t_btn + 0.3, "stop", 0.35, "comb_lo")
+    ev(t_btn, "click", 0.4, "button"); ev(t_btn + 0.3, "stop", 0.35, "")
     k_m = E.find_step(t_btn, 0.75)
     x_m = E.step_at(k_m, t_btn)[0]
     for nm_, dx in (("stop0", 0.0), ("stop10", 0.10), ("stop60", 0.60)):
@@ -397,6 +409,11 @@ def b_night(cl):
     M.at(s("36-01") - 0.05, loc=(1.2, -0.15, 0.0), face=90.0, interp="CONSTANT")
     M.path([(1.35, -0.15, 0.0), (1.5, -0.15, 0.0), (1.62, -0.15, 0.0)], [w("36-05", "測って") + 0.4 * i for i in range(1, 4)], silent=False)
     M.nod(s("36-06") + 0.4)
+    ev(w("10-03", "1枚") + 0.1, "katan", 0.15, "")                               # 10-03：すき間から段が入ってくる
+    ev(s("11-02") + 0.3, "chain", 0.25, "")                                        # 11-02：鎖の音（小）
+    ev(w("11-06", "回ると") + 0.1, "gotton", 0.25, "")                            # 11-06：ゴトン（ゆっくり）
+    ev(w("12-01", "くるっと") + 0.1, "gotton", 0.3, "")                            # 12-01：段が歯車で回る
+    ev(w("13-01", "くるっと") + 0.1, "gotton", 0.3, "")                            # 13-01：下の歯車で回る
     return dict(E=E, M=M, oj=oj, bt=bt, lid=lid, kb=kb, t_btn=t_btn, t_all=t_all, t_hr=t_hr)
 
 
@@ -458,6 +475,7 @@ def b_bench(cl):
     M.path(pts, [w("17-09", "今度は") + 0.45 * i for i in range(1, 4)], silent=False)
     M.hops(e("17-09") + 0.3, n=1, height=0.05)
     M.confused(w("17-10", "なぜ") - 0.4)
+    ev(w("15-03", "前に") + 0.05, "pi", 0.25, ""); ev(w("15-03", "後ろに") + 0.05, "pi", 0.25, "")   # 15-03：車輪が光る（ピッ×2）
     return dict(M=M, md=md, st=st, oj=oj)
 
 
@@ -509,6 +527,7 @@ def b_cut(cl):
     M.confused(s("14-03") + 0.5)
     M.nod(w("20-01", "答え"))
     M.at(s("39-01"), face=10.0)
+    ev(s("23-03") + 0.5, "rub", 0.2, "")                                           # 23-03：車ではさんでこする（ゴロゴロ・小）
     return dict(E=E, M=M, doll=doll)
 
 
