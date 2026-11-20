@@ -853,6 +853,12 @@ if __name__ == "__main__" or True:
                     print("MARU_LOG", r_[0], r_[1], r_[2], "->", nx)
             print("MARU_LATE", json.dumps(MARU_LATE, ensure_ascii=False)); sys.exit(0)
         bake_maru(t0, t1)
+        if os.environ.get("MARU_PRESSCHECK"):     # 乗った物の点検だけ（描かない）
+            print("PRESSCHECK", CLIPNAME, len(PRESS_BAD), PRESS_BAD[:10])
+            for _t, _n, _ in PRESS_BAD[:3]:
+                _o = bpy.data.objects[_n]; _fc = [c for c in _o.animation_data.action.fcurves if c.data_path == "location" and c.array_index == 2][0]
+                print("  KEYS", _n, [(round(k.co.x / FPS + CLOCK["T0"], 2), round(k.co.y, 3), k.interpolation) for k in _fc.keyframe_points if abs(k.co.x / FPS + CLOCK["T0"] - _t) < 1.0])
+            sys.exit(0)
         if os.environ.get("MARU_PROBE"):          # 物の高さを調べる（点検用）
             _sc = bpy.context.scene
             for _t in [float(x) for x in os.environ["MARU_PROBE"].split(",")]:

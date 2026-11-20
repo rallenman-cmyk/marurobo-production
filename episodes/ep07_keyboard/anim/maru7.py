@@ -215,12 +215,15 @@ class MaruR:
         return frames
 
 
+PRESS_BAD = []
+
+
 def press_under(m, frames, step=2):
     """まるロボの足が乗っている物（kit の PRESS）を、乗っている間だけ沈める（v8：2026-11-20「まるロボが乗ったボタンは沈ませて」6 件。
     v7 までは乗るキーを手で 1 つずつ hold していて、本物の動きに替えたときに抜けた）。足が地面に着いている（stance）間だけ数える"""
     from mathutils import Vector
     if not PRESS: return
-    sc = bpy.context.scene; occ = {}
+    sc = bpy.context.scene; occ = {}; SINK = []
     near = lambda o: True
     for fr in frames[::step]:
         sc.frame_set(f(fr["t"]))
@@ -246,15 +249,34 @@ def press_under(m, frames, step=2):
             else: iv.append([t, t])
         ad = o.animation_data
         for t0, t1 in iv:
-            t1 += dt * 0.5
+            t1 += dt * 0.5; SINK.append((t0, t1, dep))
             if ad and ad.action:                              # 乗っている間の手書きの上下（押す・浮き上がる）は消す
                 for fc in ad.action.fcurves:
                     if fc.data_path == "location" and fc.array_index == 2:
                         for kp in [kp for kp in fc.keyframe_points if f(t0) - 1 <= kp.co.x <= f(t1) + 2][::-1]: fc.keyframe_points.remove(kp)
-            key(o, ("location", 2), t0 - 0.02, z0, "LINEAR"); key(o, ("location", 2), t0 + 0.05, z0 - dep, "LINEAR")
+            key(o, ("location", 2), t0 - 0.05, z0, "LINEAR"); key(o, ("location", 2), t0 + 0.01, z0 - dep, "LINEAR")      # 足が着いた時には沈みきっている
             key(o, ("location", 2), t1, z0 - dep, "LINEAR"); key(o, ("location", 2), t1 + 0.08, z0, "LINEAR")
+    # まるロボも、沈んだキーと一緒に沈む（足がキーの上に浮かない）。置き場所の親の高さで
+    if SINK and not m.drops:
+        par = m.h.parent; z = par.location.z
+        U = []                                               # 重なる区間（両足が別のキー）はまとめる（間で浮かない）
+        for t0, t1, dep in sorted(SINK):
+            if U and t0 - 0.06 <= U[-1][1] + 0.08: U[-1] = [U[-1][0], max(U[-1][1], t1), max(U[-1][2], dep)]
+            else: U.append([t0, t1, dep])
+        for t0, t1, dep in U:
+            key(par, ("location", 2), t0 - 0.05, z, "LINEAR"); key(par, ("location", 2), t0 + 0.01, z - dep, "LINEAR")
+            key(par, ("location", 2), t1, z - dep, "LINEAR"); key(par, ("location", 2), t1 + 0.08, z, "LINEAR")
+    # 点検：足が乗っているのに沈んでいない・乗っていないのに沈んだまま、のコマを出す（v8：2026-11-20「乗ってるのに沈んでたボタンが戻るとこあった」）
+    bad = []
+    for fr in frames[::step]:
+        sc.frame_set(f(fr["t"]))
+        for o, dep, z0 in PRESS:
+            ts_ = occ.get(o, ())
+            on = fr["t"] in ts_ and (fr["t"] - 0.1) in [x for x in ts_ if x >= fr["t"] - 0.11 and x <= fr["t"] - 0.09] or (fr["t"] in ts_ and any(abs(x - (fr["t"] - 0.1)) < 0.05 for x in ts_))   # 乗った最初の 0.1 秒（沈んでいく途中）は数えない
+            if on and o.location.z > z0 - dep * 0.7: bad.append((round(fr["t"], 2), o.name, "乗っているのに戻っている"))
     sc.frame_set(0)
-    print("【まるロボ】乗って沈めた物：", sum(1 for o in occ), "個")
+    PRESS_BAD.extend(bad)
+    print("【まるロボ】乗って沈めた物：", sum(1 for o in occ), "個。乗っているのに戻ったコマ：", len(bad), bad[:6])
 
 
 def bake_maru(T0, T1):
