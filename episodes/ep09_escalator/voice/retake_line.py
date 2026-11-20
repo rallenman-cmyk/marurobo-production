@@ -3,6 +3,7 @@
 # MARU_WORK=<作業フォルダ> python3 retake_line.py 4,10,13 [回数=4] [必ず聞こえてほしい言葉=まる]
 #   KANA=1 をつけると、ひらがなで書き起こして MUST（ひらがなで書く。例 そうじきが）を確かめる（5本目 v2「そうじが と読んでいる」）
 #   前後の文も一緒に読ませて（3 文）、まん中の文だけを切り出す（1 文だけで読ませると調子が変わるため）
+#   BATCH=1 をつけると、声は Gemini のバッチ（まとめて頼んで、数分後に受け取る）で作る。1 日の回数の上限が別なので、回数切れのときに使う（6本目 v3、ユーザー「バッチファイルでやってみて」）
 import os, sys, json, wave, base64, urllib.request, difflib, re, shutil, time
 import numpy as np
 W = os.environ["MARU_WORK"]; D = W + "/stage/voice/achernar"
@@ -23,7 +24,7 @@ def post(model, body, timeout=240):
         try: return json.load(urllib.request.urlopen(req, timeout=timeout))
         except Exception as e:
             print("retry", repr(e)[:120], flush=True); time.sleep(20 * (k + 1))
-    raise SystemExit("API 失敗")
+    raise RuntimeError("API 失敗")
 
 
 def tts(lines):
@@ -31,6 +32,34 @@ def tts(lines):
             "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Achernar"}}}}}
     r = post("gemini-3.8-flash-tts", body)
     return np.frombuffer(base64.b64decode(r["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]), np.int16).astype(np.float32) / 32768
+
+
+def tts_batch(jobs):
+    """jobs：[文のリスト] → 声のリスト（同じ順）。バッチで頼んで、できるまで待つ"""
+    reqs = [{"request": {"contents": [{"parts": [{"text": STYLE + "\n#### TRANSCRIPT\n" + "\n".join(lines)}]}],
+                         "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Achernar"}}}}},
+             "metadata": {"key": "k%03d" % i}} for i, lines in enumerate(jobs)]
+    req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash-tts:batchGenerateContent",
+                                 data=json.dumps({"batch": {"display_name": "maru-retake", "input_config": {"requests": {"requests": reqs}}}}).encode(),
+                                 headers={"Content-Type": "application/json", "x-goog-api-key": KEY})
+    name = json.load(urllib.request.urlopen(req, timeout=240))["name"]; print("バッチ", name, len(jobs), "本", flush=True)
+    while True:
+        time.sleep(20)
+        r = json.load(urllib.request.urlopen(urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/" + name, headers={"x-goog-api-key": KEY}), timeout=120))
+        st = r.get("metadata", {}).get("state")
+        if r.get("done"): break
+    if st != "BATCH_STATE_SUCCEEDED": raise SystemExit("バッチ失敗 " + str(st))
+    out = {}
+    for it in r["response"]["inlinedResponses"]["inlinedResponses"]:
+        k = it.get("metadata", {}).get("key")
+        try:
+            dat = base64.b64decode(it["response"]["candidates"][0]["content"]["parts"][0]["inlineData"]["data"])
+        except Exception: out[k] = None; continue
+        if dat[:4] == b"RIFF":   # バッチは WAV の形で返る（ふつうの呼び出しは中身だけ）
+            import io
+            with wave.open(io.BytesIO(dat)) as w_: dat = w_.readframes(w_.getnframes())
+        out[k] = np.frombuffer(dat, np.int16).astype(np.float32) / 32768
+    return [out.get("k%03d" % i) for i in range(len(jobs))]
 
 
 def wav_bytes(x, sr=24000):
@@ -93,29 +122,50 @@ def pick_middle(x, texts, sr=24000):
     return y[max(0, on[0] - 960): on[-1] + 960] if len(on) else None
 
 
+PRE = {}
+if os.environ.get("BATCH"):   # 先に全部の文の声をまとめて作っておく
+    jobs, keys = [], []
+    for no in NOS:
+        i = no - 1
+        ctx = [FIX.get(str(k + 1), L[k]["tts"]) for k in (i - 1, i, i + 1) if 0 <= k < len(L)]
+        for k in range(N): jobs.append(ctx); keys.append(no)
+    for no, x in zip(keys, tts_batch(jobs)): PRE.setdefault(no, []).append(x)
 norm = lambda s: re.sub(r'[、。？！「」…　 ・,.!?\s]', '', s)
 for no in NOS:
     i = no - 1; e = L[i]
     ctx = [FIX.get(str(k + 1), L[k]["tts"]) for k in (i - 1, i, i + 1) if 0 <= k < len(L)]
     mid = 1 if i > 0 else 0
     cands = []
+    stop = False
     for k in range(N):
-        x = tts(ctx)
+        try: x = PRE[no][k] if PRE else tts(ctx)
+        except RuntimeError:   # 1 日の回数切れ：それまでの候補から選んで、ここで止める（6本目 v3：良い候補が残らず消えた）
+            print("回数切れ。候補 %d 個から選ぶ" % len(cands), flush=True); stop = True; break
+        if x is None: continue
         y = pick_middle(x, ctx) if len(ctx) == 3 else (pick_first(x, ctx) if mid == 0 and len(ctx) == 2 else x)
         if y is None: continue
-        h = heard(y); sc = difflib.SequenceMatcher(None, norm(e["text"]), norm(h)).ratio()
+        try: h = heard(y)
+        except RuntimeError: print("書き起こし失敗", flush=True); stop = True; break
+        sc = difflib.SequenceMatcher(None, norm(e["text"]), norm(h)).ratio()
         if os.environ.get("KANA"):
-            hk = heard_kana(y); ok = MUST in hk; h = h + " ／ " + hk
+            try: hk = heard_kana(y)
+            except RuntimeError: print("書き起こし失敗", flush=True); stop = True; break
+            ok = MUST in hk; h = h + " ／ " + hk
         else:
             ok = (not MUST) or (MUST in h or MUST.replace("まる", "マル") in h)
         cps = len(e["text"]) / (len(y) / 24000)
         cands.append((sc + (0.3 if ok else 0) - 0.05 * abs(cps - 7.0), y, h, sc, cps))
         print(no, e["id"], "候補", k, "一致 %.2f" % sc, "字/秒 %.1f" % cps, h, flush=True)
-    if not cands: print(no, "作れず"); continue
+    if not cands:
+        print(no, "作れず")
+        if stop: raise SystemExit("回数切れで止めた")
+        continue
     best = max(cands, key=lambda c: c[0])
     p = D + "/line_%03d.wav" % no
     if not os.path.exists(p.replace(".wav", "_before_retake.wav")): shutil.copy(p, p.replace(".wav", "_before_retake.wav"))
     open(p, "wb").write(wav_bytes(best[1]))
     V[str(no)]["dur"] = round(len(best[1]) / 24000, 3); V[str(no)]["retake"] = True
     print(no, e["id"], "→ 選んだ：", best[2], "（一致 %.2f）" % best[3], flush=True)
+    json.dump(V, open(D + "/lines.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)   # 1 文ごとに残す
+    if stop: raise SystemExit("回数切れで止めた（ここまでは保存した）")
 json.dump(V, open(D + "/lines.json", "w", encoding="utf-8"), ensure_ascii=False, indent=0)

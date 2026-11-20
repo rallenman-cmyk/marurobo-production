@@ -489,7 +489,7 @@ def _esc_helpers():
     def _riders(self, p):
         s_board, s_alight = G.DIP_LEN + 0.45, G.LTOP - G.DIP_LEN - 0.3
         xb, _ = G.top_point(s_board)[0]; xa, _ = G.top_point(s_alight)[0]
-        for wk, k, y in self.riders:
+        for i_r, (wk, k, y) in enumerate(self.riders):
             sk = (p + k * G.PITCH) % G.LOOP
             u = sk - s_board
             if u > G.LOOP / 2: u -= G.LOOP
@@ -499,7 +499,7 @@ def _esc_helpers():
                 (fx, fz), _ = G.top_point(sk); x, z, walk = fx - 0.18, fz + G.TREAD_DZ, False
             else: x, z, walk = xa + (u - Lr), G.H, True
             wk.root.location = (x, y, z)
-            vis = -11.0 < x < 22.0 and not any(a_ <= self._t_now <= b_ for a_, b_ in getattr(self, "rider_hide", []))
+            vis = -11.0 < x < 22.0 and not any(a_ <= self._t_now <= b_ for a_, b_ in getattr(self, "rider_hide", [])) and i_r not in getattr(self, "rider_off", ())
             if getattr(wk, "_vis", None) != vis:          # 変わったときだけ（毎コマ書くと、Blender が全部を組み直して遅い）
                 wk._vis = vis
                 for ob in [wk.root] + list(wk.root.children_recursive): ob.hide_render = not vis

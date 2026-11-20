@@ -139,7 +139,7 @@ def b_day(cl):
     M.surprise(e("04-02") - 1.3)
     p_sc = E.tread(k2, t_sc)
     M.carry(t_sc, t_sc + 0.6, lambda t, t0=t_sc: (0.55 * min(1, (t - t0) / 0.6), 0.0, 0.05 * math.sin(math.pi * min(1, (t - t0) / 0.6))))
-    M.act(t_sc + 0.05, "roll_over", side=-1)
+    M.act(t_sc + 0.05, "tumble_back")                   # くしにすくわれて、後ろへひっくり返る（v1 のコメント「ひっくり返る感じにして」。横へ転がる roll_over から替えた）
     ev(t_sc, "clank", 0.25, "comb_hi")
     M.act(s("04-05") + 0.3, "get_up")
     M.at(s("04-06") - 0.2, face=-80.0)
@@ -590,9 +590,9 @@ CUTS = [
     ("A01c", _day, s("01-03"), C((-3.2, -1.0, 1.0), (4.0, 0.0, 2.2), 28), "A"),
     ("A01d", _day, s("01-04"), C((0.3, -2.6, 3.0), (0.4, 0.0, 0.5), 30), "A"),
     ("A02", _day, s("02-01"), lambda t0: F((-0.5, -1.5, 2.4), 30), "A"),
-    ("A02b", _day, s("02-03"), lambda t0: F((0.5, -0.9, 1.6), 32, 0.1), "A"),
+    ("A02b", _day, s("02-03"), lambda t0: F((-1.0, 0.8, 1.4), 30, 0.15), "A"),   # 後ろ右の上から、足もとの段と前の段の境目を（-y の前からは手すりにくっついて見え、足もとも手すりで隠れた）
     ("A02c", _day, s("02-04"), lambda t0: F((-1.2, -1.3, 2.2), 34), "A"),
-    ("A02d", _day, s("02-05"), C((4.5, -12.0, 2.0), (4.8, 0.0, 1.5), 30), "A"),
+    ("A02d", _day, s("02-05"), C((1.6, -1.1, 2.9), (6.8, 0.0, 2.6), 30), "A"),   # 下の乗り口の上から坂を見上げて、階段の形を（真横の引きは手すりの壁で段が見えなかった）
     ("A03", _day, s("03-01"), lambda t0: F((0.3, -1.5, 2.4), 30), "A"),
     ("A03b", _day, s("03-02"), C((XHC - 1.1, -0.85, HZ + 1.5), (XHC + 0.25, 0.0, HZ), 28), "A"),
     ("A03c", _day, s("03-04"), C((XHC - 0.8, -0.3, HZ + 0.45), (XHC + 0.1, 0.0, HZ + 0.05), 24), "A"),
@@ -726,6 +726,34 @@ for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
     CLIPS[nm] = (fn, t0, t1, cm, par)
 
+def _rider_avoid(t0, t1):
+    """乗る人（お客さん）が、この場面の間にまるロボと重なるなら、その人はこの場面だけ出さない（v1 のコメント「まるロボに人が貫通してる」3 件。
+    どの段に乗せても一日のどこかで重なったので、場面ごとに決める。場面の切りかわりで人が減っても、カメラが変わるので目立たない）"""
+    E = ESC[0]
+    if E is None or not getattr(E, "riders", None) or not MARU_ALL: return
+    M = MARU_ALL[0]
+    p = M.plan(t1 + 1.0); frames = mm.simulate(p, fps=8, t_end=t1 + 0.5, t_start=max(0.0, t0 - 0.5))
+    s_board, s_alight = G.DIP_LEN + 0.45, G.LTOP - G.DIP_LEN - 0.3
+    xb, _ = G.top_point(s_board)[0]; xa, _ = G.top_point(s_alight)[0]; Lr = s_alight - s_board
+    cam_ = bpy.context.scene.camera; cam_p = tuple(cam_.location) if cam_ is not None and cam_.parent is None else None   # 追うカメラ（親について動く）は外す
+    off = set()
+    for fr in frames:
+        t = fr["t"]; x, y, z = fr["root"]; o = M.off(t)
+        mx, my, mz = x * M.s + o[0], y * M.s + o[1], z * M.s + o[2]
+        pos = E.pos(t)
+        for i, (wk, k, ry) in enumerate(E.riders):
+            sk = (pos + k * G.PITCH) % G.LOOP; u = sk - s_board
+            if u > G.LOOP / 2: u -= G.LOOP
+            if u < 0: rx, rz = xb + u, 0.0
+            elif u <= Lr: (fx, fz), _ = G.top_point(sk); rx, rz = fx - 0.18, fz + G.TREAD_DZ
+            else: rx, rz = xa + (u - Lr), G.H
+            if math.hypot(rx - mx, ry - my) < 0.7 and rz - 0.4 < mz < rz + 1.8: off.add(i)
+            # カメラのすぐ近く（1.2m 以内）を通る人も出さない（手前を大きな頭や体が横切る。02-05 の見直しで見つけた）
+            if cam_p is not None and any(math.dist((rx, ry, rz + h_), cam_p) < 1.2 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+    E.rider_off = off
+    print("RIDER_OFF", CLIPNAME, sorted(off))
+
+
 if __name__ == "__main__" or True:
     if CLIPNAME == "--list":
         print(json.dumps({k: [round(v[1], 3), round(v[2], 3), round(([c[2] for c in CUTS if c[0] == k] or [v[1]])[0], 3), v[4]] for k, v in CLIPS.items()}))
@@ -742,5 +770,7 @@ if __name__ == "__main__" or True:
             print("MARU_LATE", json.dumps(MARU_LATE, ensure_ascii=False)); sys.exit(0)
         bake_maru(t0, t1)
         if cm is not None: cm(t0)
+        _rider_avoid(t0, t1)
+        if os.environ.get("RIDER_ONLY"): sys.exit(0)
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)
