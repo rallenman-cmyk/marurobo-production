@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "8"
+$VER = "9"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -325,7 +325,22 @@ function Run-Job($job) {
   }
   if ($preempt) { Start-Sleep -Seconds 5; return }
   $min = [int]((Get-Date) - $t0).TotalMinutes
-  Write-Json (Join-Path $stat ("done\{0}.json" -f $job.id)) ([ordered]@{ id = $job.id; state = $state; finished = (Get-Date).ToString("s"); minutes = $min; tail = @($tail | Select-Object -Last 12) })
+  # そろわなかったときは、原因が分かるように Blender の記録（blender_log*.txt）の最後と、足りないコマの範囲も印に入れる
+  $btail = @(); $missing = @()
+  if ($state -ne "done" -and -not $err) {
+    try {
+      $mo = [regex]::Match((Get-Content $ps1.FullName -Raw -Encoding UTF8), '\$out = Join-Path \$root "(render_[A-Za-z0-9_.-]+)"')
+      if ($mo.Success) {
+        $od = Join-Path $root $mo.Groups[1].Value
+        foreach ($bl in @(Get-ChildItem $od -File -Filter "blender_log*.txt" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 2)) {
+          $btail += ("--- {0}" -f $bl.Name)
+          $btail += @(Get-Content $bl.FullName -Tail 30 -Encoding UTF8 -ErrorAction SilentlyContinue | ForEach-Object { $x = "$_"; if ($x.Length -gt 300) { $x.Substring(0, 300) } else { $x } })
+        }
+      }
+      $missing = @($tail | Where-Object { $_ -match "が止まりました" } | ForEach-Object { ($_ -replace "^.*\]\s*", "") -replace "\s*が止まりました.*$", "" } | Select-Object -Unique)
+    } catch { }
+  }
+  Write-Json (Join-Path $stat ("done\{0}.json" -f $job.id)) ([ordered]@{ id = $job.id; state = $state; finished = (Get-Date).ToString("s"); minutes = $min; tail = @($tail | Select-Object -Last 12); stopped = @($missing); blender_tail = @($btail) })
   if ($state -eq "done") { Note ("終わりました：{0}（{1} 分）" -f $job.id, $min) }
   else { Note ("そろいませんでした：{0}（{1} 分）。印に記録して、次へ進みます" -f $job.id, $min) }
   Status-Push ("{0}：{1}" -f $job.id, $state)
