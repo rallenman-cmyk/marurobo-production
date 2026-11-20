@@ -132,7 +132,7 @@ def balance(L, MIN=MIN, CPS=8.0, BORROW_NEXT=0.35, BORROW_PREV=0.5):
             need = n_(x[2]) / CPS - (x[1] - x[0])
             if need > -0.01:
                 need += 0.02                                                 # ちょうど 8.0 字/秒は、数え方の丸めで「こえ」になるので少しゆとりを持たせる
-                lim = (L[i + 1][0] - 0.05) if i + 1 < len(L) else x[1] + 1.0
+                lim = L[i + 1][0] if i + 1 < len(L) else x[1] + 1.0          # 次の 1 枚にくっつくまで（ほかの字幕もすき間なしで続く）
                 d = max(0.0, min(need, lim - x[1])); x[1] += d; need -= d
             if need > 0.0 and i > 0 and abs(L[i - 1][1] - x[0]) < 0.06:   # まだ速いなら、前の 1 枚（ゆとりがあるとき）から頭を借りる（v8「もっと速く！」8.02 字/秒）
                 pv = L[i - 1]; room = min(BORROW_PREV, (pv[1] - pv[0]) - MIN, (pv[1] - pv[0]) - n_(pv[2]) / CPS)
