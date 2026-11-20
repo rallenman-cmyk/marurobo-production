@@ -58,6 +58,47 @@ for a, c, t in lines:
         a0, c0, t0 = ev_[i]; a1, c1, t1 = ev_[i + 1]
         if c0 - a0 < 1.0 and c1 - (a0 + 1.0) >= 1.0: ev_[i] = (a0, a0 + 1.0, t0); ev_[i + 1] = (a0 + 1.0, c1, t1)
     SUBS += ev_
+
+
+def _lay2(txt):
+    """字幕 1 枚を、1 行 25 字までの 1〜2 行に置き直す（だめなら None）"""
+    s = txt.replace("\\N", "")
+    if len(s.replace(" ", "")) <= 25: return s
+    Q = SJ._cands(s); b_ = SJ._two(s, 0, len(s), Q)
+    if not b_: return None
+    r1, r2 = s[:b_[1]], s[b_[1]:]
+    return r1 + "\\N" + r2 if max(len(r1), len(r2)) <= 25 else None
+
+
+def _fix_subs(S, lines, end_all):
+    """v8（2026-11-20 の字幕の決まり）：1 枚 2 秒以上・1 行 25 字まで。①短い札は、次の札の前まで（2 秒まで）のばす
+    ②まだ短ければ、同じ文の隣の札とまとめる（2 行に置き直す）③1 行が長い札は 2 行に置き直す"""
+    S = sorted(S)
+    sid = lambda a: next((k for k, (la, lc, lt) in enumerate(lines) if la - 0.01 <= a <= lc + 0.01), -1)
+    for _ in range(200):
+        ch = False
+        for i, (a, c, txt) in enumerate(S):
+            nx = S[i + 1][0] if i + 1 < len(S) else end_all
+            if c - a < 2.0:
+                c2 = min(a + 2.0, nx - 0.05)
+                if c2 > c + 1e-3: S[i] = (a, c2, txt); ch = True; break
+                if i + 1 < len(S) and sid(S[i + 1][0]) == sid(a):
+                    m = _lay2(txt + S[i + 1][2])
+                    if m: S[i:i + 2] = [(a, S[i + 1][1], m)]; ch = True; break
+                if i > 0 and sid(S[i - 1][0]) == sid(a):
+                    m = _lay2(S[i - 1][2] + txt)
+                    if m: S[i - 1:i + 1] = [(S[i - 1][0], c, m)]; ch = True; break
+                if i > 0 and c - a < 2.0 and a - S[i - 1][0] > 2.3:       # ④前の札を少し縮めて、出すのを最大 0.2 秒早める（前の札も 2 秒は残す）
+                    a2 = max(c - 2.0, a - 0.2, S[i - 1][0] + 2.05)
+                    if a2 < a - 1e-3: S[i - 1] = (S[i - 1][0], min(S[i - 1][1], a2 - 0.05), S[i - 1][2]); S[i] = (a2, c, txt); ch = True; break
+            if any(len(r) > 25 for r in txt.split("\\N")):
+                m = _lay2(txt)
+                if m and m != txt: S[i] = (a, c, m); ch = True; break
+        if not ch: break
+    return S
+
+
+SUBS = _fix_subs(SUBS, lines, T.END)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
@@ -209,6 +250,7 @@ for a, c, t in SUBS:
     if c < FROM or a > TO: continue
     ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c), t.replace("\n", "\\N")))
 open(os.path.join(tmp, "subs.ass"), "w", encoding="utf-8").write("\n".join(ass) + "\n")
+open(OUT[:-4] + ".ass", "w", encoding="utf-8").write("\n".join(ass) + "\n")       # 関所（pre_upload_gate.py）が読む字幕
 json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 
 # ---------------------------------------------------------------- 絵（1 コマずつ組んで、ffmpeg へ流す）
