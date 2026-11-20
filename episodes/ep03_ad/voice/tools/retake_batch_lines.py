@@ -123,17 +123,18 @@ with ThreadPoolExecutor(6) as ex:
 Y = X.copy(); rep = {}
 for k in ids:
     slot = WT[k]["end"] - WT[k]["start"]
-    ok = [c for c in cands[k] if c["sim"] >= 0.85 and c["noise_ok"] and c["pitch"] and c["pitch"] <= med + 15 and 0.92 <= c["dur"] / slot <= 1.08]
+    ok = [c for c in cands[k] if c["sim"] >= 0.85 and c["noise_ok"] and c["pitch"] and c["pitch"] <= med + 18 and 0.85 <= c["dur"] / slot <= 1.10]   # 短い候補は伸ばさず後ろを空ける
     rep[k] = dict(slot=round(slot, 2), cands=[{a: c[a] for a in ("file", "pitch", "dur", "sim", "noise_ok", "heard")} for c in cands[k]])
     if not ok: rep[k]["chosen"] = None; continue
     c = min(ok, key=lambda c: abs(c["pitch"] - med) / 10 + abs(c["dur"] / slot - 1) * 20)
     fit = c["file"][:-4] + "_fit.wav"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", c["file"], "-af", "rubberband=tempo=%.5f:pitchq=quality:formant=preserved" % (c["dur"] / slot), "-ar", str(sr), "-ac", "1", fit], check=True)
+    tempo = max(1.0, c["dur"] / slot)                                   # 長いときだけ縮める（10% まで）。短いときは伸ばさない（遅く聞こえるため）
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", c["file"], "-af", ("rubberband=tempo=%.5f:pitchq=quality:formant=preserved" % tempo) if tempo > 1.001 else "anull", "-ar", str(sr), "-ac", "1", fit], check=True)
     with wave.open(fit) as w: z = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
     a = int((WT[k]["start"] - 0.04) * sr); b = int((WT[k]["end"] + 0.04) * sr)
     z = z * rms(X[a:b]) / rms(z); Y[a:b] = 0; Y[a:a + len(z)] = z[:len(Y) - a]
-    rep[k]["chosen"] = dict(file=c["file"], pitch=c["pitch"], tempo=round(c["dur"] / slot, 3), heard=c["heard"])
+    rep[k]["chosen"] = dict(file=c["file"], pitch=c["pitch"], tempo=round(tempo, 3), len_ratio=round(c["dur"] / slot, 3), heard=c["heard"])
 wr(out, Y, sr)
 json.dump(dict(median=round(med), batches=sorted(batches), lines=rep), open(os.path.join(W, "result_batch.json"), "w"), ensure_ascii=False, indent=1)
 print("中央値 %.0f Hz・まとめ %d 個 × %d 回" % (med, len(batches), N))
-for k, r in rep.items(): print(k, "→", ("作り直し %sHz・伸び縮み %.3f" % (r["chosen"]["pitch"], r["chosen"]["tempo"])) if r["chosen"] else "元のまま（合うものなし：%s）" % [(c["pitch"], c["dur"], c["sim"]) for c in r["cands"]])
+for k, r in rep.items(): print(k, "→", ("作り直し %sHz・長さ %.2f 倍・縮め %.3f" % (r["chosen"]["pitch"], r["chosen"]["len_ratio"], r["chosen"]["tempo"])) if r["chosen"] else "元のまま（合うものなし：%s）" % [(c["pitch"], c["dur"], c["sim"]) for c in r["cands"]])

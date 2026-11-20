@@ -11,7 +11,7 @@ sys.path.insert(0, HERE)
 import subs_jp as SJ, subs_one3 as SO           # 7本目の subs_one.py の写し（「……」で終わる 1 枚はまとめない）
 SO.PIECES = {                                        # 7本目だけの分け方は使わない。3本目で決まりに入らなかった 2 文だけ、分け方を決める
     "どうやら、今度の休みに、二人でキャンプへ行く話がまとまったみたいです。": ["どうやら、今度の休みに、二人で", "キャンプへ行く話がまとまったみたいです。"],   # 1 秒 8 字をこえた
-    "このように、同じWi-Fiにいた人が調べた物の広告が、出てくることもあるのです。": ["このように、", "同じWi-Fiにいた人が調べた物の広告が、", "出てくることもあるのです。"],   # 1 行 25 字をこえた
+    "このように、同じWi-Fiにいた人が調べた物の広告が、出てくることもあるのです。": ["このように、同じWi-Fiにいた人が", "調べた物の広告が、", "出てくることもあるのです。"],   # 1 行 25 字をこえた
 }
 P = json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8"))
 L, log = [], []
@@ -29,6 +29,27 @@ for i in range(len(L) - 2):
     d = min(need, 0.3)
     if (L[i + 2][1] - L[i + 2][0]) - d < 2.0 or len(L[i + 2][2]) / ((L[i + 2][1] - L[i + 2][0]) - d) > 8.0: continue
     L[i][1] += d; L[i + 1][0] += d; L[i + 1][1] += d; L[i + 2][0] += d
+# 1 秒 8 字ちょうどの 1 枚は、字幕の時刻を 0.01 秒にまるめると 8 字をこえる：7.9 字まで（終わりをうしろの間へ、なければ次の 1 枚の頭を少し遅らせて）のばす
+for i in range(len(L)):
+    need = len(L[i][2].replace(" ", "")) / 7.9 - (L[i][1] - L[i][0])
+    if need <= 0: continue
+    nxt = L[i + 1] if i + 1 < len(L) else None
+    room = (nxt[0] - 0.02 - L[i][1]) if nxt else 1.0
+    d = min(need, max(0.0, room)); L[i][1] += d; need -= d
+    if need > 0 and nxt and (nxt[1] - nxt[0] - need) >= 2.0 and len(nxt[2]) / (nxt[1] - nxt[0] - need) <= 7.9:
+        nxt[0] += need + 0.0; L[i][1] += need
+# 最後に 0.01 秒にまるめ（字幕のファイルと同じ）、まるめで決まりから外れた 1 枚は、次の 1 枚から 0.05 秒まで借りる
+for x in L: x[0], x[1] = round(x[0], 2), round(x[1], 2)
+for _ in range(3):
+    for i in range(len(L)):
+        n_ = len(L[i][2].replace(" ", "")); need = round(max(2.0 - (L[i][1] - L[i][0]), n_ / 7.99 - (L[i][1] - L[i][0])) + 0.004, 2)
+        if need <= 0: continue
+        nx = L[i + 1] if i + 1 < len(L) else None
+        if nx is None: L[i][1] = round(L[i][1] + need, 2); continue
+        gap = round(nx[0] - L[i][1], 2)
+        if gap >= need + 0.01: L[i][1] = round(L[i][1] + need, 2); continue
+        if need <= 0.05 and (nx[1] - nx[0] - need) >= 2.0 and len(nx[2]) / (nx[1] - nx[0] - need) <= 7.99:
+            L[i][1] = round(L[i][1] + need, 2); nx[0] = round(max(nx[0], L[i][1]), 2)
 L = [tuple(x) for x in L]
 json.dump([[round(a, 3), round(b, 3), t] for a, b, t in sorted(L)], open(os.path.join(HERE, "subs_events.json"), "w"), ensure_ascii=False, indent=0)
 n = lambda t: len(t.replace(" ", ""))

@@ -410,8 +410,9 @@ for k, lg in logs.items():
     ev_all += [(t, kd) for t, kd in lg.get("events", [])]
     ev_all += [(t, "step") for t in lg.get("steps", [])]
 # 声（アニマティックの声：ピー入り、24 kHz）を 48 kHz に
-_VW = W_ + "/animatic_tmp/voice_v10.wav"                              # v10「8分あたりから声がずっと高い」：高い文をそろえた声（voice/tools/README.md）
-if not os.path.exists(_VW): _VW = W_ + "/animatic_tmp/voice.wav"; print("【注意】高さをそろえた声がない。元の声を使う")
+_VW = W_ + "/animatic_tmp/voice_v11.wav"                              # v11：高い文を、まとめ（5 文ずつ）で読ませ直した声に差し替えた声（voice/tools/retake_batch_lines.py）。
+#   v10 の voice_v10.wav（機械で高さを下げた声）は「声おかしすぎる」と言われたので使わない
+if not os.path.exists(_VW): raise SystemExit("voice_v11.wav がない（voice/tools/README.md の作り方で作る）")
 with wave.open(_VW) as w:
     v = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768; vsr = w.getframerate()
 v = np.interp(np.arange(int(len(v) * sr / vsr)) / sr, np.arange(len(v)) / vsr, v).astype(np.float32)
