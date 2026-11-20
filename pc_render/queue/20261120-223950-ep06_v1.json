@@ -1,0 +1,17 @@
+{
+ "id": "20261120-223950-ep06_v1",
+ "name": "ep06_v1",
+ "kit_branch": "pc-kit/20261120-223950-ep06_v1",
+ "zip": "marurobo_ep06.zip",
+ "ps1": "run_pc_render_ep06.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 6,
+ "frames": 15847,
+ "fresh": false,
+ "out": "render_ep06_v1",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1606\u914d\u81b3",
+ "created": "2026-11-20T22:39:50Z"
+}
