@@ -3,6 +3,7 @@
   split   SRC.mp4 OUTDIR [秒=30]    … 原本を再エンコードせず約○秒ごとに区切る
   build   SRC.mp4 OUTDIR uploaded.txt PROJECT_ID VERSION_ID NUMBER LABEL OUT.json
 uploaded.txt は「ファイル名 アセットID」を1行ずつ。
+build の前に pre_upload_gate.py を通す（合格の印 SRC.mp4.gate.json がないと止まる）。
 """
 import hashlib, json, os, subprocess, sys
 
@@ -25,6 +26,10 @@ def split(src, out, secs='30'):
     print('ok', len(os.listdir(out)) - 1, 'files')
 
 def build(src, out, up, pid, vid, num, label, dst):
+    # 出す前の関所（2026-11-20）：pre_upload_gate.py の合格の印がない動画・印のあとで変わった動画は、登録データを作らない
+    gp = src + '.gate.json'
+    if not os.path.exists(gp): sys.exit('関所の印がない：先に pre_upload_gate.py <回> <版> %s <字幕.ass> を通す（点検表 点検_v<版>.md も書く）' % src)
+    if json.load(open(gp))['sha256'] != sha(src): sys.exit('関所を通したあとで動画が変わった：pre_upload_gate.py を通し直す')
     ids = dict(l.split() for l in open(up) if l.strip())
     segs, t, name_dur = [], 0.0, None
     for l in open(os.path.join(out, 'index.m3u8')):
