@@ -95,8 +95,8 @@ def pick_middle(x, texts, sr=24000):
 
 norm = lambda s: re.sub(r'[、。？！「」…　 ・,.!?\s]', '', s)
 for no in NOS:
-    i = no - 1; e = L[i]
-    ctx = [FIX.get(str(k + 1), L[k]["tts"]) for k in (i - 1, i, i + 1) if 0 <= k < len(L)]
+    i = [k for k, x in enumerate(L) if x["no"] == no][0]; e = L[i]      # 番号でなく並びの中の場所で（v8：05-06 を no=150 で 05-05 のあとに足したため）
+    ctx = [FIX.get(str(L[k]["no"]), L[k]["tts"]) for k in (i - 1, i, i + 1) if 0 <= k < len(L)]
     mid = 1 if i > 0 else 0
     cands = []
     for k in range(N):

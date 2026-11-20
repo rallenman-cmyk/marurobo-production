@@ -34,17 +34,17 @@ def ev_list():
     add(w("03-04", "なぜ") - 0.2, e("03-04") + 0.4, "bubble", dict(obj="maru", icon="?"))
     add(e("03-05") + 0.3, s("04-01") - 0.3, "title", {})
     # 04〜05：名前の札（引きの絵だけ）・打つ言葉・人とまるロボの札（2 つ同時に）
-    add(s("04-03") + 1.6, e("05-05") + 0.5, "tag", dict(text="クワーティ", obj="k_T", dy=-150, bg=BLUE, fg=WHITE))
-    add(s("04-03") + 1.6, e("05-05") + 0.5, "tag", dict(text="ABC 順", obj="a_E", dy=-150, bg=ORANGE, fg=WHITE))
+    add(s("04-03") + 1.6, e("05-06") + 0.5, "tag", dict(text="クワーティ", obj="k_T", dy=-150, bg=BLUE, fg=WHITE))
+    add(s("04-03") + 1.6, e("05-06") + 0.5, "tag", dict(text="ABC 順", obj="a_E", dy=-150, bg=ORANGE, fg=WHITE))
     add(w("05-02", "マルロボ"), s("05-04"), "tag", dict(text="マルロボ ＝ M A R U R O B O", pos=(640, 80), size=52))
     add(w("05-03", "人は") - 0.1, e("05-03") + 0.3, "tag", dict(text="人：10本の指", pos=(330, 110), size=46, keep=True))
     add(w("05-03", "まるロボ"), e("05-03") + 0.3, "tag", dict(text="まるロボ：1字ずつ", pos=(950, 110), size=46, keep=True))
     # MARUROBO：押したキーから字が浮き上がって、左上に並ぶ（v5「該当のキーを押したらその文字が浮かび上がって まるろぼ になるように」）
     t = w("05-04", "道のり"); dt = min(0.55, (e("05-04") + 0.4 - t) / 7)
-    t2 = s("05-05") - 0.2 + 4.3; dt2 = min(0.55, (e("05-05") + 0.5 - t2) / 7)      # scenes.py の path_a と同じ（v7：となりへ大きく跳んで移ってから打つ）
+    TA = [lt("05-06", k_) for k_ in ("M", "A", "R", "U", "R2", "O", "B", "O2")]      # scenes.py の path_a と同じ（v8：05-06 の声が字を言う瞬間）
     it = [("k_" + ch, ch, t + i * dt, i, 0, BLUE) for i, ch in enumerate("MARUROBO")]
-    it += [("a_" + ch, ch, t2 + i * dt2, i, 1, ORANGE) for i, ch in enumerate("MARUROBO")]
-    add(t, e("05-05") + 0.6, "typed", dict(items=it))
+    it += [("a_" + ch, ch, TA[i], i, 1, ORANGE) for i, ch in enumerate("MARUROBO")]
+    add(t, e("05-06") + 0.6, "typed", dict(items=it))
     # 06：結果（名前の札は引きの絵だけ。距離の札は決まった場所）
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="クワーティ", obj="k_T", dy=-110, bg=BLUE, fg=WHITE, size=44))
     add(s("06-01"), w("07-02", "いろはにほへと"), "tag", dict(text="ABC 順", obj="a_E", dy=-110, bg=ORANGE, fg=WHITE, size=44))

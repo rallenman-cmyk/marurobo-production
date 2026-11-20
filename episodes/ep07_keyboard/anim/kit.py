@@ -138,24 +138,25 @@ class Board:
         for ch, o in self.keys.items(): track(prefix + ch, o, dz)
 
 
-def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, line=True):
+def hop_path(B, word, t0, dt, M=None, col=BLUE_L, z=0.1, name="path", h=0.18, line=True, times=None):
     """まるロボが word の字を順に跳ねて打つ（dt 秒ごと）。跳ねた道のりを光る線で残す（言った字まで伸びる）"""
     word = [c for c in word.upper() if c in B.keys]
     pts = [B.pos(c)[:2] for c in word]
+    T_ = list(times) if times else [t0 + i * dt for i in range(len(word))]      # times：字ごとの時刻（声が字を言う瞬間。v8）
     ln = None
     if line and len(pts) > 1:
         ln = line_path(name, pts, col=col, width=0.018, z=KEY_TOP + z, emit=3.0)
-        ln.data.bevel_factor_end = 0.0; ln.data.keyframe_insert("bevel_factor_end", frame=f(t0))
+        ln.data.bevel_factor_end = 0.0; ln.data.keyframe_insert("bevel_factor_end", frame=f(T_[0]))
         L = [0.0]
         for a, b in zip(pts, pts[1:]): L.append(L[-1] + math.dist(a, b))
         for i in range(1, len(pts)):
-            ln.data.bevel_factor_end = L[i] / L[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(t0 + i * dt))
+            ln.data.bevel_factor_end = L[i] / L[-1]; ln.data.keyframe_insert("bevel_factor_end", frame=f(T_[i]))
         for fc in ln.data.animation_data.action.fcurves:
             for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
     if M is not None:      # まるロボ：キーからキーへ続けて跳ぶ（marumotion の hop_path。字を打つ瞬間の少し前に着く）
-        M.path([B.pos(c, z=0.075) for c in word], [t0 + i * dt - 0.03 for i in range(len(word))])
+        M.path([B.pos(c, z=0.075) for c in word], [x - 0.03 for x in T_])
     for i, c in enumerate(word):
-        B.press(c, t0 + i * dt, gain=0.35 if dt < 0.3 else 0.5, motion=M is None)
+        B.press(c, T_[i], gain=0.35 if dt < 0.3 else 0.5, motion=M is None)
     return ln
 
 
