@@ -146,8 +146,9 @@ def s02():
     # v12（v11 41「まるロボの形がグチャグチャ」・41.7「元々置いてあるタオルがなくて急にまるロボの上に乗ってる」）：
     #   タオルは、はじめから見える所（まるロボのすぐ左奥の床。引きの絵でまるロボに隠れない）に、たたんで置く。まるロボはそちらを向いて（歩くと次の動きが間に合わない）、
     #   見下ろしてから、タオルが床から頭へ上がる（0.35 秒）。運ぶ間は、たたんだ平らなまま頭にのせる（頭にかぶせる形は、本物の体の頭と合わず、ぐしゃっと見えた）
-    TWP = (-1.12, -1.12)
-    tw = soft_towel(); tw.location = (TWP[0], TWP[1], 0.0); tw.rotation_euler = (0, 0, R(30))
+    TWP = (-1.3, -1.27)                                               # 画面ではまるロボの左（計算：まるロボ x0.24・タオル x0.15。まるロボに隠れない）
+    FLZ = 0.026                                                       # たたみの上の高さ（床は 0.024。0 だと布が床に埋まって見えなかった。ray_cast で測った）
+    tw = soft_towel(); tw.location = (TWP[0], TWP[1], FLZ); tw.rotation_euler = (0, 0, R(30))
     FOLD = (0.5, 0.55, 1.0); tw.scale = FOLD                          # たたんだ大きさ（床の上・頭の上）
     kb = tw.data.shape_keys.key_blocks
     MX = (-0.06, -1.06)                                               # 置く所（スマホの左。体がスマホにかからない）
@@ -161,18 +162,20 @@ def s02():
     def _towel(m, tw=tw, TA=TA, TB=TB, TWP=TWP):                               # 予定を当てたあと：運ぶ間は頭のてっぺんに 1 コマずつ合わせる（浮かない）
         t_up, t_dn = TA - 0.1, TB + 0.5
         kshape(t_up, 0, 0)
-        key(tw, "location", f(t_up), (TWP[0], TWP[1], 0.0)); key(tw, "scale", f(t_up), FOLD)
+        key(tw, "location", f(t_up), (TWP[0], TWP[1], FLZ)); key(tw, "scale", f(t_up), FOLD)
         r0 = tw.rotation_euler[2]; key(tw, ("rotation_euler", 2), f(t_up), r0)
         t_on = t_up + 0.35
         for fr in range(f(t_up) + 1, f(t_dn) + 1):
             top = head_top(m, CLOCK_T0() + fr / FPS); k = min(1.0, (fr - f(t_up)) / max(1, f(t_on) - f(t_up)))
             k = k * k * (3 - 2 * k)
-            loc = tuple(TWP[i] * (1 - k) + top[i] * k for i in range(2)) + (0.0 * (1 - k) + (top[2] + 0.01) * k + 0.12 * math.sin(math.pi * k),)
+            loc = tuple(TWP[i] * (1 - k) + top[i] * k for i in range(2)) + (FLZ * (1 - k) + (top[2] + 0.01) * k + 0.12 * math.sin(math.pi * k),)
             key(tw, "location", fr, loc); key(tw, ("rotation_euler", 2), fr, r0 * (1 - k) + m.root.matrix_world.to_euler()[2] * k)
         PH = (0.35 + 0.2 * math.sin(R(10)), -0.9 - 0.2 * math.cos(R(10)), 0.0)
-        key(tw, "scale", f(t_dn), FOLD); key(tw, "scale", f(t_dn + 0.35), (1.0, 1.0, 1.0))      # 置くときに広げる
-        key(tw, "location", f(t_dn + 0.35), PH); key(tw, ("rotation_euler", 2), f(t_dn + 0.35), R(10)); EVENTS.append((round(t_dn + 0.35, 3), "towel"))
-        kshape(t_dn + 0.2, 0, 0.4); kshape(t_dn + 0.35, 0, 1)
+        PHU = (PH[0], PH[1], 0.06)                                    # スマホの上（たたんだまま、まず上にのせる）
+        key(tw, "location", f(t_dn + 0.3), PHU); key(tw, ("rotation_euler", 2), f(t_dn + 0.3), R(10))
+        key(tw, "scale", f(t_dn + 0.3), FOLD); kshape(t_dn + 0.3, 0, 0)
+        kshape(t_dn + 0.42, 0, 1); key(tw, "scale", f(t_dn + 0.5), (1.0, 1.0, 1.0)); key(tw, "location", f(t_dn + 0.6), PH)   # のせてから広げて、マイクの穴にかぶせる（v12：置く途中で布が床の上に大きくふくらむ・スマホに沈んで消えるコマがあった。形を先に変えてから下ろす）
+        EVENTS.append((round(t_dn + 0.45, 3), "towel"))
         show(m.antenna_objs, f(t_on), False); show(m.antenna_objs, f(t_dn + 0.3), True)   # 布の下のアンテナは隠す（突き抜けない）
         bpy.context.scene.frame_set(0)
     mr.post.append(_towel)
@@ -843,7 +846,7 @@ sc.view_settings.look = 'AgX - Punchy'
 sc.render.filepath = os.path.join(OUTDIR, KEY + "_")
 exec(open(os.path.join(_ANIM_HERE, "pc_out.py"), encoding="utf-8").read())  # PC：--gpu・--video
 os.makedirs(OUTDIR, exist_ok=True)
-json.dump(dict(mode=KEY, t0=t0, t1=t1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS), pos2d=POS2D),
+json.dump(dict(v12=True, mode=KEY, t0=t0, t1=t1, fps=FPS, frames=sc.frame_end + 1, steps=sorted(STEPS), events=sorted(EVENTS), pos2d=POS2D),
           open(os.path.join(OUTDIR, KEY + "_log.json"), "w"), ensure_ascii=False)
 print("FRAMES", KEY, sc.frame_start, sc.frame_end, "T0 %.2f T1 %.2f" % (t0, t1))
 if "--blend" in ARGS:

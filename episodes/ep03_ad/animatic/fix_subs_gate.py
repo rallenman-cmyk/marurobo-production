@@ -51,6 +51,20 @@ fl = lambda v: math.floor(v * 100 + 1e-6) / 100
 for x in L: x[0], x[1] = fl(x[0]), fl(x[1])
 bad = [(x[0], round(x[1] - x[0], 2), x[2]) for x in L if x[1] - x[0] < 2.0 or n_(x[2]) / (x[1] - x[0]) > 8.0 or max(len(r) for r in rows(x[2])) > 25 or len(rows(x[2])) > 2]
 ov = [(a[0], a[2]) for a, b in zip(L, L[1:]) if b[0] < a[1] - 1e-6]
+sys.path.insert(0, os.path.join(HERE, "..", "voice"))
+from gaps import G                                                       # v12：声と声のあいだに足した間（ここまでは v11 の時刻で作る）
+L = [[fl(G(x[0]) + 1e-6), fl(G(x[1]) + 1e-6), x[2]] for x in L]
+# 間を足したので、v11 では次の文に押されて先に出していた「テント。」を、声の頭（波形で確かめた 236.99 → v12）から出せる
+for i, x in enumerate(L):
+    if x[2] == "テント。":
+        x[0] = fl(G(236.99) - 0.05); L[i - 1][1] = fl(x[0] - 0.05)
+# 間を足した所では、前の 1 枚に押されて遅れていた文の頭を、声の頭へ戻せる（前の 1 枚が 2 秒・7.9 字/秒のまま残るときだけ）
+_P12 = json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8"))
+for i, x in enumerate(L[1:], 1):
+    st = min((p["start"] for p in _P12), key=lambda v: abs(v - x[0]))
+    pv = L[i - 1]
+    if 0.1 < x[0] - st < 0.8 and (st - 0.05) - pv[0] >= max(2.02, n_(pv[2]) / 7.9):
+        x[0] = fl(st); pv[1] = fl(st - 0.05)
 json.dump(L, open(P, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 print("字幕 %d 枚・決まりの外 %d 枚・重なり %d" % (len(L), len(bad), len(ov)))
 for b in bad: print("  ", b)

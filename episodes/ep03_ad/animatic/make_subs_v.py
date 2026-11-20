@@ -10,7 +10,7 @@ os.environ.setdefault("MARU_VOICE", W + "/stage/voice/achernar")
 sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
 import subs_jp as SJ
 V = os.environ["MARU_VOICE"]
-P = json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8"))
+P = json.load(open(os.path.join(HERE, "..", "voice", "placement_v11.json"), encoding="utf-8"))   # v12：字幕は v11 の時刻で作り、fix_subs_gate.py の最後で足した間（voice/gaps.py）をあてる
 def merge_gaps(g, join=0.25):
     # v4「字幕の出るのが早い」(8:31)：長い間の途中の息つぎ（0.2 秒ほどの小さな音）で間が 2 つに割れ、前半の間の終わりで替わって、0.6 秒早く出ていた。
     #   近い間（0.25 秒未満で隣り合う）は 1 つの間にまとめる → 切り替わりは、本当に声が出る直前になる

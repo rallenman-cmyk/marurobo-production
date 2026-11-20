@@ -17,6 +17,8 @@ FONT = os.path.join(FONTS, "NotoSansJP_700Bold.ttf")
 TAGF, BIGF = ImageFont.truetype(FONT, 46), ImageFont.truetype(FONT, 72)
 NAVY = (20, 36, 72)
 P = json.load(open(os.path.join(EP, "voice", "placement.json"), encoding="utf-8"))
+sys.path.insert(0, os.path.join(EP, "voice"))
+from gaps import G                          # v12：声と声のあいだに足した間。ここに直接書いた v11 の時刻（clip の元など）は G() で v12 へ
 SID = {e["no"]: e for e in json.load(open(os.path.join(EP, "voice", "script_v1_0.json"), encoding="utf-8"))}
 T = {SID[p["no"]]["id"]: (p["start"], p["end"]) for p in P}
 def s(i, k=0): return T[i][k]
@@ -178,7 +180,7 @@ ov(W("22-03", "キャンプの動画"), s("22-03", 1), "s22_inset", [("img", nig
 # v10：15-01b の「あの鏡」の小窓はやめた（同じ時に、鏡の前のまるロボの差し込み s05i が出ていて、鏡が二重になる）
 PIPS = [(W("07-01", "柱の穴"), s("07-01", 1) + 0.3, W("06-02", "この小さな穴") + 2.6, "さきほどの穴"),   # v10：まるロボが穴の前に着いて、のぞき込んでいる所（歩いている所を使わない）
         (W("12-03", "あの枠"), s("12-04") + 0.3, 29.0, "ハルさんの画面"),
-        (W("10-02", "さきほどと同じ"), s("10-02", 1), 158.0, "さきほどのスマホの中")]
+        (W("10-02", "さきほどと同じ"), s("10-02", 1), G(158.0), "さきほどのスマホの中")]
 
 
 # 場面の始まり（差し込みの表でも使うので先に）
@@ -217,8 +219,8 @@ INS = [
     (s("13-05b"), s("13-05b", 1) + 0.2, "img", "together"),
     (_w("14-01b", "紅葉"), s("14-01c", 1) + 0.2, "img", "autumn"),                   # 9:51 紅葉（v5：1.2 秒だけだと 3D の窓→絵の窓→3D の窓とちらつくので、次の文の終わりまで）
     (s("14-05"), s("14-05b") - 0.05, "xclip", ("s05i", 9.2)),           # 10:21 2 人目の容疑者のまとめ → 容疑者の台
-    (s("14-05b"), s("14-05c") - 0.05, "clip", 505.0),                                 # 10:30「競りで使われていました」→ 競り
-    (s("14-05c"), _w("14-05c", "季節"), "clip", 563.0),                               #       「一緒にいた人」→ 二人
+    (s("14-05b"), s("14-05c") - 0.05, "clip", G(505.0)),                                 # 10:30「競りで使われていました」→ 競り
+    (s("14-05c"), _w("14-05c", "季節"), "clip", G(563.0)),                               #       「一緒にいた人」→ 二人
     (_w("14-05c", "季節"), s("14-05d") - 0.05, "img", "autumn"),                     #       「季節」→ 紅葉
     (_w("14-05d", "2人目の容疑者"), s("14-05d", 1) + 0.3, "xclip", ("s05i", 9.2)),   # 10:39 容疑者のシーン
     (s("15-01"), s("15-01", 1) + 0.2, "xclip", ("s05i", 18.2)),
@@ -233,9 +235,9 @@ INS = [
     (s("16-06"), s("16-06", 1) + 0.3, "img", "tally"),
     (s("16-08"), s("16-08", 1) + 0.3, "xclip", ("s05i", 18.2)),                                  # 12:15 3 人目の容疑者のシーン
     (s("18-00"), s("18-01", 1) + 0.2, "img", "government"),                           # 12:43 役所が調べる
-    (s("19-08"), s("19-08b") - 0.05, "clip", 232.0),                                  # 14:02 スマホの耳は聞いていない → 門と見張り番
-    (s("19-08b"), _w("19-08b", "好きそうな"), "clip", 410.0),                         #       出ていく手がかり → 箱
-    (_w("19-08b", "好きそうな"), s("19-08c") - 0.05, "clip", 512.0),                 #       予想 → 競り
+    (s("19-08"), s("19-08b") - 0.05, "clip", G(232.0)),                                  # 14:02 スマホの耳は聞いていない → 門と見張り番
+    (s("19-08b"), _w("19-08b", "好きそうな"), "clip", G(410.0)),                         #       出ていく手がかり → 箱
+    (_w("19-08b", "好きそうな"), s("19-08c") - 0.05, "clip", G(512.0)),                 #       予想 → 競り
     (s("19-08c"), s("19-08c", 1) + 0.3, "img", "tally"),                              #       当たったときだけ覚えている
 ]
 
@@ -248,6 +250,9 @@ for k in PARTS:
         p = os.path.join(d, k + "_log.json")
         if os.path.exists(p) and (glob.glob(os.path.join(d, k + "_[0-9]*.png")) or glob.glob(os.path.join(d, k + "_[0-9]*.jpg"))):   # 本番の絵は jpg（pc_frames.py）
             lg = json.load(open(p)); lg["dir"] = d; break
+    if lg is not None and not lg.get("v12"):                             # v12 の間を足す前に描いた場面：時刻を G() で v12 へ（間の所は前のコマを止めて埋める）
+        lg["_M"] = G; lg["t1"] = G(lg["t1"])
+        lg["events"] = [[G(t), kd] for t, kd in lg.get("events", [])]; lg["steps"] = [G(t) for t in lg.get("steps", [])]
     logs[k] = lg
 t_prev = 0.0
 missing = []
@@ -258,9 +263,10 @@ for k in PARTS:
     fs = sorted(glob.glob(os.path.join(lg["dir"], k + "_[0-9]*.png")) + glob.glob(os.path.join(lg["dir"], k + "_[0-9]*.jpg")))
     nums = [int(os.path.basename(x)[len(k) + 1:-4]) for x in fs]
     lim = min(lg["t1"], SCEND["S%02d" % BOARD[k]] if k != "gate" else SCEND["S08"])   # 場面の終わり（次の場面の始まり）で切る
+    M = lg.get("_M", lambda v: v)
     for i, (pth, n) in enumerate(zip(fs, nums)):
-        a = lg["t0"] + n / 24
-        b = min(lim, lg["t0"] + (nums[i + 1] / 24 if i + 1 < len(nums) else lg["frames"] / 24))
+        a = M(lg["t0"] + n / 24)
+        b = min(lim, M(lg["t0"] + (nums[i + 1] / 24 if i + 1 < len(nums) else lg["frames"] / 24)))   # 間を足した所は、次のコマまでこのコマを止めて出す
         if a < lim - 1e-6: rows.append((a, b, pth))
 rows.sort()
 # 足りない場面・すき間は絵コンテの絵で埋める
@@ -333,7 +339,7 @@ def _xclip(name, part, src, dur):
 #   のぞく所をなくす。①近い差し込みはつなぐ（前の差し込みは消さずに、次をその上に重ねて出す）
 #   ②場面の始まり・終わりの近くの差し込みは、切り替わりまでのばす（切り替わりは差し込みの中で済ませ、元の場面の重ねは使わない）
 INS_GAP, INS_FD = 2.0, 0.3
-SCENE_TS = sorted(set([t for k, t in SCST.items() if k != "S00"] + [298.26]))
+SCENE_TS = sorted(set([t for k, t in SCST.items() if k != "S00"] + [G(298.26)]))
 # v12（v11 708・713・718・848「シーンの切り替わりが早い」）：差し込みの絵の切り替わりを、いちばん近い字幕の切り替わり（0.8 秒以内）にそろえる。
 #   字幕は 2 秒にするため声より遅れて替わることがあり、絵だけ先に替わっていた（ep04 v10「メインのテロップとそれ以外の切り替わりがズレてる」と同じ決まり）
 _SUBST = [a_ for a_, b_, t_ in json.load(open(os.path.join(EP, "animatic", "subs_events.json"), encoding="utf-8"))]
@@ -417,9 +423,10 @@ for k, lg in logs.items():
     ev_all += [(t, kd) for t, kd in lg.get("events", [])]
     ev_all += [(t, "step") for t in lg.get("steps", [])]
 # 声（アニマティックの声：ピー入り、24 kHz）を 48 kHz に
-_VW = W_ + "/animatic_tmp/voice_v11.wav"                              # v11：高い文を、まとめ（5 文ずつ）で読ませ直した声に差し替えた声（voice/tools/retake_batch_lines.py）。
+_VW = W_ + "/animatic_tmp/voice_v12.wav"                              # v12：v11 の声に、4 か所の間（voice/gaps.py）を足した声（voice/apply_gaps.py）
+_VW11 = W_ + "/animatic_tmp/voice_v11.wav"                              # v11：高い文を、まとめ（5 文ずつ）で読ませ直した声に差し替えた声（voice/tools/retake_batch_lines.py）。
 #   v10 の voice_v10.wav（機械で高さを下げた声）は「声おかしすぎる」と言われたので使わない
-if not os.path.exists(_VW): raise SystemExit("voice_v11.wav がない（voice/tools/README.md の作り方で作る）")
+if not os.path.exists(_VW): raise SystemExit("voice_v12.wav がない（voice/apply_gaps.py で voice_v11.wav から作る）")
 with wave.open(_VW) as w:
     v = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768; vsr = w.getframerate()
 v = np.interp(np.arange(int(len(v) * sr / vsr)) / sr, np.arange(len(v)) / vsr, v).astype(np.float32)
@@ -506,7 +513,7 @@ open(tmp + "/subs.ass", "w", encoding="utf-8").write("\n".join(ass) + "\n")
 #   3D どうしは 0.35 秒、スマホの外と中・2D の場面との境目は 0.65 秒。声と字幕の時刻は変えない
 XIN = {"S03", "S04", "S06b", "S09", "S10", "S11", "S20", "S21"}           # 前後で世界が変わる所（2D・スマホの中へ／外へ）
 XF = [(t, 0.65 if k in XIN else 0.35) for k, t in SCST.items() if k != "S00"]
-XF.append((298.26, 0.65))                                                    # 門の町（スマホの中）→ 外から見たスマホの画面
+XF.append((G(298.26), 0.65))                                                    # 門の町（スマホの中）→ 外から見たスマホの画面
 XF = sorted(x for x in XF if 0.5 < x[0] < END - 1 and not _covered(x[0]))   # 差し込みの中の切り替わりは重ねない（差し込みで隠れている）
 inputs = ["-i", lst]
 # 同じ絵が長く続く所は、ゆっくり寄る（QR回 v10「変わり映えしない」の横展開。動きの少ない所を測って選んだ：S05・S08 の門・S09・S14・S17〜S19・S20）。
