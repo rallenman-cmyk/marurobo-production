@@ -119,8 +119,8 @@ class Board:
 
     def light(self, ch, t0, t1=None, col="#FFD24A", strength=2.5, d=0.25):
         """キーを光らせる（その字のキーの上の面に光る板）。t1 で消す"""
-        o = self.keys[ch]
-        if ch not in self.glows:   # 大きさを scale で付けた物に scale_pop を使わない（SKILL）：空の親を弾ませる
+        o = self.keys[ch]; gk = (ch, col)
+        if gk not in self.glows:      # 色ごとに別の板（v8：同じキーを別の色で光らせると、前の色のままだった）   # 大きさを scale で付けた物に scale_pop を使わない（SKILL）：空の親を弾ませる
             gm = flat_mat("kglow_" + ch + str(id(self)), col, strength)
             bpy.context.view_layer.update()
             wm = o.matrix_world.translation
@@ -128,8 +128,8 @@ class Board:
             g.parent = o; g.matrix_parent_inverse = o.matrix_world.inverted()      # キーの子（v7：板が残って、浮き上がったキーや沈んだキーとずれた）
             gl = cube(gm, (wm.x, wm.y, wm.z + 0.0358), (self.k * 0.8, self.k * 0.8, 0.001)); bpy.context.view_layer.update()
             gl.parent = g; gl.matrix_parent_inverse = g.matrix_world.inverted(); gl.visible_shadow = False
-            self.glows[ch] = g; hide_key(g, -100.0, True)
-        g = self.glows[ch]
+            self.glows[gk] = g; hide_key(g, -100.0, True)
+        g = self.glows[gk]
         hide_key(g, t0, False); scale_pop(g, t0, 1.0, d)
         if t1 is not None: hide_key(g, t1, True)
 
@@ -272,11 +272,11 @@ def piano_typewriter(loc=(0, 0.55, 0.94), k=0.13):
     front = "ABCDEFGHIJKLMN"; back = "OPQRSTUVWXYZ"
     for i, ch in enumerate(front):
         keys[ch] = pressable(cube(white, ((i + 0.5) * k, -0.05, 0.14), (k * 0.92, 0.32, 0.06), bevel=0.01, parent=root), 0.02)
-        key_label(keys[ch], ch, k, "#1E2530", size=0.9, h=0.06)
+        key_label(keys[ch], ch, k, "#1E2530", size=1.45, h=0.06)      # v8：字を大きく（v7「文字もう少し大きくして」）
     for i, ch in enumerate(back):   # 右から左
         x = (n - 0.5 - i) * k - k * 0.5
         keys[ch] = pressable(cube(black, (x, 0.2, 0.2), (k * 0.7, 0.2, 0.06), bevel=0.01, parent=root), 0.02)
-        key_label(keys[ch], ch, k, "#F2EBDD", size=0.72, h=0.06)
+        key_label(keys[ch], ch, k, "#F2EBDD", size=1.1, h=0.06)
     return root, keys
 
 

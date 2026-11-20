@@ -144,8 +144,8 @@ def b_desk(cl):
         hide_key(bpy.data.objects[nm], -100.0, False); hide_key(bpy.data.objects[nm], s("07-01"), True)
     # 19b：Z → S → E（となりへ 1 歩ずつ）
     M.at(s("08-01"), loc=P(Q, "Z"), face=0.0, interp="CONSTANT")   # 机が映っていない間に置き直す
-    for ch, wd in (("Z", "この3つ"), ("S", "光らせて"), ("E", "みると")):
-        Q.light(ch, w("19-03", wd), e("19-05") + 0.5, col="#FFD24A")
+    for ch, wd in (("Z", "この3つ"), ("S", "光らせて"), ("E", "みると")):      # Z＝橙、S と E＝青緑（モールスの札と同じ組。v7「zがどれでseがどれかわかりやすいようにして」）
+        Q.light(ch, w("19-03", wd), e("19-05") + 0.5, col="#FF9A3C" if ch == "Z" else "#3CC8B4")
     hop_path(Q, "ZSE", w("19-04", "S"), 0.9, M, line=False)
     # 21：首をかしげる
     M.at(s("20-01"), loc=P(Q, "G"), face=0.0, interp="CONSTANT"); M.tilt(w("21-02", "もっと"), 12); M.tilt(e("21-02"), 0)
@@ -237,21 +237,7 @@ def b_end(cl):
     M.hop(s("28-05") + 0.2, h=0.18, d=0.4); M.at(s("28-05") + 1.0, look=10)
     # 28-06：はっと固まる → 28-07〜08：人の手が来て、となりのいつものキーボードへ（まるロボはしょんぼり）
     M.at(s("28-06") + 0.6, look=0); M.glow(s("28-06") + 0.6, 2.0, 0.15); M.glow(s("28-06") + 1.0, 0.9, 0.3)
-    # 人の手（ほかの人と同じ、丸い形。手のひら・丸い指 4 本・親指・そで口）（v5「何で急に雑な手が出てくるの」）
-    hand = empty((3.5, -0.2, 1.4)); km = mat("skin", "#F1C7A5", rough=0.55)
-    sphere(km, (0, 0, 0), 0.34, scale=(1.0, 1.25, 0.42), parent=hand)
-    for i in range(4):
-        fx = -0.24 + 0.16 * i; ln = (0.30, 0.36, 0.34, 0.27)[i]
-        f_ = empty((fx, 0.36, 0.0)); f_.parent = hand; f_.rotation_euler = (R(-14), 0, 0)
-        cyl(km, (0, ln / 2, 0), 0.068, ln, rot=(R(90), 0, 0), parent=f_, verts=20); sphere(km, (0, ln, 0), 0.068, parent=f_, seg=20)
-    th = empty((0.32, 0.05, -0.02)); th.parent = hand; th.rotation_euler = (0, 0, R(-48))
-    cyl(km, (0, 0.13, 0), 0.075, 0.26, rot=(R(90), 0, 0), parent=th, verts=20); sphere(km, (0, 0.26, 0), 0.075, parent=th, seg=20)
-    cyl(mat("cuff", "#F4F2EC", rough=0.6), (0, -0.42, 0.0), 0.3, 0.12, rot=(R(90), 0, 0), parent=hand)
-    cyl(mat("sleeve", "#3E7CB1", rough=0.7), (0, -1.25, 0.0), 0.31, 1.55, rot=(R(90), 0, 0), parent=hand)
-    key(hand, "location", -100.0, (3.5, -4.5, 1.6)); key(hand, "location", s("28-07"), (3.5, -4.5, 1.6))
-    key(hand, "location", s("28-07") + 1.6, (-0.1, -0.6, 0.4)); key(hand, "location", s("28-08"), (-0.1, -0.2, 0.25))
-    key(hand, "location", s("28-08") + 0.6, (-0.1, -0.1, 0.22))
-    Q.press("F", s("28-08") + 0.5); Q.press("J", s("28-08") + 0.75)
+    # v8：人の手はやめた（v7「人の手いらない」）。まるロボが、いつものキーボードの方を見て、しょんぼりする
     M.at(s("28-08") + 0.2, face=-40); M.at(s("28-08") + 0.9, look=-14); M.glow(s("28-08") + 0.9, 0.35, 0.6)
     if cl == "S28a":
         cam((-0.5, -2.6, 0.75), (-0.75, -1.0, 0.1), 35, s("28-01"), e("28-05") + 0.8, (-0.1, -2.6, 0.72), (-0.3, -1.0, 0.1), 36)
@@ -332,7 +318,7 @@ def b_shop(cl, night=False):
         ev(w("20-04", "別の並び"), "pop", 0.6)
         area((1.6, -0.8, 2.0), (1.6, 0.3, 0.95), energy=70, size=1.5, col="#FFE7C4")   # 夜でも並びの違う機械が見えるように
         for i, ch in enumerate("XPMCH"): glow_plate(xk[ch], w("20-05", "X P M C H") + 0.25 * i, e("20-06") + 0.3, "#FF6A5A", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True); ev(w("20-05", "X P M C H") + 0.25 * i, "pi", 0.2, "x_" + ch)
-        M.at(-100.0, loc=(0.8, -0.3, 0.94), face=0.0)
+        M.at(-100.0, loc=(0.8, -0.12, 0.94), face=0.0)      # 机の内がわ（v7「まるロボが机からはみ出してる」）
         M.at(w("20-04", "別の並び") + 0.4, face=-50); M.at(s("20-05") + 0.6, face=40); M.at(s("20-06"), face=-50); M.at(s("20-07"), face=0.0)
         M.at(s("20-07") + 0.5, look=16); M.glow(w("20-04", "なんと"), 1.8, 0.2); M.glow(w("20-04", "なんと") + 0.8, 0.9, 0.4)
     if cl == "S08a":
@@ -342,7 +328,7 @@ def b_shop(cl, night=False):
     elif cl == "S10a":
         cam((-0.4, -1.7, 1.6), (-0.3, 0.4, 1.05), 32, s("10-01"), e("10-03") + 0.6, (-0.1, -1.5, 1.7), (-0.1, 0.4, 1.05), 34)
     elif cl == "S10b":
-        cam((-1.45, -1.05, 1.45), (-0.3, 0.3, 1.15), 32, s("10-04"), e("10-06") + 0.8, (-1.4, -0.95, 1.45), (-0.3, 0.3, 1.15), 33)
+        cam((-0.9, -1.25, 1.55), (-0.05, 0.3, 1.05), 30, s("10-04"), e("10-06") + 0.8, (-0.85, -1.15, 1.55), (-0.05, 0.3, 1.05), 31)      # Q から Y まで入る（v7「qが画面に映ってない」）
     elif cl == "S11a":
         cam((-1.6, -0.7, 1.4), (-1.3, 1.1, 0.96), 36, s("11-01"), e("11-03") + 0.8, (-1.5, -0.5, 1.35), (-1.3, 1.1, 0.96), 40)
     elif cl == "S16a":
@@ -498,8 +484,9 @@ def b_tel(cl):
     for t_ in (s("17-03") + 0.2, s("17-03") + 0.9): M.blink(t_, 1.3)
     M.at(s("17-04") + 0.3, face=30)
     # 18：Z と SE（点だけの音。絵は 2D の点。後ろの部屋はゆっくり寄る）
-    click_seq(arm, w("18-02", "トントントン"), "... .", 0.1, 0.6)
-    click_seq(arm, w("18-04", "トントントン"), "...", 0.1, 0.6); click_seq(arm, w("18-04", "E が") + 0.25, ".", 0.1, 0.6)
+    # 声が「トン」と言う瞬間に、受信機がカチッと鳴って動く（v7「トントントンと話す時に、対象のseも流して」。時刻は voice/letter_times.json）
+    for k_ in ("t1", "t2", "t3", "t4"): click_seq(arm, lt("18-02", k_), ".", 0.1, 0.6)
+    for k_ in ("s1", "s2", "s3", "e"): click_seq(arm, lt("18-04", k_), ".", 0.1, 0.6)
     M.at(s("18-05"), face=-30); M.at(s("18-05") + 0.6, face=30); M.tilt(e("18-05") - 0.2, 14); M.tilt(e("18-05") + 0.6, 0)
     # 19-02：タイプライターの Z・S・E（字は 3D）が光る
     for i, ch in enumerate("ZSE"): glow_plate(tk[ch], w("19-02", "この3つ") + 0.25 * i, e("19-02") + 0.6, "#FFD24A", (0.13 * 0.62, 0.13 * 0.62), 0.016, round_=True)
@@ -607,20 +594,21 @@ def b_factory(cl):
         # 10-07：台車で運ばれてくる機械（運ぶ所を見せてから、作業台へ）→ 10-08：ピリオドが外れて R が入る
         cube(mat("fbench", "#7B5638", rough=0.5), (0.4, -0.3, 0.86), (1.4, 0.8, 0.05))
         tw, tk = modern_typewriter((0.4, -0.25, 0.89), layout=["QWE.TY", "ASDFG", "ZXCV"], name="fx")
+        dot = tk["."]; dz0 = dot.location.z      # 先に高さを覚えておく（キーを打つと location が変わる。v5 は R が 0.6 上に浮いたままで「Rが入ってない」）
+        # R：機械を小さくする前に作る（v7「Rのボタンだけ大きいのおかしい」：小さくしたあとで作り、ほかのキーの 2 倍になっていた）
+        rk = cyl(mat("fx_keytop", "#F1EEE6", rough=0.3, coat=0.5), (dot.location.x, dot.location.y, dz0 + 0.6), 0.13 * 0.34, 0.025, parent=tw)
+        key_label(rk, "R", 0.13, "#1E2530", size=0.72, h=0.045)
         tw.scale = (0.5, 0.5, 0.5)
         for ch in "QWE.TY": track("f_" + ("dot" if ch == "." else ch), tk[ch], 0.03)
         cart = empty((0, 0, 0)); cube(mat("cart", "#6B4A30", rough=0.6), (0, 0, 0.5), (0.9, 0.6, 0.06), parent=cart)
         for sx in (-0.35, 0.35): cyl(mat("wheel", "#2A2622", rough=0.5), (sx, 0, 0.12), 0.12, 0.05, rot=(0, R(90), 0), parent=cart)
-        pusher = walker((-4.2, -0.4, 0), face=-90, shirt="#4A5A6A", apron=True)
+        pusher = walker((-4.2, -0.4, 0), face=90, shirt="#4A5A6A", apron=True)      # 進む向き（+x）を向く（v7「手前の人が後ろ向きで移動してきてる」）
         key(cart, "location", s("10-07") - 0.5, (-3.5, -0.4, 0)); key(cart, "location", s("10-07") + 2.0, (-0.6, -0.4, 0))
         key(pusher.root, "location", s("10-07") - 0.5, (-4.2, -0.4, 0)); key(pusher.root, "location", s("10-07") + 2.0, (-1.3, -0.4, 0))
         key(tw, "location", s("10-07") - 0.5, (-3.5, -0.4, 0.56)); key(tw, "location", s("10-07") + 2.0, (-0.6, -0.4, 0.56))
         # 台車から作業台へ：一度持ち上げてから、台の上へ下ろす（v5「ミシンが貫通してる机を」：まっすぐ動かして台を突き抜けていた）
         key(tw, "location", s("10-07") + 2.3, (-0.6, -0.4, 1.15)); key(tw, "location", s("10-07") + 2.8, (0.4, -0.25, 1.15)); key(tw, "location", s("10-07") + 3.1, (0.4, -0.25, 0.89))
         ev(s("10-07") + 0.2, "motor_on", 1.0); ev(s("10-07") + 2.0, "motor_off", 1.0); ev(s("10-07") + 3.1, "clank", 0.4)
-        dot = tk["."]; dz0 = dot.location.z      # 先に高さを覚えておく（キーを打つと location が変わる。v5 は R が 0.6 上に浮いたままで「Rが入ってない」）
-        rk = cyl(mat("fx_keytop", "#F1EEE6", rough=0.3, coat=0.5), (dot.location.x, dot.location.y, dz0 + 0.6), 0.13 * 0.34, 0.025, parent=tw)
-        key_label(rk, "R", 0.13, "#1E2530", size=0.72, h=0.045)
         track("f_R", rk, 0.03)
         hide_key(rk, -100.0, True)
         t = w("10-08", "外され"); key(dot, ("location", 2), t, dz0); key(dot, ("location", 2), t + 0.4, dz0 + 0.6); hide_key(dot, t + 0.45, True)
