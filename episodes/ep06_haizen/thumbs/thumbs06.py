@@ -38,7 +38,7 @@ PLANS = {
        "y 22-98% of the frame (its head and ears must be BELOW the top 22% of the frame), a bowl of ramen on its middle tray. In its path on the floor "
        "close to the camera, the small mascot robot is LYING ON ITS SIDE on the floor: the sphere body tipped over 90 degrees, its two stubby legs "
        "sticking out sideways, its antenna lying flat along the floor, its big eye (navy ring, TEAL iris ring, dark pupil) facing the camera; at "
-       "x 14-44%, y 62-96%. Clear empty floor between them. A few seated customers at the side tables, out of focus."),
+       "x 6-50%, y 48-100% (BIG: about half of the frame height, very close to the camera). Clear empty floor between them. A few seated customers at the side tables, out of focus."),
  "B": (BRIGHT + SENPAI + "\n\nClose-up. The serving robot's head fills the right 62% of the frame (x 35-97%, y 18-100%), facing the camera straight "
        "on: the black face screen with the simple happy face of thin glowing white lines (two closed happy arc eyes and a small smile), and the two "
        "round bear ears on top. From the left edge, a child's hand and forearm (simple smooth rounded cartoon arm, skin color, short sleeve) reaches in "
@@ -53,12 +53,14 @@ PLANS = {
 REFS = {"A": ("r_S05b.png", "r_S18a.png", "r_S01a.png"), "B": ("r_S28a.png", "r_S27a.png", "r_S05b.png"), "C": ("r_S05b.png", "r_S01a.png", "r_S21a.png")}
 T.PLANS.update(PLANS); T.BASE = ""
 BAND = {   # 案 → [(字, 色)]
- "A": [("床に寝ころんだら、", "W"), ("配膳ロボ", "Y"), ("は", "W"), ("止まれる", "R"), ("？", "W")],
- "B": [("配膳ロボ", "Y"), ("の耳、", "W"), ("なで続けると", "R"), ("どうなる？", "W")],
- "C": [("なぜ", "W"), ("配膳ロボ", "Y"), ("は人に", "W"), ("ぶつからない", "R"), ("？", "W")],
+ # 2026-11-20 ユーザー「上の帯の文字って参考のチャンネルのやつもこんな多いかな？」→ 建物の深層の最近 16 本は 11〜13 字（いちばん長くて 16 字）。
+ #   前の 19・17・16 字から、12〜14 字へ短くした（絵で分かることは字にしない：B の「配膳ロボの耳」は絵で見える）
+ "A": [("配膳ロボ", "Y"), ("、", "W"), ("寝ころぶと", "W"), ("止まれる", "R"), ("？", "W")],
+ "B": [("耳を", "W"), ("なで続ける", "R"), ("と", "W"), ("どうなる？", "W")],
+ "C": [("なぜ", "W"), ("配膳ロボ", "Y"), ("は", "W"), ("ぶつからない", "R"), ("？", "W")],
 }
-MARKS = {"A_6": [("q", 1960, 430, 150)], "B_1": [("q", 2385, 820, 160)], "C_4": [("ng", 1100, 440, 115), ("ok", 1650, 470, 105)]}     # 絵の名前 → [("ok"|"ng"|"q", 中心x, 中心y, 大きさ)]（2560×1440。絵を見て決める）
-CIRCLES = {"A_6": [(905, 1170, 250)]}   # 絵の名前 → [(中心x, 中心y, 半径)]（注目の赤い丸）
+MARKS = {"A_6": [("q", 1960, 430, 150)], "A_9": [("q", 1660, 400, 150)], "B_1": [("q", 2385, 820, 160)], "C_4": [("ng", 1100, 440, 115), ("ok", 1650, 470, 105)]}     # 絵の名前 → [("ok"|"ng"|"q", 中心x, 中心y, 大きさ)]（2560×1440。絵を見て決める）
+CIRCLES = {"A_6": [(905, 1170, 250)], "A_9": [(945, 1135, 320)]}   # 絵の名前 → [(中心x, 中心y, 半径)]（注目の赤い丸）
 ARROWS = {}    # 絵の名前 → [((x0, y0), (x1, y1), 曲げ)]
 RED2 = (240, 40, 40)
 
@@ -72,7 +74,7 @@ def q_mark(im, c, r=200):
     return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
 
 
-FIT = {"A_6": 0.07}   # 絵の名前 → 中身の上の端（高さの割合）。帯（17%）の下に入るよう縮め、左右は元の絵の端をのばす
+FIT = {"A_6": 0.07, "A_9": 0.075}   # 絵の名前 → 中身の上の端（高さの割合）。帯（17%）の下に入るよう縮め、左右は元の絵の端をのばす
 
 
 def fit_below(im, top, band_h=0.18):
