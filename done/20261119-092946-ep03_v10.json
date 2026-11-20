@@ -1,0 +1,20 @@
+{
+    "id":  "20261119-092946-ep03_v10",
+    "state":  "done",
+    "finished":  "2026-11-21T01:06:57",
+    "minutes":  1,
+    "tail":  [
+                 "11/21 01:06  本物のまるロボ：C:\\marurobo\\bluetooth_handoff_restored\\bt_production_v1\\output\\story.blend",
+                 "11/21 01:06  はじめます：6 場面・97 本（100 コマずつ）。残り 0 本。同時に 2 本。Blender：C:\\Program Files\\Blender Foundation\\Blender 4.3\\blender.exe",
+                 "描き手 2 人が描いています（タスクバーの「まるロボ 描き手」の窓）。進み具合は、この窓にも出ます",
+                 "11/21 01:06  送るファイルを C:\\marurobo\\marurobo_render\\ep03_v10 にまとめました（243 MB）",
+                 "11/21 01:06  Google ドライブ（G:\\マイドライブ\\marurobo_render\\ep03_v10）にコピーしました",
+                 "11/21 01:06  ぜんぶ終わりました（0分43秒）。Google ドライブへのアップロードは自動で進みます（終わるまで PC は入れたままに）。チャットで知らせてください"
+             ],
+    "stopped":  [
+
+                ],
+    "blender_tail":  [
+
+                     ]
+}
