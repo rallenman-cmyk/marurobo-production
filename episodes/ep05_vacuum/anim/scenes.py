@@ -759,11 +759,13 @@ def b_rug(cl):
     pts_glow(fom, t5 - 0.1, 2.2); pts_glow(fom, t5 + 0.3, 9.0); pts_glow(fom, e("17-05") + 0.4, 9.0); pts_glow(fom, e("17-05") + 1.0, 3.5)
     sp.pi(w("17-06", "気づいた"), n=1)
     # 17-08：ずれていた地図全体を引き戻す（回転の中心 c、ずれ d を打ち消す動き）
-    tA = w("17-08", "ぐっと"); tB = s("17-09") + 0.15
+    tA = w("17-08", "ぐっと"); tB = w("17-09", "ぴたっ")       # 本番の点検（声がまねする音）：前は 17-09 の頭で重なり、「ぴたっ」より 1.5 秒早かった
     th = -math.radians(DRIFT["th"]); ct, st_ = math.cos(th), math.sin(th)
     cx, cy = DRIFT["c"]; dx, dy = DRIFT["d"]
     Lx = cx - (ct * (cx + dx) - st_ * (cy + dy)); Ly = cy - (st_ * (cx + dx) + ct * (cy + dy))
     key(hold, "location", tA, (0, 0, 0)); key(hold, ("rotation_euler", 2), tA, 0.0)
+    tM = e("17-08") + 0.2; kM = 0.9          # 「引き戻すと……」の間に 9 割まで引き、「ぴたっ」で最後の 1 割がはまる
+    key(hold, "location", tM, (Lx * kM, Ly * kM, 0)); key(hold, ("rotation_euler", 2), tM, th * kM)
     key(hold, "location", tB, (Lx, Ly, 0)); key(hold, ("rotation_euler", 2), tB, th)
     ev(tA, "whoosh", 0.4); ev(tB, "snap", 0.8)
     for mm in (dom, fom, com, bom):
@@ -956,12 +958,13 @@ def b_step(cl):
     # まるロボは横の列を歩いて、そのまま段差の先へ → ころん
     tf = w("22-05", "ころん")
     m.walk(s("22-05") - 0.6, tf - 0.45, (plan.STEP_X + 0.05, -2.05, 0))
-    m.move_parent(tf - 0.45, tf, (-0.30, 0.0), dz=-plan.STEP_H)     # 段差の先へ出て、置き場所ごと下へ落ちる
+    m.move_parent(tf - 0.45, tf - 0.24, (-0.30, 0.0), dz=-plan.STEP_H)     # 段差の先へ出て、置き場所ごと下へ落ちる（落ちるのは 0.2 秒。本当に落ちる速さ）
     # v6（ユーザー「まるロボが落ちた時にコロンって転がる感じにして」）：床に着いたら、一覧の roll_over（5本目で足した）で横へ転がる。
     #   転がった分（体の半径 約 0.085 m × 80°）だけ置き場所を横へ動かす
     # v7（ユーザー「コロンってときはひっくり返る感じに」）：床に着いたら、前へでんぐり返ってあお向け（脚が上）に。23-01 で戻って起き上がる
     FWD = (0.0, 1.0)          # 倒れる向き：画面の左（段差の側）へ横に。前（-x）だと画面の外へ出る
-    m.flip(tf + 0.02, 0.75, FWD, at=(plan.STEP_X + 0.05 - 0.30, -2.05)); ev(tf + 0.02 + 0.75 * 1.0 / 1.7, "maru:land", 0.9); ev(tf + 0.02 + 0.75 * 1.5 / 1.7, "maru:land", 0.35)
+    TF0 = tf - 0.22          # 本番の点検（声がまねする音）：「ころん」の時刻に、あお向けで床に当たる（床に着いてすぐ回る。前は 0.46 秒遅かった）
+    m.flip(TF0, 0.5, FWD, at=(plan.STEP_X + 0.05 - 0.30, -2.05)); ev(TF0 + 0.5 * 1.0 / 1.7, "maru:land", 0.9); ev(TF0 + 0.5 * 1.5 / 1.7, "maru:land", 0.35)
     m.blink(s("22-06") + 0.2); m.blink(s("22-06") + 0.6)
     m.flip(s("23-01") + 0.3, 0.6, FWD, back=True); ev(s("23-01") + 0.9, "maru:land", 0.6)      # 逆にたどって起き上がる
     m.act(s("23-01") + 1.0, "get_up"); m.at(s("23-01") + 5.1, face=plan.face_deg(1, 0), look=25)      # 一覧の get_up

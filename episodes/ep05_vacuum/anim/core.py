@@ -175,33 +175,50 @@ class Maru(MC.Maru):
             key(par, "rotation_euler", t0, tuple(par.rotation_euler)); key(par, "rotation_euler", t1, tuple(R(v) for v in rot))
         self.offs.append((t1, b)); self.offs.sort(key=lambda x: x[0])
 
-    def flip(self, t0, dur, fwd, back=False, roll=0.15, bounce=True, at=None):
-        """ひっくり返る（5本目 v7。ユーザー「コロンってときはひっくり返る感じに」）：置き場所の親ごと、前へでんぐり返って
-        あお向け（脚が上）になる。本物の体の作り（胴は腰を中心に傾くだけ）では逆さにできないので、親を回す。
-        回る中心は「立った胴の中心」と「逆さで床に着いた胴の中心」の真ん中の高さで、転がった分（roll m）だけ前へ進む。
-        fwd：前の向き（世界の xy）。back=True で逆にたどって起き上がる（元の場所・向きへ戻る）"""
+    def flip(self, t0, dur, fwd, back=False, roll=0.15, bounce=True, at=None, rest=105.0):
+        """ひっくり返る（5本目 v7。ユーザー「コロンってときはひっくり返る感じに」）：置き場所の親ごと、横（fwd の向き）へ転がって
+        あお向けに近い形（rest 度。足が斜め上）で止まる。体の作り（胴は腰を中心に傾くだけ）では逆さにできないので、親を回す。
+        真っ逆さま（180°）にしないのは、上に伸びたアンテナが床に刺さるため（本番の点検。胴とアンテナの先が両方床に着く角度 ≒ 105°）。
+        胴の中心は、立っているときの高さ c から、転がると球の半径 r の高さへ（床を突き抜けない）。コマごとに印を打つ（曲線の行き過ぎで沈まない）。
+        back=True で逆にたどって起き上がる（元の場所・向きへ戻る）"""
         import mathutils
         par = self.handle.parent; S_ = self.s
         if at is not None: self._flip_xy = at          # ひっくり返る所（世界の xy。まるロボが着いた所）
-        c = MM.TORSO_Z * S_; r = 0.33 * S_; h = (c + r) / 2          # 胴の中心の高さ・胴の半径（世界）
-        fv = Vector((fwd[0], fwd[1], 0)).normalized(); ax = Vector((0, 0, 1)).cross(fv).normalized()     # 頭が前へ倒れる向きに回す軸
+        c = MM.TORSO_Z * S_; r = 0.33 * S_              # 胴の中心の高さ・胴の半径（世界）
+        fv = Vector((fwd[0], fwd[1], 0)).normalized(); ax = Vector((0, 0, 1)).cross(fv).normalized()
         if not hasattr(self, "_flip0"):
             bpy.context.scene.frame_set(f(t0)); self._flip0 = (par.matrix_world.copy(), par.location.copy(), par.rotation_euler.copy())
         M0 = self._flip0[0]; L0 = M0.translation.copy()
-        P0 = Vector((self._flip_xy[0], self._flip_xy[1], L0.z + h))
+        C0 = Vector((self._flip_xy[0], self._flip_xy[1], L0.z + c))        # 立っているときの胴の中心（世界）
         def M_at(th, k):
-            P = P0 + fv * (roll * k)
-            return mathutils.Matrix.Translation(P) @ mathutils.Matrix.Rotation(math.radians(th), 4, ax) @ mathutils.Matrix.Translation(-P0) @ M0
-        seq = [(0.0, 0.0, 0.0), (0.35, 70, 0.4), (0.7, 150, 0.85), (1.0, 192, 1.0)] + ([(1.25, 172, 1.0), (1.5, 183, 1.0), (1.7, 180, 1.0)] if bounce else [(1.15, 180, 1.0)])
-        if back: seq = [(u, 180 - th if u > 0 else 180, 1.0 - k) for u, th, k in [(0.0, 0.0, 0.0), (0.3, 40, 0.3), (0.65, 120, 0.75), (1.0, 180, 1.0)]]
-        if os.environ.get("DBG_FLIP"): print("DBGFLIP M0", tuple(round(v, 3) for v in L0), "h", round(h, 3), "rot", tuple(round(math.degrees(v), 1) for v in self._flip0[2]), "par", par.parent)
-        T = seq[-1][0]; prev = None
-        for u, th, k in seq:
-            M = M_at(th, k); loc, q, sc = M.decompose(); eu = q.to_euler("XYZ", prev) if prev else q.to_euler("XYZ"); prev = eu
-            tt = t0 + dur * u / T
-            key(par, "location", tt, tuple(loc), "BEZIER"); key(par, "rotation_euler", tt, tuple(eu), "BEZIER")
-            if os.environ.get("DBG_FLIP"): print("DBGFLIP", round(tt, 2), th, tuple(round(v, 3) for v in loc), tuple(round(math.degrees(v), 1) for v in eu))
+            zc = L0.z + r + (c - r) * max(0.0, math.cos(math.radians(th)))
+            C = Vector((C0.x, C0.y, zc)) + fv * (roll * k)
+            return mathutils.Matrix.Translation(C) @ mathutils.Matrix.Rotation(math.radians(th), 4, ax) @ mathutils.Matrix.Translation(-C0) @ M0
+        R_ = rest
+        seq = [(0.0, 0.0, 0.0), (0.35, 0.55 * R_, 0.4), (0.7, 0.93 * R_, 0.85), (1.0, R_ + 6, 1.0)] + ([(1.25, R_ - 4, 1.0), (1.5, R_ + 2, 1.0), (1.7, R_, 1.0)] if bounce else [(1.15, R_, 1.0)])
+        if back: seq = [(0.0, R_, 1.0), (0.3, 0.8 * R_, 0.7), (0.65, 0.4 * R_, 0.3), (1.0, 0.0, 0.0)]
+        T = seq[-1][0]
+        sm = lambda u: u * u * (3 - 2 * u)
+        n = max(2, int(round(dur * FPS)))
+        AFTER_BAKE.append(lambda: self._flip_keys(t0, dur, seq, T, sm, n, M_at, L0.z))
         return t0 + dur
+
+    def _flip_keys(self, t0, dur, seq, T, sm, n, M_at, floor):
+        """（焼いたあとに呼ぶ）コマごとに、体の形の頂点のいちばん低い所を測り、床より下なら持ち上げて印を打つ"""
+        par = self.handle.parent; prev = None
+        meshes = [o for o in self.handle.root.children_recursive if o.type == 'MESH' and not o.hide_render]
+        for i in range(n + 1):
+            u = T * i / n
+            j = max(0, min(len(seq) - 2, next((q for q in range(len(seq) - 1) if seq[q][0] <= u <= seq[q + 1][0] + 1e-9), len(seq) - 2)))
+            (ua, tha, ka), (ub, thb, kb) = seq[j], seq[j + 1]
+            w_ = sm((u - ua) / (ub - ua)) if ub > ua else 1.0
+            th = tha + (thb - tha) * w_; k = ka + (kb - ka) * w_
+            M = M_at(th, k); tt = t0 + dur * i / n
+            bpy.context.scene.frame_set(f(tt)); par.matrix_world = M; bpy.context.view_layer.update()
+            low = min(min((o.matrix_world @ v.co).z for v in o.data.vertices) for o in meshes)
+            if low < floor + 0.003: M = mathutils_T((0, 0, floor + 0.003 - low)) @ M
+            loc, q, sc = M.decompose(); eu = q.to_euler("XYZ", prev) if prev else q.to_euler("XYZ"); prev = eu
+            key(par, "location", tt, tuple(loc), "LINEAR"); key(par, "rotation_euler", tt, tuple(eu), "LINEAR")
 
     def jump(self, t, p_from, p_to, z_to=None, apex=None, **_):
         """p_from（世界）まで歩いておき、t に一覧の jump_to（見る→向く→しゃがむ→蹴る→放物線→脚で受け止める）で p_to へ。
@@ -309,10 +326,21 @@ class Maru(MC.Maru):
 AFTER_BAKE = []          # 焼いたあとに呼ぶ（まるロボの入れかえを、跳んで着いた本当の時刻に合わせる など）
 
 
+def mathutils_T(v):
+    return Matrix.Translation(Vector(v))
+
+
 def maru_bake_all(t_end):
     MC.LATE.clear()
     for m in MARUS: m.bake05(t_end)
     for fn in AFTER_BAKE: fn()
+    if os.environ.get("DBG_LOW"):          # まるロボの体のいちばん低い所（世界・頂点）を、コマごとに出す（床を突き抜けていないか）
+        a_, b_ = [float(x) for x in os.environ["DBG_LOW"].split(",")]
+        for m in MARUS:
+            ms = [o for o in m.handle.root.children_recursive if o.type == 'MESH']
+            for fr_ in range(f(a_), f(b_) + 1):
+                bpy.context.scene.frame_set(fr_)
+                print("DBGLOW", round(CLOCK["T0"] + fr_ / FPS, 3), round(min(min((o.matrix_world @ v.co).z for v in o.data.vertices) for o in ms), 3))
     if MC.LATE: print("【まるロボ】間に合わなかった動き（秒）：", MC.LATE)
 
 
