@@ -1,0 +1,84 @@
+# QR回のサムネ：「サムネの構図の決まり」（2026-11-20 ユーザー決定。SKILL.md §9）で作る
+#   上に黒い帯（高さの 17%）＋白い極太字 1 行の問い（物の名前＝黄、おかしな所・結果＝赤）。帯の下は明るく清潔な 3D の絵
+#   形：A 左右の比べ／B 前→後／C アップ。印（✓・✕・？・赤い丸・赤い矢印）と画面の札はこちらで描く（絵の AI に字・印を描かせない）
+#   部品は thumbs_v3.py（字・矢印・✓✕）と 4本目の thumbs04.py の q_mark・band の形をまねた
+#   使い方: THUMB_WORK=<作業> THUMB_FONT=<NotoSansJP[wght].ttf> python3 thumbs_band.py gen A B C ／ comp '{"A":"QA_1.png",...}'
+import os, sys, json, importlib.util
+H_ = os.path.dirname(os.path.abspath(__file__))
+_sp = importlib.util.spec_from_file_location("tv3", os.path.join(H_, "thumbs_v3.py"))
+T = importlib.util.module_from_spec(_sp); sys.argv_ = sys.argv; sys.argv = [sys.argv[0], "x"]; _sp.loader.exec_module(T); sys.argv = sys.argv_
+from PIL import Image, ImageDraw, ImageFilter
+W, H = T.W, T.H
+ROBOT = ("The small mascot robot must match the reference images exactly: a glossy white sphere body, ONE large round camera-lens eye on the front "
+         "(dark navy outer ring, teal iris ring, glossy dark pupil), small teal discs on the sides, a thin grey antenna with a small beige-orange ball on "
+         "top, two short stubby grey legs with dark navy boots whose soles glow teal. NO mouth, NO arms, NO hands, no eyebrows.")
+BRIGHT = ("Background art for a YouTube thumbnail, 16:9, bright clean soft 3D illustration (polished explainer style: soft daylight, white and light "
+          "pastel colors, smooth shading, crisp). ABSOLUTELY NO TEXT, no letters, no numbers, no logos, no icons, no check marks, no X marks, no speech "
+          "bubbles. The TOP 18% of the frame will be covered by a black title band, so put nothing important there. QR codes must look like real QR codes "
+          "with EXACTLY three big square corner markers (top-left, top-right, bottom-left). " + ROBOT)
+PLANS = {
+ "QA": ("Two panels side by side separated by a thin white gap, the SAME bright clean white desk in both. In EACH panel the SAME large crisp QR code "
+        "printed on a white card stands facing the camera straight on, big (about 70% of the panel height, below the top 18%). LEFT panel: the robot "
+        "SITS on the lower-right corner of the card, covering about a quarter of the code, relaxed. RIGHT panel: no robot; the code has only a few small "
+        "black ink drops scattered on its white squares (small but clearly visible). Nothing else."),
+ "QB": ("Two panels side by side separated by a thin white gap (before / after), same bright clean desk. LEFT panel (before): a large crisp QR code on a "
+        "white card facing the camera, the robot SITS on its lower-right corner covering about a quarter of it, and a smartphone held above points its "
+        "camera at the code. RIGHT panel (after): a large smartphone seen from the front, its whole screen plain blank glowing white (nothing on it), "
+        "standing upright on the desk. Leave the middle gap between the panels calm (an arrow will be added)."),
+ "QC": ("Close-up shot, bright soft daylight. A large crisp QR code printed on a white card faces the camera straight on and fills the center-right (x "
+        "35-95%, y 22-95%); its lower-right corner is clearly torn off (a ragged paper edge, a missing piece). A smartphone enters from the upper right, "
+        "its back camera pointing at the code, the instant before scanning (we see the back of the phone, no screen). The robot is small at the lower "
+        "left (x 4-24%, y 60-98%), looking up at the code, curious."),
+}
+T.PLANS.update(PLANS)
+BAND = {   # 案 → [(字, 色)]。物の名前＝黄、おかしな所・結果＝赤
+ "QA": [("なぜ", "W"), ("QRコード", "Y"), ("は", "W"), ("小さな汚れ", "R"), ("で読めない？", "W")],
+ "QB": [("QRコード", "Y"), ("を体で隠すと", "W"), ("どうなる", "R"), ("？", "W")],
+ "QC": [("なぜ", "W"), ("QRコード", "Y"), ("は", "W"), ("欠けても読める", "R"), ("のか？", "W")],
+}
+# 印の位置は、10% の目盛りを重ねた一覧で絵を見て決めた（2560×1440）。QR・まるロボ・帯にかけない
+MARKS = {"QA_2": [("ok", 175, 470, 105), ("ng", 2390, 470, 105)],   # 左右の比べ：左＝隠しても ✓、右＝小さな汚れで ✕（QR の外の余白に）
+         "QB_1": [("q", 1958, 880, 200)]}                           # 前→後：右のスマホの画面に赤い ？（結果を隠す）
+CIRCLES = {"QA_2": [(1840, 840, 150)],                              # 右の QR の汚れ
+           "QC_1": [(1720, 1170, 210)]}                             # 欠けた角
+ARROWS = {"QB_1": [((1290, 880), (1610, 880))]}                     # 前→後の赤い太い矢印（2 つの絵の間）
+RED2 = (240, 40, 40)
+
+
+def q_mark(im, c, r=260):
+    """大きな「？」の札（赤い丸に白い ？、白いふち）。結果を隠す（4本目の thumbs04.py と同じ形）"""
+    x, y = c; lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
+    ds.ellipse((x - r + 10, y - r + 14, x + r + 10, y + r + 14), fill=(0, 0, 0, 110))
+    d.ellipse((x - r - 14, y - r - 14, x + r + 14, y + r + 14), fill=(255, 255, 255, 255)); d.ellipse((x - r, y - r, x + r, y + r), fill=(235, 40, 40, 255))
+    f = T.F(int(r * 1.5)); b = f.getbbox("？"); d.text((x - (b[0] + b[2]) / 2, y - (b[1] + b[3]) / 2), "？", font=f, fill=(255, 255, 255, 255))
+    return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
+
+
+def band_comp(choice):
+    out = []
+    for name, src in choice.items():
+        k = name.split("_")[0]; key = src.rsplit(".", 1)[0]; im = T.bg(os.path.join(T.G, src))
+        for kind, mx, my, r in MARKS.get(key, []):
+            im = q_mark(im, (mx, my), r) if kind == "q" else T.badge(im, (mx, my), kind == "ok", r)
+        for cx, cy, r in CIRCLES.get(key, []):
+            lay = Image.new("RGBA", (W, H)); dl = ImageDraw.Draw(lay)
+            dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
+            dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=RED2 + (255,), width=26)
+            im = Image.alpha_composite(im, lay)
+        for p0, p1 in ARROWS.get(key, []): im = T.arrow(im, p0, p1, bend=0.0, w=46, col=RED2)
+        bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
+        runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
+        px = T.fit(runs, W - 120, 220, track=-0.03)
+        f = T.F(px); tw = sum(f.getlength(ch) + px * -0.03 for t, _ in runs for ch in t)
+        b = f.getbbox("な"); y = (bh - (b[3] - b[1])) // 2 - b[1]
+        im, _ = T.line(im, ((W - tw) / 2, y), runs, px, (8, 8, 10), ew=0, track=-0.03, shadow=False)
+        out.append(T.save(im, "band_" + name))
+    return out
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == "gen":
+        T.BASE = BRIGHT
+        for a in sys.argv[2:]: T.gen(a)
+    else:
+        print("\n".join(band_comp(json.loads(sys.argv[2]))))
