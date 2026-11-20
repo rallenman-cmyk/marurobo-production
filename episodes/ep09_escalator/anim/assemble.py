@@ -68,6 +68,23 @@ for nm in list(ORDER) + sorted(PIP_ONLY):
     fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9]*.png")))
     FR[nm] = {int(os.path.basename(f)[len(nm) + 1:-4]): f for f in fs}
 _img = {}
+# 場面の終わりと、溶けて切りかわる間は、その場面を止めた絵にする（9本目 v3：次の場面のために人物を置き直すのが、
+# 溶ける間や切りかわりの直前に見えて、消えたり、追うカメラが壁に入って暗くなった）。
+# 止める時刻：次の場面の 0.1 秒前。それより前 0.6 秒の間に、映っている人物が 1 コマで 150px 以上飛ぶ所があれば、その手前
+def _hold(nm, tn):
+    h = tn - 0.1; lg = LOG.get(nm)
+    if not lg: return h
+    for ob in ("maru_c", "ojisan", "ball"):
+        tr = lg["track"].get(ob) or []
+        for p_, q_ in zip(tr, tr[1:]):
+            t_ = lg["t0"] + q_[0] / lg["fps"]
+            if not (tn - 0.6 <= t_ <= tn + 0.4): continue
+            on_ = lambda r: 0 <= r[1] <= 1280 and 0 <= r[2] <= 720 and r[3] > 0
+            if not (on_(p_) or on_(q_)): continue
+            if ((p_[1] - q_[1]) ** 2 + (p_[2] - q_[2]) ** 2) ** 0.5 / max(1, q_[0] - p_[0]) > 150:
+                h = min(h, lg["t0"] + p_[0] / lg["fps"])
+    return h
+HOLD = {ORDER[i]: _hold(ORDER[i], CL[ORDER[i + 1]][2]) for i in range(len(ORDER) - 1)}
 
 
 def frame(nm, t):
@@ -252,8 +269,9 @@ nf = int((TO - FROM) * FPS)
 for fi in range(nf):
     t = FROM + fi / FPS
     act = active(t); im = None
-    for nm, wgt in act:
-        f_ = frame(nm, t)
+    for i_, (nm, wgt) in enumerate(act):
+        # 溶けて切りかわる間、前の場面はその直前の絵で止める（9本目 v3：場面の先で人物を次の場所へ置き直すので、溶ける間に消えたり、追うカメラが壁に入って暗くなった）
+        f_ = frame(nm, min(t, HOLD.get(nm, 1e9)))
         for r_nm, r0, r_clip, r_src in REPLAY:     # 前の場面をもう一度（メインの絵を差しかえる。頭は 0.35 秒で溶かす）
             if nm == r_nm and t >= r0:
                 g_ = frame(r_clip, r_src + (t - r0))
@@ -280,6 +298,7 @@ over = [t for a, c, t in SUBS if any(SJ.width(r) > 25 for r in t.split("\\N")) o
 chk.append("鳴らした効果音（時刻・種類・大きさ）：" + "、".join("%.1f %s %.2f" % (t, k, g) for (t, k), g in sorted(EV.items()) if g > 0))
 chk.append("映っていないので鳴らさなかった効果音：" + ("、".join("%.1f %s" % x for x in sorted(DROP)) or "なし"))
 chk.append("25 字・2 行をこえる字幕：" + ("、".join(over) or "なし"))
+chk.append("終わりを早めに止めた場面（置き直しの手前）：" + ("、".join("%s %.2f 秒前" % (k_, CL[ORDER[ORDER.index(k_) + 1]][2] - v_) for k_, v_ in HOLD.items() if CL[ORDER[ORDER.index(k_) + 1]][2] - v_ > 0.11) or "なし"))
 chk.append("絵の足りないクリップ：" + ("、".join(sorted(missing)) or "なし"))
 chk.append("声のすき間へずらした効果音：" + ("、".join("%.2f %s → %+.2f 秒" % m for m in moves) or "なし"))
 chk.append("声と重なるので半分の大きさにした効果音（札が言葉の瞬間に出る音）：" + ("、".join("%.2f %s" % m for m in overl) or "なし"))
