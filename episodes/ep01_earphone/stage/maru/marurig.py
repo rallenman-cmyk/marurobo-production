@@ -40,7 +40,7 @@ class MaruRig:
             if o.animation_data:
                 mb = o.matrix_basis.copy(); o.animation_data_clear(); o.matrix_basis = mb
         find = lambda pred: next((o for o in H if pred(o)), None)
-        self.torso = find(lambda o: o.name.endswith("• torso"))
+        self.torso = find(lambda o: re.search(r"• torso(\.\d+)?$", o.name))      # 2 体目は名前の後ろに .001 などが付く（5本目 v8、本番の PC で止まった）
         self.legs = sorted([o for o in H if re.search(r"• leg(\.\d+)?$", o.name)], key=lambda o: o.location.x)   # 左（x−）、右
         self.antenna = find(lambda o: "• antenna" in o.name)
         self.cradle = find(lambda o: "cradle" in o.name and "•" in o.name)

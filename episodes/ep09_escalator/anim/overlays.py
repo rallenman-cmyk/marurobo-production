@@ -26,10 +26,11 @@ def ev_list():
     # 冒頭
     add(w("02-03", "見てください"), e("02-03") + 0.2, "ring", dict(obj="maru_c_f", dx=60, dy=10, r=46))
     add(w("04-06", "首") - 0.3, e("04-06") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(e("05-01") + 0.25, s("05-02") - 0.15, "title", {})
+    # 題の札：「エスカレーター。」のすぐ後に急に出さず、少し間をおいてから出し、問いの文（05-02）を読む間ずっと見せる（v1 のコメント 1:30）
+    add(e("05-01") + 1.0, e("05-02") + 0.4, "title", {})
     add(s("05-03"), e("05-03") + 0.2, "pip_clip", dict(clip="A04c", src_t=w("04-03", "ころん") - 1.0))
     # 1章
-    add(w("06-03", "たまって") - 0.2, e("06-03") + 0.2, "pile", dict(pos=(640, 300)))
+    add(w("06-03", "消えた段") - 0.1, e("06-03") + 0.4, "pile", dict(pos=(640, 300)))   # 文の頭から（たまっていく絵を声と一緒に見せる）
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_hi", r=60))
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_lo", r=60))
     add(w("07-02", "このしるし"), e("07-02") + 0.3, "sticker", dict(pos=(640, 170)))
@@ -131,9 +132,9 @@ def bubble_sprite(kind):
 def title_sprite():
     key = ("title",)
     if key not in _cache:
-        spr, off = D.card(1000, 330, draw=lambda d, W_, H_, ss, img: [D.ctext(d, (W_ / 2, H_ / 2 - 92 * ss), "エスカレーターの段は、", D.font(56 * ss), NAVY),
-                                                                      D.ctext(d, (W_ / 2, H_ / 2 + 10 * ss), "どこへ", D.font(70 * ss), D.TEAL_D),
-                                                                      D.ctext(d, (W_ / 2, H_ / 2 + 100 * ss), "消える？", D.font(70 * ss), D.TEAL_D)])
+        # 2 行（v1 のコメント「2行で表現して」）
+        spr, off = D.card(1000, 260, draw=lambda d, W_, H_, ss, img: [D.ctext(d, (W_ / 2, H_ / 2 - 52 * ss), "エスカレーターの段は、", D.font(60 * ss), NAVY),
+                                                                      D.ctext(d, (W_ / 2, H_ / 2 + 52 * ss), "どこへ消える？", D.font(78 * ss), D.TEAL_D)])
         _cache[key] = spr
     return _cache[key]
 
@@ -192,21 +193,43 @@ def coins_sprite():
     return _cache[key]
 
 
-def pile_sprite():
-    key = ("pile",)
-    if key not in _cache:
-        def dr(d, W_, H_, ss, img):
-            for i in range(4):
-                y = H_ - (40 + 46 * i) * ss; x0 = W_ / 2 - 150 * ss
-                for xx in range(int(x0), int(x0 + 300 * ss), 22 * ss):
-                    d.line([xx, y, xx + 12 * ss, y], fill=(90, 110, 140), width=5 * ss)
-                    d.line([xx, y - 36 * ss, xx + 12 * ss, y - 36 * ss], fill=(90, 110, 140), width=5 * ss)
-                for yy in range(int(y - 36 * ss), int(y), 14 * ss):
-                    d.line([x0, yy, x0, yy + 7 * ss], fill=(90, 110, 140), width=5 * ss)
-                    d.line([x0 + 300 * ss, yy, x0 + 300 * ss, yy + 7 * ss], fill=(90, 110, 140), width=5 * ss)
-            D.ctext(d, (W_ / 2, 34 * ss), "床の下にたまる？", D.font(40 * ss), NAVY)
-        _cache[key] = D.card(380, 300, draw=dr)[0]
-    return _cache[key]
+def pile_sprite(t=None, t0=None):
+    """06-03 の想像：横から見たエスカレーター。上の降り口で消えた段が、床の下に 1 枚ずつ落ちてたまっていく（v1 のコメント「この絵がわかりにくい」で描き替え）"""
+    k = 1.0 if t is None else max(0.0, min(1.0, (t - t0) / 3.2))
+
+    def dr(d, W_, H_, ss, img):
+        S_ = lambda x, y: (x * ss, y * ss)
+        GR, ST, NV = (150, 156, 166), (96, 104, 118), NAVY
+        # 床（下の階・上の階）と坂
+        d.line([S_(30, 330), S_(250, 330)], fill=GR, width=8 * ss)
+        d.line([S_(250, 330), S_(560, 140)], fill=GR, width=8 * ss)
+        d.line([S_(560, 140), S_(870, 140)], fill=GR, width=8 * ss)
+        # 坂の段（のこぎりの形）
+        for q in range(9):
+            x0, y0 = 262 + q * 33, 323 - q * 20.2
+            d.line([S_(x0, y0), S_(x0, y0 - 20), S_(x0 + 33, y0 - 20)], fill=ST, width=5 * ss)
+        # 床の下（上の階の下）：点線の箱
+        bx0, by0, bx1, by1 = 590, 160, 850, 400
+        for xx in range(bx0, bx1, 22):
+            d.line([S_(xx, by1), S_(xx + 12, by1)], fill=GR, width=4 * ss)
+        for yy in range(by0, by1, 22):
+            d.line([S_(bx0, yy), S_(bx0, yy + 12)], fill=GR, width=4 * ss)
+            d.line([S_(bx1, yy), S_(bx1, yy + 12)], fill=GR, width=4 * ss)
+        D.ctext(d, S_(520, 380), "床の下", D.font(32 * ss), GR)
+        # たまっていく段（1 枚ずつ落ちる）
+        u = k * 7.0; n = min(7, 1 + int(u))
+        for i_ in range(n):
+            fall = 1.0 if (i_ < n - 1 or k >= 1.0) else min(1.0, (u - (n - 1)) * 1.6 + 0.2)
+            yb = by1 - 8 - i_ * 26; ytop = 150 + (yb - 150) * fall
+            x0 = 640 + (i_ % 2) * 18
+            d.rounded_rectangle([S_(x0, ytop - 22), S_(x0 + 150, ytop)], radius=5 * ss, fill=ST)
+            for g in range(6):
+                d.line([S_(x0 + 14 + g * 23, ytop - 18), S_(x0 + 14 + g * 23, ytop - 4)], fill=(150, 158, 172), width=3 * ss)
+        # 消える所から下へ落ちる矢印
+        d.line([S_(575, 128), S_(612, 128), S_(612, 210)], fill=(214, 72, 64), width=7 * ss)
+        d.polygon([S_(598, 206), S_(626, 206), S_(612, 232)], fill=(214, 72, 64))
+        D.ctext(d, S_(450, 40), "消えた段が、床の下にたまる？", D.font(46 * ss), NV)
+    return D.card(900, 430, draw=dr)[0]
 
 
 def hrarrows_sprite(t, t0):
@@ -313,7 +336,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             spr, off = tag_sprite("もしも…", 44, WHITE)
             _paste(base, spr, 150, 70, 1.0, a)
         elif kind == "pile":
-            _paste(base, pile_sprite(), p["pos"][0], p["pos"][1], k, a)
+            _paste(base, pile_sprite(t, t0), p["pos"][0], p["pos"][1], k, a)
         elif kind == "sticker":
             _paste(base, sticker_sprite(), p["pos"][0], p["pos"][1], k, a)
         elif kind == "coins":

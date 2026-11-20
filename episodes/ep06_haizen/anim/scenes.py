@@ -820,15 +820,28 @@ def b_face(cl):
     ear_p = sv.d["ears"][1].matrix_world.translation.copy()
     arm = kid.w.arms[0]; r0 = tuple(arm.rotation_euler); arm.animation_data_clear()
     kl, kr = (0.3, 1.0, 0.0), R(133)
-    # v10 の点検：0.4 秒で腕を上げていて 1 コマ 33 度 → 1.2 秒かけて上げる。腕の向きの数は前の向きから近いほうで続ける（ぐるっと回らない）
-    from mathutils import Euler as _Eu
-    key(arm, "rotation_euler", CLOCK["TI"], r0); key(arm, "rotation_euler", s("27-01") - 0.4, r0)
-    tt = s("27-01") + 0.8; k = 0; prev_e = _Eu(r0)     # 1.2 秒かけて耳まで上げる（下から 150 度ほど）
+    # v10 の点検：0.4 秒で腕を上げていて 1 コマ 33 度。下ろすときは、向きの数のあいだを曲線まかせにしていたので、腕が頭の上を回って横へ振れた
+    #   （v9 9:49 の店員さんの腕と同じ種類）→ 上げ下げは 1 コマずつ、ねじれない向け方で、体の横を通して打つ（先輩の前を通らない＝突き抜けない）
+    from mathutils import Euler as _Eu, Vector as _V, Matrix as _Mx
+    rz_ = _Mx.Rotation(kr, 3, 'Z'); sh_ = _V(kl) + rz_ @ (_V(arm.location) * 0.78)
+    q_to = lambda tg: _V((0, 0, -1)).rotation_difference(rz_.inverted() @ (_V(tg) - sh_))
+    sd_ = 1.0 if arm.location.x > 0 else -1.0
+    q_side = q_to(sh_ + _V((math.cos(kr), math.sin(kr), 0.0)) * sd_ * 0.5 + _V((0, 0, -0.12)))   # 体の横へ、少し下向き
+    q_down = _Eu(r0).to_quaternion()
+    ear_q = lambda k_: q_to((ear_p.x + (0.05 if k_ % 2 else -0.05), ear_p.y + (0.05 if k_ % 2 else -0.05) * 0.6, ear_p.z + 0.02))
+    seq = [(s("27-01") - 0.6, q_down), (s("27-01") + 0.15, q_side)]   # 上げるのも 1.5 秒かけて
+    tt = s("27-01") + 0.9; k = 0
     while tt < e("27-02") + 0.1:
-        dx = (0.05 if k % 2 else -0.05)
-        e_ = _Eu(aim_arm(arm, kl, kr, (ear_p.x + dx, ear_p.y + dx * 0.6, ear_p.z + 0.02), sc=0.78)); e_.make_compatible(prev_e); prev_e = e_
-        key(arm, "rotation_euler", tt, tuple(e_), "BEZIER"); tt += 0.32; k += 1
-    e_ = _Eu(r0); e_.make_compatible(prev_e); key(arm, "rotation_euler", e("27-02") + 1.2, tuple(e_))   # 下ろすのも近いほうの向きで、ゆっくり
+        seq.append((tt, ear_q(k))); tt += 0.32; k += 1
+    t_last = seq[-1][0]
+    seq += [(t_last + 0.9, q_side), (t_last + 1.6, q_down)]   # 下ろすのは 1.6 秒かけて
+    key(arm, "rotation_euler", CLOCK["TI"], r0)
+    prev_e = _Eu(r0); sm_ = lambda x: x * x * (3 - 2 * x)
+    for (ta, qa), (tb, qb) in zip(seq, seq[1:]):
+        for fr in range(f(ta), f(tb) + 1):
+            x_ = (CLOCK["T0"] + fr / FPS - ta) / max(1e-6, tb - ta)
+            e_ = qa.slerp(qb, sm_(max(0.0, min(1.0, x_)))).to_euler('XYZ', prev_e); prev_e = e_
+            arm.rotation_euler = e_; arm.keyframe_insert("rotation_euler", frame=fr)
     sv.set_face(s("27-02") - 0.2, "happy"); sv.ears(s("27-01") + 0.4, e("27-02"), 10, 0.45); ev(s("27-02") - 0.1, "purr", 0.5)
     # v8 8:23「子供がなでながら回転してる」：向きのキーが、なで始め（133°）から歩き出しまでゆっくり回っていた → 歩き出す直前まで向きを止める
     kid.at(e("27-03") - 3.2, 0.3, 1.0, 133)    # 1.2 秒かけて歩く向き（164 度ふり向く）へ回ってから歩き出す（v10 の点検：0.6 秒では 1 コマ 17 度で速すぎた）
