@@ -362,7 +362,10 @@ class HopPathSeg(JumpSeg):
         dz0 = Z[1] - Z[0]; v0 = math.sqrt(2 * G * max(0.12, dz0 + 0.15))       # 高い所へは頂点が着く所より 15cm 上、下りても少しは上へ跳ぶ
         T_need = (v0 + math.sqrt(max(0.0, v0 * v0 - 2 * G * dz0))) / G
         T_fl0 = max(min(0.42, max(0.18, t_lands[0] - t0 - T_c - 0.12)), T_need)
-        tk = [t_lands[0] - T_fl0] + [t_lands[k - 1] + T_b for k in range(1, n)]
+        # 次の字まで間が長いとき（0.8 秒より長い）は、宙の時間を T_MAX までにして、着いた所で受け止めて立ち、しゃがみ直して跳ぶ
+        #   （7本目 v8：「……最後の O まで」の 3.3 秒を 1 回で跳んで、画面の上へ飛び出していた）
+        T_MAX = 0.5
+        tk = [t_lands[0] - T_fl0] + [max(t_lands[k - 1] + T_b, t_lands[k] - T_MAX) if t_lands[k] - t_lands[k - 1] > 0.8 else t_lands[k - 1] + T_b for k in range(1, n)]
         vel = []
         for k in range(n):
             T = max(0.12, t_lands[k] - tk[k]); h0 = Z[k] + HIP_REST + ext; h1 = Z[k + 1] + HIP_REST + ext
@@ -377,7 +380,13 @@ class HopPathSeg(JumpSeg):
             self.pieces.append((tk[k], tk[k] + T, lambda u, h=h0, v=v_up: h + v * u - 0.5 * G * u * u))
             fl = dict(t0=tk[k], t1=tk[k] + T, z0=Z[k], z1=Z[k + 1], v_up=v_up, v_imp=v_imp, ext_to=ext, ext_ld=ext, p0=P[k], p1=P[k + 1])
             self.flights.append(fl); t = tk[k] + T
-            if k + 1 < n:
+            if k + 1 < n and tk[k + 1] - t - T_c - push_time(crouch, ext, max(0.3, vel[k + 1][0])) >= 0.1:   # 弾むには間が長い（弾んだまま待つと深く沈む）
+                v_nx = vel[k + 1][0]; Tp = push_time(crouch, ext, max(0.3, v_nx)); tc = tk[k + 1] - Tp - T_c
+                f, w = land_curve(ext, max(0.3, v_imp), depth, zeta); fl["omega"] = w; fl["t_next"] = tk[k + 1]
+                self.pieces.append((t, tc, lambda u, h=h1, f=f: h + f(u)))
+                self.pieces.append((tc, tc + T_c, lambda u, h=h1, f=f, a=tc - t: h + f(a) - (crouch + f(a)) * smooth(u / T_c)))
+                self.pieces.append((tc + T_c, tk[k + 1], lambda u, h=h1, T=Tp, v=v_nx: h + quintic(u, T, -crouch, 0, 0, ext, v, -G)[0]))
+            elif k + 1 < n:
                 v_nx = vel[k + 1][0]; Tb = tk[k + 1] - t
                 self.pieces.append((t, t + Tb, lambda u, h=h1, T=Tb, a=v_imp, b=v_nx: h + quintic(u, T, ext, -a, -G, ext, b, -G)[0]))
                 fl["t_next"] = tk[k + 1]
