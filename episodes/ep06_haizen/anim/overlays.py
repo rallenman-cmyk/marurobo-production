@@ -10,7 +10,59 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "..", "ep04_robot", "look"))
 import design as D
 import timing as T
-s, e, w = T.s, T.e, T.w
+s, e = T.s, T.e
+# 札の時刻は、声の本当の切れ目に寄せる（6本目 v8 7:33「矢印が表示されるの早い」・5:52「テーブルのはしが早い」）。
+#   T.w は字の数で言葉の位置を見積もるので、文の中に長い間があると 1 秒ほどずれる。言葉が「、。」のすぐ後なら、
+#   その文の声の切れ目（0.25 秒以上の無音のあと、言葉が始まる時刻）のいちばん近い所（2.5 秒以内）を使う。3D（scenes.py）は T.w のまま
+_GAPS = {}
+W_SNAPS = []
+
+
+def _gaps(i):
+    """文の声の切れ目：[(言葉が始まる時刻, 無音の長さ)]"""
+    if i in _GAPS: return _GAPS[i]
+    g = []
+    try:
+        import wave, numpy as np
+        L = [l for _, l in T.L.items() if l["id"] == i][0]
+        vd = os.environ.get("MARU_VOICE") or os.path.join(os.environ.get("MARU_WORK", ""), "stage", "voice", "achernar")
+        with wave.open(os.path.join(vd, "line_%03d.wav" % L["no"])) as wv_:
+            sr = wv_.getframerate(); x = np.frombuffer(wv_.readframes(wv_.getnframes()), np.int16).astype(np.float32) / 32768
+        h = int(sr * 0.02); on = np.abs(x[:len(x) // h * h]).reshape(-1, h).max(1) > 0.02; k = 0
+        while k < len(on):
+            if not on[k]:
+                j = k
+                while j < len(on) and not on[j]: j += 1
+                if (j - k) * 0.02 >= 0.25 and k > 0 and j < len(on): g.append((L["start"] + j * 0.02 - 0.04, (j - k) * 0.02))
+                k = j
+            else: k += 1
+    except Exception: pass
+    _GAPS[i] = g; return g
+
+
+def w(i, word, end=False):
+    t0 = T.w(i, word, end)
+    txt = T.TEXT[i]; k = txt.index(word) + (len(word) if end else 0)
+    if k == 0 or txt[k - 1] not in "、。？！…": return t0
+    g = _gaps(i)
+    if not g: return t0
+    body = txt.rstrip("、。？！…")
+    ends = [n for n, ch in enumerate(body) if ch in "。？！" and (n + 1 >= len(body) or body[n + 1] not in "、。？！…")]
+    commas = [n for n, ch in enumerate(body) if ch in "、…" and (n + 1 >= len(body) or body[n + 1] not in "、。？！…")]
+    t1 = None
+    long_ = [a for a, d in g if d >= 0.4]
+    if txt[k - 1] in "。？！" and len(ends) == len(long_):                 # 文の終わりの後：長い間を何番目かで
+        nth = sum(1 for n in ends if n < k); t1 = long_[nth - 1] if nth else None
+    elif len(ends) + len(commas) == len(g):                                 # 区切り全部と切れ目の数が同じ：何番目かで
+        nth = sum(1 for n in ends + commas if n < k); t1 = g[nth - 1][0] if nth else None
+        if t1 is not None and abs(t1 - t0) > 0.8: t1 = None                 # 読点の間は短くて数えそこねることがある（29-03）→ 大きくは動かさない
+    if t1 is None:                                                          # 合わないとき：見積もりから 0.6 秒以内の切れ目へ少しだけ
+        c = min((a for a, d in g), key=lambda a: abs(a - t0))
+        if abs(c - t0) <= 0.6: t1 = c
+    if t1 is None or abs(t1 - t0) > 2.5: return t0
+    if abs(t1 - t0) > 0.15: W_SNAPS.append((i, word, round(t0, 2), round(t1, 2)))
+    return t1
+
 TEAL = (33, 193, 179); YEL = (255, 210, 74); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48); ORANGE = (255, 154, 60); PINK = (255, 79, 160)
 SUB_TOP = 560
 
@@ -73,7 +125,9 @@ def ev_list():
     add(w("22-01b", "人が"), e("22-01b") + 0.3, "pip_clip", dict(clip="S22p", src_t=w("22-01b", "人が"), big=True))   # v2：3D の小窓に
     add(w("22-02", "なめらかに"), e("22-03") + 0.3, "speed", dict(t1=e("22-02")))
     # 24：通路のはば
-    add(s("24-01"), e("24-03") + 0.3, "darrow", dict(a="gapL", b="gapR", text="70cm", track_clip="S24a", t_text=w("24-01", "70cm")))
+    # v8 7:33「矢印が表示されるの早い」：場面の頭ではなく「通路のはば」と言う瞬間に。「70cm」はそこからの字の数で
+    add(w("24-01", "通路のはば"), e("24-03") + 0.3, "darrow", dict(a="gapL", b="gapR", text="70cm", track_clip="S24a",
+                                                           t_text=w("24-01", "通路のはば") + T.w("24-01", "70cm") - T.w("24-01", "通路のはば")))
     # 23・25：困り顔・ほっと
     add(s("23-03") + 0.3, e("23-03") + 0.6, "bubble", dict(obj="maru", icon="?", side=-1, track_clip="S23b"))
     # 28：怒った

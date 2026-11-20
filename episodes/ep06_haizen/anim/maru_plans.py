@@ -34,10 +34,11 @@ def new(pos, face, t0):
     return p
 
 
-def upto(p, t, what=""):
-    """声の時刻 t まで待つ。もう過ぎていたら記録する（動きが声に間に合っていない）"""
+def upto(p, t, what="", still=False):
+    """声の時刻 t まで待つ。もう過ぎていたら記録する（動きが声に間に合っていない）
+    still=True：その形のまま止まって待つ（寝ころんだ・ころんだあと。idle は立った形に戻すので使わない。6本目 v8 5:32「立ち上がるのおかしい」）"""
     if p.t > t + 0.05: LATE.append((what, round(t, 2), round(p.t, 2)))
-    if p.t < t: p.idle(t - p.t, glance=False) if t - p.t > 0.6 else p.wait(t - p.t)
+    if p.t < t: p.idle(t - p.t, glance=False) if (t - p.t > 0.6 and not still) else p.wait(t - p.t)
     return p
 
 
@@ -136,7 +137,7 @@ def plan_test(t0=0.0):
     p.walk_to(L((0.0, 0.2)), speed=mm.V_BRISK)
     upto(p, w("18-01", "転がって") + 0.4, "18-01 寝ころぶ")
     p.lie_side(side=1)                               # marumotion に足した部品（床に横になる）
-    upto(p, s("19-01") - 1.4, "19-01 起きる")
+    upto(p, s("19-01") - 1.4, "19-01 起きる", still=True)
     p.get_up()
     p.walk_to(L((0.5, 0.55)), speed=mm.V_BRISK); p.turn_to(heading=H(200))
     return p
@@ -158,16 +159,17 @@ TABLE_Z = 0.742
 
 
 def plan_face(t0=0.0):
-    p = new((1.15, 1.35), -90, t0)
+    p = new((1.24, 1.35), -90, t0)
     extra("face", parent=[(t0, (0.0, 0.0, TABLE_Z), 0.0)])     # テーブルの上（親を天板の高さへ）
     t_r = s("28-01") + 2.2
     upto(p, t_r - 0.6, "28-01 近づく")
-    p.walk_to(L((1.02, 1.35)))
+    # v8 8:36「まるロボがトレイに貫通してる」：先輩（x 0.68）のトレーのふちは約 0.89。前へ 16° かがむと頭が 9cm 出るので、1.10 で止まる
+    p.walk_to(L((1.10, 1.35)))
     t_ang = w("28-03", "怒った") - 0.15
     # すりすり（marumotion に足した部品）：怒った顔になる直前まで続ける
     p.rub(dur=max(1.0, t_ang - 0.3 - p.t))
     upto(p, t_ang + 0.2, "28-03 怒られる")
-    p.surprise(); p.back_to(L((1.32, 1.35)))
+    p.surprise(); p.back_to(L((1.36, 1.35)))
     return p
 
 
@@ -186,7 +188,7 @@ def plan_end(t0, parent_keys):
     upto(p, s("30-01") + 0.3, "30-01 ひと休み")
     p.rest(dur=1.0)
     t_l = w("30-02", "ひょいと")
-    upto(p, t_l - 0.7, "30-02 起きる")
+    upto(p, t_l - 0.7, "30-02 起きる", still=True)
     p.wake()
     upto(p, w("30-04", "デザート") - 0.2, "30-04 デザート")
     p.surprise()

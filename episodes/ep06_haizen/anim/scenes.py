@@ -107,6 +107,8 @@ class MaruR:
         i0 = max(0, int((CLOCK["T0"] - 1.0) * FPS)); i1 = min(len(frames), int((CLOCK.get("T1", CLOCK["T0"] + 60) + 1.0) * FPS))
         h.bake(frames[i0:i1], f0=f(i0 / FPS))
         for e_ in p.events:
+            # 跳ねる・起きる・驚くときの「ぽすっ」（takeoff・land）は鳴らさない。床に転ぶ（fall）ときだけ（6本目 v8 5:47・7:55「なんの SE かわかんない」）
+            if e_["kind"] in ("takeoff", "land") and not e_.get("fall"): continue
             if e_["kind"] in MS_KINDS:
                 g_ = _GAIN.get(e_["kind"], 1.0) * (0.4 + 0.6 * min(1.0, e_.get("strength", 1.0)) if e_["kind"] == "step" else min(1.0, e_.get("strength", 1.0)) if e_["kind"] == "land" else 1.0)
                 ev(e_["t"], "maru:" + e_["kind"], round(g_, 3))
@@ -453,20 +455,28 @@ def b_lidar(cl):
     sv = Sv(senpai_serve(pos, 0)); track("senpai", sv.root, 1.2); track("window", sv.d["lidwin"], 0.0)
     sv.spin(CLOCK["T0"] - 1, 240, rps=0.5)
     # 光の線（回る頭から、まわりへ。13-03「光を当てて」から）
-    for k in range(3):
-        bm = beam(sv.d["spin"], length=2.6, col=TEAL, r=0.004, strength=8.0); bm.rotation_euler = (0, 0, R(120 * k))
-        show_between(bm, w("13-03", "光を当てて"))
-    # 当たった所に点（壁・脚）
     S = plan.segments(); P_ = []
+    for k in range(3):
+        bm = beam(sv.d["spin"], length=2.6, col=TEAL, r=0.012, strength=10.0); bm.rotation_euler = (0, 0, R(120 * k))   # v8 4:11：上から見て回るのが分かる太さに
+        show_between(bm, w("13-03", "光を当てて"))
+        # 光の線は、当たった所（脚・壁）で止める（突き抜けて遠くまで伸びない）。回る角度は spin と同じ計算（0.5 回/秒）
+        tt = max(CLOCK["T0"] - 1, w("13-03", "光を当てて") - 0.2)
+        while tt < CLOCK.get("T1", tt + 10) + 1:
+            h_ = plan.ray(pos[0], pos[1], -math.pi / 2 + 2 * math.pi * 0.5 * tt + R(120 * k), S, 2.6)
+            key(bm, ("scale", 1), tt, h_[0] if h_ else 2.6, "LINEAR"); tt += 1 / 24
+    # 当たった所に点（壁・脚）
     t0 = w("13-03", "返ってきた")
     for i in range(400):
         t = t0 + i * 0.012; a = -math.pi / 2 + 2 * math.pi * 0.5 * t + R(120 * (i % 3))
         h = plan.ray(pos[0], pos[1], a, S, 2.6)
         if h: P_.append((h[1][0], h[1][1], t))
-    point_cloud("hits", P_, col=TEAL, radius=0.02, base=1.8, pop=6.0, decay=6.0, t_offset=CLOCK["T0"])
+    point_cloud("hits", P_, col=TEAL, radius=0.035, base=1.8, pop=6.0, decay=6.0, t_offset=CLOCK["T0"])
     M = MaruR(MP.plan_lidar, "lidar", 0.0); track("maru", M.root, 0.15)
     if cut(cl, "S13a"): cam((-0.35, -0.75, 0.95), (0.0, 0.6, 0.5), 28, s("13-01") - 0.2, s("13-02"), (-0.32, -0.6, 0.88), (0.0, 0.6, 0.45))
-    if cut(cl, "S13b"): cam((0.45, -0.15, 0.36), (0.0, 0.6, 0.3), 34, s("13-02") - 0.2, s("14-01"), (0.45, -0.3, 0.5), (0.0, 0.6, 0.28), 26)
+    if cut(cl, "S13b"): cam((0.45, -0.15, 0.36), (0.0, 0.6, 0.3), 34, s("13-02") - 0.2, s("13-03"), (0.45, -0.3, 0.5), (0.0, 0.6, 0.28), 26)
+    # v8 4:11「光が回転してる感じにして、それによって椅子とかの位置がわかってるはず」：窓のアップでは光が横一本にしか見えない
+    #   → 「光を当てて」から斜め上から見下ろし、回る光の線が床の上を回って、いす・テーブルの脚や壁に当たった所に点が出るのを見せる
+    if cut(cl, "S13c"): cam((0.12, -1.35, 2.45), (0.0, 0.85, 0.0), 22, s("13-03") - 0.2, s("14-01"), (0.1, -1.2, 2.4), (0.0, 0.85, 0.0))
 
 
 # ======================================================================== S14〜S16：先輩の目で見たファミレス（暗い中の点）
@@ -810,6 +820,8 @@ def b_face(cl):
         key(arm, "rotation_euler", tt, aim_arm(arm, kl, kr, (ear_p.x + dx, ear_p.y + dx * 0.6, ear_p.z + 0.02), sc=0.78), "BEZIER"); tt += 0.32; k += 1
     key(arm, "rotation_euler", e("27-02") + 0.7, r0)
     sv.set_face(s("27-02") - 0.2, "happy"); sv.ears(s("27-01") + 0.4, e("27-02"), 10, 0.45); ev(s("27-02") - 0.1, "purr", 0.5)
+    # v8 8:23「子供がなでながら回転してる」：向きのキーが、なで始め（133°）から歩き出しまでゆっくり回っていた → 歩き出す直前まで向きを止める
+    kid.at(e("27-03") - 2.6, 0.3, 1.0, 133)    # 0.6 秒で歩く向きへ回ってから歩き出す
     kid.walk(e("27-03") - 2.0, [(0.3, 1.0), (-0.6, 0.55), (-1.0, 0.55)], v=0.7)
     sv.set_face(e("27-03") - 0.5, "normal")
     # 28：まるロボがまねして、テーブルの上から頭ですりすり → しつこく → 怒った顔
@@ -866,9 +878,12 @@ def b_end(cl):
     cube(mat("counter", "#E9E2D6", rough=0.5), (cnt[0], cnt[1] + 0.02, CZ / 2), (0.7, 0.42, CZ), bevel=0.02)
     cube(mat("countertop", "#8A5E3B", rough=0.3, coat=0.4), (cnt[0], cnt[1] + 0.02, CZ - 0.01), (0.74, 0.46, 0.03), bevel=0.008)
     # まるロボ：小さく置く親（PK）を運ぶ。体は予定（plan_end）で、休む → 起きる → おどろく。face は 6本目の向き（親は +180）
-    PK = [(CLOCK["T0"] - 1, (cnt[0], cnt[1] - 0.05, CZ + 0.005), 200 + 180)]
+    # v8 9:52「まるロボがトレイの上から移動してる」：最初の置き場所のキーを「場面の頭の 1 秒前」に打っていたため、後ろの場面（S30c）では
+    #   運び終わったあと（9:49）に台の上へ戻され、そこからトレーへ滑っていた → オチの始まりより前の決まった時刻に打つ
+    T_INIT = s("30-01") - 2.0
+    PK = [(T_INIT, (cnt[0], cnt[1] - 0.05, CZ + 0.005), 200 + 180)]
     st = Wk(walker((-0.6, 3.1), 120, shirt="#2B2F36", apron=True)); track("staff", st.root, 1.6)
-    st.at(CLOCK["T0"] - 1, -0.6, 3.1, 120)
+    st.at(T_INIT, -0.6, 3.1, 120)
     t_l = w("30-02", "ひょいと"); t_p = w("30-02", "トレー") + 0.2
     SP = (0.85, 2.92)                                   # 店員さんが立つ所
     f_cnt = plan.face_deg(cnt[0] - SP[0], cnt[1] - SP[1]); f_sv = plan.face_deg(WAIT[0] - SP[0], WAIT[1] - SP[1])
@@ -876,7 +891,8 @@ def b_end(cl):
     t_w = st.walk(t_l - 1.0 - 2.2, [(-0.6, 3.1), (0.1, 3.28), SP], v=0.85); st.at(t_l - 1.0, SP[0], SP[1], f_cnt)
     tray0 = (0.0, WAIT[1] - 0.02 * SVS, 0.52 * SVS + 0.016)   # いちばん下のトレーの上（まるロボの足もと）
     # まるロボの場所（足もと）と、店員さんの体（場所・かたむき・向き）
-    MB = 0.18                                           # 足もとから体のまん中まで
+    MB = 0.17 * MP.S / 0.26                             # 足もとから体のまん中まで（本物の寸法・大きさ 0.26 で 0.17 m）
+    HOLD = 0.165                                        # 体のまん中から手までの横のはば（体の半径 0.13 m＋手）
     g = t_l - 0.45                                      # つかむ（「ひょいと」の少し前）
     keys = [(g, (cnt[0], cnt[1] - 0.05, CZ + 0.005), 0.0, f_cnt),
             (g + 0.35, (cnt[0] - 0.12, cnt[1] - 0.1, CZ + 0.16), 0.0, f_cnt),
@@ -888,8 +904,10 @@ def b_end(cl):
             th = R(f); fx, fy = math.sin(th), -math.cos(th); loc = (SP[0] + fx * 0.42, SP[1] + fy * 0.42, 0.78)
         PK.append((t, loc, None))
         key(st.root, ("rotation_euler", 0), t, lean, "BEZIER"); key(st.root, ("rotation_euler", 2), t, R(f), "BEZIER")
-        tgt = (loc[0], loc[1], loc[2] + MB)
+        # v8 9:49「店員の手がまるロボを貫通してる」：両手で体のまん中をねらっていた → 体の左右（半径 0.13 m＋手の厚み）を、横からはさむ
         for arm in st.w.arms:
+            sd = 1.0 if arm.location.x > 0 else -1.0
+            tgt = (loc[0] + sd * HOLD * math.cos(R(f)), loc[1] + sd * HOLD * math.sin(R(f)), loc[2] + MB)
             key(arm, "rotation_euler", t, aim_arm_full(arm, (SP[0], SP[1], 0.0), (lean, 0.0, R(f)), tgt), "BEZIER")
     PK.append((t_p + 0.4, tray0, None))
     for hp in st.w.hips:   # 持ち上げる間は、足をそろえて立つ
@@ -933,7 +951,7 @@ CUTS = [
     ("S09a", b_map, s("09-01")), ("S10b", b_where, s("10-03")),
     ("S11a", b_ceil, s("11-01")), ("S11b", b_ceil, s("11-05")),
     ("S12a", b_shape, s("12-01")),
-    ("S13a", b_lidar, s("13-01")), ("S13b", b_lidar, s("13-02")),
+    ("S13a", b_lidar, s("13-01")), ("S13b", b_lidar, s("13-02")), ("S13c", b_lidar, s("13-03")),
     ("S14L", b_lit14, s("14-01")), ("S14a", b_dark, s("14-01") + 1.4), ("S14b", b_dark, s("14-04")), ("S15a", b_dark, s("15-03")), ("S16a", b_dark, s("16-01")),
     ("S17a", b_test, s("17-01")), ("S18a", b_test, s("18-01")), ("S18b", b_test, s("18-04")), ("S19a", b_test, s("19-01")),
     ("S20a", b_test, s("20-01")), ("S21a", b_test, s("21-01")),
@@ -960,5 +978,18 @@ if __name__ == "__main__" or True:
         fn, t0, t1 = CLIPS[CLIPNAME]
         CLOCK["T0"] = t0; CLOCK["T1"] = t1
         fn(CLIPNAME)
+        if "--probe" in sys.argv:
+            # 点検（6本目 v8 9:52）：同じ組み立ての場面どうしで、物の動きが場面によって変わらないかを比べるため、
+            #   決まった時刻（--probe a b：a〜b 秒を 0.5 秒ごと）の、全部の物の場所・向きを書き出す。描かない
+            a_, b_ = float(_opt("--probe", 2, (0, 0))[0]), float(_opt("--probe", 2, (0, 0))[1])
+            sc = bpy.context.scene; out = {}
+            tt = a_
+            while tt <= b_ + 1e-6:
+                sc.frame_set(f(tt))
+                out["%.1f" % tt] = {o.name: [round(v, 3) for v in list(o.matrix_world.translation) + list(o.matrix_world.to_euler())]
+                                    for o in sc.objects if o.type in ("MESH", "EMPTY", "CURVE") and not o.name.startswith("cam")}
+                tt += 0.5
+            json.dump(out, open(os.path.join(OUTDIR, CLIPNAME + "_probe.json"), "w"))
+            print("PROBE", CLIPNAME, len(out)); sys.exit(0)
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)

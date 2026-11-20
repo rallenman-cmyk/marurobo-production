@@ -43,6 +43,23 @@ for k, p in enumerate(P):
 FIX_AT = {}
 ID_OF = {v: k for k, v in T.TEXT.items()}
 NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
+# 文ごとの声の切れ目（0.25 秒以上の無音のあと、言葉が始まる時刻）
+VOICE_GAPS = {}; SNAPPED = []
+for p in P:
+    try:
+        with wave.open(os.path.join(os.environ["MARU_VOICE"], "line_%03d.wav" % p["no"])) as wv_:
+            sr_ = wv_.getframerate(); x_ = np.frombuffer(wv_.readframes(wv_.getnframes()), np.int16).astype(np.float32) / 32768
+    except Exception: continue
+    h_ = int(sr_ * 0.02); on_ = np.abs(x_[:len(x_) // h_ * h_]).reshape(-1, h_).max(1) > 0.02
+    g_ = []; i_ = 0
+    while i_ < len(on_):
+        if not on_[i_]:
+            j_ = i_
+            while j_ < len(on_) and not on_[j_]: j_ += 1
+            if (j_ - i_) * 0.02 >= 0.25 and i_ > 0 and j_ < len(on_): g_.append(p["start"] + j_ * 0.02 - 0.04)
+            i_ = j_
+        else: i_ += 1
+    VOICE_GAPS[p["start"]] = g_
 SUBS = []
 for a, c, t in lines:
     fx_ = FIX_AT.get(ID_OF.get(t))
@@ -53,6 +70,16 @@ for a, c, t in lines:
         SUBS += [(ts_[i], ts_[i + 1] if i + 1 < len(ts_) else c, ps_[i]) for i in range(len(ps_))]
         continue
     ev_ = SJ.events_v(a, c, t)
+    # 分け目を、声の本当の切れ目（無音のあと、次の言葉が始まる所）へ寄せる（6本目 v8 5:52「テーブルのはしが のテロップが早い」：
+    #   「次は、高い所。」のあと 0.76 秒の間があり、自動の分け目は 1.5 秒早かった）。いちばん近い切れ目が 2.5 秒以内にあれば使う
+    gaps_ = VOICE_GAPS.get(a, [])
+    for i in range(1, len(ev_)):
+        b_ = ev_[i][0]
+        if not gaps_: break
+        g_ = min(gaps_, key=lambda x: abs(x - b_))
+        if abs(g_ - b_) <= 2.5 and abs(g_ - b_) > 0.15 and ev_[i - 1][0] + 0.8 < g_ < ev_[i][1] - 0.8:
+            SNAPPED.append((t[:14], round(b_, 2), round(g_, 2)))
+            ev_[i - 1] = (ev_[i - 1][0], g_, ev_[i - 1][2]); ev_[i] = (g_, ev_[i][1], ev_[i][2])
     for i in range(len(ev_) - 1):        # 分けた字幕の 1 枚が 1.0 秒より短いときは、次の札を少し後ろへ（次も 1.0 秒は残す）
         a0, c0, t0 = ev_[i]; a1, c1, t1 = ev_[i + 1]
         if c0 - a0 < 1.0 and c1 - (a0 + 1.0) >= 1.0: ev_[i] = (a0, a0 + 1.0, t0); ev_[i + 1] = (a0 + 1.0, c1, t1)
@@ -248,6 +275,7 @@ chk = []
 gaps = [(P[k]["end"], P[k + 1]["start"] - P[k]["end"], T.L[P[k + 1]["no"]]["id"]) for k in range(len(P) - 1) if P[k + 1]["start"] - P[k]["end"] >= 2.2]
 chk.append("2.2 秒以上の間：" + ("、".join("%.1f 秒（%s の前）" % (g_, i_) for _, g_, i_ in gaps) or "なし"))
 short = [(a, c - a, t) for a, c, t in SUBS if c - a < 1.0]
+chk.append("声の切れ目へ寄せた字幕の分け目：" + ("、".join("「%s」%.2f→%.2f" % x for x in SNAPPED) or "なし"))
 chk.append("1.0 秒未満の字幕：" + ("、".join("%.1f秒 %.2f 秒「%s」" % (a, d_, t[:12]) for a, d_, t in short) or "なし"))
 over = [t for a, c, t in SUBS if any(SJ.width(r) > 25 for r in t.split("\\N")) or t.count("\\N") > 1]
 chk.append("25 字・2 行をこえる字幕：" + ("、".join(over) or "なし"))

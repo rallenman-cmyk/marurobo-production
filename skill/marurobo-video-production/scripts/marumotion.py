@@ -964,7 +964,7 @@ class Plan:
         self.layer(t0, t0 + 1.2, lambda t, t0=t0: {"pitch": -6.0 * hump(t, t0 + 0.42, 0.25), "lift": -0.015 * hump(t, t0 + 0.42, 0.22)})
         self.tracks["pitch"].set(t0 + 0.05, 0.4, -80.0); self.tracks["lift"].set(t0 + 0.05, 0.4, -0.04)
         self.tracks["gaze_pitch"].set(t0, 0.3, 20.0); self.tracks["iris"].set(t0 + 0.4, 0.3, -0.35)
-        self.blinks.append((t0 + 0.45, "fast")); self.event(t0 + 0.45, "land", 2.0)
+        self.blinks.append((t0 + 0.45, "fast")); self.event(t0 + 0.45, "land", 2.0, fall=True)
         self.t = t0 + 1.0; self._lb_end(lid); return self
 
     def lie_side(self, side=1, label=None):
@@ -972,7 +972,7 @@ class Plan:
         lid = self._lb(label); t0 = self.t
         self.tracks["roll"].set(t0, 0.5, 80.0 * side); self.tracks["lift"].set(t0, 0.5, -0.05)
         self.layer(t0, t0 + 1.1, lambda t, t0=t0, sd=side: {"roll": 5.0 * sd * hump(t, t0 + 0.52, 0.25)})
-        self.event(t0 + 0.5, "land", 1.5)
+        self.event(t0 + 0.5, "land", 1.5, fall=True)
         self.t = t0 + 0.9; self._lb_end(lid); return self
 
     def roll_over(self, side=1, label=None):
