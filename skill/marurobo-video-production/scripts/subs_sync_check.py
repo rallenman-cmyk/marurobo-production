@@ -43,7 +43,9 @@ def cands(wav, speed=1.0):
             i = j
         else: i += 1
     for k in range(15, n - 15):
-        if db[k] == db[k - 5:k + 6].min() and min(db[k - 15:k].max(), db[k + 1:k + 16].max()) - db[k] >= 6 and not sil[k]:
+        # 谷が無音まで下がっても数える（2026-11-21 v9：0.04〜0.06 秒だけ無音になる言葉の切れ目（「なぞを／確かめて」など 5 か所）が、
+        # 「0.07 秒より短いので間でない」「無音なので谷でない」の両方から外れ、ずれと数えていた。聞き取りでは 5 か所とも言葉の切れ目）
+        if db[k] == db[k - 5:k + 6].min() and min(db[k - 15:k].max(), db[k + 1:k + 16].max()) - db[k] >= 6:
             out.append((k * 0.01 + 0.03) / speed)
     return sorted(out)
 

@@ -40,9 +40,12 @@ t = T0
 while t < T1 - 1:
     a, b = int(t * sr), int(min(T1, t + 30) * sr)
     y = x[a:b]
-    r = post({"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wavb(y)).decode()}}, {"text": ASK}]}],
-              "generationConfig": {"responseMimeType": "application/json"}})
-    txt = r["candidates"][0]["content"]["parts"][0]["text"]
+    for _k in range(4):      # v9：答えが空（candidates なし）で止まったので、聞き直す
+        r = post({"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wavb(y)).decode()}}, {"text": ASK}]}],
+                  "generationConfig": {"responseMimeType": "application/json"}})
+        try: txt = r["candidates"][0]["content"]["parts"][0]["text"]; break
+        except (KeyError, IndexError): print("空の答え：聞き直す", str(r)[:120], flush=True); time.sleep(10)
+    else: raise SystemExit("答えが空のまま：%.0f 秒から" % t)
     try: j = json.loads(txt)
     except Exception: j = {"raw": txt}
     lv = 20 * np.log10(np.sqrt((y ** 2).mean()) + 1e-9); pk = 20 * np.log10(np.abs(y).max() + 1e-9)

@@ -23,10 +23,10 @@ for i, p in enumerate(P):
             at = ev[k + 1][0] - p["start"] + 0.02
             best = min((abs(np.sqrt((x[int((at + d - 0.01) * sr):int((at + d + 0.01) * sr)] ** 2).mean())), at + d) for d in np.arange(-0.1, 0.06, 0.01))
             db = 20 * np.log10(best[0] + 1e-9)
-            mid.append((p["no"], round(float(best[1]), 2), add, round(float(db), 1), t))
+            mid.append((p["no"], round(float(best[1]), 2), add, round(float(db), 1), t, "".join(x[2] for x in ev[:k + 1])))     # 最後は間の前の字（add_pause.py の 4 つ目）
         elif i + 1 < len(P):
             end[I[P[i + 1]["no"]]] = round(end.get(I[P[i + 1]["no"]], 0) + add, 2)
             print("文の終わり：", I[p["no"]], t, "→ 次の文", I[P[i + 1]["no"]], "の前に", add, "秒")
 for m in mid: print("文の途中：", m[0], I[m[0]], m[4], "→", m[1], "秒の所（%s dB）に" % m[3], m[2], "秒")
-print("ADD_PAUSE", " ".join("%d %s %s" % (m[0], m[1], m[2]) for m in mid))
+print("ADD_PAUSE", " ".join("%d %s %s %s" % (m[0], m[1], m[2], m[5]) for m in mid))
 print("PLUS", json.dumps(end, ensure_ascii=False))

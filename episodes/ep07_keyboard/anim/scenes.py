@@ -15,6 +15,10 @@ exec(open(os.path.join(KIT_HERE, "kit.py"), encoding="utf-8").read())
 _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
+# v9：言葉の時刻 w() は timing.py のもの（声に足した間 voice/pauses.json を入れて出す。6本目の core.py の w は字の割合だけ）
+import importlib.util as _iu
+_sp = _iu.spec_from_file_location("timing7", os.path.join(_K7, "timing.py")); _TM = _iu.module_from_spec(_sp); _sp.loader.exec_module(_TM)
+w = _TM.w
 CLIPNAME, OUTDIR = _argv[0], _argv[1]
 # 字を言う瞬間（voice/letter_times.json）。文の頭からの秒を足す
 _LT = json.load(open(os.path.join(_K7, "..", "voice", "letter_times.json"), encoding="utf-8"))
