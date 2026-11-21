@@ -33,7 +33,7 @@ def ev_list():
     add(w("06-03", "消えた段") - 0.1, e("06-03") + 0.4, "pile", dict(pos=(640, 300)))   # 文の頭から（たまっていく絵を声と一緒に見せる）
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_hi", r=60))
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_lo", r=60))
-    add(w("07-02", "このしるし"), e("07-02") + 0.3, "sticker", dict(pos=(640, 170)))
+    add(w("07-02", "このしるし"), e("07-02") + 0.3, "sticker", dict(pos=(290, 170)))   # 左上へ（まん中だと、まるロボの頭に重なった。9本目 v2 の点検）
     add(s("07-04"), e("07-04") + 0.2, "ring", dict(obj="sticker", r=40))
     add(w("08-03", "出てきました") + 0.1, e("08-03"), "bubble", dict(obj="maru_top", icon="!"))
     add(w("08-05", "輪"), e("08-06") + 0.3, "dotloop", dict(a="loop_lo", b="loop_hi"))

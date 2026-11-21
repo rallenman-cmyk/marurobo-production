@@ -1,7 +1,7 @@
 # 9本目 v2（36 章で、上のものさしの図がまるロボを隠した）：札・図が、まるロボ（体の真ん中・頭）を隠す所を数える
 #   MARU_WORK=<作業> python3 cover_check.py <描いたフォルダ> <フォントのフォルダ>
 #   札・図ごとに、出ている間を 0.25 秒おきに、その札だけを透明な絵に描き、まるロボの体の真ん中（maru_c）が
-#   札の四角の中に入る時間を出す（COVER 札の種類 時刻 隠れる割合）。まるロボを指す札（ring・bubble）は数えない
+#   札の四角の中に入る時間を出す（v2 の点検で、頭（maru_top）が隠れるのも数えるようにした）（COVER 札の種類 時刻 隠れる割合）。まるロボを指す札（ring・bubble）は数えない
 import os, sys, json, glob
 from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -45,13 +45,13 @@ for ev in ALL:
     OV.EVENTS = [ev]
     n = hit = 0; t = t0 + 0.3
     while t < t1 - 0.2:
-        m = where("maru_c", t)
-        if m is not None and 0 <= m[0] <= 1280 and 0 <= m[1] <= 720:
+        pts = [q for q in (where("maru_c", t), where("maru_top", t)) if q is not None and 0 <= q[0] <= 1280 and 0 <= q[1] <= 720]
+        if pts:
             im = Image.new("RGBA", (1280, 720), (0, 0, 0, 0))
             OV.draw(t, im, where)
             bb = im.getchannel("A").point(lambda v: 255 if v > 100 else 0).getbbox()
             n += 1
-            if bb and bb[0] <= m[0] <= bb[2] and bb[1] <= m[1] <= bb[3]: hit += 1
+            if bb and any(bb[0] <= m[0] <= bb[2] and bb[1] <= m[1] <= bb[3] for m in pts): hit += 1
         t += 0.25
     if hit:
         bad += 1

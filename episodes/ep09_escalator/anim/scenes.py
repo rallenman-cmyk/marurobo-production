@@ -9,6 +9,8 @@ import os, sys, math, json
 KIT_HERE = os.path.dirname(os.path.abspath(__file__))
 _argv = sys.argv[sys.argv.index("--") + 1:]
 import bpy
+import mathutils
+from bpy_extras.object_utils import world_to_camera_view
 bpy.ops.wm.read_factory_settings(use_empty=True)
 exec(open(os.path.join(KIT_HERE, "kit9.py"), encoding="utf-8").read())
 MAT = M                            # 材質の一覧（場面の中では M はまるロボ）
@@ -337,13 +339,13 @@ def b_night(cl):
     key(lid_lo, "location", -100.0, tuple(lid_lo.location)); key(lid_lo, "location", s("13-01"), (lid_lo.location.x, -HY - 0.75, 0.02))
     # 13-01 の切りかわり（地下を映している間）に、おじさんを下のふたの横へ移す（13-04：開けて待っている）
     key(oj.root, "location", -100.0, tuple(oj.root.location), "CONSTANT"); key(oj.root, ("rotation_euler", 2), -100.0, oj.root.rotation_euler.z, "CONSTANT")
-    key(oj.root, "location", s("13-01"), (LID_LO[0] - 0.3, 0.5, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), s("13-01"), R(-20), "CONSTANT")
+    key(oj.root, "location", s("13-01"), (LID_LO[0] - 1.5, 0.45, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), s("13-01"), R(40), "CONSTANT")   # ふたの左へ（v2 の点検：0.79m 後ろで、カメラから見てまるロボの真後ろに重なり、足が体から生えて見えた）
     M.jump(w("13-04", "ふた") - 0.1, (LID_LO[0] - 0.55, -0.25, 0.0), apex=0.45)   # 「ふたから外へ」を言う間に跳び出す（v2 の点検：言い終わってから跳んでいて、13-04 の間まるロボが映らなかった）
     M.confused(s("13-05") + 0.2)
     # ---------------------------------------------------------------- 6章：見張りに挑戦（夜。ゆっくり動いている）
     t6 = s("28-01") - 0.05
     M.at(t6, loc=(XLC - 1.2, -0.75, 0.0), face=60.0, interp="CONSTANT")
-    key(oj.root, "location", t6 - 0.06, (LID_LO[0] - 0.3, 0.5, 0.0), "CONSTANT")
+    key(oj.root, "location", t6 - 0.06, (LID_LO[0] - 1.5, 0.45, 0.0), "CONSTANT")
     key(oj.root, "location", t6, (XLC - 3.1, -0.05, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), t6, R(60), "CONSTANT")   # まるロボがボールを転がす所（29 章）から 0.9m 離す（v2 の点検：0.47m で、まるロボのすぐ後ろに足が重なって見えた）
     M.glow(s("28-02") + 0.2, 1.5, 0.3); M.hops(s("28-02") + 0.6, n=2, height=0.06)
     # ① 手すりの入口：ボールを転がす
@@ -642,7 +644,7 @@ CUTS = [
     ("D12", _cut, s("12-03"), WIDE_D, "D"),
     ("B12d", _night, s("12-04"), C((HX + 0.4, -0.62, 2.0), (HX - 1.6, 0.0, 1.5), 18), "B"),
     ("B12e", _night, s("12-05"), lambda t0: F((0.9, -0.5, 0.4), 22), "B"),
-    ("B12f", _night, s("12-07"), lambda t0: F((0.7, -0.6, 0.35), 22), "B"),
+    ("B12f", _night, s("12-07"), lambda t0: F((0.9, -0.35, 0.3), 22), "B"),   # 横から（v2 の点検：前の位置だと、戻る段がカメラの前を横切り、黒い板でまるロボが隠れた）
     ("B13", _night, s("13-01"), C((1.3, -0.62, -0.55), (0.1, 0.0, -0.85), 20), "B"),
     ("B13b", _night, s("13-03"), C((XLC + 1.0, -0.3, 0.45), (XLC - 0.1, 0.0, 0.02), 24), "B"),   # 乗り口のすき間から段が出てくる（床の上の低い所から）
     ("B13c", _night, s("13-04"), C((LID_LO[0] - 1.9, -2.6, 1.4), (LID_LO[0] - 0.3, -0.1, 0.55), 30), "B"),
@@ -713,8 +715,8 @@ CUTS = [
     ("B35a", _night, s("35-01"), C((-0.2, -2.7, 0.75), (-0.45, -1.18, 0.45), 32), "B"),
     ("I35", _imag, s("35-02"), lambda t0: F((0.2, -0.9, 2.6), 26, 0.55), "I"),   # 22-02 と同じ、手前の上から（手すりが体の前を横切らない）
     ("B35", _night, s("35-04"), C((1.2, -1.5, 2.6), (1.2, 0.0, 0.1), 30), "B"),
-    ("B36", _night, s("36-01"), C((1.2, -1.5, 2.6), (1.2, 0.0, 0.75), 30), "B"),   # 見る所を上げて、まるロボを画面の下半分に（36-04 からの上のものさしの図に隠れないよう。9本目 v2）
-    ("B36b", _night, s("36-05"), lambda t0: F((0.3, -1.3, 1.9), 28, dz=1.05), "B"),   # 同じ（ものさしの図に隠れないよう、まるロボを下半分に）
+    ("B36", _night, s("36-01"), C((1.2, -1.5, 3.4), (1.25, 0.35, 1.12), 18), "B"),   # 高い所から引いて、まるロボ（アンテナまで）を、上のものさしの図（y 20〜310）と下の字幕（615〜）の間に（9本目 v2 の点検：頭が図に隠れていた。道具で測って アンテナ 318〜・体の下 〜605）
+    ("B36b", _night, s("36-05"), C((1.2, -1.5, 3.4), (1.25, 0.35, 1.12), 18), "B"),   # B36 と同じカメラ（同じ所から、転がる 0.5m を見せる）
     ("B36c", _night, s("36-06"), C((2.8, -0.2, 1.45), (1.41, -0.15, 0.45), 30), "B"),   # 転がり終わった所（押した所から約 0.5m）に合わせた
     ("A38", _day, s("38-01"), lambda t0: F((0.0, -1.7, 0.4), 36), "A"),
     ("A38b", _day, s("38-02"), C((XLC - 1.5, -2.0, 0.95), (XLC - 0.75, -0.73, 0.62), 28), "A"),
@@ -733,23 +735,49 @@ for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
     CLIPS[nm] = (fn, t0, t1, cm, par)
 
+def _screen_touch(sc, cam_, sm, r):
+    """画面の上で、人（足もと〜頭の線に、肩はば 0.25m の太さ）が、まるロボの丸（体の真ん中と半径）にかかるか。画面の外・カメラの後ろは数えない"""
+    from mathutils import Vector
+    pts = []
+    for h_ in (0.05, 0.9, 1.65):
+        q = world_to_camera_view(sc, cam_, Vector((r.x, r.y, r.z + h_)))
+        if q.z <= 0: return False
+        pts.append((q.x * 1280, q.y * 720, q.z))
+    if all(not (-50 < x_ < 1330 and -50 < y_ < 770) for x_, y_, _ in pts): return False
+    side = cam_.matrix_world.to_3x3() @ Vector((0.25, 0.0, 0.0))
+    q2 = world_to_camera_view(sc, cam_, Vector((r.x, r.y, r.z + 0.9)) + side)
+    w_ = math.hypot(q2.x * 1280 - pts[1][0], q2.y * 720 - pts[1][1])
+    cx, cy, cr = sm
+    for (x1, y1, _), (x2, y2, _) in zip(pts, pts[1:]):
+        dx, dy = x2 - x1, y2 - y1; L2 = dx * dx + dy * dy or 1.0
+        u = max(0.0, min(1.0, ((cx - x1) * dx + (cy - y1) * dy) / L2))
+        if math.hypot(cx - (x1 + u * dx), cy - (y1 + u * dy)) < cr * 1.05 + w_ + 6: return True
+    return False
+
+
 def _rider_avoid(t0, t1):
     """乗る人（お客さん）が、この場面の間にまるロボと重なる・カメラのすぐ前を通るなら、その人はこの場面だけ出さない（v1 のコメント「まるロボに人が貫通してる」3 件）。
     どの段に乗せても一日のどこかで重なったので、場面ごとに決める。場面の切りかわりで人が減っても、カメラが変わるので目立たない。
     9本目 v2：はじめは動きの予定から計算していたが、02-04 で計算（1.0m 以上）と描いた絵（0.74m）がずれた → 描く場面の中の本当の位置を 1/4 秒ごとに測る"""
     E = ESC[0]
     if E is None or not getattr(E, "riders", None) or not MARU_ALL: return
-    sc = bpy.context.scene; cam_ = sc.camera; mc = TRACK.get("maru_c", (None,))[0]
+    sc = bpy.context.scene; cam_ = sc.camera; mc = TRACK.get("maru_c", (None,))[0]; mt = TRACK.get("maru_top", (None,))[0]
     off = set(); t = t0
     while t <= t1 + 1e-6:
         sc.frame_set(f(t))
         m = mc.matrix_world.translation if mc is not None else None
         cp = cam_.matrix_world.translation if cam_ is not None else None
+        sm = None
+        if m is not None and cam_ is not None and mt is not None:
+            a_ = world_to_camera_view(sc, cam_, m); b_ = world_to_camera_view(sc, cam_, mt.matrix_world.translation)
+            if a_.z > 0: sm = (a_.x * 1280, a_.y * 720, max(8.0, math.hypot((a_.x - b_.x) * 1280, (a_.y - b_.y) * 720)))
         for i, (wk, k, ry) in enumerate(E.riders):
             r = wk.root.matrix_world.translation
             if m is not None and math.hypot(r.x - m.x, r.y - m.y) < 1.0 and r.z - 0.4 < m.z < r.z + 1.8: off.add(i)
             # カメラの近く（2.4m 以内）を通る人も出さない（手前を大きな頭や体が横切る。08-01 で 1.2m より外の足が画面の半分をふさいだ）
             if cp is not None and any(math.dist((r.x, r.y, r.z + h_), tuple(cp)) < 2.4 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+            # 画面の上で、まるロボの体に人の形がかかる人も出さない（9本目 v2 の点検：02-05 で 1m 先の人が、カメラの向きでまるロボの真横に重なって見えた）
+            if sm is not None and i not in off and _screen_touch(sc, cam_, sm, r): off.add(i)
         t += 0.25
     E.rider_off = off
     print("RIDER_OFF", CLIPNAME, sorted(off))
