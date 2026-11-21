@@ -69,7 +69,7 @@ LAYOUT = {   # 案 → [行]（[(字, 色)]）・字の右の端
 def comp(choice, boxes):
     out = []
     for name, src in choice.items():
-        k = name.split("_")[0]; im = T.bg(os.path.join(T.G, src))
+        k = name.split("_")[0]; im = grade(T.bg(os.path.join(T.G, src)))
         if boxes.get(name): im = label(im, boxes[name])
         im = card_tag(im, (70, 56))
         rows, maxw = LAYOUT[k]; px = min(T.fit(r, maxw - 80, 330) for r in rows); y = 290
@@ -205,7 +205,7 @@ def big_card(im, box, mark=None, cursor=False):
     x0, y0, x1, y1 = box; h = y1 - y0; w = x1 - x0
     lay = Image.new("RGBA", (W, H)); d = ImageDraw.Draw(lay); sh = Image.new("RGBA", (W, H)); ds = ImageDraw.Draw(sh)
     ds.rounded_rectangle((x0 + 8, y0 + 14, x1 + 8, y1 + 14), int(h * 0.12), fill=(0, 0, 0, 110))
-    d.rounded_rectangle((x0, y0, x1, y1), int(h * 0.12), fill=(255, 255, 255, 255), outline=(210, 214, 220, 255), width=4)
+    d.rounded_rectangle((x0, y0, x1, y1), int(h * 0.12), fill=(255, 255, 255, 255), outline=(0, 0, 0, 255), width=CARD_EDGE)   # 黒いふち（建物の深層の吹き出しと同じ。1280 幅で 4px）
     bs = int(min(h * 0.48, w * 0.17)); pad = int(min(h * 0.2, w * 0.06)); bx, by = x0 + pad, y0 + (h - bs) // 2
     col = {"ok": (40, 170, 70), "ng": (225, 40, 40)}.get(mark)
     if col: d.rounded_rectangle((bx, by, bx + bs, by + bs), int(bs * 0.14), fill=col + (255,))
@@ -216,13 +216,13 @@ def big_card(im, box, mark=None, cursor=False):
         d.line([(c[0] - k, c[1] - k), (c[0] + k, c[1] + k)], fill=(255, 255, 255, 255), width=int(bs * 0.14)); d.line([(c[0] - k, c[1] + k), (c[0] + k, c[1] - k)], fill=(255, 255, 255, 255), width=int(bs * 0.14))
     tx = bx + bs + pad; best = None
     for lines in (["私はロボット", "ではありません"], ["私は", "ロボットでは", "ありません"]):   # 狭い欄は 3 行の方が字が大きくなる
-        px = int(h * 0.8 / (len(lines) * 1.15)); f = T.F(px, 800)
-        while max(f.getlength(l) for l in lines) > x1 - tx - pad * 0.6 and px > 20: px -= 2; f = T.F(px, 800)
+        px = int(h * 0.8 / (len(lines) * 1.15)); f = T.F(px, 900)
+        while max(f.getlength(l) for l in lines) > x1 - tx - pad * 0.6 and px > 20: px -= 2; f = T.F(px, 900)
         if not best or px > best[1] * 1.15: best = (lines, px, f)   # 3 行は、はっきり大きくなるときだけ
     lines, px, f = best
     lh = px * 1.15; ty = y0 + (h - lh * len(lines)) / 2
     for i, l in enumerate(lines):
-        b = f.getbbox(l); d.text((tx, ty + i * lh - b[1] + (lh - (b[3] - b[1])) / 2), l, font=f, fill=(24, 34, 56, 255))
+        b = f.getbbox(l); d.text((tx, ty + i * lh - b[1] + (lh - (b[3] - b[1])) / 2), l, font=f, fill=(0, 0, 0, 255))
     im = Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
     if cursor:   # 矢印の形のカーソル（黒に白いふち）を □ の右下に
         cx, cy = bx + bs * 0.62, by + bs * 0.6; u = bs * 0.62
@@ -233,11 +233,69 @@ def big_card(im, box, mark=None, cursor=False):
     return im
 
 
+
+# 帯の字（2026-11-21 ユーザー「文字数と黒帯のサイズをリサーチ元からしっかり調べて」。建物の深層 16 枚を 1280 幅で数えた値）
+#   帯の高さ 133px＝18.5%・字の高さ 102〜104px＝14.4%（帯の 78%。上下の余白 13〜16px）・字の幅は画面の 91〜99%・1 行 10〜17 字（多くは 12〜14 字）
+#   色：白 (255,255,255)・黄 (251,254,5)・赤 (248,3,3)。ふちなし。字の濃さ（字の箱の中の字の割合）0.45〜0.54、線の太さは字の高さの 18%
+#   こちらの前の版は、帯 16.9%・字の高さ 10.6〜12.9%・濃さ 0.37 で、字が小さく、字の間が空いていた
+BAND_H = 0.185; BAND_GLYPH = 0.144; BAND_MAXW = 0.97; BAND_TRACK = -0.07; BAND_BOLD = 0.018; SQUEEZE_MIN = 0.80
+BAND_COL = {"W": (255, 255, 255), "Y": (251, 254, 5), "R": (248, 3, 3)}
+
+
+def band_text(im, runs):
+    bh = round(H * BAND_H); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(0, 0, 0, 255))
+    want = BAND_GLYPH * H
+    for _ in range(40):
+        f0 = T.F(100); b = f0.getbbox("なぜロボット見抜ける？"); px = int(100 * want / (b[3] - b[1]))
+        f = T.F(px); sw = max(1, round(px * BAND_BOLD))
+        # 1 字ずつ詰めて、帯と同じ高さの横長の層に描く
+        chars = [(ch, BAND_COL[c]) for t, c in runs for ch in t]
+        widths = [f.getlength(ch) + px * BAND_TRACK for ch, _ in chars]; tw = int(sum(widths) - px * BAND_TRACK + 2 * sw + 4)
+        lay = Image.new("RGBA", (tw, bh)); dl = ImageDraw.Draw(lay)
+        bb = f.getbbox("な"); y = (bh - (bb[3] - bb[1])) / 2 - bb[1]; x = sw + 2
+        for (ch, col), w_ in zip(chars, widths):
+            dl.text((x, y), ch, font=f, fill=col + (255,), stroke_width=sw, stroke_fill=col + (255,)); x += w_
+        sq = min(1.0, BAND_MAXW * W / tw)
+        if sq >= SQUEEZE_MIN: break
+        want *= 0.97                                     # 横に詰めても入らないときだけ、字を小さくする
+    bx = lay.getbbox(); lay = lay.crop((bx[0], 0, bx[2], bh))          # 字のある所だけで左右の真ん中にそろえる
+    lay = lay.resize((max(1, int(lay.width * sq)), bh), Image.LANCZOS)
+    im.alpha_composite(lay, ((W - lay.width) // 2, 0))
+    print("帯の字", "".join(ch for ch, _ in chars), "字数", len(chars), "字の高さ %.1f%%" % (want / H * 100), "横の詰め %.2f" % sq)
+    return im
+
+
+# 絵の色と明暗（2026-11-21。建物の深層 16 枚の帯の下の平均：色の強さ 68・明暗の差 62・鮮やかさ 0.29・明るさ 169。
+#   前のこちらの 3 枚は 47・50・0.16・201 で、白っぽく色が薄く、物の形が背景にとけていた）
+GRADE = dict(sat=0.29, std=62.0, mean=170.0)
+CARD_EDGE = 8
+
+
+def grade(im):
+    from PIL import ImageEnhance
+    import numpy as np
+    rgb = im.convert("RGB"); top = round(H * BAND_H)
+    def stats(x):
+        a = np.asarray(x.resize((640, 360)), float)[round(360 * BAND_H):]
+        L = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
+        sat = np.asarray(Image.fromarray(a.astype("uint8")).convert("HSV"), float)[..., 1].mean() / 255
+        return sat, L.std(), L.mean()
+    sat, sd, mn = stats(rgb)
+    if mn > GRADE["mean"] + 3:                           # 白っぽすぎるときだけ、明るい所を落とす（ガンマ）
+        g = np.log(GRADE["mean"] / 255) / np.log(mn / 255)
+        rgb = rgb.point([int(255 * (i / 255) ** g) for i in range(256)] * 3)
+    sat, sd, mn = stats(rgb)
+    rgb = ImageEnhance.Contrast(rgb).enhance(min(1.5, max(1.0, GRADE["std"] / max(sd, 1))))
+    sat, sd, mn = stats(rgb)
+    rgb = ImageEnhance.Color(rgb).enhance(min(2.0, max(0.7, GRADE["sat"] / max(sat, 0.01))))   # 最後に鮮やかさを合わせる（強すぎても下げる）
+    sat, sd, mn = stats(rgb); print("絵の色 鮮やかさ %.2f 明暗の差 %.1f 明るさ %.1f" % (sat, sd, mn))
+    return rgb.convert("RGBA")
+
 def band_comp(choice):
     out = []
     RED2 = (240, 40, 40)
     for name, src in choice.items():
-        k = name.split("_")[0]; im = T.bg(os.path.join(T.G, src))
+        k = name.split("_")[0]; im = grade(T.bg(os.path.join(T.G, src)))
         lb = BAND_LABEL.get(name, BAND_LABEL.get(src.split("_")[0]))
         if lb: im = label(im, lb)
         for bx in ([] if src.rsplit(".", 1)[0] in BIGCARDS else BARS.get(src.split("_")[0], [])): im = label_bar(im, bx)
@@ -245,12 +303,7 @@ def band_comp(choice):
         for bc in BIGCARDS.get(src.rsplit(".", 1)[0], []): im = big_card(im, bc[:4], bc[4], bc[5])
         for kind, mx, my, r in ([] if src.rsplit(".", 1)[0] in BIGCARDS and src.startswith("J") else MARKS.get(src.rsplit(".", 1)[0], [])):
             im = q_mark(im, (mx, my), r) if kind == "q" else T.badge(im, (mx, my), kind == "ok", r)
-        bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
-        runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
-        px = T.fit(runs, W - 120, 220, track=-0.03)
-        f = T.F(px); tw = sum(f.getlength(ch) + px * -0.03 for t, _ in runs for ch in t)
-        b = f.getbbox("な"); y = (bh - (b[3] - b[1])) // 2 - b[1]
-        im, _ = T.line(im, ((W - tw) / 2, y), runs, px, (8, 8, 10), ew=0, track=-0.03, shadow=False)
+        im = band_text(im, BAND[k])
         for cx, cy, r in CIRCLES.get(name, CIRCLES.get(src.split("_")[0], [])):
             lay = Image.new("RGBA", (W, H)); dl = ImageDraw.Draw(lay)
             dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
