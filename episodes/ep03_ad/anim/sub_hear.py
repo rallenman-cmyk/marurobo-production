@@ -82,7 +82,7 @@ bad = []; res = []
 for j, h in zip(jobs, heard):
     ref = norm(YC[j["text"]])
     sc = difflib.SequenceMatcher(None, ref, norm(h)).ratio() if ref else None
-    for _ in range(2):                    # 合わないときは 2 回まで聞き直し、いちばん合う聞き取りを使う（聞き取りの言いまちがい「見張り→みひらき」を数えないため。v2 の点検）
+    for _ in range(4):                    # 合わないときは 4 回まで聞き直し（3本目 v12：笑い声「ふふっ」は聞くたびに「ふっ」「えっふふ」とぶれた）。もとは 2 回まで聞き直し、いちばん合う聞き取りを使う（聞き取りの言いまちがい「見張り→みひらき」を数えないため。v2 の点検）
         if sc is None or sc >= 0.8: break
         h2 = hear(j["seg"], sr); s2 = difflib.SequenceMatcher(None, ref, norm(h2)).ratio()
         if s2 > sc: h, sc = h2, s2
