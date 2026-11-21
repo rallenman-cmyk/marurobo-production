@@ -77,7 +77,7 @@ def q_mark(im, c, r=200):
 FIT = {"A_6": 0.07, "A_9": 0.075}   # 絵の名前 → 中身の上の端（高さの割合）。帯（17%）の下に入るよう縮め、左右は元の絵の端をのばす
 
 
-def fit_below(im, top, band_h=0.18):
+def fit_below(im, top, band_h=0.195):
     k = (1 - band_h) / (1 - top); w2, h2 = int(W * k), int(H * k)
     sm = im.resize((w2, h2), Image.LANCZOS); out = Image.new("RGBA", (W, H))
     side = (W - w2) // 2
@@ -85,11 +85,67 @@ def fit_below(im, top, band_h=0.18):
     out.paste(sm, (side, H - h2)); return out
 
 
+# 帯の字と絵の色（2026-11-21 ユーザー「サムネのルール追加したから 3 つのやつ作り直して」。references/thumbnail_rules.md の「数で決めた値」：
+#   建物の深層 16 枚を数えた値。帯の高さ 18.5%・字の高さ 14.4%・字の幅は画面の 92〜97%・字を詰める・色は白黄赤の決まった値・絵の色と明暗を合わせる）
+#   4本目の thumbs04.py の band_text・grade と同じ作り（字の形は太さごとのファイルを使う）
+BAND_H = 0.185; BAND_GLYPH = 0.144; BAND_MAXW = 0.97; BAND_TRACK = -0.07; BAND_BOLD = 0.010; SQUEEZE_MIN = 0.80   # 太さ：決まりの 0.018 では「膳・転・続」の字がつぶれ、字の濃さが 0.59 で幅（0.45〜0.54）の外。0.010 で 0.47〜0.54
+BAND_COL = {"W": (255, 255, 255), "Y": (251, 254, 5), "R": (248, 3, 3)}
+GRADE = dict(sat=0.28, std=62.0, mean=173.0)   # 決まりの幅（鮮やかさ 0.27〜0.31・明るさ 165〜180）のまん中に入るよう、少しずらした
+
+
+def band_text(im, runs):
+    bh = round(H * BAND_H); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(0, 0, 0, 255))
+    want = BAND_GLYPH * H
+    for _ in range(40):
+        f0 = T.F(100); b = f0.getbbox("なぜロボット見抜ける？"); px = int(100 * want / (b[3] - b[1]))
+        f = T.F(px); sw = max(1, round(px * BAND_BOLD))
+        chars = [(ch, BAND_COL[c]) for t, c in runs for ch in t]
+        widths = [f.getlength(ch) + px * BAND_TRACK for ch, _ in chars]; tw = int(sum(widths) - px * BAND_TRACK + 2 * sw + 4)
+        lay = Image.new("RGBA", (tw, bh)); dl = ImageDraw.Draw(lay)
+        bb = f.getbbox("な"); y = (bh - (bb[3] - bb[1])) / 2 - bb[1]; x = sw + 2
+        for (ch, col), w_ in zip(chars, widths):
+            dl.text((x, y), ch, font=f, fill=col + (255,), stroke_width=sw, stroke_fill=col + (255,)); x += w_
+        sq = min(1.0, BAND_MAXW * W / tw)
+        if sq >= SQUEEZE_MIN: break
+        want *= 0.97
+    bx = lay.getbbox(); lay = lay.crop((bx[0], 0, bx[2], bh))
+    lay = lay.resize((max(1, int(lay.width * sq)), bh), Image.LANCZOS)
+    im.alpha_composite(lay, ((W - lay.width) // 2, 0))
+    print("帯の字", "".join(ch for ch, _ in chars), "字数", len(chars), "字の高さ %.1f%%" % (want / H * 100), "横の詰め %.2f" % sq)
+    return im
+
+
+def grade(im):
+    from PIL import ImageEnhance
+    import numpy as np
+    rgb = im.convert("RGB")
+    def stats(x):
+        a = np.asarray(x.resize((640, 360)), float)[round(360 * BAND_H):]
+        L = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
+        sat = np.asarray(Image.fromarray(a.astype("uint8")).convert("HSV"), float)[..., 1].mean() / 255
+        return sat, L.std(), L.mean()
+    sat, sd, mn = stats(rgb)
+    if mn > GRADE["mean"] + 3:
+        g = np.log(GRADE["mean"] / 255) / np.log(mn / 255)
+        rgb = rgb.point([int(255 * (i / 255) ** g) for i in range(256)] * 3)
+    sat, sd, mn = stats(rgb)
+    rgb = ImageEnhance.Contrast(rgb).enhance(min(1.5, max(1.0, GRADE["std"] / max(sd, 1))))
+    sat, sd, mn = stats(rgb)
+    if abs(mn - GRADE["mean"]) > 3:   # 6本目：明暗の差を上げると暗くなる絵があった（151）→ 明るさを 170 へ戻す（明るくもする）
+        g = np.log(GRADE["mean"] / 255) / np.log(mn / 255)
+        rgb = rgb.point([int(255 * (i / 255) ** g) for i in range(256)] * 3)
+    sat, sd, mn = stats(rgb)
+    rgb = ImageEnhance.Color(rgb).enhance(min(2.0, max(0.7, GRADE["sat"] / max(sat, 0.01))))
+    sat, sd, mn = stats(rgb); print("絵の色 鮮やかさ %.2f 明暗の差 %.1f 明るさ %.1f" % (sat, sd, mn))
+    return rgb.convert("RGBA")
+
+
 def band(choice):
     out = []
     for name, src in choice.items():
         k = name.split("_")[0]; key = src.rsplit(".", 1)[0]; im = T.bg(os.path.join(T.G, src))
         if key in FIT: im = fit_below(im, FIT[key])
+        im = grade(im)
         for p0, p1, bend in ARROWS.get(key, []): im = T.arrow(im, p0, p1, bend=bend, w=46, col=RED2)
         for kind, mx, my, r in MARKS.get(key, []):
             im = q_mark(im, (mx, my), r) if kind == "q" else T.badge(im, (mx, my), kind == "ok", r)
@@ -98,12 +154,7 @@ def band(choice):
             dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
             dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=RED2 + (255,), width=26)
             im = Image.alpha_composite(im, lay)
-        bh = int(H * 0.17); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(8, 8, 10, 255))
-        runs = [(t, {"W": T.WHITE, "Y": T.YEL, "R": RED2}[c]) for t, c in BAND[k]]
-        px = T.fit(runs, W - 120, 220, track=-0.03)
-        f = T.F(px); tw = sum(f.getlength(ch) + px * -0.03 for t, _ in runs for ch in t)
-        b = f.getbbox("な"); y = (bh - (b[3] - b[1])) // 2 - b[1]
-        im, _ = T.line(im, ((W - tw) / 2, y), runs, px, (8, 8, 10), ew=0, track=-0.03, shadow=False)
+        im = band_text(im, BAND[k])
         out.append(T.save(im, "ep06_" + name))
     return out
 
