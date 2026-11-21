@@ -4,6 +4,8 @@
 #   ② 点検表 <回のフォルダ>/点検_v<番号>.md（ひな形：references/点検表_ひな形.md）：
 #      全部の項目の「結果：」が書いてあり、「まだ・未・あとで・確かめていない・見ていない」がなく、「OK・問題なし・見た」だけで終わっていないこと
 #      例外（2026-11-21 3本目 ユーザーの選択「ためだけ 2 秒未満を許す」）：<回のフォルダ>/字幕_ため.json（字幕の文字のリスト）にある「……」でためる短い 1 枚は、1 秒以上なら 2 秒未満でよい
+#   ③ 字幕と声のずれ（2026-11-21 7本目 ユーザー「なんでテロップのタイミングまだ治ってないの」）：scripts/subs_sync_check.py が作る <字幕.ass>.sync.json が、
+#      この字幕のもので、「声の途中で切り替わる」0 枚・「聞き取りが読みと合わない」0 枚（聞き取りを渡していないときも不合格）
 #   合格なら <通し.mp4>.gate.json（動画の sha256・字幕の数・時刻）を作る。vr_version.py build は、この印がないと止まる
 import os, re, sys, json, hashlib, statistics, datetime
 
@@ -60,6 +62,17 @@ def main():
             if not r: miss.append("結果が空：" + item)
             elif any(w in r.replace("未満", "") for w in NG) and not r.startswith("なし（"): miss.append("確かめていない言葉がある：" + item + " → " + r)
             elif EMPTY.match(r): miss.append("何をどれだけ見たかがない：" + item + " → " + r)
+    # ③ 字幕と声のずれ
+    sp = ass + ".sync.json"
+    if not os.path.exists(sp):
+        miss.append("字幕と声のずれを測っていない：python3 scripts/subs_sync_check.py <字幕.ass> <placement.json> <声のフォルダ> <字幕を聞き取った.json> を動かす")
+    else:
+        sy = json.load(open(sp, encoding="utf-8"))
+        if sy.get("ass_sha256") != sha(ass): miss.append("字幕と声のずれの測りが、いまの字幕のものでない（字幕を作り直したら、測り直す）")
+        if sy.get("outside", 1): miss.append("声の途中で切り替わる字幕が %d 枚ある" % sy.get("outside"))
+        if sy.get("heard_bad") is None: miss.append("字幕 1 枚ずつの声の聞き取りをしていない（sub_hear.py などの結果を subs_sync_check.py に渡す）")
+        elif sy["heard_bad"]: miss.append("聞き取りで読みと合わない字幕が %d 枚ある" % sy["heard_bad"])
+        else: print("字幕と声：声の途中で切り替わる 0 枚・聞き取りで読みと合わない 0 枚（%d 枚を聞いた）" % sy.get("heard", 0))
     for x in miss: print("  " + x)
     if bad or miss:
         print("不合格：上の所を直してから、もう一度通す（動画レビューには上げられない）"); sys.exit(1)
