@@ -767,6 +767,18 @@ for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
     CLIPS[nm] = (fn, t0, t1, cm, par)
 
+def _maru_circle(sc, cam_, mc):
+    """画面の上のまるロボの丸（真ん中の x・y と半径、ピクセル）。体の半径は 0.37m（9本目 v2：はじめ頭の印から測ったら、頭の印は体と同じ物で、半径 0 になっていた）"""
+    m = mc.matrix_world.translation
+    a_ = world_to_camera_view(sc, cam_, m)
+    if a_.z <= 0: return None
+    R_ = 0.37                                                     # 体（Maru body）の大きさ 0.73m の半分
+    side = cam_.matrix_world.to_3x3() @ mathutils.Vector((R_, 0.0, 0.0))
+    b_ = world_to_camera_view(sc, cam_, m + side)
+    out_ = (a_.x * 1280, a_.y * 720, max(8.0, math.hypot((a_.x - b_.x) * 1280, (a_.y - b_.y) * 720)))
+    return out_
+
+
 def _screen_touch(sc, cam_, sm, r):
     """画面の上で、人（足もと〜頭の線に、肩はば 0.25m の太さ）が、まるロボの丸（体の真ん中と半径）にかかるか。画面の外・カメラの後ろは数えない"""
     from mathutils import Vector
@@ -800,9 +812,8 @@ def _rider_avoid(t0, t1):
         m = mc.matrix_world.translation if mc is not None else None
         cp = cam_.matrix_world.translation if cam_ is not None else None
         sm = None
-        if m is not None and cam_ is not None and mt is not None:
-            a_ = world_to_camera_view(sc, cam_, m); b_ = world_to_camera_view(sc, cam_, mt.matrix_world.translation)
-            if a_.z > 0: sm = (a_.x * 1280, a_.y * 720, max(8.0, math.hypot((a_.x - b_.x) * 1280, (a_.y - b_.y) * 720)))
+        if m is not None and cam_ is not None:
+            sm = _maru_circle(sc, cam_, mc)
         for i, (wk, k, ry) in enumerate(E.riders):
             r = wk.root.matrix_world.translation
             if m is not None and math.hypot(r.x - m.x, r.y - m.y) < 1.0 and r.z - 0.4 < m.z < r.z + 1.8: off.add(i)

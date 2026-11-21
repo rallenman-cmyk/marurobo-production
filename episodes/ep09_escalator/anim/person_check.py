@@ -22,11 +22,9 @@ def CHECK(t0, t1):
             d = math.hypot(m.x - r.x, m.y - r.y)
             if d < best[0]: best = (d, t)
         # 画面の上で、おじさんの形がまるロボの丸にかかるか（13-04：0.79m 離れていても、カメラから見て真後ろに重なった）
-        if mt is not None and cam_ is not None:
-            a_ = w2c(sc, cam_, m); b_ = w2c(sc, cam_, mt.matrix_world.translation)
-            if a_.z > 0 and -0.05 < a_.x < 1.05 and -0.05 < a_.y < 1.05:
-                sm = (a_.x * 1280, a_.y * 720, max(8.0, math.hypot((a_.x - b_.x) * 1280, (a_.y - b_.y) * 720)))
-                if G_["_screen_touch"](sc, cam_, sm, r): scr.append(round(t, 2))
+        if cam_ is not None:
+            sm = G_["_maru_circle"](sc, cam_, mc)
+            if sm is not None and -60 < sm[0] < 1340 and -60 < sm[1] < 780 and G_["_screen_touch"](sc, cam_, sm, r): scr.append(round(t, 2))
         t += 0.25
     print("OJ_MIN %s %.2f %.2f" % (G_["CLIPNAME"], best[0], best[1]))
     if best[0] < 0.75: print("OJ_NEAR %s %.2f %.2f" % (G_["CLIPNAME"], best[0], best[1]))
