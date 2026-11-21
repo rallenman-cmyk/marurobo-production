@@ -90,6 +90,9 @@ def ev_list():
     add(w("36-03", "1分間"), e("36-03") + 0.3, "tag", dict(text="1分間に30メートル", pos=(640, 105), size=56, bg=YEL))
     add(w("36-04", "10センチ"), e("36-06") + 0.3, "vline", dict(obj="stop10", text="10センチ", col=YEL))
     add(w("36-04", "60センチ"), e("36-06") + 0.3, "vline", dict(obj="stop60", text="60センチ", col=YEL))
+    # 押した時の段（白い線）が、すうっと進んで止まった所を、段について動く青緑の線で見せる。36-05「この間に入っていました」が絵で分かるように（9本目 v2 の点検：止まった段の位置が絵になかった）
+    add(w("34-04", "すうっと"), e("36-06") + 0.3, "vline", dict(obj="stop_now", text="", col=TEAL))
+    add(w("36-05", "測って"), e("36-06") + 0.3, "vline", dict(obj="stop_now", text="止まった段", col=TEAL, bg=TEAL, fg=WHITE, below=True))
     return E
 
 
@@ -329,8 +332,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             d.line([(q[0] * 2, (q[1] - 90) * 2), (q[0] * 2, (q[1] + 10) * 2)], fill=p.get("col", WHITE) + (int(255 * a),), width=10)
             base.alpha_composite(_down(im))
             if p.get("text"):
-                spr, off = tag_sprite(p["text"], 40, YEL)
-                _paste(base, spr, q[0], max(60, q[1] - 130), k, a)
+                spr, off = tag_sprite(p["text"], 40, p.get("bg", YEL), fg=p.get("fg"))
+                _paste(base, spr, q[0], (q[1] + 50) if p.get("below") else max(60, q[1] - 130), k, a)   # below：線の下に札（上の 10・60 センチの札と重ならない）
         elif kind == "tint":      # 想像の場面：少し青く暗く（本当の試しではないと分かるように）
             base.alpha_composite(Image.new("RGBA", base.size, (40, 60, 120, int(80 * a))))
             spr, off = tag_sprite("もしも…", 44, WHITE)

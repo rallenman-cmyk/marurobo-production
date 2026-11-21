@@ -234,7 +234,7 @@ def _bed_env(kind_ok):
         if not act: continue
         nm = max(act, key=lambda q: q[1])[0]; grp = CL[nm][3]
         e[i0:i0 + step] = 1.0 if kind_ok(grp, t) else 0.0
-    k = int(0.4 * SR)                                       # 0.4 秒でなめらかに出入りする
+    k = int(1.5 * SR)                                       # 1.5 秒でなめらかに出入りする（v2 の点検：夜→昼の 38 章の頭で、0.4 秒で駅のざわめきが急に戻り「大きな効果音」と聞こえた）
     return np.convolve(e, np.ones(k, np.float32) / k, mode="same").astype(np.float32)
 def _loop(kind):
     x = sfx.make(kind, SR); return np.tile(x, N // len(x) + 1)[:N].astype(np.float32)

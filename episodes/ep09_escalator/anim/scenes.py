@@ -117,7 +117,7 @@ def b_day(cl):
     M.wobble(w("01-02", "腕") - 0.3, e("01-02"), 10, 0.5)
     M.at(w("01-03", "乗って"), look=22); M.at(e("01-03") + 0.2, look=0)
     M.at(s("01-04"), face=90.0)
-    t_on = w("01-04", "ぴょん") + 0.1                       # 「ぴょん」の時刻に跳ぶ（9本目 v2 の点検：「乗り口」に合わせていたので 1.1 秒おくれていた）
+    t_on = w("01-04", "ぴょん") + 0.6                       # 「ぴょんと跳んで」を言う間に跳ぶ（着く時刻。跳ぶのは 0.5 秒前）。v2 の点検：「乗り口」に合わせて 1.1 秒おくれていた。+0.1 では跳ぶのが場面の切りかわりにかかり見えなかった
     k1 = E.find_step(t_on, 0.75)
     M.jump(t_on, E.tread(k1, t_on))
     # 運ばれる（上の降り口で降りる少し前まで）
@@ -404,12 +404,18 @@ def b_night(cl):
     x_m = E.step_at(k_m, t_btn)[0]
     for nm_, dx in (("stop0", 0.0), ("stop10", 0.10), ("stop60", 0.60)):
         track(nm_, empty((x_m + dx, -(YW - 0.05), 0.005)), 0.0)
-    track("stop_now", E.steps[k_m], G.TREAD_DZ)
+    # 止まった段の印：押した時に白い線（stop0）の所にあった段について動く、10・60 センチの印と同じ高さ・奥行きの点（段の真ん中を追うと、見る角度で 60 センチを越えて見えた。9本目 v2）
+    bpy.context.scene.frame_set(f(t_btn)); bpy.context.view_layer.update()
+    st_ = E.steps[k_m]; sn_ = empty((x_m, -(YW - 0.05), 0.005)); sn_.parent = st_; sn_.matrix_parent_inverse = st_.matrix_world.inverted()
+    track("stop_now", sn_, 0.0)
     M.at(s("35-01") + 0.3, face=10.0)                 # 35-01 の寄り：こちらを向いて首をかしげる
     M.confused(s("35-01") + 0.5)
     # 36-05：段の止まった所まで、転がって測る
-    M.at(s("36-01") - 0.05, loc=(1.2, -0.15, 0.0), face=90.0, interp="CONSTANT")
-    M.path([(1.35, -0.15, 0.0), (1.5, -0.15, 0.0), (1.62, -0.15, 0.0)], [w("36-05", "測って") + 0.4 * i for i in range(1, 4)], silent=False)
+    # 白い線（押した時の段の位置）から、止まった段（約 0.5m 先）まで転がる。36-05「転がって測ってみると」（9本目 v2 の点検：1.2→1.62 の決めうちで、60 センチの印より先を転がっていた）
+    d_stop = E.step_at(k_m, t_btn + 3.0)[0] - x_m
+    print("STOP_XM", round(x_m, 3), round(d_stop, 3))
+    M.at(s("36-01") - 0.05, loc=(x_m, -0.15, 0.0), face=90.0, interp="CONSTANT")
+    M.path([(x_m + d_stop * (i + 1) / 3, -0.15, 0.0) for i in range(3)], [w("36-05", "測って") + 0.4 * i for i in range(1, 4)], silent=False)
     M.nod(s("36-06") + 0.4)
     ev(w("10-03", "1枚") + 0.1, "katan", 0.15, "")                               # 10-03：すき間から段が入ってくる
     ev(s("11-02") + 0.3, "chain", 0.6, "")                                        # 11-02：鎖の音（小）
@@ -467,7 +473,7 @@ def b_bench(cl):
     M.jump(t_j, p1, apex=0.3)
     # つるっ：傾いた段をすべり落ちて、模型の下の床へ
     M.carry(t_j + 0.15, t_j + 0.9, lambda t, t0=t_j + 0.15: (-0.55 * min(1, (t - t0) / 0.75) ** 2, 0.0, -(p1[2]) * min(1, (t - t0) / 0.75) ** 2))
-    M.act(t_j + 0.5, "tumble_back"); ev(t_j + 0.95, "land", 0.4, "maru_c")
+    M.act(t_j + 0.5, "tumble_back")                         # 床に落ちる音は tumble_back の着く音だけ（v2 の点検：ここにも足して 0.2 秒おきに 2 回鳴った）
     M.act(s("17-05") + 0.6, "get_up")
     t_b = w("17-06", "乗せかえ") + 0.6
     md.set_rot(t_b, -37.0); md.set_rot(t_b + 1.2, 0.0)
