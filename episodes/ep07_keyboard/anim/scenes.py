@@ -126,6 +126,7 @@ def b_desk(cl):
     # J → Q は、しゃがんで大きく跳ぶ（v8：続け跳びでは 0.4 秒の小さな跳びで、カメラも追っていたので「遠いと大きく跳ぶ」が見えなかった）
     tb = e("04-02") - 0.1; M.jump(tb, P(Q, "Q"), apex=0.3); Q.press("Q", tb, gain=0.5, motion=False)
     hop_path(Q, "KJQ", ta, 0.5, None, col="#FFD24A", name="path_kjq", times=[ta, ta + 0.5, tb], press=False)    # 跳んだ道の線（表「跳んだ道の線」）
+    _pk = bpy.data.objects["path_kjq"]; hide_key(_pk, -100.0, False); hide_key(_pk, s("04-03"), True)   # v10：04-02 の間だけ（消していなかったので、19・21 章などの机の場面にずっと残っていた。ユーザー「軌跡の橙色いらない」）
     # 04-03〜04：ABC 順のキーボードが右にすべりこむ → まるロボはそちら（右）を向いて、跳ねてよろこぶ（v5「まるロボはabcのキーボードの方を向かせて」）
     M.at(s("04-03") - 0.3, face=-60); M.at(s("04-03") + 2.4, face=80)
     M.hops(s("04-04") + 0.3, n=2)

@@ -1,4 +1,7 @@
-# 7本目：字幕を 1 行ずつにする（2026-11-16 ユーザー「メインのテロップを1行目と2行目で別にして」「ところがはテロップ別にして」）
+# 7本目 v10（2026-11-21 ユーザーの選択「1 文を 1 枚・2 行まで」）：字幕は 1 文を 1 枚（1 行 25 字・2 行まで）にし、文ごとに切り替える。
+#   v6〜v9 は 2026-11-16 ユーザー「メインのテロップを1行目と2行目で別にして」で 1 行ずつにしていたが、1 文が 2〜3 枚になり「切り替わりが早い」が続いた。
+#   「ところが」「でも、」「しかし」で始まる所と、分け方を決めた文（PIECES）だけは、声の切れ目で 2 枚に分ける。
+# （以下は v9 までの説明）字幕を 1 行ずつにする（2026-11-16 ユーザー「メインのテロップを1行目と2行目で別にして」「ところがはテロップ別にして」）
 #   ① 文の中の「。」「？」「！」で必ず分ける（「なるほど、と思いますよね。」「ところが……。」は別の字幕）
 #   ② それぞれを subs_jp の区切り（読点・「……」）で 2 行ぶんに分け、その 2 行も別の字幕にする（1 回に 1 行だけ）
 #   ③ 切り替える時刻（v8 で作り直し。2026-11-20 ユーザー「テロップの切り替わりがすごい早い」25 件）：
@@ -11,29 +14,49 @@ import re, os, json
 
 MIN = 2.0
 LINE_MAX = 25          # 1 行に入る字数（assemble.py の「25 字をこえる字幕」の点検と同じ）
-PIECES = {             # 文の最初の字 → 分け方（ユーザーの指定）
+CARD_MAX = 50          # v10：1 枚に入る字数（2 行）
+PIECES = {             # 文 → 分け方（ユーザーの指定）
     "先生は、なんと「もっと速く！」と声をかけたそうです。": ["先生は、なんと", "「もっと速く！」と声をかけたそうです。"],   # v7 0:496「なんとの後から次のテロップにして」
-    "では、当時のアメリカのモールス信号を聞いてみましょう。": ["では、当時のアメリカの", "モールス信号を聞いてみましょう。"],   # v9：「では、」だけの 1 枚が 0.8 秒になる（1 行に入らない）
-    "お客さんの使い方に合わせて少しずつ変えていった結果が、クワーティというわけです。": ["お客さんの使い方に合わせて", "少しずつ変えていった結果が、", "クワーティというわけです。"],   # v9：1 行に入らない区切りを、言葉の切れ目で
-    "タイプライターは、まず電信の仕事のための道具として、売りこまれていたのですね。": ["タイプライターは、", "まず電信の仕事のための道具として、", "売りこまれていたのですね。"],   # v7 0:505「として、で次のテロップにして」
+    "タイプライターは、まず電信の仕事のための道具として、売りこまれていたのですね。": ["タイプライターは、まず電信の仕事のための道具として、", "売りこまれていたのですね。"],   # v7 0:505「として、で次のテロップにして」
 }
 
 
+WRAP_FIX = {"M、A、R、U、R、O、B……最後の O まで、ぴょん。打てました。": "M、A、R、U、R、O、B……\\N最後の O まで、ぴょん。打てました。"}   # 文字を言う所は、まとまりで改行
+
+
+def wrap(t, SJ):
+    """1 枚の字幕を 2 行にする（v10）。1 行 LINE_MAX 字に入らなければ、句読点か助詞のあと（subs_jp の改行の候補）で改行。だめなら None"""
+    t = t.replace("\\N", "")
+    if t in WRAP_FIX: return WRAP_FIX[t]
+    if _vlen(t) <= LINE_MAX: return t
+    best = None
+    for k, q in SJ._cands(t).items():
+        l1, l2 = _vlen(t[:k]), _vlen(t[k:])
+        if max(l1, l2) > LINE_MAX: continue
+        c = q + 0.08 * max(0, abs(l1 - l2) - 6) + (3.0 if min(l1, l2) < 4 else 0.0)     # 文の終わり・読点を、行の長さをそろえるより先に
+        if best is None or c < best[0]: best = (c, k)
+    return None if best is None else t[:best[1]].rstrip(" 　") + "\\N" + t[best[1]:].lstrip(" 　")
+
+
 def pieces(t, SJ, sid=None):
-    """字幕の分け方（v9、2026-11-21）：句読点（、。？！……）の所だけで分け、1 行 LINE_MAX 字に入るまで続けてつなげる。
-    句読点の所にはほとんど必ず声の間があるので、言葉の途中で切り替わらない（v8 まで：字数の割合で分けた所は声の間がなく、切り替わりが声とずれた）。
-    「ところが」「でも、」などで始まる所は、必ず新しい 1 枚にする。分け方を決めた文（PIECES）は、そのとおり"""
+    """字幕の分け方（v10）：1 文を 1 枚（2 行まで）。「ところが」などで始まる所だけ新しい 1 枚。2 行に入らないときだけ句読点で分ける"""
     if t in PIECES:
         if sid is not None: sid[:] = list(range(len(PIECES[t])))
         return list(PIECES[t])
-    out = []
+    units = []
     for ph in _PH(t):
-        if len(ph.replace(" ", "")) > LINE_MAX:        # 1 つの区切りが 1 行に入らない：subs_jp の分け方で分ける
-            parts = [x for card in SJ.plan_tame(ph) for x in card.split("\\N") if x]
-        else: parts = [ph]
-        for x in parts:
-            if out and not x.startswith(KEEP_HEAD) and _vlen(out[-1] + x) <= LINE_MAX and not re.search(r"……$", out[-1]): out[-1] += x
-            else: out.append(x)
+        units += [y.replace("\\N", "") for y in SJ.plan_tame(ph)] if wrap(ph, SJ) is None else [ph]
+    n = len(units); INF = float("inf"); dp = [INF] * (n + 1); bk = [0] * (n + 1); dp[0] = 0.0
+    for i in range(1, n + 1):
+        for j in range(i):
+            if any(units[k].startswith(KEEP_HEAD) for k in range(j + 1, i)): continue
+            card = "".join(units[j:i])
+            if wrap(card, SJ) is None: continue
+            c = dp[j] + 10.0 + (0.0 if i == n or re.search(r"[。？！]$", card) else 3.0)
+            if c < dp[i]: dp[i] = c; bk[i] = j
+    out = []; i = n
+    while i > 0: out.append("".join(units[bk[i]:i])); i = bk[i]
+    out = out[::-1]
     if sid is not None: sid[:] = list(range(len(out)))
     return out
 
@@ -149,7 +172,7 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
         nonlocal ps, w, keep
         ps = ps[:i] + [ps[i] + ps[i + 1]] + ps[i + 2:]; w = w[:i] + [w[i] + w[i + 1]] + w[i + 2:]
         keep = {x - 1 if x > i + 1 else x for x in keep if x != i + 1}
-    can = lambda i: i + 1 not in keep and _vlen(ps[i] + ps[i + 1]) <= LINE_MAX
+    can = lambda i: i + 1 not in keep and _vlen(ps[i] + ps[i + 1]) <= CARD_MAX and wrap(ps[i] + ps[i + 1], SJ) is not None
     while True:
         cut = choose(ps, w)
         if cut is None:    # 間が足りない：まとめられる所のうち、いちばん短い組をまとめる
@@ -189,7 +212,7 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
                 base = len("".join(x[2] for x in out[:i0]))
                 best = None
                 for k in range(2, len(txt) - 1):
-                    if txt[k - 1] not in BRK or txt[k] in "、。？！…」』）" or _vlen(txt[:k]) > LINE_MAX or _vlen(txt[k:]) > LINE_MAX: continue
+                    if txt[k - 1] not in BRK or txt[k] in "、。？！…」』）" or wrap(txt[:k], SJ) is None or wrap(txt[k:], SJ) is None: continue
                     tm = at_time(base + k)
                     if tm is None: continue
                     l0, l1 = tm - out[i0][0], out[i1][1] - tm
@@ -204,12 +227,23 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
     return out
 
 
-def balance(L, MIN=MIN, CPS=8.0):
-    """全部の字幕を並べたあと（v9）：始まりは動かさない（声の間で決めた時刻のまま）。
-    2 秒に足りない・1 秒 CPS 字をこえる 1 枚だけ、終わりを次の 1 枚の始まりまで（声のない所へ）のばす"""
+def balance(L, MIN=MIN, CPS=8.0, heads=()):
+    """全部の字幕を並べたあと（v9）：始まりは声の間で決めた時刻のまま。
+    2 秒に足りない・1 秒 CPS 字をこえる 1 枚だけ、終わりを次の 1 枚の始まりまで（声のない所へ）のばす。
+    v10：それでも足りない文の頭の 1 枚は、前の無音へ 0.15 秒まで早く出す（前の 1 枚が 2 秒を切らない所まで）"""
     L = [list(x) for x in sorted(L)]
+    H = [round(h, 2) for h in heads]
     for i, x in enumerate(L):
         need = max(MIN, max(1, _vlen(x[2])) / CPS + 0.02)
         lim = L[i + 1][0] if i + 1 < len(L) else x[1] + 1.0
         if x[1] - x[0] < need: x[1] = max(x[1], min(lim, x[0] + need))
+    for i, x in enumerate(L):
+        need = max(MIN, max(1, _vlen(x[2])) / CPS + 0.02)
+        if x[1] - x[0] >= need - 0.005 or round(x[0], 2) not in H: continue
+        lo = x[0] - 0.15
+        if i > 0: lo = max(lo, L[i - 1][0] + MIN + 0.02)
+        nw = max(lo, x[1] - need)
+        if nw < x[0]:
+            if i > 0 and L[i - 1][1] > nw: L[i - 1][1] = nw
+            x[0] = nw
     return [tuple(x) for x in L]

@@ -18,11 +18,15 @@ else:
     for i, p in enumerate(P):
         nx = P[i + 1]["start"] - 0.05 if i + 1 < len(P) else p["end"] + 2
         L += SO.events(p["start"], p["end"], p["text"], os.path.join(SJ.VOICE, "line_%03d.wav" % p["no"]), SJ, speed=p.get("speed", 1.0), c_max=nx)
-    L = SO.balance(L)
+    L = SO.balance(L, heads=[p["start"] for p in P])
+    L = [(a, b, SO.wrap(t, SJ) or t) for a, b, t in L]     # v10：1 枚 2 行まで（組み立てと同じ改行）
 L.sort()
-d = [b - a for a, b, _ in L]; cps = [len(t.replace(" ", "")) / (b - a) for a, b, t in L]
+L = [(a, b, t.replace("\\N", "\n")) for a, b, t in L]
+_n = lambda t: len(t.replace(" ", "").replace("\n", ""))
+d = [b - a for a, b, _ in L]; cps = [_n(t) / (b - a) for a, b, t in L]
 print("字幕 %d 枚・長さ いちばん短い %.2f 秒・まん中 %.2f 秒" % (len(L), min(d), statistics.median(d)))
-bad = [(a, b - a, len(t.replace(" ", "")) / (b - a), t) for a, b, t in L if b - a < 2.0 or len(t.replace(" ", "")) / (b - a) > 8.0 or len(t.replace(" ", "")) > 25]
+bad = [(a, b - a, _n(t) / (b - a), t.replace("\n", "／")) for a, b, t in L if b - a < 2.0 or _n(t) / (b - a) > 8.0 or max(len(r.replace(" ", "")) for r in t.split("\n")) > 25 or t.count("\n") > 1]
+print("2 行の字幕：%d 枚" % sum("\n" in t for _, _, t in L))
 ov = [(round(a, 2), t) for (a, b, t), (a2, b2, t2) in zip(L, L[1:]) if a2 < b - 0.01]
 print("重なる字幕：%d 枚" % len(ov), ov[:5])
 print("2 秒未満・8 字/秒こえ・25 字こえ：%d 枚" % len(bad))

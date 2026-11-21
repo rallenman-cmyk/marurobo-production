@@ -56,7 +56,7 @@ for a, c, t in lines:
     _p = SJ._placement().get(t)
     ev_ = SO.events(a, c, t, os.path.join(SJ.VOICE, "line_%03d.wav" % _p["no"]), SJ, speed=_p.get("speed", 1.0), c_max=NEXT_START[a] - 0.05)
     SUBS += [(float(x), float(y), z) for x, y, z in ev_]
-SUBS = SO.balance(SUBS)      # v8：2 秒に足りない字幕は、となりから時間を借りる
+SUBS = SO.balance(SUBS, heads=[p["start"] for p in P])      # v8：2 秒に足りない字幕は、となりから時間を借りる（v10：文の頭は 0.15 秒まで早く）
 SUB_STARTS = sorted(x[0] for x in SUBS)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
@@ -215,7 +215,7 @@ ass = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720",
        style, "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
 for a, c, t in SUBS:
     if c < FROM or a > TO: continue
-    ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c), t.replace("\n", "\\N")))
+    ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c), (SO.wrap(t, SJ) or t).replace("\n", "\\N")))     # v10：1 枚 2 行まで
 open(os.path.join(tmp, "subs.ass"), "w", encoding="utf-8").write("\n".join(ass) + "\n")
 json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 
