@@ -59,10 +59,12 @@ for a, c, t in lines:
     SUBS += [(float(x), float(y), z) for x, y, z in ev_]
 SUBS = [(a_, c_, t_.strip("　 ")) for a_, c_, t_ in SUBS]   # 分けた頭に残る空白を取る（9本目 v2「　すぐに止まった…」）
 SUBS = SO.balance(sorted(SUBS), MIN=2.02, CPS=7.9)      # 2 秒に足りない字幕は、となりから時間を借りる（7本目 v8 の作り）   # 時刻を 1/100 秒に切り捨てても 2 秒・8 字を割らないよう、少しゆとりを持たせる（9本目 v2：2.00 秒が 1.99 秒・8.0 字が 8.01 字になった）
+json.dump(SUBS, open(os.path.join(HERE, "subs_events_pre.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)   # 声の切れ目へ合わせる前（subs_sync.py を試すため）
 import subs_sync as SY     # 9本目 v2：切り替わりを声の切れ目へ（関所 subs_sync_check.py で 10 枚がずれていた。時刻で長さを合わせず、足りない 1 枚はとなりとまとめる）
 SUBS = SY.fix(SUBS, json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8")),
               os.path.join(os.environ.get("MARU_WORK", ""), "stage", "voice", "achernar"))
 SUB_STARTS = sorted(x[0] for x in SUBS)
+if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
 
 # ---------------------------------------------------------------- クリップのコマ・ログ
 LOG, FR = {}, {}

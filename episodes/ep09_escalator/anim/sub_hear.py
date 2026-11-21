@@ -82,6 +82,10 @@ bad = []; res = []
 for j, h in zip(jobs, heard):
     ref = norm(YC[j["text"]])
     sc = difflib.SequenceMatcher(None, ref, norm(h)).ratio() if ref else None
+    for _ in range(2):                    # 合わないときは 2 回まで聞き直し、いちばん合う聞き取りを使う（聞き取りの言いまちがい「見張り→みひらき」を数えないため。v2 の点検）
+        if sc is None or sc >= 0.8: break
+        h2 = hear(j["seg"], sr); s2 = difflib.SequenceMatcher(None, ref, norm(h2)).ratio()
+        if s2 > sc: h, sc = h2, s2
     res.append(dict(at=j["at"], text=j["text"], yomi=YC[j["text"]], heard=h, score=sc))
     if sc is not None and sc < 0.8: bad.append(res[-1])
 print("読みと合わない字幕（似ている度 0.8 未満）：", len(bad), "枚 ／ 比べられない：", sum(1 for r in res if r["score"] is None), "枚")
