@@ -40,6 +40,8 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _SCRIPT = {x["text"]: x for x in json.load(open(os.path.join(_HERE, "..", "voice", "script_v1_0.json"), encoding="utf-8"))}
 _PH = lambda s: [x for x in re.split(r'(?<=[、。？！…])(?![、。？！…」』）])', s) if x.strip()]
 _KDROP = set("、。？！…「」『』（）・ 　,.!?")
+_CP = os.path.join(_HERE, "..", "voice", "sub_cuts.json")
+CUTS = json.load(open(_CP, encoding="utf-8")) if os.path.exists(_CP) else {}
 KEEP_HEAD = ("ところが", "でも、", "しかし")      # この言葉で始まる 1 枚は、前とまとめない（ユーザー「ところがはテロップ別にして」）
 
 
@@ -87,7 +89,7 @@ def _cands(wav, speed, SJ):
     head = mr[0][1] if mr and mr[0][0] <= 0.02 else 0.0
     tail = mr[-1][0] if mr and mr[-1][1] >= dur - 0.02 else dur
     gaps = [(g0, g1) for g0, g1 in mr if head < g0 and g1 < tail and g1 - g0 >= 0.07]
-    out = [(g1, 3.0 + 4.0 * min(g1 - g0, 1.0)) for g0, g1 in gaps]     # 声が止まる間は、言葉の切れ目の谷よりずっと強く選ぶ（v9：「からむので、」の 0.5 秒の間より、手前の谷を選んでいた）
+    out = [(g1, 3.0 + 2.0 * min(g1 - g0, 0.8)) for g0, g1 in gaps]     # 声が止まる間は、言葉の切れ目の谷よりずっと強く選ぶ（v9：「からむので、」の 0.5 秒の間より、手前の谷を選んでいた）
     with wave.open(wav) as w:
         sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768.0
     hop = int(0.01 * sr); n = len(x) // hop
@@ -109,6 +111,10 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
     ③ 声が MIN 秒より短い 1 枚は、となりとまとめる（ユーザー「となりとまとめる」。1 行 LINE_MAX 字まで。「ところが」などで始まる 1 枚と、PIECES の分け方はまとめない）
     ④ 最後の 1 枚だけ、声のあとの無音（c_max まで）へのばして MIN にする"""
     c_max = max(c, c_max or c)
+    if t in CUTS:          # 聞き取りで決めた切り方（anim/sub_fix_cuts.py が作る。文の声の頭からの秒と字）
+        cs = CUTS[t]; ts = [a + x[0] for x in cs]
+        ends = ts[1:] + [max(c, min(c_max, ts[-1] + MIN))]
+        return [(ts[i], ends[i], cs[i][1]) for i in range(len(cs))]
     ps = pieces(t, SJ)
     keep = set(range(1, len(ps))) if t in PIECES else {i for i in range(1, len(ps)) if ps[i].startswith(KEEP_HEAD)}
     try: C, head, tail, gaps = _cands(wav, speed, SJ)
@@ -125,7 +131,7 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
         G = [(vt(tc), st) for tc, st in C]
         INF = 1e9; n = len(G)
         dp = [[INF] * n for _ in range(k)]; bk = [[-1] * n for _ in range(k)]
-        cost = lambda i, j: ((G[j][0] - exp[i]) / 0.6) ** 2 - G[j][1]
+        cost = lambda i, j: ((G[j][0] - exp[i]) / 0.45) ** 2 - G[j][1]
         for j in range(n): dp[0][j] = cost(0, j)
         for i in range(1, k):
             for j in range(i, n):
