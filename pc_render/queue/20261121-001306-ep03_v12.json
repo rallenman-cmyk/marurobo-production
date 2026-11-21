@@ -1,0 +1,17 @@
+{
+ "id": "20261121-001306-ep03_v12",
+ "name": "ep03_v12",
+ "kit_branch": "pc-kit/20261121-001306-ep03_v12",
+ "zip": "marurobo_ep03.zip",
+ "ps1": "run_pc_render_ep03.ps1",
+ "only": "s02,s06a,s06b,gate",
+ "kind": "fix",
+ "order": 3,
+ "frames": 5123,
+ "fresh": false,
+ "out": "render_ep03_v12",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1603\u5e83\u544a",
+ "created": "2026-11-21T00:13:06Z"
+}
