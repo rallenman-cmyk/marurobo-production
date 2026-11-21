@@ -240,7 +240,7 @@ def _loop(kind):
     x = sfx.make(kind, SR); return np.tile(x, N // len(x) + 1)[:N].astype(np.float32)
 hum_env = _bed_env(lambda grp, t: grp == "A" or (grp == "B" and any(a <= t <= b for a, b in NIGHT_RUN)))
 mur_env = _bed_env(lambda grp, t: grp == "A")
-bed = 0.022 * _loop("hum") * hum_env + 0.03 * _loop("murmur") * mur_env
+bed = 0.012 * _loop("hum") * hum_env + 0.03 * _loop("murmur") * mur_env   # うなりは 0.022→0.012（v2 の点検：夜→昼の 38 章の頭で、うなりが戻るのを「大きな効果音」と 3 回聞かれた）
 mix = voice + music * g + fx * FX_GAIN + bed
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)
