@@ -54,10 +54,6 @@ ov = [(a[0], a[2]) for a, b in zip(L, L[1:]) if b[0] < a[1] - 1e-6]
 sys.path.insert(0, os.path.join(HERE, "..", "voice"))
 from gaps import G                                                       # v12：声と声のあいだに足した間（ここまでは v11 の時刻で作る）
 L = [[fl(G(x[0]) + 1e-6), fl(G(x[1]) + 1e-6), x[2]] for x in L]
-# 間を足したので、v11 では次の文に押されて先に出していた「テント。」を、声の頭（波形で確かめた 236.99 → v12）から出せる
-for i, x in enumerate(L):
-    if x[2] == "テント。":
-        x[0] = fl(G(236.99) - 0.05); L[i - 1][1] = fl(x[0] - 0.05)
 # 間を足した所では、前の 1 枚に押されて遅れていた文の頭を、声の頭へ戻せる（前の 1 枚が 2 秒・7.9 字/秒のまま残るときだけ）
 _P12 = json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8"))
 for i, x in enumerate(L[1:], 1):
@@ -65,6 +61,45 @@ for i, x in enumerate(L[1:], 1):
     pv = L[i - 1]
     if 0.1 < x[0] - st < 0.8 and (st - 0.05) - pv[0] >= max(2.02, n_(pv[2]) / 7.9):
         x[0] = fl(st); pv[1] = fl(st - 0.05)
+# ための短い 1 枚（2026-11-21 ユーザーの選択「ためだけ 2 秒未満を許す」）：声の頭と同時に出し、次の言葉の頭で替える（1 秒以上）。
+#   時刻は声の波形で求める（1 文ずつの声の無音 0.15 秒以上の終わり＝言葉の頭）。関所は ../字幕_ため.json の字幕だけ 1 秒以上でよい
+TAMES = ["うふふ。", "テント。", "結果は……", "その先には……", "……一瞬！", "正解は……。", "すると……", "次の朝。"]
+json.dump(TAMES, open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False)
+import wave
+import numpy as np
+VD = os.environ.get("MARU_VOICE")
+def _heads(p):                                                           # その文の言葉の頭（文の頭と、無音のあとの頭）
+    with wave.open(os.path.join(VD, "line_%03d.wav" % p["no"])) as w: sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16) / 32768
+    h = sr // 100; n = len(x) // h; db = 20 * np.log10(np.sqrt((x[:n * h].reshape(n, h) ** 2).mean(1)) + 1e-9); on = db > db.max() - 38
+    out, i = [p["start"]], 0
+    while i < n:
+        if not on[i]:
+            j = i
+            while j < n and not on[j]: j += 1
+            if j - i >= 15 and i > 0 and j < n: out.append(p["start"] + j / 100)
+            i = j
+        else: i += 1
+    return out
+if VD:
+    HD = sorted(v for p in _P12 for v in _heads(p))
+    for i, x in enumerate(L):
+        if x[2] not in TAMES: continue
+        v = min(HD, key=lambda h: abs(h - x[0]))                          # ための言葉の頭
+        nx = min([h for h in HD if h > v + 0.9] or [x[1]])                # 次の言葉の頭（ための言葉の中の短い息は数えない）
+        a_, b_ = fl(v - 0.05), fl(nx - 0.05)
+        if b_ - a_ < 1.0: print("ための 1 枚が 1 秒に足りない：", x); continue
+        x[0], x[1] = a_, b_
+        if i > 0: L[i - 1][1] = min(L[i - 1][1], fl(a_ - 0.05))
+        if i + 1 < len(L):
+            nn = L[i + 2][0] if i + 2 < len(L) else 1e9; need = max(2.02, n_(L[i + 1][2]) / 7.9)
+            st = min(fl(nx), fl(nn - 0.05 - need))                         # 次の 1 枚が決まりの長さを取れるように（取れなければ、その分だけ早く替える）
+            st = max(st, fl(a_ + 1.05)); x[1] = fl(st - 0.05)
+            L[i + 1][0] = st; L[i + 1][1] = max(L[i + 1][1], min(fl(nn - 0.05), fl(st + need)))
+    for i, x in enumerate(L[:-1]):                                          # 押した次の 1 枚が、その次と重ならないように（重なるなら次の頭までにする）
+        if x[1] > L[i + 1][0]: x[1] = L[i + 1][0]
+else: print("MARU_VOICE がないので、ための 1 枚は直していない")
+bad = [(x[0], round(x[1] - x[0], 2), x[2]) for x in L if x[1] - x[0] < (1.0 if x[2] in TAMES else 2.0) or n_(x[2]) / (x[1] - x[0]) > 8.0 or max(len(r) for r in rows(x[2])) > 25 or len(rows(x[2])) > 2]
+ov = [(a[0], a[2]) for a, b in zip(L, L[1:]) if b[0] < a[1] - 1e-6]
 json.dump(L, open(P, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 print("字幕 %d 枚・決まりの外 %d 枚・重なり %d" % (len(L), len(bad), len(ov)))
 for b in bad: print("  ", b)

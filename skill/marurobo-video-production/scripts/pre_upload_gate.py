@@ -3,6 +3,7 @@
 #   ① 字幕の数：1 枚 2 秒未満・1 秒 8 字こえ・1 行 25 字こえ・3 行以上（Main の字幕だけ）が 1 枚でもあれば不合格
 #   ② 点検表 <回のフォルダ>/点検_v<番号>.md（ひな形：references/点検表_ひな形.md）：
 #      全部の項目の「結果：」が書いてあり、「まだ・未・あとで・確かめていない・見ていない」がなく、「OK・問題なし・見た」だけで終わっていないこと
+#      例外（2026-11-21 3本目 ユーザーの選択「ためだけ 2 秒未満を許す」）：<回のフォルダ>/字幕_ため.json（字幕の文字のリスト）にある「……」でためる短い 1 枚は、1 秒以上なら 2 秒未満でよい
 #   合格なら <通し.mp4>.gate.json（動画の sha256・字幕の数・時刻）を作る。vr_version.py build は、この印がないと止まる
 import os, re, sys, json, hashlib, statistics, datetime
 
@@ -33,11 +34,14 @@ def main():
     ep, num, mp4, ass = sys.argv[1], sys.argv[2].lstrip("v"), sys.argv[3], sys.argv[4]
     bad = []
     L = subs(ass)
+    tp = os.path.join(ep, "字幕_ため.json")
+    TAME = set(json.load(open(tp, encoding="utf-8"))) if os.path.exists(tp) else set()
     for a, b, t in L:
         # 2026-11-20 ユーザー（6本目）「2 行のまま・道具を決まりに合わせる」：決まりは「1 行 25 字まで」。2 行の字幕は 1 行ごとに数え、3 行以上は外
         rows = t.split("\\N"); t = "".join(rows)
         n = len(t.replace(" ", "")); d = b - a
-        if d < MIN_DUR - 0.01 or n / d > MAX_CPS or max(len(r.replace(" ", "")) for r in rows) > MAX_LEN or len(rows) > 2: bad.append("  字幕 %6.2f 秒  %.2f 秒  %.1f 字/秒  %d 字  %s" % (a, d, n / d, n, t))
+        mn = 1.0 if t in TAME else MIN_DUR                                     # ための 1 枚は 1 秒以上でよい（ユーザーの選択）
+        if d < mn - 0.01 or n / d > MAX_CPS or max(len(r.replace(" ", "")) for r in rows) > MAX_LEN or len(rows) > 2: bad.append("  字幕 %6.2f 秒  %.2f 秒  %.1f 字/秒  %d 字  %s" % (a, d, n / d, n, t))
     print("字幕 %d 枚（いちばん短い %.2f 秒・まん中 %.2f 秒）。決まりの外：%d 枚" % (len(L), min(b - a for a, b, _ in L), statistics.median(b - a for a, b, _ in L), len(bad)))
     for x in bad: print(x)
     sheet = os.path.join(ep, "点検_v%s.md" % num)
