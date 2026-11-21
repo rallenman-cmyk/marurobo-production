@@ -326,3 +326,113 @@ if __name__ == "__main__" and sys.argv[1] in ("gen2", "band"):
         for a in sys.argv[2:]: gen2(a)
     else:
         print("\n".join(band_comp(json.loads(sys.argv[2]))))
+
+
+# ======================================================================================================
+# 2026-11-21 追加のルール（ブランチ claude/focused-cannon-l5328u の references/thumbnail_rules.md「数で決めた値」）で L を作り直す
+#   建物の深層 16 枚を 1280 幅で数えた値：帯 18.5%（真っ黒）・字の高さ 14.4%（帯の 78%）・字の幅は画面の 92〜97%（足りなければ横に 0.80 まで詰める）・
+#   字の間 -0.07・同じ色のふちで太く（字の大きさの 1.8%）・色は白 (255,255,255)・黄 (251,254,5)・赤 (248,3,3)。
+#   帯の下の絵は鮮やかさ 0.27〜0.31・明暗の差 58〜72・明るさ 165〜180 に合わせる（grade）。band_text と grade は 4本目 thumbs04.py と同じ中身
+BAND_H = 0.185; BAND_GLYPH = 0.144; BAND_MAXW = 0.97; BAND_TRACK = -0.07; SQUEEZE_MIN = 0.80
+# 同じ色のふちの太さ（字の大きさに対する割合）。4本目の道具は 0.018。この回の字（隣・混 など画の多い字）では
+# 0.018 だと字の濃さが 0.55〜0.57 で建物の深層（0.45〜0.54）より濃く、320 幅で「隣」「混」の中の線がくっついた。
+# QR回の決まり（thumbnail_rules.md「画数の多い字がつぶれないこと」）と同じく、太らせず 900 の書体だけにする（濃さ 0.47・線 18px）
+BAND_BOLD = 0.0
+BAND_COL = {"W": (255, 255, 255), "Y": (251, 254, 5), "R": (248, 3, 3)}
+GRADE = dict(sat=0.29, std=62.0, mean=170.0)
+
+
+def band_text(im, runs):
+    import numpy as np
+    bh = round(H * BAND_H); d = ImageDraw.Draw(im); d.rectangle((0, 0, W, bh), fill=(0, 0, 0, 255))
+    want = BAND_GLYPH * H
+    chars = [(ch, BAND_COL[c]) for t, c in runs for ch in t]
+
+    def render(px):
+        f = F(px); sw = round(px * BAND_BOLD)                # 0 なら太らせない（900 の書体だけ）
+        # 字の間は詰める。ただし「?」「!」の前は詰めない（詰めると前の字にくっつく。建物の深層も「?」の前は少し空いている）
+        widths = [f.getlength(ch) + (0 if i + 1 < len(chars) and chars[i + 1][0] in "?!" else px * BAND_TRACK) for i, (ch, _) in enumerate(chars)]
+        tw = int(sum(widths) - px * BAND_TRACK + 2 * sw + 4)
+        lay = Image.new("RGBA", (tw, bh)); dl = ImageDraw.Draw(lay)
+        bb = f.getbbox("な"); y = (bh - (bb[3] - bb[1])) / 2 - bb[1]; x = sw + 2
+        for (ch, col), w_ in zip(chars, widths):
+            dl.text((x, y), ch, font=f, fill=col + (255,), stroke_width=sw, stroke_fill=col + (255,)); x += w_
+        return lay, tw
+
+    def rows(lay):                                          # thumb_measure.py の band と同じ数え方（字の画素が幅の 0.2% をこえる行）
+        ys = np.where((np.asarray(lay.getchannel("A")) > 128).sum(1) > 0.002 * W)[0]
+        return ys[0], ys[-1]
+
+    for _ in range(40):
+        f0 = F(100); b = f0.getbbox("なぜロボット見抜ける？"); px = int(100 * want / (b[3] - b[1]))
+        lay, tw = render(px)
+        for _k in range(3):                                 # 描いた字の高さを数えて、14.4% に合わせ直す（ふちなしだと 101px と少し低かった）
+            y0, y1 = rows(lay)
+            if abs((y1 - y0 + 1) - want) <= 1: break
+            px = int(px * want / (y1 - y0 + 1)); lay, tw = render(px)
+        sq = min(1.0, BAND_MAXW * W / tw)
+        if sq >= SQUEEZE_MIN: break
+        want *= 0.97
+    y0, y1 = rows(lay); dy = ((bh - 1 - y1) - y0) // 2       # 上下の余白をそろえる
+    bx = lay.getbbox(); lay = lay.crop((bx[0], 0, bx[2], bh))
+    if lay.width * sq < 0.92 * W:                       # 字が少なく幅が 92% に届かないときは横に広げる（決まりどおり 1.15 倍まで。1本目 L は 91% だった）
+        sq = min(1.15, 0.93 * W / lay.width)
+    lay = lay.resize((max(1, int(lay.width * sq)), bh), Image.LANCZOS)
+    im.alpha_composite(lay, ((W - lay.width) // 2, dy))
+    print("帯の字", "".join(ch for ch, _ in chars), "字数", len(chars), "字の高さ %.1f%%" % ((y1 - y0 + 1) / H * 100), "横の詰め %.2f" % sq)
+    return im
+
+
+def grade(im):
+    from PIL import ImageEnhance
+    import numpy as np
+    rgb = im.convert("RGB")
+    def stats(x):
+        a = np.asarray(x.resize((640, 360)), float)[round(360 * BAND_H):]
+        L = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
+        sat = np.asarray(Image.fromarray(a.astype("uint8")).convert("HSV"), float)[..., 1].mean() / 255
+        return sat, L.std(), L.mean()
+    sat, sd, mn = stats(rgb)
+    if mn > GRADE["mean"] + 3:
+        g = np.log(GRADE["mean"] / 255) / np.log(mn / 255)
+        rgb = rgb.point([int(255 * (i / 255) ** g) for i in range(256)] * 3)
+    sat, sd, mn = stats(rgb)
+    rgb = ImageEnhance.Contrast(rgb).enhance(min(1.5, max(1.0, GRADE["std"] / max(sd, 1))))
+    sat, sd, mn = stats(rgb)
+    for _ in range(2):                                   # 鮮やかさは 1 回では目標に届かないことがあるので、2 回まで合わせる
+        rgb = ImageEnhance.Color(rgb).enhance(min(2.0, max(0.7, GRADE["sat"] / max(sat, 0.01))))
+        sat, sd, mn = stats(rgb)
+    print("絵の色 鮮やかさ %.2f 明暗の差 %.1f 明るさ %.1f" % (sat, sd, mn))
+    return rgb.convert("RGBA")
+
+
+# 「?」は半角（建物の深層と同じ背の高い「?」。全角の「？」は小さく、前が空きすぎた）
+BAND3 = {"L": [("なぜ", "W"), ("隣の曲", "Y"), ("は", "W"), ("混ざらない", "R"), ("?", "W")],
+         "M": [("満員電車で", "W"), ("イヤホン", "Y"), ("は", "W"), ("どうなる", "R"), ("?", "W")],
+         "U": [("なぜ", "W"), ("イヤホン", "Y"), ("の音は", "W"), ("途切れる", "R"), ("?", "W")]}
+
+
+def red_circle3(im, c, r):
+    """赤い丸（白いふちつき）。赤は帯の字と同じ (248,3,3)"""
+    cx, cy = c; lay = Image.new("RGBA", (W, H)); dl = ImageDraw.Draw(lay)
+    dl.ellipse((cx - r - 8, cy - r - 8, cx + r + 8, cy + r + 8), outline=(255, 255, 255, 255), width=40)
+    dl.ellipse((cx - r, cy - r, cx + r, cy + r), outline=BAND_COL["R"] + (255,), width=26)
+    return Image.alpha_composite(im, lay)
+
+
+def band_comp3(choice):
+    out = []
+    for key, src in choice.items():
+        im = grade(bg(os.path.join(G, src))); name = src.rsplit(".", 1)[0]
+        for m in MARKS2.get(name, []):
+            if m[0] == "q": im = q_mark(im, m[1:3], m[3])
+            elif m[0] in ("ok", "ng"): im = badge(im, m[1:3], m[0] == "ok", m[3])
+            elif m[0] == "arrow": im = arrow(im, m[1:3], m[3:5], bend=0.0, w=60, col=BAND_COL["R"])
+            elif m[0] == "o": im = red_circle3(im, m[1:3], m[3])
+        im = band_text(im, BAND3[key])
+        out.append(save(im, "ep01c_%s" % key))
+    return out
+
+
+if __name__ == "__main__" and sys.argv[1] == "band3":
+    print("\n".join(band_comp3(json.loads(sys.argv[2]))))
