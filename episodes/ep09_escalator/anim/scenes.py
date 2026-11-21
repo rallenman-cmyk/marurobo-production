@@ -269,6 +269,7 @@ def b_night(cl):
     hk = [(t, v) for t, v in hk if not (t_hr - 0.01 <= t <= t_all + 1.5)] + [(t_hr - 0.3, 0.25), (t_hr + 0.2, 0.0)]
     E = Esc(sp, hr_speed=SpeedS(sorted(hk)))
     ESC[0] = E
+    if CLIPNAME == "B11c": E.cutaway = True; E.set_cutaway(True)   # 11-05〜12-00：手前の板を外して、横から歯車・モーター・まるロボを一緒に（9本目 v2 の点検：中からは歯車が段の陰で真横になり見えず、モーターは画面の外だった）
     track("comb_hi", E.combs["hi"], 0.05); track("comb_lo", E.combs["lo"], 0.05); track("gear", E.gears["hi"], 0.0)
     track("inlet", E.inlets["lo"], 0.05)
     lid = bpy.data.objects[[o.name for o in bpy.data.objects if o.type == 'MESH' and abs(o.location.x - (LID_HI[0] + LID_HI[1]) / 2) < 0.01 and abs(o.location.z - (UP - 0.012)) < 0.01][0]]
@@ -635,7 +636,7 @@ CUTS = [
     ("B10b", _night, s("10-02"), C((XHC + 1.0, -0.45, Z_PIT_HI + 0.7), (XHC - 0.2, 0.0, HZ - 0.1), 20), "B"),
     ("B11", _night, s("11-01"), C((HX + 0.7, -0.6, HZ - 0.55), (HX - 0.7, -0.5, HZ - 0.3), 22), "B"),
     ("B11b", _night, s("11-04"), lambda t0: F((0.9, -0.5, 0.4), 22), "B"),   # 引くと狭い機械の部屋の柱に入って真っ黒になる。左に鎖が見えるのでこのまま
-    ("B11c", _night, s("11-05"), C((XR_PIT - 0.3, -0.6, Z_PIT_HI + 0.4), (HX, 0.0, HZ - 0.6), 20), "B"),
+    ("B11c", _night, s("11-05"), C((11.6, -2.6, 1.9), (11.3, 0.3, 1.7), 22), "B"),   # 手前の板を外した横から：左に大きな歯車、まん中にまるロボ、右にモーター
     ("B12b", _night, s("12-01"), C((HX + 1.0, -0.62, HZ - 0.5), (HX - 0.15, 0.0, HZ - 0.85), 20), "B"),   # 引いて、歯車のまわりを回る段を見せる（寄りすぎで車輪の色の固まりしか見えなかった）
     ("B12c", _night, s("12-02"), C((HX - 0.2, -0.68, 1.9), (HX - 2.2, 0.0, 1.3), 20), "B"),
     ("D12", _cut, s("12-03"), WIDE_D, "D"),
@@ -733,29 +734,23 @@ for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     CLIPS[nm] = (fn, t0, t1, cm, par)
 
 def _rider_avoid(t0, t1):
-    """乗る人（お客さん）が、この場面の間にまるロボと重なるなら、その人はこの場面だけ出さない（v1 のコメント「まるロボに人が貫通してる」3 件。
-    どの段に乗せても一日のどこかで重なったので、場面ごとに決める。場面の切りかわりで人が減っても、カメラが変わるので目立たない）"""
+    """乗る人（お客さん）が、この場面の間にまるロボと重なる・カメラのすぐ前を通るなら、その人はこの場面だけ出さない（v1 のコメント「まるロボに人が貫通してる」3 件）。
+    どの段に乗せても一日のどこかで重なったので、場面ごとに決める。場面の切りかわりで人が減っても、カメラが変わるので目立たない。
+    9本目 v2：はじめは動きの予定から計算していたが、02-04 で計算（1.0m 以上）と描いた絵（0.74m）がずれた → 描く場面の中の本当の位置を 1/4 秒ごとに測る"""
     E = ESC[0]
     if E is None or not getattr(E, "riders", None) or not MARU_ALL: return
-    M = MARU_ALL[0]
-    p = M.plan(t1 + 1.0); frames = mm.simulate(p, fps=8, t_end=t1 + 0.5, t_start=max(0.0, t0 - 0.5))
-    s_board, s_alight = G.DIP_LEN + 0.45, G.LTOP - G.DIP_LEN - 0.3
-    xb, _ = G.top_point(s_board)[0]; xa, _ = G.top_point(s_alight)[0]; Lr = s_alight - s_board
-    cam_ = bpy.context.scene.camera; cam_p = tuple(cam_.location) if cam_ is not None and cam_.parent is None else None   # 追うカメラ（親について動く）は外す
-    off = set()
-    for fr in frames:
-        t = fr["t"]; x, y, z = fr["root"]; o = M.off(t)
-        mx, my, mz = x * M.s + o[0], y * M.s + o[1], z * M.s + o[2]
-        pos = E.pos(t)
+    sc = bpy.context.scene; cam_ = sc.camera; mc = TRACK.get("maru_c", (None,))[0]
+    off = set(); t = t0
+    while t <= t1 + 1e-6:
+        sc.frame_set(f(t))
+        m = mc.matrix_world.translation if mc is not None else None
+        cp = cam_.matrix_world.translation if cam_ is not None else None
         for i, (wk, k, ry) in enumerate(E.riders):
-            sk = (pos + k * G.PITCH) % G.LOOP; u = sk - s_board
-            if u > G.LOOP / 2: u -= G.LOOP
-            if u < 0: rx, rz = xb + u, 0.0
-            elif u <= Lr: (fx, fz), _ = G.top_point(sk); rx, rz = fx - 0.18, fz + G.TREAD_DZ
-            else: rx, rz = xa + (u - Lr), G.H
-            if math.hypot(rx - mx, ry - my) < 1.0 and rz - 0.4 < mz < rz + 1.8: off.add(i)   # 0.7m では、1 段前の人とまるロボが画面で重なって見えた（02-05）ので 1.0m
-            # カメラの近く（2.4m 以内）を通る人も出さない（手前を大きな頭や体が横切る。02-05 の見直しで 1.2m にしたが、08-01 で 1.2m より外の足が画面の半分をふさいだので広げた）
-            if cam_p is not None and any(math.dist((rx, ry, rz + h_), cam_p) < 2.4 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+            r = wk.root.matrix_world.translation
+            if m is not None and math.hypot(r.x - m.x, r.y - m.y) < 1.0 and r.z - 0.4 < m.z < r.z + 1.8: off.add(i)
+            # カメラの近く（2.4m 以内）を通る人も出さない（手前を大きな頭や体が横切る。08-01 で 1.2m より外の足が画面の半分をふさいだ）
+            if cp is not None and any(math.dist((r.x, r.y, r.z + h_), tuple(cp)) < 2.4 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+        t += 0.25
     E.rider_off = off
     print("RIDER_OFF", CLIPNAME, sorted(off))
 
