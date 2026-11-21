@@ -3,7 +3,7 @@
 #   それぞれの候補で、左の字幕と右の字幕の声を聞き取り、読みとの似ている度の合計がいちばん高い所にする。
 #   結果は voice/sub_cuts.json（文 → [[声の頭からの秒, 字幕の字], …]）に書き、subs_one.events はその文をそのとおりに切る。
 #   MARU_WORK=<作業> python3 sub_fix_cuts.py <sub_hear の結果.json>
-import os, sys, json, wave, difflib
+import os, sys, json, wave, difflib, re, base64, io, urllib.request, time
 import numpy as np
 H = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(H, "..", "..", "..", "skill", "marurobo-video-production", "scripts")); sys.path.insert(0, H)

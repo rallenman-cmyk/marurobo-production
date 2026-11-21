@@ -13,22 +13,28 @@ MIN = 2.0
 LINE_MAX = 25          # 1 行に入る字数（assemble.py の「25 字をこえる字幕」の点検と同じ）
 PIECES = {             # 文の最初の字 → 分け方（ユーザーの指定）
     "先生は、なんと「もっと速く！」と声をかけたそうです。": ["先生は、なんと", "「もっと速く！」と声をかけたそうです。"],   # v7 0:496「なんとの後から次のテロップにして」
+    "では、当時のアメリカのモールス信号を聞いてみましょう。": ["では、当時のアメリカの", "モールス信号を聞いてみましょう。"],   # v9：「では、」だけの 1 枚が 0.8 秒になる（1 行に入らない）
+    "お客さんの使い方に合わせて少しずつ変えていった結果が、クワーティというわけです。": ["お客さんの使い方に合わせて", "少しずつ変えていった結果が、", "クワーティというわけです。"],   # v9：1 行に入らない区切りを、言葉の切れ目で
     "タイプライターは、まず電信の仕事のための道具として、売りこまれていたのですね。": ["タイプライターは、", "まず電信の仕事のための道具として、", "売りこまれていたのですね。"],   # v7 0:505「として、で次のテロップにして」
 }
 
 
 def pieces(t, SJ, sid=None):
-    """sid にリストを渡すと、それぞれの 1 枚がどの文（。？！で区切った文）から来たかを入れる"""
+    """字幕の分け方（v9、2026-11-21）：句読点（、。？！……）の所だけで分け、1 行 LINE_MAX 字に入るまで続けてつなげる。
+    句読点の所にはほとんど必ず声の間があるので、言葉の途中で切り替わらない（v8 まで：字数の割合で分けた所は声の間がなく、切り替わりが声とずれた）。
+    「ところが」「でも、」などで始まる所は、必ず新しい 1 枚にする。分け方を決めた文（PIECES）は、そのとおり"""
     if t in PIECES:
         if sid is not None: sid[:] = list(range(len(PIECES[t])))
         return list(PIECES[t])
     out = []
-    for k, sen in enumerate([x for x in re.split(r'(?<=[。？！])(?=[^」』）])', t) if x.strip()]):
-        for card in SJ.plan_tame(sen):
-            for x in card.split("\\N"):
-                if x:
-                    out.append(x)
-                    if sid is not None: sid.append(k)
+    for ph in _PH(t):
+        if len(ph.replace(" ", "")) > LINE_MAX:        # 1 つの区切りが 1 行に入らない：subs_jp の分け方で分ける
+            parts = [x for card in SJ.plan_tame(ph) for x in card.split("\\N") if x]
+        else: parts = [ph]
+        for x in parts:
+            if out and not x.startswith(KEEP_HEAD) and _vlen(out[-1] + x) <= LINE_MAX and not re.search(r"……$", out[-1]): out[-1] += x
+            else: out.append(x)
+    if sid is not None: sid[:] = list(range(len(out)))
     return out
 
 
