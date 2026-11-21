@@ -54,6 +54,24 @@ def F(off, lens=40, dz=0.35, t0=None, t1=None, off1=None):
     return c
 
 
+FOOT = []
+
+
+def RIDE(which, off, lens=26, aim=(0.0, -0.12, 0.0)):
+    """27 章：足を乗せた段といっしょに進むカメラ（段に乗って見ている形。足がずっと画面のまん中にいる）。
+    off＝見る所（足のつま先の少し先）からのカメラのずれ"""
+    def mk(t0):
+        ks_, ft = FOOT[which]; st = ESC[0].steps[ks_]
+        bpy.context.scene.frame_set(f(t0 + 0.05))
+        p = ft.matrix_world.translation
+        tgt = (p.x + aim[0], p.y + aim[1], p.z + aim[2] + 0.04)
+        c, tg = cam((tgt[0] + off[0], tgt[1] + off[1], tgt[2] + off[2]), tgt, lens)
+        for o in (c, tg):
+            mw = o.matrix_world.copy(); o.parent = st; o.matrix_parent_inverse = st.matrix_world.inverted(); o.matrix_world = mw
+        return c, tg
+    return mk
+
+
 def C(loc, tgt, lens=35, loc1=None, tgt1=None, lens1=None, d=8.0):
     def mk(t0):
         return cam(loc, tgt, lens, t0, t0 + d, loc1 or loc, tgt1 or tgt, lens1 or lens)
@@ -225,13 +243,27 @@ def b_day(cl):
     key(tip, ("rotation_euler", 1), t_br, 0.0); key(tip, ("rotation_euler", 1), t_br + 0.5, R(70))
     hide_key(tip, -100.0, True); hide_key(tip, s("26-10"), False); hide_key(tip, s("27-01"), True)
     ev(t_br, "snap", 0.35, "tooth")
-    # 27：段に乗った人の靴（すき間の手前で止まる）
-    t27 = s("27-01") - 0.1
-    ks = E.find_step(t27, 2.6)
-    shoe = cube(mat("shoe", "#2A2522", rough=0.5), (-0.16, -(YW - 0.07), G.TREAD_DZ + 0.035), (0.26, 0.1, 0.07), bevel=0.02, parent=E.steps[ks])
-    track("shoe", shoe, 0.0)
-    hide_key(shoe, -100.0, True); hide_key(shoe, t27, False); hide_key(shoe, e("27-05") + 1.0, True)
-    key(shoe, ("location", 1), -100.0, -(YW - 0.12)); key(shoe, ("location", 1), w("27-02", "つま先"), -(YW - 0.12)); key(shoe, ("location", 1), w("27-02", "つま先") + 1.0, -(YW - 0.07))
+    # 27：段に乗った人の足（靴とズボン。すき間の手前で止まる）
+    # 9本目 v2 の点検：前は 1 つの黒い箱で、27-02「靴のつま先」を言う時にはもう画面の外へ運ばれていた。
+    # → 27-02 と 27-05 のそれぞれで、言う時に画面のまん中に来る段に、靴とズボンの足を乗せる（つま先がすき間へ寄って、手前で止まる）
+    def _foot(t_show, t_hide, t_toe, x_at):
+        ks_ = E.find_step(t_toe, x_at)
+        ft = empty((0, 0, 0)); ft.parent = E.steps[ks_]
+        y0, y1 = -(YW - 0.20), -(YW - 0.155)          # つま先（-y の端）が、すき間の 2.5cm 手前まで寄る
+        ft.location = (-0.10, y0, G.TREAD_DZ)
+        sh = mat("shoe", "#2A2522", rough=0.5); up = mat("shoe_up", "#3B3F52", rough=0.6); pa = mat("pants", "#4A5A78", rough=0.8)
+        cube(sh, (0, 0, 0.012), (0.11, 0.27, 0.024), bevel=0.01, parent=ft)                  # 靴底
+        cube(up, (0, 0.03, 0.05), (0.10, 0.19, 0.06), bevel=0.025, parent=ft)               # 靴の上
+        sphere(up, (0, -0.085, 0.035), 0.05, scale=(1.0, 1.0, 0.7), parent=ft)             # まるいつま先
+        cyl(pa, (0, 0.07, 0.30), 0.055, 0.46, parent=ft, verts=24)                         # ズボンの足（かかとの上）
+        track("shoe", ft, 0.0)
+        for c in [ft] + list(ft.children):
+            hide_key(c, -100.0, True); hide_key(c, t_show, False); hide_key(c, t_hide, True)
+        key(ft, ("location", 1), -100.0, y0); key(ft, ("location", 1), t_toe, y0); key(ft, ("location", 1), t_toe + 1.0, y1)
+        FOOT.append((ks_, ft))
+        return ft
+    _foot(s("27-01") - 0.1, s("27-05") - 0.05, w("27-02", "つま先"), 3.3)
+    _foot(s("27-05") - 0.05, e("27-05") + 1.0, w("27-05", "つま先"), 3.75)
     # 絵コンテの音の欄（2026-11-20 の点検で足した）。エスカレーター全体・場面全体の音なので、映る物の条件は付けない
     ev(s("01-02") + 0.6, "whoosh", 0.12, "")                                       # 01-02：体を左右にふる「くるっ」
     ev(s("03-02") + 1.5, "katan", 0.15, "")                                        # 03-02：段がくしの下へ（小）
@@ -692,8 +724,8 @@ CUTS = [
     ("A26e", _day, s("26-05"), lambda t0: F((-1.3, -0.3, 0.9), 34), "A"),
     ("D26", _cut, s("26-06"), C((XHC - 0.25, -1.6, HZ + 0.3), (XHC, 0.0, HZ), 26), "D"),
     ("A26f", _day, s("26-10"), C((XHC - 0.3, -0.2, HZ + 0.18), (XHC, 0.08, HZ), 24), "A"),
-    ("A27", _day, s("27-01"), C((2.5, -0.25, 1.15), (3.1, -0.5, 0.55), 26, (2.9, -0.25, 1.35), (3.5, -0.5, 0.75)), "A"),
-    ("A27c", _day, s("27-05"), C((3.2, -0.15, 1.25), (3.6, -0.5, 0.75), 26), "A"),
+    ("A27", _day, s("27-01"), RIDE(0, eval(os.environ.get("RO1", "(-0.6, 0.25, 0.6)"))), "A"),   # 足を乗せた段といっしょに進む（v2 の点検：前は止まったカメラで、足が 1 秒ほどで通りすぎた）
+    ("A27c", _day, s("27-05"), RIDE(1, eval(os.environ.get("RO2", "(-0.35, 0.15, 0.75)"))), "A"),
     # 6章（夜）
     ("B28", _night, s("28-01"), C((-5.0, -6.0, 2.5), (1.0, 0.0, 0.8), 28), "B"),
     ("B28b", _night, s("28-02"), lambda t0: F((1.2, -1.6, 0.35), 34), "B"),
