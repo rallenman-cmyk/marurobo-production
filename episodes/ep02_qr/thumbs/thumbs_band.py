@@ -81,7 +81,7 @@ def q_mark(im, c, r=260):
 # ---- 2026-11-21 追加のサムネのルール（references/thumbnail_rules.md「数で決めた値」。建物の深層 16 枚を数えた値）----
 #   4本目の thumbs04.py の band_text・grade と同じ作り。帯 18.5%（真っ黒）・字の高さ 14.4%・字の幅 92〜97%（詰め -0.07、同じ色のふちで太く）
 #   色 白 (255,255,255)・黄 (251,254,5)・赤 (248,3,3)。絵は 鮮やかさ 0.29・明暗の差 62・明るさ 170 に合わせる
-BAND_H = 0.185; BAND_GLYPH = 0.144; BAND_MAXW = 0.97; BAND_TRACK = -0.07; BAND_BOLD = 0.018; SQUEEZE_MIN = 0.80
+BAND_H = 0.185; BAND_GLYPH = 0.144; BAND_MAXW = 0.97; BAND_TRACK = -0.07; BAND_BOLD = 0.0; SQUEEZE_MIN = 0.80   # 太らせ 0.018 は「読」がつぶれた（2026-11-21「読めるの文字潰れてて読めない」）。900 の書体だけで描く
 BAND_COL = {"W": (255, 255, 255), "Y": (251, 254, 5), "R": (248, 3, 3)}
 GRADE = dict(sat=0.29, std=62.0, mean=170.0)
 
@@ -91,7 +91,7 @@ def band_text(im, runs):
     want = BAND_GLYPH * H
     for _ in range(40):
         f0 = T.F(100); b = f0.getbbox("なぜロボット見抜ける？"); px = int(100 * want / (b[3] - b[1]))
-        f = T.F(px); sw = max(1, round(px * BAND_BOLD))
+        f = T.F(px); sw = round(px * BAND_BOLD)
         chars = [(ch, BAND_COL[c]) for t, c in runs for ch in t]
         widths = [f.getlength(ch) + px * BAND_TRACK for ch, _ in chars]; tw = int(sum(widths) - px * BAND_TRACK + 2 * sw + 4)
         lay = Image.new("RGBA", (tw, bh)); dl = ImageDraw.Draw(lay)
