@@ -254,7 +254,7 @@ gaps = [(P[k]["end"], P[k + 1]["start"] - P[k]["end"], T.L[P[k + 1]["no"]]["id"]
 chk.append("2.2 秒以上の間：" + ("、".join("%.1f 秒（%s の前）" % (g_, i_) for _, g_, i_ in gaps) or "なし"))
 short = [(a, c - a, t) for a, c, t in SUBS if c - a < 1.0]
 chk.append("1.0 秒未満の字幕：" + ("、".join("%.1f秒 %.2f 秒「%s」" % (a, d_, t[:12]) for a, d_, t in short) or "なし"))
-over = [t for a, c, t in SUBS if any(SJ.width(r) > 25 for r in t.split("\\N")) or t.count("\\N") > 1]
+over = [t for a, c, t in SUBS for t in [SO.wrap(t, SJ) or t] if any(len(r.replace(" ", "")) > 25 for r in t.split("\\N")) or t.count("\\N") > 1]     # v10：焼いた字幕（2 行）で数える
 chk.append("鳴らした効果音（時刻・種類・大きさ）：" + "、".join("%.1f %s %.2f" % (t, k, g) for (t, k), g in sorted(EV.items()) if g > 0))
 chk.append("映っていないので鳴らさなかった効果音：" + ("、".join("%.1f %s" % x for x in sorted(DROP)) or "なし"))
 chk.append("25 字・2 行をこえる字幕：" + ("、".join(over) or "なし"))
