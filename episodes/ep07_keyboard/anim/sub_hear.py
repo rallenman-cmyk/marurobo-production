@@ -53,6 +53,30 @@ for i, p in enumerate(P):
         t0 = s0 - p["start"]; t1 = (ev[m + 1][0] - p["start"]) if m + 1 < len(ev) else len(x) / sr
         jobs.append(dict(no=p["no"], at=round(s0, 2), text=txt, yomi=yomi, seg=x[int(max(0, t0) * sr):int(t1 * sr)], sr=sr))
 print("聞き取る字幕", len(jobs), "枚", flush=True)
+# 字幕ごとの読みを、ひらがなにする（台本の tts を手がかりに。漢字が残ると、正しく合っていても似ている度が下がった）
+CACHE = os.path.join(os.environ["MARU_WORK"], "sub_yomi_cache.json")
+YC = json.load(open(CACHE, encoding="utf-8")) if os.path.exists(CACHE) else {}
+def to_kana(items):
+    body = {"contents": [{"parts": [{"text": "次の JSON の各項目について、card（字幕の一部）を、ナレーターが読むとおりにすべてひらがなで書いてください。"
+        "line_tts は文全体の読み方の手がかりです（数字・英字の読みはこれに従う）。句読点・記号は書かない。"
+        "出力は、入力と同じ順のひらがなの文字列の JSON 配列だけ。\n" + json.dumps(items, ensure_ascii=False)}]}],
+        "generationConfig": {"responseMimeType": "application/json"}}
+    req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", data=json.dumps(body).encode(),
+                                 headers={"Content-Type": "application/json", "x-goog-api-key": KEY})
+    for k in range(5):
+        try:
+            r = json.loads(json.load(urllib.request.urlopen(req, timeout=180))["candidates"][0]["content"]["parts"][0]["text"])
+            if len(r) == len(items): return r
+        except Exception: pass
+        time.sleep(10 * (k + 1))
+    raise SystemExit("読みが作れない")
+need = [j for j in jobs if j["text"] + "|" + str(j["no"]) not in YC]
+for k in range(0, len(need), 40):
+    ch = need[k:k + 40]
+    r = to_kana([dict(card=j["text"], line_tts=SO._SCRIPT.get([p for p in P if p["no"] == j["no"]][0]["text"], {}).get("tts", "")) for j in ch])
+    for j, y in zip(ch, r): YC[j["text"] + "|" + str(j["no"])] = y
+json.dump(YC, open(CACHE, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+for j in jobs: j["yomi"] = YC[j["text"] + "|" + str(j["no"])]
 with ThreadPoolExecutor(4) as ex:
     heard = list(ex.map(lambda j: hear(j["seg"], j["sr"]), jobs))
 bad = []; res = []

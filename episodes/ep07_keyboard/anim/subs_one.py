@@ -167,7 +167,7 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
         near = [(abs(vt(tc) - est), tc) for tc, st in C if abs(vt(tc) - est) <= 0.45]
         if not near: return None
         return a + min(near)[1] - 0.05
-    BRK = "、をはがにでのともへやか」…"
+    BRK = "、」…"           # 分け直すのは「、」「」」「……」のあとだけ（v9 の 1 回目は助詞のあとでも切り、「はずなの／に」のように言葉の途中で切った）
     for _ in range(3):
         for i in range(len(out)):
             if out[i][1] - out[i][0] >= MIN - 0.005: continue
@@ -177,7 +177,7 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
                 base = len("".join(x[2] for x in out[:i0]))
                 best = None
                 for k in range(2, len(txt) - 1):
-                    if txt[k - 1] not in BRK or _vlen(txt[:k]) > LINE_MAX or _vlen(txt[k:]) > LINE_MAX: continue
+                    if txt[k - 1] not in BRK or txt[k] in "、。？！…」』）" or _vlen(txt[:k]) > LINE_MAX or _vlen(txt[k:]) > LINE_MAX: continue
                     tm = at_time(base + k)
                     if tm is None: continue
                     l0, l1 = tm - out[i0][0], out[i1][1] - tm
