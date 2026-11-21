@@ -766,7 +766,9 @@ def b_rug(cl):
     key(hold, "location", tA, (0, 0, 0)); key(hold, ("rotation_euler", 2), tA, 0.0)
     tM = e("17-08") + 0.2; kM = 0.9          # 「引き戻すと……」の間に 9 割まで引き、「ぴたっ」で最後の 1 割がはまる
     key(hold, "location", tM, (Lx * kM, Ly * kM, 0)); key(hold, ("rotation_euler", 2), tM, th * kM)
-    key(hold, "location", tB, (Lx, Ly, 0)); key(hold, ("rotation_euler", 2), tB, th)
+    tB0 = tB - 1.0 / FPS        # 本番の PC（グラフィックボード）で、9 割→全部 をゆっくり動かすと 1 コマおきに元の形が映った → 「ぴたっ」の 1 コマで一気にはめる
+    key(hold, "location", tB0, (Lx * kM, Ly * kM, 0), "LINEAR"); key(hold, ("rotation_euler", 2), tB0, th * kM, "LINEAR")
+    key(hold, "location", tB, (Lx, Ly, 0), "LINEAR"); key(hold, ("rotation_euler", 2), tB, th, "LINEAR")
     ev(tA, "whoosh", 0.4); ev(tB, "snap", 0.8)
     for mm in (dom, fom, com, bom):
         pts_glow(mm, tB - 0.05, 2.2 if mm is not com else 3.5); pts_glow(mm, tB + 0.2, 8.0); pts_glow(mm, tB + 1.2, 2.2 if mm is not com else 3.5)
