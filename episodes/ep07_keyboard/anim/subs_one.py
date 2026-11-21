@@ -87,7 +87,7 @@ def _cands(wav, speed, SJ):
     head = mr[0][1] if mr and mr[0][0] <= 0.02 else 0.0
     tail = mr[-1][0] if mr and mr[-1][1] >= dur - 0.02 else dur
     gaps = [(g0, g1) for g0, g1 in mr if head < g0 and g1 < tail and g1 - g0 >= 0.07]
-    out = [(g1, 1.0 + min(g1 - g0, 0.8)) for g0, g1 in gaps]
+    out = [(g1, 3.0 + 4.0 * min(g1 - g0, 1.0)) for g0, g1 in gaps]     # 声が止まる間は、言葉の切れ目の谷よりずっと強く選ぶ（v9：「からむので、」の 0.5 秒の間より、手前の谷を選んでいた）
     with wave.open(wav) as w:
         sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768.0
     hop = int(0.01 * sr); n = len(x) // hop
@@ -125,7 +125,7 @@ def events(a, c, t, wav, SJ, speed=1.0, MIN=MIN, c_max=None, log=None):
         G = [(vt(tc), st) for tc, st in C]
         INF = 1e9; n = len(G)
         dp = [[INF] * n for _ in range(k)]; bk = [[-1] * n for _ in range(k)]
-        cost = lambda i, j: ((G[j][0] - exp[i]) / 0.45) ** 2 - G[j][1]
+        cost = lambda i, j: ((G[j][0] - exp[i]) / 0.6) ** 2 - G[j][1]
         for j in range(n): dp[0][j] = cost(0, j)
         for i in range(1, k):
             for j in range(i, n):
