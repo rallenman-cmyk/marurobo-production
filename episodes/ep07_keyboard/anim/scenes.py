@@ -408,7 +408,10 @@ def b_inside(cl):
     M.hop(w("12-03", "跳ね上がって") + 0.05, h=0.18, d=0.4)
     # 13：T と Y（となり同士）が光る → T が真ん中へ上がる途中に Y も上がり、真ん中の手前でぶつかって交差したまま止まる（赤い光・ふるえる）
     a_, b_ = pv["T"], pv["Y"]
-    for o, col in ((a_, "#FF9A3C"), (b_, "#4FB3FF")): glow_plate(o.children[0], s("13-01") + 0.3, e("13-02") + 0.4, col, (0.05, 1.2 * 0.9), 0.0135)   # T＝橙・Y＝青（どの 2 本か分かるように）
+    for ch_ in "TY":         # T と Y の棒全体を金色に光らせる（14-04 の E・R と同じ光らせ方。v8 ユーザー「このときには隣り合う棒をうまく光らせられてるじゃん」→「13 も同じに」）。どちらがどれかは札（T 橙・Y 青）で
+        g = glow_mat("barglow" + ch_, "#FFD24A", 4.0)
+        gl = cube(g, (0, -1.2 * 0.45, 0.05), (0.05, 1.2 * 0.9, 0.01), parent=pv[ch_]); gl.visible_shadow = False
+        hide_key(gl, -100.0, True); hide_key(gl, s("13-01") + 0.3, False); hide_key(gl, e("13-02") + 0.4, True)
     t = w("13-01", "続けて") + 0.6
     key(a_, ("rotation_euler", 0), t, 0.0); key(a_, ("rotation_euler", 0), t + 0.5, R(-128))
     key(b_, ("rotation_euler", 0), t + 0.2, 0.0); key(b_, ("rotation_euler", 0), t + 0.6, R(-122))

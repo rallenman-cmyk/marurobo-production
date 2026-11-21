@@ -1,6 +1,6 @@
 # 聞き取りで、字幕の切り替わりを正しい声の切れ目に直す（7本目 v9）
 #   sub_hear.py で「読みと合わない」と出た字幕の、前後の切り替わりを、声の切れ目の候補（前後 1.2 秒）から選び直す。
-#   それぞれの候補で、左の字幕と右の字幕の声を聞き取り、読みとの似ている度の合計がいちばん高い所にする。
+#   候補は声が止まる間（0.07 秒以上）だけ。それぞれの候補で、左の字幕と右の字幕の声を聞き取り、読みとの似ている度の合計がいちばん高い所にする。
 #   結果は voice/sub_cuts.json（文 → [[声の頭からの秒, 字幕の字], …]）に書き、subs_one.events はその文をそのとおりに切る。
 #   MARU_WORK=<作業> python3 sub_fix_cuts.py <sub_hear の結果.json>
 import os, sys, json, wave, difflib, re, base64, io, urllib.request, time
@@ -31,7 +31,7 @@ for no in badno:
     bads = [k for k, tx in enumerate(texts) if any(r["no"] == no and r["text"] == tx and r["score"] is not None and r["score"] < 0.8 for r in R)]
     for k in sorted({b for k in bads for b in (k, k + 1) if 1 <= b < len(texts)}):   # 直す切り替わり（k 番目の字幕の頭）
         cur = offs[k]; lo, hi = offs[k - 1] + 0.3, offs[k + 1] - 0.3
-        cand = sorted({round(cur, 2)} | {round(tc - 0.05, 2) for tc, st in C if abs(tc - 0.05 - cur) <= 1.2 and lo < tc - 0.05 < hi})
+        cand = sorted({round(cur, 2)} | {round(tc - 0.05, 2) for tc, st in C if st >= 3.0 and abs(tc - 0.05 - cur) <= 2.0 and lo < tc - 0.05 < hi})   # 候補は声が止まる間だけ（言葉の途中の谷では、聞き取りがゆれて「せんせい／せいが」のように選んだ）
         best = None
         for cc in cand:
             L_ = hear(x[int(offs[k - 1] * sr):int(cc * sr)], sr); R_ = hear(x[int(cc * sr):int(offs[k + 1] * sr)], sr)
