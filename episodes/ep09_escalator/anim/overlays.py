@@ -86,13 +86,10 @@ def ev_list():
     add(s("34-02") + 0.2, e("34-02") + 0.3, "ring", dict(obj="button", r=40, col=RED))
     add(w("35-01", "安全") - 0.3, e("35-01") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("35-02"), e("35-03") + 0.1, "tint", {})
-    add(w("34-04", "すうっと"), e("36-06") + 0.3, "vline", dict(obj="stop0", text="", col=WHITE))
     add(w("36-03", "1分間"), e("36-03") + 0.3, "tag", dict(text="1分間に30メートル", pos=(640, 105), size=56, bg=YEL))
-    add(w("36-04", "10センチ"), e("36-06") + 0.3, "vline", dict(obj="stop10", text="10センチ", col=YEL))
-    add(w("36-04", "60センチ"), e("36-06") + 0.3, "vline", dict(obj="stop60", text="60センチ", col=YEL))
     # 押した時の段（白い線）が、すうっと進んで止まった所を、段について動く青緑の線で見せる。36-05「この間に入っていました」が絵で分かるように（9本目 v2 の点検：止まった段の位置が絵になかった）
-    add(w("34-04", "すうっと"), e("36-06") + 0.3, "vline", dict(obj="stop_now", text="", col=TEAL))
-    add(w("36-05", "測って"), e("36-06") + 0.3, "vline", dict(obj="stop_now", text="止まった段", col=TEAL, bg=TEAL, fg=WHITE, right=True))
+    add(w("34-04", "すうっと"), e("34-04") + 0.3, "vline", dict(obj="stop_now", text="", col=TEAL))   # 34-04 の間だけ：段といっしょに動いて止まる線（すうっと進むのが見えるように）
+    add(w("36-04", "10センチ") - 0.2, e("36-06") + 0.3, "ruler", dict(pos=(640, 165), t_meas=w("36-05", "測って")))   # ものさしの図（3D の線は角度で読めなかった）
     return E
 
 
@@ -235,6 +232,38 @@ def pile_sprite(t=None, t0=None):
     return D.card(900, 430, draw=dr)[0]
 
 
+def ruler_sprite(t=None, t_meas=None):
+    """36-04〜36-06：止まるまでの長さを、まっすぐなものさしの図で（9本目 v2 ユーザー「テロップ重なるし、どこが何センチかわかんない」。
+    3D の段の横に線を引くと、見る角度でずれて読めなかった）。10〜60 センチの間をぬり、36-05「測って」で矢印が 0 から約 50 センチまでのびる"""
+    k = 0.0 if (t is None or t_meas is None) else max(0.0, min(1.0, (t - t_meas) / 1.6))
+
+    def dr(d, W_, H_, ss, img):
+        S_ = lambda x, y: (x * ss, y * ss)
+        x0, cm = 175, 10.0                      # 0 センチの位置と、1 センチの長さ（65 センチまで）
+        X = lambda c: x0 + c * cm
+        GR, NV, YL, TL = (150, 156, 166), NAVY, YEL, D.TEAL_D
+        D.ctext(d, S_(450, 36), "ボタンを押してから、止まるまで", D.font(40 * ss), NV)
+        ya, yb = 132, 205                       # 矢印の高さ・ものさしの線の高さ
+        d.rectangle([S_(X(10), yb - 36), S_(X(60), yb)], fill=YL)   # 決まりの間（10〜60 センチ）
+        D.ctext(d, S_((X(10) + X(60)) / 2, yb - 18), "この間で止まる", D.font(28 * ss), NV)
+        d.line([S_(X(0), yb), S_(X(65), yb)], fill=GR, width=6 * ss)
+        for c in range(0, 66, 10):
+            d.line([S_(X(c), yb), S_(X(c), yb + (18 if c in (0, 10, 60) else 10))], fill=GR, width=4 * ss)
+        D.ctext(d, S_(X(0), yb + 42), "0", D.font(30 * ss), NV)
+        D.ctext(d, S_(X(10), yb + 42), "10センチ", D.font(30 * ss), NV)
+        D.ctext(d, S_(X(60), yb + 42), "60センチ", D.font(30 * ss), NV)
+        D.ctext(d, S_(X(0) - 88, ya), "押した所", D.font(28 * ss), NV)
+        d.line([S_(X(0), ya - 22), S_(X(0), yb)], fill=NV, width=4 * ss)
+        if k > 0:
+            xe = X(49 * k)
+            d.line([S_(X(0), ya), S_(xe - 14, ya)], fill=TL, width=10 * ss)
+            d.polygon([S_(xe, ya), S_(xe - 24, ya - 15), S_(xe - 24, ya + 15)], fill=TL)
+            if k >= 1.0:
+                d.line([S_(xe, ya), S_(xe, yb)], fill=TL, width=5 * ss)
+                D.ctext(d, S_(xe, ya - 34), "止まった所（約50センチ）", D.font(28 * ss), TL)
+    return D.card(900, 290, draw=dr)[0]
+
+
 def hrarrows_sprite(t, t0):
     def dr(d, W_, H_, ss, img):
         k = min(1.0, (t - t0) / 0.8)
@@ -341,6 +370,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             base.alpha_composite(Image.new("RGBA", base.size, (40, 60, 120, int(80 * a))))
             spr, off = tag_sprite("もしも…", 44, WHITE)
             _paste(base, spr, 150, 70, 1.0, a)
+        elif kind == "ruler":
+            _paste(base, ruler_sprite(t, p["t_meas"]), p["pos"][0], p["pos"][1], k, a)
         elif kind == "pile":
             _paste(base, pile_sprite(t, t0), p["pos"][0], p["pos"][1], k, a)
         elif kind == "sticker":
