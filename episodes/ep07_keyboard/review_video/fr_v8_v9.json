@@ -1,0 +1,35 @@
+{
+ "created_at": "2026-11-21T05:55:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-EP07-v8",
+ "to_version": "MARU-EP07-v9",
+ "project_id": "MARU-EP07",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwpobj4lwru6wvdg",
+   "comment_rev": 1,
+   "explain": "13 の T と Y の棒も、14-04 の E と R と同じく、棒全体を金色に光らせました（どちらがどれかは T 橙・Y 青の札）。",
+   "new_t": 348.8,
+   "new_t_end": 357.0,
+   "new_version_id": "MARU-EP07-v9",
+   "original_t": 388.2,
+   "original_t_end": null,
+   "original_text": "このときには隣り合う棒をうまく光らせられてるじゃん",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwpoee3e6qzwe7ys",
+   "comment_rev": 1,
+   "explain": "字幕の切り替わりを、声が止まる所だけにしました（時刻をずらして長さを合わせるのをやめた）。ここは「Z の右上に S、そのまた右上に E。3つが、」を 4.4 秒、「ななめにつながっていますね。」を声と同時に出します。全体の 263 枚を、声のすき間とのずれ・1 枚ずつの聞き取りの 2 つで数え、ずれ 0 枚です（v8 は文の中の切り替わり 118 か所のうち 44 か所がずれていました）。2 秒に足りない所は、となりとまとめるか、声のあとに間を足しました。",
+   "new_t": 573.6,
+   "new_t_end": 580.8,
+   "new_version_id": "MARU-EP07-v9",
+   "original_t": 568.8,
+   "original_t_end": null,
+   "original_text": "テロップの切り替わりが早い",
+   "reason": ""
+  }
+ ]
+}

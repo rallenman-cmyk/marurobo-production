@@ -15,6 +15,10 @@ exec(open(os.path.join(KIT_HERE, "kit.py"), encoding="utf-8").read())
 _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
+# v9：言葉の時刻 w() は timing.py のもの（声に足した間 voice/pauses.json を入れて出す。6本目の core.py の w は字の割合だけ）
+import importlib.util as _iu
+_sp = _iu.spec_from_file_location("timing7", os.path.join(_K7, "timing.py")); _TM = _iu.module_from_spec(_sp); _sp.loader.exec_module(_TM)
+w = _TM.w
 CLIPNAME, OUTDIR = _argv[0], _argv[1]
 # 字を言う瞬間（voice/letter_times.json）。文の頭からの秒を足す
 _LT = json.load(open(os.path.join(_K7, "..", "voice", "letter_times.json"), encoding="utf-8"))
@@ -122,6 +126,7 @@ def b_desk(cl):
     # J → Q は、しゃがんで大きく跳ぶ（v8：続け跳びでは 0.4 秒の小さな跳びで、カメラも追っていたので「遠いと大きく跳ぶ」が見えなかった）
     tb = e("04-02") - 0.1; M.jump(tb, P(Q, "Q"), apex=0.3); Q.press("Q", tb, gain=0.5, motion=False)
     hop_path(Q, "KJQ", ta, 0.5, None, col="#FFD24A", name="path_kjq", times=[ta, ta + 0.5, tb], press=False)    # 跳んだ道の線（表「跳んだ道の線」）
+    _pk = bpy.data.objects["path_kjq"]; hide_key(_pk, -100.0, False); hide_key(_pk, s("04-03"), True)   # v10：04-02 の間だけ（消していなかったので、19・21 章などの机の場面にずっと残っていた。ユーザー「軌跡の橙色いらない」）
     # 04-03〜04：ABC 順のキーボードが右にすべりこむ → まるロボはそちら（右）を向いて、跳ねてよろこぶ（v5「まるロボはabcのキーボードの方を向かせて」）
     M.at(s("04-03") - 0.3, face=-60); M.at(s("04-03") + 2.4, face=80)
     M.hops(s("04-04") + 0.3, n=2)
@@ -408,7 +413,10 @@ def b_inside(cl):
     M.hop(w("12-03", "跳ね上がって") + 0.05, h=0.18, d=0.4)
     # 13：T と Y（となり同士）が光る → T が真ん中へ上がる途中に Y も上がり、真ん中の手前でぶつかって交差したまま止まる（赤い光・ふるえる）
     a_, b_ = pv["T"], pv["Y"]
-    for o, col in ((a_, "#FF9A3C"), (b_, "#4FB3FF")): glow_plate(o.children[0], s("13-01") + 0.3, e("13-02") + 0.4, col, (0.05, 1.2 * 0.9), 0.0135)   # T＝橙・Y＝青（どの 2 本か分かるように）
+    for ch_ in "TY":         # T と Y の棒全体を金色に光らせる（14-04 の E・R と同じ光らせ方。v8 ユーザー「このときには隣り合う棒をうまく光らせられてるじゃん」→「13 も同じに」）。どちらがどれかは札（T 橙・Y 青）で
+        g = glow_mat("barglow" + ch_, "#FFD24A", 4.0)
+        gl = cube(g, (0, -1.2 * 0.45, 0.05), (0.05, 1.2 * 0.9, 0.01), parent=pv[ch_]); gl.visible_shadow = False
+        hide_key(gl, -100.0, True); hide_key(gl, s("13-01") + 0.3, False); hide_key(gl, e("13-02") + 0.4, True)
     t = w("13-01", "続けて") + 0.6
     key(a_, ("rotation_euler", 0), t, 0.0); key(a_, ("rotation_euler", 0), t + 0.5, R(-128))
     key(b_, ("rotation_euler", 0), t + 0.2, 0.0); key(b_, ("rotation_euler", 0), t + 0.6, R(-122))

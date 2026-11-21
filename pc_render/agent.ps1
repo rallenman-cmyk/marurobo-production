@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "10"
+$VER = "11"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -134,7 +134,7 @@ function Read-Queue {
       $list += $j
     } catch { Note ("読めない依頼票：{0}" -f $f.Name) }
   }
-  $sorted = @($list | Sort-Object @{ Expression = { if ($_.kind -eq "fix") { 0 } else { 1 } } }, @{ Expression = { if ($_.order) { [int]$_.order } else { 999 } } }, @{ Expression = { "$($_.created)" } }, @{ Expression = { "$($_.id)" } })
+  $sorted = @($list | Sort-Object @{ Expression = { if ($_.kind -ne "fix") { 2 } elseif ((-not $_.frames) -or ([int]$_.frames -le 3000)) { 0 } else { 1 } } }, @{ Expression = { if ($_.order) { [int]$_.order } else { 999 } } }, @{ Expression = { "$($_.created)" } }, @{ Expression = { "$($_.id)" } })
   return ,$sorted
 }
 
@@ -329,10 +329,10 @@ function Run-Job($job) {
                 $preempt = $true
                 Note ("係からの合図で、{0} をいったん止めます（新しい描画係で続きから描きます）" -f $job.id)
                 Kill-Kit $kitdir
-              } elseif ($job.kind -ne "fix") {
+              } elseif (($job.kind -ne "fix") -or ($job.frames -and ([int]$job.frames -gt 3000))) {
                 $q2 = Read-Queue
                 $small = $false
-                if ($q2.Count -gt 0 -and $q2[0].kind -eq "fix") { $small = (-not $q2[0].frames) -or ([int]$q2[0].frames -le 3000) }
+                if ($q2.Count -gt 0 -and $q2[0].id -ne $job.id -and $q2[0].kind -eq "fix") { $small = (-not $q2[0].frames) -or ([int]$q2[0].frames -le 3000) }
                 if ($small) {
                   $preempt = $true
                   Note ("短い直し（{0}）が来たので、{1} をいったん止めて、直しを先に描きます" -f $q2[0].id, $job.id)

@@ -33,7 +33,7 @@ def ev_list():
     add(w("06-03", "消えた段") - 0.1, e("06-03") + 0.4, "pile", dict(pos=(640, 300)))   # 文の頭から（たまっていく絵を声と一緒に見せる）
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_hi", r=60))
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_lo", r=60))
-    add(w("07-02", "このしるし"), e("07-02") + 0.3, "sticker", dict(pos=(640, 170)))
+    add(w("07-02", "このしるし"), e("07-02") + 0.3, "sticker", dict(pos=(290, 170)))   # 左上へ（まん中だと、まるロボの頭に重なった。9本目 v2 の点検）
     add(s("07-04"), e("07-04") + 0.2, "ring", dict(obj="sticker", r=40))
     add(w("08-03", "出てきました") + 0.1, e("08-03"), "bubble", dict(obj="maru_top", icon="!"))
     add(w("08-05", "輪"), e("08-06") + 0.3, "dotloop", dict(a="loop_lo", b="loop_hi"))
@@ -86,10 +86,11 @@ def ev_list():
     add(s("34-02") + 0.2, e("34-02") + 0.3, "ring", dict(obj="button", r=40, col=RED))
     add(w("35-01", "安全") - 0.3, e("35-01") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("35-02"), e("35-03") + 0.1, "tint", {})
-    add(w("34-04", "すうっと"), e("36-06") + 0.3, "vline", dict(obj="stop0", text="", col=WHITE))
     add(w("36-03", "1分間"), e("36-03") + 0.3, "tag", dict(text="1分間に30メートル", pos=(640, 105), size=56, bg=YEL))
-    add(w("36-04", "10センチ"), e("36-06") + 0.3, "vline", dict(obj="stop10", text="10センチ", col=YEL))
-    add(w("36-04", "60センチ"), e("36-06") + 0.3, "vline", dict(obj="stop60", text="60センチ", col=YEL))
+    # 押した時の段（白い線）が、すうっと進んで止まった所を、段について動く青緑の線で見せる。36-05「この間に入っていました」が絵で分かるように（9本目 v2 の点検：止まった段の位置が絵になかった）
+    add(w("34-04", "すうっと"), e("34-04") + 0.3, "vline", dict(obj="stop_now", text="", col=TEAL))   # 34-04 の間だけ：段といっしょに動いて止まる線（すうっと進むのが見えるように）
+    add(w("23-01", "手すり") - 0.2, e("23-04") + 0.4, "hrloop", dict(tA=w("23-02", "ゴム"), tB=w("23-03", "車"), tC=w("23-04", "すべって")))   # 手すりのしくみの図（v2 の点検：3D に手すりの輪と車が映っていなかった）
+    add(w("36-04", "10センチ") - 0.2, e("36-05") + 0.5, "ruler", dict(pos=(640, 165), t_meas=w("36-05", "測って")))   # ものさしの図（3D の線は角度で読めなかった）
     return E
 
 
@@ -232,6 +233,98 @@ def pile_sprite(t=None, t0=None):
     return D.card(900, 430, draw=dr)[0]
 
 
+def hrloop_sprite(t, tA, tB, tC):
+    """23-01〜23-04：手すりのしくみの図（9本目 v2 の点検：3D は段の断面のままで、「手すりはゴムの輪」「車ではさんで」の物が画面になかった）。
+    手すりの輪（上を進み、端で回って床の下を戻る）。tA「ゴム」で輪が青緑に光る。tB「車」で、戻る所をはさむ 2 つの車がオレンジに光る。
+    tC「すべって」で、車の所に「少しすべる」の印。手すりの白い印が輪にそって動き、車が回る"""
+    def dr(d, W_, H_, ss, img):
+        S_ = lambda x, y: (x * ss, y * ss)
+        GR, NV = (70, 76, 86), NAVY
+        D.ctext(d, S_(500, 40), "手すりのしくみ", D.font(40 * ss), NV)
+        top = [(110, 270), (330, 270), (690, 115), (890, 115)]
+        ret = [(x, y + 96) for x, y in reversed(top)]
+        rr = 48
+        arcR = [(890 + rr * math.sin(a), 115 + rr - rr * math.cos(a)) for a in [i * math.pi / 18 for i in range(19)]]
+        arcL = [(110 - rr * math.sin(a), 366 - rr + rr * math.cos(a)) for a in [i * math.pi / 18 for i in range(19)]]
+        loop = top + arcR + ret + arcL
+        # 段（うすい灰色の坂。手すりがその上を進むのが分かるように）
+        d.line([S_(x, y + 36) for x, y in top], fill=(205, 209, 215), width=26 * ss)
+        D.ctext(d, S_(800, 175), "段", D.font(32 * ss), (150, 156, 166))
+        on = t >= tA
+        col = D.TEAL if on else GR
+        if on: d.line([S_(x, y) for x, y in loop], fill=(170, 225, 215), width=30 * ss, joint="curve")
+        d.line([S_(x, y) for x, y in loop], fill=col, width=16 * ss, joint="curve")
+        # 白い印：輪にそって進む（上は右へ、床の下は左へ）
+        acc = [0.0]
+        for (a, b), (c, e_) in zip(loop, loop[1:]): acc.append(acc[-1] + math.hypot(c - a, e_ - b))
+        L = acc[-1]
+        for j in range(int(L // 70)):
+            u = (j * 70 + 60.0 * t) % L
+            i = max(0, min(len(acc) - 2, next(k for k in range(len(acc) - 1) if acc[k + 1] >= u)))
+            (a, b), (c, e_) = loop[i], loop[i + 1]
+            f = (u - acc[i]) / max(1e-6, acc[i + 1] - acc[i]); x, y = a + (c - a) * f, b + (e_ - b) * f
+            d.ellipse([S_(x - 4, y - 4), S_(x + 4, y + 4)], fill=(235, 240, 244))
+        # はさむ車（戻る坂のまん中）
+        (xa, ya), (xb, yb) = ret[1], ret[2]
+        mx, my = (xa + xb) / 2, (ya + yb) / 2
+        ln = math.hypot(xb - xa, yb - ya); nx, ny = -(yb - ya) / ln, (xb - xa) / ln
+        onB = t >= tB
+        for sg in (1, -1):
+            cx, cy = mx + sg * nx * 36, my + sg * ny * 36
+            fc = ORANGE if onB else (150, 156, 166)
+            if onB: d.ellipse([S_(cx - 34, cy - 34), S_(cx + 34, cy + 34)], fill=(255, 214, 170))
+            d.ellipse([S_(cx - 27, cy - 27), S_(cx + 27, cy + 27)], fill=fc, outline=NV, width=3 * ss)
+            ang = sg * t * 3.0
+            for q in range(3):
+                a_ = ang + q * 2 * math.pi / 3
+                d.line([S_(cx, cy), S_(cx + 22 * math.cos(a_), cy + 22 * math.sin(a_))], fill=NV, width=4 * ss)
+        if on: D.ctext(d, S_(255, 215), "手すり（ゴムの輪）", D.font(34 * ss), D.TEAL_D)
+        cl = (mx - nx * 36, my - ny * 36)          # 下の車
+        if onB:
+            d.line([S_(cl[0] + 30, cl[1] + 8), S_(700, 318)], fill=(214, 104, 0), width=3 * ss)
+            D.ctext(d, S_(800, 318), "車ではさむ", D.font(34 * ss), (214, 104, 0))
+        if t >= tC:
+            ux, uy = (xb - xa) / ln, (yb - ya) / ln    # 戻る坂の向き
+            bx, by = cl[0] + nx * -40, cl[1] + ny * -40
+            d.line([S_(bx - ux * 40, by - uy * 40), S_(bx + ux * 30, by + uy * 30)], fill=RED, width=6 * ss)
+            d.polygon([S_(bx + ux * 46, by + uy * 46), S_(bx + ux * 24 + nx * 12, by + uy * 24 + ny * 12), S_(bx + ux * 24 - nx * 12, by + uy * 24 - ny * 12)], fill=RED)
+            d.line([S_(bx + 10, by + 10), S_(700, 372)], fill=RED, width=3 * ss)
+            D.ctext(d, S_(800, 372), "少しすべる", D.font(34 * ss), RED)
+    return D.card(1000, 420, draw=dr)[0]
+
+
+def ruler_sprite(t=None, t_meas=None):
+    """36-04〜36-06：止まるまでの長さを、まっすぐなものさしの図で（9本目 v2 ユーザー「テロップ重なるし、どこが何センチかわかんない」。
+    3D の段の横に線を引くと、見る角度でずれて読めなかった）。10〜60 センチの間をぬり、36-05「測って」で矢印が 0 から約 50 センチまでのびる"""
+    k = 0.0 if (t is None or t_meas is None) else max(0.0, min(1.0, (t - t_meas) / 1.6))
+
+    def dr(d, W_, H_, ss, img):
+        S_ = lambda x, y: (x * ss, y * ss)
+        x0, cm = 175, 10.0                      # 0 センチの位置と、1 センチの長さ（65 センチまで）
+        X = lambda c: x0 + c * cm
+        GR, NV, YL, TL = (150, 156, 166), NAVY, YEL, D.TEAL_D
+        D.ctext(d, S_(450, 36), "ボタンを押してから、止まるまで", D.font(40 * ss), NV)
+        ya, yb = 132, 205                       # 矢印の高さ・ものさしの線の高さ
+        d.rectangle([S_(X(10), yb - 36), S_(X(60), yb)], fill=YL)   # 決まりの間（10〜60 センチ）
+        D.ctext(d, S_((X(10) + X(60)) / 2, yb - 18), "この間で止まる", D.font(28 * ss), NV)
+        d.line([S_(X(0), yb), S_(X(65), yb)], fill=GR, width=6 * ss)
+        for c in range(0, 66, 10):
+            d.line([S_(X(c), yb), S_(X(c), yb + (18 if c in (0, 10, 60) else 10))], fill=GR, width=4 * ss)
+        D.ctext(d, S_(X(0), yb + 42), "0", D.font(30 * ss), NV)
+        D.ctext(d, S_(X(10), yb + 42), "10センチ", D.font(30 * ss), NV)
+        D.ctext(d, S_(X(60), yb + 42), "60センチ", D.font(30 * ss), NV)
+        D.ctext(d, S_(X(0) - 88, ya), "押した所", D.font(28 * ss), NV)
+        d.line([S_(X(0), ya - 22), S_(X(0), yb)], fill=NV, width=4 * ss)
+        if k > 0:
+            xe = X(49 * k)
+            d.line([S_(X(0), ya), S_(xe - 14, ya)], fill=TL, width=10 * ss)
+            d.polygon([S_(xe, ya), S_(xe - 24, ya - 15), S_(xe - 24, ya + 15)], fill=TL)
+            if k >= 1.0:
+                d.line([S_(xe, ya), S_(xe, yb)], fill=TL, width=5 * ss)
+                D.ctext(d, S_(xe, ya - 34), "止まった所（約50センチ）", D.font(28 * ss), TL)
+    return D.card(900, 290, draw=dr)[0]
+
+
 def hrarrows_sprite(t, t0):
     def dr(d, W_, H_, ss, img):
         k = min(1.0, (t - t0) / 0.8)
@@ -329,12 +422,19 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             d.line([(q[0] * 2, (q[1] - 90) * 2), (q[0] * 2, (q[1] + 10) * 2)], fill=p.get("col", WHITE) + (int(255 * a),), width=10)
             base.alpha_composite(_down(im))
             if p.get("text"):
-                spr, off = tag_sprite(p["text"], 40, YEL)
-                _paste(base, spr, q[0], max(60, q[1] - 130), k, a)
+                spr, off = tag_sprite(p["text"], 40, p.get("bg", YEL), fg=p.get("fg"))
+                if p.get("right"):   # right：線の右に札（上は 10・60 センチの札、下は字幕と重なる。9本目 v2）
+                    _paste(base, spr, q[0] + spr.size[0] // 2 + 24, q[1] - 45, k, a)
+                else:
+                    _paste(base, spr, q[0], max(60, q[1] - 130), k, a)
         elif kind == "tint":      # 想像の場面：少し青く暗く（本当の試しではないと分かるように）
             base.alpha_composite(Image.new("RGBA", base.size, (40, 60, 120, int(80 * a))))
             spr, off = tag_sprite("もしも…", 44, WHITE)
             _paste(base, spr, 150, 70, 1.0, a)
+        elif kind == "hrloop":
+            _paste(base, hrloop_sprite(t, p["tA"], p["tB"], p["tC"]), 640, 300, k, a)
+        elif kind == "ruler":
+            _paste(base, ruler_sprite(t, p["t_meas"]), p["pos"][0], p["pos"][1], k, a)
         elif kind == "pile":
             _paste(base, pile_sprite(t, t0), p["pos"][0], p["pos"][1], k, a)
         elif kind == "sticker":

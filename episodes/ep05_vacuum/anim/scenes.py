@@ -590,7 +590,7 @@ def b_dark(cl):
         if hh and math.dist(hh[1], PX) < 2.2: cur.append((hh[1][0], hh[1][1], 0.0))
     wpt = empty((PX[0], PX[1], 0.0))
     cpt, cm = point_cloud("cur", [(x - PX[0], y - PX[1], t) for x, y, t in cur], col=WHITE_PT, radius=0.02, z=plan.LIDAR_Z + 0.01, pop=0.0, base=3.0, t_offset=1e5)
-    cpt.parent = wpt
+    cpt.parent = wpt; freeze_points(cpt); own_motion(cpt)          # 本番の PC で、動く親につけた点の雲が 1 コマおきに元の場所で映った → 固める
     tw = w("15-06", "いま見えている")
     show_between(cpt, tw); ev(tw + 0.2, "pop", 0.4)
     # v3（5本目 v2「壁の線と、ロボット掃除機が動かして位置を合わせてるのが分かるように」）：
@@ -737,6 +737,7 @@ def b_rug(cl):
     dp = [(x, y, max(t, tdark + 0.3)) for x, y, t in dp]
     hold = empty((0, 0, 0))
     do, dom = point_cloud("drift", dp, t_offset=CLOCK["T0"]); do.parent = hold
+    if cut(cl, "S17c"): freeze_points(do, s("17-03") - 1.0); own_motion(do)        # 本番の PC で、引き戻すあいだ 1 コマおきに元の場所で映った → 固める（この時にはもう全部生まれている）
     if cut(cl, "S16b"):          # v6：車輪の寄りには地図の点を出さない（切りかえの間に線が横切って見えた）
         for o in (bo, fo, do): hide_key(o, CLOCK["T0"] - 1.0, True); hide_key(o, tdark + 0.001, True); hide_key(o, tdark + 0.4, True)
     # 17-03：いま見えている（最初の壁の前で）形を白い点で
@@ -749,7 +750,7 @@ def b_rug(cl):
             rx, ry = hh[1][0] - c[0], hh[1][1] - c[1]
             cur.append((c[0] + rx * ca - ry * sa + DRIFT["d"][0], c[1] + rx * sa + ry * ca + DRIFT["d"][1], 0.0))
     tw = w("17-03", "いま見えている")
-    co, com = point_cloud("cur17", cur, col=WHITE_PT, radius=0.022, z=plan.LIDAR_Z + 0.01, pop=0.0, base=3.5, t_offset=1e5); co.parent = hold
+    co, com = point_cloud("cur17", cur, col=WHITE_PT, radius=0.022, z=plan.LIDAR_Z + 0.01, pop=0.0, base=3.5, t_offset=1e5); co.parent = hold; freeze_points(co); own_motion(co)
     show_between(co, tw); ev(tw, "pop", 0.4)
     # v4「いま見えている壁のときには、いま見えている壁のとこだけ見せた方がいいかも」：17-03 の間は地図の点を隠し、白い形だけ。
     #   17-04（どこかで見たような）で地図が戻って、見比べる
@@ -766,7 +767,9 @@ def b_rug(cl):
     key(hold, "location", tA, (0, 0, 0)); key(hold, ("rotation_euler", 2), tA, 0.0)
     tM = e("17-08") + 0.2; kM = 0.9          # 「引き戻すと……」の間に 9 割まで引き、「ぴたっ」で最後の 1 割がはまる
     key(hold, "location", tM, (Lx * kM, Ly * kM, 0)); key(hold, ("rotation_euler", 2), tM, th * kM)
-    key(hold, "location", tB, (Lx, Ly, 0)); key(hold, ("rotation_euler", 2), tB, th)
+    tB0 = tB - 1.0 / FPS        # 本番の PC（グラフィックボード）で、9 割→全部 をゆっくり動かすと 1 コマおきに元の形が映った → 「ぴたっ」の 1 コマで一気にはめる
+    key(hold, "location", tB0, (Lx * kM, Ly * kM, 0), "LINEAR"); key(hold, ("rotation_euler", 2), tB0, th * kM, "LINEAR")
+    key(hold, "location", tB, (Lx, Ly, 0), "LINEAR"); key(hold, ("rotation_euler", 2), tB, th, "LINEAR")
     ev(tA, "whoosh", 0.4); ev(tB, "snap", 0.8)
     for mm in (dom, fom, com, bom):
         pts_glow(mm, tB - 0.05, 2.2 if mm is not com else 3.5); pts_glow(mm, tB + 0.2, 8.0); pts_glow(mm, tB + 1.2, 2.2 if mm is not com else 3.5)

@@ -26,7 +26,7 @@ def CHECK(t0, t1):
             if not getattr(wk, "_vis", True): continue
             r = wk.root.matrix_world.translation
             d = ((r.x - m.x) ** 2 + (r.y - m.y) ** 2) ** 0.5
-            if d < 0.55 and r.z - 0.3 < m.z < r.z + 1.8:
+            if d < float(os.environ.get("RC_D", "0.55")) and r.z - 0.3 < m.z < r.z + 1.8:
                 rv = w2c(sc, cam, r + type(r)((0, 0, 0.9)))
                 r_on = 0 <= rv.x <= 1 and 0 <= rv.y <= 1 and rv.z > 0
                 hits.append((round(t, 2), i, round(d, 2), bool(m_on or r_on)))

@@ -89,7 +89,7 @@ def ev_list():
     add(w("17-06", "1872年"), e("17-09") + 0.3, "tag", dict(text="1872年", pos=(1100, 80), size=56))
     add(w("17-06", "えらい人"), e("17-07") + 0.3, "tag", dict(text="電信の会社のえらい人", obj="boss", dy=-90, size=44, keep=True))
     add(w("17-07", "学校の先生"), e("17-08") + 0.3, "tag", dict(text="学校の先生", obj="teacher", dy=-90, size=44, keep=True))
-    add(w("17-08", "もっと速く"), e("17-08") + 0.5, "tag", dict(text="「もっと速く！」", pos=(640, 170), size=56, bg=YEL))
+    add(lt("17-08", "もっと") - 0.05, e("17-08") + 0.5, "tag", dict(text="「もっと速く！」", pos=(640, 170), size=56, bg=YEL))
     # 18：Z と SE
     add(w("18-02", "Z"), e("18-05") + 0.4, "morse", dict(t_z=w("18-02", "Z"), t_s=w("18-03", "S"), t_e=w("18-04", "E が"), t_same=w("18-04", "あれ"),
         z_ts=[lt("18-02", k_) for k_ in ("t1", "t2", "t3", "t4")], s_ts=[lt("18-04", k_) for k_ in ("s1", "s2", "s3", "e")]))      # 点は声の「トン」の瞬間に 1 つずつ

@@ -9,6 +9,8 @@ import os, sys, math, json
 KIT_HERE = os.path.dirname(os.path.abspath(__file__))
 _argv = sys.argv[sys.argv.index("--") + 1:]
 import bpy
+import mathutils
+from bpy_extras.object_utils import world_to_camera_view
 bpy.ops.wm.read_factory_settings(use_empty=True)
 exec(open(os.path.join(KIT_HERE, "kit9.py"), encoding="utf-8").read())
 MAT = M                            # 材質の一覧（場面の中では M はまるロボ）
@@ -50,6 +52,24 @@ def F(off, lens=40, dz=0.35, t0=None, t1=None, off1=None):
     c = cam_follow(_M_[0].root, off, dz, lens); c.data.dof.aperture_fstop = 64.0
     if t0 is not None: key(c, "location", t0, off); key(c, "location", t1, off1)
     return c
+
+
+FOOT = []
+
+
+def RIDE(which, off, lens=26, aim=(0.0, -0.12, 0.0)):
+    """27 章：足を乗せた段といっしょに進むカメラ（段に乗って見ている形。足がずっと画面のまん中にいる）。
+    off＝見る所（足のつま先の少し先）からのカメラのずれ"""
+    def mk(t0):
+        ks_, ft = FOOT[which]; st = ESC[0].steps[ks_]
+        bpy.context.scene.frame_set(f(t0 + 0.05))
+        p = ft.matrix_world.translation
+        tgt = (p.x + aim[0], p.y + aim[1], p.z + aim[2] + 0.04)
+        c, tg = cam((tgt[0] + off[0], tgt[1] + off[1], tgt[2] + off[2]), tgt, lens)
+        for o in (c, tg):
+            mw = o.matrix_world.copy(); o.parent = st; o.matrix_parent_inverse = st.matrix_world.inverted(); o.matrix_world = mw
+        return c, tg
+    return mk
 
 
 def C(loc, tgt, lens=35, loc1=None, tgt1=None, lens1=None, d=8.0):
@@ -117,7 +137,7 @@ def b_day(cl):
     M.wobble(w("01-02", "腕") - 0.3, e("01-02"), 10, 0.5)
     M.at(w("01-03", "乗って"), look=22); M.at(e("01-03") + 0.2, look=0)
     M.at(s("01-04"), face=90.0)
-    t_on = w("01-04", "ぴょん") + 0.1                       # 「ぴょん」の時刻に跳ぶ（9本目 v2 の点検：「乗り口」に合わせていたので 1.1 秒おくれていた）
+    t_on = w("01-04", "ぴょん") + 0.6                       # 「ぴょんと跳んで」を言う間に跳ぶ（着く時刻。跳ぶのは 0.5 秒前）。v2 の点検：「乗り口」に合わせて 1.1 秒おくれていた。+0.1 では跳ぶのが場面の切りかわりにかかり見えなかった
     k1 = E.find_step(t_on, 0.75)
     M.jump(t_on, E.tread(k1, t_on))
     # 運ばれる（上の降り口で降りる少し前まで）
@@ -180,7 +200,7 @@ def b_day(cl):
     M.at(t4, loc=(XLC - 0.7, -0.2, 0.0), face=90.0, interp="CONSTANT")
     t_on4 = s("22-01") + 0.9
     k4 = E.find_step(t_on4, 0.6)
-    M.jump(t_on4, E.tread(k4, t_on4, ly=-0.22))
+    M.jump(t_on4, E.tread(k4, t_on4, ly=-0.30))   # 手すり（−y）に頭がつく所へ（v2 の点検：-0.22 では頭と手すりが 10cm ほど離れていた）
     M.carry(t_on4 + 0.05, e("24-08") + 2.0, E.carry_fn(k4, t_on4 + 0.05))
     M.tilt(w("22-01", "頭で"), 16)                       # 手前（−y）の手すりへ頭を寄せる
     for t0, t1 in ((s("22-02") + 0.2, e("22-02") + 0.3), (s("22-03") + 0.6, e("22-03") + 0.3), (s("22-04") + 0.6, e("22-04"))):
@@ -223,13 +243,27 @@ def b_day(cl):
     key(tip, ("rotation_euler", 1), t_br, 0.0); key(tip, ("rotation_euler", 1), t_br + 0.5, R(70))
     hide_key(tip, -100.0, True); hide_key(tip, s("26-10"), False); hide_key(tip, s("27-01"), True)
     ev(t_br, "snap", 0.35, "tooth")
-    # 27：段に乗った人の靴（すき間の手前で止まる）
-    t27 = s("27-01") - 0.1
-    ks = E.find_step(t27, 2.6)
-    shoe = cube(mat("shoe", "#2A2522", rough=0.5), (-0.16, -(YW - 0.07), G.TREAD_DZ + 0.035), (0.26, 0.1, 0.07), bevel=0.02, parent=E.steps[ks])
-    track("shoe", shoe, 0.0)
-    hide_key(shoe, -100.0, True); hide_key(shoe, t27, False); hide_key(shoe, e("27-05") + 1.0, True)
-    key(shoe, ("location", 1), -100.0, -(YW - 0.12)); key(shoe, ("location", 1), w("27-02", "つま先"), -(YW - 0.12)); key(shoe, ("location", 1), w("27-02", "つま先") + 1.0, -(YW - 0.07))
+    # 27：段に乗った人の足（靴とズボン。すき間の手前で止まる）
+    # 9本目 v2 の点検：前は 1 つの黒い箱で、27-02「靴のつま先」を言う時にはもう画面の外へ運ばれていた。
+    # → 27-02 と 27-05 のそれぞれで、言う時に画面のまん中に来る段に、靴とズボンの足を乗せる（つま先がすき間へ寄って、手前で止まる）
+    def _foot(t_show, t_hide, t_toe, x_at):
+        ks_ = E.find_step(t_toe, x_at)
+        ft = empty((0, 0, 0)); ft.parent = E.steps[ks_]
+        y0, y1 = -(YW - 0.20), -(YW - 0.155)          # つま先（-y の端）が、すき間の 2.5cm 手前まで寄る
+        ft.location = (-0.10, y0, G.TREAD_DZ)
+        sh = mat("shoe", "#2A2522", rough=0.5); up = mat("shoe_up", "#3B3F52", rough=0.6); pa = mat("pants", "#4A5A78", rough=0.8)
+        cube(sh, (0, 0, 0.012), (0.11, 0.27, 0.024), bevel=0.01, parent=ft)                  # 靴底
+        cube(up, (0, 0.03, 0.05), (0.10, 0.19, 0.06), bevel=0.025, parent=ft)               # 靴の上
+        sphere(up, (0, -0.085, 0.035), 0.05, scale=(1.0, 1.0, 0.7), parent=ft)             # まるいつま先
+        cyl(pa, (0, 0.07, 0.30), 0.055, 0.46, parent=ft, verts=24)                         # ズボンの足（かかとの上）
+        track("shoe", ft, 0.0)
+        for c in [ft] + list(ft.children):
+            hide_key(c, -100.0, True); hide_key(c, t_show, False); hide_key(c, t_hide, True)
+        key(ft, ("location", 1), -100.0, y0); key(ft, ("location", 1), t_toe, y0); key(ft, ("location", 1), t_toe + 1.0, y1)
+        FOOT.append((ks_, ft))
+        return ft
+    _foot(s("27-01") - 0.1, s("27-05") - 0.05, w("27-02", "つま先"), 3.3)
+    _foot(s("27-05") - 0.05, e("27-05") + 1.0, w("27-05", "つま先"), 3.75)
     # 絵コンテの音の欄（2026-11-20 の点検で足した）。エスカレーター全体・場面全体の音なので、映る物の条件は付けない
     ev(s("01-02") + 0.6, "whoosh", 0.12, "")                                       # 01-02：体を左右にふる「くるっ」
     ev(s("03-02") + 1.5, "katan", 0.15, "")                                        # 03-02：段がくしの下へ（小）
@@ -269,6 +303,7 @@ def b_night(cl):
     hk = [(t, v) for t, v in hk if not (t_hr - 0.01 <= t <= t_all + 1.5)] + [(t_hr - 0.3, 0.25), (t_hr + 0.2, 0.0)]
     E = Esc(sp, hr_speed=SpeedS(sorted(hk)))
     ESC[0] = E
+    if CLIPNAME == "B11c": E.cutaway = True; E.set_cutaway(True)   # 11-05〜12-00：手前の板を外して、横から歯車・モーター・まるロボを一緒に（9本目 v2 の点検：中からは歯車が段の陰で真横になり見えず、モーターは画面の外だった）
     track("comb_hi", E.combs["hi"], 0.05); track("comb_lo", E.combs["lo"], 0.05); track("gear", E.gears["hi"], 0.0)
     track("inlet", E.inlets["lo"], 0.05)
     lid = bpy.data.objects[[o.name for o in bpy.data.objects if o.type == 'MESH' and abs(o.location.x - (LID_HI[0] + LID_HI[1]) / 2) < 0.01 and abs(o.location.z - (UP - 0.012)) < 0.01][0]]
@@ -336,14 +371,17 @@ def b_night(cl):
     key(lid_lo, "location", -100.0, tuple(lid_lo.location)); key(lid_lo, "location", s("13-01"), (lid_lo.location.x, -HY - 0.75, 0.02))
     # 13-01 の切りかわり（地下を映している間）に、おじさんを下のふたの横へ移す（13-04：開けて待っている）
     key(oj.root, "location", -100.0, tuple(oj.root.location), "CONSTANT"); key(oj.root, ("rotation_euler", 2), -100.0, oj.root.rotation_euler.z, "CONSTANT")
-    key(oj.root, "location", s("13-01"), (LID_LO[0] - 0.3, 0.5, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), s("13-01"), R(-20), "CONSTANT")
-    M.jump(w("13-04", "外へ") + 0.3, (LID_LO[0] - 0.55, -0.25, 0.0), apex=0.45)
+    key(oj.root, "location", s("13-01"), (LID_LO[0] - 1.5, 0.45, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), s("13-01"), R(40), "CONSTANT")   # ふたの左へ（v2 の点検：0.79m 後ろで、カメラから見てまるロボの真後ろに重なり、足が体から生えて見えた）
+    M.jump(w("13-04", "ふた") - 0.1, (LID_LO[0] - 0.55, -0.25, 0.0), apex=0.45)   # 「ふたから外へ」を言う間に跳び出す（v2 の点検：言い終わってから跳んでいて、13-04 の間まるロボが映らなかった）
     M.confused(s("13-05") + 0.2)
     # ---------------------------------------------------------------- 6章：見張りに挑戦（夜。ゆっくり動いている）
     t6 = s("28-01") - 0.05
     M.at(t6, loc=(XLC - 1.2, -0.75, 0.0), face=60.0, interp="CONSTANT")
-    key(oj.root, "location", t6 - 0.06, (LID_LO[0] - 0.3, 0.5, 0.0), "CONSTANT")
-    key(oj.root, "location", t6, (XLC - 2.6, -0.2, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), t6, R(60), "CONSTANT")
+    key(oj.root, "location", t6 - 0.06, (LID_LO[0] - 1.5, 0.45, 0.0), "CONSTANT")
+    key(oj.root, "location", t6, (XLC - 3.1, -0.05, 0.0), "CONSTANT"); key(oj.root, ("rotation_euler", 2), t6, R(60), "CONSTANT")   # まるロボがボールを転がす所（29 章）から 0.9m 離す（v2 の点検：0.47m で、まるロボのすぐ後ろに足が重なって見えた）
+    # 29-02〜29-05 の間だけ、おじさんを左へ 1m 下げる（切りかわりの所で。v2 の点検：0.9m 後ろだと、どのカメラでも画面でまるロボの真後ろに重なった）
+    key(oj.root, "location", s("29-02") - 0.05, (XLC - 3.1, -0.05, 0.0), "CONSTANT"); key(oj.root, "location", s("29-02") - 0.04, (XLC - 4.1, 0.25, 0.0), "CONSTANT")
+    key(oj.root, "location", s("30-01") - 0.06, (XLC - 4.1, 0.25, 0.0), "CONSTANT"); key(oj.root, "location", s("30-01") - 0.05, (XLC - 3.1, -0.05, 0.0), "CONSTANT")
     M.glow(s("28-02") + 0.2, 1.5, 0.3); M.hops(s("28-02") + 0.6, n=2, height=0.06)
     # ① 手すりの入口：ボールを転がす
     # 入口は手すりが台へ入る所（高さ 0.51）。まるロボが頭の上のボールを、体を前へ傾けて押し出し、入口へ転がし入れる
@@ -404,12 +442,18 @@ def b_night(cl):
     x_m = E.step_at(k_m, t_btn)[0]
     for nm_, dx in (("stop0", 0.0), ("stop10", 0.10), ("stop60", 0.60)):
         track(nm_, empty((x_m + dx, -(YW - 0.05), 0.005)), 0.0)
-    track("stop_now", E.steps[k_m], G.TREAD_DZ)
+    # 止まった段の印：押した時に白い線（stop0）の所にあった段について動く、10・60 センチの印と同じ高さ・奥行きの点（段の真ん中を追うと、見る角度で 60 センチを越えて見えた。9本目 v2）
+    bpy.context.scene.frame_set(f(t_btn)); bpy.context.view_layer.update()
+    st_ = E.steps[k_m]; sn_ = empty((x_m, -(YW - 0.05), 0.005)); sn_.parent = st_; sn_.matrix_parent_inverse = st_.matrix_world.inverted()
+    track("stop_now", sn_, 0.0)
     M.at(s("35-01") + 0.3, face=10.0)                 # 35-01 の寄り：こちらを向いて首をかしげる
     M.confused(s("35-01") + 0.5)
     # 36-05：段の止まった所まで、転がって測る
-    M.at(s("36-01") - 0.05, loc=(1.2, -0.15, 0.0), face=90.0, interp="CONSTANT")
-    M.path([(1.35, -0.15, 0.0), (1.5, -0.15, 0.0), (1.62, -0.15, 0.0)], [w("36-05", "測って") + 0.4 * i for i in range(1, 4)], silent=False)
+    # 白い線（押した時の段の位置）から、止まった段（約 0.5m 先）まで転がる。36-05「転がって測ってみると」（9本目 v2 の点検：1.2→1.62 の決めうちで、60 センチの印より先を転がっていた）
+    d_stop = E.step_at(k_m, t_btn + 3.0)[0] - x_m
+    print("STOP_XM", round(x_m, 3), round(d_stop, 3))
+    M.at(s("36-01") - 0.05, loc=(x_m, -0.15, 0.0), face=90.0, interp="CONSTANT")
+    M.path([(x_m + d_stop * (i + 1) / 3, -0.15, 0.0) for i in range(3)], [w("36-05", "測って") + 0.4 * i for i in range(1, 4)], silent=False)
     M.nod(s("36-06") + 0.4)
     ev(w("10-03", "1枚") + 0.1, "katan", 0.15, "")                               # 10-03：すき間から段が入ってくる
     ev(s("11-02") + 0.3, "chain", 0.6, "")                                        # 11-02：鎖の音（小）
@@ -467,7 +511,7 @@ def b_bench(cl):
     M.jump(t_j, p1, apex=0.3)
     # つるっ：傾いた段をすべり落ちて、模型の下の床へ
     M.carry(t_j + 0.15, t_j + 0.9, lambda t, t0=t_j + 0.15: (-0.55 * min(1, (t - t0) / 0.75) ** 2, 0.0, -(p1[2]) * min(1, (t - t0) / 0.75) ** 2))
-    M.act(t_j + 0.5, "tumble_back"); ev(t_j + 0.95, "land", 0.4, "maru_c")
+    M.act(t_j + 0.5, "tumble_back")                         # 床に落ちる音は tumble_back の着く音だけ（v2 の点検：ここにも足して 0.2 秒おきに 2 回鳴った）
     M.act(s("17-05") + 0.6, "get_up")
     t_b = w("17-06", "乗せかえ") + 0.6
     md.set_rot(t_b, -37.0); md.set_rot(t_b + 1.2, 0.0)
@@ -629,13 +673,13 @@ CUTS = [
     ("B10b", _night, s("10-02"), C((XHC + 1.0, -0.45, Z_PIT_HI + 0.7), (XHC - 0.2, 0.0, HZ - 0.1), 20), "B"),
     ("B11", _night, s("11-01"), C((HX + 0.7, -0.6, HZ - 0.55), (HX - 0.7, -0.5, HZ - 0.3), 22), "B"),
     ("B11b", _night, s("11-04"), lambda t0: F((0.9, -0.5, 0.4), 22), "B"),   # 引くと狭い機械の部屋の柱に入って真っ黒になる。左に鎖が見えるのでこのまま
-    ("B11c", _night, s("11-05"), C((XR_PIT - 0.3, -0.6, Z_PIT_HI + 0.4), (HX, 0.0, HZ - 0.6), 20), "B"),
+    ("B11c", _night, s("11-05"), C((11.6, -2.6, 1.9), (11.3, 0.3, 1.7), 22), "B"),   # 手前の板を外した横から：左に大きな歯車、まん中にまるロボ、右にモーター
     ("B12b", _night, s("12-01"), C((HX + 1.0, -0.62, HZ - 0.5), (HX - 0.15, 0.0, HZ - 0.85), 20), "B"),   # 引いて、歯車のまわりを回る段を見せる（寄りすぎで車輪の色の固まりしか見えなかった）
     ("B12c", _night, s("12-02"), C((HX - 0.2, -0.68, 1.9), (HX - 2.2, 0.0, 1.3), 20), "B"),
     ("D12", _cut, s("12-03"), WIDE_D, "D"),
     ("B12d", _night, s("12-04"), C((HX + 0.4, -0.62, 2.0), (HX - 1.6, 0.0, 1.5), 18), "B"),
     ("B12e", _night, s("12-05"), lambda t0: F((0.9, -0.5, 0.4), 22), "B"),
-    ("B12f", _night, s("12-07"), lambda t0: F((0.7, -0.6, 0.35), 22), "B"),
+    ("B12f", _night, s("12-07"), lambda t0: F((0.9, -0.35, 0.3), 22), "B"),   # 横から（v2 の点検：前の位置だと、戻る段がカメラの前を横切り、黒い板でまるロボが隠れた）
     ("B13", _night, s("13-01"), C((1.3, -0.62, -0.55), (0.1, 0.0, -0.85), 20), "B"),
     ("B13b", _night, s("13-03"), C((XLC + 1.0, -0.3, 0.45), (XLC - 0.1, 0.0, 0.02), 24), "B"),   # 乗り口のすき間から段が出てくる（床の上の低い所から）
     ("B13c", _night, s("13-04"), C((LID_LO[0] - 1.9, -2.6, 1.4), (LID_LO[0] - 0.3, -0.1, 0.55), 30), "B"),
@@ -666,11 +710,11 @@ CUTS = [
     ("A21", _day, s("21-01"), C((-3.5, -6.5, 2.4), (2.5, 0.0, 1.0), 28), "A"),
     ("A21b", _day, s("21-02"), C((-1.8, -1.3, 1.8), (3.0, 0.0, 1.5), 30), "A"),
     ("A21c", _day, s("21-03"), C((1.6, -1.6, 2.0), (2.6, -0.67, 1.3), 30), "A"),
-    ("A22", _day, s("22-01"), lambda t0: F((0.6, -1.4, 2.2), 32, 0.6), "A"),
-    ("A22b", _day, s("22-02"), lambda t0: F((0.2, -1.2, 2.0), 32, 0.6), "A"),
+    ("A22", _day, s("22-01"), lambda t0: F((-1.7, -0.3, 1.0), 28, 0.75), "A"),   # 後ろの下から坂を見上げる：右の手すりに頭を寄せるのが、手すりと並んで見える（v2 の点検：横からは手すりが体の前を横切り、頭がのっているのか分からなかった。v1 のコメント 0:26 と同じ種類）
+    ("A22b", _day, s("22-02"), lambda t0: F((0.2, -0.9, 2.6), 26, 0.55), "A"),   # 手前の上から見下ろす：手すりが体の下に来て、もたれて前へずれるのが見える
     ("D23", _cut, s("23-01"), C((5.5, -3.0, 1.4), (5.5, 0.6, 1.0), 30), "D"),
     ("D23b", _cut, s("23-03"), C((5.0, -1.8, 1.1), (5.0, 0.6, 0.9), 26), "D"),
-    ("I24", _imag, s("24-01"), lambda t0: F((0.6, -1.4, 2.2), 32, 0.6), "I"),
+    ("I24", _imag, s("24-01"), lambda t0: F((0.2, -0.9, 2.6), 26, 0.55), "I"),   # 22-02 と同じ、手前の上から（手すりが体の前を横切らない）
     ("A24", _day, s("24-04"), C((3.0, -1.3, 3.2), (3.8, 0.0, 1.2), 28), "A"),
     ("A24c", _day, s("24-07"), C((2.2, -1.7, 2.0), (3.6, -0.6, 1.5), 30), "A"),
     # 5章（昼・断面）
@@ -683,8 +727,8 @@ CUTS = [
     ("A26e", _day, s("26-05"), lambda t0: F((-1.3, -0.3, 0.9), 34), "A"),
     ("D26", _cut, s("26-06"), C((XHC - 0.25, -1.6, HZ + 0.3), (XHC, 0.0, HZ), 26), "D"),
     ("A26f", _day, s("26-10"), C((XHC - 0.3, -0.2, HZ + 0.18), (XHC, 0.08, HZ), 24), "A"),
-    ("A27", _day, s("27-01"), C((2.5, -0.25, 1.15), (3.1, -0.5, 0.55), 26, (2.9, -0.25, 1.35), (3.5, -0.5, 0.75)), "A"),
-    ("A27c", _day, s("27-05"), C((3.2, -0.15, 1.25), (3.6, -0.5, 0.75), 26), "A"),
+    ("A27", _day, s("27-01"), RIDE(0, eval(os.environ.get("RO1", "(-0.6, 0.25, 0.6)"))), "A"),   # 足を乗せた段といっしょに進む（v2 の点検：前は止まったカメラで、足が 1 秒ほどで通りすぎた）
+    ("A27c", _day, s("27-05"), RIDE(1, eval(os.environ.get("RO2", "(-0.35, 0.15, 0.75)"))), "A"),
     # 6章（夜）
     ("B28", _night, s("28-01"), C((-5.0, -6.0, 2.5), (1.0, 0.0, 0.8), 28), "B"),
     ("B28b", _night, s("28-02"), lambda t0: F((1.2, -1.6, 0.35), 34), "B"),
@@ -692,7 +736,7 @@ CUTS = [
     ("B28d", _night, s("28-04"), C((XLC - 0.6, -3.5, 1.2), (XLC - 1.8, -1.0, 0.8), 30), "B"),
     ("B29", _night, s("29-01"), INL(-0.9, -1.2, 0.0), "B"),
     ("B29b", _night, s("29-02"), C((XLC - 1.95, -3.1, 0.9), (XLC - 1.85, -0.67, 0.6), 30), "B"),
-    ("B29c", _night, s("29-05"), lambda t0: F((0.9, -1.5, 0.4), 34), "B"),
+    ("B29c", _night, s("29-05"), lambda t0: F((0.3, -1.6, 0.45), 34), "B"),   # 前から（v2 の点検：右前からだと、下げたおじさんがまだまるロボの真後ろに重なった）
     ("B30", _night, s("30-01"), C((XLC - 1.4, -0.45, 2.1), (XLC + 0.9, -0.5, 0.15), 26), "B"),   # すき間の上から。リボンが止まる所と、押しこむまるロボの両方を入れる   # リボンが止まる所まで入れる（上から見下ろすと段といっしょに画面の外へ出た）
     ("B31", _night, s("31-01"), C((XLC + 1.2, -0.5, 1.2), (XLC - 0.05, 0.1, 0.25), 22), "B"),
     ("B32", _night, s("32-01"), C((XLC - 0.9, -2.0, 2.2), (XLC - 0.5, -0.45, 0.8), 30), "B"),
@@ -701,14 +745,14 @@ CUTS = [
     ("B33b", _night, s("33-02"), lambda t0: F((0.9, -1.3, 2.0), 34), "B"),
     ("B33c", _night, s("33-03"), C((XLC - 0.6, -3.5, 1.2), (XLC - 1.8, -1.0, 0.8), 30), "B"),
     ("B34", _night, s("34-01"), C((XLC - 1.3, -3.4, 1.3), (XLC - 1.4, -0.8, 0.6), 28), "B"),
-    ("B34b", _night, s("34-03"), C((XLC + 0.9, -1.75, 1.1), (XLC - 0.77, -0.9, 0.6), 30), "B"),
+    ("B34b", _night, s("34-03"), C((XLC - 2.3, -1.2, 0.9), (XLC - 0.77, -0.95, 0.6), 30), "B"),   # 左の横から、ボタンを押す所を（v2 の点検：右からだと、おじさんの足がまるロボの後ろに重なった）
     ("B34c", _night, s("34-04"), C((1.2, -1.5, 2.6), (1.2, 0.0, 0.1), 30), "B"),
     ("B35a", _night, s("35-01"), C((-0.2, -2.7, 0.75), (-0.45, -1.18, 0.45), 32), "B"),
-    ("I35", _imag, s("35-02"), lambda t0: F((0.4, -1.4, 2.2), 30, 0.5), "I"),
+    ("I35", _imag, s("35-02"), lambda t0: F((0.2, -0.9, 2.6), 26, 0.55), "I"),   # 22-02 と同じ、手前の上から（手すりが体の前を横切らない）
     ("B35", _night, s("35-04"), C((1.2, -1.5, 2.6), (1.2, 0.0, 0.1), 30), "B"),
-    ("B36", _night, s("36-01"), C((1.4, -1.5, 2.6), (1.4, 0.0, 0.0), 30), "B"),
-    ("B36b", _night, s("36-05"), lambda t0: F((0.3, -1.3, 1.9), 32), "B"),
-    ("B36c", _night, s("36-06"), C((3.0, -0.2, 1.45), (1.62, -0.15, 0.45), 30), "B"),
+    ("B36", _night, s("36-01"), C((1.2, -1.5, 3.4), (1.25, 0.35, 1.12), 18), "B"),   # 高い所から引いて、まるロボ（アンテナまで）を、上のものさしの図（y 20〜310）と下の字幕（615〜）の間に（9本目 v2 の点検：頭が図に隠れていた。道具で測って アンテナ 318〜・体の下 〜605）
+    ("B36b", _night, s("36-05"), C((1.2, -1.5, 3.4), (1.25, 0.35, 1.12), 18), "B"),   # B36 と同じカメラ（同じ所から、転がる 0.5m を見せる）
+    ("B36c", _night, s("36-06"), C((2.8, -0.2, 1.45), (1.41, -0.15, 0.45), 30), "B"),   # 転がり終わった所（押した所から約 0.5m）に合わせた
     ("A38", _day, s("38-01"), lambda t0: F((0.0, -1.7, 0.4), 36), "A"),
     ("A38b", _day, s("38-02"), C((XLC - 1.5, -2.0, 0.95), (XLC - 0.75, -0.73, 0.62), 28), "A"),
     # まとめ・オチ
@@ -726,30 +770,61 @@ for i, (nm, fn, tc, cm, par) in enumerate(CUTS):
     t1 = (CUTS[i + 1][2] + 0.75) if i + 1 < len(CUTS) else END_T
     CLIPS[nm] = (fn, t0, t1, cm, par)
 
+def _maru_circle(sc, cam_, mc):
+    """画面の上のまるロボの丸（真ん中の x・y と半径、ピクセル）。体の半径は 0.37m（9本目 v2：はじめ頭の印から測ったら、頭の印は体と同じ物で、半径 0 になっていた）"""
+    m = mc.matrix_world.translation
+    a_ = world_to_camera_view(sc, cam_, m)
+    if a_.z <= 0: return None
+    R_ = 0.37                                                     # 体（Maru body）の大きさ 0.73m の半分
+    side = cam_.matrix_world.to_3x3() @ mathutils.Vector((R_, 0.0, 0.0))
+    b_ = world_to_camera_view(sc, cam_, m + side)
+    out_ = (a_.x * 1280, a_.y * 720, max(8.0, math.hypot((a_.x - b_.x) * 1280, (a_.y - b_.y) * 720)))
+    return out_
+
+
+def _screen_touch(sc, cam_, sm, r):
+    """画面の上で、人（足もと〜頭の線に、肩はば 0.25m の太さ）が、まるロボの丸（体の真ん中と半径）にかかるか。画面の外・カメラの後ろは数えない"""
+    from mathutils import Vector
+    pts = []
+    for h_ in (0.05, 0.9, 1.65):
+        q = world_to_camera_view(sc, cam_, Vector((r.x, r.y, r.z + h_)))
+        if q.z <= 0: return False
+        pts.append((q.x * 1280, q.y * 720, q.z))
+    if all(not (-50 < x_ < 1330 and -50 < y_ < 770) for x_, y_, _ in pts): return False
+    side = cam_.matrix_world.to_3x3() @ Vector((0.25, 0.0, 0.0))
+    q2 = world_to_camera_view(sc, cam_, Vector((r.x, r.y, r.z + 0.9)) + side)
+    w_ = math.hypot(q2.x * 1280 - pts[1][0], q2.y * 720 - pts[1][1])
+    cx, cy, cr = sm
+    for (x1, y1, _), (x2, y2, _) in zip(pts, pts[1:]):
+        dx, dy = x2 - x1, y2 - y1; L2 = dx * dx + dy * dy or 1.0
+        u = max(0.0, min(1.0, ((cx - x1) * dx + (cy - y1) * dy) / L2))
+        if math.hypot(cx - (x1 + u * dx), cy - (y1 + u * dy)) < cr * 1.05 + w_ + 6: return True
+    return False
+
+
 def _rider_avoid(t0, t1):
-    """乗る人（お客さん）が、この場面の間にまるロボと重なるなら、その人はこの場面だけ出さない（v1 のコメント「まるロボに人が貫通してる」3 件。
-    どの段に乗せても一日のどこかで重なったので、場面ごとに決める。場面の切りかわりで人が減っても、カメラが変わるので目立たない）"""
+    """乗る人（お客さん）が、この場面の間にまるロボと重なる・カメラのすぐ前を通るなら、その人はこの場面だけ出さない（v1 のコメント「まるロボに人が貫通してる」3 件）。
+    どの段に乗せても一日のどこかで重なったので、場面ごとに決める。場面の切りかわりで人が減っても、カメラが変わるので目立たない。
+    9本目 v2：はじめは動きの予定から計算していたが、02-04 で計算（1.0m 以上）と描いた絵（0.74m）がずれた → 描く場面の中の本当の位置を 1/4 秒ごとに測る"""
     E = ESC[0]
     if E is None or not getattr(E, "riders", None) or not MARU_ALL: return
-    M = MARU_ALL[0]
-    p = M.plan(t1 + 1.0); frames = mm.simulate(p, fps=8, t_end=t1 + 0.5, t_start=max(0.0, t0 - 0.5))
-    s_board, s_alight = G.DIP_LEN + 0.45, G.LTOP - G.DIP_LEN - 0.3
-    xb, _ = G.top_point(s_board)[0]; xa, _ = G.top_point(s_alight)[0]; Lr = s_alight - s_board
-    cam_ = bpy.context.scene.camera; cam_p = tuple(cam_.location) if cam_ is not None and cam_.parent is None else None   # 追うカメラ（親について動く）は外す
-    off = set()
-    for fr in frames:
-        t = fr["t"]; x, y, z = fr["root"]; o = M.off(t)
-        mx, my, mz = x * M.s + o[0], y * M.s + o[1], z * M.s + o[2]
-        pos = E.pos(t)
+    sc = bpy.context.scene; cam_ = sc.camera; mc = TRACK.get("maru_c", (None,))[0]; mt = TRACK.get("maru_top", (None,))[0]
+    off = set(); t = t0
+    while t <= t1 + 1e-6:
+        sc.frame_set(f(t))
+        m = mc.matrix_world.translation if mc is not None else None
+        cp = cam_.matrix_world.translation if cam_ is not None else None
+        sm = None
+        if m is not None and cam_ is not None:
+            sm = _maru_circle(sc, cam_, mc)
         for i, (wk, k, ry) in enumerate(E.riders):
-            sk = (pos + k * G.PITCH) % G.LOOP; u = sk - s_board
-            if u > G.LOOP / 2: u -= G.LOOP
-            if u < 0: rx, rz = xb + u, 0.0
-            elif u <= Lr: (fx, fz), _ = G.top_point(sk); rx, rz = fx - 0.18, fz + G.TREAD_DZ
-            else: rx, rz = xa + (u - Lr), G.H
-            if math.hypot(rx - mx, ry - my) < 1.0 and rz - 0.4 < mz < rz + 1.8: off.add(i)   # 0.7m では、1 段前の人とまるロボが画面で重なって見えた（02-05）ので 1.0m
-            # カメラの近く（2.4m 以内）を通る人も出さない（手前を大きな頭や体が横切る。02-05 の見直しで 1.2m にしたが、08-01 で 1.2m より外の足が画面の半分をふさいだので広げた）
-            if cam_p is not None and any(math.dist((rx, ry, rz + h_), cam_p) < 2.4 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+            r = wk.root.matrix_world.translation
+            if m is not None and math.hypot(r.x - m.x, r.y - m.y) < 1.0 and r.z - 0.4 < m.z < r.z + 1.8: off.add(i)
+            # カメラの近く（2.4m 以内）を通る人も出さない（手前を大きな頭や体が横切る。08-01 で 1.2m より外の足が画面の半分をふさいだ）
+            if cp is not None and any(math.dist((r.x, r.y, r.z + h_), tuple(cp)) < 2.4 for h_ in (0.4, 1.0, 1.6)): off.add(i)
+            # 画面の上で、まるロボの体に人の形がかかる人も出さない（9本目 v2 の点検：02-05 で 1m 先の人が、カメラの向きでまるロボの真横に重なって見えた）
+            if sm is not None and i not in off and _screen_touch(sc, cam_, sm, r): off.add(i)
+        t += 0.25
     E.rider_off = off
     print("RIDER_OFF", CLIPNAME, sorted(off))
 

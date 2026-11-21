@@ -426,6 +426,19 @@ def dof(c, target_ob, fstop=4.0):
 
 
 def render_clip(name, t0, t1, outdir, samples, res, step, fr=None, stills=None):
+    if os.environ.get("DBG_PTS2"):
+        sc_ = bpy.context.scene; sc_.frame_set(f(float(os.environ.get("DBG_T", t0 + 1))))
+        o = bpy.data.objects[os.environ["DBG_PTS2"]]; dg = bpy.context.evaluated_depsgraph_get(); oe = o.evaluated_get(dg)
+        ws = [oe.matrix_world @ v.co for v in oe.data.vertices]
+        print("DBGPTS2", len(ws), "x", round(min(w.x for w in ws), 2), round(max(w.x for w in ws), 2), "y", round(min(w.y for w in ws), 2), round(max(w.y for w in ws), 2), "z", round(min(w.z for w in ws), 3), round(max(w.z for w in ws), 3))
+        n_ = [x for x in o.data.materials[0].node_tree.nodes if x.type == 'MATH' and x.operation == 'MULTIPLY_ADD'][0]
+        print("DBGPTS2 base", n_.inputs[2].default_value, "pop", n_.inputs[1].default_value)
+    if os.environ.get("DBG_PTS"):
+        for o in bpy.data.objects:
+            if o.name.startswith(os.environ["DBG_PTS"]):
+                sc_ = bpy.context.scene; sc_.frame_set(f(float(os.environ.get("DBG_T", t0 + 1))))
+                print("DBGPTS", o.name, o.type, len(o.data.vertices) if o.type == 'MESH' else -1, o.hide_render, [m.type for m in o.modifiers],
+                      o.parent.name if o.parent else None, tuple(round(v, 2) for v in o.matrix_world.translation), [m.name for m in o.data.materials] if o.type == 'MESH' else None)
     sc = bpy.context.scene
     render_settings(samples, res)
     if "--fast" in sys.argv:   # PC の本番：光の跳ね返りを減らす（見た目はほぼ同じで速い。SKILL「PC の本番描画は速い設定で描く」2026-11-15）
@@ -466,3 +479,47 @@ def render_clip(name, t0, t1, outdir, samples, res, step, fr=None, stills=None):
         sc.frame_set(k)
         sc.render.filepath = os.path.join(outdir, "%s_%05d.png" % (name, k))
         bpy.ops.render.render(write_still=True)
+
+
+def freeze_points(ob, t=None):
+    """点の雲（ジオメトリノード・時刻で生まれる）を、ふつうの形（小さな球の集まり）に固める。
+    本番の PC（グラフィックボード）で、動く親につけた点の雲が 1 コマおきに元の場所・元の見え方で映った（5本目 S15c・S17c）。
+    固めると時刻に関係なく同じ形になる。t：固める時刻（その時までに生まれた点だけ残す。None なら全部）"""
+    import bmesh
+    mod = next((m for m in ob.modifiers if m.type == 'NODES'), None)
+    if mod is None: return ob
+    rad = next((n.inputs["Radius"].default_value for n in mod.node_group.nodes if n.type == 'MESH_TO_POINTS'), 0.02)
+    me = ob.data; birth = me.attributes.get("birth")
+    bt = [0.0] * len(me.vertices)
+    if birth: birth.data.foreach_get("value", bt)
+    fr_now = f(t) if t is not None else None
+    keep = [v.co.copy() for v, b in zip(me.vertices, bt) if fr_now is None or b <= fr_now]
+    bm = bmesh.new()
+    for p in keep:
+        r_ = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=rad)
+        bmesh.ops.translate(bm, verts=r_["verts"], vec=p)
+    for fc in bm.faces: fc.smooth = True
+    nm = bpy.data.meshes.new(ob.name + "_frozen"); bm.to_mesh(nm); bm.free()
+    for m in me.materials: nm.materials.append(m)
+    ag = nm.attributes.new("age", 'FLOAT', 'POINT'); ag.data.foreach_set("value", [1e3] * len(nm.vertices))    # 生まれてずっと経った（光るのは base の明るさ）。1e6 だと exp の計算で光らなくなる
+    ob.modifiers.remove(mod); ob.data = nm
+    return ob
+
+
+def own_motion(child):
+    """子の物を親から外し、親の動き（場所・回り）を子の印に写す（場面をみな作ったあと＝AFTER_BAKE で）。
+    本番の PC（グラフィックボード）で、動く親につけた点が 1 コマおきに親の動きなしの場所で映った（5本目 S15c・S17c）ため"""
+    def _do(ch=child):
+        par = ch.parent
+        if par is None or not (par.animation_data and par.animation_data.action): return
+        ch.parent = None; ch.matrix_parent_inverse = Matrix.Identity(4)
+        ad = ch.animation_data or ch.animation_data_create()
+        if ad.action is None: ad.action = bpy.data.actions.new(ch.name + "_act")
+        for fc in par.animation_data.action.fcurves:
+            if fc.data_path not in ("location", "rotation_euler", "scale"): continue
+            nf = ad.action.fcurves.find(fc.data_path, index=fc.array_index) or ad.action.fcurves.new(fc.data_path, index=fc.array_index)
+            for kp in fc.keyframe_points:
+                k = nf.keyframe_points.insert(kp.co[0], kp.co[1]); k.interpolation = kp.interpolation
+        # 親の止まっている値（印のない所）も写す
+        ch.location = par.location; ch.rotation_euler = par.rotation_euler
+    AFTER_BAKE.append(_do)
