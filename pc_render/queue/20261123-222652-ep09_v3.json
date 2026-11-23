@@ -1,0 +1,17 @@
+{
+ "id": "20261123-222652-ep09_v3",
+ "name": "ep09_v3",
+ "kit_branch": "pc-kit/20261123-222652-ep09_v3",
+ "zip": "marurobo_ep09.zip",
+ "ps1": "run_pc_render_ep09.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 9,
+ "frames": 26363,
+ "fresh": false,
+ "out": "render_ep09_v3",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1609\u30a8\u30b9\u30ab\u30ec\u30fc\u30bf\u30fc",
+ "created": "2026-11-23T22:26:52Z"
+}
