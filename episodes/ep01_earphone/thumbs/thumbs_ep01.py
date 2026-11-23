@@ -22,7 +22,7 @@ def gen_lovart(name, prompt, refs, with_robot=True):
     import thumb_lovart
     local = [os.path.join(S, "src", r) for r in refs if os.path.exists(os.path.join(S, "src", r))]
     robot = [] if not with_robot or any(os.path.basename(p).startswith("robot_") for p in local) else list(ROBOT_REFS)
-    return thumb_lovart.gen(G, name, prompt, robot + local)
+    return thumb_lovart.gen(G, name, prompt, robot + local, text=False)   # この回の頼む文は「字なし」で、字は comp で重ねる（前の作り方）
 
 
 ROBOT = ("The small mascot robot must match the reference images exactly: a glossy white sphere body, ONE large round teal-and-navy camera-lens eye "

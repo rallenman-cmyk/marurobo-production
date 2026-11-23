@@ -1,5 +1,7 @@
 # サムネの絵を Lovart（GPT Image 2）で描く入口（2026-11-23 決定。恋愛チャンネルと同じ Lovart を使う。前は Gemini の gemini-3-pro-image）
-#   字は描かせない（SKILL.md §9）。絵だけを描かせ、字・札・矢印・赤い丸は各回の thumbs_*.py の comp で重ねる。
+#   字も GPT Image 2 に描かせる（2026-11-23 ユーザー決定。あとで重ねる・試しの絵に足させる・字ごと描かせる、の 3 つを比べて「字ごと」を選んだ）。
+#   字の頼み方は text_block()（試しで、太いゴシック・黒いふち 1 本・字は 1 字ずつ正しく描けた形）を使う。描けたら 1 字ずつ目で確かめる。
+#   字のない絵だけがほしいとき（前の作り方。字は各回の thumbs_*.py の comp で重ねる）は --no-text。
 #   ・見本（まるロボのコマなど）は Lovart に上げ、URL を ../references/lovart_refs.json に覚えておく。
 #     画像はリポジトリに入れない決まりなので、URL を残しておけば、次のセッションは画像なしで同じ見本を使える。
 #   ・見本をそろえたプロジェクトも同じ json に覚えて、続けて頼む（見本の登録は 1 分あたりの回数に上限がある）。
@@ -8,7 +10,8 @@
 #   使い方:
 #     python3 thumb_lovart.py upload robot_front.png robot_34.png …      … 見本を上げて覚える（同じ中身は上げ直さない）
 #     python3 thumb_lovart.py refs                                         … 覚えている見本の一覧
-#     python3 thumb_lovart.py gen <出力フォルダ> <案の名前> <頼む文.txt> [--ref 画像か名前か URL …] [--stop-on-cost]
+#     python3 thumb_lovart.py gen <出力フォルダ> <案の名前> <頼む文.txt> [--ref 画像か名前か URL …] [--no-text] [--stop-on-cost]
+#   頼む文.txt には、絵の中身・配置と、text_block() で作った字の頼みを入れる（python から使うときは gen(..., prompt=絵 + text_block(...))）。
 #   クレジットは恋愛と同じく、確認を待たずに使い、使った数をあとで報告する（2026-11-23 ユーザー決定）。
 #   GPT Image 2 は 1 枚 23 クレジットほど（2026-11-23 の試し。使い放題は低い画質だけ）。--stop-on-cost で、使う前に止める。
 #   --ref には、手元の画像・覚えた見本の名前（robot_front など）・https の URL のどれでもよい。
@@ -24,8 +27,24 @@ MODEL = os.environ.get("THUMB_LOVART_MODEL", "generate_image_gpt_image_2")
 CACHE = os.path.normpath(os.path.join(HERE, "..", "references", "lovart_refs.json"))
 W, H = 2560, 1440
 # GPT Image 2 は横長を頼んでも 3:2 などで返ることがあるので、頼む文の頭で 16:9 をはっきり頼み、返ったあとも切りそろえる
-HEAD = ("Generate ONE image. Landscape 16:9 (1920x1080 or 2560x1440), for a YouTube thumbnail background. "
-        "Do not add any text, letters, numbers, logos or watermarks anywhere in the image.\n\n")
+HEAD_TEXT = ("Generate ONE YouTube thumbnail. Landscape 16:9 (1920x1080). The ONLY text in the image is the headline and label "
+             "described below, rendered exactly character by character; no other letters, numbers, logos, signs or watermarks.\n\n")
+HEAD_PLAIN = ("Generate ONE image. Landscape 16:9 (1920x1080 or 2560x1440), for a YouTube thumbnail background. "
+              "Do not add any text, letters, numbers, logos or watermarks anywhere in the image.\n\n")
+
+
+def text_block(lines, label=None, area="the top-left half of the frame", label_style="a small cyan hexagon-shaped label with dark navy bold letters"):
+    """字の頼み方（2026-11-23 の試しで、きれいに描けた書き方）。lines は [(字, 色の英語), …]。例：[("隣の曲も", "white"), ("届いてる!?", "bright yellow")]"""
+    t = "JAPANESE HEADLINE TEXT (render it exactly, character by character, no other text anywhere):\n"
+    if label:
+        t += f'- Top-left corner: {label_style} "{label}".\n'
+    t += (f"- {'Below it, a' if label else 'A'} huge {len(lines)}-line headline in {area}, extremely heavy bold Japanese gothic font "
+          "(like Noto Sans JP Black), flat fill, one thick black outline, soft drop shadow, high contrast, professional YouTube thumbnail "
+          "lettering (NOT cartoonish, NOT bubbly, NOT 3D-extruded):\n")
+    for i, (txt, col) in enumerate(lines, 1):
+        t += f"  line {i} in {col}: {txt}\n"
+    t += "  Each line is about 20% of the frame height. The text must not cover the robot or the main object.\n"
+    return t
 
 
 def load():
@@ -74,7 +93,7 @@ def fit(src, dst):
     return (w, h)
 
 
-def gen(outdir, name, prompt, refs=(), auto_confirm=True):
+def gen(outdir, name, prompt, refs=(), auto_confirm=True, text=True):
     c = load()
     urls = [ref_url(r, c) for r in refs]
     key = "|".join(sorted(urls))
@@ -84,13 +103,14 @@ def gen(outdir, name, prompt, refs=(), auto_confirm=True):
         c["projects"][key] = pid
         save(c)
     raw = os.path.join(outdir, "raw")
+    head = HEAD_TEXT if text else HEAD_PLAIN
     try:
-        rec = lovart.gen(raw, HEAD + prompt, urls, MODEL, auto_confirm=auto_confirm, project=pid)
+        rec = lovart.gen(raw, head + prompt, urls, MODEL, auto_confirm=auto_confirm, project=pid)
     except RuntimeError as e:  # 覚えていたプロジェクトが使えないときだけ、作り直して 1 回だけ頼む
         if "project" not in str(e).lower():
             raise
         pid = lovart.new_project(urls); c["projects"][key] = pid; save(c)
-        rec = lovart.gen(raw, HEAD + prompt, urls, MODEL, auto_confirm=auto_confirm, project=pid)
+        rec = lovart.gen(raw, head + prompt, urls, MODEL, auto_confirm=auto_confirm, project=pid)
     out = []
     k = len(glob.glob(os.path.join(outdir, name + "_*.png")))
     for f in rec.get("files") or []:
@@ -117,12 +137,14 @@ if __name__ == "__main__":
             print(k, v["url"])
     elif a[0] == "gen":
         outdir, name, ptxt, rest = a[1], a[2], a[3], a[4:]
-        refs, auto = [], True
+        refs, auto, text = [], True, True
         while rest:
             k = rest.pop(0)
             if k == "--ref":
                 refs.append(rest.pop(0))
+            elif k == "--no-text":
+                text = False
             elif k == "--stop-on-cost":
                 auto = False
         os.makedirs(outdir, exist_ok=True)
-        gen(outdir, name, open(ptxt, encoding="utf-8").read(), refs, auto)
+        gen(outdir, name, open(ptxt, encoding="utf-8").read(), refs, auto, text)
