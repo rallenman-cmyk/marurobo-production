@@ -185,7 +185,7 @@ def b_castle(cl):
     for k_, g_ in enumerate(C_["lock"]["crack_grow"]):
         a_ = t_c + 0.35 * k_
         key(g_, "scale", -100.0, (1, 1, 0.001), "CONSTANT"); key(g_, "scale", a_, (1, 1, 0.001)); key(g_, "scale", a_ + 0.6, (1, 1, 1))
-    hl = C_["lock"]["hole"]
+    hl = C_["lock"]["hole"]; track("lockhole", hl, 0.0)
     key(hl, "scale", -100.0, (0.001, 0.001, 0.001), "CONSTANT"); key(hl, "scale", t_h, (0.3, 0.3, 0.3)); key(hl, "scale", t_h + 1.2, (1.0, 1.0, 1.0)); key(hl, "scale", w("10-06", "残って"), (1.25, 1.25, 1.25))
     ev(t_c + 0.1, "crackle", 0.3, "lock")
     emit_key(cm, t_c, 3.0); emit_key(cm, w("10-05", "弱い所"), 6.0); emit_key(cm, e("10-06") + 0.3, 6.0); emit_key(cm, e("10-06") + 0.8, 3.0)
