@@ -27,8 +27,8 @@ MODEL = os.environ.get("THUMB_LOVART_MODEL", "generate_image_gpt_image_2")
 CACHE = os.path.normpath(os.path.join(HERE, "..", "references", "lovart_refs.json"))
 W, H = 2560, 1440
 # GPT Image 2 は横長を頼んでも 3:2 などで返ることがあるので、頼む文の頭で 16:9 をはっきり頼み、返ったあとも切りそろえる
-HEAD_TEXT = ("Generate ONE YouTube thumbnail. Landscape 16:9 (1920x1080). The ONLY text in the image is the headline and label "
-             "described below, rendered exactly character by character; no other letters, numbers, logos, signs or watermarks.\n\n")
+HEAD_TEXT = ("Generate ONE YouTube thumbnail. Landscape 16:9 (1920x1080). Render the headline/title text described below exactly, "
+             "character by character. No logos, signs, watermarks or any other text than what is described.\n\n")
 HEAD_PLAIN = ("Generate ONE image. Landscape 16:9 (1920x1080 or 2560x1440), for a YouTube thumbnail background. "
               "Do not add any text, letters, numbers, logos or watermarks anywhere in the image.\n\n")
 
@@ -44,6 +44,19 @@ def text_block(lines, label=None, area="the top-left half of the frame", label_s
     for i, (txt, col) in enumerate(lines, 1):
         t += f"  line {i} in {col}: {txt}\n"
     t += "  Each line is about 20% of the frame height. The text must not cover the robot or the main object.\n"
+    return t
+
+
+def band_block(runs):
+    """今の型（references/thumbnail_rules.md）：上に真っ黒の帯（高さの 18.5%）、白い極太字の 1 行の問い。runs は [(字, 色の英語), …]。
+    物の名前は "bright yellow"、おかしな所・結果は "bright red"、ほかは "white"。帯の下の絵は明るく清潔な 3D にする（頼む文の側で書く）"""
+    t = ("TITLE BAND (render exactly, character by character; no other text in the image except what the scene description explicitly asks for, such as letters printed on keys):\n"
+         "- A solid pure black horizontal band across the full width at the very top, exactly 18.5% of the image height.\n"
+         "- Inside it, ONE line of Japanese text, centered, filling about 92-97% of the width, characters about 14% of the image height, "
+         "extremely heavy bold Japanese gothic font (like Noto Sans JP Black), flat solid colors, tight letter spacing, no outline, no shadow, "
+         "no 3D effect, NOT cartoonish, NOT bubbly. The line, from left to right, colored part by part:\n")
+    for txt, col in runs:
+        t += f'  "{txt}" in {col}\n'
     return t
 
 
