@@ -70,7 +70,7 @@ def fix(SUBS, P, S, VD):
         if t is not None:
             na = round(t - LEAD, 2)
             if off == 0 and txt.startswith("……") and out and i > 0:   # 「……」で始まる字幕は、声の前の「ため」の間から出す（0.8 秒まで。前の声の終わり +0.35 秒・前の字幕を 2 秒は出したあと）
-                na = round(min(na, max(P[i - 1]["end"] + 0.35, na - 0.8, out[-1][0] + 2.0)), 2)
+                na = round(min(na, max(P[i - 1]["end"] + 0.35, na - 0.12, out[-1][0] + 2.0)), 2)     # v2：0.8 秒前から出すと、関所（声の頭から 0.2 秒以内）を外れた。0.15 秒前まで
                 out[-1][1] = round(na - 0.05, 2)
             if abs(na - a) > 0.05: moved.append((round(a, 2), na, txt))
             if out and out[-1][1] > na - 0.05: out[-1][1] = round(na - 0.05, 2)

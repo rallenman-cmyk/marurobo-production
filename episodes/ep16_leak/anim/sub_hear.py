@@ -17,7 +17,7 @@ SC = {x["no"]: x for x in json.load(open(os.path.join(H, "..", "voice", "script_
 kata2hira = lambda s: "".join(chr(ord(c) - 0x60) if "ァ" <= c <= "ヶ" else c for c in s)
 # 16本目 v1：「まるロボは」の助詞「は」を「わ」、のばす音「ー」を別の音として数え、合っている字幕を「合わない」としていた。
 #   のばす音は消し、助詞になりうる「は・を・へ」は「わ・お・え」にそろえてから比べる（両方に同じことをする）
-norm = lambda s: re.sub(r"[^ぁ-ゖ]", "", kata2hira(s)).translate(str.maketrans("はをへ", "わおえ"))
+norm = lambda s: re.sub(r"っ$", "", re.sub(r"[^ぁ-ゖ]", "", kata2hira(s)).translate(str.maketrans("はをへ", "わおえ")))   # 終わりの小さな「っ」（「え？」→「えっ」）は数えない
 MODEL = os.environ.get("HEAR_MODEL", "gemini-3.8-flash")
 
 
