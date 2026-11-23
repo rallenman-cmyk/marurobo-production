@@ -24,6 +24,30 @@
    "sha1": "a522ce89f70459c8",
    "from": "robot_side.png",
    "what": "横（横の水色の丸が見える。S04a 0:01.5）"
+  },
+  "robot_cap_front": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/2ba82804-ad8b-4ac4-919b-c62fda48f3c4.png",
+   "sha1": "2d68700bb690a573",
+   "from": "robot_cap_front.png",
+   "what": "探偵の帽子（茶色の格子）をかぶった正面（3本目 ep03_v12 s06b 0:02）"
+  },
+  "robot_cap_34": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/28f5f81b-c3bc-4229-b1a0-87b38ea0c615.png",
+   "sha1": "31eec67f9b426c7b",
+   "from": "robot_cap_34.png",
+   "what": "帽子つき・斜め前（s06b 0:03.2）"
+  },
+  "robot_cap_side": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/040627e4-6d3d-4342-947e-7c25e8dc2541.png",
+   "sha1": "f6827e91a4b58c61",
+   "from": "robot_cap_side.png",
+   "what": "帽子つき・横（s06a 0200 0:03.2）"
+  },
+  "tent_ad_screen": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/5b74225f-6d4d-4b91-ad88-4068f34b1bf2.png",
+   "sha1": "5e9128965ee83100",
+   "from": "tent_ad_screen.png",
+   "what": "3本目のテントの広告の画面（オレンジのテント・緑・太陽・水色のボタン、字なし。s02 0300 0:00.5）"
   }
  },
  "projects": {
