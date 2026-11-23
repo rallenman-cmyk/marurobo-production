@@ -162,7 +162,7 @@ def tile_row(center, n=8, size=0.12, gap=0.03, face=0.0, parent=None):
         cube(_m("tileback", "#FFFFFF", rough=0.4), (0, 0.006, 0), (size, 0.012, size), bevel=0.012, parent=r)
         plane(img_mat("tileface_" + NUM[k], os.path.join(TEX, "tile_%s.png" % NUM[k]), emit=0.35), (0, -0.0005, 0), (size * 0.92, size * 0.92), rot=(R(90), 0, 0), parent=r)
         gm = mat("tileglow%d_%d" % (len(TILES_ALL), k), "#FFFFFF", rough=0.4, emit=0.001)
-        fr = cube(gm, (0, 0.014, 0), (size * 1.16, 0.006, size * 1.16), bevel=0.016, parent=r)
+        fr = cube(gm, (0, 0.014, 0), (size * 1.24, 0.006, size * 1.24), bevel=0.016, parent=r)      # ふちを太く（試しの絵：光ってもうすかった）
         out.append(dict(root=r, glow=gm, frame=fr))
     TILES_ALL.append(out)
     return base, out
@@ -171,14 +171,14 @@ def tile_row(center, n=8, size=0.12, gap=0.03, face=0.0, parent=None):
 TILES_ALL = []
 
 
-def tile_color(tl, t, col, strength=4.0, d=0.25):
+def tile_color(tl, t, col, strength=9.0, d=0.25):
     """タイルのふちを色で光らせる（t から d 秒で）"""
     m = tl["glow"]; b = m.node_tree.nodes["Principled BSDF"]
     b.inputs["Emission Color"].default_value = srgb(col)      # 地の色は白のまま（試しの絵の点検：地の色を替えると、光らせる前から色が付いた）
     emit_key(m, -100.0, 0.0); emit_key(m, t, 0.0); emit_key(m, t + d, strength)
 
 
-def tile_off(tl, t, d=0.25, s0=4.0):
+def tile_off(tl, t, d=0.25, s0=9.0):
     emit_key(tl["glow"], t, s0); emit_key(tl["glow"], t + d, 0.0)
 
 
@@ -253,6 +253,11 @@ def shop(with_register=True):
             for j in range(3): cube(_m("nbwin", "#7FA8C8", rough=0.2), (x0 - 0.9 + j * 0.9, -0.21, 1.4 + i * 1.3), (0.5, 0.02, 0.7))
     plane(noise_mat("shopfloor", "#C9B79C", "#BBA98E", 4.0, 0.7), (0, 2.5, 0.004), (6.6, 5.0))
     cube(_m("backwall", "#EADFCB", rough=0.8), (0, 5.0, 1.8), (7.0, 0.2, 3.6))
+    # 店の中の天井と左右のかべ（試しの絵：中から見ると空が見えた）。天井には丸い照明
+    cube(_m("ceil", "#F4EFE6", rough=0.8), (0, 2.65, 3.62), (7.0, 4.9, 0.08))
+    for sx in (-1, 1): cube(_m("sidewall", "#EADFCB", rough=0.8), (sx * 3.45, 2.65, 1.8), (0.1, 4.9, 3.6))
+    for (xx, yy) in ((-1.5, 1.6), (1.5, 1.6), (-1.5, 3.6), (1.5, 3.6)):
+        cyl(glow_mat("ceilamp", "#FFF4DA", 2.0), (xx, yy, 3.56), 0.22, 0.04)
     for sx in (-1, 1):   # 中の棚（品物の箱。字なし）
         cube(_m("shelfin", "#A07850", rough=0.6), (sx * 1.9, 4.6, 1.0), (1.6, 0.5, 2.0))
         for i in range(3):

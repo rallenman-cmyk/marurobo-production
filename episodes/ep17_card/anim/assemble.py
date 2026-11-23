@@ -40,7 +40,10 @@ for k, p in enumerate(P):
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
 # 波形で確かめた切り替わり（文の頭からの秒）。自動で選ぶと外れた所（5本目 v2 のコメント：「これを」が早い・「あれ」が遅い・「ぱっ」がだいぶ早い・改行の位置がおかしい）
 #   ID: (分け方（None＝自動の分け方のまま）, [切り替わりの秒, …])。最後の 1 枚が 1.0 秒未満なら、次の文の前までのばす
-FIX_AT = {}
+FIX_AT = {
+    # 17本目 v1：08-05 は 1 つの声に 2 つの文。字幕は文をまたいでまとめない（SKILL）。声の「……」の無音（2.28〜3.14 秒）の終わりで替える
+    "08-05": (["それなのに、使われた。", "……いったい、どういうことでしょう？"], [3.09]),
+}
 ID_OF = {v: k for k, v in T.TEXT.items()}
 NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
 SUBS = []
@@ -136,6 +139,18 @@ def _min2(S):
         if not ch: return [tuple(x) for x in S]
 SUBS = _min2(SUBS)
 SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
+# 17本目 v1：あとの道具（声の切れ目へ合わせる・2 秒に足りない 1 枚をまとめる）が FIX_AT の分け方をまとめ直すので、最後にもう一度 FIX_AT どおりに分ける
+def _refix(S):
+    out = []
+    for a_, c_, t_ in S:
+        hit = None
+        for id_, (ps_, ts_) in FIX_AT.items():
+            if ps_ and len(ps_) > 1 and t_.replace("\\N", "") == "".join(ps_).replace("\\N", ""): hit = (id_, ps_, ts_)
+        if not hit: out.append((a_, c_, t_)); continue
+        id_, ps_, ts_ = hit; st_ = T.s(id_); cuts = [a_] + [st_ + x for x in ts_] + [c_]
+        out += [(cuts[i], cuts[i + 1] - (0.0 if i + 1 == len(ps_) else 0.0), ps_[i]) for i in range(len(ps_))]
+    return out
+SUBS = _refix(SUBS)
 json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
