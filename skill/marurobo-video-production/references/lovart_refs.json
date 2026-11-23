@@ -1,0 +1,32 @@
+{
+ "_説明": "まるロボのサムネ用に Lovart へ上げた見本の URL（thumb_lovart.py が使う）。画像はリポジトリに入れないので URL だけ残す。projects は見本の組ごとのプロジェクト ID",
+ "refs": {
+  "robot_front": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/1c0f4578-b4a6-4f47-aed9-0ab351b588c0.png",
+   "sha1": "105fbf6b5d64418d",
+   "from": "robot_front.png",
+   "what": "正面の目のアップ（3本目の描画 S02b 0:00.5 から切り出し）"
+  },
+  "robot_34": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/2b4fdf6a-420e-4e54-86dd-7ee8e64d3355.png",
+   "sha1": "63aa20097e7b1574",
+   "from": "robot_34.png",
+   "what": "斜め前（S02b 0:01.5）"
+  },
+  "robot_antenna": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/dea4509b-afa5-48eb-85fd-4988d9e40280.png",
+   "sha1": "eb211edfbb15fdd3",
+   "from": "robot_antenna.png",
+   "what": "アンテナの先のオレンジの玉が見える全体（S02a 0:03）"
+  },
+  "robot_side": {
+   "url": "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/e317f6c1-4e75-4d7e-a4d5-78862e2c1815.png",
+   "sha1": "a522ce89f70459c8",
+   "from": "robot_side.png",
+   "what": "横（横の水色の丸が見える。S04a 0:01.5）"
+  }
+ },
+ "projects": {
+  "https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/1c0f4578-b4a6-4f47-aed9-0ab351b588c0.png|https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/2b4fdf6a-420e-4e54-86dd-7ee8e64d3355.png|https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/dea4509b-afa5-48eb-85fd-4988d9e40280.png|https://assets-persist.lovart.ai/img/341eebef5135432ea35497e21e7a9a10/e317f6c1-4e75-4d7e-a4d5-78862e2c1815.png": "28a1e4107b254e65addbead623a97733"
+ }
+}
