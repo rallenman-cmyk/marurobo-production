@@ -17,11 +17,11 @@ _load0 = B3.load
 
 
 def _looped(path, sr):
-    """曲を 1 本の長い流れにする：頭はそのまま、5 秒〜(終わり-8 秒) を 2 秒重ねながら 4 回くり返す"""
+    """曲を 1 本の長い流れにする：頭はそのまま、5 秒〜(終わり-8 秒) を 2 秒重ねながら 6 回くり返す（16本目：S は S12〜S29 と長く、4 回では 7 秒足りなかった）"""
     x = _load0(path, sr)
     a, e, k = int(5 * sr), len(x) - int(8 * sr), int(2 * sr)
     body = x[a:e]; out = x[:e].copy()
-    for _ in range(4):
+    for _ in range(6):
         o = out.copy(); o[-k:] = o[-k:] * np.linspace(1, 0, k) + body[:k] * np.linspace(0, 1, k)
         out = np.concatenate([o, body[k:]])
     return out

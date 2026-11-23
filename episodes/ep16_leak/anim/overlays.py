@@ -33,7 +33,7 @@ def ev_list():
                                                    fly=w("02-06", "知らない"), back=s("02-07"), extra=w("02-08", "誕生日")))
     add(w("02-08", "安心") + 0.1, e("02-08") + 0.4, "bubble", dict(obj="maru_top", icon="?"))
     add(w("04-01", "流出の発表") - 0.3, e("04-01") + 0.3, "headlines", {})
-    add(w("04-03", "どこから") - 0.2, e("04-03") + 0.3, "qmark", dict(pos=(860, 250)))
+    add(w("04-03", "どこから") - 0.2, e("04-03") + 0.3, "qmark", dict(pos=(860, 250), size=190))      # v1 の点検：町の上の？が小さかった
     add(s("04-05") - 0.05, e("04-05") + 0.5, "title", {})
     add(w("05-02", "お城") - 0.1, e("05-02") + 0.3, "tag", dict(text="会社 → お城", pos=(640, 120), size=52))
     add(w("05-03", "名札") - 0.1, e("05-03") + 0.3, "tag", dict(text="1人分の情報 → 名札", pos=(640, 120), size=52))
@@ -58,10 +58,10 @@ def ev_list():
     add(w("11-06", "家に") - 0.2, e("11-07") + 0.3, "remote", dict(ghost=w("11-07", "座って") - 0.2))
     add(s("12-01") - 0.05, s("12-01") + 1.6, "rewind", {})
     add(w("12-05", "ID") - 0.1, e("12-05") + 0.3, "tag", dict(text="働く人のIDとパスワード", obj="key", dy=-120, size=44))
-    add(w("12-07", "どこから") - 0.2, e("12-07") + 0.3, "qmark", dict(obj="key", dy=-110))
-    add(w("12-08", "古い") - 0.1, e("12-09") + 0.3, "tag", dict(text="古いままの錠", obj="i_lock", dy=-110, size=40))
-    add(w("12-08", "かんたん") - 0.1, e("12-09") + 0.3, "tag", dict(text="かんたんな鍵", obj="i_skey", dy=-200, size=40))
-    add(w("12-08", "漏れた") - 0.1, e("12-09") + 0.3, "tag", dict(text="漏れた鍵", obj="i_key", dy=-110, size=40))
+    add(w("12-07", "どこから") - 0.2, e("12-07") + 0.3, "qmark", dict(obj="door", dy=-170))      # 鍵は影と一緒に動くので、扉の上に止めて出す（v1：？が飛び回った）
+    add(w("12-08", "古い") - 0.1, e("12-08") + 0.4, "tag", dict(text="古いままの錠", obj="i_lock", dy=-110, size=48))
+    add(w("12-08", "かんたん") - 0.1, e("12-08") + 0.4, "tag", dict(text="かんたんな鍵", obj="i_skey", dy=-200, size=48))
+    add(w("12-08", "漏れた") - 0.1, e("12-08") + 0.4, "tag", dict(text="漏れた鍵", obj="i_key", dy=-110, size=48))
     return E
 
 
@@ -108,8 +108,11 @@ def bubble_sprite(kind):
 def title_sprite():
     key = ("title",)
     if key not in _cache:
-        spr, off = D.card(1000, 230, draw=lambda d, W_, H_, ss, img: [D.ctext(d, (W_ / 2 - 105 * ss, H_ / 2), "盗まれた情報は、", D.font(64 * ss), NAVY),
-                                                                      D.ctext(d, (W_ / 2 + 250 * ss, H_ / 2), "どこへ行く？", D.font(64 * ss), (214, 150, 0))])
+        def dr(d, W_, H_, ss, img):
+            f = D.font(64 * ss); a_, b_ = "盗まれた情報は、", "どこへ行く？"
+            wa, wb = d.textlength(a_, font=f), d.textlength(b_, font=f); x0 = W_ / 2 - (wa + wb) / 2     # 2 つの幅を測って、続けて並べる（v1 の点検：「は」と「ど」が重なっていた）
+            D.ctext(d, (x0 + wa / 2, H_ / 2), a_, f, NAVY); D.ctext(d, (x0 + wa + wb / 2, H_ / 2), b_, f, (214, 150, 0))
+        spr, off = D.card(1000, 230, draw=dr)
         _cache[key] = spr
     return _cache[key]
 
@@ -144,9 +147,9 @@ def form_sprite(t, p):
         if lit and not gone: D.ctext(d, (cx, 240 * S2), nm, D.font(40 * S2), NAVY)
     if t >= p["extra"]:
         for j, kd in enumerate(("cake", "bldg")):
-            cx = (850 + j * 0) * S2 if j == 0 else 850 * S2; cy = (95 + j * 115) * S2
-            IC.icon(d, kd, cx, cy, 40 * S2, (150, 158, 170))
-            r_ = 44 * S2; d.line((cx - r_, cy - r_, cx + r_, cy + r_), fill=(120, 128, 140, 255), width=9 * S2); d.line((cx - r_, cy + r_, cx + r_, cy - r_), fill=(120, 128, 140, 255), width=9 * S2)
+            cx = 885 * S2; cy = (82 + j * 136) * S2
+            IC.icon(d, kd, cx, cy, 54 * S2, (110, 118, 132))
+            r_ = 50 * S2; d.line((cx - r_, cy - r_, cx + r_, cy + r_), fill=(150, 158, 170, 230), width=6 * S2); d.line((cx - r_, cy + r_, cx + r_, cy - r_), fill=(150, 158, 170, 230), width=6 * S2)
     if t >= p["back"] and t < p["extra"] + 0.01:
         f = D.font(44 * S2); D.ctext(d, (850 * S2, 150 * S2), "4つ", f, D.TEAL_D)
     return im.resize((W_, H_), Image.LANCZOS)
@@ -168,12 +171,12 @@ def headlines_sprite(t, t0):
     return im.resize((W_, H_), Image.LANCZOS)
 
 
-def qmark_sprite():
-    key = ("qmark",)
+def qmark_sprite(sz=120):
+    key = ("qmark", sz)
     if key not in _cache:
         im = Image.new("RGBA", (240, 240), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
         d.ellipse((20, 20, 220, 220), fill=(255, 255, 255, 235)); D.ctext(d, (120, 118), "？", D.font(150), RED)
-        _cache[key] = im.resize((120, 120), Image.LANCZOS)
+        _cache[key] = im.resize((sz, sz), Image.LANCZOS)
     return _cache[key]
 
 
@@ -184,6 +187,12 @@ def fig92_sprite(t, p):
     d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 245))
     D.ctext(d, (W_ * S2 / 2, 42 * S2), "2025年 警察のまとめ", D.font(40 * S2), NAVY)
     n_show = 0 if t < p["t92"] else min(92, int((t - p["t92"]) / 0.9 * 92) + 1)
+    if n_show == 0:      # 11-02「警察のまとめを見てみます」：書類の束の絵（v1 の点検：何もない白い札が 5 秒出ていた）
+        for k_ in range(3):
+            x0_, y0_ = (400 + k_ * 26) * S2, (110 + k_ * 22) * S2
+            d.rounded_rectangle((x0_, y0_, x0_ + 200 * S2, y0_ + 260 * S2), radius=14 * S2, fill=(250, 251, 253, 255), outline=(150, 160, 176, 255), width=4 * S2)
+        for j_ in range(6):
+            yy_ = (200 + j_ * 30) * S2; d.rounded_rectangle((480 * S2, yy_, (480 + [150, 120, 150, 100, 140, 90][j_]) * S2, yy_ + 12 * S2), radius=5 * S2, fill=GREY + (255,))
     for i in range(n_show):
         r_, c_ = divmod(i, 23)
         x = (70 + c_ * 25) * S2; y = (100 + r_ * 52) * S2
@@ -610,7 +619,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 q = where(p["obj"], t)
                 if q is None: continue
                 cx, cy = q[0] + p.get("dx", 0), max(80, q[1] + p.get("dy", -100))
-            _paste(base, qmark_sprite(), cx, cy, k, a)
+            _paste(base, qmark_sprite(p.get("size", 120)), cx, cy, k, a)
         elif kind == "fig92":
             base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(90 * a))))
             sm = p.get("small")

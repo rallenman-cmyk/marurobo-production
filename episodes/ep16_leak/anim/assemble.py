@@ -234,28 +234,8 @@ for (t, kind), gain in sorted(EV.items()):
     i = int(t * SR)
     if i < 0: continue
     fx[i:i + len(x)] += x[:N - i]
-# 床の音（9本目）：エスカレーターの低いうなり（昼の駅はずっと、夜は動いている間だけ）と、昼の駅のざわめき。どちらもごく小さく
-def _night_run():
-    """scenes._night_speed と同じ時刻で、夜のエスカレーターが動いている間（速さ 0.1 m/秒より上）"""
-    t_hr = T.w("32-02", "押さえると") + 0.5; t_all = T.w("32-03", "全体が") - 0.6; t_btn = T.w("34-03", "えいっ") + 0.25
-    ivs = [(T.w("09-05", "動かして") + 0.5, T.w("29-03", "止まりました") - 0.6), (T.s("30-01") + 0.8, T.w("30-03", "止まりました") - 0.6),
-           (T.s("31-01") + 0.8, T.w("31-03", "止まりました") - 0.6), (T.s("32-01") + 0.8, t_all + 0.3), (T.s("34-01") + 1.0, t_btn + 0.7)]
-    return ivs
-NIGHT_RUN = _night_run()
-def _bed_env(kind_ok):
-    e = np.zeros(N, np.float32); step = int(0.05 * SR)
-    for i0 in range(0, N, step):
-        t = i0 / SR; act = active(t)
-        if not act: continue
-        nm = max(act, key=lambda q: q[1])[0]; grp = CL[nm][3]
-        e[i0:i0 + step] = 1.0 if kind_ok(grp, t) else 0.0
-    k = int(1.5 * SR)                                       # 1.5 秒でなめらかに出入りする（v2 の点検：夜→昼の 38 章の頭で、0.4 秒で駅のざわめきが急に戻り「大きな効果音」と聞こえた）
-    return np.convolve(e, np.ones(k, np.float32) / k, mode="same").astype(np.float32)
-def _loop(kind):
-    x = sfx.make(kind, SR); return np.tile(x, N // len(x) + 1)[:N].astype(np.float32)
-hum_env = _bed_env(lambda grp, t: grp == "A" or (grp == "B" and any(a <= t <= b for a, b in NIGHT_RUN)))
-mur_env = _bed_env(lambda grp, t: grp == "A")
-bed = 0.012 * _loop("hum") * hum_env + 0.03 * _loop("murmur") * mur_env   # うなりは 0.022→0.012（v2 の点検：夜→昼の 38 章の頭で、うなりが戻るのを「大きな効果音」と 3 回聞かれた）
+# 16本目：駅の環境音（9本目の床の音）は使わない。夜の虫の声などは効果音（crickets）で鳴らす
+bed = 0.0
 mix = voice + music * g + fx * FX_GAIN + bed
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)

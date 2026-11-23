@@ -266,7 +266,7 @@ def shop_model(loc, s=1.0):
 def castle_model(loc, s=1.0):
     """お城の模型（05 の机の上。本物のお城と同じ色・形を小さく）"""
     e = empty(loc, 0.0, s)
-    st = _stone()
+    st = _m("stone_model", "#A99E8C", rough=0.9)      # 模型は無地の石の色（大きなお城の石の模様は、小さな模型では太い帯に見え、白っぽく見えた。v1 の点検）
     cube(st, (0, 0, 0.09), (0.36, 0.24, 0.18), parent=e)
     for (tx, ty) in ((-0.18, -0.12), (0.18, -0.12), (0.18, 0.12), (-0.18, 0.12)):
         cyl(st, (tx, ty, 0.13), 0.05, 0.26, parent=e, verts=24)
@@ -296,10 +296,10 @@ def pw_board(loc, w=0.22, h=0.08):
 def table_set(loc=(0, 0, 0)):
     """05 の机（木の天板。まわりは部屋の壁の色をぼかした地）"""
     cube(noise_mat("deskwood", "#C79A6B", "#B98C5E", 2.5, 0.45, wave=True), (loc[0], loc[1], loc[2] - 0.025), (1.6, 0.9, 0.05), bevel=0.01)
-    world("#F2ECE2", 0.5)
-    a = area((loc[0] - 0.6, loc[1] - 1.2, loc[2] + 1.2), loc, energy=160, size=1.6, col="#FFF4E6"); a.visible_camera = False
-    a2 = area((loc[0] + 0.9, loc[1] + 0.2, loc[2] + 0.9), loc, energy=60, size=1.0, col="#FFE2C0"); a2.visible_camera = False
-    cube(_m("deskbg", "#EADFCF", rough=0.9), (loc[0], loc[1] + 1.2, loc[2] + 0.4), (4.0, 0.05, 2.0))
+    world("#F2ECE2", 0.22)      # v1 の点検：白く飛んでいた（0.5・160・60）
+    a = area((loc[0] - 0.6, loc[1] - 1.2, loc[2] + 1.2), loc, energy=85, size=1.6, col="#FFF4E6"); a.visible_camera = False
+    a2 = area((loc[0] + 0.9, loc[1] + 0.2, loc[2] + 0.9), loc, energy=30, size=1.0, col="#FFE2C0"); a2.visible_camera = False
+    cube(_m("deskbg", "#CDBBA3", rough=0.9), (loc[0], loc[1] + 1.2, loc[2] + 0.4), (4.0, 0.05, 2.0))
 
 
 def dark_room():
