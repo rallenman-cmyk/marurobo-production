@@ -4,10 +4,13 @@
 #     画像はリポジトリに入れない決まりなので、URL を残しておけば、次のセッションは画像なしで同じ見本を使える。
 #   ・見本をそろえたプロジェクトも同じ json に覚えて、続けて頼む（見本の登録は 1 分あたりの回数に上限がある）。
 #   ・返った絵は、元の絵（raw/）を残したうえで 2560×1440（16:9）に切りそろえて <名前>_<番号>.png にする（comp がこの大きさで組む）。
+#     GPT Image 2 は 1920×1088 で返る（2026-11-23）。2560 幅に引きのばすので、Gemini の 2K より少しやわらかい。
 #   使い方:
 #     python3 thumb_lovart.py upload robot_front.png robot_34.png …      … 見本を上げて覚える（同じ中身は上げ直さない）
 #     python3 thumb_lovart.py refs                                         … 覚えている見本の一覧
-#     python3 thumb_lovart.py gen <出力フォルダ> <案の名前> <頼む文.txt> [--ref 画像か名前か URL …] [--auto-confirm]
+#     python3 thumb_lovart.py gen <出力フォルダ> <案の名前> <頼む文.txt> [--ref 画像か名前か URL …] [--stop-on-cost]
+#   クレジットは恋愛と同じく、確認を待たずに使い、使った数をあとで報告する（2026-11-23 ユーザー決定）。
+#   GPT Image 2 は 1 枚 23 クレジットほど（2026-11-23 の試し。使い放題は低い画質だけ）。--stop-on-cost で、使う前に止める。
 #   --ref には、手元の画像・覚えた見本の名前（robot_front など）・https の URL のどれでもよい。
 #   鍵は LOVART_ACCESS_KEY / LOVART_SECRET_KEY。使ったものは lovart.py がリポジトリの logs/lovart_usage.jsonl に残す。
 import os, sys, json, glob, hashlib
@@ -71,7 +74,7 @@ def fit(src, dst):
     return (w, h)
 
 
-def gen(outdir, name, prompt, refs=(), auto_confirm=False):
+def gen(outdir, name, prompt, refs=(), auto_confirm=True):
     c = load()
     urls = [ref_url(r, c) for r in refs]
     key = "|".join(sorted(urls))
@@ -114,12 +117,12 @@ if __name__ == "__main__":
             print(k, v["url"])
     elif a[0] == "gen":
         outdir, name, ptxt, rest = a[1], a[2], a[3], a[4:]
-        refs, auto = [], False
+        refs, auto = [], True
         while rest:
             k = rest.pop(0)
             if k == "--ref":
                 refs.append(rest.pop(0))
-            elif k == "--auto-confirm":
-                auto = True
+            elif k == "--stop-on-cost":
+                auto = False
         os.makedirs(outdir, exist_ok=True)
         gen(outdir, name, open(ptxt, encoding="utf-8").read(), refs, auto)

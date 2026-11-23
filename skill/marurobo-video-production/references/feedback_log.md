@@ -247,3 +247,4 @@
 - やったこと：恋愛の `tools/lovart.py` を `scripts/lovart.py` に写し（記録はこのリポジトリの `logs/lovart_usage.jsonl`）、サムネ用の入口 `scripts/thumb_lovart.py`（見本の URL を覚える・16:9 に切りそろえる）を作った。1本目の `thumbs_ep01.py` の gen・gen2 を Lovart で描くようにした（`THUMB_ENGINE=gemini` で前の作り方）。
 - まるロボの見本：ドライブ `marurobo_render` の描画（S02a・S02b・S04a）から 4 枚切り出して Lovart に上げ、URL を `references/lovart_refs.json` に残した。
 - 決まり（SKILL.md §9 の 4・CLAUDE.md）：サムネの絵の AI は Lovart の GPT Image 2。字は今までどおり絵の AI に描かせない。
+- クレジット：質問の画面で「恋愛と同じ（確認を待たずに使い、あとで報告）」を選んだ。試しの 1 枚は、はじめ 23 クレジットの確認で止めた（使い放題は低い画質だけ）→「進める」を選んで描いた（23 クレジット）。まるロボは見本どおり。右下に手とスマホが入った（決まりでは空ける）。
