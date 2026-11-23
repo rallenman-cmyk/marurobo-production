@@ -1,0 +1,6875 @@
+{
+ "fetched_at": "2026-11-19T10:32:52.593943+00:00",
+ "sort": null,
+ "queries": {
+  "スマホ カメラ なぜ 3つ レンズ 複数": [],
+  "スマホ 熱くなる なぜ 仕組み": [
+   {
+    "id": "WIVE-FubFLg",
+    "title": "スマホはなぜ熱くなる？CPU・GPU・ジュール熱から仕組みを解説",
+    "channel": "なぜなぜゆっくり研究所",
+    "channel_id": "UCcsgY5mPvBZSIOSVnRyLo4w",
+    "views": 25,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "7:01"
+   },
+   {
+    "id": "JpmgbiFCw2I",
+    "title": "スマホが熱くなる原因をわかりやすく解説｜CPU・バッテリー・冷却の仕組み",
+    "channel": "生活に役立つ理系なハナシ",
+    "channel_id": "UC7Hm69wtPiPttIAnedVP4kw",
+    "views": 1169,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "3:23"
+   },
+   {
+    "id": "T3KV8Ea5BTc",
+    "title": "なぜスマホは熱くなる？実はスマホの中でヤバいことが起きていた【ゆっくり解説】",
+    "channel": "日常の裏側ラボ",
+    "channel_id": "UC0SR7QZwCiLRHyDk3LdRdXQ",
+    "views": 152,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "4:13"
+   },
+   {
+    "id": "8MO1mKiXUaU",
+    "title": "スマホ・携帯が熱い！すぐ熱くなる！そんなときのオススメの対処法と原因を紹介！Androidの使い方",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 20318,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:50"
+   },
+   {
+    "id": "VxbbQhnJpVA",
+    "title": "「なんでスマホは熱くなるの？壊れない？50代・60代のスマホ初心者にも分かりやすく解説！」",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 59,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "6:39"
+   },
+   {
+    "id": "PZxXV4fa3xU",
+    "title": "最新スマホの冷却システム/ Cooling Systems in the Latest Smartphones *Audio in EN / DE / FR / PT / ES",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 222669,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:06"
+   },
+   {
+    "id": "AElLcPXzyzA",
+    "title": "【危険な状態！？】iPhoneが熱くなる原因・熱い時の対処法を紹介",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 76519,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:31"
+   },
+   {
+    "id": "TsI5wLWQMYg",
+    "title": "    スマホが熱い！原因と今すぐできる対策を解説",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 760,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "6:17"
+   },
+   {
+    "id": "m0Ysm2nRDRc",
+    "title": "スマホの電池はなぜ劣化する？電池の中で育つ「膜」の正体を図解",
+    "channel": "まことの部屋",
+    "channel_id": "UC3_0NrJHRHfT_g-zjb2aAlg",
+    "views": 0,
+    "published": "32 分前",
+    "age_days": 0,
+    "length": "8:18"
+   },
+   {
+    "id": "HZjl-CMSRgk",
+    "title": "スマホが熱くなる原因｜危険なバックグラウンド通信と個人情報が抜かれるアプリ",
+    "channel": "スマホ・パソコンTV　虎太郎大百科",
+    "channel_id": "UCPRgFQji3JMJMi4WpjJZspQ",
+    "views": 271,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "2:25"
+   },
+   {
+    "id": "BmlR9fdHQiY",
+    "title": "【知らないと損】スマホがすぐ熱く重くなるのは通信のこの設定…11月から勝手にオン。今すぐオフに！",
+    "channel": "なつみのスマホ相談室",
+    "channel_id": "UCe6Rsko7449SfS3ajOXCu5A",
+    "views": 13346,
+    "published": "4 時間前",
+    "age_days": 0,
+    "length": "21:18"
+   },
+   {
+    "id": "fqPJTIKkorA",
+    "title": "使っていなくてもスマホが熱くなる理由と安全に冷ます方法",
+    "channel": "数分で理解",
+    "channel_id": "UCOlLfyHUmB4xyhyV56O7T8g",
+    "views": 1418,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "2:01"
+   },
+   {
+    "id": "Yz93oAZBGLg",
+    "title": "YouTube動画を視聴するとiPhone本体熱くなる熱暴走＆バッテリー消費も激しくなる問題",
+    "channel": "テックスタイルch",
+    "channel_id": "UCfcJ7_Wt1P6y2ovduob7ghg",
+    "views": 10762,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:50"
+   },
+   {
+    "id": "cJFCSFC_tz4",
+    "title": "「スマホが熱くなる」は実は故障じゃない？ 素早く安全に冷やす方法を検証",
+    "channel": "au",
+    "channel_id": "UCnHmD0XBFFMnA3zhL85zL3g",
+    "views": 95817,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:48"
+   }
+  ],
+  "プッシュ通知 仕組み なぜ 届く": [
+   {
+    "id": "4QMqI5SbRgA",
+    "title": "アプリを閉じても通知が届くのはなぜ？プッシュ通知の仕組みをやさしく解説",
+    "channel": "小学生でもわかる!! IT知識学習チャンネル",
+    "channel_id": "UC9_EdEGOAnTGO45_uNu2vwg",
+    "views": 225,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:41"
+   },
+   {
+    "id": "6AWJqpO32SY",
+    "title": "【これはもはや罠！】許可してはいけない！プッシュ通知の本当の怖さ【個人情報を漏らす仕組みを徹底解説！】",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 1070140,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:06"
+   },
+   {
+    "id": "tq2WH4SI7v4",
+    "title": "アプリを開いていないのに通知が届くのはなぜ？ プッシュ通知・ローカル通知のしくみ",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 5,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "9:00"
+   },
+   {
+    "id": "DwIOYqz_IdQ",
+    "title": "アプリを閉じても通知が届くのはなぜ?宅配便でわかるプッシュ通知",
+    "channel": "ゆっくり修羅場大好きマン",
+    "channel_id": "UCG34gic_B_UB4fX2ORJqbiw",
+    "views": 4,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "17:42"
+   },
+   {
+    "id": "vR0AWnsn7gs",
+    "title": "【知ってる？】プッシュ通知はどのような仕組みでできているか",
+    "channel": "Masahiro Tonomura(CodeMafia)",
+    "channel_id": "UCQ8iiBr45MDWD7hDp3FDmQg",
+    "views": 3052,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "6:43"
+   },
+   {
+    "id": "T7dwDnT08m4",
+    "title": "188. どうしてメッセージ通知はメールよりも「速い」の？（プッシュ通知）",
+    "channel": "ちいラボ - スマホ教室",
+    "channel_id": "UCmxiAMzMsEnN6m_1seVpiMA",
+    "views": 353,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:00"
+   },
+   {
+    "id": "mUVV8SK7mbY",
+    "title": "PUSH通知・お知らせ機能の設計でチェックすべきポイント",
+    "channel": "アプリ開発専門の会社 Pentagon",
+    "channel_id": "UCeiPcKiLRx6iOtAM_uOUaDQ",
+    "views": 366,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:41"
+   },
+   {
+    "id": "TgduwShrClk",
+    "title": "プッシュ通知とメール通知は何が違う？使い分けは？",
+    "channel": "今更だけど、一歩前に進むための小さな学び",
+    "channel_id": "UCr5EZ5HnzvU9uMPxpNOQUAg",
+    "views": 0,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "2:19"
+   },
+   {
+    "id": "Yz73yl6CuJs",
+    "title": "ヤフーが誤ったプッシュ通知送信 今後届く可能性も",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 7673,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:31"
+   },
+   {
+    "id": "5kFWMWcH2Cg",
+    "title": "【10分でわかる】アプリに欠かせないプッシュ通知を解説！",
+    "channel": "アプリマーケch【Repro公式】",
+    "channel_id": "UC-fklE3_evYFYeHnQoWBC6A",
+    "views": 878,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:18"
+   },
+   {
+    "id": "7rlRDHPEFzI",
+    "title": "注文を見逃さない：タブを閉じても届く Web プッシュ通知 | Hibira",
+    "channel": "Hibira",
+    "channel_id": "UC879cuZp4sPUl3sEIn4T2fw",
+    "views": 0,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "1:52"
+   },
+   {
+    "id": "ETOhwgM9EvQ",
+    "title": "登録した全員に通知を送ったのに、届いていない理由｜通知と配信先の登録【システム設計 超入門⑫】",
+    "channel": "ikijimacom",
+    "channel_id": "UCQZWyFpwROGqkCabRcFFmgw",
+    "views": 1,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "12:41"
+   },
+   {
+    "id": "AKYebqOCAzY",
+    "title": "プッシュ通知はどのように機能しますか?",
+    "channel": "Gerald Versluis",
+    "channel_id": "UCBBZ2kXWmd8eXlHg2wEaClw",
+    "views": 34812,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "8:42"
+   }
+  ],
+  "LINE 通話 なぜ 無料 仕組み": [
+   {
+    "id": "EivWqfQMh-s",
+    "title": "【今さら聞けない】LINE電話は本当に無料？通常電話との違いと役立つ設定！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 307927,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:52"
+   },
+   {
+    "id": "TvHhhWNKm2U",
+    "title": "なぜLINEの電話は「無料」なのか【ゆっくり解説】",
+    "channel": "ゆっくりIT解説",
+    "channel_id": "UCa7blfH744ZRbM9TgjtjfDw",
+    "views": 68749,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "11:55"
+   },
+   {
+    "id": "pOGueAQc4fw",
+    "title": "LINE電話のかけ方｜なぜ無料？知らないと困る注意点も解説【初心者向け】",
+    "channel": "ともちゃんねる",
+    "channel_id": "UCEAVHrls8rHjVX4ApshY0Dg",
+    "views": 105,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "7:17"
+   },
+   {
+    "id": "4eJIpXainJE",
+    "title": "【LINE電話】「11月から有料化」は大嘘です！信じて設定を変えないでください",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 4404,
+    "published": "1 時間前",
+    "age_days": 0,
+    "length": "15:11"
+   },
+   {
+    "id": "wBE0GlwCTgY",
+    "title": "【今さら聞けない】通常の電話とLINE通話の違い！メリットやデメリットも解説",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 131778,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:30"
+   },
+   {
+    "id": "v_bY8ipgPbo",
+    "title": "LINE通話は本当に無料？",
+    "channel": "ふうちゃんねる",
+    "channel_id": "UCATj-Y4F7ylO74Yc685PWew",
+    "views": 655,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:01"
+   },
+   {
+    "id": "8s4ONSAsdsA",
+    "title": "LINE電話は本当に無料？普通電話との違いと注意点！役立つ設定も紹介！",
+    "channel": "スマキン【Smakin】",
+    "channel_id": "UC3zx3B5VObMmSGyZk0mijxw",
+    "views": 81632,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "9:20"
+   },
+   {
+    "id": "xNap2CEaHVE",
+    "title": "【実は無料じゃない】LINE電話で高額請求...。知らないと損するLINE電話の仕組み",
+    "channel": "スマホパソコンの解説チャンネル",
+    "channel_id": "UCZTIFSMcd1gKiTDjCeeZ7Yg",
+    "views": 3662,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "12:51"
+   },
+   {
+    "id": "o6jZSWKhlK0",
+    "title": "【LINEライン】固定電話に無料で電話をかける方法",
+    "channel": "動画ファン",
+    "channel_id": "UCF4c7UkIusFsfgdxcK3L_Aw",
+    "views": 15440,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "7:22"
+   },
+   {
+    "id": "Xbcsd4zGiaw",
+    "title": "「本当に無料？」LINE電話を使っただけで高額請求…。知らなきゃ損するLINE電話の正しい使い方",
+    "channel": "楽スマ",
+    "channel_id": "UCnykP53ZexOb29R9_ffDP1g",
+    "views": 2012,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "7:22"
+   },
+   {
+    "id": "SVda5KRomLs",
+    "title": "LINEに通話録音・文字起こしが来た！無料で試す設定、相手への通知、消える前の保存",
+    "channel": "MIRAI LAB",
+    "channel_id": "UC_i3IFIrDBUS68WQV94oESA",
+    "views": 132,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "4:19"
+   },
+   {
+    "id": "yWJq3secNJM",
+    "title": "【要注意】LINE通話で料金が発生してしまう「思わぬ落とし穴」",
+    "channel": "ゆきえのスマホ塾",
+    "channel_id": "UC66g_QjJbvItZURwqYydOCw",
+    "views": 71226,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "13:58"
+   },
+   {
+    "id": "q89AtcLry_0",
+    "title": "【危険】LINE電話は本当に無料？知らないと高額になる落とし穴！【シニア向け】",
+    "channel": "ひろっさんチャンネル〜中高年のためのスマホ生活",
+    "channel_id": "UCpf_bRl96uotMR55KGH_SzA",
+    "views": 38136,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "11:00"
+   },
+   {
+    "id": "3M_x0JbrC8o",
+    "title": "【要注意】LINE電話は無料なのに高額請求!? 知らないと危険な落とし穴",
+    "channel": "設定タロウのスマホ安心ガイド",
+    "channel_id": "UCgaSYfAG-sKZEe_OThzKrdQ",
+    "views": 32417,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "11:00"
+   },
+   {
+    "id": "uzm22vnNueE",
+    "title": "【緊急】LINE通話が完全有料に...7月から使っただけで高額請求届く40歳以上が急増中！今すぐこの設定をオフに！",
+    "channel": "スマホ博士",
+    "channel_id": "UC7nKJWglHMy-dO8dqEabRIQ",
+    "views": 154811,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "11:26"
+   },
+   {
+    "id": "OH_0I9mLK_I",
+    "title": "【大至急オフに！】11月からLINE通話で高額請求が急増中…勝手にオンになっていることも…手遅れになる前に大至急確認して！【iPhone/android】",
+    "channel": "ひまりのスマホ情報局",
+    "channel_id": "UCA0PBEWRG6oGs1YFjqSC7YQ",
+    "views": 159678,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "23:09"
+   },
+   {
+    "id": "4onYZWuFuBU",
+    "title": "【必見】コレ知らないと高額請求！9割が知らないLINE電話の本当の恐ろしさ…",
+    "channel": "まりこ先生のスマホ教室",
+    "channel_id": "UCuq0ROnRVDQAwPKAT5UfMaA",
+    "views": 290209,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "13:37"
+   },
+   {
+    "id": "Q_9X3penEUM",
+    "title": "【知らないと危険】LINE電話は無料じゃない！?相手のギガを減らす落とし穴と正しい使い分け",
+    "channel": "ひとみのスマホ相談窓口",
+    "channel_id": "UCIWlk39tE1EL1RYwQyGPPIg",
+    "views": 48764,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:32"
+   }
+  ],
+  "AirDrop 仕組み なぜ 送れる": [
+   {
+    "id": "VfloLIan-MQ",
+    "title": "【受け側に優しい】iPhoneを近づけるだけで使える『AirDrop』！iOS26.2で登場したAirDropコードの使用目的とは！",
+    "channel": "ためになるAppleの話",
+    "channel_id": "UCIu9bc_ZLLmIZ1r_3UXi4PA",
+    "views": 24387,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "9:32"
+   },
+   {
+    "id": "5iM5lcQp7d8",
+    "title": "AirDrop（エアードロップ）の使い方解説！【 iOS16.2以降対応 / iPhone・iPad / エアドロップやり方】",
+    "channel": "佐藤辰則 / スマホ・AI教室",
+    "channel_id": "UCe-biKii3ibY_m1kJBC7cSQ",
+    "views": 57596,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:06"
+   },
+   {
+    "id": "Lp3Ffjho4t0",
+    "title": "【AirDrop】Apple製品同士で簡単に写真などを受け渡しする方法",
+    "channel": "かじがや電器店",
+    "channel_id": "UCmWVwb1NqEe1PuVf199ii-w",
+    "views": 137649,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "4:59"
+   },
+   {
+    "id": "NkP5oPub71Q",
+    "title": "電車などでのエアドロップ悪用被害を防げ！対策をおさらい・AirDropのiPhone/Mac設定、インターネット共有も要注意",
+    "channel": "Appleが大好きなんだよ",
+    "channel_id": "UCCD76tKlE45u1YTX0cVh1OQ",
+    "views": 35737,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:54"
+   },
+   {
+    "id": "7BKmhcRPyvc",
+    "title": "AirDropはもう特権じゃない。iPhoneとAndroid、送れなかった時代の話",
+    "channel": "ギズモード・ジャパン",
+    "channel_id": "UCZm3dECbQU33IWG5MQ-NAdw",
+    "views": 110016,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "18:03"
+   },
+   {
+    "id": "6DgMXNfRrD8",
+    "title": "iPhone 写真・動画を最速で送る！AirDrop（エアドロップ）超基本 最新 かんたんガイド【2026年版】▶︎スマホに初挑戦！〈iPhone編〉",
+    "channel": "スマホHELPMAN",
+    "channel_id": "UCPV4MiiFbgSZ1QMESBCGlbQ",
+    "views": 9573,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "16:36"
+   },
+   {
+    "id": "ddOK_z42Z4A",
+    "title": "iPhoneのAirDropができない？送れないときの原因と対処法",
+    "channel": "ケリケタ夫婦のiPhone【初心者向け解説】",
+    "channel_id": "UCNlbCa6BizMhz70-BtLeWnQ",
+    "views": 140,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "4:23"
+   },
+   {
+    "id": "meDg_LR77Uo",
+    "title": "Apple iPhone — 範囲外でもAirDropを使う方法（iCloud経由）",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 67,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "1:19"
+   },
+   {
+    "id": "nhFIqZQoDjI",
+    "title": "なぜiPhoneとAndroidはAirDropで送れなかったのか｜合図と身元のしくみ",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 3,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "10:01"
+   },
+   {
+    "id": "o7z3tA69C2I",
+    "title": "【iPhone】Airdropできない・送れない時の対処法6選｜Wondershare Dr.Fone",
+    "channel": "ワンダーシェアーソフトウェア",
+    "channel_id": "UCkY_wTrst4c7ur3sCgXRbYw",
+    "views": 14070,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:37"
+   },
+   {
+    "id": "8GfwHzdg59c",
+    "title": "【本日公開】iOS26.2でAirDropが進化【徹底解説6選】",
+    "channel": "かじがや電器店",
+    "channel_id": "UCmWVwb1NqEe1PuVf199ii-w",
+    "views": 103174,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "14:33"
+   },
+   {
+    "id": "tEOEinb9FnA",
+    "title": "iPhoneからiPadに写真を送る方法｜AirDrop（エアドロップ）の使い方を完全ガイド　送れない時の対処法も",
+    "channel": "あっちゃん教えてiPad",
+    "channel_id": "UCveHtYUl32zavjFwi11mHYw",
+    "views": 32639,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:03"
+   },
+   {
+    "id": "VhrePStftKs",
+    "title": "iPhone「Airdrop（エアードロップ）」の使い方｜家族や友達と写真を共有でき便利！｜使えない時の対処法・注意点も",
+    "channel": "あっちゃん教えて",
+    "channel_id": "UCds0nELWhAGEyQ93vsaeCAA",
+    "views": 18096,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "13:53"
+   }
+  ],
+  "ギガ とは 何 なぜ 減る 仕組み": [
+   {
+    "id": "1NmAAaThEIU",
+    "title": "【知らないと損】何もしてないのにギガが減る！？実は減る本当の理由をやさしく解説【50代・60代向け】",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 505,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "6:03"
+   },
+   {
+    "id": "eDvSzd85a_Q",
+    "title": "「ギガが減る」の正体｜1GBで何ができるのか　国の通信量統計で、1バイトから日本全体までたどる",
+    "channel": "スマホの裏側図鑑",
+    "channel_id": "UCjwPqwRPqBKCHota0i5E1HA",
+    "views": 21,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "13:19"
+   },
+   {
+    "id": "a-Ta85Th8hQ",
+    "title": "【iPhone】知らないうちにギガが減る理由！通信量をグッと節約する方法",
+    "channel": "ロクスマ 60代からのスマホ講座",
+    "channel_id": "UChbneTxp0AJ3OYc5VkVuD3A",
+    "views": 9736,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "8:10"
+   },
+   {
+    "id": "C-mjaXoXk7A",
+    "title": "スマホのギガバイト（GB）って何？実は2種類あります！【スマホ初心者向け】",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 46097,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:44"
+   },
+   {
+    "id": "9kP3bikZy_k",
+    "title": "スマホのギガ泥棒を停止！使っていないのに通信量が減る原因と対策",
+    "channel": "動画ファン",
+    "channel_id": "UCF4c7UkIusFsfgdxcK3L_Aw",
+    "views": 2702,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "8:50"
+   },
+   {
+    "id": "Ez6ve4VMLUM",
+    "title": "【今さら聞けない！】そもそもギガって何？データ通信量の基礎知識講座｜オンライン講習会良いトコどり動画｜スマホ・タブレットの訪問レッスン「タクミ」",
+    "channel": "「タクミ」スマホレッスン・フィットネス・料理教室",
+    "channel_id": "UCIeK04Xf3BRocNlwlwa4Xhw",
+    "views": 409,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:08"
+   },
+   {
+    "id": "XpvFZVIdRbQ",
+    "title": "「中毒性がある」なぜハマる？ショート動画“無駄な時間”半数が回答も…、携帯各社が“増量プラン”あなたは毎月何ギガ使う？【Nスタ解説】｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 290862,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:58"
+   },
+   {
+    "id": "vm1N2B15CuA",
+    "title": "【ギガ】通信・容量・CPUの違いをわかりやすく解説",
+    "channel": "暮らしの教養ラボ",
+    "channel_id": "UCzVRlvHID2oyBe93SEDY2cQ",
+    "views": 13,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "8:49"
+   },
+   {
+    "id": "ZO4vVj5haN0",
+    "title": "スマホ初心者でもわかる！今さら聞けない2つのギガの違いをやさしく解説",
+    "channel": "モバワンチャンネル",
+    "channel_id": "UCCJaeilLbq8zYz8QPdZ3U3w",
+    "views": 1984,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:08"
+   },
+   {
+    "id": "Kz5MJp_UiOo",
+    "title": "95%が知らない!!スマホの1ギガってどれだけ使えるの？",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 51118,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:03"
+   },
+   {
+    "id": "b9Yq4hMJFEE",
+    "title": "スマホのギガが減る原因と確認順｜通信量・YouTube・Wi-Fiの設定をまとめて解説【まとめ版】",
+    "channel": "PC・スマホ・AIやさしい解説",
+    "channel_id": "UCDWdPu9YLafkB-FFn37yP4A",
+    "views": 144,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "26:09"
+   },
+   {
+    "id": "1mvoo3FwSRw",
+    "title": "何もしてないのにギガが減る理由",
+    "channel": "スマホ・パソコンTV　虎太郎大百科",
+    "channel_id": "UCPRgFQji3JMJMi4WpjJZspQ",
+    "views": 136,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "2:04"
+   }
+  ],
+  "パスキー 仕組み なぜ 安全": [],
+  "YouTube 画質 勝手に 下がる なぜ": [
+   {
+    "id": "ooiRz43Jc3Q",
+    "title": "【YouTubeが重い?遅い?固まる?】原因と対処法をわかりやすく解説！",
+    "channel": "@nifty プロバイダーチャンネル【公式】",
+    "channel_id": "UCiZTWtsMFBvfZ_SsQWjB2Hg",
+    "views": 57774,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:54"
+   },
+   {
+    "id": "VoAGiHgoQck",
+    "title": "解決方法 Youtubeアップロード時のエンコード、画質劣化が酷い!",
+    "channel": "りょーづ ryo-du",
+    "channel_id": "UChyFSjV27pxWVriR6Kes3sA",
+    "views": 745,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "7:06"
+   },
+   {
+    "id": "AqMwpyZWuFQ",
+    "title": "【お金をかけずに】YouTubeアップロードで『画質が落ちる理由』と画質を良くする撮影方法！",
+    "channel": "tabinotomo",
+    "channel_id": "UCelh4iWnF1dDIoi4A7Rxt_w",
+    "views": 5280,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "6:30"
+   },
+   {
+    "id": "d2CdGsX168Y",
+    "title": "【YouTubeの裏技】高画質でYouTubeに動画をアップロードする方法を解説します",
+    "channel": "YouTube集客コーチのスズキくん",
+    "channel_id": "UCc5-jABvtnl-R2618aEsfkQ",
+    "views": 10009,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:45"
+   },
+   {
+    "id": "PX8ujDhQLvE",
+    "title": "【120%快適に!!】Youtubeの通信量を節約する裏ワザ！動画視聴時にやってみて！",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 8960,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:37"
+   },
+   {
+    "id": "vW6vs9nnWlE",
+    "title": "YouTubeの画質が「自動（240p）」になる ― 原因の調べ方と、1440pで上げ直して直した記録",
+    "channel": "awatake",
+    "channel_id": "UCOxF8lvObXZmE4TQfbKMtJg",
+    "views": 8,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "6:36"
+   },
+   {
+    "id": "vms9i12VK60",
+    "title": "【Youtubeの使い方】高画質なのになぜ画質が落ちるの？3つの理由",
+    "channel": "Film Studioまるきゅう",
+    "channel_id": "UCQ4YP32Aw3jr2ld1XcTnBoA",
+    "views": 10297,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "6:09"
+   },
+   {
+    "id": "kucXWTFpSCw",
+    "title": "YouTube Capture（ver1.0）の動画の画質が悪い。アップロードされない時の解決方法",
+    "channel": "中小企業のAI・IT運用コンサルタント はちえん。坂田誠",
+    "channel_id": "UCs4XI_LLhWV90r0cNCcqaYw",
+    "views": 1984,
+    "published": "13 年前",
+    "age_days": 4745,
+    "length": "1:43"
+   },
+   {
+    "id": "9tcXBfX81X0",
+    "title": "YouTubeで再生する動画の画質を良くする設定方法！高画質で動画を見る時の注意点とは？",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 113865,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:20"
+   },
+   {
+    "id": "YJxdcQikoAw",
+    "title": "【YouTubeアップロード方法】高画質でYouTubeに動画をアップロードする方法を解説します",
+    "channel": "TAIGA YouTube Channel",
+    "channel_id": "UCW1z3ZPvI9C_a2XXvCZ9GwQ",
+    "views": 138500,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:07"
+   },
+   {
+    "id": "u_F961EPT2U",
+    "title": "YouTube の、重い、遅い、止まる、カクカクする、クルクルする、を簡単に解決する方法！【h264ify】【Windows】",
+    "channel": "外来魚食べ太郎",
+    "channel_id": "UCJMsY5X9DhzVcIB3K_y3shA",
+    "views": 90058,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:03"
+   },
+   {
+    "id": "72FDhWgh2I4",
+    "title": "【2026年最新】OBS配信にも影響！？Windowsで勝手に音量が下がる危険な設定の解除方法を解説します！",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 1693,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "5:59"
+   },
+   {
+    "id": "nXzpExtkGSo",
+    "title": "【注意】YouTubeにアップした動画の音が勝手に小さくなってる事ってありませんか？そんな時はここをチェックしよう！【YouTube便利機能使い方動画】",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 5410,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:28"
+   },
+   {
+    "id": "iXClCZCLYdY",
+    "title": "YouTubeに動画をアップしてから画質調整しよう／はちえん。ミニセミナー",
+    "channel": "中小企業のAI・IT運用コンサルタント はちえん。坂田誠",
+    "channel_id": "UCs4XI_LLhWV90r0cNCcqaYw",
+    "views": 323,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "3:27"
+   }
+  ],
+  "メルカリ 匿名配送 仕組み なぜ 届く": [
+   {
+    "id": "0iYFnW3U0MU",
+    "title": "メルカリ匿名配送のすべて！送り方から仕組みまで全て解説します",
+    "channel": "個人で稼ぐメルカリ【星野渚】",
+    "channel_id": "UCfPGu9MYjEWwXxcjgV9gTSA",
+    "views": 1754,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:14"
+   },
+   {
+    "id": "74cqCMNxh6U",
+    "title": "メルカリ匿名配送のメリットとは？ 仕組みや送り方を徹底解説",
+    "channel": "メルカリ研究所",
+    "channel_id": "UCDVmNeZK3ICIcO4fqZc9Rog",
+    "views": 11790,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "14:01"
+   },
+   {
+    "id": "heDZNYKQNHI",
+    "title": "メルカリ【匿名配送】完全ガイド！メリット／使い方／注意点なども詳しく解説♪",
+    "channel": "RIKO@給付金等・生活サポート情報Channel",
+    "channel_id": "UCptLygGpXSs0sp8nAhDDAzA",
+    "views": 35511,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "6:43"
+   },
+   {
+    "id": "CzBlVtDxoo8",
+    "title": "【メルカリの匿名配送】メルカリの匿名配送ってどうなっているの？ゆうゆうメルカリ便とらくらくメルカリ便はどう違う？　個人情報保護に特化したフリマで販売！　中国輸入物販プロジェクト",
+    "channel": "中国仕入れ 輸入物販プロジェクト",
+    "channel_id": "UCYB6cer9XJrs01o1OpeETQA",
+    "views": 10433,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:11"
+   },
+   {
+    "id": "HIo60XWYwmM",
+    "title": "【メルカリ 発送方法】2025年最新 匿名で初心者も簡単 送料で損しない梱包",
+    "channel": "メルカリ栄養士まちこ⌇40〜50代から始める物販",
+    "channel_id": "UCeJASElsJq_I87TH38irwGg",
+    "views": 9843,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "16:37"
+   },
+   {
+    "id": "0H5rCb6dhqE",
+    "title": "【メルカリの落とし穴】匿名配送なのに住所がバレる!? 知らないと怖い設定ミスと3つの確認ポイント【ウレマル探偵】",
+    "channel": "ウレマル",
+    "channel_id": "UCOdEjuCGaD-ZtfNKyQzQd2w",
+    "views": 13,
+    "published": "23 時間前",
+    "age_days": 0,
+    "length": "6:05"
+   },
+   {
+    "id": "zWGROwGRJys",
+    "title": "【匿名配送】ゆうゆうメルカリ便　発送の流れを動画解説　～郵便局編～",
+    "channel": "たくやん副業チャンネル",
+    "channel_id": "UCtG1WASot0TKjJfYiEeGmWA",
+    "views": 65237,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "1:48"
+   },
+   {
+    "id": "qH92q6ZkbCM",
+    "title": "【朗報】メルカリ、遂に匿名返品をスタート！概要を整理します！【ずんだもん解説】",
+    "channel": "ふりまめ【メルカリ解説】",
+    "channel_id": "UC7oijaq_oB3avz-Nha4SbJA",
+    "views": 9434,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "6:47"
+   },
+   {
+    "id": "dG5PYmyX-LQ",
+    "title": "らくらくメルカリ便（匿名配送）でセブンイレブンから発送する方法が簡単過ぎた",
+    "channel": "おにまるちゃんねる",
+    "channel_id": "UCPI61AHwYWwVbsXEOhPUZOw",
+    "views": 20541,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:38"
+   },
+   {
+    "id": "NyzFYctWCqA",
+    "title": "【メルカリ梱包】新サービス（匿名配送キャンセル）をこんなに早く利用してしまうとは..実際に利用したお話をしていきます。",
+    "channel": "サッチンのんびり梱包",
+    "channel_id": "UC5ahUvpRAoT8aglfJUSuECA",
+    "views": 5662,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "15:53"
+   },
+   {
+    "id": "EamyK4K3srU",
+    "title": "ゆっくりボイスで簡潔解説【ゆうゆうメルカリ便】メルカリで売れた匿名配送の「ゆうパケット」を郵便局に出しにいきます！【発送方法】",
+    "channel": "subway channel",
+    "channel_id": "UCpfMsbdOAE7KObbUjuFwrLw",
+    "views": 5811,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:24"
+   },
+   {
+    "id": "dz9KWENsK6I",
+    "title": "【メルカリ】配送サービスの「未定」を「匿名配送」へ変更した結果→匿名では無くなりました…",
+    "channel": "メルカリままチャンネル",
+    "channel_id": "UCeRahzLLf-aaUO_9D3wLAIw",
+    "views": 10097,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:07"
+   },
+   {
+    "id": "5afuVGnK46M",
+    "title": "『匿名じゃないメルカリ便』を使う人が急増…？その理由とは？【ずんだもん解説】",
+    "channel": "ふりまめ【メルカリ解説】",
+    "channel_id": "UC7oijaq_oB3avz-Nha4SbJA",
+    "views": 2541,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:08"
+   },
+   {
+    "id": "nCFkM1TdllM",
+    "title": "メルカリ出品で使える配送方法と送料について徹底解説",
+    "channel": "吉田ゆうすけ",
+    "channel_id": "UCDgLoYnv_7vLqjzww2XioZw",
+    "views": 1615,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:10"
+   }
+  ],
+  "電子棚札 仕組み": [
+   {
+    "id": "SPSIqNSmdl8",
+    "title": "電子棚札ESL管理システムのご紹介PC編",
+    "channel": "ニューランド・ジャパン株式会社",
+    "channel_id": "UCCcR9xoXyCk91IJlJx_o9zw",
+    "views": 1354,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "5:09"
+   },
+   {
+    "id": "abSOL95OTNY",
+    "title": "OKS電子棚札システム",
+    "channel": "岡谷システム株式会社",
+    "channel_id": "UCbcBTvI4M4qbGzvo7aCKgvg",
+    "views": 557,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "2:40"
+   },
+   {
+    "id": "7ZKcto4x0a4",
+    "title": "【導入事例】「紙の代わり」だけじゃもったいない！  電子棚札(ESL)ソリューション「Newton」／ 株式会社多慶屋様",
+    "channel": "アイニックス株式会社",
+    "channel_id": "UCXgIhPXDzYYsZrApMs5f5Pw",
+    "views": 663,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "5:39"
+   },
+   {
+    "id": "uRw8GPYIvkI",
+    "title": "ESL（Electronic Shelf Label）電子棚札サブスクリプション",
+    "channel": "寺岡精工 公式TERAOKA jp",
+    "channel_id": "UCGVxYxIiayOlNpkNqNr0Rjw",
+    "views": 5269,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:33"
+   },
+   {
+    "id": "H9d71Mio2sA",
+    "title": "個人でも買える電子棚札「EZ Sign」を試してみた | vlog",
+    "channel": "ERB 電子情報放送",
+    "channel_id": "UCkYKJM3jbGUuSmnjUJZh7bQ",
+    "views": 451,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "2:48"
+   },
+   {
+    "id": "_6OMNJotEf0",
+    "title": "電子棚札システム 製品説明",
+    "channel": "索東輝",
+    "channel_id": "UCnJP_J6EPAnMioTN9LiPhuQ",
+    "views": 362,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:49"
+   },
+   {
+    "id": "4fEuTRYjl5s",
+    "title": "電子棚札で新しい動き！アイネックス株式会社の「無人決済」",
+    "channel": "IT情報局",
+    "channel_id": "UCd4KV2VIO2D4LfHVKOqGjIg",
+    "views": 537,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "0:13"
+   },
+   {
+    "id": "t0OgCE-yTQ8",
+    "title": "電子棚札システム デモ",
+    "channel": "索東輝",
+    "channel_id": "UCnJP_J6EPAnMioTN9LiPhuQ",
+    "views": 221,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:09"
+   },
+   {
+    "id": "-d8tmt5ceUA",
+    "title": "サンドラッグ様 電子棚札(ESL)導入によるDX事例",
+    "channel": "寺岡精工 公式TERAOKA jp",
+    "channel_id": "UCGVxYxIiayOlNpkNqNr0Rjw",
+    "views": 13990,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:43"
+   },
+   {
+    "id": "ksmod18OwGg",
+    "title": "売価表示の一元管理『T＠POP（ESL）』_Short Video",
+    "channel": "寺岡精工 公式TERAOKA jp",
+    "channel_id": "UCGVxYxIiayOlNpkNqNr0Rjw",
+    "views": 1132,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "0:38"
+   },
+   {
+    "id": "IbSTW9IUJJY",
+    "title": "電子棚札プロモーション動画",
+    "channel": "IoTDiv Forval",
+    "channel_id": "UCV30zO2fRkZB9b-p3UaXQeg",
+    "views": 749,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:41"
+   },
+   {
+    "id": "SuI_nrsmiwY",
+    "title": "売価表示の一元管理『T＠POP（ESL）』【寺岡精工】",
+    "channel": "寺岡精工 公式TERAOKA jp",
+    "channel_id": "UCGVxYxIiayOlNpkNqNr0Rjw",
+    "views": 4668,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:56"
+   },
+   {
+    "id": "1nlYPMRG2OI",
+    "title": "お車価さま(おしゃかさま）｜電子棚札(ELS)書換え変更画面",
+    "channel": "中古車用デジタルプライスボードお車価さま(おしゃかさま)",
+    "channel_id": "UCkmJzRM3X7QnFUD1d2sxraw",
+    "views": 147,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:33"
+   },
+   {
+    "id": "Pc-W1c5OEtY",
+    "title": "電子棚札ESLの特長と表示書換えデモ",
+    "channel": "ニューランド・ジャパン株式会社",
+    "channel_id": "UCCcR9xoXyCk91IJlJx_o9zw",
+    "views": 2107,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:41"
+   },
+   {
+    "id": "7X6cdZBEJeE",
+    "title": "TVCM180秒_ミライト・ワン　電子棚札 編",
+    "channel": "ミライト・ワン 公式",
+    "channel_id": "UC0VRPRuO6K_tOkj62pHpQLg",
+    "views": 227479,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:01"
+   },
+   {
+    "id": "Fcy26ejeOaU",
+    "title": "電子ペーパー　5.65インチ電子棚札",
+    "channel": "株式会社アールイーナンバー",
+    "channel_id": "UCW5eACf-E4GyoGPKzlpAsyQ",
+    "views": 638,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:19"
+   },
+   {
+    "id": "n8JlERDUA1o",
+    "title": "【ペーパーレス化＆効率アップ】電子棚札(ESL)ソリューション",
+    "channel": "アイニックス株式会社",
+    "channel_id": "UCXgIhPXDzYYsZrApMs5f5Pw",
+    "views": 6598,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:01"
+   }
+  ],
+  "万引き防止 ゲート 仕組み タグ": [
+   {
+    "id": "i_M6Nov_p2E",
+    "title": "【悪用厳禁】万引き防止ゲート・タグの仕組みをわかりやすく~電磁気学の有用性~【ゆっくり解説】",
+    "channel": "まーちの気になる科学・雑学【ゆっくり解説】",
+    "channel_id": "UCzdUPF0Trfx3U4DsMpG5lHg",
+    "views": 25575,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "9:29"
+   },
+   {
+    "id": "HpARJRC-Eos",
+    "title": "【意外と知らない】万引き防止ゲートのしくみ【5分でわかるシリーズ】",
+    "channel": "しくみスクール",
+    "channel_id": "UC1x4fl58kbWMfl4If2Esw-w",
+    "views": 112,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "5:22"
+   },
+   {
+    "id": "1llYMzqQHFA",
+    "title": "ユニクロ 盗難防止タグちぎってみた",
+    "channel": "奄美ノタ（あまみのたチャンネル）",
+    "channel_id": "UCodx7UYA86NmzefKsZispFA",
+    "views": 58679,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "1:15"
+   },
+   {
+    "id": "S-H43sECuNQ",
+    "title": "【センサーだらけ？】ユニクロで不正ができないのはなぜか",
+    "channel": "ラムダ技術部",
+    "channel_id": "UC8g17oXkRt8buwQL8GU-NSw",
+    "views": 526484,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "4:26"
+   },
+   {
+    "id": "0ZmIybKnOQM",
+    "title": "シグマの防犯ゲート　万引き防止ゲートを新たに購入しました！　実際にタグを使って動かしてみます。",
+    "channel": "T.K.E.Dマニア",
+    "channel_id": "UCFZ-RF2eSYW7G-A1vO0F1aw",
+    "views": 1738,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "5:06"
+   },
+   {
+    "id": "U6RMW23l8jU",
+    "title": "【九州初】「電子タグ」本に挟んで万引き防止　北九州市の書店で実証実験　被害が年間1087冊→157冊に減った店も",
+    "channel": "FBS福岡放送ニュース",
+    "channel_id": "UC3X-tn7gpipCqOdYWCmdyJQ",
+    "views": 30555,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:38"
+   },
+   {
+    "id": "Nv_9SwvM49w",
+    "title": "万引き講座 1",
+    "channel": "narukami 793",
+    "channel_id": "UCD-9XNRAyyqOUIQ_R1Mv4IQ",
+    "views": 28894,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "7:05"
+   },
+   {
+    "id": "7WadTJWcyvA",
+    "title": "HAWK GRIP FIVE のご紹介・取扱説明 【最新型防犯タグ】",
+    "channel": "タカヤ株式会社_ストアセキュリティ製品",
+    "channel_id": "UCSysXoMotu8z48MEHOP-9HQ",
+    "views": 1278,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:29"
+   },
+   {
+    "id": "f04pe6Nw_LM",
+    "title": "兵庫県警密着24時。万引き犯が防犯ゲート突破失敗！",
+    "channel": "ばたやん姫路",
+    "channel_id": "UCrXLkylGpaxTmx_bb_fcpVA",
+    "views": 8859,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "0:39"
+   },
+   {
+    "id": "YYcfiFhpfXc",
+    "title": "【防犯タグ】HAWK-GRIP 製品紹介・お取り扱いについて",
+    "channel": "タカヤ株式会社_ストアセキュリティ製品",
+    "channel_id": "UCSysXoMotu8z48MEHOP-9HQ",
+    "views": 3713,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:20"
+   }
+  ],
+  "ポイント 還元 なぜ 儲かる 仕組み": [
+   {
+    "id": "gcvGzVeZf1E",
+    "title": "お店はなぜポイントをくれる？｜値引きとの違いと還元のしくみ",
+    "channel": "5分でわかるお金と経済のしくみ",
+    "channel_id": "UCe4LJ7xdD5MkPfRD8ZtWezg",
+    "views": 12,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "5:39"
+   },
+   {
+    "id": "RZU509LwhUs",
+    "title": "【第6回】ポイントサイトの稼げる仕組みはどうなってるの？【お悩み相談室】",
+    "channel": "OTAKE【節約オタク】",
+    "channel_id": "UCXrNg2DvnaVYpdzwCcHqXkg",
+    "views": 3315,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:53"
+   },
+   {
+    "id": "R2op-_Shbdc",
+    "title": "ポイントカードで店が儲かる仕組み｜タダでくれるポイントの正体",
+    "channel": "世の中の仕組み",
+    "channel_id": "UCsAzo1bLBo_qBqFMhLqIijQ",
+    "views": 3,
+    "published": "3 時間前",
+    "age_days": 0,
+    "length": "8:11"
+   },
+   {
+    "id": "ajwJrp4jaAw",
+    "title": "QR決済の仕組み｜PayPayは還元でどうやって儲けている？【アニメ解説】",
+    "channel": "CLEVER MONKEY　なんでも知りたい考えたい",
+    "channel_id": "UCaWyDTX849tn0gg3Rt9Vwng",
+    "views": 230,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "16:37"
+   },
+   {
+    "id": "p7ezbaxdjVc",
+    "title": "ポイント還元の代金は誰が払う？日本のポイント経済圏の経済学",
+    "channel": "日本商売解剖",
+    "channel_id": "UCPjGp2JdgGxr6VvYxshf7cQ",
+    "views": 196,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "27:48"
+   },
+   {
+    "id": "WRo7FPVwqJs",
+    "title": "なぜPayPayはポイントを配っても儲かるのか【ずんだもん解説】",
+    "channel": "くらしのデジタルなぜなに【ずんだもん解説】",
+    "channel_id": "UCElibAd6un47BHAGSGFqnBw",
+    "views": 12,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:08"
+   },
+   {
+    "id": "NZyywttdVIM",
+    "title": "共通ポイントの仕組み｜なぜ毎回聞かれる？Tポイントが消えた理由も【アニメ解説】",
+    "channel": "CLEVER MONKEY　なんでも知りたい考えたい",
+    "channel_id": "UCaWyDTX849tn0gg3Rt9Vwng",
+    "views": 63,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "15:55"
+   },
+   {
+    "id": "KhY8RyyfPYM",
+    "title": "なぜカード会社はポイントを配っても儲かる？",
+    "channel": "ナゼのウラガワ",
+    "channel_id": "UCm6vercGC7jklC9Vb9TZ_Ww",
+    "views": 185,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "4:54"
+   },
+   {
+    "id": "q-SuIFu6XJc",
+    "title": "ポイント還元1%は誰が出している？現金で払う人も無関係じゃない仕組み【公的な調査で解説】",
+    "channel": "大人のお金の授業【年金・給付金・税金】",
+    "channel_id": "UCbWgJSgqNmhDFDmp1JnC0UQ",
+    "views": 21,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "29:54"
+   },
+   {
+    "id": "2pWHiDcfrvg",
+    "title": "定期預金でWESTERポイントがもらえる？銀行と鉄道会社が組む理由",
+    "channel": "ビジネスの深層",
+    "channel_id": "UCL63n93DhYyHduGekEGMzMg",
+    "views": 34,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "23:45"
+   },
+   {
+    "id": "7fQsL1alUBo",
+    "title": "ポイ活のポイントは誰が出している？楽天・Ponta・dポイントとカード還元のしくみを図解",
+    "channel": "身近なお金のしくみ図鑑",
+    "channel_id": "UCk2Ujo5boYR02YAVJLFfOHA",
+    "views": 6,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "11:00"
+   },
+   {
+    "id": "lvEmyHHb5RU",
+    "title": "知らないと損するポイント還元7選|10%還元の正体",
+    "channel": "かざまるのお金教室",
+    "channel_id": "UCw5BWs1dMuN9syyFuo07nNA",
+    "views": 192,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "14:50"
+   },
+   {
+    "id": "pybml93xnjQ",
+    "title": "知らないと損するポイント還元の落とし穴7選|得するつもりで支出が増える理由",
+    "channel": "かざまるのお金教室",
+    "channel_id": "UCw5BWs1dMuN9syyFuo07nNA",
+    "views": 66,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "14:51"
+   },
+   {
+    "id": "Uyb_KmSZUiw",
+    "title": "楽天はなぜポイントを配っても得をするのか？",
+    "channel": "商売の経済学",
+    "channel_id": "UC3ZlfwR3yK40m_YMpgrWnTQ",
+    "views": 18,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "28:53"
+   }
+  ],
+  "クレジットカード 仕組み なぜ 後払い お金の流れ": [
+   {
+    "id": "OVSlzx85OP0",
+    "title": "クレジットカード決済の仕組みって？利用から支払いまでの流れを解説",
+    "channel": "山田のレゾンデートル",
+    "channel_id": "UCPZyntJm0j4o2ApxhFNm-ew",
+    "views": 103602,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:27"
+   },
+   {
+    "id": "IN4KBoRhe3Y",
+    "title": "クレジットはどんな仕組みなの？",
+    "channel": "日本クレジット協会公式チャンネル",
+    "channel_id": "UCumM01rHfPwZ5r3PB0j3EUg",
+    "views": 8393,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:15"
+   },
+   {
+    "id": "EVm_xlkustY",
+    "title": "クレジットカードは、なぜ「後払い」で買い物できるのか？｜決済の仕組みを図解",
+    "channel": "なんでそうなった　しくみ図鑑",
+    "channel_id": "UC41bFknZlwZgMG-7BpNhEXg",
+    "views": 129,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "16:34"
+   },
+   {
+    "id": "AnD01Juac8E",
+    "title": "【就活生も必見！】クレジットカード業界の仕組み",
+    "channel": "借りれるくん【「お金」で損しないために学ぶ動画チャンネル】",
+    "channel_id": "UCL8bkicLuIJF8oiC7iptMAg",
+    "views": 20970,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:47"
+   },
+   {
+    "id": "OsjzMrDEPqs",
+    "title": "クレジットカードの仕組みとは？利用者とカード会社、加盟店の関係性とお金の流れを解説【三井住友カード公式】",
+    "channel": "三井住友カード【公式】",
+    "channel_id": "UCFUVJww_Rf3syoRc92-ssHQ",
+    "views": 4663,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "6:17"
+   },
+   {
+    "id": "mGSb5_vry_0",
+    "title": "【ゆっくり解説】クレジットカードの仕組み",
+    "channel": "現実資料館【お金・社会の闇】",
+    "channel_id": "UCl-brX5ZKqPz8Zj_3QegLAw",
+    "views": 6204,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:27"
+   },
+   {
+    "id": "IRoSjsUx-Tg",
+    "title": "1回払いの手数料は0円。それでもカード会社が儲かるのはなぜ？",
+    "channel": "5分でわかるお金と経済のしくみ",
+    "channel_id": "UCe4LJ7xdD5MkPfRD8ZtWezg",
+    "views": 11,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "4:51"
+   },
+   {
+    "id": "pruEat55CFU",
+    "title": "Visaはなぜ儲かる？貸さずに稼ぐクレカの仕組み",
+    "channel": "マンガでわかるお金とビジネスの物語",
+    "channel_id": "UC2kkFxn00dXiLkm54dxJxmQ",
+    "views": 67,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "17:07"
+   },
+   {
+    "id": "gK8iQ1KUGJw",
+    "title": "クレジットカードのヒミツ",
+    "channel": "ずんだと学ぶ、黒板アカデミー",
+    "channel_id": "UC_HDq1r_rIZ9FMQOdhmFXsw",
+    "views": 12,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "12:23"
+   },
+   {
+    "id": "5nk5YN7Ss3o",
+    "title": "後払い（BNPL）の仕組み｜なぜ手数料タダ？12回分割でも無料の理由【アニメ解説】",
+    "channel": "CLEVER MONKEY　なんでも知りたい考えたい",
+    "channel_id": "UCaWyDTX849tn0gg3Rt9Vwng",
+    "views": 39,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "12:20"
+   },
+   {
+    "id": "L6t88MxqWiI",
+    "title": "クレカはなぜ借金が増える？子どもに伝える後払いの教え方",
+    "channel": "暮らしの答え図鑑",
+    "channel_id": "UC691ItVaOG63dwIMxsXIvTA",
+    "views": 9,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "6:37"
+   },
+   {
+    "id": "TXXu7QzctD8",
+    "title": "【絶対NG】クレジットカードの現金化とは？危険な仕組みとバレる理由を徹底解説！",
+    "channel": "現役社員が教えるクレジットカードの世界 ",
+    "channel_id": "UCe3i8ttujgLDqDNiy0O8oxg",
+    "views": 8834,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:08"
+   },
+   {
+    "id": "hhO3xGduW14",
+    "title": "【超入門】クレジットカードの仕組みと選び方｜知らないと損する仕組みと、絶対避けるべき落とし穴 【新生活シリーズ】",
+    "channel": "コアラ先生の時事ネタ祭り",
+    "channel_id": "UCQ-0MkpvJZ0co7WD79DBt9w",
+    "views": 42874,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "21:50"
+   },
+   {
+    "id": "tgieETlQX80",
+    "title": "クレジットカードの仕組み",
+    "channel": "雑学研究所ひろし",
+    "channel_id": "UC--nCmN6Gh9743loukS9gog",
+    "views": 4829,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "12:50"
+   },
+   {
+    "id": "c2hwyLOzCnE",
+    "title": "クレジットカードの特徴と注意点とは？：消費者庁",
+    "channel": "消費者庁 / CAA",
+    "channel_id": "UCxYpWT3DELDs8_uks1hKuUw",
+    "views": 43013,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:54"
+   },
+   {
+    "id": "2zIngPmEZb0",
+    "title": "なぜ、クレカのポイントがもらえるのか？｜1,000円の買い物でわかるお金の流れ",
+    "channel": "マネーの裏側ラボ",
+    "channel_id": "UCiJjNp9E_Xyv_wYRhuxMCvg",
+    "views": 15,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "10:35"
+   }
+  ],
+  "バーチャル背景 仕組み なぜ 人 だけ": [],
+  "パソコン フリーズ なぜ 固まる 仕組み": [],
+  "CM 音 大きい なぜ": [
+   {
+    "id": "YhQk2BFnmDA",
+    "title": "なぜ昔のテレビCMは爆音だったのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 23236,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "16:03"
+   },
+   {
+    "id": "DE-J28Y0XBE",
+    "title": "なぜテレビは、CMになると音が大きくなったのか【ゆっくり解説】",
+    "channel": "ゆっくり懐かしデジタル館",
+    "channel_id": "UCKxBonZiofNdmgZbZdLkYuA",
+    "views": 3488,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "13:50"
+   },
+   {
+    "id": "wehm3S7f4K0",
+    "title": "【ゆっくり解説】CMだけ急にうるさい？テレビ音量を揃える基準の闇5選『闇学』",
+    "channel": "『闇の雑学』をゆっくり解説",
+    "channel_id": "UCZwLA11TBRTdJlBv-IpZvmQ",
+    "views": 7721,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "13:04"
+   },
+   {
+    "id": "Fy7bbB6nANw",
+    "title": "YouTubeで特定動画の音量が「大きい」や「小さい」とお感じのかたに試してもらいたい設定の紹介動画です。※全てのかたの音に関する問題解消になるとは限りません。",
+    "channel": "栗静岡 【静岡の飲食店紹介チャンネル】",
+    "channel_id": "UCkbYI-YkoN4MA3t3PTrry0A",
+    "views": 9077,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:45"
+   },
+   {
+    "id": "82DHeggeeGE",
+    "title": "なぜ薬のCMは、最後に「ピンポン」と言うのか【ゆっくり解説】",
+    "channel": "ゆっくり懐かしデジタル館",
+    "channel_id": "UCKxBonZiofNdmgZbZdLkYuA",
+    "views": 25790,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "14:20"
+   },
+   {
+    "id": "urCRYyhs5QM",
+    "title": "【雑学】実はテレビの音量が気になる人は…",
+    "channel": "雑学宅急便。",
+    "channel_id": "UC_YhWHsK3cBqYPecAh29V5A",
+    "views": 320,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "3:32"
+   },
+   {
+    "id": "MxWMPQ4ZJTg",
+    "title": "映画「騒音」マナーCM",
+    "channel": "騒音公式",
+    "channel_id": "UCsDKW15nlUxLXDj_hoKHO0g",
+    "views": 5260,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "1:01"
+   },
+   {
+    "id": "BxoIZJuwOuE",
+    "title": "CMになったら音量が少し大きくなってる感じは確かだろうか",
+    "channel": "d Nm",
+    "channel_id": "UCYPrrIK6tIg_pQkegRRJtYw",
+    "views": 5,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "15:39"
+   },
+   {
+    "id": "V47AaAaLjsE",
+    "title": "Youtubeの音量が小さいと思ったときに試す方法",
+    "channel": "三田パソコンTV",
+    "channel_id": "UCJ29Ni-fbcALd00TP8VABLg",
+    "views": 88227,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:51"
+   }
+  ],
+  "テレビ チャンネル 番号 なぜ 地域 違う": [
+   {
+    "id": "XLejyeZiLIg",
+    "title": "なぜテレビのリモコンは12まで？NHKが「1」、実際は27チャンネルの理由【ゆっくり解説】",
+    "channel": "はてなデジタルゆっくり解説",
+    "channel_id": "UCjBOHufoRsIbZtO6XtGqdPg",
+    "views": 23,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "9:17"
+   },
+   {
+    "id": "vCti1jTAkac",
+    "title": "なぜテレビのチャンネルは「1・3・4・6・8・10・12」と飛び飛びだったのか【ゆっくり解説】",
+    "channel": "ゆっくり懐かしデジタル館",
+    "channel_id": "UCKxBonZiofNdmgZbZdLkYuA",
+    "views": 27535,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "16:50"
+   },
+   {
+    "id": "WUoIfjxR04E",
+    "title": "【テレビ】チャンネル数が少ない都道府県ランキング",
+    "channel": "データは語る",
+    "channel_id": "UC-te6wlY2GiVOK9v54lXvCA",
+    "views": 64646,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "2:02"
+   },
+   {
+    "id": "8Ui5zMkHDv4",
+    "title": "なぜ市外局番は地域によってケタ数が違うのか【ゆっくり解説】",
+    "channel": "ゆっくり懐かしデジタル館",
+    "channel_id": "UCKxBonZiofNdmgZbZdLkYuA",
+    "views": 28735,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "20:09"
+   },
+   {
+    "id": "W7p6kM6ZE50",
+    "title": "【昭和の暮らし】テレビ欄に丸を付けたあの頃…録画で変わった家族の番組選び【ゆっくり解説】",
+    "channel": "衝撃雑学ラボ",
+    "channel_id": "UCFQWbOg7MkXoav8HcpHwpow",
+    "views": 69,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "12:35"
+   },
+   {
+    "id": "U70ZJlYC968",
+    "title": "【テレビ離れの正体】10代の視聴時間はネットの5分の1！食レポ番組ばかりになった3つの理由",
+    "channel": "トモヤ学びの部屋",
+    "channel_id": "UC-HPqfubuBERNGzEkStIpgQ",
+    "views": 17316,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "17:14"
+   },
+   {
+    "id": "SKtmxNirgHw",
+    "title": "なぜ県によって、映る民放の数が違ったのか【ゆっくり解説】",
+    "channel": "ゆっくり懐かしデジタル館",
+    "channel_id": "UCKxBonZiofNdmgZbZdLkYuA",
+    "views": 55018,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "17:17"
+   },
+   {
+    "id": "C5rno8RAnyM",
+    "title": "【初心者向け】TVリモコンの「チャンネル」とは？周波数との違いをわかりやすく解説",
+    "channel": "RFエンジニア育成所【無線・電波を教える学校】",
+    "channel_id": "UCw64Fd-CqTkfBhtXA6ZvrqQ",
+    "views": 1086,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:48"
+   },
+   {
+    "id": "3R1k3muvCGU",
+    "title": "【NCV福島】テレビ設定・チャンネルスキャン【説明動画】",
+    "channel": "NCV福島",
+    "channel_id": "UCYuYoBnlXcjJL_enm5vXqsQ",
+    "views": 651,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "2:07"
+   },
+   {
+    "id": "K6PRdRG_Smw",
+    "title": "なぜテレビ局は電波を手放さないのか",
+    "channel": "ゆっくりあいてぃーch",
+    "channel_id": "UCRu68pIpeYkDDvSuLUPk82A",
+    "views": 343,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "13:15"
+   },
+   {
+    "id": "YPYtYqxYSU0",
+    "title": "なぜ消えた？40年前に日本中の屋根にあった「月額ゼロのテレビ」の謎",
+    "channel": "暮らしの裏科学",
+    "channel_id": "UCoq72Q9m0E1tZoTeZS_NzFA",
+    "views": 4219,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "14:47"
+   },
+   {
+    "id": "Xrzuq03Z4WQ",
+    "title": "回すチャンネルのテレビ｜「4チャンにして」の声と、消えたダイヤル",
+    "channel": "昭和の暮らし・消えた日常",
+    "channel_id": "UCBdIkc2NSPLRJAhH9cLJlhA",
+    "views": 14,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "7:29"
+   },
+   {
+    "id": "amWEDCHxr5I",
+    "title": "テレビ映らないチャンネルが有る",
+    "channel": "やっさんN ",
+    "channel_id": "UCp3QcUaZNjMyH2UfyB_xzwA",
+    "views": 10032,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:03"
+   },
+   {
+    "id": "k8J0TpmH9UY",
+    "title": "なぜファミコンは『テレビの2チャンネル』で映ったのか？実は地域によって違った【ゆっくり解説】",
+    "channel": "AIってなんなん。ゆっくり解説",
+    "channel_id": "UCacYx9HdEduwiJI7NwVOAIA",
+    "views": 842,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "15:56"
+   },
+   {
+    "id": "rKAIKZAoIfU",
+    "title": "テレビ革命が始まった。公共放送に迫る最大の危機を解説します【メディア NHK】",
+    "channel": "下矢一良の正直メディア",
+    "channel_id": "UCtkGrvBMJhICgVxTfo-pneA",
+    "views": 542584,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "17:32"
+   },
+   {
+    "id": "bIDgAgJcK-0",
+    "title": "なぜフルHDのテレビは、縦が「1080」という半端な数になったのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 7592,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "17:05"
+   },
+   {
+    "id": "AKPlXsWuVD0",
+    "title": "テレビが映らない！地上波やＢＳが受信できないＴＶの６つの修理方法。",
+    "channel": "jisyukanri",
+    "channel_id": "UCIO55NIcGgsuUKiTeaafWTQ",
+    "views": 417068,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:41"
+   },
+   {
+    "id": "YntXyewCcrE",
+    "title": "なぜファミコンはテレビの1・2チャンネルで映ったのか？【ゆっくり解説】",
+    "channel": "あの頃のなぜ",
+    "channel_id": "UCT_3Twi6xpzgrKpRTaQPSng",
+    "views": 583,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "15:17"
+   }
+  ],
+  "ウインカー 音 なぜ カチカチ": [
+   {
+    "id": "5l1FK_AT5f4",
+    "title": "ダイハツ車のウインカー",
+    "channel": "ナカゴエ草",
+    "channel_id": "UCOM1VIeybQulSKUbvOey7UA",
+    "views": 101080,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:20"
+   },
+   {
+    "id": "yPQPfR2znYc",
+    "title": "今更!?ダイハツ車のウィンカー音変更方法",
+    "channel": "森京R",
+    "channel_id": "UCMIxJUsoePPsqBie6vNPkTw",
+    "views": 3946,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "0:27"
+   },
+   {
+    "id": "MnlSlH50Nuo",
+    "title": "車のウインカーの音の正体と法律",
+    "channel": "高橋巨樹のガレージライフ / Naoki's Garage Life",
+    "channel_id": "UCa3jilkXpbo2Fzn43aGP3sg",
+    "views": 19122,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "3:14"
+   },
+   {
+    "id": "g0EIHTxqX54",
+    "title": "ＩＣウインカーリレー カチカチ音",
+    "channel": "kazupin10",
+    "channel_id": "UCaowi_3NyEM_iWvhFZ_dlsQ",
+    "views": 24509,
+    "published": "16 年前",
+    "age_days": 5840,
+    "length": "0:27"
+   },
+   {
+    "id": "MQvsk86yv6Y",
+    "title": "前期型 K12マーチ ウインカーのカチカチ音が出なくなる持病",
+    "channel": "スマイリーささき",
+    "channel_id": "UCkidDSKoG0iKLaZkpSm9h4w",
+    "views": 1465,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "0:37"
+   },
+   {
+    "id": "wriFCblE5Pc",
+    "title": "【バモス】何これ⁉︎何もしてないのにウィンカーがカチカチ鳴るんだけど！自分で修理",
+    "channel": "クロちゃんの部屋",
+    "channel_id": "UC43kIH5vPxaoxa86lxmYZng",
+    "views": 4147,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "17:07"
+   },
+   {
+    "id": "YUrk0CDXyxA",
+    "title": "【Jazz５０】ウインカーリレー交換　カチカチ音あり【カスタム】",
+    "channel": "毒百合姫の趣味とモトブログ",
+    "channel_id": "UCc5mLFIsaaF-oLE_Ja3oJZA",
+    "views": 923,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:36"
+   },
+   {
+    "id": "73BKhLptG5I",
+    "title": "バイクのウインカーリレー の音が小さかったので改造しました",
+    "channel": "Kawacha HOBBY",
+    "channel_id": "UCT5zvBQzCRtw0H-HDGVL-tQ",
+    "views": 3730,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:36"
+   },
+   {
+    "id": "WHDAYhAAhrw",
+    "title": "JB64ジムニー／JB74ジムニーシエラ　ウインカーの音がうるさい件、その解決案",
+    "channel": "独楽犬",
+    "channel_id": "UCQlvUoLzrwOiUALkyes3lew",
+    "views": 11346,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "5:46"
+   },
+   {
+    "id": "K85zcgjChEE",
+    "title": "Turnsignal buzzer  ウインカーブザー",
+    "channel": "キジマちゃんねる【公式】",
+    "channel_id": "UCEKsOWXQ0GHyTPK7BjKouOA",
+    "views": 30585,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "1:24"
+   },
+   {
+    "id": "GBLffkF_Ono",
+    "title": "【環境音】ウインカー【ずっと見てられる動画】/Turn signal",
+    "channel": "ずっと見てられる動画",
+    "channel_id": "UCSqILuhsO64ARWQHlx9UINQ",
+    "views": 999,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:18"
+   },
+   {
+    "id": "mL8KZBrUr-Y",
+    "title": "ウインカーリレー 『カチカチ』音",
+    "channel": "一舎洋明",
+    "channel_id": "UCM31RRtBikQdHTswKC-xUFg",
+    "views": 2239,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:15"
+   },
+   {
+    "id": "beVUQzYxbwg",
+    "title": "[特別企画] プリウスのウィンカー音を「名探偵プリキュア」仕様に改造します",
+    "channel": "M F Garage",
+    "channel_id": "UCWGdVVaT0zPKw-hvv9Qso2w",
+    "views": 269831,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "3:57"
+   },
+   {
+    "id": "29tx82T6rPY",
+    "title": "ただのウインカー故障だと思ったら・・・",
+    "channel": "モリモトシンヤ",
+    "channel_id": "UCwDO02SRX6YLzZKG1e7gDCg",
+    "views": 361185,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "16:07"
+   },
+   {
+    "id": "1kw0iVZyYz0",
+    "title": "【ウィンカーLED化】キタコのカチカチ音リレーに交換したらハイフラ発生…原因と対策",
+    "channel": "kすけチャンネル",
+    "channel_id": "UCfUGQQvHPRUJ_mFggNmWGmA",
+    "views": 6317,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:02"
+   },
+   {
+    "id": "mcxw4Qqk7is",
+    "title": "バスのウインカー音集",
+    "channel": "伊達崎シティ交通",
+    "channel_id": "UCIdS1VuGFobdU8mDEpooGOA",
+    "views": 48760,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:39"
+   },
+   {
+    "id": "W7WxchOafh0",
+    "title": "ウィンカー音集４",
+    "channel": "Yootaro515",
+    "channel_id": "UCKIwKXAAt63zbPI_n800iHA",
+    "views": 56162,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:45"
+   },
+   {
+    "id": "8_Zbtcwc67Q",
+    "title": "ウィンカー音集５",
+    "channel": "Yootaro515",
+    "channel_id": "UCKIwKXAAt63zbPI_n800iHA",
+    "views": 144863,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "5:04"
+   }
+  ],
+  "ゲーム ロード 時間 なぜ 長い 仕組み": [
+   {
+    "id": "AESkd9ZjTx4",
+    "title": "なぜ初代プレステのゲームはロード時間が長かったのか",
+    "channel": "消えたモノ図鑑",
+    "channel_id": "UC-cHRPoZhEkpmMQpG8jw5BA",
+    "views": 5991,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "27:37"
+   },
+   {
+    "id": "V1A-caU_6EM",
+    "title": "【ザ・検証】ネオジオCDのロード時間を比べてみる",
+    "channel": "超電脳ゲームファイヤー",
+    "channel_id": "UCQHwBwei_DxL_zPbXa5ic0A",
+    "views": 19682,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "1:12"
+   },
+   {
+    "id": "uB658vSXI_s",
+    "title": "ロード画面はなぜ長いのか — 素材の読み込みと先読み｜ねる前エンジニアリング",
+    "channel": "ねる前エンジニアリング",
+    "channel_id": "UCtJCzDE8a49U7HOQFTTIUnw",
+    "views": 129,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "14:13"
+   },
+   {
+    "id": "theNUApmHPE",
+    "title": "ゲームの『ロード画面』はなぜ消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりIT解説",
+    "channel_id": "UCa7blfH744ZRbM9TgjtjfDw",
+    "views": 6861,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "17:21"
+   },
+   {
+    "id": "J1ydWhxK8sc",
+    "title": "なぜ最近のゲームはラグを感じずオンライン対戦できるのか【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 99352,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "20:44"
+   },
+   {
+    "id": "T5mF0DY0qBA",
+    "title": "\"市場最速のSSD\"でオープンワールドゲームのロード時間を計測！『セインツロウ』を高速SSDにインストールして遅刻を回避した",
+    "channel": "インサイド＆Game*Spark動画チャンネル",
+    "channel_id": "UCkU6nDHWQpyDK5vw9YSYjLw",
+    "views": 181,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:49"
+   },
+   {
+    "id": "AZGFu-IJ5iQ",
+    "title": "【悲報】Switch2、ロード時間の検証結果がヤバかったwww【ネットの反応】",
+    "channel": "何それ!? ゲーム速報",
+    "channel_id": "UCLfUYPjiihODeeBzlnpf7Fg",
+    "views": 15764,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:29"
+   },
+   {
+    "id": "21yItTowehs",
+    "title": "なぜ大人になるとゲームを始めるまでが長いのか？",
+    "channel": "あれこれ、ためしてみた。",
+    "channel_id": "UC17XwMiUv40Ee8UpOtL7kPQ",
+    "views": 3,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "9:14"
+   },
+   {
+    "id": "XtQ3fUc-s30",
+    "title": "ダメージのあと、なぜ無敵になる？【ゲームの仕組み】",
+    "channel": "ゲームのつくり方の歴史",
+    "channel_id": "UCoRKiHXexUwA8APy4YTm9UQ",
+    "views": 12,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "9:23"
+   },
+   {
+    "id": "9k2VAhdjeaY",
+    "title": "ロード画面が20年間「退屈」だった本当の理由──たった一枚の特許が世界を縛っていた【ゲームの法律】",
+    "channel": "Puzzlebyrinth",
+    "channel_id": "UCPxLpiLf747Te_nwbZeSqSg",
+    "views": 42,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "3:51"
+   },
+   {
+    "id": "vgrBq-WAJ4M",
+    "title": "【衝撃】ゲームのロード、なぜか一瞬で終わる新技術がガチでヤバい【ずんだもん】",
+    "channel": "ずんだITガジェ速報【ずんだもん解説】",
+    "channel_id": "UCBLNa3DKn2GHWZtd3NsPwug",
+    "views": 4778,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "9:04"
+   }
+  ],
+  "ゲーム 容量 なぜ 大きい": [
+   {
+    "id": "8kdNM77XGAY",
+    "title": "【ゆっくり解説】任天堂の歴代ゲーム容量が神すぎる件",
+    "channel": "ゲーム都市伝説・小ネタ情報局【ゆっくり解説】",
+    "channel_id": "UCuYo0I6CfFTtcsFa5kAtMzQ",
+    "views": 6492,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:37"
+   },
+   {
+    "id": "WBPtK9CuY8Y",
+    "title": "なぜ初代ドラクエで容量ギリギリだったファミコンで、ドラクエ4まで出せたのか？【ファミコン】【修正1】",
+    "channel": "ゆっくりゲームの不思議",
+    "channel_id": "UCVC1aE9CuwggGrUVn5JwqbQ",
+    "views": 323753,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "11:00"
+   },
+   {
+    "id": "A98cMYieFzU",
+    "title": "なぜ初代スーパーマリオは容量不足にならなかったのか？開発者が仕掛けた驚きの工夫【ゆっくり解説】",
+    "channel": "あの頃のゲーム研究所【ゆっくり解説】",
+    "channel_id": "UCup0yakbqViqu0p_qVgbWuw",
+    "views": 2926,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "20:55"
+   },
+   {
+    "id": "0luursJZBj8",
+    "title": "なぜファミコンのゲームは、あんなに小さい容量で動いたのか【ゆっくり解説】",
+    "channel": "あの頃のなぜ",
+    "channel_id": "UCT_3Twi6xpzgrKpRTaQPSng",
+    "views": 2371,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "18:25"
+   },
+   {
+    "id": "2B8Mv4IjLhc",
+    "title": "なぜ昔のゲームは容量が少ないのに長く遊べたのか",
+    "channel": "消えたモノ図鑑",
+    "channel_id": "UC-cHRPoZhEkpmMQpG8jw5BA",
+    "views": 8045,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "30:56"
+   },
+   {
+    "id": "adtKTEqzbnc",
+    "title": "ゲーム1本で100GB超え。その容量は何に使われているのか",
+    "channel": "ずんだずんだ大先生",
+    "channel_id": "UCITfj2TKjModO4mY2uzn7yg",
+    "views": 690,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:07"
+   },
+   {
+    "id": "kNtwRlJ97qc",
+    "title": "なぜ初代マリオはあの広い世界を40KBに詰め込めたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 152055,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:04"
+   },
+   {
+    "id": "c_nnrYsqiD8",
+    "title": "【Windows11】不足するストレージの空き容量を増やす方法9選（C/Dドライブ・HDD/SSD）",
+    "channel": "365日の学び　～たいぞうのITカフェ～",
+    "channel_id": "UCq0U14WighKpLM2c-AfcrfA",
+    "views": 215610,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "12:02"
+   },
+   {
+    "id": "t8nSMnS7TKs",
+    "title": "なぜかCドライブがいっぱい！、空き容量不足の時　ココをチェック！",
+    "channel": "パソコン修理屋-亀さんの知っ得チャンネル",
+    "channel_id": "UCeXvdlp4PWALgiO--w-rCDQ",
+    "views": 89758,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:32"
+   }
+  ],
+  "ワイヤレスイヤホン 音ズレ 遅延 なぜ": [],
+  "急速充電 なぜ 速い 仕組み": [
+   {
+    "id": "REUcIJTxVFY",
+    "title": "急速充電の仕組みを徹底解説（アニメーション）",
+    "channel": "Mindor",
+    "channel_id": "UCfQ5UshcXHLAZTLS6SACh2A",
+    "views": 216,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "3:01"
+   },
+   {
+    "id": "EzzlnEHA_4k",
+    "title": "充電器のWを全部解説【急速充電のしくみ】",
+    "channel": "ネジとハカセ【ざっくり解説】",
+    "channel_id": "UCqUXPKuCkgFXUH9IzTk9fgw",
+    "views": 20,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "10:16"
+   },
+   {
+    "id": "sotd7W5PFCc",
+    "title": "USB-Cなのに充電速度が違う理由、充電器とスマホの見えない電力交渉",
+    "channel": "モノづくりの科学",
+    "channel_id": "UCl6e9kFkefFRWI3xEgVONKQ",
+    "views": 130,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "23:17"
+   },
+   {
+    "id": "S2rGniUdizo",
+    "title": "USB-C急速充電って何？仕組みを徹底解説！",
+    "channel": "詳細エンジニアリング",
+    "channel_id": "UCPYNtEuzSKRsYJxpPDqmgEA",
+    "views": 807,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "11:17"
+   },
+   {
+    "id": "SGo6rSYPj4w",
+    "title": "🔋急速充電は寿命を縮める？スマホ40台を2年間・500回酷使した実験結果が衝撃的すぎた😱「80%制限」都市伝説？真実と正しい充電方法【検証】",
+    "channel": "サイバー太郎",
+    "channel_id": "UC6I_-Dg6Y9jAV6KS1UaUz0w",
+    "views": 15015,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "10:39"
+   },
+   {
+    "id": "cdsStbBOPpY",
+    "title": "充電速度ってなんで違う？充電器・ケーブル・W数の違いを解説",
+    "channel": "ガジェッ娘",
+    "channel_id": "UCLnNWUxIcU0pMecdb-Gk5WQ",
+    "views": 417,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:56"
+   },
+   {
+    "id": "sTwPMx15wDc",
+    "title": "置くだけで本当に速い？ワイヤレス急速充電の仕組みと「発熱・冷却」の科学",
+    "channel": "Cat of Worldlines",
+    "channel_id": "UCleq23hUnllSdT_B8CWDenw",
+    "views": 35,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "21:52"
+   },
+   {
+    "id": "ZH9ritKvTJA",
+    "title": "スマホの充電は、なぜ80%から遅くなる？｜充電の歴史と「制限」の仕組み",
+    "channel": "カイメイLAB ― 気になる技術、一緒に解明。―",
+    "channel_id": "UCaGns-ISbHByIH2yZaxs7qg",
+    "views": 35,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "8:32"
+   },
+   {
+    "id": "aG50Jii0yeg",
+    "title": "なぜ急速充電は最後の2割になると遅くなるのか｜定電流と定電圧",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 1,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "11:06"
+   },
+   {
+    "id": "w-ZTgx0vhjQ",
+    "title": "【EV急速充電】知らないと損！どの充電設備を使うのが得なのか急速充電の仕組みを解説！ | MITSUBISHI OUTLANDER 2022",
+    "channel": "YandYChannel",
+    "channel_id": "UCYZpwxvFtQpYi841TbRuNWQ",
+    "views": 12923,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:08"
+   },
+   {
+    "id": "hXlIsb0pYPg",
+    "title": "最先端の充電規格、USB Power Deliveryとは？100W対応とはどういうこと？iPhone12も100Wで爆速充電？",
+    "channel": "佐倉大吉",
+    "channel_id": "UCzcFZDymgm6LR-w3NoAb4eA",
+    "views": 46387,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "28:28"
+   },
+   {
+    "id": "cVcEtebVuxk",
+    "title": "【急速充電】なぜ80パーセントから遅くなるのか。ボルトを上げて、最後は手をゆるめる",
+    "channel": "AIの地図帳",
+    "channel_id": "UCNX4YlU8FnzrchmyCyTIWtw",
+    "views": 6,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "4:54"
+   },
+   {
+    "id": "pOFKoXI8Qr4",
+    "title": "ワイヤレス充電の仕組み／The Mechanism of a Wireless Battery Charger",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 267449,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:01"
+   }
+  ],
+  "スマホ 充電 最後 遅い なぜ 80%": [
+   {
+    "id": "vnH9vLCBgmY",
+    "title": "Pixelスマホで充電が遅い時の原因と対処",
+    "channel": "Pixelスマホの使い方 - Pixel lab",
+    "channel_id": "UCBU-oF42hFn4UUkdLAi-LTw",
+    "views": 11229,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "5:43"
+   },
+   {
+    "id": "rpqDMg6tW64",
+    "title": "スマホの充電、80%から遅いのはなぜ？スマホ充電の仕組みを約3分で解説",
+    "channel": "しくみの小窓",
+    "channel_id": "UCrLMySmUYgsWt642B6a6VFg",
+    "views": 14,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:25"
+   },
+   {
+    "id": "vhSbWesRmCU",
+    "title": "100%と80%どっちが正解？スマホの充電の常識が正反対になった理由【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの真相",
+    "channel_id": "UCDlGznf8OvYLZPiXcsL96gg",
+    "views": 2099,
+    "published": "3 時間前",
+    "age_days": 0,
+    "length": "27:40"
+   },
+   {
+    "id": "6e81JJ0ClSg",
+    "title": "スマホの充電は、なぜ最後だけ遅い？80％から先で起きていること",
+    "channel": "ずんだずんだ大先生",
+    "channel_id": "UCITfj2TKjModO4mY2uzn7yg",
+    "views": 676,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "12:20"
+   },
+   {
+    "id": "ZH9ritKvTJA",
+    "title": "スマホの充電は、なぜ80%から遅くなる？｜充電の歴史と「制限」の仕組み",
+    "channel": "カイメイLAB ― 気になる技術、一緒に解明。―",
+    "channel_id": "UCaGns-ISbHByIH2yZaxs7qg",
+    "views": 35,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "8:32"
+   },
+   {
+    "id": "sSbFu-e7_mc",
+    "title": "iPhoneを充電しながら寝ても大丈夫！80%で充電が止まるスマホが長持ちする設定",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 74704,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:13"
+   },
+   {
+    "id": "qRF-Xt1miPI",
+    "title": "Androidの充電が遅い問題を修正する方法 完全ガイド",
+    "channel": "Waylohr",
+    "channel_id": "UC8Q_tlVu1qotzGnH0gA5eMw",
+    "views": 211,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "1:19"
+   },
+   {
+    "id": "wocVrByZBJE",
+    "title": "Pixelスマホでバッテリー充電80％制限に対応！メリットとデメリットは？",
+    "channel": "Pixelスマホの使い方 - Pixel lab",
+    "channel_id": "UCBU-oF42hFn4UUkdLAi-LTw",
+    "views": 17728,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "6:39"
+   },
+   {
+    "id": "SGo6rSYPj4w",
+    "title": "🔋急速充電は寿命を縮める？スマホ40台を2年間・500回酷使した実験結果が衝撃的すぎた😱「80%制限」都市伝説？真実と正しい充電方法【検証】",
+    "channel": "サイバー太郎",
+    "channel_id": "UC6I_-Dg6Y9jAV6KS1UaUz0w",
+    "views": 15015,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "10:39"
+   },
+   {
+    "id": "kW6dkXB2bVE",
+    "title": "スマホの充電が遅い理由 初心者向けに解説",
+    "channel": "つちやたけし / ネットの疑問を解説",
+    "channel_id": "UCmfcNK62WfD-gYffHfAenOA",
+    "views": 59,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "11:21"
+   },
+   {
+    "id": "zHY3vnmoHHs",
+    "title": "【質問】高速充電対応のスマホの充電が遅い！PCのUSBポートに繋ぐと充電に時間がかかる、なんで？　-　充電速度が遅くなる主な原因と対処を解説 -",
+    "channel": "パソコンやワイズチャンネル　【ITエンジニア・元外資系IT大手メーカー】",
+    "channel_id": "UC3j6aO7-jLja9Y182SCaiBA",
+    "views": 1135,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:50"
+   }
+  ],
+  "モバイルバッテリー なぜ 発火 仕組み": [
+   {
+    "id": "hXWggv0EUdA",
+    "title": "モバイルバッテリー発火事故の原因",
+    "channel": "k trendy",
+    "channel_id": "UC7Rnks6jiVpXB3xCkHplj4g",
+    "views": 885,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "9:35"
+   },
+   {
+    "id": "BVOI0waRzEc",
+    "title": "【火災】モバイルバッテリーはなぜ発火する？【解説】",
+    "channel": "AIちゃん【日常の疑問解説】",
+    "channel_id": "UC-UQ828k7JcXATSsPxz949w",
+    "views": 747,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:07"
+   },
+   {
+    "id": "nlDWFKKiP0I",
+    "title": "モバイルバッテリーはなぜ発火する？危険な使い方と火災を防ぐ対策【公的資料で解説】",
+    "channel": "空からたどる街の記憶　新旧航空写真",
+    "channel_id": "UC_JHhZxvLFOFhH1945Ylpvg",
+    "views": 261,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:02"
+   },
+   {
+    "id": "MVc6V6dyrDM",
+    "title": "リチウムイオン電池 なぜ発火･爆発するの？メカニズムを聞く 地下鉄でモバイルバッテリーから出火したことも… 何に気をつければいい？",
+    "channel": "CBCニュース【CBCテレビ公式】",
+    "channel_id": "UCh5mvJtIWycou5b8smpBuxA",
+    "views": 7182,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "2:55"
+   },
+   {
+    "id": "XeKHYjC7of4",
+    "title": "↑フル動画はこちら↑モバイルバッテリーの発火はなぜ起こる？独自検証",
+    "channel": "読売テレビニュース",
+    "channel_id": "UCv7_krlrre3GQi79d4guxHQ",
+    "views": 57877,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:38"
+   },
+   {
+    "id": "ZSQ6z1zg5JU",
+    "title": "モバイルバッテリーなぜ発火？政府も回収義務化検討へ　家庭でできる対策と次世代“発火しないバッテリー”【Nスタ解説】｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 124640,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:35"
+   },
+   {
+    "id": "ukzGc0CoaiE",
+    "title": "モバイルバッテリーはなぜ発火する？リチウムイオン電池の仕組み",
+    "channel": "RRR",
+    "channel_id": "UCF82eD8Mfnc0QkdNCmIsjtw",
+    "views": 86,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "1:19"
+   },
+   {
+    "id": "OquqdNVbto0",
+    "title": "相次ぐモバイルバッテリー発火…対策続々も「粗悪品」どう見分ける？【スポットライト】調査報道プロジェクト",
+    "channel": "フジテレビ 報道【公式】",
+    "channel_id": "UCMbyctUUzWY8oRtXPKe6l5g",
+    "views": 16527,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "15:16"
+   },
+   {
+    "id": "jFKVYf7expI",
+    "title": "なぜモバイルバッテリーは発火するのか？ リチウムイオン電池のしくみと歴史を解説",
+    "channel": "ぜんぴょう",
+    "channel_id": "UCWEKHtQH_8V_VaYsZWVD4-A",
+    "views": 3,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "11:18"
+   },
+   {
+    "id": "BoKBhDc0o6s",
+    "title": "【危険】モバイルバッテリーはなぜ発火する？火災事故と発火原因を消防庁データで調べてみた",
+    "channel": "いさやん",
+    "channel_id": "UCq3ZOMuH241jxNIiQ6GnZmQ",
+    "views": 126,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "17:36"
+   },
+   {
+    "id": "_pE9e2iVJGU",
+    "title": "モバイルバッテリーはなぜ燃える？使っていない時にも起きる火災の仕組み",
+    "channel": "思考の森",
+    "channel_id": "UCA28Vmo-MQPawXiJeF0AZRA",
+    "views": 7,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "19:07"
+   },
+   {
+    "id": "AxOdXm15sFk",
+    "title": "モバイルバッテリーは、なぜ使っていなくても発火することがある？",
+    "channel": "そういうしくみ",
+    "channel_id": "UCdxjUwIY-fxh-wiGViZ95FA",
+    "views": 2,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "9:19"
+   },
+   {
+    "id": "GsEv68QHCR4",
+    "title": "モバイルバッテリーは、なぜ突然燃える？｜知の裏側",
+    "channel": "知の裏側",
+    "channel_id": "UCUPF7BcFwXDm1YCIyloaWdg",
+    "views": 2,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "2:59"
+   },
+   {
+    "id": "IUbYuJZ9UUk",
+    "title": "モバイルバッテリーはなぜ突然燃える？発火の原因と注意点 #shorts",
+    "channel": "身近な気になーる【雑学】",
+    "channel_id": "UC0O2edK31a2UQO_Jt6x26Jw",
+    "views": 1245,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "0:32"
+   },
+   {
+    "id": "2smQxi1Dkxg",
+    "title": "少しの衝撃で発火の可能性も…相次ぐモバイルバッテリー火災　3年以上経ったら要注意？モバイルバッテリー発火の前兆は【Nスタ解説】｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 29345,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:03"
+   },
+   {
+    "id": "N4-iIdzCfdI",
+    "title": "モバイルバッテリーはなぜ突然燃える？中の薄い膜の仕組み #shorts",
+    "channel": "世界の中身",
+    "channel_id": "UCieNPQtX1DkwkAVJyfVaGfg",
+    "views": 1594,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "1:02"
+   },
+   {
+    "id": "3AnD5BB1zos",
+    "title": "【発火原因！？】知らなきゃ危ないリチウムイオンバッテリーの仕組みについて徹底解説します！",
+    "channel": "ハンズクラフト",
+    "channel_id": "UCZyl1qWQqk3JAMEvzKrm-tw",
+    "views": 2117,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:54"
+   },
+   {
+    "id": "KsofUT72Nfo",
+    "title": "モバイルバッテリーが発火する理由｜ふくらみは危険サイン",
+    "channel": "へぇー図鑑",
+    "channel_id": "UCeBY1WwFJtRZfEH6iGp0Atg",
+    "views": 1089,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "0:37"
+   },
+   {
+    "id": "b2JzAiSibVw",
+    "title": "モバイルバッテリーが発火する原因とは？",
+    "channel": "WhyPlus+",
+    "channel_id": "UCLpT5YetSDcXomEdEdIPhTA",
+    "views": 2154,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "1:10"
+   },
+   {
+    "id": "T-OcyHOFb28",
+    "title": "モバイルバッテリーのひみつ～なぜ夏に爆発・発火事故が急増する？車内放置の危険性とリチウムイオンの「熱暴走」～",
+    "channel": "すきま時間の科学",
+    "channel_id": "UCmbQs69IAqq43sxm1rGFYVw",
+    "views": 65,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "4:41"
+   }
+  ],
+  "リチウムイオン電池 仕組み なぜ 燃える": [
+   {
+    "id": "PUVV3D8Xg70",
+    "title": "リチウムイオン電池はなぜ最強の電池なのか？仕組み・原理・長所を解説",
+    "channel": "もろぴー有機化学・研究ちゃんねる",
+    "channel_id": "UCVdqfcGIhXFEe4JDV97X1ig",
+    "views": 9854,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "7:35"
+   },
+   {
+    "id": "MVc6V6dyrDM",
+    "title": "リチウムイオン電池 なぜ発火･爆発するの？メカニズムを聞く 地下鉄でモバイルバッテリーから出火したことも… 何に気をつければいい？",
+    "channel": "CBCニュース【CBCテレビ公式】",
+    "channel_id": "UCh5mvJtIWycou5b8smpBuxA",
+    "views": 7182,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "2:55"
+   },
+   {
+    "id": "04m8lV0m69Y",
+    "title": "5分で分かるリチウムイオンバッテリーの仕組み（充放電時のリチウムイオンと電子の動き/電解質・セパレーター・集電体・外部回路の役割）",
+    "channel": "DIYと掃除機ときどき猫",
+    "channel_id": "UC0mTur_TH1_0EXpzMyJi0Qw",
+    "views": 21137,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:21"
+   },
+   {
+    "id": "QPT8TmuARF4",
+    "title": "リチウムイオン電池　仕組み　解説　充放電　二次電池　高校化学　エンジョイケミストリー　121106　令和５年１月１４日改訂版",
+    "channel": "ヒロシのエンジョイケミストリー",
+    "channel_id": "UCwaN2Y-XT66JcLaHLpjZaWQ",
+    "views": 53355,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "12:44"
+   },
+   {
+    "id": "eQGCN2QAibs",
+    "title": "リチウムイオンバッテリーが燃える理由｜熱暴走の仕組みと防ぎ方",
+    "channel": "ちょこっといい雑学 Ι 身近な疑問や豆知識・ライフハックをお届け",
+    "channel_id": "UCYWCN7cGlFIm78PxxoEk-ig",
+    "views": 114,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "2:44"
+   },
+   {
+    "id": "_ClAp_4ijjc",
+    "title": "【リチウムイオン電池】ノーベル賞の電池は、なぜ燃える？燃えにくくした技術を丁寧に解説｜吉野彰・セパレーター・リン酸鉄｜キギョズム研究室",
+    "channel": "永井みつるのキギョズム研究室 (企ギョズム)",
+    "channel_id": "UCGkAhbLzcVoUyNChJHgPBKQ",
+    "views": 105,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "20:31"
+   },
+   {
+    "id": "LSR9ooWaUNQ",
+    "title": "リチウムイオン電池の仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 281610,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "12:46"
+   },
+   {
+    "id": "zBdEyi2qFhc",
+    "title": "【面白い化学】リチウムイオン電池が発火する仕組み。【モバイルバッテリー】",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 873,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "4:49"
+   },
+   {
+    "id": "u6HNwCRQzNg",
+    "title": "【ゆっくり解説】なぜリチウムイオン電池は爆発するのか？",
+    "channel": "ゆくラボ 【身近な科学ゆっくり解説】",
+    "channel_id": "UC3bsE3tukQo-oiz7TimICAA",
+    "views": 473,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "8:09"
+   },
+   {
+    "id": "8Z_DO0wGah8",
+    "title": "リチウムイオン電池発火実験　～発火したらどうなる？～",
+    "channel": "東大阪市消防局公式チャンネル",
+    "channel_id": "UCsMnn6f9cGDQVrVasurGf6g",
+    "views": 53069,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:42"
+   },
+   {
+    "id": "ABahd5AFlCc",
+    "title": "スマホの電池はなぜ燃える？｜リチウムイオン電池の仕組みと歴史",
+    "channel": "機械の歴史",
+    "channel_id": "UC-HDaFoQ1O7G78sz0D8kBnw",
+    "views": 147,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "16:10"
+   },
+   {
+    "id": "3AnD5BB1zos",
+    "title": "【発火原因！？】知らなきゃ危ないリチウムイオンバッテリーの仕組みについて徹底解説します！",
+    "channel": "ハンズクラフト",
+    "channel_id": "UCZyl1qWQqk3JAMEvzKrm-tw",
+    "views": 2117,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:54"
+   },
+   {
+    "id": "GsEv68QHCR4",
+    "title": "モバイルバッテリーは、なぜ突然燃える？｜知の裏側",
+    "channel": "知の裏側",
+    "channel_id": "UCUPF7BcFwXDm1YCIyloaWdg",
+    "views": 2,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "2:59"
+   },
+   {
+    "id": "4XQuMoZxV5g",
+    "title": "【リチウムイオン電池の火災】「2030年までにゼロ目指す」 回収体制構築など対策本格化｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 6001,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "2:50"
+   },
+   {
+    "id": "2YcEx00CG2o",
+    "title": "【知らないと危ない！】1日3件爆発!?リチウムイオン電池の爆発のメカニズムを分かりやすく解説！【最新テクノロジーニュース】",
+    "channel": "おっしーの最先端テクノロジー and サイエンス",
+    "channel_id": "UC6ZJF0AS0yUP2V-h1gu5Esg",
+    "views": 65013,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "12:50"
+   },
+   {
+    "id": "9_-2_DvPgn0",
+    "title": "【ゆっくり解説】リチウムイオン電池の原理ー2019年ノーベル賞ー",
+    "channel": "化学屋まひろんのゆっくり解説",
+    "channel_id": "UCjHhw0AYjKG4NkUJ5KsrFXg",
+    "views": 22844,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:08"
+   },
+   {
+    "id": "rzKh2hKZIS4",
+    "title": "モバイルバッテリーはなぜ燃え続ける?ふたをしても消えない火の正体",
+    "channel": "不思議研究クラブ",
+    "channel_id": "UCAqx6ZRXNgrTHHyCPEMTHJw",
+    "views": 10,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "6:58"
+   },
+   {
+    "id": "aAcxsrm4sHo",
+    "title": "“発火しない”リチウムイオン電池！低コストの“驚き製造法”【ブレイクスルー】",
+    "channel": "テレ東BIZ ダイジェスト",
+    "channel_id": "UCkKVQ_GNjd8FbAuT6xDcWgg",
+    "views": 143326,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "3:15"
+   },
+   {
+    "id": "FTLqk9fL4SU",
+    "title": "リチウムイオン電池火災の恐怖…",
+    "channel": "GENKI LABO",
+    "channel_id": "UC46u5qG6vqDdrNYgqRVvq3Q",
+    "views": 61489,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "16:17"
+   },
+   {
+    "id": "tjVhJjyN2JQ",
+    "title": "３分でわかる！リチウムイオン電池【新課程対応】※電池と電気分解⑥/⑦",
+    "channel": "yラボ〜高校化学フラッシュカード×思考の入口〜",
+    "channel_id": "UCUAJ8n9_GrL5tEA0IR7ZbYA",
+    "views": 1057,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "3:25"
+   }
+  ],
+  "コンセント 穴 左右 大きさ 違う なぜ": [
+   {
+    "id": "EqO74mVjxYo",
+    "title": "9割の人が知らない…コンセントの左右の穴、大きさが違う理由とは？",
+    "channel": "雑学魂",
+    "channel_id": "UCxsDhjbvmB-bbJZg1ssgjzA",
+    "views": 7868,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:02"
+   },
+   {
+    "id": "QfbeU5RH3JI",
+    "title": "実は左右で大きさの違うコンセントの穴",
+    "channel": "生物学日誌",
+    "channel_id": "UCPWct-z-sKD_eo5xTX6ZPGQ",
+    "views": 567,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:07"
+   },
+   {
+    "id": "IYHv1MMrK-Y",
+    "title": "なぜコンセントの穴は「左右で長さが違う」のか？",
+    "channel": "なぜコレ",
+    "channel_id": "UChr4_OUtzy-sU1Wl85GoEvg",
+    "views": 228,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "22:34"
+   },
+   {
+    "id": "egxxVaLo7IY",
+    "title": "コンセントの大きい穴が０Vの理由",
+    "channel": "電気を研究するチャンネル",
+    "channel_id": "UCzx1XuzJ28tju_S6RDbFBcw",
+    "views": 6680,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:02"
+   },
+   {
+    "id": "yszvDo7RMUs",
+    "title": "知ってよかった雑学！コンセントの穴は、左右で大きさが違う理由とは・・・　【衝雑の泉】",
+    "channel": "衝雑の泉",
+    "channel_id": "UC4ud9B0Gibbfj17_uEONKbA",
+    "views": 91,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "2:55"
+   },
+   {
+    "id": "M0lm_CXE-dg",
+    "title": "意外と知らない!?なぜ、コンセントの左右の穴の大きさは違うのか？正しく差し込む方向がある！知ってよかった雑学【今日の話題】",
+    "channel": "非表示",
+    "channel_id": "UCsWqBoRl4_HkWH-4uXbscOA",
+    "views": 301,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "4:15"
+   },
+   {
+    "id": "o8G49zKr4KM",
+    "title": "【知ってた？】コンセントの左右の穴はなぜ大きさが違う？",
+    "channel": "板橋の電気屋トシさん",
+    "channel_id": "UCdRrkl4aJx1tEk4gy3PAQrg",
+    "views": 181,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "5:50"
+   }
+  ],
+  "充電器 小さい GaN なぜ": [
+   {
+    "id": "7x2Y1XCZj-w",
+    "title": "なぜ充電器は、小さいまま大きな電力を出せるのか｜GaNと速い切り替え",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 12,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "10:44"
+   },
+   {
+    "id": "ssIj6tzHbqE",
+    "title": "【バッテリーに優しい充電器】寝る時は5W、急速充電と低速充電を切り替えられる45W GaN充電器",
+    "channel": "飯塚健太 - イエスタLife",
+    "channel_id": "UCLn8WeDJX1_3R9f7HL2UCig",
+    "views": 1097,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "10:00"
+   },
+   {
+    "id": "2RH7CWmAoyw",
+    "title": "【充電器の仕組み】なぜこんなに小さくなったのか？昔の充電器はなぜあんなに重かったのか",
+    "channel": "Kath Engineering Lab | かとひエンジニアリングラボ",
+    "channel_id": "UCTDPWsB6d2by5K3AJljX12A",
+    "views": 873,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "11:03"
+   },
+   {
+    "id": "sOAAeM2b5-o",
+    "title": "新技術 窒化ガリウム(GaN) USB充電器について解説します。Anker PowerPort Atom III slim. |  Why GaN charger is very small?",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 485560,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "16:26"
+   },
+   {
+    "id": "vD3m4hAWHnM",
+    "title": "GaN（窒化ガリウム）採用の充電アダプタが小さい理由を絶対に理解したい",
+    "channel": "独学ヒトリ",
+    "channel_id": "UCAcGrCJE4wCx3LujhhbTWcg",
+    "views": 766,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:12"
+   },
+   {
+    "id": "J9su0Dy1hEI",
+    "title": "GaN(窒化ガリウム)採用 世界最小級 65W PD急速充電器 65w1c_video_01",
+    "channel": "充電器メーカーの株式会社CIO",
+    "channel_id": "UC1Rg1u2rL4x7Pkgh5LOezWw",
+    "views": 1114,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:25"
+   },
+   {
+    "id": "iAeKIh9o9tI",
+    "title": "レビュー (2025): UGREEN NexodeX 100W GaNII Charger 超小型急速充電器。まとめ",
+    "channel": "商品紹介チャンネル",
+    "channel_id": "UCIgEjVpmmL0fLC73sAvsIrQ",
+    "views": 150,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "1:23"
+   },
+   {
+    "id": "d5_BEgOPiWo",
+    "title": "【USB充電器の技術とは？】進化する大容量と小型化！ 何故、窒化ガリウムが使われるの？ 化合物半導体！ No.155",
+    "channel": "ゆっくりITちゃんねる",
+    "channel_id": "UCXn1BeokidOdzY0DzcHszgA",
+    "views": 2683,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:26"
+   },
+   {
+    "id": "DGll0FMwUKs",
+    "title": "GaNは何がすごい？ 小さな充電器からAIを支える電源まで【30分でわかる窒化ガリウム】",
+    "channel": "Future Tech Channel",
+    "channel_id": "UClqVKlUMyF2HZSMtXZnqsvA",
+    "views": 215,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "30:01"
+   },
+   {
+    "id": "IPXizqPFya8",
+    "title": "GaNerator - 次世代半導体GaN搭載・世界最小クラスの65w充電器",
+    "channel": "BUBBAMUSH",
+    "channel_id": "UCfa9uJ4BW_QpgaYccQx48vQ",
+    "views": 2987,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:52"
+   },
+   {
+    "id": "4_hyO9JBkXY",
+    "title": "65W2ポート！小型軽量な窒化ガリウム充電器がやってきた！PD充電器 65W Type C 急速充電器 GaN(窒化ガリウム)採用",
+    "channel": "Kのさぶちゃんねる",
+    "channel_id": "UCMyGpOBQc2YxcLuVF8LMatQ",
+    "views": 3456,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:16"
+   },
+   {
+    "id": "GJE0huBekFg",
+    "title": "【ガジェット】世界最小のGaN(窒化ガリウム)充電器140Wと67W登場！MacBookの充電に最適！",
+    "channel": "UZUMAX",
+    "channel_id": "UCsuv_Yt6IvZRnPXdaZ374QQ",
+    "views": 1772,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "6:15"
+   },
+   {
+    "id": "ST-DYxVgrCo",
+    "title": "【世界最小級サイズのGaN急速充電器】CIO NovaPort TRIO 67Wが登場！",
+    "channel": "GadgetTV / ガジェットTV",
+    "channel_id": "UClRe_j0T20Hzn06I1IR4xAQ",
+    "views": 599,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:17"
+   },
+   {
+    "id": "dEC5uy2zA_A",
+    "title": "GaN(窒化ガリウム)採用 世界最小級 65W PD急速充電器 65w1c_video_02",
+    "channel": "充電器メーカーの株式会社CIO",
+    "channel_id": "UC1Rg1u2rL4x7Pkgh5LOezWw",
+    "views": 2740,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:29"
+   },
+   {
+    "id": "_MfH_6pT5lc",
+    "title": "なんでGaNに勝てるの？ ADAMON 65Wの“謎テクノロジー”を暴いた 【USB充電器分解レビュー】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 303575,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "18:07"
+   },
+   {
+    "id": "k-HRH1UiSqg",
+    "title": "65W出力でこの価格は超お得！GaNって何？激安のUSB PD充電器をご紹介します！",
+    "channel": "倹約DIY",
+    "channel_id": "UCSdMtfw8Zl3knWN3XI9vn_A",
+    "views": 62176,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "15:43"
+   }
+  ],
+  "Wi-Fi 2.4GHz 5GHz 違い なぜ": [
+   {
+    "id": "mZUKyKOQ61k",
+    "title": "【Wi-Fiルーターの周波数】2.4GHzと5GHzはどっちを使えばいい？",
+    "channel": "@nifty プロバイダーチャンネル【公式】",
+    "channel_id": "UCiZTWtsMFBvfZ_SsQWjB2Hg",
+    "views": 29548,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:29"
+   },
+   {
+    "id": "MPgHcfgmhPo",
+    "title": "2.4GHzと5GHz｜同じWi-Fiなのに二つある理由",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 138,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "1:22"
+   },
+   {
+    "id": "MfG0b08mL7c",
+    "title": "【結局どっちに接続すればいいの？】Wi-Fiの2.4GHzと5GHzの違い",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 458737,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:12"
+   },
+   {
+    "id": "GNVFpEgOYxY",
+    "title": "なぜWi-Fiには2.4GHzと5GHzがあるのか【ずんだもん解説】",
+    "channel": "くらしのデジタルなぜなに【ずんだもん解説】",
+    "channel_id": "UCElibAd6un47BHAGSGFqnBw",
+    "views": 14,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "10:44"
+   },
+   {
+    "id": "BafQncOhjTU",
+    "title": "初心者向け】Wi-Fiの2.4GHzと5GHzの違いとは？電波の「回折」と「直進性」で完全理解",
+    "channel": "RFエンジニア育成所【無線・電波を教える学校】",
+    "channel_id": "UCw64Fd-CqTkfBhtXA6ZvrqQ",
+    "views": 624,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "3:28"
+   },
+   {
+    "id": "tcq8f-HTTjg",
+    "title": "【Wi-Fi】2.4Ghzと5Ghzの違い【４K】",
+    "channel": "ゆっくりたっくん",
+    "channel_id": "UCEHSfzszwZYC1C50xC1a6mw",
+    "views": 169,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:17"
+   },
+   {
+    "id": "CW9_0s1QktM",
+    "title": "ネットワーク探検 第10回｜2.4GHz・5GHz・6GHzは何が違う？――届き方と混雑、使える場所の決まり",
+    "channel": "ikijimacom",
+    "channel_id": "UCQZWyFpwROGqkCabRcFFmgw",
+    "views": 1,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "9:55"
+   },
+   {
+    "id": "mQ0OrdFrdZg",
+    "title": "Wi-Fiの「2.4GHz」と「5GHz」、結局どっちを使えばいい？【図解】",
+    "channel": "デジタルのなぜ実験室",
+    "channel_id": "UCKpaaekrIbMROPf1F-AhtzQ",
+    "views": 11,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "3:10"
+   },
+   {
+    "id": "-c1FO2QADLM",
+    "title": "【ネットワーク入門 #25】無線LAN（Wi-Fi）の仕組み｜つながりにくいのはなぜ？2.4GHz・5GHz・6GHzの違い【ずんだもん解説】",
+    "channel": "ずんだもんと学ぶIT・プログラミング教室",
+    "channel_id": "UCwqPs9jy78Txyrlwe2YfaRw",
+    "views": 32,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "3:46"
+   },
+   {
+    "id": "iQN9XatOdzA",
+    "title": "WIFIとは何か？初心者向けに解説",
+    "channel": "つちやたけし / ネットの疑問を解説",
+    "channel_id": "UCmfcNK62WfD-gYffHfAenOA",
+    "views": 1,
+    "published": "1 時間前",
+    "age_days": 0,
+    "length": "11:10"
+   },
+   {
+    "id": "DuTLzumBJMM",
+    "title": "Wi-Fi が遅いのは、電子レンジのせい？【2.4GHz と 5GHz の違い・電波の仕組み・太陽フレア】",
+    "channel": "朝比奈幸太郎の空音開発研究室",
+    "channel_id": "UCUif3enJinDf06LVEOJcpbA",
+    "views": 56,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "7:17"
+   },
+   {
+    "id": "0dyo_FSLB-Y",
+    "title": "今さら聞けないWi-Fi『2.4GHzと5GHzって何が違うの？』正しい使い分け！",
+    "channel": "知識の泉　",
+    "channel_id": "UCvzBz6QYJmgOlApCFuvpNUw",
+    "views": 36,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:41"
+   },
+   {
+    "id": "KnoQbt4QFWA",
+    "title": "【誰も教えてくれない】2種類のWi-Fi結局どっちに接続する？aとg、2.4と5GHｚの違いとは？",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 842418,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:47"
+   },
+   {
+    "id": "qeppG4Dc52o",
+    "title": "Wi-Fi の電波、3 種類あるよ — 2.4GHz / 5GHz / 6GHz の性格と生まれた事情【ずんだ計算機科学】",
+    "channel": "ずんだ計算機科学",
+    "channel_id": "UCgnfNe4ORbOFMxAgnnGkomA",
+    "views": 94,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "5:47"
+   },
+   {
+    "id": "wXHxp9b4ROA",
+    "title": "【自宅のWi-Fi　2.4GHzと5GHzで速度や通信範囲が違う】メリット・デメリットを理解して快適に使おう！",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 10732,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:20"
+   },
+   {
+    "id": "MbouI-KEP4U",
+    "title": "無線LAN（Wi-Fi）の2.4GHz、5GHzについて今更解説するぞ",
+    "channel": "ケイローの日常",
+    "channel_id": "UCCd1KKwCFKXl0HuES4THV_g",
+    "views": 16931,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:14"
+   },
+   {
+    "id": "nkvPo1mKygA",
+    "title": "同じルーターなのに、2.4GHzと5GHzで電波の届き方が違うのはなぜ？",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 3,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "5:38"
+   },
+   {
+    "id": "ObEsbGSx9cE",
+    "title": "Wi-Fiはつながっているのに、なぜ遅い？ 電波マークでは見えない仕組み",
+    "channel": "道具のなぜ",
+    "channel_id": "UCMAffosnqQNRyQBrxaki4tQ",
+    "views": 2693,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "11:05"
+   },
+   {
+    "id": "TRL-o6N8brE",
+    "title": "2.4GHzと5GHzのWi-Fi：違いは何？（Teltonika）",
+    "channel": "Teltonika Networks",
+    "channel_id": "UCNCdr8qUvlBZgG3sHaLtc-g",
+    "views": 36997,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:55"
+   }
+  ],
+  "Wi-Fi ルーター 仕組み なぜ つながる": [
+   {
+    "id": "t8Ar70pZ_IA",
+    "title": "モデムとルーターの違いを、初心者にも分かりやすく解説！",
+    "channel": "ノジマ【公式】チャンネル",
+    "channel_id": "UCrFGUKtdBJbPLYNlhYDLPgw",
+    "views": 465031,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:46"
+   },
+   {
+    "id": "VyLh1H9Q6SY",
+    "title": "ルーターとは?Wi-Fiとの違い・接続の仕組みを超わかりやすく解説",
+    "channel": "HONDA 街ネット研究部",
+    "channel_id": "UC97bk4a9Tb5T89GbWgLE4TA",
+    "views": 3984,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:16"
+   },
+   {
+    "id": "G4icq0yoEKw",
+    "title": "Wi-Fiの仕組み|線がないのになぜつながる?【3D図解・ゆっくり解説】",
+    "channel": "しくみ断面ラボ",
+    "channel_id": "UC_HHx87c5AH_O8SsQsxBdjQ",
+    "views": 2,
+    "published": "23 時間前",
+    "age_days": 0,
+    "length": "6:17"
+   },
+   {
+    "id": "3AprahXMA5A",
+    "title": "【Wi-Fiの基本】Wi-Fiと無線LANの違いとは？ | Wi-Fiネットワーク講座【入門編】",
+    "channel": "ファイバーゲートTV",
+    "channel_id": "UC-oEmkbCXf1tQfUdt65mLPg",
+    "views": 10305,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:18"
+   },
+   {
+    "id": "Wtf_hRpigFw",
+    "title": "【今さら聞けない】Wi Fiってなに？【小学生でもわかる・ざっくり解説】",
+    "channel": "ぺんぺん特報",
+    "channel_id": "UCmiAcub8tOL6WBF106Lh64A",
+    "views": 217677,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "12:04"
+   },
+   {
+    "id": "bVY-1MNeoSA",
+    "title": "【ネットワーク基礎講座1】IPアドレス概要 / スイッチ / ルーター / LANとWAN / FW【3:25】",
+    "channel": "CloudTech",
+    "channel_id": "UCirsB9lWx1Vao8jmbMK_nQg",
+    "views": 107235,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:26"
+   },
+   {
+    "id": "xtKhnIf2Hfk",
+    "title": "欠点だらけのWi-Fiは、なぜ世界標準になれたのか？【ゆっくり解説】",
+    "channel": "コンピュータのお話【ゆっくり解説】",
+    "channel_id": "UChkk3v9oUm0hkh5mteTIx0A",
+    "views": 99496,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "24:47"
+   },
+   {
+    "id": "GmPp8tFsJY8",
+    "title": "WiFiとは？超初心者向けにわかりやすく説明します【無線LAN｜WiFiのメリット】",
+    "channel": "NETGEAR Japan",
+    "channel_id": "UCs7AbfkyLvZNSP-NsJPNemA",
+    "views": 24532,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:41"
+   },
+   {
+    "id": "AFEhHGzidNI",
+    "title": "WIFI が実際にどのように機能するか。",
+    "channel": "The Default Guy",
+    "channel_id": "UCb7fgFCDfeqBUIqS0AFBikQ",
+    "views": 882279,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:22"
+   },
+   {
+    "id": "rIMeni0ZYZ8",
+    "title": "Wi Fiの基礎知識　無線LANの歴史と基本概念の探求【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 2076,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "16:01"
+   },
+   {
+    "id": "z89rTLvImrM",
+    "title": "ルータとは（ネットワーク機器）",
+    "channel": "ITを分かりやすく解説【生成AI・情報処理試験・プログラミング講座】",
+    "channel_id": "UC--TPTOTN0O178CcwvMNV6w",
+    "views": 15039,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:42"
+   },
+   {
+    "id": "71XkQPtYNyE",
+    "title": "Wi-Fiと無線LANとLTEの違いとは？わかりやすく初心者に説明【音速パソコン教室】",
+    "channel": "音速パソコン教室。1万人が自宅でパソコン上達。",
+    "channel_id": "UCYAPVqVW8hDn9K0zgpL0foQ",
+    "views": 2459678,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "13:44"
+   },
+   {
+    "id": "w_wqcIHCV3E",
+    "title": "Wi-Fiと携帯電波の違いや仕組みを知っていますか？",
+    "channel": "スマサポチャンネル",
+    "channel_id": "UCMXjwK6-rRw-la5SN5j0M6g",
+    "views": 248023,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:05"
+   },
+   {
+    "id": "iki5mL6JoEE",
+    "title": "モデム・ルーター・ONUは一体何が違う？ホームゲートウェイや二重ルーターについても解説！",
+    "channel": "ネット回線アンバサダー",
+    "channel_id": "UCuMfQ0tD5_D-7Sn-6HlWI3Q",
+    "views": 1326208,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "13:30"
+   },
+   {
+    "id": "BPODklKbx5s",
+    "title": "インターネットはどんなしくみなのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1737846,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:16"
+   },
+   {
+    "id": "iQN9XatOdzA",
+    "title": "WIFIとは何か？初心者向けに解説",
+    "channel": "つちやたけし / ネットの疑問を解説",
+    "channel_id": "UCmfcNK62WfD-gYffHfAenOA",
+    "views": 1,
+    "published": "1 時間前",
+    "age_days": 0,
+    "length": "11:10"
+   },
+   {
+    "id": "VEZGTGoOrgQ",
+    "title": "Wi-Fi 仕組み｜線がないのに小包が届く理由【しくみずかん ネットワーク#16】",
+    "channel": "しくみずかん",
+    "channel_id": "UC8Xm0BAII3xGm2Hi0E48loQ",
+    "views": 48,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "4:02"
+   },
+   {
+    "id": "JK0aBHHp-pk",
+    "title": "2022年Wi-Fi、LTE、Bluetoothの違いとは？ネットに繋がる仕組みを初心者に解説",
+    "channel": "金子晃之",
+    "channel_id": "UCaxV7Sf7pdNjlahl6BtJBBw",
+    "views": 170943,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "19:44"
+   },
+   {
+    "id": "odhHaPcIbAg",
+    "title": "Wi-Fiとは？無線接続の仕組みをわかりやすく解説",
+    "channel": "数分で理解",
+    "channel_id": "UCOlLfyHUmB4xyhyV56O7T8g",
+    "views": 10,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "2:03"
+   },
+   {
+    "id": "jgZVRhXXQQI",
+    "title": "Wi-Fiとは？仕組みと使い方を簡単に解説！",
+    "channel": "チョコとレイトとコスタリカチャンネル〜雑",
+    "channel_id": "UC50IkwYLSnRFF8xEyGaYC_Q",
+    "views": 431,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:06"
+   }
+  ],
+  "テレビ リモコン なぜ 反応 仕組み 赤外線": [
+   {
+    "id": "fjepeJQofwU",
+    "title": "なぁぜ？赤外線リモコンが遠くまで送信できる仕組み",
+    "channel": "まさやん",
+    "channel_id": "UCtZaPo15cki7797-SALhA1A",
+    "views": 5755,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:58"
+   },
+   {
+    "id": "wNsaweLdByE",
+    "title": "【電気の知識シリーズ】電気をあやつる半導体　～リモコンのヒミツ～",
+    "channel": "一般社団法人電気学会IEEJ",
+    "channel_id": "UCL88CjinmTAIMQhuBvWYVBg",
+    "views": 5966,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:43"
+   },
+   {
+    "id": "v8jOUKtboOU",
+    "title": "テレビのリモコンはなぜ反応する?",
+    "channel": "しくみスクール",
+    "channel_id": "UC1x4fl58kbWMfl4If2Esw-w",
+    "views": 16,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "3:59"
+   },
+   {
+    "id": "-lAzW5HrihE",
+    "title": "なぜテレビのリモコンはボタンだらけなのか【ずんだもん解説】",
+    "channel": "くらしのデジタルなぜなに【ずんだもん解説】",
+    "channel_id": "UCElibAd6un47BHAGSGFqnBw",
+    "views": 23,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:19"
+   }
+  ],
+  "インターホン 仕組み 映像": [
+   {
+    "id": "oWPsYvdA7uU",
+    "title": "【アレの仕組み】インターホンで電気錠が開くのは何故か？鍵屋が解説！How Locks Work【カギ屋】【鍵の仕組み】",
+    "channel": "カギ屋タウンロックちゃんねる",
+    "channel_id": "UC6UvOP2uiabOIHjO3x7TYbQ",
+    "views": 644,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "8:51"
+   },
+   {
+    "id": "yFUqh8iRlWs",
+    "title": "インターホンの使用方法",
+    "channel": "ジョンソン暮らしチャンネル",
+    "channel_id": "UCMLGBSlVsjFEjjz99yU9DCg",
+    "views": 25534,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "0:56"
+   },
+   {
+    "id": "HfP3gCL4lf4",
+    "title": "インターホンにハーモニカを付けると面白い",
+    "channel": "ARuFa",
+    "channel_id": "UC49IcjbsspFVpukiVYN05Hg",
+    "views": 21625740,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "0:29"
+   },
+   {
+    "id": "AjyBViQj6-Y",
+    "title": "DNAKEとは？｜スマートインターホンメーカーの会社概要・導入実績をご紹介",
+    "channel": "JTS Corporation",
+    "channel_id": "UCFQc4SiMp278Bga8oeIXb3w",
+    "views": 43,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "1:16"
+   },
+   {
+    "id": "N8VdBvQ_p4s",
+    "title": "電気のプロがインターホンの交換を実演！カメラ/モニター付きの新品の取り付けを電気工事士が解説！",
+    "channel": "プロのモノづくりと知恵 [HOWLOW-TV]",
+    "channel_id": "UC9FS3b3sP0uD41sHlE_4pmA",
+    "views": 424983,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:54"
+   },
+   {
+    "id": "sa7SnNtlxmI",
+    "title": "モニター付きインターホンもワイヤレスなら簡単に取り付けできる【DIY1-21】",
+    "channel": "アッフィーのDIY不動産投資",
+    "channel_id": "UC0geN6ofbTdkqXKyrAZ7XEg",
+    "views": 619140,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:28"
+   },
+   {
+    "id": "YAeGdjgzDcI",
+    "title": "家族を守るために攻める防犯を。ドアホン篇（VL-X70AHS）【パナソニック公式】",
+    "channel": "Panasonic Japan（パナソニック公式）",
+    "channel_id": "UCWfg-7LoIeXDLWb_8jpvjnA",
+    "views": 1663118,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "0:31"
+   },
+   {
+    "id": "zurd6tDS6VQ",
+    "title": "マンションインターホンWindea-C 施工手順2",
+    "channel": "Channel Panasonic - Official",
+    "channel_id": "UCOcdBuUur7MiKPdHQUM_8IA",
+    "views": 4172,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "0:46"
+   },
+   {
+    "id": "wjdZRn2RFqA",
+    "title": "【直結式は資格が必要！？】インターホン交換工事（前編）｜でんきの学校",
+    "channel": "でんきの学校",
+    "channel_id": "UCiNK726fj0_U8pH0CG19aSA",
+    "views": 200098,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "6:18"
+   },
+   {
+    "id": "boBKuL0qAOY",
+    "title": "マンションインターホン　個別配線システム　機能説明動画",
+    "channel": "Channel Panasonic - Official",
+    "channel_id": "UCOcdBuUur7MiKPdHQUM_8IA",
+    "views": 2567,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:54"
+   },
+   {
+    "id": "MiT-9XJnVQc",
+    "title": "パナソニックのドアホンVL-SWZ700KS 商品紹介動画【パナソニック公式】",
+    "channel": "Panasonic Japan（パナソニック公式）",
+    "channel_id": "UCWfg-7LoIeXDLWb_8jpvjnA",
+    "views": 183850,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:22"
+   },
+   {
+    "id": "c9wkdgD-AyI",
+    "title": "集合住宅用インターホンdearis商品紹介【AIPHONE Official [アイホン公式] 】",
+    "channel": "AIPHONE Official [アイホン公式]",
+    "channel_id": "UCHSfdxhWTjzrRjRuqlChGiQ",
+    "views": 8909,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:01"
+   },
+   {
+    "id": "apB0OS_kj_I",
+    "title": "【理事会必見】マンションのインターホン交換、失敗しないための全知識。費用、業者選てび、全戸在宅問題まで徹底解説【さくら事務所】",
+    "channel": "マンション管理組合のミカタ【さくら事務所】",
+    "channel_id": "UC66c_VKXN7ivU4l5B4K0caA",
+    "views": 1819,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:29"
+   },
+   {
+    "id": "wrusaJY3v4o",
+    "title": "【DIY防音室】インターホンに気づけない！そんな不満の解決策【REVEX XP760 ワイヤレスチャイム】",
+    "channel": "ていちょう@DIY",
+    "channel_id": "UCSARc7sjRSuYPihHytCbllw",
+    "views": 17677,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:53"
+   },
+   {
+    "id": "PQY4tnYmPj0",
+    "title": "ワイヤレスモニター付テレビドアホン VL-X70AHS 紹介動画【パナソニック公式】",
+    "channel": "Panasonic Japan（パナソニック公式）",
+    "channel_id": "UCWfg-7LoIeXDLWb_8jpvjnA",
+    "views": 17091,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "2:14"
+   },
+   {
+    "id": "8YqUwtV80i0",
+    "title": "【DIY】ドアホン インターホン 交換 超簡単 パナソニック  VL-MZ30【モニター付き】",
+    "channel": "快適ライフ【便利で快適な生活】",
+    "channel_id": "UCuP3YibzczxjwuvxMzJdp9A",
+    "views": 675109,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:49"
+   }
+  ],
+  "スマートスピーカー 仕組み なぜ 聞き取れる": [
+   {
+    "id": "1lOLdgXudYc",
+    "title": "【電気の知識シリーズ】電気と磁気のチカラ ～スピーカーから音が出るのはなぜ？～",
+    "channel": "一般社団法人電気学会IEEJ",
+    "channel_id": "UCL88CjinmTAIMQhuBvWYVBg",
+    "views": 31287,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:32"
+   },
+   {
+    "id": "54cLR6XlPcM",
+    "title": "電気が、音になる｜スピーカーの仕組みを物理で解説",
+    "channel": "NovaSolver_JP",
+    "channel_id": "UC5RgVG6aRPB_AxOE8Vfi8lg",
+    "views": 273,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "3:16"
+   },
+   {
+    "id": "mg2v_-vAo6M",
+    "title": "超音波なのに音が聞こえるパラメトリックスピーカーの動作原理を解説します。",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 102331,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "18:46"
+   },
+   {
+    "id": "MriL7v1RqQY",
+    "title": "スピーカーはなぜ、音が出るのか",
+    "channel": "技術の知恵袋",
+    "channel_id": "UC7_KlLBfgI4HPF0znySAZ7Q",
+    "views": 11,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "1:44"
+   },
+   {
+    "id": "U7MODu4LaxI",
+    "title": "スマートスピーカーが「生成AI」になると、何が変わる？ ― Apple HomeView・Alexa+・Gemini for Homeで始まる「AIホーム」",
+    "channel": "ケミストリーチャンネル・X-HEMISTRYチャンネル",
+    "channel_id": "UCUBZdQQ8D2yFr-P1gYy26zQ",
+    "views": 147,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "10:03"
+   },
+   {
+    "id": "AAA8fTNdyQc",
+    "title": "次世代スマートスピーカー大戦",
+    "channel": "ケミストリーチャンネル・X-HEMISTRYチャンネル",
+    "channel_id": "UCUBZdQQ8D2yFr-P1gYy26zQ",
+    "views": 4388,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "12:25"
+   },
+   {
+    "id": "DbgsCeC2amE",
+    "title": "スマートスピーカーを買わなくていい5つの理由。",
+    "channel": "Ryuichi",
+    "channel_id": "UCXT3eyS7LQ2IwtqquFywX9A",
+    "views": 1352,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "1:23"
+   },
+   {
+    "id": "LtosJK2J1Rg",
+    "title": "音の出る仕組みを解説 スピーカー （ゼロから始めるオーディオ生活）１時限目",
+    "channel": "しゃかもち ガジェット",
+    "channel_id": "UCgLs_qnzmKA_BPim96F2Cyg",
+    "views": 3005,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:21"
+   },
+   {
+    "id": "j_MckA_I5DI",
+    "title": "【ゆっくり解説】スピーカーやイヤホンから音が出る仕組み【科学】",
+    "channel": "Easy Science - おうちで出来る簡単科学 -",
+    "channel_id": "UCTOWb8Ojn7_VOzRk39QH5nA",
+    "views": 14018,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:32"
+   }
+  ],
+  "LED 電球 なぜ 光る 仕組み": [],
+  "蛍光灯 2027 なぜ なくなる": [
+   {
+    "id": "YpZzEmz0hvc",
+    "title": "2027年末に蛍光灯「製造禁止」へ　LED照明への交換にも“落とし穴”？【Nスタ解説】｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 508808,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:53"
+   },
+   {
+    "id": "67wnQgOO2XA",
+    "title": "2027年に作れなくなるのに、なぜ蛍光灯は天井から消えないのか【ゆっくり解説】",
+    "channel": "放課後の商売教室",
+    "channel_id": "UCMsniLTc2IJNtyj4PFgmfvQ",
+    "views": 70193,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "23:50"
+   },
+   {
+    "id": "biVrk-6r5FA",
+    "title": "「壊れたらLEDでいい」は危険です。賃貸経営2027年蛍光灯問題を解説",
+    "channel": "クラスコ | 家賃を上げる不動産経営",
+    "channel_id": "UCDVp5r-Uuu2Ou5_ixhqa9EQ",
+    "views": 980,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "5:53"
+   },
+   {
+    "id": "oMISI6hIQoY",
+    "title": "【家電王】2027年末に蛍光灯の製造と輸出入が禁止されるって知ってますか？",
+    "channel": "くらしのラボ",
+    "channel_id": "UCGSXwlnTWgcf6wHoekOlq-Q",
+    "views": 174231,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:32"
+   },
+   {
+    "id": "qfPRf_3UamM",
+    "title": "【蛍光灯の製造終了本格化】LED交換で火災リスクも",
+    "channel": "大阪NEWS【テレビ大阪ニュース】",
+    "channel_id": "UCd6GEK664CTEWRZda7Fu7Lg",
+    "views": 61796,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "2:39"
+   },
+   {
+    "id": "6aL7Dkuacsc",
+    "title": "【警告】知らないと真っ暗？蛍光灯の2027年問題。製造禁止で大損する前にすべきこと",
+    "channel": "トヨおばちゃんの生活豆知識",
+    "channel_id": "UCrr4Uvn1wOizFydfPM3LYjw",
+    "views": 228,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "12:01"
+   },
+   {
+    "id": "x6e0TlwgFYc",
+    "title": "【蛍光灯2027年問題】製造中止とLED交換の補助金｜お店・事務所で使える国と自治体の制度を解説",
+    "channel": "診断士社長えだもんの補助金·助成金の話",
+    "channel_id": "UCkke4sKG6bwuAgQyF6tPZ9A",
+    "views": 392,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:19"
+   },
+   {
+    "id": "JjK5MjRpnGw",
+    "title": "蛍光灯2027年末に製造禁止 「LED」に変えるだけでは思わぬ事故も 「発煙発火」のリスクも｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 17298,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:48"
+   },
+   {
+    "id": "IQMLMTeUXK4",
+    "title": "なぜ蛍光灯は2027年末で作れなくなるのか｜水銀で光るしくみと古い器具",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 30,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "10:47"
+   },
+   {
+    "id": "_eXdkYOxeGk",
+    "title": "蛍光灯の2027年問題。家の照明は使えなくなる？｜しくみのひとコマ",
+    "channel": "しくみのひとコマ",
+    "channel_id": "UCi-W5boAt_pPjloeglxNNwQ",
+    "views": 72,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "7:13"
+   },
+   {
+    "id": "28vf4lkaRDU",
+    "title": "【漫画】蛍光灯は、なぜ2027年に作れなくなるのか？",
+    "channel": "家電と雑学",
+    "channel_id": "UCkUCYVZcHlbeOZAqJMoGOsg",
+    "views": 460,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "18:55"
+   },
+   {
+    "id": "WtzdFCjaf9I",
+    "title": "【制度変更】2027年に蛍光灯がなくなる？家庭での正しい対応方法  〜直管は特に注意。種類と年数で変わるリスクを解説〜",
+    "channel": "家電ユーチューバーふいちゃん",
+    "channel_id": "UCCj_vryGqDPrFdI88xTBBGg",
+    "views": 740,
+    "published": "8 か月前 に配信済み",
+    "age_days": 240,
+    "length": "14:56"
+   },
+   {
+    "id": "hyw09kgWARA",
+    "title": "蛍光灯終了で火事続出!? 2027年問題と“買ってはいけないLED”",
+    "channel": "でんまる電力株式会社",
+    "channel_id": "UCkxG2Pw27sdoMtIC0xycy4Q",
+    "views": 334646,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:29"
+   },
+   {
+    "id": "vqd5mB9tKAQ",
+    "title": "蛍光灯が2027年末で作れなくなる理由 1本に数ミリグラムの粒",
+    "channel": "売り場のなぜ",
+    "channel_id": "UCf_ZYUX0KQaIPKoAzUDkikw",
+    "views": 59,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "11:02"
+   },
+   {
+    "id": "wcvYudkH7NY",
+    "title": "蛍光灯が消える！？「2027年問題」をご存知ですか？　水俣条約で製造と輸出入が禁止に　LEDへの切り替えを",
+    "channel": "RKK NEWS DIG",
+    "channel_id": "UCG1ApxYbWaC9xUxgHCWyR5Q",
+    "views": 11812,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "6:29"
+   },
+   {
+    "id": "9udnxh7EenU",
+    "title": "【蛍光灯2027年問題】無くなるの？損せず切り替るコツとは!?（大口町）",
+    "channel": "【電気のお困りごと解決】あんしん電気さかい",
+    "channel_id": "UCqW6zzopejWaKQ4MTwfQMKw",
+    "views": 1897,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "5:06"
+   },
+   {
+    "id": "egWks54AYII",
+    "title": "対応誤ると出火の恐れ…製造等が禁止となる『蛍光灯2027年問題』街の便利屋さんでLED照明への切替依頼が増加",
+    "channel": "東海テレビ ニュースONE",
+    "channel_id": "UCUQ0AtI3k10_CyLYcu4WRVA",
+    "views": 78531,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "8:41"
+   },
+   {
+    "id": "7UMA4pJvcOk",
+    "title": "10月21日は「あかりの日」 蛍光灯が2027年に製造休止？交換のポイントは",
+    "channel": "シェア！チャンネル",
+    "channel_id": "UCF3imSG-M8LidiPxBbEhreQ",
+    "views": 26492,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "4:45"
+   },
+   {
+    "id": "DNeHC9WnZ2c",
+    "title": "蛍光灯は2027年に生産中止？交換しないと危険な理由と対策",
+    "channel": "ヤマト帰郷 日本の未来の図解",
+    "channel_id": "UCeA_10Yd-0HmhIUiGPNks8Q",
+    "views": 1406,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "6:36"
+   },
+   {
+    "id": "rPpmrpr3Z2E",
+    "title": "蛍光灯が2027年に消える!?温かく照らしてくれた蛍光灯にさよならの理由",
+    "channel": "NBC長崎放送",
+    "channel_id": "UCh0-nAqSYSYed_A4Qdz-0ww",
+    "views": 30271,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:12"
+   }
+  ],
+  "固定電話 停電 なぜ 使える": [
+   {
+    "id": "BhPQ5TSgh_Q",
+    "title": "なぜ固定電話は銅の線から光に変わるのか｜停電のときの電気の出どころ",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 9,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "10:06"
+   },
+   {
+    "id": "K4syf-rV2Bk",
+    "title": "公衆電話は停電しても使える?｜公衆電話の裏側",
+    "channel": "モノの裏側ラボ",
+    "channel_id": "UC3GnT-jxAZlIsxGzgDOwn7w",
+    "views": 0,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "4:36"
+   },
+   {
+    "id": "eRrLJWMbxZ0",
+    "title": "なぜ黒電話は停電でも使えたのか…新しい光回線の電話のほうが停電に弱い理由【ずんだもん＆四国めたん解説】",
+    "channel": "ナゼテク",
+    "channel_id": "UC-xSiC1j7qfE2yn7A81MOGQ",
+    "views": 189,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "13:04"
+   },
+   {
+    "id": "O7jS2WPMFM4",
+    "title": "【9月11日は公衆電話の日】公衆電話はなぜ停電でもつながる?スマホが止まる日に生き残る理由と使い方【ずんだもん解説】",
+    "channel": "自由研究ラボ",
+    "channel_id": "UCDkmylN4YXu0udnfxVLIjzw",
+    "views": 11,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "7:51"
+   },
+   {
+    "id": "xYkymB3ViWQ",
+    "title": "固定電話は解約すべき？体験して分かったこと",
+    "channel": "図解で学ぶお金の知識",
+    "channel_id": "UCvUfGFGJcZBu78F8bMfCgFg",
+    "views": 358937,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "12:15"
+   },
+   {
+    "id": "tWirMzRvlAM",
+    "title": "なぜ固定電話をやめる人が増えているのか【ずんだもん解説】",
+    "channel": "くらしのデジタルなぜなに【ずんだもん解説】",
+    "channel_id": "UCElibAd6un47BHAGSGFqnBw",
+    "views": 4,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "16:57"
+   },
+   {
+    "id": "GxC5dqJx-vo",
+    "title": "公衆電話が災害に強い理由は、古さそのものだった",
+    "channel": "日常の謎図鑑",
+    "channel_id": "UCB55hda9QwhHO4uS0r9uyIA",
+    "views": 30,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "7:36"
+   },
+   {
+    "id": "EK1px-FJvgs",
+    "title": "黒電話は、なぜ停電でも使えた？ 電源コードが無いのに、電気で動いていたわけ",
+    "channel": "でんきのなぜ図書室",
+    "channel_id": "UCNG9e4V6bAIcnhWwEAAUsKQ",
+    "views": 3,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "9:07"
+   },
+   {
+    "id": "JG6LzEtM9CM",
+    "title": "「維持限界」固定電話の銅回線 廃止へ 　電話線100年超の歴史に幕　黒電話はどうなる？｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 383206,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:52"
+   },
+   {
+    "id": "63sp6rCpKkk",
+    "title": "黒電話は、なぜダイヤルを回すだけでつながった？",
+    "channel": "しくみの正体",
+    "channel_id": "UCS_EEYRtiF4Hl8aMjyu3xWA",
+    "views": 12889,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "9:17"
+   },
+   {
+    "id": "tlVedSmrDbA",
+    "title": "停電しても使える電話はあるか　局給電　昔の電話",
+    "channel": "kawa aki",
+    "channel_id": "UCwRzireArYPb_uoeSKFz--w",
+    "views": 393,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:50"
+   },
+   {
+    "id": "UBA48gp4fGI",
+    "title": "【光電話の謎】固定電話を解約したい！インターネットはどうなる？",
+    "channel": "Financial Field",
+    "channel_id": "UCtDfgNm0fbDuib7uoAzhQOA",
+    "views": 60741,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "3:57"
+   }
+  ],
+  "迷惑電話 表示 なぜ わかる 仕組み": [
+   {
+    "id": "JIXxoEZOuYQ",
+    "title": "なぜ「迷惑電話の可能性」と表示されるのか【ずんだもん解説】",
+    "channel": "くらしのデジタルなぜなに【ずんだもん解説】",
+    "channel_id": "UCElibAd6un47BHAGSGFqnBw",
+    "views": 23,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:50"
+   },
+   {
+    "id": "YqIiu6n0euk",
+    "title": "【iPhone】迷惑電話の対策強化  代わりに用件を聞き取り",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 152352,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:01"
+   },
+   {
+    "id": "GedhKt3O1kI",
+    "title": "【相手が分かる!】不明な番号の着信でも名前を表示させる方法の解説!【iPhone•Android】",
+    "channel": "みずおじさん / 誰でも分かるスマホ講座",
+    "channel_id": "UCV4KlwQA-H7XnT3or0m53Hg",
+    "views": 1490349,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:36"
+   },
+   {
+    "id": "GS0UbF1SM70",
+    "title": "【超便利】知らない番号からの着信に相手名を表示させる神アプリを紹介します！",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 5525236,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "16:40"
+   },
+   {
+    "id": "Y8eImywGIdc",
+    "title": "【迷惑電話を撃退】詐欺電話をブロック！着信拒否と非通知拒否の設定【Android・シニア向け】",
+    "channel": "スマホの学校",
+    "channel_id": "UCIaQ74jNWiiAWVE0yLR6YOQ",
+    "views": 403,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "17:32"
+   },
+   {
+    "id": "HKqNPYc0IN4",
+    "title": "【一発ブロック】海外からの詐欺電話をピタッと止める簡単な方法を紹介【リベ大公式切り抜き】",
+    "channel": "両学長 リベラルアーツ大学",
+    "channel_id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+    "views": 179569,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:13"
+   },
+   {
+    "id": "9rAtVnTRFO8",
+    "title": "詐欺師があなたの電話番号や自宅住所にアクセスしている可能性があります！今すぐオフにしてください",
+    "channel": "スマホ博士",
+    "channel_id": "UC7nKJWglHMy-dO8dqEabRIQ",
+    "views": 247144,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "14:19"
+   },
+   {
+    "id": "BGbGZehzV5Q",
+    "title": "ワン切りは折り返すな！警察の番号も偽装される？非通知・国際電話・ニセ警察詐欺の対処法",
+    "channel": "りょうのパソコンお役立ちラボ",
+    "channel_id": "UCWvmtas0KPmb9nLDwD57jCg",
+    "views": 0,
+    "published": "1 時間前",
+    "age_days": 0,
+    "length": "10:02"
+   },
+   {
+    "id": "XBoobyq9gtw",
+    "title": "【今すぐ確認】Android 迷惑電話を減らす設定5つ その着信、まだ知らない番号も鳴るまま？【電話アプリ・シニア向け】",
+    "channel": "やさしいスマホ",
+    "channel_id": "UCt3-XnmHw-mn8Il3AeqtnDQ",
+    "views": 42,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "10:32"
+   },
+   {
+    "id": "aDoCO0V82AM",
+    "title": "【迷惑電話対策】不明な番号からの着信時に相手の名前を表示！【簡単アプリ】",
+    "channel": "後藤PC塾:プロが伝えるパソコン教室",
+    "channel_id": "UCMvaNVWBGbEPuZllYZETjfQ",
+    "views": 175249,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:02"
+   },
+   {
+    "id": "xj1s3Mg3ddA",
+    "title": "0800から始まる電話番号はなぜ迷惑電話が多い？【衝撃考察】個人情報の「合法的流出」と0.1秒のハッキング手口を解剖",
+    "channel": "現場ちゃん【しくじり企業調査隊】",
+    "channel_id": "UCB3yjkeU69Ybr2ug933mGfg",
+    "views": 55,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "13:09"
+   },
+   {
+    "id": "i17zlDXNM4A",
+    "title": "【着信拒否・ブロック】相手にバレる？表示方法が分かると対応も変わる！安心して着信拒否、ブロックを使う方法",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 130704,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "17:57"
+   },
+   {
+    "id": "csHIo5VjCR8",
+    "title": "迷惑電話撃退！iPhone「着信スクリーニング」の使い方（iOS26新機能）",
+    "channel": "あっちゃん教えて",
+    "channel_id": "UCds0nELWhAGEyQ93vsaeCAA",
+    "views": 120310,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "9:43"
+   },
+   {
+    "id": "BTPw4bvnoVM",
+    "title": "迷惑電話で個人情報が抜かれてる…今すぐ「このアプリ」入れてください！",
+    "channel": "ゆいスマホ",
+    "channel_id": "UCQU1ACZJRzu2LC1boxAxM3w",
+    "views": 2821,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "10:41"
+   }
+  ],
+  "暗証番号 4桁 なぜ": [
+   {
+    "id": "bm-IjT_OFlM",
+    "title": "【衝撃】ATMの暗証番号が「4桁」になった”理由”は〇〇！9割が知らない雑学10選",
+    "channel": "ユー92",
+    "channel_id": "UCc_xNFWJSwvloKnLgU5jMlQ",
+    "views": 28,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "2:54"
+   },
+   {
+    "id": "apirAYFngzw",
+    "title": "なぜ銀行の暗証番号はたった4桁なのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 89523,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "17:54"
+   },
+   {
+    "id": "yeqPc5zhxbI",
+    "title": "【当初は6桁の予定だった】ATMの暗証番号はなぜ4桁なのか",
+    "channel": "Tech History - テクノロジーの物語",
+    "channel_id": "UCKHpaCcBRqjaAR-RVD24bcg",
+    "views": 254,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:21"
+   },
+   {
+    "id": "CErn2VvnxX8",
+    "title": "ATMの暗証番号4ケタの理由は？",
+    "channel": "雑学タイムズ",
+    "channel_id": "UCYTytmjc-IJZ6a9DMe0VWXA",
+    "views": 47,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:56"
+   },
+   {
+    "id": "1LTCdf5ja00",
+    "title": "「暗証番号」「パスワード」「認証コード」の違い。もう迷わない見分け方を解説！",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 15109,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "11:54"
+   },
+   {
+    "id": "VXMog_Dyyug",
+    "title": "【2025年義務化で再注目】なぜPINは4桁でも最強？3つの安全性をわかりやすく解説！",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 40399,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:35"
+   },
+   {
+    "id": "n68pIhm68_w",
+    "title": "マイナンバーカードの暗証番号｜4桁と英数字は何が違う？",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 74,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "3:06"
+   },
+   {
+    "id": "avguge1317c",
+    "title": "【大人の教科書】一番使われやすい「4桁の暗証番号」は？",
+    "channel": "ぽてち。",
+    "channel_id": "UCd3qNUlcz8JjtjEd6HawZbA",
+    "views": 286,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "19:53"
+   },
+   {
+    "id": "mlR_e7fUbuk",
+    "title": "【統計で衝撃】なぜこの4桁PINが危険？2900万件データが明かす恐ろしい真実",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 3649,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:08"
+   },
+   {
+    "id": "iswGRsJm4BU",
+    "title": "【暗証番号４桁】自分の身の回りの暗証番号をATMの４桁で使いまわしている確率７０％",
+    "channel": "とーかい情報局",
+    "channel_id": "UC0qLewVg4WeWzIHQf5ZHM2w",
+    "views": 29,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:01"
+   },
+   {
+    "id": "V9hbPXMPKLE",
+    "title": "【全スマホ対象】全国銀行協会が新たに緊急警報発令…暗証番号のココがオンのままだと口座が0円に？今すぐオフに！",
+    "channel": "元スマホショップ店員のみずき",
+    "channel_id": "UC3UOKGQ6X8LquakOK3Yr5Aw",
+    "views": 33563,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "20:32"
+   },
+   {
+    "id": "FIRelHn0zao",
+    "title": "暗証番号が分からなくなる本当の理由｜マイナンバーカード4つの番号を整理する",
+    "channel": "やさしいマイナンバーカード相談所",
+    "channel_id": "UClS9lLGAsQA20LFLd2wfNww",
+    "views": 672,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "4:44"
+   },
+   {
+    "id": "a99_DFI3ogI",
+    "title": "たった4桁で流れが変わる暗証番号の整え方",
+    "channel": "開運雑学",
+    "channel_id": "UCZMsfr6oLhyt-1tmlw2MPrg",
+    "views": 1066,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "5:09"
+   }
+  ],
+  "ATM 仕組み 中 どうなってる": [
+   {
+    "id": "0ZSkgi0sSTM",
+    "title": "ATMにカードを入れた瞬間、裏で何が起きているのか？あなたの想像とは違います",
+    "channel": "なにがギモン【雑学解説】",
+    "channel_id": "UCoryGG-HTyFRBF5zeeACH-w",
+    "views": 65838,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "6:46"
+   },
+   {
+    "id": "YxLm_ifBBhE",
+    "title": "ATM はどのようにして正確な支払額を判断しているのか？",
+    "channel": "Logic Gap 日本語",
+    "channel_id": "UCYDmxwlJ_BsU3MurDtUQoBA",
+    "views": 118,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "26:25"
+   },
+   {
+    "id": "SpQZyPBAtA0",
+    "title": "【工場見学】私たちの生活を支えるATMができるまで｜日立チャネルソリューションズ",
+    "channel": "AMAZING FACTORY",
+    "channel_id": "UCuCLpfycF-65dRaPXdnpc1g",
+    "views": 53291,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "11:37"
+   },
+   {
+    "id": "tmaClULvM2Y",
+    "title": "利用者は手数料無料なのにどうして儲かるのか。コンビニATMの知られざる収益モデル",
+    "channel": "経済の裏側",
+    "channel_id": "UCCjj_tlMmbS56MRv-InEh3g",
+    "views": 186,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "8:59"
+   },
+   {
+    "id": "RApRSv0PfTk",
+    "title": "Stories of Techonoogy 「ATM」編 - 日立",
+    "channel": "Hitachi",
+    "channel_id": "UC1uLQAHSG6VXSypf5ng-hCQ",
+    "views": 42933,
+    "published": "13 年前",
+    "age_days": 4745,
+    "length": "13:15"
+   },
+   {
+    "id": "Ade2fz-ZH64",
+    "title": "コンビニATMの手数料は誰のもの？銀行とATMの会社のお金の流れを図解",
+    "channel": "身近なお金のしくみ図鑑",
+    "channel_id": "UCk2Ujo5boYR02YAVJLFfOHA",
+    "views": 15,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "11:41"
+   }
+  ],
+  "マイナ保険証 仕組み カードリーダー": [
+   {
+    "id": "HTY-_p0Eh6E",
+    "title": "マイナ保険証の医療機関や薬局での使い方 ｜ マイナンバーカードの健康保険証利用 ｜ マイナンバーカードの安全性",
+    "channel": "デジタル庁",
+    "channel_id": "UCKmJk25wcPwCecf7nV9HwCw",
+    "views": 482486,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:08"
+   },
+   {
+    "id": "LystOMehrRA",
+    "title": "新型マイナ保険証読み取り機 パナソニック系 別端末不要に【WBS】",
+    "channel": "テレ東BIZ ダイジェスト",
+    "channel_id": "UCkKVQ_GNjd8FbAuT6xDcWgg",
+    "views": 15941,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "0:36"
+   },
+   {
+    "id": "rhE7ohk8hwg",
+    "title": "医療情報をしっかり把握していく　マイナ保険証　顔認証付きカードリーダー　　厚労大臣会見　11月13日",
+    "channel": "全国保険医団体連合会公式チャンネル",
+    "channel_id": "UC8ls5lZocfTkdjO29nBOT7w",
+    "views": 1232,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "5:58"
+   },
+   {
+    "id": "13iomqXfwBs",
+    "title": "【比較体験】顔認証付きカードリーダー3社比べてみた!!－オンライン資格確認",
+    "channel": "Wevery!チャンネル 河村伸哉",
+    "channel_id": "UCShKGUDVfgSXSQ4B6QdW1Ag",
+    "views": 224992,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "22:46"
+   },
+   {
+    "id": "XyOcjQQSz1E",
+    "title": "【全5機種対応】マイナ保険証の医療機関・薬局での使い方を完全解説",
+    "channel": "YMちゃんねる | かんたんIT解説",
+    "channel_id": "UCCH7rNajZcGq0huP7nGiWNw",
+    "views": 29841,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "11:04"
+   },
+   {
+    "id": "wiDToJkdtl4",
+    "title": "【絶対確認】マイナ保険証で\"窓口30万円\"請求される人の特徴…このボタン押さないと詰みます。",
+    "channel": "キャッシュレスしすぎた【杉田】",
+    "channel_id": "UC4TnL2yRWdT4GXzXaACPATw",
+    "views": 18601,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "8:16"
+   },
+   {
+    "id": "G2dRpvE4oBE",
+    "title": "マイナンバーカードによる保険証の確認方法【国立がん研究センター 中央病院】",
+    "channel": "国立がん研究センター公式チャンネル",
+    "channel_id": "UCicLjKtxm1uIyHKw12RW1Qw",
+    "views": 54456,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:01"
+   },
+   {
+    "id": "i9yR9ZJp_JY",
+    "title": "【知らないと損】マイナ保険証の仕組み。現役医療事務が徹底解説！",
+    "channel": "みかんチャンネル",
+    "channel_id": "UCpzyr1-CPw3F7HJILhMWSkg",
+    "views": 37219,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "15:31"
+   },
+   {
+    "id": "j0Dxy7OLcj4",
+    "title": "マイナ保険証を使う時に同意をしなかったらどうなる？同意することでメリットはあるの？「健康保険証廃止で不安」と感じている人へ！【高額療養費制度/医療情報/カードリーダー/本人同意/読み込めない】",
+    "channel": "老後資金チャンネル",
+    "channel_id": "UCaKOveSqIMjI_hfnbrj5TzQ",
+    "views": 40712,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:26"
+   },
+   {
+    "id": "qHdYal9An-Y",
+    "title": "とっても簡単３ステップ　マイナ保険証登録方法",
+    "channel": "IMSグループ医療・介護のお役立ちサイトチャンネル",
+    "channel_id": "UCqzoEkpH2qvJDvtve89leLw",
+    "views": 29724,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:54"
+   },
+   {
+    "id": "Omrx-wLYgbY",
+    "title": "【KTN】週刊健康マガジン　マイナ保険証～マイナ保険証利用の実際～",
+    "channel": "KTNテレビ長崎",
+    "channel_id": "UCFVI14YKxx42CZPRyZX_g0A",
+    "views": 445,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:46"
+   },
+   {
+    "id": "eajIECLxXVs",
+    "title": "マイナンバーカードを健康保険証として利用する方法",
+    "channel": "デジタル庁",
+    "channel_id": "UCKmJk25wcPwCecf7nV9HwCw",
+    "views": 1056062,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:52"
+   },
+   {
+    "id": "5t5lgXbIbc0",
+    "title": "【ついに】スマホでマイナ保険証 提供開始！【iPhoneのマイナンバーカード】",
+    "channel": "かじがや電器店",
+    "channel_id": "UCmWVwb1NqEe1PuVf199ii-w",
+    "views": 219765,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:36"
+   },
+   {
+    "id": "A_RgWQJ4ybc",
+    "title": "マイナ保険証とは？2026年版の全体像",
+    "channel": "あいパートナーズのAI労務解説",
+    "channel_id": "UCcXgpZsPfOUQgm3RE7bUcmw",
+    "views": 466,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "7:03"
+   },
+   {
+    "id": "32pWW3zDRy8",
+    "title": "マイナンバーカードを健康保険証として使う方法をご紹介します☝️",
+    "channel": "東海北陸厚生局YouTube公式チャンネル",
+    "channel_id": "UCE0Gnv_hZWknvojic6RTxaQ",
+    "views": 3860,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "1:52"
+   },
+   {
+    "id": "j_u9ajGg86A",
+    "title": "オンライン資格確認の顔認証付きカードリーダーの保守契約が終わって使えなくなる!?",
+    "channel": "Wevery!チャンネル 河村伸哉",
+    "channel_id": "UCShKGUDVfgSXSQ4B6QdW1Ag",
+    "views": 10202,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "8:42"
+   },
+   {
+    "id": "snvTzU0yt4s",
+    "title": "厚生労働省のオンライン資格確認に対応した顔認証付きカードリーダー「Caora」ご紹介",
+    "channel": "株式会社PFU【Official】",
+    "channel_id": "UCPZsYILIPojNOi3kZHN4CcA",
+    "views": 22385,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:21"
+   },
+   {
+    "id": "O6D4tRHh8wU",
+    "title": "スマホでマイナ保険証！ 病院・薬局の受付のしかたとiPhone・Androidの違い【シニア向け】",
+    "channel": "Hisa",
+    "channel_id": "UCt5fmqr0fnN6ric0qZeKDvA",
+    "views": 207,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "2:24"
+   },
+   {
+    "id": "_bc-5L1jY_Y",
+    "title": "マイナ保険証を基本とする仕組みへの移行に向けた準備セミナー",
+    "channel": "厚生労働省 / Ministry of Health, Labour and Welfare",
+    "channel_id": "UCVgZUHlkoN51FOwoNMBGjfw",
+    "views": 8680,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "23:26"
+   }
+  ],
+  "コンビニ 支払い バーコード 公共料金 仕組み": [
+   {
+    "id": "VLMS6cX90Y8",
+    "title": "「公共料金をポイントで払える？」楽天ペイの請求書払い機能を使う流れ・注意点！",
+    "channel": "Android・iPhone使い方教室 - webmobile",
+    "channel_id": "UCxi2nlCktT-ac8Yi7FVF_eQ",
+    "views": 4409,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:06"
+   },
+   {
+    "id": "NFVXps7mkWs",
+    "title": "【FPが解説】コンビニで払っちゃだめ！公共料金のおすすめの支払い方法を解説",
+    "channel": "お金の学校　Money School",
+    "channel_id": "UC4yHhA-Wlv1N2kTSKNiKICg",
+    "views": 1908,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:37"
+   },
+   {
+    "id": "-7iwHBehi6g",
+    "title": "簡単！電気料金paypay自宅払い",
+    "channel": "政治系Ch「黒幕」",
+    "channel_id": "UCQJrcJBABWShzV3cnYlFOBA",
+    "views": 641,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:20"
+   },
+   {
+    "id": "y7DwVoZOTo0",
+    "title": "コンビニでの公共料金の支払いスマホで　用紙不要に(16/08/31)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 19308,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "1:01"
+   },
+   {
+    "id": "PAOhz7hMk2M",
+    "title": "PayPay請求書払",
+    "channel": "cloverport",
+    "channel_id": "UC0z7671adXiT5i2Px9KWs-Q",
+    "views": 5395,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:11"
+   },
+   {
+    "id": "sOUeAX2G8Xs",
+    "title": "日本の電気代とガス代をコンビニで払う方法",
+    "channel": "Omotenashi Realty",
+    "channel_id": "UC_gI3LbPAbjvPusrwmzox4w",
+    "views": 11196,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:09"
+   },
+   {
+    "id": "fBqYBX64q5M",
+    "title": "【コンビニバイトの話275】公共料金を払うためだけにコンビニ寄るのはコスパ悪い【自宅で払うのが1番】",
+    "channel": "30代フリーター資産運用チャンネル",
+    "channel_id": "UCMaPk3k1k9DZ-w0U0cV63xw",
+    "views": 365,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "5:19"
+   },
+   {
+    "id": "2nSYA-4f640",
+    "title": "【コンビニ店員あるある】収納代行の公共料金支払いあるある！",
+    "channel": "中卒コンビニ店員シアンちゃんねる",
+    "channel_id": "UCgY6D7MLcTkRmkKDonsqzdw",
+    "views": 65545,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "11:38"
+   },
+   {
+    "id": "DTLUkhv74tI",
+    "title": "【スマホ】【お得】PayPayで損ぜずに公共料金を支払う方法！ペイペイ残高で電気代・ガス代・水道代も簡単に！",
+    "channel": "スマキン【Smakin】",
+    "channel_id": "UC3zx3B5VObMmSGyZk0mijxw",
+    "views": 27262,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:19"
+   },
+   {
+    "id": "V7bBCNzIxaQ",
+    "title": "コンビニ払いでコード決済する動画　（３回）",
+    "channel": "塩牛丼マン",
+    "channel_id": "UC7-EdQYjaKZtJF8YWATQ1sA",
+    "views": 90377,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:14"
+   },
+   {
+    "id": "bKJwZCQcX8Q",
+    "title": "【改定あり/固定コメントをお読みください】au Pay請求書支払いで公共料金を支払う方法【解説＆実演】ポイントたまる！",
+    "channel": "スマっ子のお得キャッシュレスCH",
+    "channel_id": "UCIgHEhAiiIns1OhrorL2bUQ",
+    "views": 32651,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "3:49"
+   },
+   {
+    "id": "NMoRlELhOGo",
+    "title": "セブンイレブンでのコンビニ支払い方法",
+    "channel": "コミュ症チャンネル",
+    "channel_id": "UCI8ncQMpTPSJ-TI_5iTZHEA",
+    "views": 122495,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:56"
+   },
+   {
+    "id": "tZFDnuh9VdQ",
+    "title": "#３分で済むから 第453回「公共料金の紙、どうしてる？２」",
+    "channel": "ARIKIRA Ch. アリキラちゃんねる",
+    "channel_id": "UCcCBXxysE_QvV4wbbUryKXw",
+    "views": 136,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:01"
+   },
+   {
+    "id": "l38TElL6oJM",
+    "title": "Temuコンビニ支払いのやり方❘ファミリーマート代金支払い| Cách thanh toán Temu ở combini| How to pay temu in convenience store",
+    "channel": "BaToReKa",
+    "channel_id": "UC2sN69JpgxuJDx194V_OwBw",
+    "views": 159235,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:06"
+   },
+   {
+    "id": "k3uqzVH8KXU",
+    "title": "【ファミリーマート】ファミリーマートでのコンビニ支払い方法",
+    "channel": "コミュ症チャンネル",
+    "channel_id": "UCI8ncQMpTPSJ-TI_5iTZHEA",
+    "views": 62569,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:51"
+   },
+   {
+    "id": "WkMc7-RBn_o",
+    "title": "【ローソン】ローソンでのコンビニ支払い方法",
+    "channel": "コミュ症チャンネル",
+    "channel_id": "UCI8ncQMpTPSJ-TI_5iTZHEA",
+    "views": 71795,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:06"
+   }
+  ],
+  "置き配 オートロック 仕組み": [
+   {
+    "id": "fPE6HgyQaQ0",
+    "title": "【どうなった？】配達員がオートロック解除して置配をする。話題になったニュースのその後は？【鍵屋】【鍵の仕組み】",
+    "channel": "カギ屋タウンロックちゃんねる",
+    "channel_id": "UC6UvOP2uiabOIHjO3x7TYbQ",
+    "views": 492,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "9:19"
+   },
+   {
+    "id": "bOoM5oZK5v4",
+    "title": "【「置き配」がスムーズに？】オートロックを配達員が解錠  国土交通省新システムで支援へ",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 6596,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:47"
+   },
+   {
+    "id": "NwJpmUvDQ84",
+    "title": "「置き配」配達員がオートロック解除可能に　「本物の業者か分からない」「リスク増える」国の方針に賛否の声　再配達削減へ業界は歓迎",
+    "channel": "OBS News",
+    "channel_id": "UC04SqLqLWaH01DOka8e2yEQ",
+    "views": 1502,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:40"
+   },
+   {
+    "id": "Ue_8B6Atz3M",
+    "title": "「置き配」利用拡大へ新制度！マンションのオートロック解錠を共通化、防犯リスクは大丈夫？",
+    "channel": "love@japan ♥️🌹",
+    "channel_id": "UC1ZxQEo51yszHKHhoSQFihA",
+    "views": 70,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:47"
+   },
+   {
+    "id": "-TSrmuNOx6o",
+    "title": "置き配「オートロック解錠」国が支援へ　配達現場で同行取材　効率化と安全性の両立が課題か　大分",
+    "channel": "TOSテレビ大分 ニュース【公式】",
+    "channel_id": "UChx_y6aLWNkifSDUt2TVAzg",
+    "views": 405,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:08"
+   },
+   {
+    "id": "8oJbKK37OAA",
+    "title": "オートロックでも置き配　スマホで「デジタルキー」(2022年3月28日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 12935,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "0:52"
+   },
+   {
+    "id": "2OxY6csqRN8",
+    "title": "オートロックでも置き配できる”新制度”は改悪なのか？",
+    "channel": "求人ライターM【会社の口コミ・求人の見方】",
+    "channel_id": "UCeYPqm6im4LbsS48hrsBEcA",
+    "views": 1849,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:07"
+   },
+   {
+    "id": "R2bGJ7w-qM0",
+    "title": "「物流2024年問題」に政府が緊急対策「置き配」にポイント還元へ “オートロックの壁”に対応できる新システムとは？【news23】｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 8585,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:50"
+   },
+   {
+    "id": "h3AizinJT10",
+    "title": "【ヨコスカ解説】「置き配」が基本ルールに？手渡しには追加手数料も…盗難のリスクは？オートロックは？推進を急ぐ裏側にある、物流の「2030年問題」",
+    "channel": "読売テレビニュース",
+    "channel_id": "UCv7_krlrre3GQi79d4guxHQ",
+    "views": 14276,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "14:03"
+   },
+   {
+    "id": "IDDcd2txHOo",
+    "title": "配達員がオートロック解錠できる仕組み支援の方針 国交省 置き配の利用拡大に向けて(2025年9月18日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 4185,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:23"
+   },
+   {
+    "id": "01xLbly86H4",
+    "title": "【amazonFLEX】実はOK！　オートロックマンションの勝手な置き配の話。",
+    "channel": "たけちゃんねる TV-Kusakarism",
+    "channel_id": "UCtDRxzXFIVnU6kHTxowxYFA",
+    "views": 3447,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:12"
+   },
+   {
+    "id": "s_xolJ6ooB8",
+    "title": "オートロック解錠で広がる「置き配」――利便性と防犯をどう両立するか",
+    "channel": "横浜マンション管理・FP研究室",
+    "channel_id": "UCSGLTXuNpBELkv3snhh-19Q",
+    "views": 142,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "21:55"
+   },
+   {
+    "id": "2U457jMjakA",
+    "title": "オートロックマンションで“配送中の荷物”がカギの代わりに！安心・安全な宅配システム “Pabbit”",
+    "channel": "NewsTV",
+    "channel_id": "UCxdDgTF_Ya58d-RIJEFVpLQ",
+    "views": 374952,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "1:27"
+   },
+   {
+    "id": "xTQlUfXRGCk",
+    "title": "オートロックマンションの『置き配』を便利に「Key for Business」",
+    "channel": "株式会社GoldKey Co.,Ltd",
+    "channel_id": "UCox3h7tsQlB6tBkRek0U5UQ",
+    "views": 382,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:01"
+   },
+   {
+    "id": "yFVcLbY_k-o",
+    "title": "【配達員によるオートロック解錠】　「セキュリティー大丈夫？」配送業者は歓迎の一方で心配の声も　「置き配」促進で再配達削減につながるか？　“解錠を共通化”国が支援へ（2025年9月18日）",
+    "channel": "MBS NEWS",
+    "channel_id": "UCkKJhKO73xF1pK5h9R82ZGQ",
+    "views": 6891,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:02"
+   },
+   {
+    "id": "2CMR__8B53Q",
+    "title": "【「置き配」促進へ】配達員の“オートロック解錠”に賛否 「負担減る」「怖いしかない」 SNSで「誰でも自由に」誤解も",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 3977,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:41"
+   },
+   {
+    "id": "5wFzlPbK8iw",
+    "title": "【鍵屋ガチ見解】配達員不足による置配推進でマンションオートロックに関すること。解決方法を鍵のプロが考察！【カギ屋】【世間の話題】",
+    "channel": "カギ屋タウンロックちゃんねる",
+    "channel_id": "UC6UvOP2uiabOIHjO3x7TYbQ",
+    "views": 251,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:50"
+   }
+  ],
+  "スマホ 画面 自動 明るさ センサー": [
+   {
+    "id": "BmlR9fdHQiY",
+    "title": "【知らないと損】スマホがすぐ熱く重くなるのは通信のこの設定…11月から勝手にオン。今すぐオフに！",
+    "channel": "なつみのスマホ相談室",
+    "channel_id": "UCe6Rsko7449SfS3ajOXCu5A",
+    "views": 13346,
+    "published": "4 時間前",
+    "age_days": 0,
+    "length": "21:18"
+   },
+   {
+    "id": "jgNJbpWk2K8",
+    "title": "画面が暗い？明るさとライトの使い方 iPhone・Android",
+    "channel": "金子らくらくデジタル教室",
+    "channel_id": "UCO49ThBCjWXkGZHAk22i6aw",
+    "views": 174,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "8:51"
+   },
+   {
+    "id": "dQLN72UIeZk",
+    "title": "Androidスマートフォンの画面の明るさを修正する方法｜画面の明るさが自動的に変化し続ける問題を解決する方法",
+    "channel": "My iphone support",
+    "channel_id": "UCZby8cyZ0_yscftVHPO1W9g",
+    "views": 1678,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "1:29"
+   },
+   {
+    "id": "iYm7RBB-6-M",
+    "title": "自動明るさとは｜画面が勝手に変わる理由",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 51,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "2:50"
+   },
+   {
+    "id": "W9-A5xL0ibI",
+    "title": "REDMI 17 4G – 自動明るさ調整が機能しない場合の修正方法",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 2,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "3:56"
+   },
+   {
+    "id": "9uu4lLv5MJw",
+    "title": "MOTOROLA Razr 60 – 自動明るさ調整が効かないときの対処法",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 9,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "2:15"
+   },
+   {
+    "id": "EfUDeuG3al8",
+    "title": "MOTOROLA Moto G77 – 自動明るさ調整が効かない時の対処法",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 3,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "2:13"
+   },
+   {
+    "id": "pdYPR6Aa9yQ",
+    "title": "【2026年】Androidスマホのやってはいけない設定15選！「オフ」にすべき理由も丁寧に解説！",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 331679,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "21:06"
+   },
+   {
+    "id": "Cnusqov6OIo",
+    "title": "TECNO Spark 20 Pro Plus – 自動明るさ調整が効かないときの対処法",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 0,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "1:54"
+   },
+   {
+    "id": "331Oqo6r-kg",
+    "title": "スマホの画面が暗い！明るさを調整する方法【シニア向け・Android】",
+    "channel": "75歳からYouTubeに挑戦",
+    "channel_id": "UC2Ci9TiSEWLK_f-7ggx4fDQ",
+    "views": 34,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "5:54"
+   },
+   {
+    "id": "BKkRPWNIK1Q",
+    "title": "XIAOMI 14T Proで自動明るさをオン/オフにする方法",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 6,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "0:42"
+   },
+   {
+    "id": "ITUo4X1yT-g",
+    "title": "Galaxyの画面が暗い？明るさを簡単に変える方法",
+    "channel": "ともちゃんねる",
+    "channel_id": "UCEAVHrls8rHjVX4ApshY0Dg",
+    "views": 315,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "3:36"
+   },
+   {
+    "id": "N4bvS6jj-bI",
+    "title": "【知らないと損】寒い11月でもスマホを熱くして重くする設定はコレ…iPhoneもAndroidも最初から勝手にオン。今すぐオフに！",
+    "channel": "りんのスマホ点検室",
+    "channel_id": "UCtKIkpBtHuFkWrBws0OefXQ",
+    "views": 31214,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "19:27"
+   },
+   {
+    "id": "bocTebc8uLI",
+    "title": "【iPhoneの説明書】「明るさの自動調整の対処法！」たけ講座 第3回",
+    "channel": "たける / たけぷらす。",
+    "channel_id": "UCNwkUCe94pAc9Z7Fdn_9WHw",
+    "views": 5304,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "2:46"
+   },
+   {
+    "id": "MISytR8Xu6s",
+    "title": "iPhone 18 Pro/Pro Max/Duoでアクセシビリティ設定の「明るさの自動調節」を有効にする方法",
+    "channel": "Nucleus",
+    "channel_id": "UC46XhaCEaPAuSrM_LPm7Ruw",
+    "views": 2,
+    "published": "6 時間前",
+    "age_days": 0,
+    "length": "0:43"
+   },
+   {
+    "id": "Hy17sNJTw_k",
+    "title": "【えっなんで?】スマホの画面が勝手に暗くなるのを防ぐための便利な方法！原因とは？",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 32493,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "6:20"
+   },
+   {
+    "id": "PMRIvPdZQlk",
+    "title": "【初心者向け講座12】スマホの画面が暗い時どうする？明るさ調節を簡単解説！",
+    "channel": "スマホの教科書 by 街のケータイショップ",
+    "channel_id": "UC5TDzar1n488zR9VEefLBcA",
+    "views": 14060,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:52"
+   },
+   {
+    "id": "DfRz79EUkeM",
+    "title": "外に出ると、スマホの画面が明るくなるのはなぜ？",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 6,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "5:08"
+   },
+   {
+    "id": "YoSBj_Tp7xg",
+    "title": "VIVO V29 Lite 5G - 自動明るさ（オートブライトネス）のオン/オフ",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 2,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "0:44"
+   },
+   {
+    "id": "nWKBGmDltjs",
+    "title": "OPPO Reno 16 F – 自動明るさ調整が効かない時の対処法",
+    "channel": "HardReset_jp",
+    "channel_id": "UCNTw7xFybeNr0kYcHQbSrAQ",
+    "views": 7,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "3:44"
+   }
+  ],
+  "スマホ 防水 なぜ 仕組み": [
+   {
+    "id": "eril5nhEvr0",
+    "title": "【スマホ水没の真実】「IP68＝完全防水」は大間違い！お風呂や海でスマホが壊れる科学的理由",
+    "channel": "ちょっと気になる話題の宝庫",
+    "channel_id": "UCu1ZMLJ80Xz8EU5EJeaPwqg",
+    "views": 462,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "5:45"
+   },
+   {
+    "id": "SEdJ6DPti4k",
+    "title": "【知らないと危険】スマホの「IP68」って実際どこまで大丈夫？防水性能を分かりやすく解説│新潟のスマホショップ COMG!(コング)",
+    "channel": "COMG! チャンネル",
+    "channel_id": "UCX8gL1WC_0ESi1d8ndQOV2w",
+    "views": 76,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "2:27"
+   },
+   {
+    "id": "NLr4_F4exuQ",
+    "title": "【iPhoneの水没の仕組み】お風呂でスマホを使う人は必ず持ってる防水ケース",
+    "channel": "APPLEMAC三宮元町駅前店",
+    "channel_id": "UCluyCe08ZuW6CGWQ4dQnJsA",
+    "views": 1292,
+    "published": "2 年前 に配信済み",
+    "age_days": 730,
+    "length": "9:35"
+   },
+   {
+    "id": "m0Ysm2nRDRc",
+    "title": "スマホの電池はなぜ劣化する？電池の中で育つ「膜」の正体を図解",
+    "channel": "まことの部屋",
+    "channel_id": "UC3_0NrJHRHfT_g-zjb2aAlg",
+    "views": 0,
+    "published": "34 分前",
+    "age_days": 0,
+    "length": "8:18"
+   },
+   {
+    "id": "IOazZduvA94",
+    "title": "防水スマホが水没しても、保証されない本当の理由",
+    "channel": "ずんだずんだ大先生",
+    "channel_id": "UCITfj2TKjModO4mY2uzn7yg",
+    "views": 36,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "9:11"
+   },
+   {
+    "id": "KJiQ9P3imPQ",
+    "title": "スマホが水没したら？ お米はNG、防水でもお風呂がだめな理由【VOICEVOX解説】",
+    "channel": "スマホトラブル相談所",
+    "channel_id": "UCfy_W0oSHmnImLcOmOGV--A",
+    "views": 140,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "15:09"
+   },
+   {
+    "id": "MaxEGFkwSuk",
+    "title": "なぜ「防水」のスマホでも水で壊れるのか｜IP68の試験の条件",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 8,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "10:09"
+   }
+  ],
+  "リフレッシュレート 120Hz 違い なぜ ぬるぬる": [
+   {
+    "id": "h9rWSl1dE9s",
+    "title": "【ゲーマー必見】リフレッシュレートとは？フレームレートとの違い、60Hz・120Hz・240Hzの見え方の差は？",
+    "channel": "モニ研 / Monitor lab.",
+    "channel_id": "UCa-zzjBBzmTanh4CDIkKuLw",
+    "views": 196922,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "9:26"
+   },
+   {
+    "id": "4_4uQn1CDk8",
+    "title": "120Hzのリフレッシュレートは必要なのか？60Hzとの違いを比較",
+    "channel": "まつりくん",
+    "channel_id": "UCFsN2wdxh_-tf7P1EumPNlQ",
+    "views": 58283,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:25"
+   },
+   {
+    "id": "xNtcLlwj2qQ",
+    "title": "【PS5】 ストリートファイター6 入力遅延比較 120Hz VRR vs 60Hz 【120Hzジャストパリィよりも60Hzは先行入力】",
+    "channel": "Jisaku Hibi",
+    "channel_id": "UC6OTi2hAj3jmM1uSwxvGbEg",
+    "views": 14986,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "0:26"
+   },
+   {
+    "id": "CLB9fuLmk88",
+    "title": "リフレッシュレート別 遠距離の視認性比較",
+    "channel": "Jisaku Hibi",
+    "channel_id": "UC6OTi2hAj3jmM1uSwxvGbEg",
+    "views": 22643,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "0:16"
+   },
+   {
+    "id": "OMbFcGgd4hI",
+    "title": "リフレッシュレートとは｜60Hzと120Hzは何の数字？",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 93,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "2:36"
+   },
+   {
+    "id": "asB1MLcQm14",
+    "title": "モニターリフレッシュレート 60Hzと120Hzの見え方の違い",
+    "channel": "zbnrhpcom 雑多垢 メリメロシエル",
+    "channel_id": "UCnrOryxlgFZnkhUjrQBg7EA",
+    "views": 241,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "0:47"
+   }
+  ],
+  "ダークモード 電池 なぜ": [
+   {
+    "id": "uH8JkNP1MtQ",
+    "title": "【スマホ】ダークモードは、バッテリーの節約になるのか？【アトムミニ】",
+    "channel": "アトム/探求ちゃんねる",
+    "channel_id": "UCpjRcvQdZf_FfqgSh1FNjMw",
+    "views": 123,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:26"
+   },
+   {
+    "id": "Derr0gpYYF4",
+    "title": "ダークモードとは｜画面が暗くなると何が変わる？",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 101,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "1:10"
+   },
+   {
+    "id": "9ht840OCYlc",
+    "title": "スマホのダークモードを積極的に使おう。目も疲れないし、電池の減りも遅いです。",
+    "channel": "勝間和代が徹底的にマニアックな話をするYouTube",
+    "channel_id": "UCWoiNwdr7EEjgs2waxe_QpA",
+    "views": 16714,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:40"
+   },
+   {
+    "id": "5Wvhn3HrTtE",
+    "title": "【iPhone9割誤解】ダークモードずっとオン損？機種別の真実【2026】",
+    "channel": "れん@iPhone先生",
+    "channel_id": "UClWgjIJJwIcuveI-m_gQJwA",
+    "views": 447,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "5:11"
+   },
+   {
+    "id": "m3V11Q4Ok3s",
+    "title": "【スマホ】iPhoneダークモードのメリットと設定方法！目の疲れ防止と節電の効果も",
+    "channel": "スマキン【Smakin】",
+    "channel_id": "UC3zx3B5VObMmSGyZk0mijxw",
+    "views": 54317,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:22"
+   },
+   {
+    "id": "c2Ld63fS-c4",
+    "title": "【衝撃の結果】ダークモードって本当に電池もつの？",
+    "channel": "おめがシスターズ [Ω Sisters]",
+    "channel_id": "UCNjTjd2-PMC8Oo_-dCEss7A",
+    "views": 144442,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "6:45"
+   },
+   {
+    "id": "vfg53zRN4-A",
+    "title": "【裏技】iPhoneを超ダークモードにする方法！目に優しい設定とは?",
+    "channel": "アイフォンのヒント",
+    "channel_id": "UCwBi_YA8_YxTxSEb435P79g",
+    "views": 546,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:09"
+   },
+   {
+    "id": "7FgJogwuC9U",
+    "title": "【あなたはどっち？】スマホのライトモードとダークモードってどっちがメリットあるの？正しい使い方・設定方法",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 13697,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "8:03"
+   },
+   {
+    "id": "dJkMk_7bJeY",
+    "title": "今すぐiPhoneをダークモードに変えたほうがいい理由について説明します",
+    "channel": "マックスむらい",
+    "channel_id": "UC5Y35HzjHnxi2Dk8Xk8Cllw",
+    "views": 227795,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "7:31"
+   },
+   {
+    "id": "81IRSt_xGrs",
+    "title": "【Apple】iPhone XS, XS Maxユーザーならバッテリーを更に節約できる!? Macの様なダークモードにする方法",
+    "channel": "Macを使いたい / 初心者Apple講座",
+    "channel_id": "UCi5xdGjU4I_lyMaxrlNUBAw",
+    "views": 961,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:43"
+   }
+  ],
+  "スマホ 電波 アンテナ 本数 意味": [
+   {
+    "id": "p5zwYrG4saY",
+    "title": "127. スマートフォンの「アンテナ本数」の意味は？（dBm）",
+    "channel": "ちいラボ - スマホ教室",
+    "channel_id": "UCmxiAMzMsEnN6m_1seVpiMA",
+    "views": 892,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "18:59"
+   },
+   {
+    "id": "vwNeNlEgTXQ",
+    "title": "この電波マークが便利すぎるのでご紹介します。",
+    "channel": "マメ",
+    "channel_id": "UCAaThwhgEMfisl0GMsd4SIg",
+    "views": 204278,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:22"
+   },
+   {
+    "id": "bE8ayosOgKg",
+    "title": "スマホ上部のアンテナマークって何？電波の見方を初心者向けに解説！",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 553,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "6:04"
+   },
+   {
+    "id": "qmGk4xvshpA",
+    "title": "スマホの電波が弱いときの改善方法｜簡単にモバイル信号を強くするコツ",
+    "channel": "Waylohr",
+    "channel_id": "UC8Q_tlVu1qotzGnH0gA5eMw",
+    "views": 6444,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:46"
+   },
+   {
+    "id": "tRnIWuav15E",
+    "title": "【電波があるのにつながらない？】再起動の前に試したい「飛行機マーク」の使い方｜iPhone・Android",
+    "channel": "スマホ博士",
+    "channel_id": "UC7nKJWglHMy-dO8dqEabRIQ",
+    "views": 21,
+    "published": "10 分前",
+    "age_days": 0,
+    "length": "12:44"
+   },
+   {
+    "id": "agPFIm4Rb0c",
+    "title": "4Gと5G｜アンテナ表示は何が違う？",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 640,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "1:57"
+   },
+   {
+    "id": "_X94SpbVOxM",
+    "title": "【新事実】スマホの飛行機マークを押すだけで「電波・電池・通信量」の悩みが一発解決！機内モードの神すぎる使い方4つご紹介！",
+    "channel": "はるかのスマホ教室",
+    "channel_id": "UC61UQJ1BSk1Y_FvoGWfmiKA",
+    "views": 260,
+    "published": "1 時間前",
+    "age_days": 0,
+    "length": "11:43"
+   },
+   {
+    "id": "w4rHu33WVCg",
+    "title": "【最新電波利用調査】ドコモの通信品質が他社と違う理由",
+    "channel": "スマサポチャンネル",
+    "channel_id": "UCMXjwK6-rRw-la5SN5j0M6g",
+    "views": 309005,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "12:25"
+   },
+   {
+    "id": "9zgzSvzUvro",
+    "title": "アンテナは立ってるのに遅い…スマホの電波だけでは決まらないこと",
+    "channel": "ずんだずんだ大先生",
+    "channel_id": "UCITfj2TKjModO4mY2uzn7yg",
+    "views": 1871,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:58"
+   },
+   {
+    "id": "Dp_1trtj1rc",
+    "title": "【知ってた？】なぜスマホからアンテナが消えたのか？外から消えた衝撃の理由",
+    "channel": "身近なハテナ【解説ch】",
+    "channel_id": "UCJuWkcHm_fBSrqTecdyvQgQ",
+    "views": 783,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "5:56"
+   },
+   {
+    "id": "eWOaDMpN3Kg",
+    "title": "スマホ（au）の電波が突然なくなった～　◯◯で電波復活！【田舎でゆるゆる自給自足生活 ／ 第127回】",
+    "channel": "田舎でゆるゆる自給自足生活",
+    "channel_id": "UCfjOH2Li0tgSZ_OywnvaOCg",
+    "views": 6231,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "5:58"
+   },
+   {
+    "id": "XO3ryy1G1-g",
+    "title": "【徹底解説】携帯基地局のアンテナが3本ある理由(セクターについて) 5Gよりも前に基地局の基礎を知りましょう",
+    "channel": "RFエンジニア育成所【無線・電波を教える学校】",
+    "channel_id": "UCw64Fd-CqTkfBhtXA6ZvrqQ",
+    "views": 20912,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:19"
+   }
+  ],
+  "フリック入力 なぜ 日本語 予測": [
+   {
+    "id": "Bq8a3ByjMTY",
+    "title": "なぜ日本人はスマホでフリック入力するのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの真相",
+    "channel_id": "UCDlGznf8OvYLZPiXcsL96gg",
+    "views": 7911,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "20:34"
+   },
+   {
+    "id": "2FOAG7l2UTQ",
+    "title": "android日本語キーボードをフリックのみ有効にする",
+    "channel": "ビフォアフィールド",
+    "channel_id": "UCDbP6MAkPTmqCPBK6o-bxKQ",
+    "views": 384,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:05"
+   },
+   {
+    "id": "WLqPz1V_iT0",
+    "title": "今さら聞けない！スマホ文字入力のトラブル解決法＆入力テクニック AR",
+    "channel": "dアプリ＆レビュー公式チャンネル",
+    "channel_id": "UCrBlOI_kU4fXAcUg4B80Fdg",
+    "views": 254692,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:49"
+   },
+   {
+    "id": "3jkN9HKOZCs",
+    "title": "【15,000人に聞いた！】iPhoneの日本語入力はフリック入力派？それともローマ字(QWERTY)入力派？→回答結果が意外すぎました・・・",
+    "channel": "Apple信者１億人創出計画",
+    "channel_id": "UCfMgDw34gQ2cu2GfLAjMUjA",
+    "views": 40937,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "19:14"
+   },
+   {
+    "id": "GMSU3o81iXg",
+    "title": "フリック入力の特許を発明者が解説！マイクロソフトに売却できたポイントはこれだ！",
+    "channel": "小川コータの発明チャンネル",
+    "channel_id": "UCsNhfl6qig7erDYfA0i5fJw",
+    "views": 1804,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:13"
+   },
+   {
+    "id": "3yKtvOoinjM",
+    "title": "フリック入力とローマ字入力どっちが速いの？",
+    "channel": "ウジエンターテインメント",
+    "channel_id": "UCBLCpg9ne7b6aZ4ivyKhGBQ",
+    "views": 17511,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:25"
+   },
+   {
+    "id": "GJ7e1anNEdo",
+    "title": "Chromebookでフリック入力できますか？",
+    "channel": "実録! 娘のスマホ 格安スマホ活用術",
+    "channel_id": "UCybWMPsL91TxTf5aP0x5IEA",
+    "views": 1901,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "13:34"
+   },
+   {
+    "id": "6GxGm-_RGoA",
+    "title": "フリック入力を発明し「人生100回分」稼いだ日本人がAppleではなくMicrosoftに特許を売却した戦略的理由",
+    "channel": "テック系米国株「FORGE AHEAD」",
+    "channel_id": "UCKign2N6adt9j8zafah9zRw",
+    "views": 160,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:54"
+   },
+   {
+    "id": "6-hq7fC_Sfg",
+    "title": "【入力は変わらない】スマホが大人気でフリック入力も普通になりました。それでも「キーボードがなくならない理由」とは",
+    "channel": "戸田覚Biz",
+    "channel_id": "UCQhtBeMKRZKDcMeEEV_AlIA",
+    "views": 5742,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:45"
+   },
+   {
+    "id": "0vNe1QUdNcg",
+    "title": "【スマホの文字入力】フリック入力・変換・音声入力・コピー｜iPhone・Androidが18分でわかる【初心者向け】",
+    "channel": "パソコンはじめの一歩",
+    "channel_id": "UCbPMIMbSnkFGpOoWqe_mqTA",
+    "views": 142,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "17:41"
+   },
+   {
+    "id": "iSMbKoD4thY",
+    "title": "アルテ ターンフリック入力（この解説動画は旧版になりました）",
+    "channel": "Umineko Design",
+    "channel_id": "UCxwjRxmoC81cN_4NUquFW2w",
+    "views": 34660,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "3:44"
+   },
+   {
+    "id": "md2H5msLpbE",
+    "title": "フリック入力の軌跡から文字を復元するクイズ",
+    "channel": "QuizKnock",
+    "channel_id": "UCQ_MqAw18jFTlBB-f8BP7dw",
+    "views": 1068888,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:58"
+   },
+   {
+    "id": "Nsb5mdR5228",
+    "title": "【知らなきゃ損】スマホ文字入力の便利設定と裏ワザを徹底解説",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 91807,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "23:05"
+   },
+   {
+    "id": "7b701AVD--A",
+    "title": "第8回 フリック入力をマスターしよう！【ゼロから学ぶITスキル】",
+    "channel": "両学長 リベラルアーツ大学",
+    "channel_id": "UC67Wr_9pA4I0glIxDt_Cpyw",
+    "views": 87614,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:20"
+   }
+  ],
+  "スクリーンタイム 無限スクロール なぜ やめられない 仕組み": [
+   {
+    "id": "eBlAFsBUSVM",
+    "title": "SNSがやめられないのはなぜ？答えは無限スクロールの3つの仕掛け「止まる合図の消去・変動報酬・自動再生」｜スマホ依存を心理学で解説",
+    "channel": "仕掛けの心理学",
+    "channel_id": "UCTHKeIT7zDiGvcG7ZeV1Rag",
+    "views": 133,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "12:51"
+   },
+   {
+    "id": "KJ96IT8mKsA",
+    "title": "【依存症】君はなぜスマホをやめられないのか？",
+    "channel": "VAIENCE バイエンス",
+    "channel_id": "UCPKsFwt9ACF-EnJM3xN8wyQ",
+    "views": 427655,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:47"
+   },
+   {
+    "id": "Hfvyfw4RnOw",
+    "title": "なぜSNSを見続けてしまうのか？SNS依存が精神を破壊する理由「無限スクロール」が脳を蝕む認知設計とは【ずんだもん解説】",
+    "channel": "ずんだもんリテラシー",
+    "channel_id": "UCPDu2vPUyDZ7f1Dt4zKEMhw",
+    "views": 540,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "11:27"
+   },
+   {
+    "id": "V2KADTeewB4",
+    "title": "【最終手段】お前の人生を滅ぼす『スクロール病』から抜け出す唯一の方法。＃スマホイカ臭い",
+    "channel": "ジョージ -メンズコーチ-",
+    "channel_id": "UCM4qOCYKzBbuK1qK3YW9Fvg",
+    "views": 375313,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "21:48"
+   },
+   {
+    "id": "aPt1vulGQOU",
+    "title": "「あと1本だけ」が絶対に止まらない脳科学的な理由。無限スクロールがあなたの満足中枢を破壊する仕組み",
+    "channel": "日常を支配する「ブラック心理学と洗脳の科学」",
+    "channel_id": "UCO42pGXT7Mg0LMs-2cIUyeg",
+    "views": 472,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "17:02"
+   },
+   {
+    "id": "CXXQdWiubIM",
+    "title": "【無限スクロール】スマホ依存システム設計者の苦悩",
+    "channel": "となりの弁護士放送局",
+    "channel_id": "UCrabwE0YVpjCwx16zqZ-hiw",
+    "views": 1108,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "51:15"
+   },
+   {
+    "id": "Hi-XVsfBsCs",
+    "title": "なぜ「あと1本だけ」が止まらないのか【行動神経科学×注意経済学】禁忌辞典 第119項『ショート動画無限スクロール症』—",
+    "channel": "真夜中の禁忌辞典",
+    "channel_id": "UCBUhUZ8GrhQvUqe1U5IS8BA",
+    "views": 1081,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "14:08"
+   },
+   {
+    "id": "9jjHT2hK6B4",
+    "title": "ショート動画がやめられないのはなぜ？アプリが仕組んでいる4つの設計",
+    "channel": "レイタのIT解説",
+    "channel_id": "UCgrY1QHKikXJTlOy8lHyMFg",
+    "views": 33,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "6:59"
+   },
+   {
+    "id": "XEzpataQd_g",
+    "title": "スマホがやめられないのは意志が弱いからじゃない？",
+    "channel": "人類のトリセツ",
+    "channel_id": "UCb8MI4sFOOMlDf69Rwyn2gQ",
+    "views": 19,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "9:45"
+   },
+   {
+    "id": "P_w9_TERLyw",
+    "title": "なぜSNSはやめられないのか｜裁判所が認めた「やめどきを消す設計」",
+    "channel": "猫耳先生の知識研究室",
+    "channel_id": "UCWwMmxJFAqxEsAsTFKNHNOA",
+    "views": 47,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "12:49"
+   },
+   {
+    "id": "Q5l6B4gcdqc",
+    "title": "【スマホ依存】やめられない原因は脳にある｜報酬系と前頭葉、治療はハームリダクション×認知行動療法【精神科医が解説】",
+    "channel": "精神科医がこころの病気を解説するCh",
+    "channel_id": "UC7C5oRm6cGgbjJdPPEVeNMA",
+    "views": 97279,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "15:28"
+   },
+   {
+    "id": "DThKWhIk5l4",
+    "title": "なぜスマホがやめられないのか？",
+    "channel": "脳の仕組み研究所",
+    "channel_id": "UCYEG1bkMKfoe751RcLz2Diw",
+    "views": 30,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "14:19"
+   },
+   {
+    "id": "KBJ02EFdgoc",
+    "title": "スクロールがやめられないのは、脳が\"巧妙な仕掛け\"に負けているから【脳科学】",
+    "channel": "ひとり時間の脳科学",
+    "channel_id": "UCmFDRAfl-8WpHlL2fq1NLHw",
+    "views": 963,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "16:26"
+   },
+   {
+    "id": "alhMNIED3N0",
+    "title": "なぜスマホをやめられないのか？ドパガキの正体【心理学】",
+    "channel": "人の心の境界線",
+    "channel_id": "UCixGDsr9v2TOiQ6XLzDF-Yg",
+    "views": 106,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "11:54"
+   }
+  ],
+  "デジタル 体重計 仕組み なぜ 測れる": [],
+  "自転車 ライト 自動 点灯 仕組み": [
+   {
+    "id": "fgx4NIpJdzk",
+    "title": "自転車の発電機や自動点灯ライトの仕組みをどこよりも詳しく解説",
+    "channel": "なぜなぜラボ",
+    "channel_id": "UC5eIYr27oYVSogUlCPVkRWw",
+    "views": 5589,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "7:20"
+   },
+   {
+    "id": "fCqkIXZCayU",
+    "title": "どう違うの？自転車のオートライトと常時点灯ライト！プロが解説！",
+    "channel": "サイクルショップ キーマート",
+    "channel_id": "UCo-ZsWFYKh22UGPZhUTIZYg",
+    "views": 7965,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "5:29"
+   },
+   {
+    "id": "hgh0V1stOso",
+    "title": "あなたの自転車がLEDオートライトに変えられます！",
+    "channel": "ビバムサシ",
+    "channel_id": "UCaOCwKt839MtdtBr7CTEG3g",
+    "views": 22127,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:01"
+   },
+   {
+    "id": "mRtzLW5csSU",
+    "title": "【お手軽】自転車の古いライトをオートライトに変えちゃいましょう",
+    "channel": "ラビットサイクルのうさぎ小屋",
+    "channel_id": "UCl7D6pyMkyex9PCkD14K05w",
+    "views": 53565,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "8:05"
+   },
+   {
+    "id": "cH9P7jaXkJQ",
+    "title": "自転車のライトが故障したので0円(タダ)で簡単に修理！",
+    "channel": "DIYテック　ナガチ",
+    "channel_id": "UCB6P3cbWRJXnfZkjxnD-nAw",
+    "views": 54768,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:26"
+   },
+   {
+    "id": "rudWWSrJcXc",
+    "title": "自転車のオートライトがつかなくなった時の対処法🚴💡",
+    "channel": "Takka - no bike no life",
+    "channel_id": "UCTdzaXcJA-BcDf5raQIN-yA",
+    "views": 35321,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:31"
+   },
+   {
+    "id": "EOWdkdYyM-4",
+    "title": "ママチャリ・シティサイクルのライトの使い方と調整方法～ライトが点灯しない時の解決方法～",
+    "channel": "SUNTRUST -激安ママチャリ通販-",
+    "channel_id": "UCvOpUz_KBd9g4jll4mLqi2w",
+    "views": 11330,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:46"
+   },
+   {
+    "id": "4VGxTaCOOTw",
+    "title": "カゴ下にオートライトを移動する場合の確認方法 〜自転車屋店長の勝手レポート・レビュー〜",
+    "channel": "自転車とか紹介チャンネル",
+    "channel_id": "UCMkKjEo4gJauqgX8IH7Xzjw",
+    "views": 8611,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "0:57"
+   },
+   {
+    "id": "JrngglI4xos",
+    "title": "ライトの違い",
+    "channel": "自転車や りんりん",
+    "channel_id": "UClnUPjs9hIB0KEhmAyYF8xg",
+    "views": 9432,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:05"
+   },
+   {
+    "id": "mmHQ_sphp6M",
+    "title": "自転車ハブダイナモ　断線メカニズム　Bicycle Light generator Disconnection Structure",
+    "channel": "bicycleshop saito",
+    "channel_id": "UCMeJOHYOKyofLUy0kwA5CNw",
+    "views": 20476,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "1:41"
+   },
+   {
+    "id": "Z3T64aqP-ig",
+    "title": "【実践解説】自転車ライトのルールをわかりやすく解説！事故を未然に防ぐために自転車ライトは必須です！",
+    "channel": "なななチャンネル",
+    "channel_id": "UCjR7D_pvnz1Og1IEXfFc2-g",
+    "views": 43330,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "19:50"
+   },
+   {
+    "id": "ikXbtRrPtUw",
+    "title": "Amazon Product Review | 自転車 ライト 防水 自転車ライト 充電式 光センサー搭載 自動点灯 5つ点灯...",
+    "channel": "Mirai Finds",
+    "channel_id": "UCSWv6UesF95ASUKMgvgQq_g",
+    "views": 137,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "1:40"
+   },
+   {
+    "id": "JbLfFOyVuWw",
+    "title": "【無灯火対策】道交法改正対策に自転車ライト買ってみた！自動点灯＆モバイルバッテリー機能は実用的？キャットアイVOLT400と比較してみた",
+    "channel": "ブルジョア魔理沙のレビュー詐欺ぶらり旅",
+    "channel_id": "UCPikJYh-LRNf720FTB1hJfw",
+    "views": 12416,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "14:12"
+   },
+   {
+    "id": "baz4OgRSU-c",
+    "title": "最近のオートライト、ハブダイナモ式ライトの話",
+    "channel": "bicycleshop saito",
+    "channel_id": "UCMeJOHYOKyofLUy0kwA5CNw",
+    "views": 18470,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:29"
+   },
+   {
+    "id": "YmP1qGBBmgE",
+    "title": "ママチャリオートライト簡単修理",
+    "channel": "じじぼっち研究所",
+    "channel_id": "UC4LtbDw209pPFUeCsP5gnLw",
+    "views": 914,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "7:05"
+   },
+   {
+    "id": "Cu4lYdbRcd0",
+    "title": "センサー内蔵で自動点灯・消灯『LED かしこいランプ』NSKL153",
+    "channel": "Channel Panasonic - Official",
+    "channel_id": "UCOcdBuUur7MiKPdHQUM_8IA",
+    "views": 22484,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:01"
+   }
+  ],
+  "電子レンジ 自動 あたため センサー なぜ わかる": [
+   {
+    "id": "jktbSfNtyKM",
+    "title": "電子レンジの「自動あたため」は、時間を入れなくてもなぜ止まるの？",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 0,
+    "published": "10 時間前",
+    "age_days": 0,
+    "length": "5:04"
+   },
+   {
+    "id": "lj-bHN26ZWU",
+    "title": "温めだけで十分？【単機能レンジ】選び方とおすすめ6選",
+    "channel": "まさとパパの家電チャンネル",
+    "channel_id": "UCcOh15aCCumRNsWHx-6zw7g",
+    "views": 33717,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "12:46"
+   },
+   {
+    "id": "XkhedMAnNRc",
+    "title": "【知ってトクする】電子レンジのセンサーのおはなし",
+    "channel": "【公式】サンパナチャンネル",
+    "channel_id": "UCy-N3h_Lr0qgzkHHDh_HZ3g",
+    "views": 2169,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:34"
+   },
+   {
+    "id": "_uu5UNwL_as",
+    "title": "温めムラにおさらば！2026年最新 電子レンジ徹底比較＆おすすめランキングTOP5【単機能/フラット庫内】",
+    "channel": "スマートモノ選び",
+    "channel_id": "UCvZdSbD-4j2-h2D3x3h8_NA",
+    "views": 6117,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "8:01"
+   },
+   {
+    "id": "cUSgYKrZnM8",
+    "title": "［レビュー］東芝 ER-S6B｜17Lセンサー付き単機能レンジ。ワンタッチあたため重視の一人暮らし向け",
+    "channel": "家電マスター・タコ",
+    "channel_id": "UCitfsXqiSgBTjhoCfCsA4fg",
+    "views": 2492,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "13:53"
+   },
+   {
+    "id": "w04bZ1zeDz0",
+    "title": "【2026最新】電子レンジTOP5｜温めムラゼロ＆掃除しやすい最強モデルを徹底比較",
+    "channel": "本日のおすすめTOP",
+    "channel_id": "UCHMwnfoyyQ-fQpTZ3Ad4o_g",
+    "views": 21546,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "7:05"
+   },
+   {
+    "id": "cfJoySB3IH8",
+    "title": "【2026年最新】トースター不要？人気オーブンレンジおすすめ5選！一人暮らしからファミリー向けまで徹底解説🔥",
+    "channel": "毎日セレクト",
+    "channel_id": "UCDNGPF88i2biEEdiVkoogPg",
+    "views": 836,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "14:47"
+   },
+   {
+    "id": "VoqPjfNXP7Y",
+    "title": "パナソニック 電子レンジ・オーブンレンジ比較｜NE-FB2D・NE-BS5E・NE-MS4E｜64眼センサーの単機能か、オーブン付きの入門機か",
+    "channel": "家電マスター・タコ",
+    "channel_id": "UCitfsXqiSgBTjhoCfCsA4fg",
+    "views": 10526,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "20:44"
+   },
+   {
+    "id": "G9b55z5AgVQ",
+    "title": "【NE-UBS10D】Panasonic｜Bistro｜解凍・あたため",
+    "channel": "らぶこの気まぐれチャンネル。",
+    "channel_id": "UCyY0Vi-dP2qZ-xvMC23BhtA",
+    "views": 11097,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "11:35"
+   },
+   {
+    "id": "bCB0CLkPjs4",
+    "title": "スタイリッシュなデザインと時間設定不要の赤外線センサーを備えたオーブンレンジ！【ツインバード フラットオーブンレンジ】",
+    "channel": "ショップチャンネル【公式】",
+    "channel_id": "UC_I5Dmudikt3EFo0xMoHO8Q",
+    "views": 21027,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:59"
+   },
+   {
+    "id": "sQSjlmmjCRE",
+    "title": "電子レンジ/オーブンレンジ　よくあるご質問「レンジ加熱　加熱不足・ムラになる　基本編」　｜東芝ライフスタイル",
+    "channel": "東芝ライフスタイル 生活家電Officialチャンネル",
+    "channel_id": "UCaEHrhtvhJ_c4D9-nhywBGQ",
+    "views": 6594,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:57"
+   }
+  ],
+  "テレビ 録画 仕組み ハードディスク": [
+   {
+    "id": "2F75gwAKAAk",
+    "title": "【外付けHDD録画】違いをメーカー別解説とよく聞かれる質問と疑問点【テレビ録画】",
+    "channel": "家電の虎-家電専門チャンネル",
+    "channel_id": "UCWeOQRaS3A9ccdtpwCuFM-w",
+    "views": 314671,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:00"
+   },
+   {
+    "id": "Tglq2WdZEvM",
+    "title": "レグザ×アイオーデータのハードディスクでテレビ録画の概念が変わる!?",
+    "channel": "レグザ",
+    "channel_id": "UCAvRzykY7JwHDR0wu1Vk0Yg",
+    "views": 14935,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "8:47"
+   },
+   {
+    "id": "xDq3vKsqbsQ",
+    "title": "テレビ録画、外付けHDDとレコーダーどっちが正解？",
+    "channel": "家電タリスト DaiN.",
+    "channel_id": "UCWd5Tgi-cfy1qI1oHwJ0lHw",
+    "views": 90755,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "13:23"
+   },
+   {
+    "id": "v5Q2PAvlOYY",
+    "title": "【テレビの録画】外付けHDDで大丈夫？ブルーレイレコーダーとの違いとメリット・デメリットを比較してみた",
+    "channel": "家電の虎-家電専門チャンネル",
+    "channel_id": "UCWeOQRaS3A9ccdtpwCuFM-w",
+    "views": 393322,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "13:41"
+   },
+   {
+    "id": "lsJRZNXWmaw",
+    "title": "ソニー ブラビア USB HDD録画方法",
+    "channel": "Sony - Support JP",
+    "channel_id": "UCH3JN0I5A2vvWEt-SCKVzQw",
+    "views": 67945,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:31"
+   },
+   {
+    "id": "u1-dwE9rCKE",
+    "title": "【設定手順】テレビ録画用ハードディスク HDCY-UTシリーズ［東芝レグザ編］",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 122770,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:59"
+   },
+   {
+    "id": "z5xncD4vgnk",
+    "title": "テレビ録画用USBハードディスク_00_0518.mov",
+    "channel": "buffalodirect",
+    "channel_id": "UCt8h3wBgKn35ozdhNMdTHiw",
+    "views": 49460,
+    "published": "15 年前",
+    "age_days": 5475,
+    "length": "0:31"
+   },
+   {
+    "id": "O4DJ96VaUo4",
+    "title": "USB-HDD登録･録画方法　オリオン 24型ハイビジョン液晶テレビ BN 24DT10H",
+    "channel": "Twiteru(ツイテル) | ナチュラリスト",
+    "channel_id": "UCUomvHZGtVRhL_enpCR0XFg",
+    "views": 3284,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "5:29"
+   },
+   {
+    "id": "HVDAKO7eGT0",
+    "title": "テレビを買い替えたら録画が見られない？外付けHDDの落とし穴",
+    "channel": "家電タリスト DaiN.",
+    "channel_id": "UCWd5Tgi-cfy1qI1oHwJ0lHw",
+    "views": 57232,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "11:26"
+   },
+   {
+    "id": "IHtFiQHix9o",
+    "title": "【設定手順】テレビ録画用ハードディスク HDCY-UTシリーズ［シャープアクオス編］",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 92882,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:32"
+   },
+   {
+    "id": "4c6s8vYHEqs",
+    "title": "【徹底レビュー】TV録画にHDDはもう古い！スティックSSDが今お勧めな理由【I-O DATA SSPM-US2K/E】",
+    "channel": "きょうのクリエイト",
+    "channel_id": "UCliHkRJj4NP5tQioiagEkhw",
+    "views": 435420,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "14:42"
+   },
+   {
+    "id": "EhAHNore1_w",
+    "title": "テレビで外付けHDDが認識しない⁉️自分で録画データを復旧する方法｜Tenorshare 4DDiG",
+    "channel": "【公式】Tenorshare 4DDiG データ復元",
+    "channel_id": "UC5G9VIvb5VvnPhijjHAOqew",
+    "views": 3523,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "5:19"
+   },
+   {
+    "id": "2ZQfRoxAx-k",
+    "title": "【録画用SSD】挿すだけ簡単！SSPM-USシリーズ［IODATA］",
+    "channel": "動画で紹介byアイオーレビュー隊",
+    "channel_id": "UCF5ORquyE8NxEPe7u5cEEQA",
+    "views": 92004,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:09"
+   },
+   {
+    "id": "DKoFtc_di0w",
+    "title": "【テレビ録画に使える？】古いHDD＆SSDを有効利用！テレビ録画に再利用する方法！【ブルレコ/ケーブルTVでは？】",
+    "channel": "きょうのクリエイト",
+    "channel_id": "UCliHkRJj4NP5tQioiagEkhw",
+    "views": 23306,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "19:33"
+   },
+   {
+    "id": "07vWzR3caFc",
+    "title": "ハードディスクではじめてのテレビ録画",
+    "channel": "IODATA 公式",
+    "channel_id": "UC8cY4TC9pK-fiuTsev7il_w",
+    "views": 117741,
+    "published": "10 年前",
+    "age_days": 3650,
+    "length": "3:43"
+   },
+   {
+    "id": "m7kzReih4Ss",
+    "title": "ハードディスクのトラブル（テレビ編）",
+    "channel": "エレコム サポートアンドサービス株式会社",
+    "channel_id": "UC2QrAkwO2dIhvRDedsePPMw",
+    "views": 86096,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:45"
+   },
+   {
+    "id": "tFW0cLX9zUQ",
+    "title": "【テレビ録画救出】HDDの番組をディスクに残せる！アイ・オー・データの新製品「BDレコ」が便利すぎる",
+    "channel": "暮らしのアップデート 〜 家と知恵と道具",
+    "channel_id": "UC6V6kBMu5pea7oUVuFJ9o_w",
+    "views": 13740,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "6:39"
+   },
+   {
+    "id": "EZGQJtExM-M",
+    "title": "【録画するならどちらがいいの？】ハードディスクとSSDの違いを解説【エレコムVSアイ・オー・データ機器】",
+    "channel": "レグザ",
+    "channel_id": "UCAvRzykY7JwHDR0wu1Vk0Yg",
+    "views": 80160,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "13:42"
+   },
+   {
+    "id": "q9cmsV9CSM4",
+    "title": "【設定手順】テレビ録画用ハードディスク HDCY-UTシリーズ［ソニーブラビア編］",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 50040,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:27"
+   },
+   {
+    "id": "zNyirpYoYKc",
+    "title": "パナソニック「ビエラ」でかんたんハードディスク録画",
+    "channel": "IODATA 公式",
+    "channel_id": "UC8cY4TC9pK-fiuTsev7il_w",
+    "views": 31253,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "2:01"
+   }
+  ],
+  "カーナビ 到着時刻 なぜ わかる": [
+   {
+    "id": "QH-C8Sd4kLM",
+    "title": "なぜ、カーナビは自分の位置がわかるのかについて、GPSの原理を基に、やさしく解説いたします。",
+    "channel": "ゼロからわかる宇宙",
+    "channel_id": "UCpliXQn-GQzReI6YoRriakg",
+    "views": 402,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:10"
+   },
+   {
+    "id": "iARO1U_zMcE",
+    "title": "COCCHiとカーナビタイムとYahoo!カーナビで有料ナビアプリの比較してみた！",
+    "channel": "おかちゃんねる車庫",
+    "channel_id": "UCYHcm_nF0sinjHI1osB3pdQ",
+    "views": 143715,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "25:42"
+   },
+   {
+    "id": "VzfD1sf5N7E",
+    "title": "マツコネナビ 到着予想時刻は調整していますか？",
+    "channel": "KomiMovi-SUV",
+    "channel_id": "UCZL1_KUW2cEWIWEh2gKl_Iw",
+    "views": 5874,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:18"
+   }
+  ],
+  "SNS 既読 オンライン 表示 なぜ わかる": [
+   {
+    "id": "bIJH3GTLbyU",
+    "title": "【インスタグラム使い方】メッセージに「既読」がつくの知ってた？",
+    "channel": "動画ファン",
+    "channel_id": "UCF4c7UkIusFsfgdxcK3L_Aw",
+    "views": 6182,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "5:08"
+   },
+   {
+    "id": "70JmBgtxp-4",
+    "title": "【いらない機能】既読はなぜ生まれたのか？既読未読スルーの心理とトラブル対策！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 20046,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:13"
+   },
+   {
+    "id": "LBn5TMi88zA",
+    "title": "SNSは見ているのに、返事が来ないのはなぜか",
+    "channel": "となりのプラトンさん",
+    "channel_id": "UCLDK3UbtGOOGfqvE0vW-sxQ",
+    "views": 137,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "17:13"
+   }
+  ],
+  "スマホ 写真 なぜ きれい 小さい レンズ 計算": [
+   {
+    "id": "JN1wRHKNeaw",
+    "title": "【スマホのカメラ】小さなレンズで、なぜきれいに撮れるのか。答えは「計算」",
+    "channel": "AIの地図帳",
+    "channel_id": "UCNX4YlU8FnzrchmyCyTIWtw",
+    "views": 24,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "4:51"
+   },
+   {
+    "id": "Rz7dpgVAj5Y",
+    "title": "【写真がうまくなる】ちゃんと理解しよう！　「ボケの大きさ」　~フルサイズのボケが大きい理由～",
+    "channel": "カメラ部TV",
+    "channel_id": "UCppaD2aunuip_c89XxpIx6w",
+    "views": 27440,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:40"
+   },
+   {
+    "id": "m8WZKYkkYEs",
+    "title": "スマホのカメラはなぜ小さくても鮮明に撮れる？｜CCD・CMOS・色の作り方・何枚も重ねる計算を深掘り",
+    "channel": "雑学ラジオ",
+    "channel_id": "UCouENDlsmFH3q-kLEW_bhzg",
+    "views": 707,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "20:05"
+   },
+   {
+    "id": "3gPSmHMGCQU",
+    "title": "スマホが\"まだ\"カメラに勝てない６つの理由｜スマホカメラは本当に綺麗なのか？",
+    "channel": "AKIYA MOVIE",
+    "channel_id": "UCXeGg0Pv1hAkAUYrhyf0aVg",
+    "views": 52422,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "19:04"
+   }
+  ],
+  "オートフォーカス 仕組み なぜ ピント": [
+   {
+    "id": "GHDl9dQKdnk",
+    "title": "写真表現においてオートフォーカスって必要なのか？というお話",
+    "channel": "Wataru Nishida 西田航 2nd",
+    "channel_id": "UCeHyXFWymAvAHZiW8sNFSPw",
+    "views": 4283,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:49"
+   },
+   {
+    "id": "zMro98CdTl0",
+    "title": "【オートフォーカス設定】狙いどおりにピントを合わせる方法【Sony α7 Ⅳ、α7S III、α7R Ⅳ、α7C、α1、α9対応】",
+    "channel": "かつきしょうへい",
+    "channel_id": "UC3HOWiYMLNYDA0rnPKSFmaw",
+    "views": 163634,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "7:49"
+   },
+   {
+    "id": "hYjn6RYLH6o",
+    "title": "【親指AF】これでピントもバッチリ！親指AFの利便性！【写真家】",
+    "channel": "写真家 林祐介【写真が好きになるチャンネル】",
+    "channel_id": "UCD0enQj6_Z4KEwXc6nMaxtA",
+    "views": 15779,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:38"
+   },
+   {
+    "id": "CQluvP1JE2Q",
+    "title": "【初心者向け！AFの基本！】AF設定！確実なピントの合わせ方！！領域拡大AF？１点AF？ 【カメラ】【写真】【オートフォーカス】",
+    "channel": "写真家 林祐介【写真が好きになるチャンネル】",
+    "channel_id": "UCD0enQj6_Z4KEwXc6nMaxtA",
+    "views": 61945,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:27"
+   },
+   {
+    "id": "p5j_ypi41Q0",
+    "title": "もうピンボケで後悔しない！AF-SとAF-Cの使い分け",
+    "channel": "天才カメラマンRuu ",
+    "channel_id": "UCepoVVjaN-lxhowRmuJCJ_Q",
+    "views": 16703,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "17:40"
+   },
+   {
+    "id": "JtbWT2VG4Fg",
+    "title": "背景だけがぼけるのはなぜ？ カメラのピントと光のしくみ",
+    "channel": "日常の裏側図鑑",
+    "channel_id": "UCW-1MPyoZSbnSGI0YHNglkQ",
+    "views": 24,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "22:53"
+   },
+   {
+    "id": "ns1vL_mZd8M",
+    "title": "ピントの基本！Part.4　３つのオートフォーカスの種類！早いAF、正確なAF",
+    "channel": "よっしーの写真教室",
+    "channel_id": "UCcbYs5656IfNLURZXwe1Khg",
+    "views": 8330,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "15:54"
+   },
+   {
+    "id": "ASHABjtGspE",
+    "title": "【なぜかピントが合わない？】AF-S / AF-C とエリア選択の基本＆裏技を徹底解説【初心者〜中級者必見】#オートフォーカス #ピンボケ解消  #ミラーレス一眼",
+    "channel": "なんくるフォト塾",
+    "channel_id": "UCmNPEbUdTMjkLNPfBbFj4dg",
+    "views": 1433,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:37"
+   },
+   {
+    "id": "QM51ceGbojU",
+    "title": "初心者カメラ講座｜撮影の上達法【オートフォーカスの使い方を解説】Nikon Z50IIの実例で紹介するAFエリア/フォーカスモード、ピントの合わせ方。",
+    "channel": "カメラ塾【JimaTube】 ",
+    "channel_id": "UCVD5FFC1ZctcCrueblVhQNg",
+    "views": 60830,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:14:41"
+   },
+   {
+    "id": "QkY_4DfXSgA",
+    "title": "【AF】カメラのオートフォーカスの種類と使い方解説！",
+    "channel": "TAKUYA Cinema",
+    "channel_id": "UCC-d1H94b5ZnDqqFIoM_xdw",
+    "views": 1031,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:14"
+   },
+   {
+    "id": "fuGyDjGaLTk",
+    "title": "【初心者カメラ講座】オートフォーカスの種類と特徴を完全解説 【実例でわかる AFエリア/フォーカスモード、ピントの合わせ方】ピン甘写真をなくす撮影の上達法。",
+    "channel": "カメラ塾【JimaTube】 ",
+    "channel_id": "UCVD5FFC1ZctcCrueblVhQNg",
+    "views": 101620,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:13:23"
+   },
+   {
+    "id": "S17h8ZMrCQs",
+    "title": "【いまさら聞けない】位相差AFとコントラストAF　～結局どっちがいいの？～",
+    "channel": "カメラ部TV",
+    "channel_id": "UCppaD2aunuip_c89XxpIx6w",
+    "views": 84842,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:02"
+   },
+   {
+    "id": "NlzhEvAlSss",
+    "title": "【完全保存版】一緒に覚えよう！SONYのAF攻略ガイド｜状況別に最適な方法も解説します！！",
+    "channel": "AKIYA MOVIE",
+    "channel_id": "UCXeGg0Pv1hAkAUYrhyf0aVg",
+    "views": 300782,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "21:51"
+   },
+   {
+    "id": "RA_C12IdBLQ",
+    "title": "元カメラ開発者がAF方式について説明する動画",
+    "channel": "NIIYAチャンネル",
+    "channel_id": "UCUQJM5jmOqRu2QTr1iNKlRA",
+    "views": 457,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "10:59"
+   },
+   {
+    "id": "xxX7D3giCJw",
+    "title": "#04 ジャストでピントを合わせる方法-フォーカスエリアとは-＜カメラの基礎マスター＞",
+    "channel": "なべカメラ",
+    "channel_id": "UCrjN5WDl7aY5RQZBdTo6hWA",
+    "views": 5207,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:40"
+   },
+   {
+    "id": "pKpOCJ3DDnw",
+    "title": "【初心者カメラ講座】図解でわかるAF-SとAF-Cの違いと使い方",
+    "channel": "star view studio 〜カメラで人生を楽しく〜",
+    "channel_id": "UCsUbz7ilkJbfqe9Py6RdxPw",
+    "views": 145610,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "14:17"
+   },
+   {
+    "id": "3AKxzM5tFqM",
+    "title": "AF（オートフォーカス）の種類と使い方は？3分で解説します。",
+    "channel": "高澤 けーすけ",
+    "channel_id": "UCxR3l8_ZzI2PMG4ajG7ouRw",
+    "views": 85025,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:57"
+   },
+   {
+    "id": "LCBz7jdbKJs",
+    "title": "【初心者基礎講座#3】なぜAFでピンボケする？フォーカスエリアとAFモードを初心者向けに解説！",
+    "channel": "HikaMikaカメラチャンネル",
+    "channel_id": "UCTDFn72_VrvQ5Sjp1jSt_Ag",
+    "views": 4458,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "23:29"
+   },
+   {
+    "id": "WRu3dmsj8jY",
+    "title": "【ピント調整】一眼レフ ピントチェックの方法！ 皆ちゃんと直してる!?  AFマイクロアジャスメント【カメラ】",
+    "channel": "写真家 林祐介【写真が好きになるチャンネル】",
+    "channel_id": "UCD0enQj6_Z4KEwXc6nMaxtA",
+    "views": 70218,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:23"
+   }
+  ],
+  "イヤホン 左右 L R なぜ 決まっている": [
+   {
+    "id": "6CX2ggL6m-s",
+    "title": "超シンプル！ステレオテスト",
+    "channel": "Hiyoko Moai",
+    "channel_id": "UCEpce91JKOf_2U55_5gvXzA",
+    "views": 1078878,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "0:13"
+   },
+   {
+    "id": "f3nuU59G04w",
+    "title": "イヤホン左右確認テスト",
+    "channel": "久宝寺",
+    "channel_id": "UC6GiQl-pk33ioB67-X6AO7g",
+    "views": 1436333,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:35"
+   },
+   {
+    "id": "XApBC4K20N0",
+    "title": "左右の音量差チェック【聴力テスト・イヤホン/ヘッドホンの故障診断】",
+    "channel": "Five Senses Sound",
+    "channel_id": "UC_aGbxPIre9Mur8TsOYGr1g",
+    "views": 726007,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:18"
+   },
+   {
+    "id": "Wh-apBctjcI",
+    "title": "スピーカーテスト  左右確認 /LR check/楽器別【高音質】",
+    "channel": "アルファノートALFANOTE",
+    "channel_id": "UCl9wDorqKXeyY_-pyG_uoeg",
+    "views": 73102,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:50"
+   },
+   {
+    "id": "QhBpwqd3jZU",
+    "title": "(フル画こちら)左右の耳、同じ音量で聞こえていますか？テストしてみませんか？レベル１",
+    "channel": "音瓶",
+    "channel_id": "UCAGSKFeYrVGmyLrHRDo-lxQ",
+    "views": 11595,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:47"
+   },
+   {
+    "id": "cJLI_2bthxU",
+    "title": "【Voicepeak】の音声使用　スピーカー・イヤホンの左右チェック位相チェック",
+    "channel": "sound-frame",
+    "channel_id": "UCsOohdKM7MMzPJ3aa_1WNUg",
+    "views": 75748,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:14"
+   },
+   {
+    "id": "D9PiWgcw3io",
+    "title": "なぜ同じイヤホンが人によって違って聴こえるのか？final社長が辿り着いた「個人最適化」の真実【TONALITE】",
+    "channel": "final | オーディオマニア45年のイヤホン社長",
+    "channel_id": "UCJafy9bpSZpSK67n59b4HIA",
+    "views": 7383,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "35:09"
+   },
+   {
+    "id": "QtUuF7SzoFk",
+    "title": "線がないのに、なぜイヤホンに音が届く？｜Bluetoothのしくみ",
+    "channel": "技術の動画",
+    "channel_id": "UC-tQIaxH5YBN6HMUpEi8IKw",
+    "views": 71,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "4:09"
+   },
+   {
+    "id": "7Hdi6_E1b6U",
+    "title": "両耳にイヤホンをつけて最後まで聞いてください。絶対にびっくりします",
+    "channel": "ろーど",
+    "channel_id": "UCC-aaLGIyC2rpKyZ6DBA5ww",
+    "views": 868727,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:15"
+   },
+   {
+    "id": "LAdRqSf2Fdw",
+    "title": "なぜイヤホンは周囲の音を消せるのか | イヤフォンを解体してみた",
+    "channel": "モノ解体",
+    "channel_id": "UC_S-Ce7TIbcc8qeum-rSoCg",
+    "views": 145,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "22:23"
+   },
+   {
+    "id": "GinhoK0qkOY",
+    "title": "【高音質】左右の音量差チェック【聴力テスト・イヤホン/ヘッドホンの故障診断】",
+    "channel": "Five Senses Sound",
+    "channel_id": "UC_aGbxPIre9Mur8TsOYGr1g",
+    "views": 202276,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:18"
+   },
+   {
+    "id": "Y2r4HwUsBzI",
+    "title": "最初に再生する動画【LR音声出力チェック】 for ワイヤレスイヤホン/有線イヤホン/FMトランスミッター (音声遅延のチェックにもおススメです)",
+    "channel": "カシムラ公式チャンネル",
+    "channel_id": "UCTaoBxVzk7ckgkTmb6l5umQ",
+    "views": 6328,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:58"
+   },
+   {
+    "id": "kg4HaZjsHgE",
+    "title": "【スピーカー配線接続チェック】L/R接続確認 +/- 位相確認 Wiring test (Speakers)",
+    "channel": "TEST TONE",
+    "channel_id": "UCytCN88PNDiX6nYK_739p9w",
+    "views": 1613496,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "1:28"
+   },
+   {
+    "id": "4qZ2GdfSX38",
+    "title": "【１０分版】超シンプル！ステレオテスト",
+    "channel": "Hiyoko Moai",
+    "channel_id": "UCEpce91JKOf_2U55_5gvXzA",
+    "views": 241934,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:01"
+   },
+   {
+    "id": "bxmI8idK6ds",
+    "title": "【オーディオ】イヤホンヘッドホンが耳に悪い論について",
+    "channel": "Frieve-A Music",
+    "channel_id": "UCPfCbCiOfTg_KbbaeF9cYwg",
+    "views": 21851,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "18:45"
+   },
+   {
+    "id": "eBAfw49j-KQ",
+    "title": "RとLが聞き分けられる人と、聞き分けられない人の違い｜あなたの耳は、生後何か月で決まったか",
+    "channel": "真理への鍵穴",
+    "channel_id": "UCl0B5Gnnx9fdEMWbb8i4OOg",
+    "views": 1246,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "13:09"
+   },
+   {
+    "id": "2g2TcgMVC80",
+    "title": "これを見ればイヤホン選びがより楽しくなる！イヤホンのドライバーを全種類ざっくり解説！",
+    "channel": "イヤホン・ヘッドホン専門店 eイヤホン",
+    "channel_id": "UCDppocjZtrwEMYmSyFmBmbA",
+    "views": 47298,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "18:26"
+   },
+   {
+    "id": "oP3FcODa-oI",
+    "title": "【イヤホン】リケーブルの効果と意味【ヘッドホン】",
+    "channel": "Frieve-A Music",
+    "channel_id": "UCPfCbCiOfTg_KbbaeF9cYwg",
+    "views": 60420,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "22:33"
+   },
+   {
+    "id": "tax5FZ_ynHE",
+    "title": "Bluetoothはなぜ「すぐ近く」でも音が切れる？ 接続中なのに途切れる仕組み",
+    "channel": "身近な発明のひみつ",
+    "channel_id": "UC9S_SbRm1aSS4xCejVLjf5A",
+    "views": 15,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "10:52"
+   },
+   {
+    "id": "i0BfblBdk90",
+    "title": "音声の左右チャンネルのチェック用動画",
+    "channel": "nakamura",
+    "channel_id": "UCaBA_M05ODoQP1HgOfz2yLA",
+    "views": 5284,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:18"
+   }
+  ],
+  "ドライヤー スマホ 充電器 コンセント 電圧 海外 なぜ": [
+   {
+    "id": "d7qvnub9kP0",
+    "title": "Vol.9　変換アダプタと変圧器、どっちが必要？海外旅行初心者の悩みに答えます💡",
+    "channel": "ツキナミトラベル",
+    "channel_id": "UCvsyUyad8IunXTJ09C4yY0A",
+    "views": 3936,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:30"
+   },
+   {
+    "id": "91deZSbvsjE",
+    "title": "【ベトナム旅行】iPhone充電で失敗しない！電圧は？必要なものは？アダプターの選び方⚡️",
+    "channel": "Shitsugi Ōtō",
+    "channel_id": "UChgfzgf318lTt6NyJAF6EmQ",
+    "views": 1143,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:28"
+   },
+   {
+    "id": "fKEEL8ACuGg",
+    "title": "⚡️フランス旅行で充電問題を完全解決！必要な変換プラグ・電圧は？🔌",
+    "channel": "Shitsugi Ōtō",
+    "channel_id": "UChgfzgf318lTt6NyJAF6EmQ",
+    "views": 452,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:42"
+   },
+   {
+    "id": "OnWaDXN8nDo",
+    "title": "◤発煙する可能性あり◢ 海外旅行に必要な変換プラグと変圧器の使い方を徹底解説！[#23]",
+    "channel": "Asumi – 元CAが教える海外旅行メディア【トリップアテンダント】",
+    "channel_id": "UCjhJG7nniAAKzHXg1RJuDIA",
+    "views": 129879,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:00"
+   },
+   {
+    "id": "jBSTvdWPMc8",
+    "title": "韓国旅行のプラグで迷うな！CとSEの違いと選び方を徹底解説✨ #韓国旅行 #海外旅行",
+    "channel": "Shitsugi Ōtō",
+    "channel_id": "UChgfzgf318lTt6NyJAF6EmQ",
+    "views": 1136,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:54"
+   }
+  ]
+ }
+}
