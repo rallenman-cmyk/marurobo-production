@@ -3,7 +3,8 @@
 #   型（branding.md・SKILL.md §9）：Noto Sans JP 900・白と黄色の極太字に黒の太いふち（字の大きさの 14%）・1 行 5 字ほどで 2 行・左上の半分、
 #   左上に札、主役の物は右半分、まるロボは高さの 3 分の 1 ほどで左下、右下は空ける、矢印と印は字・まるロボ・ほかの印に重ねない
 #   1本目の参考（前に作ってもらった 7 枚）から残すもの：電車とイヤホンの世界、自分の曲＝水色・隣の曲＝黄色、アンテナつきのまるロボ
-#   使い方: THUMB_WORK=<作業フォルダ（src/ に本編のコマ）> THUMB_FONT=<NotoSansJP[wght].ttf> GEMINI_API_KEY=… python3 thumbs_ep01.py gen A B C
+#   絵の AI は Lovart の GPT Image 2（2026-11-23 から。SKILL.md §9）。前の Gemini は THUMB_ENGINE=gemini で使える
+#   使い方: THUMB_WORK=<作業フォルダ（src/ に本編のコマ）> THUMB_FONT=<NotoSansJP[wght].ttf> LOVART_ACCESS_KEY=… LOVART_SECRET_KEY=… python3 thumbs_ep01.py gen A B C
 #           python3 thumbs_ep01.py comp '{"A": "A_1.png"}'
 import os, sys, json, base64, math, urllib.request, glob
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -11,6 +12,18 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 S = os.environ["THUMB_WORK"]; G = os.path.join(S, "gen"); OUT = os.path.join(S, "out")
 os.makedirs(G, exist_ok=True); os.makedirs(OUT, exist_ok=True)
 FONT = os.environ.get("THUMB_FONT", "")
+ENGINE = os.environ.get("THUMB_ENGINE", "lovart")   # lovart（標準）／gemini（前の作り方）
+# Lovart では、src/ にない見本はスキルの references/lovart_refs.json に覚えたまるロボの見本（名前）で補う
+ROBOT_REFS = ("robot_front", "robot_34", "robot_side", "robot_antenna")
+
+
+def gen_lovart(name, prompt, refs, with_robot=True):
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
+    import thumb_lovart
+    local = [os.path.join(S, "src", r) for r in refs if os.path.exists(os.path.join(S, "src", r))]
+    robot = [] if not with_robot or any(os.path.basename(p).startswith("robot_") for p in local) else list(ROBOT_REFS)
+    return thumb_lovart.gen(G, name, prompt, robot + local)
+
 
 ROBOT = ("The small mascot robot must match the reference images exactly: a glossy white sphere body, ONE large round teal-and-navy camera-lens eye "
          "on the front, teal round discs on both sides, a thin dark antenna with a small glowing orange ball on top, two short stubby legs with navy "
@@ -52,6 +65,8 @@ REFS = {"A": ("robot_front.png", "robot_34.png", "robot_side.png", "giant_earbud
 def gen(name):
     parts = [{"text": BASE + "\n\n" + LAYOUT + PLANS[name] + "\n\nThe attached images are references: the first ones show the robot (match it exactly); "
               "the last one shows the style of the scene in the video (match the clean 3D look, not the composition)."}]
+    if ENGINE == "lovart":
+        return gen_lovart(name, parts[0]["text"], REFS[name])
     for ref in REFS[name]:
         p = os.path.join(S, "src", ref)
         if os.path.exists(p): parts.append({"inline_data": {"mime_type": "image/png", "data": base64.b64encode(open(p, "rb").read()).decode()}})
@@ -245,6 +260,8 @@ RED2 = (240, 40, 40)
 def gen2(name):
     parts = [{"text": BRIGHT + "\n\n" + PLANS2[name] + "\n\nThe attached images are references from the video: match the character design and the "
               "earbud shape, but redraw everything in the bright clean soft 3D illustration style described above."}]
+    if ENGINE == "lovart":
+        return gen_lovart(name, parts[0]["text"], REFS2[name], with_robot=False)
     for ref in REFS2[name]:
         p = os.path.join(S, "src", ref)
         if os.path.exists(p): parts.append({"inline_data": {"mime_type": "image/png", "data": base64.b64encode(open(p, "rb").read()).decode()}})

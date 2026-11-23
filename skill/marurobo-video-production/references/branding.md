@@ -61,7 +61,7 @@
 - **作る前に、ユーザーの参考を並べて見る**（前に作ってもらった 6 枚。上の「ユーザーが前に作ってもらった形」）。字の書体・太さ・ふち・大きさ・配置を数字で書き出し、それに合わせる。
 - **字は絵の AI に描かせない**（丸くふくらんだマンガ風になり「死ぬほどチープ」）。字は Noto Sans JP の 900（いちばん太い）で、べた塗り・ふちは 1 本（明るい字＝紺、暗い字＝白。太さは字の大きさの 11%）・やわらかい影。字の間を少し詰める。1 行が画面の高さの 2 割前後、2 行で左上の半分。左上に「QRコード」のような札（高さの 1 割ほど）。
 - **絵は絵の AI に「字なし」で描かせる**。配置を細かく指定する：右半分に主役の物、まるロボは高さの 3 分の 1 ほどで左下、左上の半分は空ける。何が起きているかを絵で見せる印（赤く光る丸・✓・×）は絵の中に入れる。
-- 道具：`episodes/ep02_qr/thumbs/thumbs_v3.py`（gen：絵、comp：字）。書体は Google Fonts の NotoSansJP[wght].ttf（`raw.githubusercontent.com/google/fonts/main/ofl/notosansjp/`）。
+- 道具：`episodes/ep02_qr/thumbs/thumbs_v3.py`（gen：絵、comp：字）。**2026-11-23 から絵は Lovart の GPT Image 2**（`scripts/thumb_lovart.py`。SKILL.md §9 の 4）。ここより上に書いた Gemini での気づきは、Lovart でも起きるかを確かめながら使う。書体は Google Fonts の NotoSansJP[wght].ttf（`raw.githubusercontent.com/google/fonts/main/ofl/notosansjp/`）。
 
 ### EP02 サムネの下調べ（2回目・くわしく。2026-11-15）
 - 範囲：YouTube の検索 46 通り・約 700 本から、ここ 2 年の日本語のしくみ解説で登録者より伸びた 34 本＋同じチャンネルの当たりと外れ 20 本（「しくみの正体」「しくみ物語」）＝54 枚を並べて見た。データ・特徴の記録・道具：`episodes/ep02_qr/thumbs/research/`（一覧の画像はリポジトリに入れていない）。クリック率・投稿したときの登録者数は分からない。

@@ -238,7 +238,12 @@ QR回は動画の直しが 154 件、うち 8 件は直したあとに戻され�
 1. **調べる（作る前に必ず）**：同じ話の動画（日本語と英語）と、同じ種類の解説チャンネルで伸びた動画を 20 本以上。再生数と登録者数を並べ、サムネを画像で並べて目で見る。言葉と絵が「混んでいる型」と「空いている型」、題とサムネの字の分け方を書き出す。調べた結果は `references/branding.md` に回ごとに残す。
 2. **ユーザーの参考を並べる**：前に作ってもらった案・ユーザーが良いと言った案を横に並べ、字の書体・太さ・ふち・大きさ・配置・絵の主役を数字で書き出す（下の「型」）。
 3. **設計書を書く**（2〜3 案）：主役の絵・字（1 行 9 字まで）・色・印（赤い丸・✓・×・矢印）・合わせる題。それぞれ、1 の何を根拠にしたかを書く。
-4. **作る**：絵は絵の AI に「字なし」で描かせ、字はこちらで重ねる（`episodes/ep02_qr/thumbs/thumbs_v3.py`）。
+4. **作る**：絵は絵の AI に「字なし」で描かせ、字はこちらで重ねる（`episodes/ep01_earphone/thumbs/thumbs_ep01.py` を土台にする）。
+   - **絵の AI は Lovart の GPT Image 2**（2026-11-23 ユーザー決定「恋愛の方では lovart を使っている、まるロボの方のサムネを lovart 使ってやるようにしたい」。前は Gemini の gemini-3-pro-image。`THUMB_ENGINE=gemini` で前の作り方も使える）。
+   - 呼び方：`scripts/thumb_lovart.py gen <出力> <案の名前> <頼む文.txt> --ref robot_front --ref robot_34 --ref robot_side --ref robot_antenna [--ref 本編のコマ.png]`。鍵は `LOVART_ACCESS_KEY`・`LOVART_SECRET_KEY`（環境に入っている）。中で `scripts/lovart.py`（恋愛と同じもの）を使う。
+   - まるロボの見本は Lovart に上げた URL を `references/lovart_refs.json` に覚えてある（名前で `--ref` に渡せる。画像はリポジトリに入れないため）。まるロボの形が変わったら、本編の描画から切り出し直して `thumb_lovart.py upload` で足す。
+   - 返った絵は元の大きさ（`raw/`）を残し、2560×1440（16:9）に真ん中で切りそろえる。切ったぶん端の物が欠けることがあるので、頼む文の配置は端に寄せすぎない。
+   - GPT Image 2 は「使い放題」の枠（2026-11-23 時点で残り 151 日。`scripts/lovart.py mode` で見られる）。高い操作の確認が出たら止まる（`--auto-confirm` を付けない）。使ったものはリポジトリの `logs/lovart_usage.jsonl` に残る。絵が返らないとき・結果が分からないときに黙って頼み直さない（返らず 0 クレジットのときだけ、道具が 1 回だけ頼み直す）。
 5. **自分で点検してから見せる**：参考と同じ大きさで横に並べて比べる・210×118 に縮めて字が読めるか・まるロボに字がかかっていないか・字が 1 字ずつ合っているか・絵の中の物が正しいか（QR の目印は 3 つ）。
 6. 見せるときは、調べたこと（数字つき）→ 設計書 → 案、の順で出す。
 
@@ -270,5 +275,6 @@ QR回は動画の直しが 154 件、うち 8 件は直したあとに戻され�
 | `concat_full.sh`・`final_qa.sh` | 通しをつなぐ・点検 |
 | `drive_watch.py` | PC の描画（ドライブ `marurobo_render`）を見張って受け取る |
 | `spike_find.py` | 1 コマだけ別の絵が映る所（場面の切り替わりのずれ）を章の mp4 から探す |
+| `thumb_lovart.py`・`lovart.py` | サムネの絵を Lovart（GPT Image 2）で描く。見本の URL は `references/lovart_refs.json` |
 
 使い方の詳細と注意は `references/toolkit.md`。章の組み立て・図・3D の舞台・ロボの予定の見本は `assets/templates/ep01/`、PC 側の Blender の道具は `assets/pc_kit/`。
