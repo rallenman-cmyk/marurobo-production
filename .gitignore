@@ -27,3 +27,4 @@ episodes/ep16_leak/voice/heard*.json
 
 # 字幕の中間ファイル（assemble が作り直す）
 episodes/ep16_leak/anim/subs_events*.json
+episodes/ep16_leak/up_v*/

@@ -54,7 +54,7 @@ def ev_list():
     add(w("10-06", "弱い所") - 0.2, e("10-06") + 0.3, "ring", dict(obj="lock", r=46, col=RED))
     add(w("10-08", "誕生日"), e("10-08") + 0.3, "tag", dict(text="誕生日", pos=(470, 110), size=52))
     add(w("10-08", "1234"), e("10-08") + 0.3, "tag", dict(text="1234", pos=(800, 110), size=56))
-    add(s("11-02") - 0.05, e("11-09") + 0.4, "fig92", dict(t92=w("11-03", "92件") - 0.2, t61=w("11-04", "61件") - 0.2, t19=w("11-08", "19件") - 0.2,
+    add(s("11-02") - 0.05, e("11-09") + 0.4, "fig92", dict(t_co=w("11-03", "会社") - 0.1, t_fill=w("11-03", "どこから") - 0.1, t92=w("11-03", "92件") - 0.2, t61=w("11-04", "61件") - 0.2, t19=w("11-08", "19件") - 0.2,
                                                         t80=w("11-09", "80件") - 0.2, small=(s("11-05"), s("11-08") - 0.05)))     # 11-08 の頭から図に戻す（v1：「ここから入られたのが」の間、図がなかった）
     add(w("11-06", "家に") - 0.2, e("11-07") + 0.3, "remote", dict(ghost=w("11-07", "座って") - 0.2))
     add(s("12-01") - 0.05, s("12-01") + 1.6, "rewind", {})
@@ -215,13 +215,19 @@ def fig92_sprite(t, p):
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 245))
     D.ctext(d, (W_ * S2 / 2, 42 * S2), "2025年 警察のまとめ", D.font(40 * S2), NAVY)
-    n_show = 0 if t < p["t92"] else min(92, int((t - p["t92"]) / 0.9 * 92) + 1)
+    tf = p.get("t_fill", p["t92"] - 0.9)      # マスは「どこから入られたか」から並び始め、「92件」の言葉でそろう（v1：書類の絵だけが 12 秒続いた）
+    n_show = 0 if t < tf else min(92, int((t - tf) / max(0.9, p["t92"] - tf) * 92) + 1)
     if n_show == 0:      # 11-02「警察のまとめを見てみます」：書類の束の絵（v1 の点検：何もない白い札が 5 秒出ていた）
         for k_ in range(3):
             x0_, y0_ = (400 + k_ * 26) * S2, (110 + k_ * 22) * S2
             d.rounded_rectangle((x0_, y0_, x0_ + 200 * S2, y0_ + 260 * S2), radius=14 * S2, fill=(250, 251, 253, 255), outline=(150, 160, 176, 255), width=4 * S2)
         for j_ in range(6):
             yy_ = (200 + j_ * 30) * S2; d.rounded_rectangle((480 * S2, yy_, (480 + [150, 120, 150, 100, 140, 90][j_]) * S2, yy_ + 12 * S2), radius=5 * S2, fill=GREY + (255,))
+        if "t_co" in p and t >= p["t_co"]:      # 「泥棒に入られた会社に聞いて」：入られた会社（お城の印）が左右に並んでいく
+            m_ = min(8, int((t - p["t_co"]) / 0.25) + 1)
+            for i_ in range(m_):
+                cx_ = (150 + (i_ % 2) * 100) * S2 if i_ < 4 else (750 + (i_ % 2) * 100) * S2; cy_ = (150 + (i_ % 4 // 2) * 120) * S2
+                IC.castle_logo(d, cx_, cy_, 36 * S2)
     for i in range(n_show):
         r_, c_ = divmod(i, 23)
         x = (70 + c_ * 25) * S2; y = (100 + r_ * 52) * S2
@@ -230,7 +236,7 @@ def fig92_sprite(t, p):
         if t >= p["t19"] and 61 <= i < 80: col = (255, 138, 31)
         d.rounded_rectangle((x, y, x + 18 * S2, y + 36 * S2), radius=6 * S2, fill=col + (255,))
         d.ellipse((x + 12 * S2, y + 17 * S2, x + 16 * S2, y + 21 * S2), fill=(255, 255, 255, 255))
-    if n_show >= 92: D.ctext(d, (870 * S2, 160 * S2), "92件", D.font(60 * S2), NAVY)
+    if t >= p["t92"]: D.ctext(d, (870 * S2, 160 * S2), "92件", D.font(60 * S2), NAVY)
     if t >= p["t61"]: D.ctext(d, (240 * S2, 345 * S2), "出入口の機械 61件", D.font(40 * S2), (18, 140, 130))
     if t >= p["t19"]: D.ctext(d, (640 * S2, 345 * S2), "遠くから操作 19件", D.font(40 * S2), (214, 104, 0))
     if t >= p["t80"]:
