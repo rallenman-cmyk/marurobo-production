@@ -5,7 +5,7 @@
 #   止め方：この窓を閉じる（描いている途中なら、描き手の窓も閉じる）。もう一度はじめると、できている所は飛ばして続きから
 #   記録：C:\marurobo\pc_agent_log.txt
 param([int]$Every = 120)
-$VER = "11"
+$VER = "12"
 $ErrorActionPreference = "Continue"
 $root = "C:\marurobo"
 $repo = Join-Path $root "repo"
@@ -293,6 +293,7 @@ function Run-Job($job) {
     $lastCheck = Get-Date
     $lastProg = Get-Date
     $prog = ""
+    $nfail = 0
     for ($try = 1; $try -le 2 -and $state -ne "done" -and -not $preempt -and -not $cancel; $try++) {
       $a = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $ps1.FullName)
       if ($job.only) { $a += @("-Only", "$($job.only)") }
@@ -309,9 +310,12 @@ function Run-Job($job) {
         if ($line -match "ぜんぶ終わりました") { $state = "done" }
         # 進み具合（「残り N 本、およそ …」の行）を、30 分ごとに印の枝へ（係のセッションが、次に見に来る時間を決めるのに使う）
         if ($line -match "残り") { $prog = $line }
+        if ($line -match "が止まりました") { $nfail++ }
         if ($prog -and ((Get-Date) - $lastProg).TotalMinutes -ge 30) {
           $lastProg = Get-Date
-          try { Heartbeat "描いています" $job @() $prog } catch { }
+          $ptxt = $prog
+          if ($nfail -gt 0) { $ptxt = ("{0}（ここまでに止まった所：{1} 本）" -f $prog, $nfail) }
+          try { Heartbeat "描いています" $job @() $ptxt } catch { }
         }
         # 全部描きの途中に短い直しが来たら、いったん止めて直しを先に描く（できている所は残り、あとで続きから）
         #   割り込むのは小さな直し（3000 コマまで・およそ 2 時間半）だけ。大きな直しは、いまの 1 件が終わってから先頭で描く
