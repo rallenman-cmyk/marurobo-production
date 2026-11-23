@@ -62,6 +62,17 @@ json.dump(SUBS, open(os.path.join(HERE, "subs_events_pre.json"), "w", encoding="
 import subs_sync as SY     # 9本目 v2：切り替わりを声の切れ目へ（関所 subs_sync_check.py で 10 枚がずれていた。時刻で長さを合わせず、足りない 1 枚はとなりとまとめる）
 SUBS = SY.fix(SUBS, json.load(open(os.path.join(HERE, "..", "voice", "placement.json"), encoding="utf-8")),
               os.path.join(os.environ.get("MARU_WORK", ""), "stage", "voice", "achernar"))
+# 16本目：1 行が 25 字をこえる字幕は、まん中に近い「、」で 2 行にする（関所の「1 行 25 字まで」。1 か所だけでなく全部に効く）
+def _wrap(t_):
+    out = []
+    for ln in t_.split("\\N"):
+        if len(ln) > 25:
+            cut = [i + 1 for i, ch in enumerate(ln[:-1]) if ch in "、。？！"]
+            if cut:
+                c_ = min(cut, key=lambda i: abs(i - len(ln) / 2)); out += [ln[:c_], ln[c_:]]; continue
+        out.append(ln)
+    return "\\N".join(out)
+SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
 
