@@ -28,7 +28,7 @@ def ev_list():
     # 冒頭
     add(w("01-02", "はじめて") - 0.1, e("01-02") + 0.3, "bubble", dict(obj="maru_top", icon="heart"))
     add(s("02-03") - 0.05, e("02-03") + 0.3, "notice", {})
-    add(w("02-04", "え") - 0.05, w("02-04", "え") + 1.2, "bubble", dict(obj="maru_top", icon="!"))
+    add(w("02-04", "え") - 0.05, w("02-04", "え") + 0.95, "bubble", dict(obj="maru_top", icon="!"))   # v1 の点検：次の字幕に 0.2 秒残っていた → 次の字幕（声の波形で 33.54 秒）の直前で消す（言葉の時刻の見積もりは 0.6 秒早い）
     add(w("02-07", "お店") - 0.2, e("02-07") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("03-01") + 0.2, e("03-02") + 0.3, "headlines", dict(t_more=s("03-02") + 0.2))
     add(s("03-04") - 0.05, e("03-04") + 0.5, "title", {})
@@ -52,7 +52,7 @@ def ev_list():
     add(w("13-08", "むっと") - 0.1, e("13-08") + 0.2, "bubble", dict(obj="maru_top", icon="hmph"))
     add(s("14-02") - 0.05, e("14-03") + 0.2, "tint", {})
     add(w("14-06", "1人1人") - 0.1, e("14-06") + 0.3, "tag", dict(text="1人1人の数字", obj="stile4", dy=-100, size=48, bg=WHITE))
-    add(w("14-07", "会社") - 0.1, e("14-07") + 0.4, "tag", dict(text="会社の印", obj="stile0", dx=40, dy=-95, size=44, bg=BLUE, fg=WHITE))
+    add(max(w("14-07", "会社") - 0.1, s("14-07")), e("14-07") + 0.4, "tag", dict(text="会社の印", obj="stile0", dx=40, dy=-95, size=44, bg=BLUE, fg=WHITE))
     add(w("14-07", "1人1人") - 0.1, e("14-07") + 0.4, "tag", dict(text="1人1人の数字", obj="stile4", dy=95, size=44, bg=WHITE))
     add(w("14-07", "検算") - 0.1, e("14-07") + 0.4, "tag", dict(text="検算の数字", obj="stile7", dx=-30, dy=-95, size=44, bg=ORANGE, fg=WHITE))
     return E

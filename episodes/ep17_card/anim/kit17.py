@@ -126,7 +126,12 @@ def hat_on_maru(M, t_on, rack_loc=None, rack_h=0.86):
     if rack_loc is not None:
         s_ = M.s
         hatw.location = (rack_loc[0], rack_loc[1], rack_h + 0.06 * s_ / 0.4); hatw.scale = (s_, s_, s_)
-        hide_key(hatw, -100.0, False); hide_key(hatw, t_on, True)
+        # v1 の点検：帽子が、かけの上から頭の上へ一瞬で移っていた（ワープ）→ 跳んだまるロボに当たって、かけから頭へ落ちる（0.45 秒）
+        #   頭の上の帽子（hm）に写しを重ねる強さを 0→1 にして、かけの上から頭の上へ動かす。重なりきった t_on で頭の帽子に替える
+        ct = hatw.constraints.new("COPY_TRANSFORMS"); ct.target = hm
+        ct.influence = 0.0; ct.keyframe_insert("influence", frame=f(t_on - 0.45))
+        ct.influence = 1.0; ct.keyframe_insert("influence", frame=f(t_on))
+        hide_key(hatw, -100.0, False); hide_key(hatw, t_on + 0.05, True)
         for o in hatw.children_recursive: hide_key(o, -100.0, False); hide_key(o, t_on, True)
     else:
         hide_key(hatw, -100.0, True)
@@ -220,7 +225,8 @@ def shop(with_register=True):
     cube(wallm, (-(HW / 2 + GW / 2) / 2, 0.15, HH / 2), (HW / 2 - GW / 2, 0.3, HH))
     cube(wallm, ((HW / 2 + GW / 2) / 2, 0.15, HH / 2), (HW / 2 - GW / 2, 0.3, HH))
     cube(wallm, (0, 0.15, (GH + HH) / 2), (GW, 0.3, HH - GH))
-    cube(trim, (0, -0.01, 0.35), (HW + 0.02, 0.04, 0.7))                         # 腰板
+    # 腰板（v1 の点検：入り口の前まで 1 本で通っていて、まるロボが通り抜けていた（hitcheck）→ 入り口の左右の 2 つに分ける）
+    for sx in (-1, 1): cube(trim, (sx * (HW / 2 + GW / 2 + 0.13) / 2, -0.01, 0.35), (HW / 2 - GW / 2 - 0.13 + 0.01, 0.04, 0.7))
     cube(_m("cornice", "#F4EFE6", rough=0.5), (0, 0.05, HH + 0.08), (HW + 0.2, 0.5, 0.16))
     cube(_m("signbd", "#2E6E8E", rough=0.5), (0, -0.02, 3.35), (2.6, 0.06, 0.4))   # 看板の板（字なし）
     for j in range(3): sphere(_m("signdot", "#FFD24A", rough=0.4), (-0.6 + j * 0.6, -0.06, 3.35), 0.09, seg=16)
