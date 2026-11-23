@@ -399,8 +399,8 @@ def b_night(cl):
     key(oj.root, "location", s("29-02") - 0.05, (XLC - 3.1, -0.05, 0.0), "CONSTANT"); key(oj.root, "location", s("29-02") - 0.04, (XLC - 4.1, 0.25, 0.0), "CONSTANT")
     key(oj.root, "location", s("30-01") - 0.06, (XLC - 4.1, 0.25, 0.0), "CONSTANT"); key(oj.root, "location", s("30-01") - 0.05, (XLC - 3.1, -0.05, 0.0), "CONSTANT")
     # 33-03〜34-04：まるロボがボタンへ歩く道（手すりの端の外を回る）から離す（v3 の点検：0.66m の所を通り、画面でおじさんの足の前に 3 秒重なった）
-    key(oj.root, "location", s("33-03") - 0.06, (XLC - 3.1, -0.05, 0.0), "CONSTANT"); key(oj.root, "location", s("33-03") - 0.05, (XLC - 3.4, 0.6, 0.0), "CONSTANT")
-    key(oj.root, "location", s("35-01") - 0.06, (XLC - 3.4, 0.6, 0.0), "CONSTANT"); key(oj.root, "location", s("35-01") - 0.05, (XLC - 3.1, -0.05, 0.0), "CONSTANT")
+    key(oj.root, "location", s("33-03") - 0.06, (XLC - 3.1, -0.05, 0.0), "CONSTANT"); key(oj.root, "location", s("33-03") - 0.05, (XLC - 3.9, 0.7, 0.0), "CONSTANT")
+    key(oj.root, "location", s("35-01") - 0.06, (XLC - 3.9, 0.7, 0.0), "CONSTANT"); key(oj.root, "location", s("35-01") - 0.05, (XLC - 3.1, -0.05, 0.0), "CONSTANT")
     M.glow(s("28-02") + 0.2, 1.5, 0.3); M.hops(s("28-02") + 0.6, n=2, height=0.06)
     # ① 手すりの入口：ボールを転がす
     # v2 のコメント 12:51「ボールが貫通してるし、隙間に入りそうになってるのがわからない」：前はボールが宙を通って入口の箱にめりこんだ →
