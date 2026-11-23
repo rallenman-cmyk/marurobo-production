@@ -19,7 +19,7 @@ exec(_src5[_a5:_b5].replace("plan.", "plan5."))
 
 PURPLE = "#7B5BD6"
 BLUE_C, PURP_C, ORANGE_C, GREY_C, GREEN_C, RED_C = "#3478E6", "#8A5BD6", "#FF8A1F", "#9AA4B2", "#34B266", "#E23A30"
-NUM = "35280476"
+NUM = "35280476"; WRONG = "35280456"     # WRONG：7 つ目を打ちまちがえた番号（make_tex17.py と同じ）
 
 
 def _m(name, col, **kw): return mat(name, col, **kw)
@@ -155,8 +155,9 @@ def trash_can(loc):
 
 
 # ======================================================================== 数字のタイル
-def tile_row(center, n=8, size=0.12, gap=0.03, face=0.0, parent=None):
-    """数字のタイルを横 1 列に（前＝−y）。戻り値：[dict(root, glow（色のふちの材質）)]。数字は NUM"""
+def tile_row(center, n=8, size=0.12, gap=0.03, face=0.0, parent=None, num=None):
+    """数字のタイルを横 1 列に（前＝−y）。戻り値：[dict(root, glow（色のふちの材質）)]。数字は num（なければ NUM）"""
+    num = num or NUM
     base = empty(center, R(face))
     if parent is not None: base.parent = parent
     out = []
@@ -165,7 +166,7 @@ def tile_row(center, n=8, size=0.12, gap=0.03, face=0.0, parent=None):
         x = -W / 2 + size / 2 + k * (size + gap)
         r = empty((x, 0, 0)); r.parent = base
         cube(_m("tileback", "#FFFFFF", rough=0.4), (0, 0.006, 0), (size, 0.012, size), bevel=0.012, parent=r)
-        plane(img_mat("tileface_" + NUM[k], os.path.join(TEX, "tile_%s.png" % NUM[k]), emit=0.35), (0, -0.0005, 0), (size * 0.92, size * 0.92), rot=(R(90), 0, 0), parent=r)
+        plane(img_mat("tileface_" + num[k], os.path.join(TEX, "tile_%s.png" % num[k]), emit=0.35), (0, -0.0005, 0), (size * 0.92, size * 0.92), rot=(R(90), 0, 0), parent=r)
         gm = mat("tileglow%d_%d" % (len(TILES_ALL), k), "#FFFFFF", rough=0.4, emit=0.001)
         fr = cube(gm, (0, 0.014, 0), (size * 1.24, 0.006, size * 1.24), bevel=0.016, parent=r)      # ふちを太く（試しの絵：光ってもうすかった）
         out.append(dict(root=r, glow=gm, frame=fr))
@@ -176,15 +177,29 @@ def tile_row(center, n=8, size=0.12, gap=0.03, face=0.0, parent=None):
 TILES_ALL = []
 
 
-def tile_color(tl, t, col, strength=9.0, d=0.25):
-    """タイルのふちを色で光らせる（t から d 秒で）"""
-    m = tl["glow"]; b = m.node_tree.nodes["Principled BSDF"]
-    b.inputs["Emission Color"].default_value = srgb(col)      # 地の色は白のまま（試しの絵の点検：地の色を替えると、光らせる前から色が付いた）
-    emit_key(m, -100.0, 0.0); emit_key(m, t, 0.0); emit_key(m, t + d, strength)
+def _col_key(m, t, rgba):
+    """ふちの地の色と光の色を、時刻 t の値としてキーを打つ"""
+    b = m.node_tree.nodes["Principled BSDF"]
+    for nm in ("Base Color", "Emission Color"):
+        b.inputs[nm].default_value = rgba; b.inputs[nm].keyframe_insert("default_value", frame=f(t))
 
 
-def tile_off(tl, t, d=0.25, s0=9.0):
-    emit_key(tl["glow"], t, s0); emit_key(tl["glow"], t + d, 0.0)
+def tile_color(tl, t, col, strength=1.2, d=0.25):
+    """タイルのふちを色で光らせる（t から d 秒で）。
+    17本目 v1 の点検：光の強さ 9 で、青・紫・橙が白に飛んで見分けられなかった（11-01〜14-07）→ 強さ 1.2 にして（3 でもまだうすかった）、ふちの地の色も同じ色にする。
+    地の色は t まで白（試しの絵の点検：はじめから地に色を付けると、光らせる前から色が付いた）→ 色は時刻でキーを打って替える"""
+    m = tl["glow"]; c = srgb(col); c = tuple(c) + (1.0,) if len(c) == 3 else tuple(c)
+    prev = tl.get("_col", (1.0, 1.0, 1.0, 1.0))
+    if "_col" not in tl: _col_key(m, -100.0, prev)
+    _col_key(m, t, prev); _col_key(m, t + d, c); tl["_col"] = c
+    emit_key(m, -100.0, 0.0); emit_key(m, t, 0.0 if not tl.get("_on") else tl["_on"]); emit_key(m, t + d, strength); tl["_on"] = strength
+
+
+def tile_off(tl, t, d=0.25, s0=None):
+    s0 = tl.get("_on", 3.0) if s0 is None else s0
+    emit_key(tl["glow"], t, s0); emit_key(tl["glow"], t + d, 0.0); tl["_on"] = 0.0
+    prev = tl.get("_col", (1.0, 1.0, 1.0, 1.0)); w_ = (1.0, 1.0, 1.0, 1.0)
+    _col_key(tl["glow"], t, prev); _col_key(tl["glow"], t + d, w_); tl["_col"] = w_
 
 
 # ======================================================================== 塔（カードの会社）・お店（C）・想像の家

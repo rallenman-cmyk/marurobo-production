@@ -50,7 +50,7 @@ def ev_list():
     add(w("12-05", "検算の数字") - 0.1, e("12-05") + 0.3, "tag", dict(text="検算の数字", obj="tile7", dy=-110, size=52, bg=ORANGE, fg=WHITE))
     add(s("13-06") - 0.05, e("13-06") + 0.6, "tag", dict(text="番号がちがいます", pos=(640, 92), size=56, bg=RED, fg=WHITE))
     add(w("13-08", "むっと") - 0.1, e("13-08") + 0.2, "bubble", dict(obj="maru_top", icon="hmph"))
-    add(s("14-02") - 0.05, e("14-03") + 0.2, "tint", {})
+    add(s("14-02") - 0.05, s("14-04") + 0.35, "tint", {})   # v1 の点検：e("14-03") で消え、想像の場面の終わり 1 秒が色なしに戻っていた → お店に戻る重ねの終わりまで
     add(w("14-06", "1人1人") - 0.1, e("14-06") + 0.3, "tag", dict(text="1人1人の数字", obj="stile4", dy=-100, size=48, bg=WHITE))
     add(max(w("14-07", "会社") - 0.1, s("14-07")), e("14-07") + 0.4, "tag", dict(text="会社の印", obj="stile0", dx=40, dy=-95, size=44, bg=BLUE, fg=WHITE))
     add(w("14-07", "1人1人") - 0.1, e("14-07") + 0.4, "tag", dict(text="1人1人の数字", obj="stile4", dy=95, size=44, bg=WHITE))
@@ -255,7 +255,7 @@ def pathfig_sprite(t, p):
     return im.resize((W_, H_), Image.LANCZOS)
 
 
-def headlines_sprite(t, t0):
+def headlines_sprite_ep16(t, t0):   # 16本目の物（使わない。同じ名前で 17本目の物を上書きしていた）
     """04-01：ニュースの見出しの絵（会社の名前は書かない。「流出」の字と、架空の印だけ）。少しずつずらして重ねる"""
     W_, H_ = 900, 420; S2 = 2
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)

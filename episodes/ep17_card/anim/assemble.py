@@ -268,13 +268,24 @@ def _seen1(src, t):
     q = min(pts, key=lambda p: abs(p[0] - k))
     return 0 <= q[1] <= 1280 and 0 <= q[2] <= 720 and q[3] > 0
 DROP = []
+_SHOWN_END = {nm: (CL[ORDER[i + 1]][2] if i + 1 < len(ORDER) else CL[nm][1]) for i, nm in enumerate(ORDER)}   # 映る範囲＝始まり〜次のカットの始まり
 for nm in ORDER:
     if nm not in LOG: continue
     for e_ in LOG[nm]["events"]:
         t, kind, gain = e_[:3]; src = e_[3] if len(e_) > 3 else ""
+        # 17本目 v1 の点検：同じ場面の全部のカットの記録に、場面全部の音が入っている。直す前に描いたカットの古い時刻の音まで鳴っていた
+        #   → 音は、その時刻に映っているカット（小窓だけのクリップは除く）の記録からだけ取る
+        if nm in PIP_ONLY or not (CL[nm][2] - 0.05 <= t < _SHOWN_END[nm] + 0.05): continue
         if (round(t, 2), kind) in EV: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
+# 17本目 v1 の点検：まるロボの電子音（beep_）が 1 秒の中に同じ種類で重なったら、大きい 1 つだけ鳴らす（首振りが自分で鳴らす音と、場面で足した音が重なっていた）
+_bp = sorted(k for k in EV if k[1].startswith("beep_") and EV[k] > 0)
+for i_, (t_, k_) in enumerate(_bp):
+    for (t2, k2) in _bp[i_ + 1:]:
+        if t2 - t_ > 1.0: break
+        if k2 == k_ and EV[(t_, k_)] > 0 and EV[(t2, k2)] > 0:
+            lo = (t_, k_) if EV[(t_, k_)] < EV[(t2, k2)] else (t2, k2); EV[lo] = 0.0
 for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴らす音（絵の物の記録にない音）
     EV[(round(t_, 2), k_)] = g_
 # 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）
