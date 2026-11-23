@@ -9,7 +9,7 @@ SS = 2
 from icons16 import castle_logo, icon
 
 
-def card(name, items, border, w=600, h=380):
+def card(name, items, border, w=600, h=380, pale=0.0):
     """札の面（はがきの形）。items：絵の種類のならび（2×2 か 3 つ）"""
     im = Image.new("RGB", (w * SS, h * SS), WHITE); d = ImageDraw.Draw(im)
     b = 22 * SS
@@ -19,6 +19,7 @@ def card(name, items, border, w=600, h=380):
     pos = [(0.27, 0.33), (0.73, 0.33), (0.27, 0.72), (0.73, 0.72)] if n == 4 else [(0.2, 0.5), (0.5, 0.5), (0.8, 0.5)]
     for k, (fx, fy) in zip(items, pos):
         icon(d, k, fx * w * SS, fy * h * SS, 62 * SS, NAVY if k != "face" else NAVY)
+    if pale: im = Image.blend(im, Image.new("RGB", im.size, WHITE), pale)      # 2章：予備の倉庫の写し（少し薄い色）
     im.resize((w, h), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
 
 
@@ -74,4 +75,8 @@ card("tag_maru", ["face", "house", "phone", "mail"], TEAL)
 card("tag_orange", ["mail", "cake", "bag"], ORANGE)
 card("tag_green", ["phone", "bldg", "mail"], GREEN)
 form("form4")
+# 2章：お城の倉庫のお客さんの名札（白っぽい灰色のふち）と、予備の倉庫の写し（薄い）
+card("tag_cust", ["face", "house", "phone", "mail"], (150, 162, 178))
+card("tag_copy", ["face", "house", "phone", "mail"], (150, 162, 178), pale=0.45)
+card("tag_maru_copy", ["face", "house", "phone", "mail"], TEAL, pale=0.45)
 print("ok", sorted(os.listdir(OUT)))

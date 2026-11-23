@@ -61,6 +61,21 @@ def make16(kind, sr):
     if kind == "rewind":    # 時間を巻きもどす（ひゅるるる、高さが下がる）
         n = int(1.0 * sr); tt = np.arange(n) / sr; f = 1600 * (1 - 0.7 * tt) + 120 * np.sin(2 * np.pi * 14 * tt)
         return (0.12 * np.sin(2 * np.pi * np.cumsum(f) / sr) * np.sin(np.pi * tt)).astype(np.float32)
+    if kind == "clunk":     # 2章：赤い錠がかかる（ガチャン）：金属の重い短い音
+        return 0.42 * _mx(_n(0.12, sr, 200, 3000, a=0.0005, d=0.06), 0.8 * _t(180, 140, 0.18, sr, a=0.0005, d=0.09), 0.35 * _t(1400, 1350, 0.08, sr, a=0.0003, d=0.03))
+    if kind in ("squeak", "squeak2"):   # 2章：扉を少し開ける（キィ）。1章のきしむ音の頭 0.5 秒だけ（短く・小さく）。squeak2＝印を付ける「きゅっ」（もっと短い）
+        import wave as _w
+        p_ = os.path.join(os.environ.get("MARU_WORK", ""), "stage", "sfx", "door_creak.wav")
+        with _w.open(p_) as f_: y = np.frombuffer(f_.readframes(f_.getnframes()), np.int16).astype(np.float32) / 32768; r_ = f_.getframerate()
+        if r_ != sr: y = np.interp(np.arange(int(len(y) * sr / r_)) * r_ / sr, np.arange(len(y)), y).astype(np.float32)
+        L_ = 0.5 if kind == "squeak" else 0.18
+        y = y[int(0.3 * sr):int((0.3 + L_) * sr)].copy(); f_ = int(0.12 * sr); y[-f_:] *= np.linspace(1, 0, f_); y[:int(0.01 * sr)] *= np.linspace(0, 1, int(0.01 * sr))
+        return (0.28 * y / (np.abs(y).max() + 1e-9)).astype(np.float32)
+    if kind == "rattle":    # 2章：開かない扉を引く（ガタッ）：木の短い音を 2 つ
+        x = np.zeros(int(0.3 * sr))
+        for d0 in (0.0, 0.1):
+            c = _mx(_n(0.06, sr, 150, 2500, a=0.0005, d=0.03), 0.6 * _t(130, 110, 0.08, sr, a=0.0005, d=0.04)); j = int(d0 * sr); x[j:j + len(c)] += c[:len(x) - j]
+        return (0.35 * x).astype(np.float32)
     if kind == "crickets":  # 夜の虫の声（4 秒でつながる輪。ずっと小さく流す）
         n = 4 * sr; tt = np.arange(n) / sr
         g = (np.sin(2 * np.pi * 4.5 * tt) > 0.3) * (np.sin(2 * np.pi * 0.5 * tt) > -0.2)

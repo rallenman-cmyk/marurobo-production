@@ -405,10 +405,12 @@ CUTS = [
     ("N12g", b_night, s("12-09"), C((LEDGE[0] + 1.6, LEDGE[1] - 0.6, 1.3), (DX, DOOR_Y + 0.5, 0.8), 30, (DX + 4.0, DOOR_Y - 1.6, 1.8)), "N"),
     ("P09", b_pip_home, s("09-03") - 0.2, C((2.0, 0.1, 1.35), (2.0, 1.9, 0.95), 30), "A"),
 ]
+exec(open(os.path.join(KIT_HERE, "scenes_ch2.py"), encoding="utf-8").read())     # 2章（S13〜S17）
+CUTS += CUTS2
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
-PIP_ONLY = {"P02", "P09"}
-END_T = e("12-09") + 1.5
+PIP_ONLY = {"P02", "P09", "P17"}
+END_T = e("17-13") + 1.5
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}
@@ -418,6 +420,7 @@ for i, (nm, fn, tc, cm, par) in enumerate(_main):
     CLIPS[nm] = (fn, t0, t1, cm, par)
 CLIPS["P02"] = (b_table, s("02-03") - 0.2, e("02-03") + 0.4, [c for c in CUTS if c[0] == "P02"][0][3], "T")
 CLIPS["P09"] = (b_pip_home, s("09-03") - 0.2, e("09-03") + 0.4, [c for c in CUTS if c[0] == "P09"][0][3], "A")
+CLIPS["P17"] = (b_in, PIP2["P17"][0], PIP2["P17"][1], [c for c in CUTS if c[0] == "P17"][0][3], "D")
 
 
 if __name__ == "__main__" or True:
