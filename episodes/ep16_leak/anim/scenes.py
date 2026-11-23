@@ -191,7 +191,8 @@ def b_castle(cl):
     key(sk_, "location", -100.0, (0, 0, 0.09), "CONSTANT"); key(sk_, "location", t_h + 0.3, (0, 0, 0.09)); key(sk_, "location", t_h + 0.8, (0, 0, 0.13))
     key(sk_, "rotation_euler", -100.0, (R(90), 0, 0), "CONSTANT"); key(sk_, "rotation_euler", t_h + 0.8, (R(90), 0, 0)); key(sk_, "rotation_euler", t_h + 1.3, (R(90), 0, R(60)))
     ev(t_h + 0.5, "click", 0.35, "lockhole")
-    key(hl, "scale", -100.0, (0.001, 0.001, 0.001), "CONSTANT"); key(hl, "scale", t_h, (0.3, 0.3, 0.3)); key(hl, "scale", t_h + 1.2, (1.0, 1.0, 1.0)); key(hl, "scale", w("10-06", "残って"), (1.25, 1.25, 1.25))
+    # 鍵穴が広がる（v3 のユーザー「穴は増やさないで、今ある穴が広がる感じに」）：鍵穴と同じ大きさ（0.75）から、ひびと一緒に少し、「開けられて」で大きく
+    key(hl, "scale", -100.0, (0.75, 0.75, 0.75), "CONSTANT"); key(hl, "scale", t_c, (0.75, 0.75, 0.75)); key(hl, "scale", t_h, (1.0, 1.0, 1.0)); key(hl, "scale", t_h + 1.2, (1.8, 1.8, 1.8)); key(hl, "scale", w("10-06", "残って"), (2.2, 2.2, 2.2))
     ev(t_c + 0.1, "crackle", 0.3, "lock")
     emit_key(cm, t_c, 3.0); emit_key(cm, w("10-05", "弱い所"), 6.0); emit_key(cm, e("10-06") + 0.3, 6.0); emit_key(cm, e("10-06") + 0.8, 3.0)
     # 10-07：もう 1 つの裏口（同じかべの先）。かんたんな形の鍵が差さって開く

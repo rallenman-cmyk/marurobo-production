@@ -214,14 +214,16 @@ def old_lock(loc, face=0.0, crack=True):
         cm = mat("crack_glow", "#FF3B2F", rough=0.4, emit=0.001)
         # ひび（v1 のユーザー「弱いところはヒビが入って穴が広がる感じにして」）：穴の所から 5 本のひびが順にのびる。
         #   1 本ずつ、根もとの empty の z の大きさを 0 → 1 にしてのばす（out["crack_grow"]）。穴（黒い丸と赤いふち）は out["hole"] を大きくして広げる
-        HX, HZ = 0.035, 0.005
-        segs = [(HX, HZ, 25, 0.055), (HX, HZ, 160, 0.045), (HX, HZ, -60, 0.04), (HX, HZ, 95, 0.035), (HX + 0.02, HZ + 0.03, 55, 0.03)]
+        # v3 のユーザー「穴は増やさないで。今ある穴（鍵穴）が、ひびで広がる感じに」：ひびの根もとと広がる穴を、鍵穴のまん中（0, −0.01）に置く
+        #   （v2 は鍵穴の右上に 2 つ目の穴ができていた。鍵の使われ方で穴が増えても錠は開かないので、違う）
+        HX, HZ = 0.0, -0.01
+        segs = [(HX, HZ, 25, 0.075), (HX, HZ, 160, 0.055), (HX, HZ, -60, 0.06), (HX, HZ, 95, 0.06), (HX, HZ, 52, 0.065)]
         grow = []
         for (x0, z0, ang, ln) in segs:
             e_ = empty((x0, -0.0315, z0)); e_.parent = root; e_.rotation_euler = (0, R(ang), 0); e_.scale = (1, 1, 0.001)
             o = cube(cm, (0, 0, ln / 2), (0.005, 0.002, ln), parent=e_); o.hide_render = True
             grow.append((e_, o))
-        hole = empty((HX, -0.032, HZ)); hole.parent = root; hole.scale = (0.001, 0.001, 0.001)
+        hole = empty((HX, -0.0325, HZ)); hole.parent = root; hole.scale = (0.75, 0.75, 0.75)     # 大きさ 0.75＝鍵穴と同じ（黒 0.009・赤いふち 0.012）。広げると鍵穴が広がって見える
         rim = cyl(cm, (0, 0, 0), 0.016, 0.002, rot=(R(90), 0, 0), parent=hole, verts=24)
         blk = cyl(_m("hole_black", "#050404", rough=1.0), (0, -0.0006, 0), 0.012, 0.002, rot=(R(90), 0, 0), parent=hole, verts=24)
         for o in (rim, blk): o.hide_render = True
