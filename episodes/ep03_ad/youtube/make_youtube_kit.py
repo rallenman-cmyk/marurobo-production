@@ -18,7 +18,7 @@ def mmss(t): t = int(t + OFF + 0.5) if t else 0; return "%d:%02d" % (t // 60, t 
 toc = "\n".join("%s %s" % (mmss(SC[s]), name) for s, name in CH)
 ev = json.load(open(os.path.join(EP, "animatic", "subs_events.json"), encoding="utf-8"))
 def ts(x): x += OFF; ms = int(round(x * 1000)); return "%02d:%02d:%02d,%03d" % (ms // 3600000, ms // 60000 % 60, ms // 1000 % 60, ms % 1000)
-srt = "\n".join("%d\n%s --> %s\n%s\n" % (i + 1, ts(a), ts(b), t) for i, (a, b, t) in enumerate(ev))
+srt = "\n".join("%d\n%s --> %s\n%s\n" % (i + 1, ts(a), ts(b), t.replace("\\N", "\n")) for i, (a, b, t) in enumerate(ev))   # 2 行の字幕の分け目（\N）を、SRT の改行に
 open(os.path.join(HERE, "ad_ep03_ja.srt"), "w", encoding="utf-8").write(srt)
 src = open(os.path.join(HERE, "template.md"), encoding="utf-8").read()
 end = P[-1]["end"] + 2.0
