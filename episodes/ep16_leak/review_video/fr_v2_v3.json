@@ -1,0 +1,35 @@
+{
+ "created_at": "2026-11-23T20:40:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v2",
+ "to_version": "MARU-LEAK-v3",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwtd5ib9qp9jucwf",
+   "comment_rev": 1,
+   "explain": "扉がきしむ音を 8 dB 下げました（夜の扉も同じに）。2 秒続く音なので、短い音より小さくしています。聞き取りで「声よりはっきり小さい」を確かめました。",
+   "new_t": 279.0,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v3",
+   "original_t": 270.5,
+   "original_t_end": null,
+   "original_text": "ドアが開くseおかしい（戻し：音量が大きい）",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwtd7tqxr7d241yh",
+   "comment_rev": 1,
+   "explain": "キラキラに聞こえていたのは、夜の場面にずっと小さく流していた「虫の声」（高い音の刻み）でした。鳴らすのをやめました。ほかにずっと流している効果音はありません。",
+   "new_t": 358.0,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v3",
+   "original_t": 351.6,
+   "original_t_end": null,
+   "original_text": "ドアが開くse変えたい、あとドアが開く時扉が貫通してる（戻し：新しい鍵が出てからキラキラ見たいなSEずっと聞こえるのやめたい）",
+   "reason": ""
+  }
+ ]
+}

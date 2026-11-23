@@ -26,7 +26,7 @@ def make16(kind, sr):
         with _w.open(p_) as f_: y = np.frombuffer(f_.readframes(f_.getnframes()), np.int16).astype(np.float32) / 32768; r_ = f_.getframerate()
         if r_ != sr: y = np.interp(np.arange(int(len(y) * sr / r_)) * r_ / sr, np.arange(len(y)), y).astype(np.float32)
         y = y[:int(2.0 * sr)].copy(); f_ = int(0.4 * sr); y[-f_:] *= np.linspace(1, 0, f_)     # 扉が動く 1.8 秒に合わせて 2 秒で消す（v2 の確認役：3 秒鳴って声と重なった）
-        return (0.7 * y / (np.abs(y).max() + 1e-9)).astype(np.float32)
+        return (0.28 * y / (np.abs(y).max() + 1e-9)).astype(np.float32)     # v2「音量が大きい」：0.7 → 0.28（8 dB 下げた。2 秒続くので、短い音より小さく）
     if kind == "crackle":   # 錠にひびが入る（ピシッ、ピシッ）
         x = np.zeros(int(0.5 * sr))
         for i, d0 in enumerate((0.0, 0.18, 0.31)):
