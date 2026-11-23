@@ -203,7 +203,7 @@ def b_castle(cl):
     key(sk, "location", t_k, (X_SIDE + 0.6, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81)); key(sk, "location", t_k + 0.8, (X_SIDE + 0.34, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81))
     ev(t_k + 0.8, "click", 0.4, "skey")
     t_o = w("10-07", "開いて") - 0.1
-    key(hinge2, "rotation_euler", t_o, (0, 0, 0)); key(hinge2, "rotation_euler", t_o + 1.8, (0, 0, R(-75)))     # きしむ音（3 秒）に合わせて、ゆっくり開く; ev(t_o, "creak", 0.35, "door2")
+    key(hinge2, "rotation_euler", t_o, (0, 0, 0)); key(hinge2, "rotation_euler", t_o + 1.8, (0, 0, R(-75))); ev(t_o, "creak", 0.35, "door2")     # きしむ音（2 秒）に合わせて、ゆっくり開く
     pop_out(sk, t_o + 0.05, 1.4, 0.05)
     # まるロボ（歩く速さは 0.72 m/s。距離 ÷ 速さで間に合うよう、立ち位置を近くし、移動を減らす。SKILL §5）
     M = MaruR((0.0, -1.6, 0.0), face=180.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
