@@ -24,3 +24,6 @@ __pycache__/
 # 16本目の作業中の大きいファイル・声・BGM（作業フォルダに置く）
 episodes/ep16_leak/voice/*.wav
 episodes/ep16_leak/voice/heard*.json
+
+# 字幕の中間ファイル（assemble が作り直す）
+episodes/ep16_leak/anim/subs_events*.json
