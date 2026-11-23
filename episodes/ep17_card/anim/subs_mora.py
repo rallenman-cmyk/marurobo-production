@@ -9,6 +9,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 import pauses as PZ
 
 LEAD = 0.05
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
+import subs_pause_align as PA
+P_TEXT = {}
+
+
+def _raw_from(raw, off):
+    """空白・改行を除いた off 文字目から始まる、元の文の残り"""
+    k = 0
+    for i, ch in enumerate(raw):
+        if re.match(r"[\s　]", ch): continue
+        if k == off: return raw[i:]
+        k += 1
+    return ""
 
 
 def _clean(s): return re.sub(r"[\s　]|\\N", "", s)
@@ -48,6 +61,10 @@ def boundary(P, S, VD, i, off):
     if off == 0:
         v, hop = PZ.env(wav); import numpy as np
         idx = np.where(v)[0]; return p["start"] + (idx[0] * hop if len(idx) else 0.0)
+    # 17本目 v1：関所の道具（subs_sync_check）と同じ「声の本当の間に句読点を 1 対 1 で当てる」やり方（subs_pause_align）を先に使う。
+    #   pauses.cut_all は 14-02「たまたま、｜ほかの人の」で「たま｜たま」の間を選び、字幕が 0.39 秒早かった（聞き取りで確かめた）
+    tg = PA.target(p, _raw_from(p["text"], off).lstrip("…"), wav)   # 字幕の頭の「……」は、前の句読点（「。……」）の一部
+    if tg is not None: return tg + LEAD
     to = _tts_off(text, tts, off)
     if to is None: return None
     for pos, ch, r in PZ.cut_all(wav, tts):
@@ -69,9 +86,8 @@ def fix(SUBS, P, S, VD):
                 out[-1] = [pa, c, nt]; merged.append((round(a, 2), txt)); continue
         if t is not None:
             na = round(t - LEAD, 2)
-            if off == 0 and txt.startswith("……") and out and i > 0:   # 「……」で始まる字幕は、声の前の「ため」の間から出す（0.8 秒まで。前の声の終わり +0.35 秒・前の字幕を 2 秒は出したあと）
-                na = round(min(na, max(P[i - 1]["end"] + 0.35, na - 0.8, out[-1][0] + 2.0)), 2)
-                out[-1][1] = round(na - 0.05, 2)
+            # 17本目 v1：「……」で始まる字幕を声の前のためから（0.8 秒まで早く）出していたが、関所（声の頭から 0.2 秒以内）で「声のない所で切り替わる」になった。
+            #   ためは前の字幕を残して見せる → 声の頭で替える（ほかの字幕と同じ）
             if abs(na - a) > 0.05: moved.append((round(a, 2), na, txt))
             if out and out[-1][1] > na - 0.05: out[-1][1] = round(na - 0.05, 2)
             if out and out[-1][1] < na - 0.05 and out[-1][1] > a - 0.06: out[-1][1] = round(na - 0.05, 2)   # 前の字幕は次の字幕まで出す
@@ -89,6 +105,5 @@ def check(SUBS, P, S, VD, tol=0.25):
         if t is None:
             if L[1] > 0: bad.append((round(a, 2), None, txt, "区切りに声の切れ目がない（続けて読んでいる所で分けている）"))
             continue
-        if txt.startswith("……") and L[1] == 0 and -0.85 <= a + LEAD - t <= tol: continue     # 「……」の字幕は、声の前のためから出してよい
         if abs(a + LEAD - t) > tol: bad.append((round(a, 2), round(t, 2), txt, "%+.2f 秒" % (a + LEAD - t)))
     return bad

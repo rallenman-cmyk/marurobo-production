@@ -14,6 +14,7 @@ s, e, w = T.s, T.e, T.w
 YEL = (255, 201, 40); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48)
 ORANGE = (255, 138, 31); PURPLE = (138, 77, 255); TEAL = D.TEAL
 BLUE = (52, 120, 230)
+WRONG = "35280486"      # 打ちまちがえた番号（kit17.py・make_tex17.py と同じ）
 import icons17 as IC
 GREY = (190, 198, 210)
 SUB_TOP = 560
@@ -30,6 +31,7 @@ def ev_list():
     add(s("02-03") - 0.05, e("02-03") + 0.3, "notice", {})
     add(w("02-04", "え") - 0.05, w("02-04", "え") + 0.95, "bubble", dict(obj="maru_top", icon="!"))   # v1 の点検：次の字幕に 0.2 秒残っていた → 次の字幕（声の波形で 33.54 秒）の直前で消す（言葉の時刻の見積もりは 0.6 秒早い）
     add(w("02-07", "お店") - 0.2, e("02-07") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    add(s("02-08") + 0.1, e("02-08") + 0.3, "notice", {})   # v1 の点検：スマホの画面が色の点だけで、買い物をしたと分からなかった → 知らせ（買い物ぶくろの絵）をもう一度
     add(s("03-01") + 0.2, e("03-02") + 0.3, "headlines", dict(t_more=s("03-02") + 0.2))
     add(s("03-04") - 0.05, e("03-04") + 0.5, "title", {})
     # 1章：3 か所に番号 → 1 つずつ小窓（想像）と × → 3 つ並べて ×
@@ -48,7 +50,9 @@ def ev_list():
     add(w("12-02", "役目") - 0.2, e("12-02") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("12-04") + 0.05, e("12-04") + 0.4, "notebook", dict(check=w("12-04", "見直す") - 0.1))
     add(w("12-05", "検算の数字") - 0.1, e("12-05") + 0.3, "tag", dict(text="検算の数字", obj="tile7", dy=-110, size=52, bg=ORANGE, fg=WHITE))
+    add(w("13-04", "となり") - 0.2, e("13-04") + 0.3, "ring", dict(obj="key" + WRONG[6], r=46, col=RED))   # v1 の点検：どのキーを押しまちがえたか分からなかった
     add(s("13-06") - 0.05, e("13-06") + 0.6, "tag", dict(text="番号がちがいます", pos=(640, 92), size=56, bg=RED, fg=WHITE))
+    add(w("13-07", "その場") + 0.1, e("13-07") + 0.3, "ring", dict(obj="gate", dy=40, r=60, col=RED))   # 光の点が止まった門に赤い輪
     add(w("13-08", "むっと") - 0.1, e("13-08") + 0.2, "bubble", dict(obj="maru_top", icon="hmph"))
     add(s("14-02") - 0.05, s("14-04") + 0.35, "tint", {})   # v1 の点検：e("14-03") で消え、想像の場面の終わり 1 秒が色なしに戻っていた → お店に戻る重ねの終わりまで
     add(w("14-06", "1人1人") - 0.1, e("14-06") + 0.3, "tag", dict(text="1人1人の数字", obj="stile4", dy=-100, size=48, bg=WHITE))
@@ -145,19 +149,26 @@ def notice_sprite():
 
 
 def headlines_sprite(t, t0, t_more=None):
-    """03-01・03-02：ニュースの見出しの絵（会社の名前は書かない。カードの絵と「？」だけ）"""
-    W_, H_ = 900, 420; S2 = 2
+    """03-01・03-02：新聞の切り抜き（v1 の点検：色の四角と線だけで、02-03 の知らせと同じ形に見えた → 新聞と分かる形に）。
+    会社の名前・本当の見出しは書かない：太い黒い帯（見出し）・写真の枠（カードの絵）・段の線・赤い「？」だけ"""
+    W_, H_ = 760, 470; S2 = 2
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     cols = [(52, 120, 230), (126, 84, 196), (220, 120, 60), (80, 160, 110)]
     n = 3 + (1 if t_more is not None and t >= t_more else 0)
     for k in range(n):
         if k < 3 and t < t0 + k * 0.45: break
-        x0 = (60 + k * 70) * S2; y0 = (30 + k * 75) * S2
-        d.rounded_rectangle((x0, y0, x0 + 560 * S2, y0 + 150 * S2), radius=18 * S2, fill=(255, 255, 255, 255), outline=(200, 206, 214, 255), width=3 * S2)
-        d.rounded_rectangle((x0 + 30 * S2, y0 + 40 * S2, x0 + 150 * S2, y0 + 112 * S2), radius=10 * S2, fill=cols[k])
-        D.ctext(d, (x0 + 210 * S2, y0 + 72 * S2), "？", D.font(80 * S2), RED)
-        for j, ww in enumerate((200, 170)):
-            d.rounded_rectangle((x0 + 300 * S2, y0 + (50 + j * 34) * S2, x0 + (300 + ww) * S2, y0 + (64 + j * 34) * S2), radius=6 * S2, fill=GREY + (255,))
+        x0 = (20 + k * 58) * S2; y0 = (14 + k * 62) * S2; w_, h_ = 440, 230
+        d.rectangle((x0 + 8 * S2, y0 + 8 * S2, x0 + (w_ + 8) * S2, y0 + (h_ + 8) * S2), fill=(0, 0, 0, 60))            # 影
+        d.rectangle((x0, y0, x0 + w_ * S2, y0 + h_ * S2), fill=(246, 242, 230, 255), outline=(180, 174, 160, 255), width=2 * S2)
+        d.rectangle((x0 + 18 * S2, y0 + 16 * S2, x0 + (w_ - 18) * S2, y0 + 26 * S2), fill=(40, 40, 46, 255))            # 新聞の名前の帯
+        d.rectangle((x0 + 18 * S2, y0 + 40 * S2, x0 + 300 * S2, y0 + 72 * S2), fill=(30, 30, 36, 255))                  # 太い見出し
+        D.ctext(d, (x0 + 350 * S2, y0 + 58 * S2), "？", D.font(64 * S2), RED)
+        d.rectangle((x0 + 18 * S2, y0 + 88 * S2, x0 + 170 * S2, y0 + 200 * S2), fill=(214, 220, 228, 255))              # 写真の枠
+        d.rounded_rectangle((x0 + 40 * S2, y0 + 118 * S2, x0 + 148 * S2, y0 + 172 * S2), radius=8 * S2, fill=cols[k])  # 写真：カード
+        for c_ in range(2):
+            for j in range(7):
+                xx = x0 + (190 + c_ * 120) * S2
+                d.rectangle((xx, y0 + (92 + j * 16) * S2, xx + (104 if j < 6 else 60) * S2, y0 + (98 + j * 16) * S2), fill=(150, 150, 158, 255))   # 段の線（本文）
     return im.resize((W_, H_), Image.LANCZOS)
 
 
@@ -186,17 +197,16 @@ def imag_pip(im, w_, h_):
 
 
 def notebook_sprite(t, t_check):
-    """12-04：ノートの足し算と、その横で答えを見直す絵（字なし。✓）"""
+    """12-04：ノートの足し算と、答えを見直す検算（v1 の点検：点の並びにしか見えなかった → 2D なので数字で書く。カードの計算のやり方ではない、ふつうの検算）"""
     W_, H_ = 520, 300; S2 = 2
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((6, 6, W_ * S2 - 6, H_ * S2 - 6), radius=24 * S2, fill=(255, 253, 244, 255), outline=(200, 206, 214, 255), width=4 * S2)
-    for j in range(5): d.line([(30 * S2, (60 + j * 46) * S2), ((W_ - 30) * S2, (60 + j * 46) * S2)], fill=(190, 214, 236, 255), width=2 * S2)
-    for j in range(3):
-        for i in range(4): d.rounded_rectangle(((60 + i * 46) * S2, (34 + j * 46) * S2, (92 + i * 46) * S2, (56 + j * 46) * S2), radius=6 * S2, fill=(120, 134, 156, 255))
-    d.line([(50 * S2, 168 * S2), (250 * S2, 168 * S2)], fill=NAVY + (255,), width=5 * S2)
-    for i in range(4): d.rounded_rectangle(((60 + i * 46) * S2, (180 + 0) * S2, (92 + i * 46) * S2, (204) * S2), radius=6 * S2, fill=ORANGE + (255,))
+    for j in range(4): d.line([(30 * S2, (78 + j * 62) * S2), ((W_ - 30) * S2, (78 + j * 62) * S2)], fill=(190, 214, 236, 255), width=2 * S2)
+    D.ctext(d, (220 * S2, 112 * S2), "12 ＋ 35 ＝ 47", D.font(56 * S2), NAVY)
+    if t >= t_check - 0.6:
+        D.ctext(d, (220 * S2, 200 * S2), "47 − 35 ＝ 12", D.font(56 * S2), ORANGE)
     if t >= t_check:
-        d.line([(320 * S2, 150 * S2), (370 * S2, 200 * S2), (460 * S2, 90 * S2)], fill=(52, 178, 102, 255), width=18 * S2, joint="curve")
+        d.line([(410 * S2, 190 * S2), (440 * S2, 222 * S2), (490 * S2, 160 * S2)], fill=(52, 178, 102, 255), width=16 * S2, joint="curve")
     return im.resize((W_, H_), Image.LANCZOS)
 
 
@@ -725,7 +735,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "pathfig":
             _paste(base, pathfig_sprite(t, p), 640, 160, k, a)
         elif kind == "headlines":
-            _paste(base, headlines_sprite(t, t0, p.get("t_more")), 640, 270, 1.0, a)
+            _paste(base, headlines_sprite(t, t0, p.get("t_more")), 860, 280, 1.0, a)   # v1 の点検：まるロボの目の上に重なった → 右へ
         elif kind == "notice":
             _paste(base, notice_sprite(), 640, 130, k, a)
         elif kind == "num":
@@ -733,7 +743,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= 720): continue
             _paste(base, num_sprite(p["n"]), q[0], max(50, q[1] - 70), k, a)
         elif kind == "notebook":
-            _paste(base, notebook_sprite(t, p["check"]), 300, 190, k, a)
+            _paste(base, notebook_sprite(t, p["check"]), 290, 330, k, a)   # v1 の点検：タイルの列の左を隠していた → 下へ
         elif kind == "pip3" and frame_of:
             for i_, (cl_, st_) in enumerate(p["clips"]):
                 im = frame_of(cl_, st_)

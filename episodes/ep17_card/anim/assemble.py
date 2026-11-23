@@ -41,9 +41,9 @@ for k, p in enumerate(P):
 # 波形で確かめた切り替わり（文の頭からの秒）。自動で選ぶと外れた所（5本目 v2 のコメント：「これを」が早い・「あれ」が遅い・「ぱっ」がだいぶ早い・改行の位置がおかしい）
 #   ID: (分け方（None＝自動の分け方のまま）, [切り替わりの秒, …])。最後の 1 枚が 1.0 秒未満なら、次の文の前までのばす
 FIX_AT = {
-    # 17本目 v1：08-05 は 1 つの声に 2 つの文。字幕は文をまたいでまとめない（SKILL）。「使われた。」のあとの無音の終わり（2.05 秒）で替える
-    #   （「……」の字幕は、ための間の頭から出す。subs_mora.check：無音の終わり 3.09 秒で替えると +1.09 秒の遅れになった）
-    "08-05": (["それなのに、使われた。", "……いったい、どういうことでしょう？"], [2.05]),
+    # 17本目 v1：08-05 は 1 つの声に 2 つの文。字幕は文をまたいでまとめない（SKILL）。「いったい」の言い始め（3.10 秒）の 0.05 秒前で替える
+    #   （関所の subs_sync_check と subs_mora が同じ所を指す。「……」のためは、前の「使われた。」の字幕を残して見せる）
+    "08-05": (["それなのに、使われた。", "……いったい、どういうことでしょう？"], [3.05]),
 }
 ID_OF = {v: k for k, v in T.TEXT.items()}
 NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
@@ -152,6 +152,12 @@ def _refix(S):
         out += [(cuts[i], cuts[i + 1] - (0.0 if i + 1 == len(ps_) else 0.0), ps_[i]) for i in range(len(ps_))]
     return out
 SUBS = _refix(SUBS)
+# 17本目 v1：1 秒 8 字をこえる 1 枚は、次の字幕の 0.05 秒前まで（声のない間に）出しておく（08-05「……いったい」が 2.1 秒で 19 字だった）
+SUBS = sorted(SUBS)
+for i_ in range(len(SUBS)):
+    a_, c_, t_ = SUBS[i_]; n_ = len(t_.replace("\\N", "").replace(" ", ""))
+    if n_ / (c_ - a_) > 8.0 and i_ + 1 < len(SUBS):
+        SUBS[i_] = (a_, max(c_, min(SUBS[i_ + 1][0] - 0.05, a_ + n_ / 7.5)), t_)
 json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)

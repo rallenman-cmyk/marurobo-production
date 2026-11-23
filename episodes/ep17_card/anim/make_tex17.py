@@ -8,7 +8,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from icons17 import icon
 NAVY = (24, 38, 74); WHITE = (255, 255, 255); GREY = (200, 206, 214); RED = (226, 58, 48); ORANGE = (255, 138, 31)
 GREEN = (52, 178, 102); BLUE = (52, 120, 230); TEAL = (47, 217, 200)
-NUM = "35280476"; WRONG = "35280456"      # 7 つ目を打ちまちがえる（となりのキー）
+NUM = "35280476"; WRONG = "35280486"      # 7 つ目を打ちまちがえる（となりのキー。v1 の点検：前の 5 は 7 のとなりでなかった。キーは上 1〜5・下 6〜0 なので 8）
+OTHER = "49280476"                         # 11-06 の別の会社のカード（はじめの 2 けただけちがう）
 SS = 2
 F = lambda n, w="900Black": ImageFont.truetype("%s/%s/NotoSansJP_%s.ttf" % (FD, w, w), n)
 
@@ -60,11 +61,12 @@ def register(name, digits, state="typing", bad=None):
     for k in range(8):
         x = 40 + k * 92; y = 80
         col = WHITE
-        if bad is not None and k == bad: col = (255, 200, 196)
+        if bad is not None and k == bad: col = (255, 150, 140)      # v1 の点検：うすい桃色で、赤に見えなかった
         line = ORANGE if k == 7 and state != "nocheck" else (NAVY if state != "nocheck" or k < 7 else GREY)
         if state == "nocheck" and k == 7: col = (210, 214, 220)
         if state == "wrong" and k == 7: line = RED
         if state == "ok": line = GREEN
+        if bad is not None and k == bad and state != "ok": line = RED
         d.rounded_rectangle(S(x, y, x + 80, y + 120), radius=12 * SS, fill=col, outline=line, width=6 * SS)
         if k < len(digits): d.text(S(x + 40, y + 64), digits[k], font=F(84 * SS, "700Bold"), fill=NAVY, anchor="mm")
     if state == "ok": d.ellipse(S(W_ / 2 - 26, 222, W_ / 2 + 26, 274), fill=GREEN)
@@ -81,7 +83,9 @@ for c in "0123456789": tile(c); key_face(c)
 card("card_blue", (52, 102, 196)); card("card_purple", (126, 84, 196))
 phone("ph_home", "home"); phone("ph_notice", "notice")
 for n in range(0, 9): register("reg_%d" % n, NUM[:n])
-for n in range(7, 9): register("reg_w%d" % n, WRONG[:n], bad=6)
-register("reg_wrong", WRONG, "wrong", bad=6)
-register("reg_ok", NUM, "ok"); register("reg_nocheck", WRONG[:7], "nocheck", bad=6)
+# v1 の点検：まちがえたますを画面で赤くすると、レジがどのけたをまちがえたか分かっているように見える（本当は検算が合わないことしか分からない）
+#   → 画面は赤くしない。押しまちがえたキーは 2D の赤い輪で示す（overlays.py）。最後の検算のますだけ赤
+for n in range(7, 9): register("reg_w%d" % n, WRONG[:n])
+register("reg_wrong", WRONG, "wrong")
+register("reg_ok", NUM, "ok"); register("reg_nocheck", WRONG[:7], "nocheck")
 print("tex done", len(os.listdir(OUT)))

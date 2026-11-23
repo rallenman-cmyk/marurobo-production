@@ -75,6 +75,9 @@ def _marks(text):
     for m in PUNCT.finditer(text):
         if out and m.start() == out[-1][0]: out[-1] = (m.end(), out[-1][1] + m.group()); continue
         out.append((m.end(), m.group()))
+    # 文の頭の記号（「……え？」の「……」）は、前に声がないので間に当てない（17本目 v1：頭の「……」が「え」のあとの間を取り、
+    #   「？」が次の読点の間に当たって、合っている字幕を「1.04 秒早い」と数えた）
+    out = [o for o in out if text[:o[0]].strip("…、。？！?!　 「") != ""]
     return [o for o in out if text[o[0]:].strip("。？！?!…、　 」") != ""]
 
 

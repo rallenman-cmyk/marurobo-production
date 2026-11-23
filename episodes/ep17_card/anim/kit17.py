@@ -19,7 +19,7 @@ exec(_src5[_a5:_b5].replace("plan.", "plan5."))
 
 PURPLE = "#7B5BD6"
 BLUE_C, PURP_C, ORANGE_C, GREY_C, GREEN_C, RED_C = "#3478E6", "#8A5BD6", "#FF8A1F", "#9AA4B2", "#34B266", "#E23A30"
-NUM = "35280476"; WRONG = "35280456"     # WRONG：7 つ目を打ちまちがえた番号（make_tex17.py と同じ）
+NUM = "35280476"; WRONG = "35280486"; OTHER = "49280476"     # WRONG：7 つ目を打ちまちがえた番号（make_tex17.py と同じ）
 
 
 def _m(name, col, **kw): return mat(name, col, **kw)
@@ -108,7 +108,9 @@ def hat_parts(parent):
     for sy, ang in ((1, 18), (-1, -18)):
         cyl(plaid, (0, sy * 0.40, -0.03), 0.2, 0.03, rot=(R(ang), 0, 0), scale=(1.05, 0.62, 1), parent=he)
     for sx in (-1, 1): sphere(plaid, (sx * 0.3, 0, -0.02), 0.1, scale=(0.35, 1, 1.1), parent=he)
-    sphere(band, (0, 0, 0.26), 0.05, scale=(1.6, 0.8, 0.8), parent=he)
+    # v1 の点検（確認役）：アンテナが帽子を突き抜けて見えた → てっぺんに、アンテナを通す穴のふち（こげ茶の輪）を付け、穴から出ている形にする
+    bpy.ops.mesh.primitive_torus_add(location=(0, 0, 0), major_radius=0.07, minor_radius=0.022)
+    o = bpy.context.object; o.data.materials.append(band); o.parent = he; o.location = (0, 0.0, 0.255)
     gold = _m("loupe", "#D9B24A", rough=0.3, metal=0.9)
     lp = empty((0.33, 0.30, 0.02)); lp.parent = he; lp.rotation_euler = (0, R(-20), R(30))
     bpy.ops.mesh.primitive_torus_add(location=(0, 0, 0), rotation=(0, R(90), 0), major_radius=0.09, minor_radius=0.016)
