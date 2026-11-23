@@ -129,8 +129,8 @@ def castle(night=False):
     for zz in (0.3, 1.15):
         cube(_m("rust", "#6E4A2E", rough=0.8, metal=0.5), (0.09, DOOR_W / 2, zz), (0.02, DOOR_W - 0.08, 0.08), parent=hinge)
     # 扉のまわりの石の枠（少し出っぱる）
-    for (yy, zz, sy, sz) in ((DOOR_Y - DOOR_W / 2 - 0.1, DOOR_H / 2, 0.2, DOOR_H + 0.2), (DOOR_Y + DOOR_W / 2 + 0.1, DOOR_H / 2, 0.2, DOOR_H + 0.2), (DOOR_Y, DOOR_H + 0.1, DOOR_W + 0.4, 0.2)):
-        cube(_m("doorframe_st", "#9C9384", rough=0.85), (X_SIDE + 0.05, yy, zz), (0.12, sy, sz))
+    for (yy, zz, sy, sz) in ((DOOR_Y - DOOR_W / 2 - 0.1, DOOR_H / 2, 0.2, DOOR_H), (DOOR_Y + DOOR_W / 2 + 0.1, DOOR_H / 2, 0.2, DOOR_H), (DOOR_Y, DOOR_H + 0.1, DOOR_W + 0.4, 0.2)):
+        cube(_m("doorframe_st", "#9C9384", rough=0.85), (X_SIDE + 0.05 + (0.01 if sz < 0.5 else 0), yy, zz), (0.12 + (0.02 if sz < 0.5 else 0), sy, sz))
     CASTLE["door"] = hinge
     lk = old_lock((X_SIDE + 0.16, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), face=90.0)
     lk["root"].parent = hinge; lk["root"].location = (0.12, DOOR_W - 0.14, 0.82)
