@@ -35,7 +35,6 @@
 
 ▼参考にしたページ
 ・Pudu Robotics「BellaBot」 https://www.pudurobotics.com/products/bellabot
-・Pudu Robotics 製品紹介の資料（2022年） https://cdn.robotshop.com/media/P/Pud/RB-Pud-11/pdf/bellabot-intro_20220316-en-presentation.pdf
 ・PUDU Academy 製品の紹介 https://academy.pudutech.com/en/docs/chan-pin-jie-shao
 ・Impress Watch（すかいらーくの約3,000台） https://www.watch.impress.co.jp/docs/topic/1501163.html
 ・Business Insider Japan https://www.businessinsider.jp/article/273271/
@@ -61,5 +60,5 @@
 
 ## 公開前に確かめること
 - もくじの時刻：本番の動画の声の始まりから取った。YouTube のもくじは 0:00 から始まり、3 つ以上・10 秒以上の間が要る（満たしている）。
-- 参考のページ：台本を書いたとき（2026-11-14〜16）に開けるのを確かめたもの。
+- 参考のページ：2026-11-23 に 12 本とも開けるのを確かめた（開けなかった会社の資料の PDF は外した）。
 
