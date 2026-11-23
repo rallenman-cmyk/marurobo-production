@@ -27,7 +27,7 @@ def ev_list():
     add(w("02-03", "見てください"), e("02-03") + 0.2, "ring", dict(obj="maru_c_f", dx=60, dy=10, r=46))
     add(w("04-06", "首") - 0.3, e("04-06") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # 題の札：「エスカレーター。」のすぐ後に急に出さず、少し間をおいてから出し、問いの文（05-02）を読む間ずっと見せる（v1 のコメント 1:30）
-    add(e("05-01") + 1.0, e("05-02") + 0.4, "title", {})
+    add(s("05-02") - 0.05, e("05-02") + 0.4, "title", {})   # v2 のコメント 1:31「段は〜のセリフの時にオープニングも映して。表示で音声ないの気になる」：声が出ている間だけ出す（前の文との間も 2.8 → 1.0 秒に詰めた）
     add(s("05-03"), e("05-03") + 0.2, "pip_clip", dict(clip="A04c", src_t=w("04-03", "ころん") - 1.0))
     # 1章
     add(w("06-03", "消えた段") - 0.1, e("06-03") + 0.4, "pile", dict(pos=(640, 300)))   # 文の頭から（たまっていく絵を声と一緒に見せる）
@@ -77,7 +77,8 @@ def ev_list():
     # 6章
     add(w("28-03", "見張り"), e("28-03") + 0.3, "tag", dict(text="見張り＝はさまったら止める", pos=(640, 100), size=46))
     add(s("29-01") + 0.3, e("29-01") + 0.3, "ring", dict(obj="inlet", r=48))
-    add(s("31-01") + 0.3, e("31-01") + 0.3, "ring", dict(obj="comb_lo", r=52))
+    add(w("29-02", "なると") - 0.3, e("29-02") + 0.3, "ring", dict(obj="ball", r=40))   # ボールが入口の手前ではさまる所（v2 のコメント 12:51）
+    add(s("31-01") + 0.3, e("31-01") + 0.3, "ring", dict(obj="comb_hi", r=52))   # 上の降り口のくし（v2 のコメント 13:30）
     # 見張りの試しの小さな物（リボン・小石）を白い輪で示す（9本目 v2 の点検：小さくて見落とす）
     add(w("30-02", "リボン"), e("30-03") + 0.3, "ring", dict(obj="ribbon", r=34))
     add(w("31-02", "小石"), e("31-03") + 0.3, "ring", dict(obj="pebble", r=30))
@@ -89,6 +90,11 @@ def ev_list():
     add(w("36-03", "1分間"), e("36-03") + 0.3, "tag", dict(text="1分間に30メートル", pos=(640, 105), size=56, bg=YEL))
     # 押した時の段（白い線）が、すうっと進んで止まった所を、段について動く青緑の線で見せる。36-05「この間に入っていました」が絵で分かるように（9本目 v2 の点検：止まった段の位置が絵になかった）
     add(w("34-04", "すうっと"), e("34-04") + 0.3, "vline", dict(obj="stop_now", text="", col=TEAL))   # 34-04 の間だけ：段といっしょに動いて止まる線（すうっと進むのが見えるように）
+    # 床の下の場面（10-01〜13-02）：いま、どこを見ているかの小さな地図（v2 のコメント 3:55・4:03）
+    add(s("10-01"), e("13-02") + 0.3, "locator", dict(keys=[(s("10-01"), 0.0), (e("11-04"), 0.0), (s("11-05"), 0.1), (e("12-00"), 0.1), (s("12-01"), 0.12),
+        (s("12-03"), 0.22), (e("12-07"), 0.62), (s("13-01"), 0.8), (e("13-02"), 0.86)]))
+    # 10-02「ここは、冒頭でまるロボが見ていたすき間の、ちょうど裏側です」：冒頭の上から見たすき間を、左上の小窓で（v2 のコメント 3:42「冒頭のシーンを切り抜きみたいな感じで映して」）
+    add(s("10-02"), e("10-02") + 0.3, "pip_clip", dict(clip="A03b", src_t=s("03-03") + 0.3))
     add(w("23-01", "手すり") - 0.2, e("23-04") + 0.4, "hrloop", dict(tA=w("23-02", "ゴム"), tB=w("23-03", "車"), tC=w("23-04", "すべって")))   # 手すりのしくみの図（v2 の点検：3D に手すりの輪と車が映っていなかった）
     add(w("36-04", "10センチ") - 0.2, e("36-05") + 0.5, "ruler", dict(pos=(640, 165), t_meas=w("36-05", "測って")))   # ものさしの図（3D の線は角度で読めなかった）
     return E
@@ -293,6 +299,41 @@ def hrloop_sprite(t, tA, tB, tC):
     return D.card(1000, 420, draw=dr)[0]
 
 
+LOC_PATH = [(292, 12), (318, 14), (330, 28), (316, 42), (282, 42), (104, 140), (72, 140), (60, 126), (70, 112), (96, 112)]   # 床の下の道（上の床の下 → 歯車 → 坂の下を戻る → 下の端 → 下の床の下）
+
+
+def _loc_pt(u):
+    acc = [0.0]
+    for (a, b), (c, d) in zip(LOC_PATH, LOC_PATH[1:]): acc.append(acc[-1] + math.hypot(c - a, d - b))
+    L = acc[-1] * max(0.0, min(1.0, u))
+    for i in range(len(LOC_PATH) - 1):
+        if acc[i + 1] >= L:
+            f = (L - acc[i]) / max(1e-6, acc[i + 1] - acc[i]); (a, b), (c, d) = LOC_PATH[i], LOC_PATH[i + 1]
+            return a + (c - a) * f, b + (d - b) * f
+    return LOC_PATH[-1]
+
+
+def locator_sprite(u, blink=1.0):
+    """10〜13 章（床の下）：いま、エスカレーターのどこを見ているかの小さな地図（v2 のコメント 3:55「どの部分を見ているか分かりにくい」）。
+    横から見たエスカレーター（下の床・坂・上の床）と、床の下の道（点線）に、赤い点と「いまここ」"""
+    def dr(d, W_, H_, ss, img):
+        S_ = lambda x, y: ((x + 10) * ss, (y + 50) * ss)
+        GR, ST = (150, 156, 166), (96, 104, 118)
+        d.line([S_(0, 100), S_(90, 100)], fill=GR, width=6 * ss)            # 下の床
+        d.line([S_(90, 100), S_(270, 0)], fill=ST, width=10 * ss)           # 坂（段）
+        d.line([S_(270, 0), S_(340, 0)], fill=GR, width=6 * ss)             # 上の床
+        for (a, b), (c, e_) in zip(LOC_PATH, LOC_PATH[1:]):                  # 床の下の道（点線）
+            L = math.hypot(c - a, e_ - b); n = max(1, int(L // 12))
+            for q in range(n):
+                f0, f1 = q / n, (q + 0.55) / n
+                d.line([S_(a + (c - a) * f0, b + (e_ - b) * f0), S_(a + (c - a) * f1, b + (e_ - b) * f1)], fill=GR, width=4 * ss)
+        x, y = _loc_pt(u)
+        d.ellipse([S_(x - 15, y - 15), S_(x + 15, y + 15)], fill=(255, 205, 200))
+        d.ellipse([S_(x - 9, y - 9), S_(x + 9, y + 9)], fill=RED)
+        D.ctext(d, S_(110, -22), "いまここ", D.font(44 * ss), RED)
+    return D.card(380, 230, draw=dr)[0]
+
+
 def ruler_sprite(t=None, t_meas=None):
     """36-04〜36-06：止まるまでの長さを、まっすぐなものさしの図で（9本目 v2 ユーザー「テロップ重なるし、どこが何センチかわかんない」。
     3D の段の横に線を引くと、見る角度でずれて読めなかった）。10〜60 センチの間をぬり、36-05「測って」で矢印が 0 から約 50 センチまでのびる"""
@@ -341,14 +382,18 @@ def flow_sprite(t, items):
     key = ("flow", tuple(shown))
     if key not in _cache:
         def dr(d, W_, H_, ss, img):
-            n = len(items); step = (W_ - 80 * ss) / n
-            for i, nm in enumerate(shown):
-                cx = 40 * ss + step * (i + 0.5)
-                D.ctext(d, (cx, H_ / 2), nm, D.font(46 * ss), NAVY)
-                if i + 1 < len(shown):
-                    xa, xb = cx + step * 0.28, cx + step * 0.72
+            # 字の幅を測って並べ、矢印はどれも同じ長さで字と字の間に（v2 のコメント 4:38「矢印が文字に重なってる」）。全部の字の場所を先に決めるので、出てきても字は動かない
+            f_ = D.font(46 * ss); ws = [d.textlength(nm, font=f_) for nm, _ in items]
+            gap, arr = 22 * ss, 100 * ss
+            tot = sum(ws) + (len(items) - 1) * (arr + 2 * gap); x = (W_ - tot) / 2
+            for i, (nm, _) in enumerate(items):
+                cx = x + ws[i] / 2
+                if nm in shown: D.ctext(d, (cx, H_ / 2), nm, f_, NAVY)
+                if i + 1 < len(items) and items[i + 1][0] in shown:
+                    xa = x + ws[i] + gap; xb = xa + arr
                     d.line([xa, H_ / 2, xb - 16 * ss, H_ / 2], fill=D.TEAL_D, width=8 * ss)
                     d.polygon([(xb, H_ / 2), (xb - 22 * ss, H_ / 2 - 14 * ss), (xb - 22 * ss, H_ / 2 + 14 * ss)], fill=D.TEAL_D)
+                x += ws[i] + arr + 2 * gap
         _cache[key] = D.card(980, 120, draw=dr)[0]
     return _cache[key]
 
@@ -431,6 +476,12 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             base.alpha_composite(Image.new("RGBA", base.size, (40, 60, 120, int(80 * a))))
             spr, off = tag_sprite("もしも…", 44, WHITE)
             _paste(base, spr, 150, 70, 1.0, a)
+        elif kind == "locator":
+            ks = p["keys"]; u = ks[0][1]
+            for (ta, ua), (tb, ub) in zip(ks, ks[1:]):
+                if ta <= t <= tb: u = ua + (ub - ua) * (t - ta) / max(1e-6, tb - ta); break
+                if t > tb: u = ub
+            _paste(base, locator_sprite(round(u, 3)), 1080, 122, k, a)
         elif kind == "hrloop":
             _paste(base, hrloop_sprite(t, p["tA"], p["tB"], p["tC"]), 640, 300, k, a)
         elif kind == "ruler":

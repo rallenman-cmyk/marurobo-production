@@ -7,6 +7,8 @@
 #        短い 1 枚（ぺたっ。など）は、声より先に出さないよう、うしろの 1 枚とまとめる。
 import os, sys, json, wave
 import numpy as np
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
+import subs_pause_align as PA
 
 HEAD_TOL, TOL = 0.2, 0.15
 
@@ -93,6 +95,16 @@ def fix(SUBS, P, vdir, MIN=2.02, CPS=7.9, log=print):
                 na = round(nxt[0]["start"] - 0.05, 3)
             elif a - p["start"] <= HEAD_TOL: i += 1; continue
             else:                                                   # ① 声の途中
+                # 2026-11-23（v2「テロップの切り替わりが早い／遅い」11 件）：句読点のあとなら、その句読点に当てはまる声の本当の間の終わりへ
+                tg = PA.target(p, S[i][2], os.path.join(vdir, "line_%03d.wav" % p["no"]))
+                if tg is not None:
+                    if abs(a - tg) <= 0.08: i += 1; continue
+                    na = tg
+                    if abs(S[i - 1][1] - a) < 0.06 or S[i - 1][1] > na: S[i - 1][1] = na
+                    S[i][0] = na; log("SYNC 間へ %7.2f → %7.2f  %s" % (a, na, S[i][2])); changed = True
+                    for j in (i, i - 1):
+                        if _merge(S, j, P, MIN, CPS, log): break
+                    i += 1; continue
                 if p["no"] not in C: C[p["no"]] = cands(os.path.join(vdir, "line_%03d.wav" % p["no"]), p.get("speed", 1.0))
                 tv = a + 0.05 - p["start"]
                 cs = C[p["no"]]
