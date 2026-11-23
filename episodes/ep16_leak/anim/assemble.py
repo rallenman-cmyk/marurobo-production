@@ -77,6 +77,26 @@ def _wrap(t_):
         out.append(ln)
     return "\\N".join(out)
 SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
+# 16本目 v1：「……」でためたあとの答えは別の字幕にする（台本 v0.2 のコメント「やっぱり以降はテロップ別にして」・SKILL）。
+#   声の切れ目へ合わせる道具（subs_sync）が、短い答えの文（「やっぱり、だめ。」1.0 秒）を前の「……」の字幕にまとめていた。
+#   「……\N」で 2 つの文がつながった字幕は、答えの文の声の頭で分け、答えが 2 秒に足りなければ、次の字幕の上の行にする
+def _split_tame(S):
+    S = sorted(S); out = []; i = 0
+    while i < len(S):
+        a_, c_, t_ = S[i]
+        if "……\\N" in t_:
+            x_, y_ = t_.split("……\\N", 1); x_ += "……"
+            tb = next((p["start"] for p in P if p["text"].startswith(y_[:6]) and a_ < p["start"] < c_), None)
+            if tb is not None:
+                out.append((a_, tb - 0.05, x_))
+                if c_ - tb >= 2.0 or i + 1 >= len(S) or "\\N" in S[i + 1][2] or len(S[i + 1][2]) > 25:
+                    out.append((tb, c_, y_))
+                else:
+                    S[i + 1] = (tb, S[i + 1][1], y_ + "\\N" + S[i + 1][2])
+                i += 1; continue
+        out.append(S[i]); i += 1
+    return out
+SUBS = _split_tame(SUBS)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
 
@@ -199,6 +219,8 @@ for nm in ORDER:
         if (round(t, 2), kind) in EV: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
+for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴らす音（絵の物の記録にない音）
+    EV[(round(t_, 2), k_)] = g_
 # 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）
 _run = None
 for (t, kind) in sorted(EV):

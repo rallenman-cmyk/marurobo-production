@@ -61,6 +61,10 @@ def make16(kind, sr):
 def make(kind, sr=48000):
     x = make16(kind, sr)
     if x is not None: return x
+    if kind.startswith("beep_") or kind in ("sigh", "ding"):      # まるロボの電子音（全部の回で共通の maru_sfx）
+        import maru_sfx
+        y = maru_sfx.make(kind, 1.0, sr)
+        if y is not None: return y
     if kind == "key":       # カタッ（低めのこもった音と、短い高い音）
         return 0.32 * _mx(_n(0.05, sr, 300, 2500, a=0.0005, d=0.02), 0.5 * _n(0.02, sr, 3000, 9000, a=0.0003, d=0.008))
     if kind == "tick":      # 受信機のカチッ（金属の短い音）

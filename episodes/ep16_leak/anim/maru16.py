@@ -239,6 +239,9 @@ class MaruR:
             o = self.off(fr["t"]) if self.carries else (0.0, 0.0, 0.0)
             key(self.root, "location", fr["t"], (x * self.s + o[0], y * self.s + o[1], z * self.s + zp + o[2]))
         snd = {"step": ("step", 0.06), "step_turn": ("step", 0.03), "takeoff": ("jump", 0.3), "land": ("land", 0.4)}
+        # 16本目 v1：驚く・首をかしげる・首を振るなどの電子音が、予定にはあるのに捨てられていた（確認役「驚いてるのに音がない」）。全部ひろう
+        for k_ in ("beep_yes", "beep_no", "beep_surprise", "beep_happy", "beep_think", "beep_question", "beep_hello", "beep_present", "sigh", "ding"):
+            snd[k_] = (k_, 0.45)
         for e_ in p.events:
             if e_["kind"] not in snd: continue
             if e_["t"] < T0 - 1.0 or e_["t"] > T1 + 1.0: continue

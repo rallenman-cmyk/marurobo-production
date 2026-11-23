@@ -178,8 +178,9 @@ def key_obj(loc, rot=(0, 0, 0), col="#C9A24A", simple=False, s=1.0, parent=None)
     """鍵（輪・軸・歯）。simple＝歯が 1 つだけの、短くかんたんな形の鍵（10-07）。前＝+x"""
     e = empty(loc); e.rotation_euler = rot; e.scale = (s, s, s)
     if parent is not None: e.parent = parent
+    if simple and col == "#C9A24A": col = "#AEB4BC"      # かんたんな鍵は銀色（v1 の確認役：本物の鍵と同じ金色・同じ見た目で、ちがいが分からなかった）
     m = _m("key" + col, col, rough=0.3, metal=0.85)
-    bpy.ops.mesh.primitive_torus_add(location=(0, 0, 0), rotation=(R(90), 0, 0), major_radius=0.045, minor_radius=0.012)
+    bpy.ops.mesh.primitive_torus_add(location=(0, 0, 0), rotation=(R(90), 0, 0), major_radius=0.035 if simple else 0.045, minor_radius=0.012)
     o = bpy.context.object; o.data.materials.append(m); o.parent = e
     L = 0.08 if simple else 0.14
     cyl(m, (0.045 + L / 2, 0, 0), 0.011, L, rot=(0, R(90), 0), parent=e, verts=16)

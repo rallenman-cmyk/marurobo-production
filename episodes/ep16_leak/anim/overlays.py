@@ -25,13 +25,13 @@ def ev_list():
     E = []
     add = lambda *a: E.append(a)
     # 冒頭
-    add(w("01-03", "セール") - 0.2, w("01-03", "開きます"), "bubble", dict(obj="maru_top", icon="sale"))
+    add(w("01-03", "セール") - 0.2, w("02-02", "え") - 0.15, "bubble", dict(obj="maru_top", icon="sale"))      # 表どおり 02-02 の「え？」で消す（v1：開く所で消えていた）
     add(s("02-01") - 0.05, e("02-01") + 0.3, "mailcard", {})
     add(w("02-02", "え") - 0.05, w("02-02", "え") + 1.1, "bubble", dict(obj="maru_top", icon="!"))
     add(s("02-03") + 0.05, e("02-03") + 0.3, "pip_clip", dict(clip="P02", src_t=s("02-03") + 0.05))
     add(s("02-04"), e("02-08") + 0.4, "form", dict(lit=[w("02-05", "名前"), w("02-05", "住所"), w("02-05", "電話"), w("02-05", "メール")],
                                                    fly=w("02-06", "知らない"), back=s("02-07"), extra=w("02-08", "誕生日")))
-    add(w("02-08", "安心") + 0.1, e("02-08") + 0.4, "bubble", dict(obj="maru_top", icon="?"))
+    add(w("02-08", "安心") + 0.1, e("02-08") + 0.4, "bubble", dict(obj="maru_top", icon="?", pos=(1000, 650)))   # 上の札と重ねない（まるロボの右）
     add(w("04-01", "流出の発表") - 0.3, e("04-01") + 0.3, "headlines", {})
     add(w("04-03", "どこから") - 0.2, e("04-03") + 0.3, "qmark", dict(pos=(860, 250), size=190))      # v1 の点検：町の上の？が小さかった
     add(s("04-05") - 0.05, e("04-05") + 0.5, "title", {})
@@ -42,13 +42,14 @@ def ev_list():
     add(w("06-04", "どうやって") - 0.3, e("06-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("07-01"), e("07-01") + 0.2, "tint", {})
     add(w("07-03", "どこから") - 0.3, e("07-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(w("08-02", "小さな扉"), e("08-02") + 0.4, "ring", dict(obj="door", r=70, col=RED))
+    add(w("08-02", "小さな扉"), e("08-02") + 0.4, "ring", dict(obj="door", r=150, col=RED))     # 扉の全体を囲む（v1 の確認役：何もない所に小さな丸）
     add(w("08-04", "うしろ") + 0.3, w("08-04", "うしろ") + 1.6, "bubble", dict(obj="maru_top", icon="!"))
     add(w("09-01", "裏口"), e("09-01") + 0.3, "tag", dict(text="裏口", obj="door", dy=-150, size=52))
     add(w("09-02", "なぜ") - 0.3, e("09-02") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("09-03") + 0.05, e("09-03") + 0.3, "pip_clip", dict(clip="P09", src_t=s("09-03") + 0.05))
+    add(s("09-04") + 0.2, e("09-04") + 0.3, "pathfig", dict(t_line=w("09-04", "外から") - 0.1))      # 家 → 点線 → お城の裏口（v1 の確認役：「外から入れるように」が絵に出ていなかった）
     add(w("09-05", "出入口の機械"), e("09-05") + 0.3, "tag", dict(text="外から会社につなぐ出入口の機械", pos=(640, 100), size=44))
-    add(w("09-06", "ねらわれ"), e("09-06") + 0.3, "ring", dict(obj="door", r=70, col=RED))
+    add(w("09-06", "ねらわれ"), e("09-06") + 0.3, "ring", dict(obj="door", r=170, col=RED))
     add(w("10-04", "プログラム") - 0.2, e("10-04") + 0.3, "tag", dict(text="新しいプログラム", obj="box", dy=-110, size=44))
     add(w("10-06", "弱い所") - 0.2, e("10-06") + 0.3, "ring", dict(obj="lock", r=46, col=RED))
     add(w("10-08", "誕生日"), e("10-08") + 0.3, "tag", dict(text="誕生日", pos=(470, 110), size=52))
@@ -59,10 +60,21 @@ def ev_list():
     add(s("12-01") - 0.05, s("12-01") + 1.6, "rewind", {})
     add(w("12-05", "ID") - 0.1, e("12-05") + 0.3, "tag", dict(text="働く人のIDとパスワード", obj="key", dy=-120, size=44))
     add(w("12-07", "どこから") - 0.2, e("12-07") + 0.3, "qmark", dict(obj="door", dy=-170))      # 鍵は影と一緒に動くので、扉の上に止めて出す（v1：？が飛び回った）
-    add(w("12-08", "古い") - 0.1, e("12-08") + 0.4, "tag", dict(text="古いままの錠", obj="i_lock", dy=-110, size=48))
+    add(max(w("12-08", "古い") - 0.1, s("12-08") + 0.45), e("12-08") + 0.4, "tag", dict(text="古いままの錠", obj="i_lock", dy=-110, size=48))
     add(w("12-08", "かんたん") - 0.1, e("12-08") + 0.4, "tag", dict(text="かんたんな鍵", obj="i_skey", dy=-200, size=48))
     add(w("12-08", "漏れた") - 0.1, e("12-08") + 0.4, "tag", dict(text="漏れた鍵", obj="i_key", dy=-110, size=48))
     return E
+
+
+def sfx_list():
+    """札・図に合わせて鳴らす音（絵コンテ表の音。v1 の確認役：表の音が入っていなかった）：(時刻, 種類, 大きさ)"""
+    L = []
+    for i in range(4): L.append((w("04-01", "流出の発表") - 0.3 + i * 0.45, "paper", 0.35))     # 見出しが重なる「ぱさ」
+    for k in ("名前", "住所", "電話", "メール"): L.append((w("02-05", k), "tick", 0.3))     # 光るたび「ピッ」
+    L.append((w("02-06", "知らない"), "swish", 0.35))      # 4 つが飛んでいく「ひゅっ」
+    L.append((s("12-01") - 0.05, "rewind", 0.4))           # 時間を巻きもどす
+    L.append((s("07-02") + 0.05, "swish", 0.3))            # 想像の場面から戻る「しゅっ」
+    return L
 
 
 def _pop(t, t0, t1):
@@ -148,10 +160,27 @@ def form_sprite(t, p):
     if t >= p["extra"]:
         for j, kd in enumerate(("cake", "bldg")):
             cx = 885 * S2; cy = (82 + j * 136) * S2
+            d.rounded_rectangle((cx - 62 * S2, cy - 62 * S2, cx + 62 * S2, cy + 62 * S2), radius=16 * S2, fill=(236, 238, 242, 255))     # 4 つとは別の灰色の地（預けていない物）
             IC.icon(d, kd, cx, cy, 54 * S2, (110, 118, 132))
-            r_ = 50 * S2; d.line((cx - r_, cy - r_, cx + r_, cy + r_), fill=(150, 158, 170, 230), width=6 * S2); d.line((cx - r_, cy + r_, cx + r_, cy - r_), fill=(150, 158, 170, 230), width=6 * S2)
+            r_ = 48 * S2; d.line((cx - r_, cy - r_, cx + r_, cy + r_), fill=RED + (230,), width=10 * S2); d.line((cx - r_, cy + r_, cx + r_, cy - r_), fill=RED + (230,), width=10 * S2)     # 太い赤の×
     if t >= p["back"] and t < p["extra"] + 0.01:
         f = D.font(44 * S2); D.ctext(d, (850 * S2, 150 * S2), "4つ", f, D.TEAL_D)
+    if gone and t >= p["fly"] + 0.8:     # 4 つが飛んでいったあとの札：大きな「？」（v1 の確認役：空の札だけが 3 秒残った）
+        D.ctext(d, (W_ * S2 / 2 - 80 * S2, 140 * S2), "？", D.font(150 * S2), RED)
+    return im.resize((760, 228), Image.LANCZOS)      # 小さくして左上へ（v1 の確認役：まるロボの顔と体を 26 秒かくしていた）
+
+
+def pathfig_sprite(t, p):
+    """09-04：外の家から、お城の裏口まで点線がのびる（外からでも入れる入口）"""
+    W_, H_ = 900, 260; S2 = 2
+    im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 245))
+    IC.icon(d, "house", 130 * S2, 120 * S2, 70 * S2, NAVY); D.ctext(d, (130 * S2, 220 * S2), "家", D.font(40 * S2), NAVY)
+    IC.castle_logo(d, 770 * S2, 120 * S2, 70 * S2); D.ctext(d, (770 * S2, 220 * S2), "会社", D.font(40 * S2), NAVY)
+    d.rounded_rectangle((744 * S2, 128 * S2, 796 * S2, 190 * S2), radius=6 * S2, fill=(124, 100, 72, 255))     # 裏口
+    n = 0 if t < p["t_line"] else min(10, int((t - p["t_line"]) / 0.12) + 1)
+    for k in range(n):
+        x = (230 + k * 46) * S2; d.ellipse((x, 152 * S2, x + 16 * S2, 168 * S2), fill=(255, 138, 31, 255))
     return im.resize((W_, H_), Image.LANCZOS)
 
 
@@ -205,7 +234,8 @@ def fig92_sprite(t, p):
     if t >= p["t61"]: D.ctext(d, (240 * S2, 345 * S2), "出入口の機械 61件", D.font(40 * S2), (18, 140, 130))
     if t >= p["t19"]: D.ctext(d, (640 * S2, 345 * S2), "遠くから操作 19件", D.font(40 * S2), (214, 104, 0))
     if t >= p["t80"]:
-        d.rounded_rectangle((55 * S2, 88 * S2, 640 * S2, 300 * S2), radius=20 * S2, outline=RED + (255,), width=8 * S2)
+        pts = [(60, 90), (648, 90), (648, 247), (348, 247), (348, 300), (60, 300), (60, 90)]      # 3 段と 4 段目の 11 個（80 個）だけ（v1 の確認役：灰色まで囲っていた）
+        d.line([(x * S2, y * S2) for x, y in pts], fill=RED + (255,), width=8 * S2, joint="curve")
         D.ctext(d, (500 * S2, 420 * S2), "合わせて 80件", D.font(60 * S2), RED)
     return im.resize((W_, H_), Image.LANCZOS)
 
@@ -236,8 +266,9 @@ def remote_sprite(t, t0, p):
         x = (360 + k * 40) * S2; d.ellipse((x, 150 * S2, x + 14 * S2, 164 * S2), fill=(255, 138, 31, 255))
     if t >= p["ghost"]:   # 家の人の姿が、会社の机にうっすら重なる
         a_ = int(150 * min(1.0, (t - p["ghost"]) / 0.6))
-        d.ellipse((690 * S2, 255 * S2, 730 * S2, 295 * S2), fill=(90, 120, 168, a_)); d.rounded_rectangle((670 * S2, 290 * S2, 750 * S2, 330 * S2), radius=20 * S2, fill=(90, 120, 168, a_))
-        d.ellipse((170 * S2, 255 * S2, 210 * S2, 295 * S2), fill=(90, 120, 168, 255)); d.rounded_rectangle((150 * S2, 290 * S2, 230 * S2, 330 * S2), radius=20 * S2, fill=(90, 120, 168, 255))
+        for cx_, al_ in ((190, 255), (710, a_)):      # 画面の前に座る人の後ろ姿（頭と肩を大きく。v1 の確認役：台に見えた）。会社のほうはうすく重なる
+            d.ellipse(((cx_ - 34) * S2, 196 * S2, (cx_ + 34) * S2, 264 * S2), fill=(244, 160, 70, al_))
+            d.rounded_rectangle(((cx_ - 80) * S2, 252 * S2, (cx_ + 80) * S2, 330 * S2), radius=40 * S2, fill=(244, 160, 70, al_))
     return im.resize((W_, H_), Image.LANCZOS)
 
 
@@ -539,8 +570,10 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             cx = min(max(cx, spr.width / 2 + 20), 1260 - spr.width / 2)
             _paste(base, spr, cx + (off[0] + spr.width / 2), cy + (off[1] + spr.height / 2), k, a)
         elif kind == "bubble":
-            q = where(p["obj"], t)
-            if q is None or not (-20 <= q[0] <= 1300 and -20 <= q[1] <= 700): continue
+            q = p["pos"] if "pos" in p else where(p["obj"], t)
+            # 16本目 v1：寄りの絵で頭が画面の上にはみ出すと、吹き出しを出していなかった（01-03 のセールの吹き出しが一度も出なかった）。
+            #   頭が横にはみ出すときだけ出さず、上下は画面のふちに寄せて出す
+            if q is None or not (-60 <= q[0] <= 1340): continue
             spr, off = bubble_sprite(p["icon"])
             cx = min(max(q[0], spr.width / 2 + 10), 1270 - spr.width / 2); cy = min(max(q[1] - 40 - spr.height / 2, spr.height / 2 + 10), SUB_TOP - spr.height / 2)
             _paste(base, spr, cx, cy, k, a)
@@ -580,7 +613,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 else:
                     _paste(base, spr, q[0], max(60, q[1] - 130), k, a)
         elif kind == "tint":      # 想像の場面：少し青く暗く（本当の試しではないと分かるように）
-            base.alpha_composite(Image.new("RGBA", base.size, (40, 60, 120, int(80 * a))))
+            base.alpha_composite(Image.new("RGBA", base.size, (40, 60, 130, int(115 * a))))      # v1 の確認役：想像か本当か分かりにくい → 濃く
             spr, off = tag_sprite("もしも…", 44, WHITE)
             _paste(base, spr, 150, 70, 1.0, a)
         elif kind == "locator":
@@ -610,7 +643,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "mailcard":
             _paste(base, mailcard_sprite(), 640, 200, k, a)
         elif kind == "form":
-            _paste(base, form_sprite(t, p), 640, 250, k, a)
+            _paste(base, form_sprite(t, p), 420, 140, k, a)
+        elif kind == "pathfig":
+            _paste(base, pathfig_sprite(t, p), 640, 160, k, a)
         elif kind == "headlines":
             _paste(base, headlines_sprite(t, t0), 640, 270, 1.0, a)
         elif kind == "qmark":
@@ -632,7 +667,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "pip_clip" and frame_of:
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
-            im = im.convert("RGB").resize((400, 225), Image.LANCZOS)
-            fr = Image.new("RGBA", (412, 237), (255, 255, 255, 255)); fr.paste(im, (6, 6))
-            _paste(base, fr, 30 + 206, 25 + 118, k, a)
+            im = im.convert("RGB").resize((544, 306), Image.LANCZOS)      # v1 の確認役：小さくて中身が分からない（400×225 → 544×306）
+            fr = Image.new("RGBA", (556, 318), (255, 255, 255, 255)); fr.paste(im, (6, 6))
+            _paste(base, fr, 30 + 278, 25 + 159, k, a)
     return base
