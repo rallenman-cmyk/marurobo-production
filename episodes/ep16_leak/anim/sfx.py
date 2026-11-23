@@ -71,6 +71,11 @@ def make16(kind, sr):
         L_ = 0.5 if kind == "squeak" else 0.18
         y = y[int(0.3 * sr):int((0.3 + L_) * sr)].copy(); f_ = int(0.12 * sr); y[-f_:] *= np.linspace(1, 0, f_); y[:int(0.01 * sr)] *= np.linspace(0, 1, int(0.01 * sr))
         return (0.28 * y / (np.abs(y).max() + 1e-9)).astype(np.float32)
+    if kind == "zap":       # 2章：名札の絵が読めない形に変わる（じじっ）：短い雑音を 3 つ
+        x = np.zeros(int(0.35 * sr))
+        for d0 in (0.0, 0.11, 0.22):
+            c = _n(0.07, sr, 1500, 6000, a=0.0005, d=0.03); j = int(d0 * sr); x[j:j + len(c)] += c[:len(x) - j]
+        return (0.22 * x).astype(np.float32)
     if kind == "rattle":    # 2章：開かない扉を引く（ガタッ）：木の短い音を 2 つ
         x = np.zeros(int(0.3 * sr))
         for d0 in (0.0, 0.1):

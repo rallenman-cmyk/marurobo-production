@@ -63,6 +63,8 @@ def ev_list():
     add(max(w("12-08", "古い") - 0.1, s("12-08") + 0.45), e("12-08") + 0.4, "tag", dict(text="古いままの錠", obj="i_lock", dy=-110, size=48))
     add(w("12-08", "かんたん") - 0.1, e("12-08") + 0.4, "tag", dict(text="かんたんな鍵", obj="i_skey", dy=-200, size=48))
     add(w("12-08", "漏れた") - 0.1, e("12-08") + 0.4, "tag", dict(text="漏れた鍵", obj="i_key", dy=-110, size=48))
+    import overlays2 as OV2      # 2章（S13〜S17）
+    E += OV2.ev_list2()
     return E
 
 
@@ -74,6 +76,8 @@ def sfx_list():
     L.append((w("02-06", "知らない"), "swish", 0.35))      # 4 つが飛んでいく「ひゅっ」
     L.append((s("12-01") - 0.05, "rewind", 0.4))           # 時間を巻きもどす
     L.append((s("07-02") + 0.05, "swish", 0.3))            # 想像の場面から戻る「しゅっ」
+    import overlays2 as OV2
+    L += OV2.sfx_list2()
     return L
 
 
@@ -671,6 +675,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             _paste(base, remote_sprite(t, t0, p), 640, 290, k, a)
         elif kind == "rewind":
             base.alpha_composite(rewind_layer(t, t0))
+        elif kind.startswith("c2_"):
+            import overlays2 as OV2
+            OV2.draw2(kind, t, t0, p, base, where, _paste, k, a)
         elif kind == "pip_clip" and frame_of:
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue

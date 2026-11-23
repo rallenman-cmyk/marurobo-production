@@ -314,6 +314,7 @@ def b_out2(cl):
         for tt, st in ((-100.0, 2.4), (tk, 2.4), (tk + 0.2, 0.0)):
             b_.inputs["Emission Strength"].default_value = st; b_.inputs["Emission Strength"].keyframe_insert("default_value", frame=f(tt))
     track("castle_c", C_["gate"][0], 3.0)
+    gf = empty((GK[0], GK[1] - 5.0, 1.0)); track("gk_front", gf, 0.0)     # 門番さんの見ている先（15-06 の扇）
     return sh, M
 
 
