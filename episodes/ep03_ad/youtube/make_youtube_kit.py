@@ -10,10 +10,9 @@ SID = {e["no"]: e for e in json.load(open(os.path.join(EP, "voice", "script_v1_0
 SC = {}
 for p in P: SC.setdefault(SID[p["no"]]["scene"], max(0.0, p["start"] - 0.4))
 SC["S00"] = 0.0
-CH = [("S00", "冒頭　さっき話しただけなのに、テントの広告が？"), ("S05", "容疑者は3人"),
-      ("S06", "容疑者①　マイク　スマホの中に入って確かめる"), ("S10", "容疑者②　スマホから出ていく手がかり"),
-      ("S15", "容疑者③　わたしたちの記憶"), ("S17", "どんでん返し「会話を聞ける」と言った会社"),
-      ("S19", "事件のまとめ"), ("S21", "オチ　犯人は……")]
+CH = [("S00", "話しただけなのに、テントの広告が？"),   # 2026-11-23 ユーザー「もくじもう少しだけまとめて」：8 → 5 に
+      ("S06", "容疑者①　マイク"), ("S10", "容疑者②　スマホから出ていく手がかり"),
+      ("S15", "容疑者③　わたしたちの記憶"), ("S17", "どんでん返しと、犯人の答え")]
 def mmss(t): t = int(t + OFF + 0.5) if t else 0; return "%d:%02d" % (t // 60, t % 60)
 toc = "\n".join("%s %s" % (mmss(SC[s]), name) for s, name in CH)
 ev = json.load(open(os.path.join(EP, "animatic", "subs_events.json"), encoding="utf-8"))
