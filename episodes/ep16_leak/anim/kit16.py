@@ -225,6 +225,7 @@ def old_lock(loc, face=0.0, crack=True):
         rim = cyl(cm, (0, 0, 0), 0.016, 0.002, rot=(R(90), 0, 0), parent=hole, verts=24)
         blk = cyl(_m("hole_black", "#050404", rough=1.0), (0, -0.0006, 0), 0.012, 0.002, rot=(R(90), 0, 0), parent=hole, verts=24)
         for o in (rim, blk): o.hide_render = True
+        out["shackle"] = sh
         out["crack"] = cm; out["crack_objs"] = [o for _, o in grow] + [rim, blk]; out["crack_grow"] = [e_ for e_, _ in grow]; out["hole"] = hole
     return out
 

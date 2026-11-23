@@ -44,7 +44,8 @@ for k in range(sc.frame_start, sc.frame_end + 1, max(1, FPS // 10)):
         if not pts: continue
         if max((p - pts[0]).length for p in pts[::7]) < 0.05: continue       # 出る前・消えたあと（大きさ 0）は数えない
         lo = Vector([min(p[i] for p in pts) for i in range(3)]); hi = Vector([max(p[i] for p in pts) for i in range(3)])
-        for s in statics:
+        others = [o for k_, v_ in movers.items() if k_ != nm and not (set(v_) & set(ms)) for o in v_]   # 動く物どうし（扉と影の手など。v2 の確認役で見つかった）
+        for s in statics + others:
             bb = [s.matrix_world @ Vector(c) for c in s.bound_box]
             slo = Vector([min(c[i] for c in bb) for i in range(3)]); shi = Vector([max(c[i] for c in bb) for i in range(3)])
             if any(hi[i] < slo[i] or lo[i] > shi[i] for i in range(3)): continue

@@ -166,7 +166,8 @@ def _castle_common(night):
     hinge2 = empty((X_SIDE + HINGE_X, DOOR2_Y - DOOR_W / 2, 0.0))      # 1 つ目と同じ形（枠に入らない蝶つがい）
     cube(noise_mat("doorwood", "#7C6448", "#6A5440", 1.2, 0.85, wave=True), (-0.06, DOOR_W / 2 + 0.01, DOOR_H / 2 - 0.015), (0.08, DOOR_W - 0.05, DOOR_H - 0.03), parent=hinge2)
     lk2 = old_lock((0, 0, 0), face=90.0, crack=False); lk2["root"].parent = hinge2; lk2["root"].location = (0.026, DOOR_W - 0.14, 0.82)
-    track("door2", hinge2, 0.75); C_["door2"] = hinge2
+    d2c = empty((0, 0, 0)); d2c.parent = hinge2; d2c.location = (-0.06, DOOR_W / 2, DOOR_H / 2)
+    track("door2", d2c, 0.0); C_["door2"] = hinge2      # 扉のまん中（v2 の確認役：蝶つがいの端が画面の外で、開く音が鳴らなかった）
     return C_, gk
 
 
@@ -186,14 +187,18 @@ def b_castle(cl):
         a_ = t_c + 0.35 * k_
         key(g_, "scale", -100.0, (1, 1, 0.001), "CONSTANT"); key(g_, "scale", a_, (1, 1, 0.001)); key(g_, "scale", a_ + 0.6, (1, 1, 1))
     hl = C_["lock"]["hole"]; track("lockhole", hl, 0.0)
+    sk_ = C_["lock"]["shackle"]       # 「開けられてしまう」で錠の輪が外れる（v2 の確認役：開けられていないのに「開けられてしまう」）
+    key(sk_, "location", -100.0, (0, 0, 0.09), "CONSTANT"); key(sk_, "location", t_h + 0.3, (0, 0, 0.09)); key(sk_, "location", t_h + 0.8, (0, 0, 0.13))
+    key(sk_, "rotation_euler", -100.0, (R(90), 0, 0), "CONSTANT"); key(sk_, "rotation_euler", t_h + 0.8, (R(90), 0, 0)); key(sk_, "rotation_euler", t_h + 1.3, (R(90), 0, R(60)))
+    ev(t_h + 0.5, "click", 0.35, "lockhole")
     key(hl, "scale", -100.0, (0.001, 0.001, 0.001), "CONSTANT"); key(hl, "scale", t_h, (0.3, 0.3, 0.3)); key(hl, "scale", t_h + 1.2, (1.0, 1.0, 1.0)); key(hl, "scale", w("10-06", "残って"), (1.25, 1.25, 1.25))
     ev(t_c + 0.1, "crackle", 0.3, "lock")
     emit_key(cm, t_c, 3.0); emit_key(cm, w("10-05", "弱い所"), 6.0); emit_key(cm, e("10-06") + 0.3, 6.0); emit_key(cm, e("10-06") + 0.8, 3.0)
     # 10-07：もう 1 つの裏口（同じかべの先）。かんたんな形の鍵が差さって開く
     hinge2 = C_["door2"]
     sk = key_obj((X_SIDE + 0.6, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81), rot=(0, 0, R(180)), simple=True, s=1.4); track("skey", sk, 0.0)
-    t_k = w("10-07", "かんたんな") - 0.2
-    sk.scale = (0, 0, 0); key(sk, "scale", -100.0, (0, 0, 0), "CONSTANT"); pop_in(sk, t_k - 0.35, 1.4, 0.25)     # 鍵は 10-07 で出す（v1：初めから扉の横に浮いていた）
+    t_k = w("10-07", "かんたんな") + 0.15      # 言葉が来てから鍵を出す（v2 の確認役：0.6 秒早かった）
+    sk.scale = (0, 0, 0); key(sk, "scale", -100.0, (0, 0, 0), "CONSTANT"); pop_in(sk, t_k - 0.15, 1.4, 0.2)     # 鍵は 10-07 で出す（v1：初めから扉の横に浮いていた）
     key(sk, "location", -100.0, (X_SIDE + 0.6, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81), "CONSTANT")
     key(sk, "location", t_k, (X_SIDE + 0.6, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81)); key(sk, "location", t_k + 0.8, (X_SIDE + 0.34, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81))
     ev(t_k + 0.8, "click", 0.4, "skey")
@@ -239,7 +244,7 @@ def b_castle(cl):
 
 # ======================================================================== N：夜のお城（12）
 LEDGE = (X_SIDE + 1.55, DOOR_Y + 1.7)
-KX, KY, KA = X_SIDE + 0.92, DOOR_Y + 0.62, 18      # 12-05 で鍵を差すときの影の立つ所と腕の角度（鍵の先が錠に届く）
+KX, KY, KA = X_SIDE + 0.97, DOOR_Y + 0.62, 18      # 12-05 で鍵を差すときの影の立つ所と腕の角度（鍵の先が錠に届く）
 
 
 def b_night(cl):
@@ -266,10 +271,13 @@ def b_night(cl):
     key(sh.arm, "rotation_euler", t_in - 0.5, (R(-5), 0, 0)); key(sh.arm, "rotation_euler", t_in + 0.2, (R(KA), 0, 0))     # 腕を錠の高さへ下ろす
     ev(t_in + 0.5, "click", 0.45, "lock")
     hg = C_["door"]
-    t_op = t_in + 1.1
-    key(hg, "rotation_euler", t_op, (0, 0, 0)); key(hg, "rotation_euler", t_op + 1.8, (0, 0, R(-88))); ev(t_op, "creak", 0.4, "door")
+    t_op = t_in + 1.6
+    # 開ける前に、影は腕を引いて、扉の回る所の外へ下がる（v2 の確認役：開く扉が影の手と鍵を突き抜けた）
+    key(sh.arm, "rotation_euler", t_in + 0.8, (R(KA), 0, 0)); key(sh.arm, "rotation_euler", t_in + 1.2, (R(-60), 0, 0))
+    key(sh.root, "location", t_in + 0.8, (KX, KY, 0.0)); key(sh.root, "location", t_op, (X_SIDE + 0.85, DOOR_Y + 0.9, 0.0))
+    key(hg, "rotation_euler", t_op, (0, 0, 0)); key(hg, "rotation_euler", t_op + 1.8, (0, 0, R(-94))); ev(t_op, "creak", 0.4, "door")
     t_go = s("12-07") + 0.6
-    key(sh.root, "location", t_go, (KX, KY, 0.0)); key(sh.arm, "rotation_euler", t_go + 0.1, (R(-60), 0, 0)); key(sh.root, "location", t_go + 1.0, (X_SIDE + 0.9, DOOR_Y, 0.0))
+    key(sh.root, "location", t_go, (X_SIDE + 0.85, DOOR_Y + 0.9, 0.0)); key(sh.arm, "rotation_euler", t_go + 0.1, (R(-60), 0, 0)); key(sh.root, "location", t_go + 1.0, (X_SIDE + 0.9, DOOR_Y, 0.0))
     key(sh.root, "location", t_go + 2.2, (X_SIDE - 0.95, DOOR_Y, 0.0)); ev(t_go, "swish", 0.25, "shadow")
     pop_out(sh.root, t_go + 2.4, SHS, 0.2)
     # 12-08：3 つを並べる台（古いままの錠・かんたんな鍵・漏れた鍵）。12-09 で裏口がゆっくり閉まる
@@ -283,15 +291,16 @@ def b_night(cl):
         pop_in(o_, t_ - 0.15, o_.scale[0] if o_.scale[0] > 0.01 else 1.0); ev(t_ - 0.15, "pop", 0.3)
     for o_, s_ in ((k3, 1.4), (k4, 1.4)):
         pass
-    key(hg, "rotation_euler", w("12-09", "そこから"), (0, 0, R(-88))); key(hg, "rotation_euler", e("12-09") + 0.6, (0, 0, 0)); ev(e("12-09") + 0.5, "door_shut", 0.4, "door")
+    t_cl = w("12-09", "そこから") + 0.3      # 閉まり終わる時刻に「パタン」（v2 の確認役：音が 1.5 秒遅れ、章の終わりで切れた）
+    key(hg, "rotation_euler", t_cl, (0, 0, R(-94))); key(hg, "rotation_euler", t_cl + 1.4, (0, 0, 0)); ev(t_cl + 1.35, "door_shut", 0.4, "door")
     # 門番さんは正面を見たまま（12-06）。夜の虫の声
     ev(cl_t0(), "crickets", 0.25, "")
     # まるロボ：12-07 で石の台のかげからそっとのぞき、影が入ったあと、こっそりあとを追って中へ（台本 S12。v1 の確認役：夜の場面にまるロボがいなかった）
     M = MaruR((30.0, 30.0, 0.0), face=180.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
-    M.at(s("12-07") - 0.05, loc=(X_SIDE + 1.45, DOOR_Y + 0.62, 0.0), face=-135.0, interp="CONSTANT")
-    M.peer(s("12-07") + 0.2, 0.6)
-    M.walk(s("12-07") + 2.0, s("12-08") + 2.5, (X_SIDE + 0.9, DOOR_Y, 0.0))               # のぞいたあと、扉の正面へまわる（ななめに入ると枠に当たる）
-    M.walk(s("12-08") + 2.7, w("12-09", "そこから") - 0.3, (X_SIDE - 0.9, DOOR_Y, 0.0))   # こっそり中へ（12-09「そこから」で扉が閉まりはじめる前に入り終える）
+    M.at(s("12-06") + 0.3, loc=(X_SIDE + 0.8, DOOR_Y + 1.8, 0.0), face=-20.0, interp="CONSTANT")   # 扉のほうを向いて（face 0＝−y・−90＝−x）     # 石の台のかげ（v2 の確認役：影と重なって見えた）
+    M.peer(e("12-06") - 1.6, 0.8)                     # 12-06（門番さんの絵）のうちからのぞきはじめ、12-07 の頭でのぞいている
+    M.walk(s("12-07") + 1.3, s("12-08") - 0.6, (X_SIDE + 0.9, DOOR_Y + 0.18, 0.0))               # のぞいたあと、扉の正面へ（12-08 の台の絵より前に着く。v2 の確認役：台の絵の左はしに映った）
+    M.walk(s("12-09") + 0.2, w("12-09", "そこから") + 0.1, (X_SIDE - 0.9, DOOR_Y, 0.0))   # 12-09 で、こっそり中へ（扉が閉まりはじめる前に入り終える）
 
 
 def cl_t0():
@@ -379,10 +388,10 @@ CUTS = [
     ("B10", b_castle, s("10-01"), C((DX + 2.6, DOOR_Y + 1.9, 1.4), (DX + 0.2, DOOR_Y, 0.7), 30), "B"),   # まるロボが歩いてもどる道から離す（v1：カメラのすぐ前を横切った）
     ("B10b", b_castle, s("10-02"), C((DX + 0.75, DOOR_Y + 0.6, 0.95), (DX + 0.1, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), 36), "B"),
     ("B10c", b_castle, s("10-03"), C((DX + 2.4, DOOR_Y + 2.6, 1.4), (DX + 0.3, DOOR_Y + 0.5, 0.6), 30), "B"),
-    ("B10c2", b_castle, s("10-05"), C((DX + 1.3, DOOR_Y + 1.6, 0.55), (DX + 0.35, DOOR_Y + 0.6, 0.5), 30), "B"),   # 置きっぱなしの箱を手前に（v1：まるロボの頭で錠が隠れた）
+    ("B10c2", b_castle, s("10-05"), C((DX + 0.95, DOOR_Y + 1.25, 0.95), (DX + 0.1, DOOR_Y + 0.39, 0.82), 40), "B"),   # 錠に寄って、ひびが入り穴があくのを見せる（v2 の確認役：小さくて、まるロボの背中で隠れた）   # 置きっぱなしの箱を手前に（v1：まるロボの頭で錠が隠れた）
     ("B10d", b_castle, s("10-06"), C((DX + 0.75, DOOR_Y + 0.6, 0.95), (DX + 0.1, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), 36), "B"),
     ("B10e", b_castle, s("10-07"), C((DX + 2.2, DOOR2_Y + 1.4, 1.2), (DX + 0.2, DOOR2_Y, 0.8), 30), "B"),   # 錠の側から（v1：蝶つがいの側からだと、開いた扉で奥の暗がりが隠れた）
-    ("B10e2", b_castle, s("10-08"), C((DX + 2.4, DOOR2_Y + 0.6, 1.1), (DX + 0.1, DOOR2_Y + 0.1, 0.8), 32), "B"),
+    ("B10e2", b_castle, s("10-08"), C((DX + 3.4, DOOR2_Y - 1.3, 1.6), (DX + 0.3, DOOR2_Y - 0.9, 0.7), 30), "B"),   # 2 つの裏口とまるロボの引き（v2 の確認役：真っ黒な出入口が 8 秒続いた）
     ("B11", b_castle, s("11-01"), C((DX + 6.0, DOOR_Y - 4.0, 2.4), (DX, DOOR_Y, 1.0), 30, (DX + 5.6, DOOR_Y - 3.6, 2.3)), "B"),
     ("B11b", b_castle, s("11-10"), C((-4.5, -15.0, 3.2), (0.4, 0.0, 2.8), 30, (-4.2, -14.4, 3.1)), "B"),
     # 12（夜のお城）
