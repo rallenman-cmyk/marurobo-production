@@ -4,6 +4,9 @@
 #   ① Main の字幕の始まりを 1 枚ずつ、その時の文の声のファイルと比べる。
 #      文の頭（声の始まりから 0.2 秒以内）か、声の切れ目（声のない間 0.07 秒以上・言葉の切れ目で 6 dB 以上下がる谷）の 0.15 秒以内なら合う。
 #      ほかは「声の途中で切り替わる」（字幕が早い・遅い）。
+#   ①の続き（2026-11-23、9本目 v3。ユーザー「字幕のずれの治し方を繰り返さないようにルール化して」）：
+#      文の頭の字幕は、本当の声の頭（息を除く）から 0.25 秒以内。句読点のあとの字幕は、その句読点に当てはまる声の間（subs_pause_align）の終わりから 0.15 秒以内。
+#      句読点のない所で分けた字幕は、そこに 0.1 秒以上の声の間があること（ないなら「続けて読む所で分けた」）。どれも外れたら「ずれ」に数え、関所で止まる。
 #   ② 4 つ目に、字幕 1 枚ずつの声を聞き取った結果（各回の anim/sub_hear.py などが作る [{at, score}]）を渡すと、似ている度 0.8 未満の数も書く。
 #   <字幕.ass>.sync.json を作る。pre_upload_gate.py は、これがない・ずれが 1 つでもある・字幕が変わったあとの物なら不合格にする。
 import os, sys, re, json, wave, hashlib
@@ -62,13 +65,25 @@ for a, b, t in L:
     if p is None:
         nxt = [q for q in P if q["start"] > a]
         bad.append(dict(at=round(a, 2), text=t, why="声のない所で切り替わる（次の文の %.2f 秒前）" % ((nxt[0]["start"] - a) if nxt else 0))); continue
-    if a - p["start"] <= HEAD_TOL: continue
+    on = p["start"] + PA.onset(os.path.join(vdir, "line_%03d.wav" % p["no"]))
+    if a - p["start"] <= HEAD_TOL or a - on <= HEAD_TOL:
+        # 2026-11-23（9本目 v3 の点検。ユーザー「字幕のずれの治し方を繰り返さないようにルール化して」）：文の頭の字幕は、
+        #   文の声のファイルの頭ではなく、本当の声の頭（-40dB をこえる所、PA.onset）と比べる。頭に息があると 0.9 秒早く出ていた（37「出てきました！」）
+        d0 = a + 0.05 - on
+        if t.replace("\\N", "").startswith("……") and -0.85 <= d0 <= HEAD_TOL: continue     # 「……」でためる字幕は、声の前のためから出してよい
+        if abs(d0) > 0.25: bad.append(dict(at=round(a, 2), text=t, why="文の声の頭とずれる（%+.2f 秒。声の頭は %.2f）" % (d0, on)))
+        continue
     # 2026-11-23（9本目 v2「テロップの切り替わりが早い／遅い」11 件）：句読点のあとで替わる字幕は、その句読点に当てはまる声の本当の間
     # （subs_pause_align.py）の終わりと比べる。いちばん近い小さな谷に合っても、言葉の途中なら合格にしない
     tg = PA.target(p, t, os.path.join(vdir, "line_%03d.wav" % p["no"]))
     if tg is not None:
         if abs(a - tg) > TOL: bad.append(dict(at=round(a, 2), text=t, why="句読点のあとの声の間とずれる（%+.2f 秒。替えるのは %.2f）" % (a - tg, tg)))
         continue
+    # 2026-11-23（同上）：句読点のない所で分けた字幕は、そこに声の間（0.1 秒以上の無音）がなければ「続けて読む所で分けた」（2 行の 1 枚にまとめる）
+    #   言葉の中の小さな谷（「っ」の無音など）に合っても合格にしない（9本目 v3：「先へ進むように｜作られている」は 0.04 秒の無音だけだった）
+    sil, _ = PA.silences(os.path.join(vdir, "line_%03d.wav" % p["no"]), p.get("speed", 1.0))
+    if not any(e_ - s_ >= 0.10 and p["start"] + s_ - TOL <= a + 0.05 <= p["start"] + e_ + TOL for s_, e_ in sil):
+        bad.append(dict(at=round(a, 2), text=t, why="句読点も声の間もない所で分けている（続けて読む所。前と 2 行の 1 枚にまとめる）")); continue
     if p["no"] not in C: C[p["no"]] = cands(os.path.join(vdir, "line_%03d.wav" % p["no"]), p.get("speed", 1.0))
     tv = a + 0.05 - p["start"]                    # 字幕は声が出る 0.05 秒前に出す
     d = min([abs(tv - c) for c in C[p["no"]]] or [9.0])
