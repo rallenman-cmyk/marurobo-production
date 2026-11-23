@@ -17,7 +17,7 @@ PLANS = {
  # A（採用）左右の比べ：今のキーボード（QWERTY）と、同じ形の ABC 順のキーボード。比べる所を赤い丸で囲む（？は使わない）
  "A": ([("なぜ", "white"), ("キーボード", "bright yellow"), ("は", "white"), ("ABC順じゃない", "bright red"), ("?", "white")],
        "Two identical modern white keyboards side by side on the desk, seen from slightly above and in front, each large (each about 44% "
-       "of the width). LEFT keyboard: the normal layout, top letter row Q W E R T Y U I O P, middle row A S D F G H J K L, bottom row "
+       "of the width). LEFT keyboard: the normal layout, top letter row exactly 10 keys Q W E R T Y U I O P (the 7th key is U, NOT J), middle row A S D F G H J K L, bottom row "
        "Z X C V B N M. RIGHT keyboard: exactly the same shape and size, but the letters are in alphabetical order: top row A B C D E F G H I J, "
        "middle row K L M N O P Q R S, bottom row T U V W X Y Z. One red circle (ellipse) around Q W E R T Y on the left keyboard, one red circle "
        "around A B C D E F on the right keyboard. The small robot stands on the desk between the two keyboards at the bottom center (about 22% "
@@ -46,6 +46,33 @@ def prompt(name):
     return T.band_block(runs) + "\n" + STYLE + "\n" + scene + "\n\n" + ROBOT
 
 
+def finish(src, dst, target=170):
+    """帯の下の絵の明るさを決まりの幅（165〜180。thumbnail_rules.md）に寄せて、1280×720 の jpg にする。帯（上の黒い所）と字は変えない"""
+    import numpy as np
+    from PIL import Image
+    im = Image.open(src).convert("RGB").resize((1280, 720), Image.LANCZOS)
+    a = np.asarray(im).astype(float); L = a.mean(2)
+    band = max([y for y in range(288) if (L[y] < 45).mean() > 0.97] or [0]) + 1
+    Lm = lambda: (0.299 * a[band:, :, 0] + 0.587 * a[band:, :, 1] + 0.114 * a[band:, :, 2]).mean()
+    lum = Lm()
+    for _ in range(4):                     # 1 回では目標に届かないので、幅に入るまでくり返す
+        m = Lm()
+        if 165 <= m <= 180: break
+        a[band:] = 255 * (a[band:] / 255) ** (np.log(target / 255) / np.log(m / 255))
+    out = Image.fromarray(a.clip(0, 255).astype("uint8"))
+    from PIL import ImageEnhance
+    for _ in range(3):                     # 鮮やかさも決まりの幅（0.27〜0.31）へ。帯の下だけ
+        low = out.crop((0, band, 1280, 720)); sat = np.asarray(low.convert("HSV"), float)[..., 1].mean() / 255
+        if 0.27 <= sat <= 0.31: break
+        out.paste(ImageEnhance.Color(low).enhance(min(1.6, max(0.7, 0.29 / max(sat, 0.01)))), (0, band))
+    out.save(dst, quality=95)
+    print(dst, "帯", band, "明るさ %.0f → %.0f" % (lum, (0.299 * a[band:, :, 0] + 0.587 * a[band:, :, 1] + 0.114 * a[band:, :, 2]).mean()))
+
+
+if __name__ == "__main__" and sys.argv[1] == "finish":
+    for p in sys.argv[3:]:
+        finish(p, os.path.join(sys.argv[2], "ep07_" + os.path.basename(p).replace(".png", ".jpg")))
+    sys.exit()
 if __name__ == "__main__":
     out = sys.argv[1]; names = sys.argv[2:] or list(PLANS)
     os.makedirs(out, exist_ok=True)
