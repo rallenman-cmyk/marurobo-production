@@ -1,87 +1,127 @@
 # 文の中の句読点（、。？！……）を、声の本当の間（無音）に 1 つずつ当てはめる（2026-11-23、9本目 v2 のコメント「テロップの切り替わりが早い／遅い」11 件）
 #   v2 までは「字幕の切り替わりの近くにある、いちばん近い声の切れ目（小さな谷も入れる）」に合わせていた。
-#   そのため、文の区切りの長い間（0.5〜0.9 秒）ではなく、その手前の言葉の中の小さな谷に合わせてしまい、字幕が 1〜1.5 秒早く替わった
-#   （「上では消えて、下では出てくる。｜いったい…」が「出てくる」の途中で替わった）。関所の測り（subs_sync_check.py）も同じ見つけ方だったので、通ってしまった。
-#   ここでは：
-#     ① 声の無音（0.12 秒以上）を全部出す
-#     ② 文の句読点を、読みの長さの割合から出した時刻の順に、無音へ 1 対 1 で当てはめる（順番は入れかえない。間のない句読点もある）。
-#        「。？！……」は長い間になりやすいので、長い無音ほど当てやすくする
-#     ③ 句読点ごとに「その句読点のあとで声がまた出る時刻（無音の終わり）」を返す。字幕は、そこから 0.05 秒前に替える
-#   使い方：import subs_pause_align as PA;  PA.align(text, start, wav_path, speed=1.0) → [(句読点の字の位置（その字の次）, 無音の終わりの時刻 or None, 無音の長さ), ...]
-import wave
+#   そのため、文の区切りの長い間（0.5〜0.9 秒）ではなく、その手前の言葉の中の小さな谷に合わせてしまい、字幕が 1〜1.5 秒早く替わった。
+#
+#   2026-11-23 改め（9本目 v3 の点検。16本目の subs_mora.py の check で 6 枚ずれていた）：
+#   はじめの作り（声の大きさの最大から -38dB を無音・0.12 秒以上・字数の割合）は、
+#     ① 1 つの間が小さな音で 2 つに分かれ、前半の終わりに合わせた（「そろって、｜平らな床に」が 0.8 秒早い。3 枚）
+#     ② 0.08 秒の短い間を拾えず、残った 1 つの長い間を別の読点に当てた（「おじさんが、｜段を」が 1.1 秒早い）
+#     ③ 文の頭の息を声の頭と見た（「出てきました！」が 0.9 秒早い）
+#   → 16本目の pauses.py と同じ見つけ方にした：無音は決まった大きさ（-40dB）より小さい所・0.03 秒から、
+#     句読点の位置は「読み（かな）の長さ」の割合を「声の出ている時間だけ」に当てる。順番を守って 1 対 1 で当てはめる（間のない句読点もある）。
+#     長い間ほど句読点に当てやすく、「。？！」「……」はさらに。文の頭は onset()（-40dB をこえる最初の所）。
+#   使い方：import subs_pause_align as PA
+#     PA.align(text, start, wav) → [(句読点の字の位置（その字の次）, 間の終わりの時刻 or None, 間の長さ), ...]
+#     PA.target(line, sub_text, wav) → 字幕を替える時刻（声がまた出る 0.05 秒前） or None
+#     PA.onset(wav) → 声の頭（文の声のファイルの頭からの秒）
+import re, wave
 import numpy as np
 
 STRONG = "。？！?!…"
-PUNCT = "、。？！?!…"
+PUNCT = re.compile(r"……|…|[、。？！?!]")
+THR, HOP, MIN_SIL = -40.0, 0.01, 0.03
+try:
+    import pykakasi
+    _K = pykakasi.kakasi()
+except Exception:                      # pykakasi がないときは、字数で数える
+    _K = None
 
 
-def silences(wav, speed=1.0, min_len=0.12):
-    """文の声の中の無音（文の頭・終わりは除く）：[(始め, 終わり)]（文の声の頭からの秒）"""
+def kana_len(s):
+    s = re.sub(r"[「」『』（）\s　]", "", s)
+    # 数字は読むと長い（30＝さんじゅう、2024＝にせんにじゅうよ）。1 けたを かな 2.5 字として数える
+    #   （182「1分間に30メートル」：数字を 1 字と数えて読点の位置を後ろに見積もり、「いっぷん」の「っ」の無音に当てた）
+    s = re.sub(r"[0-9０-９]+", lambda m_: "ア" * int(2.5 * len(m_.group()) + 0.5), s)
+    if _K is None: return len(re.sub(r"[、。？！…]", "", s))
+    return sum(len(re.sub(r"[ゃゅょぁぃぅぇぉ、。？！…]", "", it["hira"])) for it in _K.convert(s))
+
+
+def _env(wav):
     with wave.open(wav) as w:
         sr, ch = w.getframerate(), w.getnchannels(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
     if ch > 1: x = x.reshape(-1, ch).mean(1)
-    hop = int(0.01 * sr); n = len(x) // hop
-    db = 20 * np.log10(np.sqrt((x[:n * hop].reshape(n, hop) ** 2).mean(1)) + 1e-9)
-    db = np.convolve(db, np.ones(3) / 3, mode="same")
-    sil = db < db.max() - 38
-    out = []; i = 0
-    while i < n:
-        if sil[i]:
-            j = i
-            while j < n and sil[j]: j += 1
-            if i > 0 and j < n and (j - i) * 0.01 >= min_len: out.append((i * 0.01 / speed, j * 0.01 / speed))
-            i = j
-        else: i += 1
-    return out, n * 0.01 / speed
+    n = int(HOP * sr); m = len(x) // n
+    db = 20 * np.log10(np.sqrt((x[:m * n].reshape(m, n) ** 2).mean(1)) + 1e-9)
+    return db > THR
 
 
-def _wt(u):
-    return sum(0.35 if ch in "…" else (0.6 if ch in "、。？！「」　" else 1.0) for ch in u)
+def onset(wav):
+    v = _env(wav); idx = np.where(v)[0]
+    return idx[0] * HOP if len(idx) else 0.0
 
 
-def align(text, start, wav, speed=1.0):
-    """句読点ごとの (位置, 無音の終わりの時刻, 無音の長さ)。当てはまらない句読点は (位置, None, 0)"""
-    S, dur = silences(wav, speed)
-    # 句読点（続く「……」「。」は 1 つにまとめる）。文の最後の句読点は数えない
-    P = []; k = 0
-    while k < len(text):
-        if text[k] in PUNCT:
-            j = k
-            while j < len(text) and text[j] in PUNCT: j += 1
-            if j < len(text.rstrip(PUNCT + "　 ")) + 0:
-                strong = any(c in STRONG for c in text[k:j])
-                P.append((j, dur * _wt(text[:j]) / max(1e-6, _wt(text)), strong))
-            k = j
-        else: k += 1
-    n, m = len(P), len(S)
-    INF = 1e9
-    # dp[i][j]：句読点 i 個・無音 j 個まで見たときの、いちばん小さい費用
+def silences(wav, speed=1.0, min_len=MIN_SIL):
+    """文の声の中の無音（頭と終わりは除く）：[(始め, 終わり)]、声の長さ"""
+    v = _env(wav); idx = np.where(v)[0]
+    if not len(idx): return [], len(v) * HOP
+    a, b = idx[0], idx[-1]; r = []; s = None
+    for i in range(a, b + 1):
+        if not v[i] and s is None: s = i
+        if v[i] and s is not None:
+            if (i - s) * HOP >= min_len: r.append((s * HOP / speed, i * HOP / speed))
+            s = None
+    # 0.1 秒以下の小さな音（息・口の音）で 2 つに分かれた間は、1 つの間にまとめる（182「エスカレーターは、｜いっぷんかんに」：
+    #   本当の間 0.73 秒＋0.1 秒の音＋0.21 秒が分かれ、「いっぷん」の「っ」の 0.06 秒の無音に読点を当てて、字幕が 0.2 秒おくれた）
+    m = []
+    for a_, b_ in r:
+        if m and a_ - m[-1][1] <= 0.105 / speed and (b_ - a_) >= 0.08 / speed and (m[-1][1] - m[-1][0]) >= 0.08 / speed: m[-1] = (m[-1][0], b_)
+        else: m.append((a_, b_))
+    return m, len(v) * HOP / speed
+
+
+def _marks(text):
+    """文の中の句読点（続く記号は 1 つ。文の最後は除く）：[(記号の次の位置, 記号)]"""
+    out = []
+    for m in PUNCT.finditer(text):
+        if out and m.start() == out[-1][0]: out[-1] = (m.end(), out[-1][1] + m.group()); continue
+        out.append((m.end(), m.group()))
+    return [o for o in out if text[o[0]:].strip("。？！?!…、　 」") != ""]
+
+
+def align(text, start, wav, speed=1.0, miss=0.50):
+    v = _env(wav); S, dur = silences(wav, speed)
+    mk = _marks(text)
+    if not mk: return []
+    voiced = np.cumsum(v) * HOP; total = voiced[-1] if len(voiced) else 1.0
+    seg = []; prev = 0
+    for p_, c_ in mk + [(len(text), "")]:
+        k_ = kana_len(text[prev:p_]); seg.append(max(k_, 4) if c_ in ("？", "！") or (p_ == len(text) and k_ <= 2) else k_); prev = p_
+    tot = max(1, sum(seg)); T = [sum(seg[:i + 1]) / tot * total for i in range(len(mk))]
+    Pv = [voiced[min(len(voiced) - 1, int(round(s * speed / HOP)))] for s, e in S]
+    n, m = len(mk), len(S); INF = 1e9
     dp = [[INF] * (m + 1) for _ in range(n + 1)]; bk = [[None] * (m + 1) for _ in range(n + 1)]
     for j in range(m + 1): dp[0][j] = 0.0
     for i in range(1, n + 1):
-        pos, est, strong = P[i - 1]
+        sym = mk[i - 1][1]
         for j in range(0, m + 1):
-            # 句読点 i を当てない（間のない読点。「。」で間がないのは珍しいので重く）
-            c = dp[i - 1][j] + (2.0 if strong else 1.0)
-            if c < dp[i][j]: dp[i][j] = c; bk[i][j] = ("skip", j)
-            # 無音 j を使わない（言葉の中の小さな無音）
-            if j > 0 and dp[i][j - 1] < dp[i][j]: dp[i][j] = dp[i][j - 1]; bk[i][j] = ("free", j - 1)
-            # 句読点 i を無音 j に当てる
-            if j > 0:
-                a, b = S[j - 1]; L = b - a
-                c = dp[i - 1][j - 1] + abs(b - est) - (1.0 if strong else 0.3) * min(L, 0.8)
-                if c < dp[i][j]: dp[i][j] = c; bk[i][j] = ("match", j - 1)
+            c = dp[i - 1][j] + miss
+            if c < dp[i][j]: dp[i][j], bk[i][j] = c, ("miss", j)
+            if j >= 1:
+                if dp[i][j - 1] < dp[i][j]: dp[i][j], bk[i][j] = dp[i][j - 1], ("skip", j - 1)
+                s, e = S[j - 1]; L = e - s
+                c = dp[i - 1][j - 1] + abs(Pv[j - 1] - T[i - 1]) - 0.5 * min(L, 0.6) \
+                    - (0.2 if any(ch in "。？！?!" for ch in sym) and L >= 0.2 else 0.0) - (0.6 if "…" in sym and L >= 0.4 else 0.0)
+                if c < dp[i][j]: dp[i][j], bk[i][j] = c, ("use", j - 1)
     res = [None] * n; i, j = n, m
     while i > 0:
         kind, jj = bk[i][j]
-        if kind == "match": res[i - 1] = S[jj]; i, j = i - 1, jj
-        elif kind == "skip": i, j = i - 1, jj
+        if kind == "use": res[i - 1] = S[jj]; i -= 1; j = jj
+        elif kind == "miss": i -= 1
         else: j = jj
-    return [(P[q][0], (start + res[q][1]) if res[q] else None, (res[q][1] - res[q][0]) if res[q] else 0.0) for q in range(n)]
+    # 当てはまらなかった句読点：前後の当てはまった間のあいだに残った間（0.05 秒以上）から、見積もりにいちばん近い物を当てる
+    #   （79「おじさんが、｜段を」：0.08 秒の短い間が、見積もりから少し離れていて当てられず、字幕が言葉の谷へ 0.43 秒早く替わった）
+    used = set(id(x) for x in res if x)
+    for q in range(n):
+        if res[q] is not None: continue
+        lo = max([res[r][1] for r in range(q) if res[r]] or [-1.0]); hi = min([res[r][0] for r in range(q + 1, n) if res[r]] or [1e9])
+        cand = [(abs(Pv[j_] - T[q]), S[j_]) for j_ in range(m) if lo <= S[j_][0] and S[j_][1] <= hi and S[j_][1] - S[j_][0] >= 0.05 and id(S[j_]) not in used]
+        if cand:
+            d_, best = min(cand, key=lambda x: x[0])
+            if d_ <= 0.8: res[q] = best; used.add(id(best))
+    return [(mk[q][0], (start + res[q][1]) if res[q] else None, (res[q][1] - res[q][0]) if res[q] else 0.0) for q in range(n)]
 
 
 def _nz(u):
-    import re
     return re.sub(r"\{.*?\}|\\N|[\s　]", "", u)
 
 
@@ -97,5 +137,5 @@ def target(line, sub_text, wav):
     key = (line["no"], wav)
     if key not in _CACHE: _CACHE[key] = align(t, line["start"], wav, line.get("speed", 1.0))
     for pos, tt, L in _CACHE[key]:
-        if pos == k: return None if tt is None else round(tt - 0.05, 3)
+        if pos <= k and t[pos:k].strip("　 「」") == "": return None if tt is None else round(tt - 0.05, 3)
     return None

@@ -182,6 +182,8 @@ for nm in ORDER:
     if nm not in LOG: continue
     for e_ in LOG[nm]["events"]:
         t, kind, gain = e_[:3]; src = e_[3] if len(e_) > 3 else ""
+        # 音は、その時刻を映しているクリップの記録からだけ取る（v3 の点検：1 場面だけ描き直すと、ほかの場面の記録に古い時刻の音が残り、ぺたっが 2 回鳴った）
+        if not (CL[nm][0] - 0.3 <= t <= CL[nm][1] + 0.3): continue
         if (round(t, 2), kind) in EV: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)

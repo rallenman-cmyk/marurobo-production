@@ -78,7 +78,8 @@ def fix(SUBS, P, vdir, MIN=2.02, CPS=7.9, log=print):
         t0 = nz(S[i][2])[:6]
         for q in P:
             if nz(q["text"]).startswith(t0) and abs(q["start"] - S[i][0]) < 3.0:
-                na = round(q["start"] - 0.05, 3)
+                # v3 の点検：文の声のファイルの頭ではなく、本当の声の頭（-40dB をこえる所）に。37「出てきました！」は頭に 0.9 秒の息があり、字幕が声より 0.9 秒早かった
+                na = round(q["start"] + PA.onset(os.path.join(vdir, "line_%03d.wav" % q["no"])) - 0.05, 3)
                 if abs(na - S[i][0]) > 0.12:                 # 0.12 秒までは今の作り（声の頭に出す）のまま
                     if S[i - 1][1] > na or abs(S[i - 1][1] - S[i][0]) < 0.06: S[i - 1][1] = na
                     log("SYNC 文の頭へ %7.2f → %7.2f  %s" % (S[i][0], na, S[i][2])); S[i][0] = na
@@ -130,6 +131,22 @@ def fix(SUBS, P, vdir, MIN=2.02, CPS=7.9, log=print):
         if _ok(S[k][0], S[k + 1][1], S[k][2] + "\\N" + S[k + 1][2], MIN, CPS):
             S[k] = [S[k][0], S[k + 1][1], S[k][2] + "\\N" + S[k + 1][2]]; del S[k + 1]; log("SYNC 聞き取りでまとめた %7.2f %s" % (S[k][0], S[k][2]))
         else: log("SYNC 聞き取りでまとめられない %s" % tx)
+    # 句読点のない所で分けていて、声に間がない（続けて読んでいる）1 枚は、前と 2 行の 1 枚にまとめる
+    #   （v3 の点検、16本目 subs_mora の check：123「先へ進むように｜作られている」は 0.04 秒の無音しかなく、言葉の途中で替わっていた）
+    i = 1
+    while i < len(S):
+        a = S[i][0]
+        p = next((q for q in P if q["start"] + 0.3 < a < q["end"] - 0.1), None)
+        if p is not None and S[i - 1][1] >= a - 0.06:
+            wav = os.path.join(vdir, "line_%03d.wav" % p["no"])
+            k = p["text"].find(_re.sub(r"\\N|[\s　]", "", S[i][2])[:6])
+            after_punct = k > 0 and p["text"][k - 1] in "、。？！…」　 "
+            sil, _ = PA.silences(wav, p.get("speed", 1.0))
+            gap = any(b_ - a_ >= 0.10 and p["start"] + a_ - 0.15 <= a + 0.05 <= p["start"] + b_ + 0.15 for a_, b_ in sil)
+            if not after_punct and not gap and _ok(S[i - 1][0], S[i][1], S[i - 1][2] + "\\N" + S[i][2], MIN, CPS):
+                S[i - 1] = [S[i - 1][0], S[i][1], S[i - 1][2] + "\\N" + S[i][2]]; del S[i]
+                log("SYNC 続けて読む所なのでまとめた %7.2f  %s" % (S[i - 1][0], S[i - 1][2])); continue
+        i += 1
     # 最後に、決まりに合わない 1 枚が残っていれば、となりとまとめる（文の頭を声の頭へ戻すと、前の 1 枚が 2 秒に足りなくなることがある）
     j = 0
     while j < len(S):
