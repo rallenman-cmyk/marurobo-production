@@ -51,7 +51,7 @@ BAND = {   # 案 → [(字, 色)]。物の名前は黄、おかしな所は赤�
  "C": [("わざと", "R"), ("打ちにくく", "Y"), ("した？", "W")],
 }
 MARKS = {}     # 絵の名前 → [("ok"|"ng"|"q", 中心x, 中心y, 大きさ)]（2560×1440。絵を見て決める）
-CIRCLES = {}   # 絵の名前 → [(中心x, 中心y, 半径)]（注目の赤い丸）
+CIRCLES = {"C_1": [(1220, 700, 360)]}   # 絵の名前 → [(中心x, 中心y, 半径)]（注目の赤い丸）
 ARROWS = {}    # 絵の名前 → [((x0, y0), (x1, y1), 曲げ)]
 RED2 = (240, 40, 40)
 
@@ -65,7 +65,8 @@ def q_mark(im, c, r=200):
     return Image.alpha_composite(Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10))), lay)
 
 
-FIT = {}   # 絵の名前 → 中身の上の端（高さの割合）。帯（17%）の下に入るよう縮め、左右は元の絵の端をのばす
+FIT = {}
+SHIFT = {"C_1": 0.16}   # C：2 本が交わる所（絵の上の端）が帯に隠れるので、絵を下へずらす（縮めると左右の端をのばした所が筋に見えた）   # 絵の名前 → 中身の上の端（高さの割合）。帯（17%）の下に入るよう縮め、左右は元の絵の端をのばす
 
 
 def fit_below(im, top, band_h=0.195):
@@ -81,7 +82,7 @@ def fit_below(im, top, band_h=0.195):
 #   4本目の thumbs04.py の band_text・grade と同じ作り（字の形は太さごとのファイルを使う）
 BAND_H = 0.185; BAND_GLYPH = 0.144; BAND_MAXW = 0.97; BAND_TRACK = -0.07; BAND_BOLD = 0.010; SQUEEZE_MIN = 0.80   # 太さ：決まりの 0.018 では「膳・転・続」の字がつぶれ、字の濃さが 0.59 で幅（0.45〜0.54）の外。0.010 で 0.47〜0.54
 BAND_COL = {"W": (255, 255, 255), "Y": (251, 254, 5), "R": (248, 3, 3)}
-GRADE = dict(sat=0.28, std=62.0, mean=173.0)   # 決まりの幅（鮮やかさ 0.27〜0.31・明るさ 165〜180）のまん中に入るよう、少しずらした
+GRADE = dict(sat=0.32, std=66.0, mean=173.0)   # 7本目：3D の絵は 0.28・62 で入れると 0.26・56 にとどまった（強めに当てる）   # 決まりの幅（鮮やかさ 0.27〜0.31・明るさ 165〜180）のまん中に入るよう、少しずらした
 
 
 def band_text(im, runs):
@@ -126,16 +127,16 @@ def grade(im):
         g = np.log(GRADE["mean"] / 255) / np.log(mn / 255)
         rgb = rgb.point([int(255 * (i / 255) ** g) for i in range(256)] * 3)
     sat, sd, mn = stats(rgb)
-    rgb = ImageEnhance.Color(rgb).enhance(min(2.0, max(0.7, GRADE["sat"] / max(sat, 0.01))))
+    rgb = ImageEnhance.Color(rgb).enhance(min(2.4, max(0.7, GRADE["sat"] / max(sat, 0.01))))
     sat, sd, mn = stats(rgb); print("絵の色 鮮やかさ %.2f 明暗の差 %.1f 明るさ %.1f" % (sat, sd, mn))
     return rgb.convert("RGBA")
 
 
 # 2026-11-23：絵の AI が使えない（前払いの残りなし・402）ので、絵は本編の 3D を Blender で描いた静止画（2560×1440 か 3840×2160）を使う。
 #   CROPS：絵の名前 → 切り抜く箱（元の絵の画素）。RECTS：赤い角丸の枠。LABELS：白い札（黒いふち）に色の字
-CROPS = {}
-RECTS = {}      # 絵の名前 → [(x0, y0, x1, y1)]（2560×1440）
-LABELS = {}     # 絵の名前 → [(字, 中心x, 中心y, 字の高さ, 字の色)]
+CROPS = {"B_1": (90, 84, 3780, 2160)}   # B は 3840×2160 で描き、2 台のキーボードが大きく入るよう少し寄る
+RECTS = {"A_1": [(190, 300, 1700, 590)]}      # 絵の名前 → [(x0, y0, x1, y1)]（2560×1440）
+LABELS = {"B_1": [("クワーティ", 600, 930, 150, (30, 110, 240)), ("ABC順", 1940, 930, 150, (240, 120, 20))]}     # 絵の名前 → [(字, 中心x, 中心y, 字の高さ, 字の色)]
 
 
 def label(im, text, c, px, col):
@@ -163,6 +164,8 @@ def band(choice):
         if key in CROPS: im0 = im0.crop(CROPS[key])
         im = im0.resize((W, H), Image.LANCZOS).convert("RGBA")
         if key in FIT: im = fit_below(im, FIT[key])
+        if key in SHIFT:
+            dy = round(H * SHIFT[key]); sh_ = Image.new("RGBA", (W, H), (0, 0, 0, 255)); sh_.paste(im.crop((0, 0, W, H - dy)), (0, dy)); im = sh_
         im = grade(im)
         for p0, p1, bend in ARROWS.get(key, []): im = T.arrow(im, p0, p1, bend=bend, w=46, col=RED2)
         for kind, mx, my, r in MARKS.get(key, []):
