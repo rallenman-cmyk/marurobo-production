@@ -18,11 +18,20 @@ def make16(kind, sr):
         return 0.22 * _mx(_n(0.02, sr, 800, 4000, a=0.0003, d=0.008), 0.5 * _t(1300, 1250, 0.04, sr, a=0.0003, d=0.015))
     if kind == "thud":      # 箱が地面に置かれる（とすっ）
         return 0.34 * _mx(_n(0.08, sr, 80, 900, a=0.001, d=0.05), 0.6 * _t(120, 90, 0.12, sr, a=0.001, d=0.06))
-    if kind == "creak":     # 木の扉が開く（ギィ）：音の高さがゆっくり揺れながら上がる
-        n = int(0.8 * sr); tt = np.arange(n) / sr; f = 380 + 160 * tt / 0.8 + 25 * np.sin(2 * np.pi * 7 * tt)
-        x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / sr)) * 0.35 + np.sin(2 * np.pi * np.cumsum(f) / sr)
-        env = np.minimum(1, tt / 0.05) * np.minimum(1, (0.8 - tt) / 0.2)
-        return (0.12 * x * env + 0.05 * _n(0.8, sr, 300, 2500, a=0.05, d=0.6)[:n]).astype(np.float32)
+    if kind == "creak":     # 木の扉がゆっくりきしむ（ギィィ…）。v1 のユーザー「ドアが開く SE おかしい・変えたい」→ 選んだのは「木の扉がゆっくりきしむ」
+        #   計算で作った音は「蒸気」「光線銃」に聞こえたので、作曲の AI（Lyria）に効果音として作らせ、聞き取りで 5 点の所を切り出した
+        #   （<作業>/stage/sfx/door_creak.wav。作り方は episodes/ep16_leak/README.md の「効果音」）
+        import wave as _w
+        p_ = os.path.join(os.environ.get("MARU_WORK", ""), "stage", "sfx", "door_creak.wav")
+        with _w.open(p_) as f_: y = np.frombuffer(f_.readframes(f_.getnframes()), np.int16).astype(np.float32) / 32768; r_ = f_.getframerate()
+        if r_ != sr: y = np.interp(np.arange(int(len(y) * sr / r_)) * r_ / sr, np.arange(len(y)), y).astype(np.float32)
+        return (0.9 * y / (np.abs(y).max() + 1e-9)).astype(np.float32)
+    if kind == "crackle":   # 錠にひびが入る（ピシッ、ピシッ）
+        x = np.zeros(int(0.5 * sr))
+        for i, d0 in enumerate((0.0, 0.18, 0.31)):
+            c = _mx(_n(0.03, sr, 2500, 9000, a=0.0002, d=0.008), 0.4 * _t(3200 - 400 * i, 2800, 0.03, sr, a=0.0002, d=0.01))
+            j = int(d0 * sr); x[j:j + len(c)] += c[:len(x) - j]
+        return (0.3 * x).astype(np.float32)
     if kind == "door_shut": # 扉が閉まる（パタン）
         return 0.36 * _mx(_n(0.1, sr, 100, 1800, a=0.0005, d=0.06), 0.7 * _t(150, 110, 0.15, sr, a=0.0005, d=0.08))
     if kind == "push":      # 体で門を押す（ぐっ）：低くこもった短い音

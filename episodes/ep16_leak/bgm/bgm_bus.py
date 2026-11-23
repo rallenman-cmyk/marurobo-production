@@ -1,7 +1,7 @@
 # 16本目（情報流出）の BGM。この回のために作った新しい曲（make_bgm.py。git には入れない）。作業フォルダの stage/bgm/bgm_h/m/s/b.mp3
 #   H（家）：S01〜S05（冒頭）／S30〜S32（家に戻る）／S40（オチ）
 #   M（調べる）：S06〜S11（お城を調べる・裏口・数の図）／S18〜S21（市場）／S27〜S29（ほかのドア）
-#   S（影）：S12〜S17（夜の影・運び出し・脅し）／S22〜S26（市場・つながる）／S33〜S35（輪）
+#   N（夜に忍ぶ）：S12〜S15（v2 から）／S（影）：S16〜S17（錠をかける・脅し）／S22〜S26（市場・つながる）／S33〜S35（輪）
 #   B（守る）：S36〜S39（自分でできること・まとめ）
 #   切り替え・大きさ・くり返しは 6本目の bgm_bus.py と同じ（3本目の make を使う）
 import os, importlib.util
@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _sp = importlib.util.spec_from_file_location("bgm_bus_ep03", os.path.join(HERE, "..", "..", "ep03_ad", "bgm", "bgm_bus.py"))
 B3 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(B3)
 
-PLAN = [("H", "S01"), ("M", "S06"), ("S", "S12"), ("H", "S30"), ("S", "S33"), ("B", "S36"), ("H", "S40")]
+PLAN = [("H", "S01"), ("M", "S06"), ("N", "S12"), ("S", "S16"), ("H", "S30"), ("S", "S33"), ("B", "S36"), ("H", "S40")]   # v2：S12〜S15（夜に忍びこむ・中を調べる）を N（そっと忍ぶ）に。v1 のユーザー「このbgm違うのにしたい」
 OFFSET = {("H", "S30"): 50.0, ("S", "S33"): 60.0, ("H", "S40"): 100.0}   # 同じ曲の 2 回目からは途中から
 RMS = 0.0076   # 7本目と同じ（声 -24 dB に合わせた大きさ）   # 7本目 v6：声を 4 dB 下げたので、曲も 4 dB 下げて差をそのままに（v5 まで 0.012）   # SKILL：新しい回は最初から 0.012（声より約 23 dB 下）
 _load0 = B3.load

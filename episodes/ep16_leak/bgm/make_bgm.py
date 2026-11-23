@@ -4,6 +4,7 @@
 #   M（調べる）：お城を調べる・裏口を見つける・数の図。好奇心のある、軽い探偵の感じ
 #   S（影）：夜のお城の影・かくれた市場・脅し。ひそやか。こわすぎない
 #   B（守る）：自分でできること・まとめ。明るく前向き（9章で使う）
+#   N（夜に忍ぶ）：S12〜S15 夜のお城（影が忍びこむ・中を調べる）。v1 のコメントで S から替えた
 import os, sys, json, base64, time, urllib.request
 
 COMMON = ("Instrumental background music for a cute, gentle science explainer video for all ages, starring a small round robot. "
@@ -15,6 +16,10 @@ PROMPTS = {
                   "pizzicato strings, soft marimba, light finger snaps, walking upright bass, about 100 BPM, curious and playful, not scary.",
     "S": COMMON + "A quiet night: a shadowy thief sneaks through a castle and a hidden market, sneaky and suspenseful but gentle for children: "
                   "muted plucked low strings, soft celesta, light ticking percussion, low warm synth pad, minor key, about 84 BPM, mysterious, never horror.",
+    # N（夜に忍ぶ）：v1 のユーザー「このbgm違うのにしたい」（S12 夜の裏口）→ 選んだのは「そっと忍ぶ感じ」：ピチカートと低い音で、こっそり・ひそひそ。こわすぎず少しユーモア
+    "N": COMMON + "Tiptoeing at night: a shadow quietly sneaks up to a castle back door and a little robot peeks from behind a wall. "
+                  "Sneaky cartoon-like tiptoe music: soft staccato pizzicato strings in short steps, low bassoon-like plucks, light woodblock ticks, "
+                  "brushed snare very soft, occasional celesta sparkle, minor key with a playful wink, about 96 BPM, secretive and a little humorous, never scary.",
     "B": COMMON + "A hopeful, bright resolution: the small robot changes all its door keys and feels safe again: soft piano, warm strings, "
                   "light claps, gentle ukulele, major key, about 104 BPM, uplifting and reassuring.",
 }

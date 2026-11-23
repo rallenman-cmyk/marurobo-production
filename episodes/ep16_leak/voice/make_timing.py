@@ -1,5 +1,5 @@
 # 声の長さ（lines.json）から、台本 json の start/end を作り直す（narration.py がこの時刻に置く）
-# 9本目（7本目から写した）。間の決まり（SKILL §3）：短い声のあと 0.8 秒／場面が変わる文の前 0.8 秒／「……」で始まる文の前 0.7 秒／前の文が「？」「……」で終わるとき 0.6 秒／ほか 0.4 秒
+# 9本目（7本目から写した）。16本目 v2 で間の決まりを替えた：同じ場面の中 0.6 秒／場面が変わる 0.9 秒／動きを見せる所は EXTRA（長い方）
 # MARU_WORK=<作業フォルダ> python3 make_timing.py
 import os, json, re
 W = os.environ["MARU_WORK"]
@@ -29,20 +29,13 @@ for e in L:
     d = V[str(e["no"])]["dur"]
     if prev is None:
         g = 0.0
-    elif e["id"] in EXTRA:
-        g = EXTRA[e["id"]]
-    elif e["id"] in BEEP:
-        g = BEEP[e["id"]]  # 合言葉（声に出さない）を「ピー」で鳴らす時間＋見張り番の反応
-    elif V[str(prev["no"])]["dur"] < 1.0:
-        g = 0.8  # 短い声（「……一瞬！」など）のあとは、字幕が 1 秒以上出るように
-    elif e["scene"] != prev["scene"]:
-        g = 0.8
-    elif e["text"].startswith("……"):
-        g = 0.7
-    elif re.search(r'[？?]$|……。?$', prev["text"]):
-        g = 0.6
     else:
-        g = 0.4
+        # 16本目 v1 のコメント「テロップとテロップの間のばらつきが大きい・たまに食い気味」：
+        #   同じ場面の中 0.6 秒・場面が変わる所 0.9 秒にそろえる（前は 0.4〜1.0 秒）。
+        #   動きを見せる所（EXTRA）は、これより短くしない（max をとる）
+        g = 0.9 if e["scene"] != prev["scene"] else 0.6     # 場面（＝台本の段落。番号の頭 2 けた）が変わる所 0.9 秒、同じ場面の中 0.6 秒
+    if e["id"] in EXTRA and prev is not None:
+        g = max(g, EXTRA[e["id"]])
     t += g
     e["start"], e["end"] = round(t, 3), round(t + d, 3)
     e.pop("gap_before", None)

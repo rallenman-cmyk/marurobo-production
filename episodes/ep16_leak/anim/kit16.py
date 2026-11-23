@@ -31,8 +31,10 @@ CD = 10.0          # 奥行き
 CH = 5.6           # かべの高さ
 GATE_W, GATE_H = 2.8, 3.6
 DOOR_Y = 3.2       # 裏口のまん中の y（右のかべ）
-DOOR_W, DOOR_H = 0.9, 1.45
+DOOR_W, DOOR_H = 1.05, 1.45      # 16本目 v2：0.9 → 1.05（はば 0.75 m のまるロボが、枠に当たらずに通れるように）
+HINGE_X = 0.12          # 蝶つがいの x（かべの面から。枠の前の面 0.11 より少し前）
 X_SIDE = CW / 2    # 右のかべの外の面の x
+DOOR2_Y = DOOR_Y + 3.2   # 2 つ目の裏口（10-07）。v1：1.7 では、08-02 の絵に 2 つの扉が並んで見えた
 CASTLE = {}
 
 
@@ -81,10 +83,17 @@ def castle(night=False):
     cube(st, ((CW / 2 + gx) / 2, 0.75, CH / 2), (CW / 2 - gx, 1.5, CH))
     cube(st, (0, 0.75, (GATE_H + CH) / 2), (GATE_W, 1.5, CH - GATE_H))
     # 横と奥のかべ・中の中庭の床（中は見せない）
-    cube(st, (X_SIDE - 0.75, CD / 2, CH / 2), (1.5, CD, CH))
+    # 右のかべは、2 つの裏口の所に本当の出入口をあけて組む（v1 のユーザー「泥棒が壁に貫通してる」：前は黒い板を貼っただけで、入ると石を突き抜けた）
+    ys = [0.0]
+    for yc in sorted((DOOR_Y, DOOR2_Y)): ys += [yc - DOOR_W / 2, yc + DOOR_W / 2]
+    ys.append(CD)
+    for k in range(0, len(ys) - 1):
+        y0, y1 = ys[k], ys[k + 1]
+        if k % 2 == 0: cube(st, (X_SIDE - 0.75, (y0 + y1) / 2, CH / 2), (1.5, y1 - y0, CH))                       # 柱の間のかべ（下まで）
+        else: cube(st, (X_SIDE - 0.75, (y0 + y1) / 2, (DOOR_H + CH) / 2), (1.5, y1 - y0, CH - DOOR_H))        # 出入口の上のかべ
     cube(st, (-X_SIDE + 0.75, CD / 2, CH / 2), (1.5, CD, CH))
     cube(st, (0, CD - 0.75, CH / 2), (CW, 1.5, CH))
-    cube(_m("court", "#8E8576", rough=0.9), (0, CD / 2, 0.02), (CW - 2, CD - 2, 0.04))
+    cube(_m("court", "#8E8576", rough=0.9), (0, CD / 2, 0.02), (CW - 3.1, CD - 3.1, 0.04))      # 中庭の床はかべの内側だけ（v2：通路の中まで来ていて、入る影が床に沈んだ）
     # 上のぎざぎざ（正面と右）
     for k in range(int(CW / 0.9)):
         x = -CW / 2 + 0.45 + k * 0.9
@@ -124,13 +133,15 @@ def castle(night=False):
         cube(_m("flag", "#C84B4B", rough=0.8), (sx * 3.2 + 0.32, -0.1, CH + 2.05), (0.6, 0.02, 0.38))
     # 裏口（右のかべの外の面。低い所の小さな木の扉。古い錠）
     door_wood = noise_mat("doorwood", "#7C6448", "#6A5440", 1.2, 0.85, wave=True)
-    hinge = empty((X_SIDE + 0.02, DOOR_Y - DOOR_W / 2, 0.0))      # 蝶つがい（扉の手前の端）。z 回りに開く
-    cube(door_wood, (0.04, DOOR_W / 2, DOOR_H / 2), (0.08, DOOR_W, DOOR_H), parent=hinge)
+    # 蝶つがいは枠の前の面（X_SIDE+0.11）に置き、扉の板はその内側（-0.09〜-0.01）に置く。v1 のユーザー「ドアが開く時扉が貫通してる」：
+    #   前は蝶つがいが板の裏の角にあり、開くと板の厚みが枠の柱に 0.08 m めりこんでいた。この形なら 90 度まで開いても柱に入らない
+    hinge = empty((X_SIDE + HINGE_X, DOOR_Y - DOOR_W / 2, 0.0))
+    cube(door_wood, (-0.06, DOOR_W / 2 + 0.01, DOOR_H / 2 - 0.015), (0.08, DOOR_W - 0.05, DOOR_H - 0.03), parent=hinge)
     for zz in (0.3, 1.15):
-        cube(_m("rust", "#6E4A2E", rough=0.8, metal=0.5), (0.09, DOOR_W / 2, zz), (0.02, DOOR_W - 0.08, 0.08), parent=hinge)
+        cube(_m("rust", "#6E4A2E", rough=0.8, metal=0.5), (-0.012, DOOR_W / 2 + 0.01, zz), (0.016, DOOR_W - 0.1, 0.08), parent=hinge)
     door_hole(DOOR_Y)
     CASTLE["door"] = hinge
-    lk = old_lock((X_SIDE + 0.16, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), face=90.0)
+    lk = old_lock((0.026, DOOR_W - 0.14, 0.82), face=90.0); lk["root"].parent = hinge      # 錠は扉の板に付ける（開くと一緒に動く。v1 は宙に残っていた）
     lk["root"].parent = hinge; lk["root"].location = (0.12, DOOR_W - 0.14, 0.82)
     CASTLE["lock"] = lk
     # 明かり
@@ -201,10 +212,20 @@ def old_lock(loc, face=0.0, crack=True):
     out = dict(root=root, crack=None, crack_objs=[])
     if crack:
         cm = mat("crack_glow", "#FF3B2F", rough=0.4, emit=0.001)
-        c = cube(cm, (0.035, -0.0315, 0.02), (0.006, 0.002, 0.07), rot=(0, R(25), 0), parent=root)
-        c2 = cube(cm, (0.05, -0.0315, -0.02), (0.005, 0.002, 0.04), rot=(0, R(-35), 0), parent=root)
-        for o in (c, c2): o.hide_render = True        # ふだんは見えない（弱い所を先に見せない）。10-05 で出す
-        out["crack"] = cm; out["crack_objs"] = [c, c2]
+        # ひび（v1 のユーザー「弱いところはヒビが入って穴が広がる感じにして」）：穴の所から 5 本のひびが順にのびる。
+        #   1 本ずつ、根もとの empty の z の大きさを 0 → 1 にしてのばす（out["crack_grow"]）。穴（黒い丸と赤いふち）は out["hole"] を大きくして広げる
+        HX, HZ = 0.035, 0.005
+        segs = [(HX, HZ, 25, 0.055), (HX, HZ, 160, 0.045), (HX, HZ, -60, 0.04), (HX, HZ, 95, 0.035), (HX + 0.02, HZ + 0.03, 55, 0.03)]
+        grow = []
+        for (x0, z0, ang, ln) in segs:
+            e_ = empty((x0, -0.0315, z0)); e_.parent = root; e_.rotation_euler = (0, R(ang), 0); e_.scale = (1, 1, 0.001)
+            o = cube(cm, (0, 0, ln / 2), (0.005, 0.002, ln), parent=e_); o.hide_render = True
+            grow.append((e_, o))
+        hole = empty((HX, -0.032, HZ)); hole.parent = root; hole.scale = (0.001, 0.001, 0.001)
+        rim = cyl(cm, (0, 0, 0), 0.016, 0.002, rot=(R(90), 0, 0), parent=hole, verts=24)
+        blk = cyl(_m("hole_black", "#050404", rough=1.0), (0, -0.0006, 0), 0.012, 0.002, rot=(R(90), 0, 0), parent=hole, verts=24)
+        for o in (rim, blk): o.hide_render = True
+        out["crack"] = cm; out["crack_objs"] = [o for _, o in grow] + [rim, blk]; out["crack_grow"] = [e_ for e_, _ in grow]; out["hole"] = hole
     return out
 
 
@@ -264,7 +285,10 @@ def shop_model(loc, s=1.0):
 
 def door_hole(yc):
     """裏口の奥の暗がり（扉が開くと見える）と、まわりの石の枠（少し出っぱる）。v1：開いても、うしろの石のかべが見えるだけだった"""
-    cube(_m("doorhole", "#121214", rough=1.0), (X_SIDE + 0.004, yc, DOOR_H / 2), (0.004, DOOR_W, DOOR_H))
+    # 出入口の中の暗い通路（かべの厚み 1.5 m の中。光を返さない黒）。奥の口は黒い板でふさぐ
+    dk = _m("doorhole", "#0A0A0C", rough=1.0)
+    for yy in (yc - DOOR_W / 2 + 0.01, yc + DOOR_W / 2 - 0.01): cube(dk, (X_SIDE - 0.75, yy, DOOR_H / 2), (1.5, 0.02, DOOR_H))
+    cube(dk, (X_SIDE - 0.75, yc, DOOR_H - 0.01), (1.5, DOOR_W, 0.02)); cube(dk, (X_SIDE - 0.75, yc, -0.01), (1.5, DOOR_W, 0.02)); cube(dk, (X_SIDE - 1.49, yc, DOOR_H / 2), (0.02, DOOR_W, DOOR_H))
     for (yy, zz, sy, sz) in ((yc - DOOR_W / 2 - 0.1, DOOR_H / 2, 0.2, DOOR_H), (yc + DOOR_W / 2 + 0.1, DOOR_H / 2, 0.2, DOOR_H), (yc, DOOR_H + 0.1, DOOR_W + 0.4, 0.2)):
         cube(_m("doorframe_st", "#9C9384", rough=0.85), (X_SIDE + 0.05 + (0.01 if sz < 0.5 else 0), yy, zz), (0.12 + (0.02 if sz < 0.5 else 0), sy, sz))
 

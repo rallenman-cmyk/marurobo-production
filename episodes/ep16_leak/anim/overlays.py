@@ -224,7 +224,8 @@ def fig92_sprite(t, p):
         for j_ in range(6):
             yy_ = (200 + j_ * 30) * S2; d.rounded_rectangle((480 * S2, yy_, (480 + [150, 120, 150, 100, 140, 90][j_]) * S2, yy_ + 12 * S2), radius=5 * S2, fill=GREY + (255,))
         if "t_co" in p and t >= p["t_co"]:      # 「泥棒に入られた会社に聞いて」：入られた会社（お城の印）が左右に並んでいく
-            m_ = min(8, int((t - p["t_co"]) / 0.25) + 1)
+            step_ = min(0.25, max(0.08, (p["t_fill"] - p["t_co"] - 0.6) / 8))     # 8 つを、マスが並び始める 0.6 秒前までに出し終える（v1：5 つ目が出た直後に図が替わり「右に何か一瞬」）
+            m_ = min(8, int((t - p["t_co"]) / step_) + 1)
             for i_ in range(m_):
                 cx_ = (150 + (i_ % 2) * 100) * S2 if i_ < 4 else (750 + (i_ % 2) * 100) * S2; cy_ = (150 + (i_ % 4 // 2) * 120) * S2
                 IC.castle_logo(d, cx_, cy_, 36 * S2)

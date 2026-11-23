@@ -97,6 +97,50 @@ def _split_tame(S):
         out.append(S[i]); i += 1
     return out
 SUBS = _split_tame(SUBS)
+# 16本目 v2（v1 のコメント「テロップの切り替わりが早い」2 件・「……え？」の 1 枚が遅い）：
+#   ① 1 枚の中で文が変わる字幕（「……え？\Nそれは、」）は、文の切れ目で分ける（字幕をまとめるのは同じ文の中だけ。SKILL）
+#   ② 字幕 1 枚ずつ、最初の言葉を声が言い始める 0.05 秒前に替える。続けて読んでいる所では分けない（subs_mora.py）
+#   ③ 2 秒に足りない 1 枚は、短い声（「……え？」など 8 字まで、1 秒以上）なら残して 字幕_ため.json に書き、ほかは同じ文のとなりとまとめる
+import re as _re
+import subs_mora as SM
+def _split_sent(S):
+    out = []
+    for a, c, t in S:
+        parts = [x for x in _re.split(r"(?<=[。？！])(?:\\N)?", t) if x.strip()]
+        if len(parts) == 1: out.append((a, c, t)); continue
+        L = sum(len(x) for x in parts); x0 = a
+        for x in parts:
+            x1 = x0 + (c - a) * len(x) / L; out.append((x0, x1, x.replace("\\N", ""))); x0 = x1
+    return out
+SUBS = _split_sent(SUBS)
+_SC = {e["no"]: e for e in json.load(open(os.path.join(HERE, "..", "voice", "script_v1_0.json"), encoding="utf-8"))}
+SUBS, SM_MOVED, SM_MERGED = SM.fix(SUBS, P, _SC, os.environ["MARU_VOICE"])
+TAME = []
+def _min2(S):
+    """2 秒に足りない 1 枚：短い 1 文（8 字まで・1 秒以上）は残す。ほかは同じ声（文の番号）の中のとなりとまとめる。声をまたいではまとめない"""
+    S = [list(x) for x in sorted(S)]
+    while True:
+        loc = SM._locate([tuple(x) for x in S], P); ch = False
+        for i, (a, c, t) in enumerate(S):
+            if c - a >= 2.0: continue
+            keep = len(t.replace("\\N", "")) <= 8 and c - a >= 1.0
+            if keep and _re.search(r"(？|！|……)$", t):          # ため・問いの短い 1 枚（「……え？」）は、答えと別の字幕のまま
+                TAME.append(t); continue
+            if keep and t.endswith("。") and (i + 1 >= len(S) or loc[i + 1] is None or loc[i] is None or loc[i + 1][0] != loc[i][0]):
+                TAME.append(t); continue                         # 1 つの声が短い 1 文だけ（「やっぱり、だめ。」）
+            for j in (i + 1, i - 1):
+                if not (0 <= j < len(S)) or loc[j] is None or loc[i] is None: continue
+                li = loc[i][0]; lj = loc[j][0]
+                if li != lj: continue                            # 声（文の番号）をまたいではまとめない
+                x, y = (S[j], S[i]) if j < i else (S[i], S[j])
+                tt = x[2] + ("\\N" if len(x[2].replace("\\N", "")) + len(y[2].replace("\\N", "")) > 25 else "") + y[2]
+                if tt.count("\\N") > 1 or any(len(z) > 25 for z in tt.split("\\N")): continue
+                S[min(i, j)] = [x[0], y[1], tt]; del S[max(i, j)]; ch = True; break
+            if ch: break
+        if not ch: return [tuple(x) for x in S]
+SUBS = _min2(SUBS)
+SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
+json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
 
@@ -271,7 +315,8 @@ with wave.open(os.path.join(tmp, "mix.wav"), "wb") as wv:
 
 # ---------------------------------------------------------------- 字幕の ASS
 def ts(x): x = math.floor(max(0.0, x - FROM) * 100 + 1e-6) / 100; return "%d:%02d:%05.2f" % (x // 3600, x % 3600 // 60, x % 60)   # 頭も終わりも 1/100 秒に切り捨て（四捨五入で 2.00 秒の字幕が 1.99 秒になった。9本目 v2）
-style = SJ.STYLE_MAIN      # 9本目：フォントは Noto Sans CJK JP（fontsdir の 700Bold に置いた物）
+style = SJ.STYLE_MAIN.replace("Noto Sans CJK JP", "Noto Sans JP")      # 16本目 v1 のユーザー「テロップのフォント違う」：この作業場所の 700Bold にあるのは Noto Sans JP（CJK と同じ字の形）。
+#   名前が合わないと、ffmpeg は別の字（丸い字）に置きかえていた。名前は fc-scan で調べた物を使う
 ass = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720", "", "[V4+ Styles]",
        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
        style, "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
@@ -283,6 +328,11 @@ json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-
 
 # ---------------------------------------------------------------- 絵（1 コマずつ組んで、ffmpeg へ流す）
 ffdir = os.path.join(FONTDIR, "700Bold")
+# 字幕のフォントが本当に置いてあるかを確かめる（無いと ffmpeg は黙って別の字にする。16本目 v1 のユーザー「テロップのフォント違う」）
+_fam = style.split(",")[1]
+_have = subprocess.run(["fc-scan", "--format", "%{family}\n"] + glob.glob(os.path.join(ffdir, "*.tt[fc]")) + glob.glob(os.path.join(ffdir, "*.otf")), capture_output=True, text=True).stdout
+if _fam not in [x.strip() for l in _have.splitlines() for x in l.split(",")]:
+    raise SystemExit("字幕のフォント「%s」が %s にない（あるのは %s）" % (_fam, ffdir, _have.split()))
 cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "%dx%d" % (WV, HV), "-r", str(FPS), "-i", "-",
        "-i", os.path.join(tmp, "mix.wav"), "-vf", "subtitles=%s:fontsdir=%s" % (os.path.join(tmp, "subs.ass"), ffdir),
        "-c:v", "libx264", "-preset", "veryfast", "-crf", "30", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-shortest", OUT]

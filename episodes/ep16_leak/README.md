@@ -9,3 +9,6 @@
 | `構成案_v1.md` | 構成案 v1（決定） |
 | `台本_v0_1.md`〜`台本_v0_4.md` | 台本（台本レビュー：作品 ID `MARU-LEAK`） |
 | `review_tool/` | 台本レビューに入れる版のデータと作る道具 |
+
+## 効果音（v2 から）
+- 扉がきしむ音（`anim/sfx.py` の creak）：計算で作った音は扉に聞こえなかったので、作曲の AI（Lyria 3.5）に「Foley sound effects only. No music…an old heavy wooden castle door slowly swinging open on rusty iron hinges, a long low creeeak…」と頼んで作り、最初の 1 回（1.0〜4.2 秒）を切り出した（聞き取りの採点 5/5「古い木の扉がきしみながらゆっくり開く音そのもの」）。置き場所は作業フォルダの `stage/sfx/door_creak.wav`（git に入れない）。
