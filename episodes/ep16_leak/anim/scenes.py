@@ -133,6 +133,7 @@ def b_table(cl):
         key(pp, "location", -100.0, (-0.36, -0.06, TZ + 0.05), "CONSTANT"); key(pp, "location", t_, (-0.36, -0.1, TZ + 0.05))
         key(pp, "location", t_ + 1.4, (-0.36 + 0.35 + 0.04 * k, -0.45 - 0.05 * k, TZ + 0.18 + 0.03 * (k % 2)))
         key(pp, "rotation_euler", t_, (0, 0, 0)); key(pp, "rotation_euler", t_ + 1.4, (R(30), R(20 * k), R(50)))
+        hide_key(pp, -100.0, False); hide_key(pp, e("02-03") + 1.0, True)      # 小窓が終わったら消す（v1：05 の机の場面で、宙に止まった紙が名札の前に映っていた）
     M = MaruR((0.02, 0.28, TZ), face=0.0, s=0.22); track("maru", M.body, 0.18); track("maru_top", M.body, 0.24)
     M.at(w("05-02", "お城"), look=-10)
     M.surprise(w("05-03", "名札") + 0.2)
@@ -149,6 +150,12 @@ def _castle_common(night):
     gk = gatekeeper(GK, 0.0, night); track("gk", gk.head, 0.0)
     dc = empty((0, 0, 0)); dc.parent = C_["door"]; dc.location = (0.06, DOOR_W / 2, DOOR_H / 2)     # 扉のまん中（赤い丸・？を置く。v1：蝶つがいの端に出ていた）
     track("gate", C_["gate"][0], 2.0); track("door", dc, 0.0); track("lock", C_["lock"]["root"], 0.0)
+    # もう 1 つの裏口（10-07 で開く）。昼も夜も同じ所にある（v1：昼の場面にだけあった）
+    door_hole(DOOR2_Y)
+    hinge2 = empty((X_SIDE + 0.02, DOOR2_Y - DOOR_W / 2, 0.0))
+    cube(noise_mat("doorwood", "#7C6448", "#6A5440", 1.2, 0.85, wave=True), (0.04, DOOR_W / 2, DOOR_H / 2), (0.08, DOOR_W, DOOR_H), parent=hinge2)
+    lk2 = old_lock((0, 0, 0), face=90.0, crack=False); lk2["root"].parent = hinge2; lk2["root"].location = (0.12, DOOR_W - 0.14, 0.82)
+    track("door2", hinge2, 0.75); C_["door2"] = hinge2
     return C_, gk
 
 
@@ -164,10 +171,7 @@ def b_castle(cl):
     for _c in C_["lock"]["crack_objs"]: hide_key(_c, -100.0, True); hide_key(_c, w("10-05", "弱い所") - 0.3, False); hide_key(_c, e("10-06") + 0.6, True)
     emit_key(cm, w("10-05", "弱い所") - 0.3, 2.0); emit_key(cm, w("10-05", "弱い所"), 6.0); emit_key(cm, e("10-06") + 0.3, 6.0); emit_key(cm, e("10-06") + 0.6, 2.0)
     # 10-07：もう 1 つの裏口（同じかべの先）。かんたんな形の鍵が差さって開く
-    hinge2 = empty((X_SIDE + 0.02, DOOR2_Y - DOOR_W / 2, 0.0))
-    cube(noise_mat("doorwood", "#7C6448", "#6A5440", 1.2, 0.85, wave=True), (0.04, DOOR_W / 2, DOOR_H / 2), (0.08, DOOR_W, DOOR_H), parent=hinge2)
-    lk2 = old_lock((0, 0, 0), face=90.0, crack=False); lk2["root"].parent = hinge2; lk2["root"].location = (0.12, DOOR_W - 0.14, 0.82)
-    track("door2", hinge2, 0.75)
+    hinge2 = C_["door2"]
     sk = key_obj((X_SIDE + 0.6, DOOR2_Y + DOOR_W / 2 - 0.14, 0.81), rot=(0, 0, R(180)), simple=True, s=1.4); track("skey", sk, 0.0)
     t_k = w("10-07", "かんたんな") - 0.2
     sk.scale = (0, 0, 0); key(sk, "scale", -100.0, (0, 0, 0), "CONSTANT"); pop_in(sk, t_k - 0.35, 1.4, 0.25)     # 鍵は 10-07 で出す（v1：初めから扉の横に浮いていた）
@@ -186,16 +190,17 @@ def b_castle(cl):
     M.push(w("06-05", "押して") + 1.25, 0.25); ev(w("06-05", "押して") + 1.4, "push", 0.4, "maru_c")    # 門に着いてから押す（歩きは 1.04 秒遅れて 146.2 秒に着く）
     M.at(s("06-07") + 0.2, face=180.0)
     t_hit = w("06-07", "体当たり") + 0.1
-    M.act(t_hit, "bonk"); ev(t_hit, "thump", 0.5, "gate")              # その場で体当たり → ゴツン
+    M.act(t_hit, "bonk"); ev(t_hit, "thump", 0.5, "maru_c")            # その場で体当たり → ゴツン（門の印の点は画面の外になるので、まるロボで見る）
     M.act(t_hit + 0.3, "tumble_back", lift=0.0); ev(t_hit + 0.35, "boing", 0.35, "maru_c")
     M.act(s("06-09") - 1.3, "get_up")
     M.shake(e("06-09") - 0.6)                                          # 門番の横まで歩かず、その場で「だめ」と首を振る
-    M.at(s("07-03") - 0.1, face=180.0)
+    M.at(s("07-03") - 0.1, face=-60.0)                               # 見る人のほうを向いて「どこから？」（v1：背中しか見えなかった）
     M.confused(w("07-03", "どこから") - 0.2)
     # 08：正面を見たまま → 「うしろです」でふり向いて驚く（移動はしない）→ 09 でカメラが裏口へ移る間に、裏口の前へ置き直す
     M.at(s("08-01"), face=180.0)
     M.at(s("08-03") + 0.2, face=170.0)
-    M.surprise(w("08-04", "うしろ") + 0.2)
+    M.at(w("08-04", "うしろ") - 0.2, face=-20.0)                       # ふり向いて（見る人の側へ）→ 驚く（v1：背中だけだった）
+    M.surprise(w("08-04", "うしろ") + 0.3)
     # 09：カメラが裏口に切り替わる所で、裏口の前に置き直す（カメラが変わるのでワープに見えない）
     M.at(s("09-01") - 0.05, loc=(X_SIDE + 0.72, DOOR_Y - 0.05, 0.0), face=-90.0, interp="CONSTANT")   # 08-04 の驚きが終わる 192.1 秒に効く。裏口のカットは 09-01 の 0.55 秒あとから（v1：カットの頭で、まるロボが急に現れた）
     M.at(e("09-01") + 0.1, look=15)
@@ -246,9 +251,11 @@ def b_night(cl):
     pop_out(sh.root, t_go + 2.1, 1.0, 0.2)
     # 12-08：3 つを並べる台（古いままの錠・かんたんな鍵・漏れた鍵）。12-09 で裏口がゆっくり閉まる
     cube(_stone(), (LEDGE[0], LEDGE[1], 0.4), (0.5, 1.3, 0.8))
-    l3 = old_lock((LEDGE[0], LEDGE[1] - 0.42, 0.88), face=90.0, crack=False); track("i_lock", l3["root"], 0.05)
-    k3 = key_obj((LEDGE[0] - 0.05, LEDGE[1] - 0.06, 0.82), rot=(0, 0, R(180)), simple=True, s=1.4); track("i_skey", k3, 0.02)
-    k4 = key_obj((LEDGE[0] - 0.05, LEDGE[1] + 0.34, 0.82), rot=(0, 0, R(180)), s=1.4); track("i_key", k4, 0.02)
+    l3 = old_lock((LEDGE[0], LEDGE[1] - 0.5, 0.88), face=90.0, crack=False)
+    track("i_lock", l3["root"], 0.05)
+    k3 = key_obj((LEDGE[0] - 0.05, LEDGE[1] - 0.2, 0.93), rot=(0, 0, R(90)), simple=True, s=1.8); track("i_skey", k3, 0.02)
+    k4 = key_obj((LEDGE[0] - 0.05, LEDGE[1] + 0.25, 0.93), rot=(0, 0, R(90)), s=1.8); track("i_key", k4, 0.02)
+    bpy.ops.object.light_add(type='POINT', location=(LEDGE[0] + 0.5, LEDGE[1], 1.6)); ll = bpy.context.object; ll.data.energy = 30; ll.data.shadow_soft_size = 0.3; ll.data.color = (1.0, 0.88, 0.68)   # 台の上を照らす（v1：夜で 3 つが暗くて見えにくかった。鍵は 1.4 → 1.8 倍にし、カメラに向ける）
     for o_, t_ in ((l3["root"], w("12-08", "古い")), (k3, w("12-08", "かんたん")), (k4, w("12-08", "漏れた"))):
         pop_in(o_, t_ - 0.15, o_.scale[0] if o_.scale[0] > 0.01 else 1.0); ev(t_ - 0.15, "pop", 0.3)
     for o_, s_ in ((k3, 1.4), (k4, 1.4)):
@@ -273,7 +280,7 @@ def b_imag(cl):
     t0 = s("07-01")
     for k in range(int((e("07-01") - t0) / 0.16)):
         key(sh.arm, "rotation_euler", t0 + k * 0.16, (R(-20 + (8 if k % 2 else -8)), 0, 0))
-    ev(t0 + 0.2, "typing", 0.35, "shadow")
+    ev(t0 + 0.7, "typing", 0.35, "shadow")      # 場面が重なって切りかわる 0.6 秒のあと
     for i, hg in enumerate(C_["gate"]):
         sx = -1 if i == 0 else 1
         key(hg, "rotation_euler", w("07-01", "破ります") - 0.2, (0, 0, 0)); key(hg, "rotation_euler", w("07-01", "破ります") + 0.6, (0, 0, R(-75 * sx)))
@@ -303,6 +310,8 @@ CUTS = [
     ("A02", b_house, s("02-01"), C((1.97, 0.4, 0.36), (1.95, 0.65, 0.0), 32), "A"),
     ("A02b", b_house, s("02-02"), C((2.7, 0.3, 0.5), (1.8, 0.62, 0.2), 30), "A"),
     ("A02c", b_house, s("02-05"), C((2.8, 0.25, 0.55), (1.8, 0.62, 0.18), 30, (2.65, 0.3, 0.5)), "A"),
+    ("A02b2", b_house, s("02-03"), C((2.6, -0.1, 0.75), (1.75, 0.62, 0.2), 30), "A"),      # 8 秒をこえる絵を文の切れ目で替える（v1 の点検）
+    ("A02c2", b_house, s("02-07"), C((2.4, 1.3, 0.55), (1.75, 0.62, 0.18), 30), "A"),
     ("A03", b_house, s("03-01"), C((2.6, -0.05, 0.55), (1.72, 0.62, 0.2), 28), "A"),      # きょろきょろが見える寄り（v1：遠くて首を振るのが見えなかった）
     ("A03b", b_house, s("03-02"), C((-0.5, -1.4, 1.2), (1.5, 0.6, 0.3), 30), "A"),
     ("A03c", b_house, s("03-03"), C((0.7, 0.62, 0.55), (3.0, 0.4, 0.55), 22), "A"),
@@ -326,19 +335,24 @@ CUTS = [
     ("B06g", b_castle, s("06-09"), C((0.5, -7.5, 1.6), (0.6, -1.0, 1.2), 28), "B"),
     ("I07", b_imag, s("07-01"), C((2.6, -5.2, 2.0), (0.3, -1.4, 1.6), 28), "I"),
     ("B07", b_castle, s("07-02"), C((0.5, -7.5, 1.6), (0.6, -1.0, 1.2), 28), "B"),
-    ("B07b", b_castle, s("07-03"), lambda t0: F((2.0, -0.6, 0.7), 30), "B"),
+    ("B07b", b_castle, s("07-03"), lambda t0: F((-2.2, -1.3, 0.75), 30), "B"),   # 左の横から（v1：右からだと門番さんの体でふさがれた）
     ("B08", b_castle, s("08-01"), C((3.0, -10.0, 3.5), (3.0, 0.0, 2.0), 26, (13.5, 1.0, 3.0), (DX, DOOR_Y, 1.0), d=4.5), "B"),
     ("B08b", b_castle, s("08-02"), C((DX + 2.6, DOOR_Y - 1.2, 1.0), (DX, DOOR_Y, 0.8), 30), "B"),
-    ("B08c", b_castle, s("08-03"), C((8.0, -6.0, 1.5), (0.0, -0.9, 0.6), 40), "B"),       # 角の塔の外から、門の前のまるロボ（v1：錠のアップになっていた）
+    ("B08c", b_castle, s("08-03"), C((5.0, -9.0, 1.6), (0.2, -0.9, 0.6), 45), "B"),       # 角の塔の外から、門の前のまるロボ（v1：錠のアップになっていた）
+    ("B08d", b_castle, s("08-04"), lambda t0: F((-0.9, -2.2, 0.8), 32), "B"),
     ("B09", b_castle, s("09-01") + 0.55, C((DX + 3.2, DOOR_Y - 2.4, 1.2), (DX + 0.6, DOOR_Y, 0.8), 30), "B"),
     ("B09b", b_castle, s("09-02"), lambda t0: F((2.3, -1.5, 0.75), 30), "B"),
+    ("B09b2", b_castle, s("09-03"), C((DX + 3.0, DOOR_Y - 1.4, 1.2), (DX + 0.5, DOOR_Y, 0.8), 30), "B"),
     ("B09c", b_castle, s("09-04"), C((DX + 12.0, DOOR_Y - 6.0, 9.0), (DX, DOOR_Y, 0.5), 30), "B"),
     ("B09d", b_castle, s("09-05"), C((DX + 2.0, DOOR_Y - 1.8, 1.1), (DX + 0.6, DOOR_Y + 0.2, 0.8), 30, (DX + 1.9, DOOR_Y - 1.6, 1.05)), "B"),
+    ("B09d2", b_castle, s("09-06"), C((DX + 1.4, DOOR_Y - 0.9, 1.0), (DX + 0.1, DOOR_Y, 0.75), 34), "B"),
     ("B10", b_castle, s("10-01"), C((DX + 2.8, DOOR_Y + 0.6, 1.3), (DX, DOOR_Y, 0.7), 30), "B"),
     ("B10b", b_castle, s("10-02"), C((DX + 0.75, DOOR_Y + 0.6, 0.95), (DX + 0.1, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), 36), "B"),
     ("B10c", b_castle, s("10-03"), C((DX + 2.4, DOOR_Y + 2.6, 1.4), (DX + 0.3, DOOR_Y + 0.5, 0.6), 30), "B"),
+    ("B10c2", b_castle, s("10-05"), C((DX + 1.3, DOOR_Y + 1.6, 0.55), (DX + 0.35, DOOR_Y + 0.6, 0.5), 30), "B"),   # 置きっぱなしの箱を手前に（v1：まるロボの頭で錠が隠れた）
     ("B10d", b_castle, s("10-06"), C((DX + 0.75, DOOR_Y + 0.6, 0.95), (DX + 0.1, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), 36), "B"),
-    ("B10e", b_castle, s("10-07"), C((DX + 2.2, DOOR2_Y - 1.6, 1.2), (DX + 0.2, DOOR2_Y, 0.8), 30), "B"),
+    ("B10e", b_castle, s("10-07"), C((DX + 2.2, DOOR2_Y + 1.4, 1.2), (DX + 0.2, DOOR2_Y, 0.8), 30), "B"),   # 錠の側から（v1：蝶つがいの側からだと、開いた扉で奥の暗がりが隠れた）
+    ("B10e2", b_castle, s("10-08"), C((DX + 2.4, DOOR2_Y + 0.6, 1.1), (DX + 0.1, DOOR2_Y + 0.1, 0.8), 32), "B"),
     ("B11", b_castle, s("11-01"), C((DX + 6.0, DOOR_Y - 4.0, 2.4), (DX, DOOR_Y, 1.0), 30, (DX + 5.6, DOOR_Y - 3.6, 2.3)), "B"),
     ("B11b", b_castle, s("11-10"), C((-4.5, -15.0, 3.2), (0.4, 0.0, 2.8), 30, (-4.2, -14.4, 3.1)), "B"),
     # 12（夜のお城）
@@ -347,7 +361,7 @@ CUTS = [
     ("N12c", b_night, s("12-05"), C((DX + 1.7, DOOR_Y - 0.6, 1.1), (DX + 0.2, DOOR_Y + 0.3, 0.85), 32), "N"),
     ("N12d", b_night, s("12-06"), C((0.6, -4.4, 1.6), (1.75, -1.1, 1.5), 34), "N"),
     ("N12e", b_night, s("12-07"), C((DX + 3.6, DOOR_Y - 1.8, 1.3), (DX + 0.4, DOOR_Y, 0.9), 30), "N"),
-    ("N12f", b_night, s("12-08"), C((LEDGE[0] + 1.4, LEDGE[1] - 0.2, 1.25), (LEDGE[0], LEDGE[1] - 0.05, 0.85), 34), "N"),
+    ("N12f", b_night, s("12-08"), C((LEDGE[0] + 1.6, LEDGE[1] - 0.1, 1.3), (LEDGE[0], LEDGE[1] + 0.05, 0.88), 32), "N"),
     ("N12g", b_night, s("12-09"), C((LEDGE[0] + 1.6, LEDGE[1] - 0.6, 1.3), (DX, DOOR_Y + 0.5, 0.8), 30, (DX + 4.0, DOOR_Y - 1.6, 1.8)), "N"),
     ("P09", b_pip_home, s("09-03") - 0.2, C((2.0, 0.1, 1.35), (2.0, 1.9, 0.95), 30), "A"),
 ]

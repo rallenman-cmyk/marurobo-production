@@ -128,9 +128,7 @@ def castle(night=False):
     cube(door_wood, (0.04, DOOR_W / 2, DOOR_H / 2), (0.08, DOOR_W, DOOR_H), parent=hinge)
     for zz in (0.3, 1.15):
         cube(_m("rust", "#6E4A2E", rough=0.8, metal=0.5), (0.09, DOOR_W / 2, zz), (0.02, DOOR_W - 0.08, 0.08), parent=hinge)
-    # 扉のまわりの石の枠（少し出っぱる）
-    for (yy, zz, sy, sz) in ((DOOR_Y - DOOR_W / 2 - 0.1, DOOR_H / 2, 0.2, DOOR_H), (DOOR_Y + DOOR_W / 2 + 0.1, DOOR_H / 2, 0.2, DOOR_H), (DOOR_Y, DOOR_H + 0.1, DOOR_W + 0.4, 0.2)):
-        cube(_m("doorframe_st", "#9C9384", rough=0.85), (X_SIDE + 0.05 + (0.01 if sz < 0.5 else 0), yy, zz), (0.12 + (0.02 if sz < 0.5 else 0), sy, sz))
+    door_hole(DOOR_Y)
     CASTLE["door"] = hinge
     lk = old_lock((X_SIDE + 0.16, DOOR_Y + DOOR_W / 2 - 0.14, 0.82), face=90.0)
     lk["root"].parent = hinge; lk["root"].location = (0.12, DOOR_W - 0.14, 0.82)
@@ -261,6 +259,13 @@ def shop_model(loc, s=1.0):
     cube(_m("shopdoor", "#8EC5E8", rough=0.2), (0, -0.101, 0.07), (0.08, 0.004, 0.12), parent=e)
     cube(_m("shoproof", "#7A5A40", rough=0.6), (0, 0, 0.215), (0.34, 0.24, 0.03), parent=e)
     return e
+
+
+def door_hole(yc):
+    """裏口の奥の暗がり（扉が開くと見える）と、まわりの石の枠（少し出っぱる）。v1：開いても、うしろの石のかべが見えるだけだった"""
+    cube(_m("doorhole", "#121214", rough=1.0), (X_SIDE + 0.004, yc, DOOR_H / 2), (0.004, DOOR_W, DOOR_H))
+    for (yy, zz, sy, sz) in ((yc - DOOR_W / 2 - 0.1, DOOR_H / 2, 0.2, DOOR_H), (yc + DOOR_W / 2 + 0.1, DOOR_H / 2, 0.2, DOOR_H), (yc, DOOR_H + 0.1, DOOR_W + 0.4, 0.2)):
+        cube(_m("doorframe_st", "#9C9384", rough=0.85), (X_SIDE + 0.05 + (0.01 if sz < 0.5 else 0), yy, zz), (0.12 + (0.02 if sz < 0.5 else 0), sy, sz))
 
 
 def castle_model(loc, s=1.0):
