@@ -57,7 +57,7 @@ for m, (a, c, t) in enumerate(SUBS):
     nx = SUBS[m + 1][0] if m + 1 < len(SUBS) else c
     ls = [p for p in P if p["start"] < max(c, nx) and p["end"] > a]
     jobs.append(dict(at=round(a, 2), text=t.replace("\\N", ""), lines=[p["no"] for p in ls],
-                     seg=tr[int(max(0, a - 0.05) * sr):int(min(nx, c + 0.3) * sr)]))
+                     seg=tr[int(max(0, a - 0.15) * sr):int(min(nx, c + 0.3) * sr)]))   # 頭は 0.15 秒前から（0.05 秒では「ぺ」の破裂が欠けて「でた」と聞こえた）
 print("聞き取る字幕", len(jobs), "枚", flush=True)
 CACHE = os.path.join(os.environ["MARU_WORK"], "sub_yomi_cache9.json")
 YC = json.load(open(CACHE, encoding="utf-8")) if os.path.exists(CACHE) else {}

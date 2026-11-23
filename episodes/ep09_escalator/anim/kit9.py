@@ -477,9 +477,14 @@ def _esc_helpers():
     def sticker(self, k, t_show):
         """段 k の踏む面の後ろの方に、まるロボの顔のシール（字のない絵：白い丸に青緑の目）"""
         st = self.steps[k]
-        d = cyl(mat("stk", "#F7F7F2", rough=0.4), (-0.27, -0.25, G.TREAD_DZ + 0.011), 0.075, 0.004, parent=st, verts=32)
-        cyl(mat("stk_eye", "#1FB8AC", rough=0.3, emit=0.6), (-0.27, -0.25, G.TREAD_DZ + 0.0135), 0.03, 0.002, parent=st, verts=24)
-        for ob in [d] + [c for c in st.children if c.name.startswith("Cylinder") and abs(c.location.z - (G.TREAD_DZ + 0.0135)) < 1e-4]:
+        # 9本目 v2 のコメント 2:27・2:47「シールが映像で見えるところに貼るようにして」：小さく（半径 7.5cm）、まるロボと同じ側（手前）に貼っていて、
+        # まるロボの体と手すりの壁に隠れた → 大きく（半径 11cm・ふちを紺）し、踏む面のまん中より奥へ（手前から見下ろすと、まるロボの横に見える）
+        X_, Y_ = -0.24, 0.10
+        rim = cyl(mat("stk_rim", "#1F3A5F", rough=0.4), (X_, Y_, G.TREAD_DZ + 0.010), 0.118, 0.003, parent=st, verts=40)
+        d = cyl(mat("stk", "#F7F7F2", rough=0.4), (X_, Y_, G.TREAD_DZ + 0.012), 0.11, 0.004, parent=st, verts=40)
+        cyl(mat("stk_eye", "#1FB8AC", rough=0.3, emit=0.6), (X_, Y_, G.TREAD_DZ + 0.0145), 0.045, 0.002, parent=st, verts=32)
+        hide_key(rim, -100.0, True); hide_key(rim, t_show, False)
+        for ob in [d] + [c for c in st.children if c.name.startswith("Cylinder") and abs(c.location.z - (G.TREAD_DZ + 0.0145)) < 1e-4]:
             hide_key(ob, -100.0, True); hide_key(ob, t_show, False)
         return d
 

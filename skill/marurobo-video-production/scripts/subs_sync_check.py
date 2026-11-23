@@ -8,6 +8,8 @@
 #   <字幕.ass>.sync.json を作る。pre_upload_gate.py は、これがない・ずれが 1 つでもある・字幕が変わったあとの物なら不合格にする。
 import os, sys, re, json, wave, hashlib
 import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import subs_pause_align as PA
 
 ass, plp, vdir = sys.argv[1], sys.argv[2], sys.argv[3]
 hearp = sys.argv[4] if len(sys.argv) > 4 else None
@@ -61,6 +63,12 @@ for a, b, t in L:
         nxt = [q for q in P if q["start"] > a]
         bad.append(dict(at=round(a, 2), text=t, why="声のない所で切り替わる（次の文の %.2f 秒前）" % ((nxt[0]["start"] - a) if nxt else 0))); continue
     if a - p["start"] <= HEAD_TOL: continue
+    # 2026-11-23（9本目 v2「テロップの切り替わりが早い／遅い」11 件）：句読点のあとで替わる字幕は、その句読点に当てはまる声の本当の間
+    # （subs_pause_align.py）の終わりと比べる。いちばん近い小さな谷に合っても、言葉の途中なら合格にしない
+    tg = PA.target(p, t, os.path.join(vdir, "line_%03d.wav" % p["no"]))
+    if tg is not None:
+        if abs(a - tg) > TOL: bad.append(dict(at=round(a, 2), text=t, why="句読点のあとの声の間とずれる（%+.2f 秒。替えるのは %.2f）" % (a - tg, tg)))
+        continue
     if p["no"] not in C: C[p["no"]] = cands(os.path.join(vdir, "line_%03d.wav" % p["no"]), p.get("speed", 1.0))
     tv = a + 0.05 - p["start"]                    # 字幕は声が出る 0.05 秒前に出す
     d = min([abs(tv - c) for c in C[p["no"]]] or [9.0])

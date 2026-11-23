@@ -966,15 +966,26 @@ class Plan:
 
     # ---------------------------------------------------------------- 6本目で足した動き（2026-11-17 ユーザー「ない動きを作るときは marumotion に足して、一覧にも書く」）
     #   どれも足は地面に着いたまま。胴を脚の付け根のまわりに大きく倒し（pitch・roll）、体を少し沈める（lift）。起きるまでそのまま
-    def tumble_back(self, label=None):
+    def tumble_back(self, label=None, lift=-0.04):
         """ころん（見上げすぎて後ろへ転ぶ）：かかとに体重 → 胴が後ろへ 80° 倒れて、背中から床に座りこむ（0.4秒・少し弾む）。
         目がくるっと回る（輪が小さく）。音：beep_surprise → land。起きるのは get_up()"""
         lid = self._lb(label); t0 = self.t
         self.event(t0, "beep_surprise", 0.7)
         self.layer(t0, t0 + 1.2, lambda t, t0=t0: {"pitch": -6.0 * hump(t, t0 + 0.42, 0.25), "lift": -0.015 * hump(t, t0 + 0.42, 0.22)})
-        self.tracks["pitch"].set(t0 + 0.05, 0.4, -80.0); self.tracks["lift"].set(t0 + 0.05, 0.4, -0.04)
+        self.tracks["pitch"].set(t0 + 0.05, 0.4, -80.0); self.tracks["lift"].set(t0 + 0.05, 0.4, lift)   # lift：9本目 v2 で足した（-0.04 では背中が床に 9cm めりこんだ。9本目は 0.05）
         self.tracks["gaze_pitch"].set(t0, 0.3, 20.0); self.tracks["iris"].set(t0 + 0.4, 0.3, -0.35)
         self.blinks.append((t0 + 0.45, "fast")); self.event(t0 + 0.45, "land", 2.0, fall=True)
+        self.t = t0 + 1.0; self._lb_end(lid); return self
+
+    def tumble_fwd(self, label=None):
+        """つんのめる（急に止まって前へ転ぶ）：体が前へ 80° 倒れて、顔から前に倒れこむ（0.35秒・少し弾む）。目がくるっと回る。
+        音：beep_surprise → land。起きるのは get_up()。9本目 v2（35-02「ガクンと急に止まったら」の想像の絵。コメント「転がる感じのイメージ映像に」）で足した"""
+        lid = self._lb(label); t0 = self.t
+        self.event(t0, "beep_surprise", 0.7)
+        self.layer(t0, t0 + 1.2, lambda t, t0=t0: {"pitch": 6.0 * hump(t, t0 + 0.38, 0.25), "lift": -0.015 * hump(t, t0 + 0.38, 0.22)})
+        self.tracks["pitch"].set(t0 + 0.02, 0.35, 80.0); self.tracks["lift"].set(t0 + 0.02, 0.35, -0.04)
+        self.tracks["gaze_pitch"].set(t0, 0.3, -20.0); self.tracks["iris"].set(t0 + 0.35, 0.3, -0.35)
+        self.blinks.append((t0 + 0.4, "fast")); self.event(t0 + 0.38, "land", 2.0, fall=True)
         self.t = t0 + 1.0; self._lb_end(lid); return self
 
     def lie_side(self, side=1, label=None):
