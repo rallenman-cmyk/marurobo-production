@@ -35,7 +35,7 @@ def ev_list():
     add(s("06-06"), e("06-06") + 0.2, "ring", dict(obj="comb_lo", r=60))
     add(w("07-02", "このしるし"), e("07-02") + 0.3, "sticker", dict(pos=(290, 170)))   # 左上へ（まん中だと、まるロボの頭に重なった。9本目 v2 の点検）
     add(s("07-04"), e("07-04") + 0.2, "ring", dict(obj="sticker", r=40))
-    add(w("08-03", "出てきました") + 0.1, e("08-03"), "bubble", dict(obj="maru_top", icon="!"))
+    add(s("08-03") + 0.9, e("08-03"), "bubble", dict(obj="maru_top", icon="!"))   # v3 の点検：この文は頭に 0.9 秒の息があり、字数の見積もり（w）では「！」が声より 0.8 秒早かった → 本当の声の頭（162.87 秒）に
     add(w("08-05", "輪"), e("08-06") + 0.3, "dotloop", dict(a="loop_lo", b="loop_hi"))
     add(w("08-06", "床の下"), e("08-06") + 0.3, "bubble", dict(obj="loop_mid", icon="?"))
     add(w("08-07", "なぜ") - 0.3, e("08-07") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
