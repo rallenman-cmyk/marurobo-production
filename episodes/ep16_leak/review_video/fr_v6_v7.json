@@ -1,0 +1,22 @@
+{
+ "created_at": "2026-11-24T18:00:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v6",
+ "to_version": "MARU-LEAK-v7",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwuud3ertuwc2bmo",
+   "comment_rev": 1,
+   "explain": "台本の案を質問の画面で見せ、選んでもらった「1段ずつ言う6文」にしました。1通目の逃げ道 → 予備の倉庫にも錠 → 元に戻せたら解決？ → 名札は盗まれたまま → 両方ふさぐ → 本物でもたくさん起きている、の6文で、図も1文で1段ずつ出ます。そのあと153件の数字へ移ります。",
+   "new_t": 294.2,
+   "new_t_end": 332.3,
+   "new_version_id": "MARU-LEAK-v7",
+   "original_t": 303.9,
+   "original_t_end": null,
+   "original_text": "ここ展開早いな、状況全然理解されない、必要に応じて台本出してもいいので",
+   "reason": ""
+  }
+ ]
+}
