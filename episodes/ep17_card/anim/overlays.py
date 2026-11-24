@@ -70,11 +70,11 @@ def ev_list():
     add(w("14-07", "検算") - 0.1, e("14-07") + 0.4, "tag", dict(text="検算の数字", obj="stile7", dx=-30, dy=-95, size=44, bg=ORANGE, fg=WHITE))
     # 3章（2026-11-24）：絵コンテ表の 3章。言葉に合わせる時刻は wp()（声の本当の間から）
     add(wp("15-11", "本当に") - 0.1, e("15-11") + 0.4, "qmark", dict(obj="pile", dy=-110, size=150))
-    add(s("16-05") - 0.05, e("16-05") + 0.4, "tag", dict(text="光の問い合わせ", obj="qball", dy=-90, size=48))   # 390px の点検：下の字幕と同じ文を上にも書いていた（決まり：上は単語・ラベルだけ）→ 光の玉の名前に
-    add(wp("16-08", "ブッブー") + 1.25, e("16-08") + 0.3, "xobj", dict(obj="drops", sz=100))   # 通しの点検：門の前に落ちた札が細くて、はじかれたと分かりにくかった
+    add(wp("16-04", "光の") - 0.05, e("16-05") + 0.4, "tag", dict(text="光の問い合わせ", obj="qball", dy=-90, size=48))   # 390px の点検：下の字幕と同じ文を上にも書いていた（決まり：上は単語・ラベルだけ）→ 光の玉の名前に
+    add(wp("16-08", "ブッブー") + 1.25, e("16-08") + 0.3, "xobj", dict(obj="drops", sz=100, dx=110))   # 通しの点検：門の前に落ちた札が細くて、はじかれたと分かりにくかった
     add(wp("16-12", "限らない") - 0.2, e("16-12") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(wp("17-08", "緑") - 0.05, e("17-08") + 0.3, "bubble", dict(obj="maru_top", icon="!"))
-    add(s("18-06") + 0.05, wp("18-07", "いなかった") + 0.3, "pip3", dict(clips=(("P05", s("05-01") + 2.0), ("P06", s("06-01") + 2.0), ("P07", s("07-01") + 2.0))))
+    add(wp("17-08", "通って") - 0.1, e("17-08") + 0.3, "bubble", dict(obj="maru_top", icon="!"))   # 17-08 の前半は緑の札の寄り（まるロボは映らない）
+    add(s("18-06") + 0.05, e("18-07") + 0.2, "pip3", dict(x_at=wp("18-07", "盗まれて") - 0.1, clips=(("P05", s("05-01") + 2.0), ("P06", s("06-01") + 2.0), ("P07", s("07-01") + 2.0))))   # 別の目の点検：18-06 で初めから × が付き、言っていることと逆だった → 「盗まれていなかった」の言葉で ×、文の終わりで消える
     add(s("18-09") + 0.05, e("18-11") + 0.3, "pip_clip", dict(clip="P18", src_t=s("18-09") + 0.05))
     add(wp("18-11", "クレジットマスター") - 0.1, e("18-11") + 0.4, "tag", dict(text="クレジットマスター", pos=(930, 110), size=56, bg=YEL))
     add(s("19-02") + 0.05, e("19-02") + 0.3, "pip_clip", dict(clip="P19", src_t=s("19-02") + 0.05))
@@ -702,6 +702,10 @@ def cycle_sprite(t, p):
         c = (138, 106, 72)
         d.rectangle((RX - 70 * S2, CY - 60 * S2, RX - 50 * S2, CY + 70 * S2), fill=c); d.rectangle((RX + 50 * S2, CY - 60 * S2, RX + 70 * S2, CY + 70 * S2), fill=c)
         d.rectangle((RX - 80 * S2, CY - 78 * S2, RX + 80 * S2, CY - 56 * S2), fill=c)
+        for j in range(8):          # しまの日よけ（お店の門と分かるように。別の目の点検：机に見えた）
+            d.rectangle((RX - 96 * S2 + j * 24 * S2, CY - 104 * S2, RX - 72 * S2 + j * 24 * S2, CY - 80 * S2), fill=(224, 106, 90) if j % 2 == 0 else (255, 255, 255))
+        d.rectangle((RX - 96 * S2, CY - 104 * S2, RX + 96 * S2, CY - 80 * S2), outline=(200, 90, 76), width=2 * S2)
+        d.rectangle((RX - 46 * S2, CY - 52 * S2, RX + 46 * S2, CY + 70 * S2), fill=(246, 232, 214))   # 門の中（お店の中の明るい床）
         D.ctext(d, (RX, CY + 128 * S2), "試す", D.font(52 * S2), NAVY)
     if t >= p["t_arr"]:      # 回る矢印（上：機械 → 門、下：門 → 機械）。0.6 秒でのびて、そのあと光の点が回る
         g = min(1.0, (t - p["t_arr"]) / 0.6); col = (52, 120, 230)
@@ -825,7 +829,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "xobj":
             q = where(p["obj"], t)
             if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= 720): continue
-            sz = p.get("sz", 60); _paste(base, xmark(sz), q[0], q[1], k, a)
+            sz = p.get("sz", 60); _paste(base, xmark(sz), q[0] + p.get("dx", 0), q[1] + p.get("dy", 0), k, a)
         elif kind == "sum":
             if "t2" in p and t >= p["t2"]:      # 次の場面では、小さくして空いている所へ（13-10：レジの画面を隠さない）
                 _paste(base, sum_sprite(t, p.get("lines2", p["lines"]), p.get("w2", 820)), p["x2"], p["y2"], k, a)   # 字は小さくしない（44 より小さいとスマホで読めない）
@@ -839,7 +843,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 if im is None: continue
                 im = imag_pip(im, 360, 203)
                 fr = Image.new("RGBA", (372, 215), (255, 255, 255, 255)); fr.paste(im, (6, 6))
-                fr.alpha_composite(xmark(150), (111, 32))
+                if p.get("x_at") is None or t >= p["x_at"]: fr.alpha_composite(xmark(150), (111, 32))   # 3章 18-06：「盗まれたと思っていた」では × を付けない（別の目の点検）
                 _paste(base, fr, 230 + i_ * 410, 190, k, a)
         elif kind == "qmark":
             if "pos" in p: cx, cy = p["pos"]

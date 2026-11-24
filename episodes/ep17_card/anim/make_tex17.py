@@ -135,7 +135,7 @@ slip("slip_red", SLIPS[1], col=(214, 44, 36))   # 通しの点検：うすい赤
 for i, n in enumerate(SLIPS[1:4]):
     register("reg_q%d" % i, n, "typing")
     register("reg_n%d" % i, n, "nocard")
-register("reg_hit", NUM, "ok")
+register("reg_hit", NUM, "ok"); register("reg_qhit", NUM, "typing")   # 17-06：当たりの札を入れて問い合わせ中（別の目の点検：1 枚目の番号の画面に戻っていた）
 
 
 def card_back(name, base):
