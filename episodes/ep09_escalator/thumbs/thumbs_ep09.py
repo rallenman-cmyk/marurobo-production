@@ -37,6 +37,24 @@ PLANS = {
        "everyday situation, nothing dangerous happening). A red circle around the comb teeth where they meet the step grooves. The small "
        "robot stands on the landing plate at the left, looking at the comb teeth with a curious wide-open eye (robot about 22% of the image "
        "height). " + ESC),
+
+ # 2026-11-24 ユーザー「階段はどこへ見たいな切り口でアングル変えてほしい、確かにって思えるような見せ方で」
+ # A3 横から：坂の階段 → 上で平らに → 床のすき間へ。段の流れを赤い矢印でなぞり、床の中は赤い ？ で隠す
+ "A3": ([("エスカレーター", "bright yellow"), ("の", "white"), ("階段はどこへ", "bright red"), ("?", "white")],
+       "Clean SIDE VIEW of the upper part of a station escalator, like a clear diagram but as a polished 3D render: on the left the steps "
+       "climb diagonally as a clear STAIRCASE shape; toward the right, at the top landing, the steps gradually flatten into a flat floor and "
+       "slide one by one into the narrow gap under the comb plate, where the solid floor begins. A big bold bright-red curved arrow follows "
+       "the steps along the staircase, over the top and dives down into the gap in the floor. Just below the floor surface after the arrow, "
+       "a big bright-red question mark on a white round badge (the inside of the floor is hidden, solid, NOT shown). The small robot rides on "
+       "one of the stair steps near the top, looking ahead at the gap with a wide-open eye (robot about 20% of the image height). " + ESC),
+ # A4 乗っている人の目線：上に着く直前に足もとを見下ろす。目の前の階段がたたまれて平らになり、くしの下へ。まるロボは手前の段
+ "A4": ([("エスカレーター", "bright yellow"), ("の", "white"), ("階段はどこへ", "bright red"), ("?", "white")],
+       "FIRST-PERSON VIEW of a rider just before reaching the top of a station escalator, looking down and forward: in the foreground the "
+       "steps are still a clear STAIRCASE (each step a riser and a tread), and ahead the steps fold down and become a flat floor, then slide "
+       "under the comb plate teeth and vanish into the floor at the landing. The black handrails run along both sides toward the landing. "
+       "The small robot stands on a step in the lower-center foreground, seen from behind and slightly from the side, its eye glowing, "
+       "looking at where the steps vanish (robot about 22% of the image height). A red circle around the line where the steps vanish under "
+       "the comb plate. " + ESC),
 }
 REFS = ["robot_front", "robot_34", "robot_side", "robot_antenna"]
 
