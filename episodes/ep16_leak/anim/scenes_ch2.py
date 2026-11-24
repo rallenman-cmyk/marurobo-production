@@ -11,6 +11,9 @@ def wv(i, word, occ=0):
     return _WT.get("%s|%s|%d" % (i, word, occ)) or w(i, word)
 D_ = dict(IDOORS)
 Y_ROOM = YB + WALL_T          # 部屋の入口側のかべの奥の面
+SH_SHELF = (D_["tags"] + 0.2, Y_ROOM + 2.2)     # 15-02 で名札を取る影の立つ所（棚の前）
+ARM_UP = -65.0      # 腕の角度は −で上がる（測った：+55 で手は 0.59 m、−25 で 0.91 m）
+TBOX_AT = (D_["tags"] - 0.35, Y_ROOM + 2.0, 0.0)
 
 
 def sh_key(sh, t, loc, face=None, interp="BEZIER"):
@@ -125,15 +128,17 @@ def b_in(cl):
     # 14-03：鍵束の寄り（影の手の中で光る）
     # 14-04：2 つの扉に赤い印（「こっそり」で 1 つ目、そのあと 2 つ目）。まるロボがびくっ
     tc = s("14-04")
-    t_m1 = wv("14-04", "こっそり") + 0.1; t_m2 = wv("14-04", "印") + 0.5
-    sh_key(sh, tc - 0.1, (D_["admin"] + 0.3, 0.2), 90.0, "CONSTANT"); sh_key(sh, tc - 0.05, (D_["tags"] - 1.3, 0.85), 90.0, "CONSTANT"); sh_key(sh, tc + 0.3, (D_["tags"] - 1.3, 0.85), 90.0)
-    sh_key(sh, t_m1 - 0.5, (D_["tags"], 0.85), 90.0)      # 確認役：0.4 秒で廊下の奥へワープして見えた
-    key(sh.root, "rotation_euler", t_m1 - 0.35, (0, 0, R(0 + 180))); key(sh.arm, "rotation_euler", t_m1 - 0.3, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_m1, (R(70), 0, 0))
+    # 確認役 2 回目：「こっそり」と「印」が 0.65 秒しか離れておらず、1 つ目の扉から 2 つ目の扉（2.6 m）へ 0.15 秒で移ってワープに見えた
+    #   → 1 つ目の印は「2つの部屋の扉に」の間に付け、2.2 秒かけて歩いて 2 つ目の扉へ。2 つ目は「印を付けました」
+    t_m1 = tc + 0.9; t_m2 = wv("14-04", "印") + 0.5
+    sh_key(sh, tc - 0.1, (D_["admin"] + 0.3, 0.2), 90.0, "CONSTANT"); sh_key(sh, tc - 0.05, (D_["tags"] - 0.3, 0.85), 180.0, "CONSTANT")
+    key(sh.arm, "rotation_euler", t_m1 - 0.3, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_m1, (R(70), 0, 0))
     key(sh.arm, "rotation_euler", t_m1 + 0.4, (R(5), 0, 0))
     for nm, tm in (("tags", t_m1), ("backup", t_m2)):
         mk = IN["mark_" + nm]; key(mk, "scale", -100.0, (0.001,) * 3, "CONSTANT"); key(mk, "scale", tm, (0.001,) * 3); key(mk, "scale", tm + 0.25, (1, 1, 1))
         ev(tm, "squeak2", 0.3, "door_" + nm); track("mark_" + nm, mk, 0.0)
-    sh_key(sh, t_m1 + 0.5, (D_["tags"], 0.85), 180.0); sh_key(sh, t_m2 - 0.4, (D_["backup"], 0.85), 180.0)
+    sh_key(sh, t_m1 + 0.5, (D_["tags"] - 0.3, 0.85), 180.0); key(sh.root, "rotation_euler", t_m1 + 0.75, (0, 0, R(90)))       # 進む向き（+x）を向いて歩く
+    sh_key(sh, t_m2 - 0.6, (D_["backup"] - 0.3, 0.85), 90.0); key(sh.root, "rotation_euler", t_m2 - 0.4, (0, 0, R(180)))
     key(sh.arm, "rotation_euler", t_m2 - 0.3, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_m2, (R(70), 0, 0)); key(sh.arm, "rotation_euler", t_m2 + 0.4, (R(5), 0, 0))
     # 14-05〜14-07：扉が開いて中を見せる（影は扉の前に立ったまま）→ 閉める
     door_key("tags", s("14-05") + 0.1, 0); door_key("tags", s("14-05") + 0.9, 85); door_key("tags", e("14-06") + 0.3, 85); door_key("tags", e("14-06") + 1.0, 0)
@@ -151,12 +156,14 @@ def b_in(cl):
     key(sh.arm, "rotation_euler", t_k2 - 0.6, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_k2, (R(40), 0, 0)); ev(t_k2 + 0.05, "click", 0.9, "door_tags")
     key(sh.arm, "rotation_euler", t_k2 + 0.5, (R(40), 0, 0)); key(sh.arm, "rotation_euler", t_k2 + 0.9, (R(-10), 0, 0))
     door_key("tags", t_k2 + 0.2, 0); door_key("tags", t_k2 + 1.2, 88); ev(t_k2 + 0.2, "squeak", 0.25, "door_tags")
-    sh_key(sh, t_k2 + 1.0, (D_["tags"] + 0.25, 0.75), 180.0); sh_key(sh, t_k2 + 1.6, (D_["tags"] + 0.15, 0.8), 180.0); sh_key(sh, e("15-01") + 0.6, (D_["tags"] + 0.2, Y_ROOM + 1.2), 180.0)     # 出入口を通って中へ
+    sh_key(sh, t_k2 + 1.0, (D_["tags"] + 0.25, 0.75), 180.0); sh_key(sh, t_k2 + 1.6, (D_["tags"] + 0.15, 0.8), 180.0); sh_key(sh, s("15-02") - 0.25, (D_["tags"] + 0.2, Y_ROOM + 1.2), 180.0)     # 出入口を通って中へ
     # 15-02：名札を箱につめる（3 枚が棚から箱へ）。箱は部屋の床
-    bx = tag_box((D_["tags"] - 0.5, Y_ROOM + 1.7, 0.0)); track("tbox", bx, 0.15)
-    sh_key(sh, s("15-02") - 0.2, (D_["tags"] + 0.2, Y_ROOM + 1.2), 0.0 + 180.0)
+    # 確認役 2 回目：手が棚に届かず（手から棚まで 1.2 m）、名札が棚から手へ、手から遠くの箱へ宙を飛んでいた
+    #   → 場面が替わる重なりで、影を棚の前（手が届く所）へ。手のすぐ近くの 3 枚を取り、箱は手を下ろした所の真下に
+    bx = tag_box(TBOX_AT); track("tbox", bx, 0.15)
+    sh_key(sh, s("15-02") - 0.06, (D_["tags"] + 0.2, Y_ROOM + 1.2), 180.0, "CONSTANT"); sh_key(sh, s("15-02") - 0.05, SH_SHELF, 180.0, "CONSTANT")
     tags = IN["tags_tags"]
-    pick = [tags[7 + 3], tags[7 + 1], tags[7 + 5]]      # 2 段目の 3 枚（1 枚目がまるロボの青緑）
+    pick = [tags[7 + 3], tags[7 + 2], tags[7 + 4]]      # 2 段目のまん中の 3 枚（1 枚目がまるロボの青緑）。手の前の 3 枚
     for k, tg in enumerate(pick):
         t0_ = s("15-02") + 0.2 + k * 0.8
         p0 = tuple(tg.location); r0 = tuple(tg.rotation_euler)
@@ -165,7 +172,7 @@ def b_in(cl):
         key(tg, "location", t0_ + 0.75, p1)
         IN.setdefault("_tag_hand", []).append((tg, t0_))       # 棚 → 手 → 箱（手の場所はあとで計る。確認役：名札が手を通らず勝手に飛んだ）
         key(tg, "rotation_euler", t0_, r0); key(tg, "rotation_euler", t0_ + 0.75, (0, 0, R(8 * k - 8)))
-        key(sh.arm, "rotation_euler", t0_ - 0.25, (R(-10), 0, 0)); key(sh.arm, "rotation_euler", t0_, (R(30), 0, 0)); key(sh.arm, "rotation_euler", t0_ + 0.55, (R(-25), 0, 0))
+        key(sh.arm, "rotation_euler", t0_ - 0.25, (R(-10), 0, 0)); key(sh.arm, "rotation_euler", t0_, (R(ARM_UP), 0, 0)); key(sh.arm, "rotation_euler", t0_ + 0.3, (R(ARM_UP + 10), 0, 0)); key(sh.arm, "rotation_euler", t0_ + 0.65, (R(40), 0, 0))
         ev(t0_ + 0.75, "paper", 0.3, "tbox")
         if k == 0: track("mytag", tg, 0.0)
     sc_ = 1.1 / SHS2 * 1.4
@@ -254,9 +261,17 @@ def b_in(cl):
     M.surprise(wv("15-04", "まるロボ") + 0.25)      # 場面が替わり終わってから（v1：替わる途中で、驚く音が鳴らなかった）
     M.at(e("15-05") + 0.6, loc=(40.0, -30.0, 0.0), interp="CONSTANT")
     tr = s("16-07")
-    M.at(tr - 0.3, loc=(D_["tags"] - 0.5, 0.05, 0.0), face=90.0, interp="CONSTANT")      # 錠のかかった扉の前を急ぐが、まるロボは遅い（1.4 m を 3.8 秒。向きを変えずに）。v2 の計画で 7 秒遅れた
-    M.walk(tr + 0.1, e("16-07") - 0.9, (D_["tags"] + 0.9, 0.1, 0.0))
-    M.sigh(e("16-07") - 0.8)       # 映っている間に（確認役：ため息が次の場面にかかった）
+    # 確認役 2 回目：「走り回る」のに 1 m 歩いて来るだけだった → 横から撮り、錠のかかった 2 つの扉の間を、ぴょんぴょん行って戻って、
+    #   最後の錠（予備の倉庫）の前でへたりこむ。1 回のぴょんは 0.7 m・0.65 秒（1 つの動きは 1.4 m まで）
+    xa, xb, yy = D_["tags"] + 0.2, D_["backup"] - 0.25, 0.45
+    M.at(tr - 0.3, loc=(xa, yy, 0.0), face=90.0, interp="CONSTANT")
+    M.path([(xa + 0.7, yy, 0.0), (xa + 1.4, yy, 0.0), (xb, yy, 0.0)], [tr + 0.55, tr + 1.2, tr + 1.85], silent=False)
+    M.at(tr + 2.0, face=270.0)
+    M.path([(xb - 0.7, yy, 0.0)], [tr + 2.75], silent=False)
+    M.at(tr + 2.9, face=90.0)
+    M.path([(xb, yy, 0.0)], [tr + 3.5], silent=False)
+    M.at(tr + 3.6, face=20.0)        # 予備の倉庫の錠を見上げる
+    M.sigh(tr + 3.75)       # 映っている間に（確認役：ため息が次の場面にかかった）
     M.at(e("16-07") + 0.9, loc=(40.0, -30.0, 0.0), interp="CONSTANT")
     M.at(s("17-01") - 0.5, loc=(ox + 0.8, oy + 0.5, 0.0), face=170.0, interp="CONSTANT")       # 持ち主の右うしろで見ている（確認役：持ち主の部屋の 36 秒、まるロボがいなかった）
     M.peer(wv("17-02", "元に") - 0.2, 1.2)
@@ -325,7 +340,7 @@ def b_out2(cl):
     M = MaruR((30.0, 30.0, 0.0), face=180.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
     M.at(s("15-07") - 0.3, loc=(X_SIDE - 0.9, DOOR_Y, 0.0), face=-90.0 + 180.0 - 180.0 + 90.0, interp="CONSTANT")
     M.walk(s("15-07") + 0.3, e("15-07") - 0.3, (X_SIDE + 0.9, DOOR_Y + 0.1, 0.0))      # 扉からまっすぐ出る（開いた扉の板に当たらない）
-    M.walk(s("16-01") + 0.0, e("16-01") + 0.4, (LG[0] - 0.25, LG[1] - 1.05, 0.0))     # 影が戻ってくる前に、台のかげへ（入りこみの点検：戻る影とぶつかった）
+    M.at(s("16-01") + 0.05, loc=(LG[0] - 0.25, LG[1] - 1.05, 0.0), interp="CONSTANT")     # 影が戻ってくる前に、台のかげへ。場面が替わる重なりの中で置き直す（確認役 2 回目：映らない所を歩く足音が、影の場面で鳴った）
     # 16-02 の驚く動きは外した（まるロボは台のかげで、16-02 の絵に映らない。音だけ鳴らないように）
     # 16-08：窓の明かりが 1 つずつ消える（正面のかべに窓を 6 つ足す。1 つずつ別の材質）
     for k in range(6):
@@ -414,7 +429,7 @@ CUTS2 = [
     ("D16b", b_in, s("16-04"), C((D_["tags"] + 0.6, 0.15, 1.3), (D_["tags"] + ID_W / 2 - 0.25, YB, 1.15), 30), "D"),     # 印と錠が入る（確認役：×が上で切れた）
     ("D16c", b_in, s("16-05"), C((3.9, -0.7, 1.45), (3.9, YB, 1.05), 22), "D"),
     ("D16d", b_in, s("16-06"), C((D_["backup"] + 0.55, 0.15, 0.55), (D_["backup"] + 0.2, YB, 1.05), 28), "D"),
-    ("D16e", b_in, s("16-07"), C((D_["tags"] + 2.7, -0.75, 1.15), (D_["tags"] + 0.3, 0.6, 0.65), 28), "D"),     # 前から、錠のかかった扉の前を急ぐまるロボの顔（確認役：下で見切れて何をしているか分からない）
+    ("D16e", b_in, s("16-07"), C(((D_["tags"] + D_["backup"]) / 2, -1.35, 1.15), ((D_["tags"] + D_["backup"]) / 2, YB, 0.75), 17), "D"),     # 横から、錠のかかった 2 つの扉と、その間を行き来するまるロボ（確認役 2 回目：走り回っていない・字幕が目に重なる）
     ("O16c", b_out2, s("16-08"), C((-4.5, -15.0, 3.2), (0.4, 0.0, 3.0), 30), "O"),
     ("M16", b_morning, s("16-10"), C((3.5, -14.0, 2.4), (0.0, -2.0, 1.4), 30), "M"),
     ("D16f", b_in, s("16-11"), C((D_["hall2"] - 1.3, -0.9, 1.6), (D_["tags"] - 0.3, 1.3, 1.1), 24), "D"),

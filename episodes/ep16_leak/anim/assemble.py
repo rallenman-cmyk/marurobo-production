@@ -242,6 +242,7 @@ gp = np.pad(g.astype(np.float64), (kk // 2, kk - kk // 2), mode="edge"); cs_ = n
 g = ((cs_[kk:] - cs_[:-kk]) / kk)[:N].astype(np.float32)
 # 効果音（クリップのログを合わせ、同じ物は 1 つに）
 EV = {}
+EVSRC = {}      # 映っている物が鳴らす音（扉・箱・紙など）。声と重なっても時刻をずらさない（16本目 2章の確認役：鍵の「カチャ」を声のすき間へ 0.6 秒ずらし、扉の動きとずれた）
 def _seen(src, t):
     """鳴らした物（track の名前）が、時刻 t に映っているクリップの画面の中にあるか。src + "_f"（足もと）があれば、どちらかが入っていればよい"""
     if _seen1(src + "_f", t): return True
@@ -265,6 +266,7 @@ for nm in ORDER:
         if not _act or max(_act, key=lambda q: q[1])[0] != nm: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
+        if src: EVSRC[(round(t, 2), kind)] = src
 for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴らす音（絵の物の記録にない音）
     EV[(round(t_, 2), k_)] = g_
 # 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）
@@ -282,7 +284,9 @@ _env = np.abs(voice[:_m * _hop]).reshape(_m, _hop).max(1) > 0.02
 _env = np.convolve(_env.astype(float), np.ones(5), mode="same") > 0      # 前後 0.04 秒の余白
 voiced = lambda t0, t1: _env[max(0, int(t0 * SR) // _hop):max(0, int(t1 * SR) // _hop + 1)].any()
 motor_on = []
+FINAL = []      # 本当に鳴らした音（時刻・種類・大きさ・鳴らした物）。点検で、絵の動きと比べる
 for (t, kind), gain in sorted(EV.items()):
+    t0_ev = t
     if kind == "motor_on": motor_on.append(t); continue
     if kind == "motor_off":
         if motor_on:
@@ -296,7 +300,7 @@ for (t, kind), gain in sorted(EV.items()):
     if x is None: continue
     x = x.astype(np.float32) * gain
     dur = len(x) / SR
-    if kind in SHIFT and voiced(t, t + dur):
+    if kind in SHIFT and (round(t, 2), kind) not in EVSRC and voiced(t, t + dur):
         best = None
         win = 0.9 if kind in ("pipi", "click") else 0.5     # 返事の「ピッ、ピッ」・バンパーのカチッは、言葉の「……」の間まで探す
         for d_ in np.arange(-win, win + 0.01, 0.02):
@@ -306,12 +310,14 @@ for (t, kind), gain in sorted(EV.items()):
     i = int(t * SR)
     if i < 0: continue
     fx[i:i + len(x)] += x[:N - i]
+    if gain > 0: FINAL.append((round(t, 2), kind, round(float(gain), 3), EVSRC.get((round(t0_ev, 2), kind), "")))
 # 16本目：駅の環境音（9本目の床の音）は使わない。夜の虫の声などは効果音（crickets）で鳴らす
 bed = 0.0
 mix = voice + music * g + fx * FX_GAIN + bed
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)
 tmp = os.path.splitext(OUT)[0] + "_tmp"; os.makedirs(tmp, exist_ok=True)
+json.dump([x for x in FINAL if FROM - 1 <= x[0] <= TO + 1], open(os.path.join(tmp, "sfx_final.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 with wave.open(os.path.join(tmp, "mix.wav"), "wb") as wv:
     wv.setnchannels(1); wv.setsampwidth(2); wv.setframerate(SR); wv.writeframes((mix[a0:a1] * 32767).astype(np.int16).tobytes())
 

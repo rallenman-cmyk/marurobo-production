@@ -177,7 +177,7 @@ def scramble_sprite(t, p):
     d.rounded_rectangle((cx - wd / 2 + b, cy - h / 2 + b, cx + wd / 2 - b, cy + h / 2 - b), radius=int(wd * 0.05), fill=(255, 255, 255, 255))
     for i, ((fx, fy), kd) in enumerate(zip(((-0.22, -0.16), (0.22, -0.16), (-0.22, 0.18), (0.22, 0.18)), ("face", "house", "phone", "mail"))):
         x, y = cx + fx * wd, cy + fy * wd
-        if k < (i + 1) / 4.0:
+        if k < 0.06 + i / 4.0:      # 「じじっ」と同時に 1 つ目から崩れる（確認役 2 回目：音より 1 秒遅れて崩れはじめた）
             IC.icon(d, kd, x, y, wd * 0.1, NAVY)
         else:
             for j in range(7):       # 記号のかたまり（字ではない線と点）
@@ -342,7 +342,7 @@ def sfx_list2():
     L.append((wv("14-11", "壊れても") - 0.1, "crackle", 0.3))              # スマホが割れる「ピシッ」
     L.append((wv("14-11", "元どおり") - 0.4 + 1.0, "pop", 0.35))           # 写真が戻る「ぽん」
     L.append((wv("14-13", "元に戻せる") - 0.5 + 1.2, "pop", 0.3))
-    L.append((wv("16-09", "読めない") - 0.6, "zap", 0.25))                 # 読めない形に変わる「じじっ」
+    L.append((wv("16-09", "読めない") - 0.6 + 0.08, "zap", 0.25))                 # 読めない形に変わる「じじっ」
     for k in (0, 1): L.append((wv("17-09", ("逃げ道", "両方")[k]) - 0.1, "thud", 0.25))
     return L
 
