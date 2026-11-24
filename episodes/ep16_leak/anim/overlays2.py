@@ -116,9 +116,12 @@ def shelves_sprite(t, p):
 
 
 def _arrow(d, x0, y0, x1, y1, col):
-    d.line((x0 * S2, y0 * S2, x1 * S2, y1 * S2), fill=col + (255,), width=12 * S2)
-    sg = 1 if x1 > x0 else -1
-    d.polygon([(x1 * S2, y1 * S2), ((x1 - sg * 26) * S2, (y1 - 20) * S2), ((x1 - sg * 26) * S2, (y1 + 20) * S2)], fill=col + (255,))
+    """矢印。矢じりは線の向きに合わせ、大きく（v7 のコメント「矢印の先が潰れてて分かりにくい」2 件：矢じりが横向きの小さな三角のままで、ななめの線では先がつぶれて見えた）"""
+    L = math.hypot(x1 - x0, y1 - y0) or 1; ux, uy = (x1 - x0) / L, (y1 - y0) / L; nx, ny = -uy, ux
+    hl, hw = 40, 30                                   # 矢じりの長さ・半分のはば
+    bx, by = x1 - ux * hl, y1 - uy * hl
+    d.line((x0 * S2, y0 * S2, bx * S2, by * S2), fill=col + (255,), width=12 * S2)
+    d.polygon([(x1 * S2, y1 * S2), ((bx + nx * hw) * S2, (by + ny * hw) * S2), ((bx - nx * hw) * S2, (by - ny * hw) * S2)], fill=col + (255,))
 
 
 def _phone(d, cx, cy, h, photo=True, crack=False, dark=False):
@@ -224,7 +227,7 @@ def pip_lockcoin_sprite():
     for i, (dx, dy) in enumerate(((-30, 25), (30, 25), (0, -25))):
         cx, cy = (120 + dx) * S2, (150 + dy) * S2; r = 46 * S2
         d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(240, 190, 60, 255), outline=(190, 140, 30, 255), width=5 * S2)
-    _arrow(d, 210, 150, 290, 150, NAVY)
+    _arrow(d, 200, 150, 318, 150, NAVY)
     d.rounded_rectangle((330 * S2, 40 * S2, 470 * S2, 260 * S2), radius=10 * S2, fill=(110, 80, 52, 255))
     d.rounded_rectangle((375 * S2, 150 * S2, 425 * S2, 195 * S2), radius=6 * S2, fill=RED + (255,))
     d.arc((382 * S2, 100 * S2, 418 * S2, 138 * S2), 180, 360, fill=(160, 30, 30, 255), width=6 * S2)      # 上に外れた輪（開いた錠）

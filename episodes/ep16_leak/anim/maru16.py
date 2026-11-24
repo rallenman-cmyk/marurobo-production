@@ -34,7 +34,7 @@ class MaruR:
         self.h = MRL.place(loc=(0.0, 0.0, 0.0), heading=0.0, scale=self.s, name="maru%d" % len(MARU_ALL))
         self.body = self.h.torso; self.torso = self.h.torso
         self.root = empty((0, 0, 0)); self.root.name = "maru%d follow" % len(MARU_ALL)   # 追うカメラ用：足もとの真ん中（上下にはずまない）。bake で打つ
-        self.cmds = []; self.silent = []; self.quiet = []; self.drops = []; self.carries = []
+        self.cmds = []; self.silent = []; self.quiet = []; self.drops = []; self.carries = []; self.mute = []
         self._last = {"loc": (-100.0, tuple(loc))}
         track("maru_c", self.torso, 0.0); track("maru_c_f", self.root, 0.02)   # 体の真ん中と足もと（足だけ写す寄りの絵でも鳴らす）                     # 効果音の「映っているか」は体の真ん中で見る（"maru" は頭の上の吹き出し用）
         MARU_ALL.append(self); _M_[0] = self
@@ -107,7 +107,10 @@ class MaruR:
     def shake(self, t): self.cmds.append((t, "shake", {}))
     def surprise(self, t): self.cmds.append((t, "surprise", {}))
     def confused(self, t): self.cmds.append((t, "confused", {}))
-    def sigh(self, t): self.cmds.append((t, "sigh", {}))
+    def sigh(self, t, sound=True):
+        """ため息。sound=False で電子音なし（16本目 2章 v7 のコメント「このSEいらない」）"""
+        self.cmds.append((t, "sigh", {}))
+        if not sound: self.mute.append(("sigh", t))
     def peer(self, t, dur=1.6): self.cmds.append((t, "peer", dict(dur=dur)))
     def look_around(self, t): self.cmds.append((t, "look_around", {}))
 
@@ -247,6 +250,7 @@ class MaruR:
             if e_["t"] < T0 - 1.0 or e_["t"] > T1 + 1.0: continue
             if e_["kind"] in ("takeoff", "land") and any(a - 0.01 <= e_["t"] <= b + 0.01 for a, b in self.silent): continue
             if e_["kind"] in ("takeoff", "land") and not e_.get("fall") and any(a - 0.01 <= e_["t"] <= b + 0.01 for a, b in self.quiet): continue
+            if any(e_["kind"] == mk and -0.2 <= e_["t"] - mt <= 2.0 for mk, mt in self.mute): continue
             k_, g_ = snd[e_["kind"]]
             st = e_.get("strength", 1.0)
             g = g_ * (max(0.3, min(1.0, st / 3.0)) if e_["kind"] in ("takeoff", "land") else max(0.3, st))
