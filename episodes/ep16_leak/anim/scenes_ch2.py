@@ -22,12 +22,12 @@ def door_key(name, t, deg, interp="BEZIER"):
     key(IN["door_" + name], "rotation_euler", t, (0, 0, R(deg)), interp)
 
 
-def pop_lock(name, t, s=1.0):
+def pop_lock(name, t, s=1.0, heard=True):
     """赤い錠が扉に「ガチャン」とかかる（t＝扉に当たる時刻）：少し上から下りて、大きさ 0 → s"""
     lk = IN["lock_" + name]; z0 = lk.location[2]
     key(lk, "scale", -100.0, (0.001, 0.001, 0.001), "CONSTANT"); key(lk, "scale", t - 0.12, (0.001, 0.001, 0.001)); key(lk, "scale", t, (s, s, s))
     key(lk, "location", t - 0.12, (lk.location[0], lk.location[1], z0 + 0.12)); key(lk, "location", t, (lk.location[0], lk.location[1], z0))
-    ev(t, "clunk", 0.45, "lk_" + name)
+    if heard: ev(t, "clunk", 0.45, "")      # 声の「ガチャン」と同じ時刻に必ず鳴らす（v1 の組み立て：場面の替わり目で前のカットの絵で判定され、2 つ鳴らなかった）
 
 
 def wk_walk(wk, t0, t1, p0, p1, face):
@@ -54,12 +54,12 @@ def b_in(cl):
     # ---- 夜と昼（13-04 で夜昼が何度も替わる・13-05 は昼・16-10 からは朝）
     t4 = s("13-04")
     day_night([(-100.0, "night"), (t4 + 0.9, "day"), (t4 + 2.1, "night"), (t4 + 3.3, "day"), (t4 + 4.5, "night"), (s("13-05") - 0.2, "day"),
-               (e("13-05") + 0.3, "night"), (s("16-10") - 0.3, "day")])
+               (s("13-06") + 0.3, "night"), (s("16-10") - 0.3, "day")])
     for nm, e_ in (("work", 60.0), ("admin", 30.0), ("tags", 0.0), ("backup", 0.0)):
         light_key(IN["room_" + nm], -100.0, 0.0)
-    light_key(IN["room_work"], s("13-05") - 0.3, 70.0); light_key(IN["room_work"], e("13-05") + 0.3, 0.0)
+    light_key(IN["room_work"], s("13-05") - 0.3, 70.0); light_key(IN["room_work"], s("13-06") + 0.3, 0.0)      # 13-05 の終わりまで昼（v1：最後の 1 秒が暗かった）
     light_key(IN["room_work"], s("16-10"), 70.0)
-    light_key(IN["room_admin"], s("14-01") - 0.6, 35.0); light_key(IN["room_admin"], e("14-01") + 0.4, 0.0)
+    light_key(IN["room_admin"], s("14-01") - 0.6, 70.0); light_key(IN["room_admin"], s("14-02") + 1.0, 0.0)
     light_key(IN["room_tags"], s("14-05"), 0.0); light_key(IN["room_tags"], s("14-05") + 0.6, 45.0); light_key(IN["room_tags"], e("15-04") + 0.5, 45.0); light_key(IN["room_tags"], e("15-04") + 1.0, 0.0)
     light_key(IN["room_backup"], s("14-07"), 0.0); light_key(IN["room_backup"], s("14-07") + 0.6, 45.0); light_key(IN["room_backup"], e("14-13") + 0.3, 45.0); light_key(IN["room_backup"], e("14-13") + 0.8, 0.0)      # 試しの絵：14-08・14-12 の部屋の中が真っ黒だった
     # ---- 影
@@ -130,8 +130,8 @@ def b_in(cl):
     ev(s("14-05") + 0.1, "squeak", 0.25, "door_tags")
     sh_key(sh, s("14-05"), (D_["backup"], 0.85), 180.0); sh_key(sh, s("14-05") + 0.05, (D_["tags"] + 1.3, 0.3), 160.0, "CONSTANT")       # 扉の回る所の外
     sh_key(sh, s("14-07") - 0.3, (D_["tags"] + 1.3, 0.3), 160.0); sh_key(sh, s("14-07") - 0.25, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT")
-    door_key("backup", s("14-07") + 0.1, 0); door_key("backup", s("14-07") + 0.9, 85); door_key("backup", s("14-08") + 0.2, 85); door_key("backup", s("14-08") + 0.9, 0)
-    ev(s("14-07") + 0.1, "squeak", 0.25, "door_backup")
+    door_key("backup", s("14-07") + 0.45, 0); door_key("backup", s("14-07") + 1.25, 85); door_key("backup", s("14-08") + 0.2, 85); door_key("backup", s("14-08") + 0.9, 0)
+    ev(s("14-07") + 0.45, "squeak", 0.25, "door_backup")      # 場面が替わり終わってから（v1：替わる途中で鳴らず）
     # 14-09：予備の倉庫の扉の前に立つ影（後ろ姿）
     sh_key(sh, s("14-09") - 0.3, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT"); sh_key(sh, s("14-09") - 0.25, (D_["backup"], 0.75), 180.0, "CONSTANT")
     # 15-01：名札の倉庫の扉を鍵束で開ける
@@ -150,7 +150,7 @@ def b_in(cl):
     for k, tg in enumerate(pick):
         t0_ = s("15-02") + 0.2 + k * 0.8
         p0 = tuple(tg.location); r0 = tuple(tg.rotation_euler)
-        p1 = (bx.location[0] - 0.1 + 0.1 * k, bx.location[1] - 0.02 + 0.03 * k, 0.05 + 0.012 * k)
+        p1 = (bx.location[0] - 0.1 + 0.1 * k, bx.location[1] - 0.02 + 0.03 * k, 0.05 + 0.012 * (2 - k))      # まるロボの青緑の名札をいちばん上に（v1：ほかの札の下に隠れた）
         key(tg, "location", -100.0, p0, "CONSTANT"); key(tg, "location", t0_, p0)
         key(tg, "location", t0_ + 0.35, (p0[0], p0[1] - 0.35, p0[2] + 0.1)); key(tg, "location", t0_ + 0.75, p1)
         key(tg, "rotation_euler", t0_, r0); key(tg, "rotation_euler", t0_ + 0.75, (0, 0, R(8 * k - 8)))
@@ -177,7 +177,7 @@ def b_in(cl):
     pop_lock("tags", wv("16-04", "ガチャン") + 0.08)
     g1 = wv("16-05", "ガチャン") + 0.08; g2 = wv("16-05", "ガチャン", 1) + 0.08
     pop_lock("admin", g1); pop_lock("work", g2)       # 2 つが 1 枚の絵に入るとなりの扉（v1 の決まり：動きを目で追える。5 m 先へ 0.6 秒で振ると追えない）
-    pop_lock("hall2", e("16-05") + 0.3); pop_lock("hall5", e("16-05") + 0.5)
+    pop_lock("hall2", e("16-05") + 0.3, heard=False); pop_lock("hall5", e("16-05") + 0.5, heard=False)      # 映らない扉（音なし）
     pop_lock("backup", wv("16-06", "ガチャン") + 0.08, 1.6)
     sh_key(sh, e("16-03") + 0.6, (4.5, 0.4), 90.0, "CONSTANT"); sh_key(sh, e("16-03") + 0.65, (40.0, 30.0), 90.0, "CONSTANT")      # 錠をかける影は見せない（錠だけ）
     # 16-07：まるロボが走り回る → 予備の倉庫の扉の前でへたりこむ（まるロボは下で）
@@ -208,11 +208,11 @@ def b_in(cl):
     track("screen0", bpy.data.objects[[o.name for o in bpy.data.objects if o.active_material is scr[0]][0]], 0.0)
     xw = D_["work"]
     for k in range(5):
-        pp = cube(mat("paper", "#FFFFFF", rough=0.6), (xw - 0.85, Y_ROOM + 2.1, 0.775 + 0.01 * k), (0.21, 0.3, 0.008), rot=(0, 0, R(6 * k - 12)))
+        pp = cube(mat("paper", "#FFFFFF", rough=0.6), (xw - 0.3, Y_ROOM + 2.25, 0.775 + 0.01 * k), (0.21, 0.3, 0.008), rot=(0, 0, R(6 * k - 12)))
         hide_key(pp, -100.0, True); hide_key(pp, w("16-14", "注文") - 0.2 + 0.25 * k, False)
     track("orders", pp, 0.05)
     for k in range(3):
-        b_ = cube(mat("parcel", "#C9A06A", rough=0.8), (xw + 0.75, Y_ROOM + 2.05, 0.83 + 0.16 * k), (0.28, 0.2, 0.15), rot=(0, 0, R(8 * k - 8)))
+        b_ = cube(mat("parcel", "#C9A06A", rough=0.8), (xw + 0.3, Y_ROOM + 2.25, 0.83 + 0.16 * k), (0.28, 0.2, 0.15), rot=(0, 0, R(8 * k - 8)))
         hide_key(b_, -100.0, True); hide_key(b_, w("16-14", "荷物") - 0.2 + 0.3 * k, False)
     track("parcels", b_, 0.1)
     # 17：持ち主の部屋。手紙が 2 通、ひらひら落ちる
@@ -343,8 +343,8 @@ def b_imag2(cl):
     random.seed(1708)
     t0 = s("17-08")
     for k in range(26):
-        x = random.uniform(-6, 6); y = random.uniform(-9, -2); z0 = random.uniform(4.0, 8.0)
-        tg = nameplate((x, y, z0), rot=(R(random.uniform(-40, 40)), 0, R(random.uniform(0, 180))), tex=random.choice(["tag_cust", "tag_cust", "tag_maru"]), w=0.45)
+        x = random.uniform(-4, 4); y = random.uniform(-7, -3); z0 = random.uniform(3.5, 6.5)
+        tg = nameplate((x, y, z0), rot=(R(random.uniform(-40, 40)), 0, R(random.uniform(0, 180))), tex=random.choice(["tag_cust", "tag_cust", "tag_maru"]), w=0.75)      # v1：小さくて見えなかった
         td = t0 + random.uniform(0.0, 1.5)
         key(tg, "location", -100.0, (x, y, z0), "CONSTANT"); key(tg, "location", td, (x, y, z0))
         key(tg, "location", td + 4.5, (x + random.uniform(-1, 1), y, max(0.05, z0 - 5.5)))
@@ -357,17 +357,17 @@ def b_imag2(cl):
 I0 = 0.0
 CUTS2 = [
     ("D13", b_in, s("13-01"), C((5.2, -0.4, 1.5), (0.4, 0.25, 0.9), 30), "D"),
-    ("D13b", b_in, s("13-02"), C((0.2, -1.0, 1.8), (6.5, 0.6, 0.9), 26), "D"),     # 試しの絵：横からだと影が画面いっぱいだった
+    ("D13b", b_in, s("13-02"), C((0.15, -1.05, 2.4), (6.5, 0.6, 0.8), 26), "D"),     # 試しの絵：横からだと影が画面いっぱいだった
     ("D13c", b_in, s("13-03"), C((5.6, -1.05, 1.6), (9.2, 1.2, 1.0), 26), "D"),
     ("D13d", b_in, s("13-04"), C((15.3, -0.95, 1.7), (17.3, 0.9, 1.7), 30), "D"),
     ("D13e", b_in, s("13-05"), C((D_["work"] - 1.1, Y_ROOM + 0.3, 2.3), (D_["work"] + 0.2, Y_ROOM + 2.3, 0.75), 22), "D"),
     ("D13f", b_in, s("13-06"), C((10.7, 1.0, 1.3), (8.55, -0.95, 0.6), 24), "D"),
     ("D13g", b_in, s("13-07"), C((10.1, 0.4, 0.95), (8.55, -0.95, 0.62), 28), "D"),
     ("D13h", b_in, s("13-08"), C((1.0, -1.0, 2.2), (10.0, 0.8, 0.8), 24), "D"),
-    ("D14", b_in, s("14-01"), C((D_["admin"] + 1.0, Y_ROOM + 2.6, 1.6), (D_["admin"] - 0.35, Y_ROOM + 1.4, 0.75), 26), "D"),     # 机の横から（試しの絵：影の背中で机が隠れた）
+    ("D14", b_in, s("14-01"), C((D_["admin"] - 1.15, Y_ROOM + 0.45, 1.3), (D_["admin"] - 0.45, Y_ROOM + 1.5, 0.7), 30), "D"),     # 引き出しと手元が見える左前から（v1：影の背中で暗かった）     # 机の横から（試しの絵：影の背中で机が隠れた）
     ("D14b", b_in, s("14-02"), C((0.6, -1.0, 1.8), (12.0, 0.9, 1.0), 24), "D"),
-    ("D14c", b_in, s("14-03"), C((D_["admin"] + 1.3, -0.3, 1.25), (D_["admin"] + 0.58, 0.43, 1.05), 45), "D"),     # 影の手の鍵束に寄る（試しの絵：手が画面の外だった）
-    ("D14d", b_in, s("14-04"), C((7.0, -1.0, 1.6), (12.2, 1.4, 1.05), 24), "D"),
+    ("D14c", b_in, s("14-03"), C((D_["admin"] + 1.4, -0.35, 0.95), (D_["admin"] + 0.68, 0.43, 0.66), 40), "D"),     # 鍵束の高さ（調べた場所 5.88, 0.43, 0.64）     # 影の手の鍵束に寄る（試しの絵：手が画面の外だった）
+    ("D14d", b_in, s("14-04"), C((5.9, -0.75, 1.5), (11.0, 0.8, 0.8), 22), "D"),     # まるロボ（柱のかげ）も入れる。柱（x 6.5）の外（v1：びくっが映らなかった）
     ("D14e", b_in, s("14-05"), C((D_["tags"], -0.6, 1.45), (D_["tags"], Y_ROOM + 2.6, 0.95), 30, (D_["tags"], YB - 0.2, 1.3)), "D"),
     ("D14f", b_in, s("14-06"), C((D_["tags"], Y_ROOM + 1.1, 1.25), (D_["tags"], Y_ROOM + 2.9, 0.95), 30), "D"),
     ("D14g", b_in, s("14-07"), C((D_["backup"], -0.6, 1.45), (D_["backup"], Y_ROOM + 2.6, 0.95), 30, (D_["backup"], YB - 0.2, 1.3)), "D"),
@@ -379,12 +379,12 @@ CUTS2 = [
     ("D15", b_in, s("15-01"), C((D_["tags"] + 2.3, -0.9, 1.55), (D_["tags"] + 0.3, 1.2, 1.0), 28), "D"),
     ("D15b", b_in, s("15-02"), C((D_["tags"] - 1.05, Y_ROOM + 0.35, 1.7), (D_["tags"] - 0.2, Y_ROOM + 2.0, 0.5), 26), "D"),
     ("D15c", b_in, s("15-03"), C((D_["tags"] - 0.5, Y_ROOM + 1.62, 0.95), (D_["tags"] - 0.5, Y_ROOM + 1.7, 0.0), 32), "D"),
-    ("D15d", b_in, s("15-04"), C((D_["tags"] - 0.25, Y_ROOM + 0.85, 0.95), (D_["tags"] - 0.2, 0.35, 0.6), 30), "D"),     # 部屋の中から入口のまるロボ（顔）
+    ("D15d", b_in, s("15-04"), C((D_["tags"] - 0.25, Y_ROOM + 0.85, 0.95), (D_["tags"] + 0.95, 0.55, 0.55), 30), "D"),     # 部屋の中から入口のまるロボ（顔）
     ("D15e", b_in, s("15-05"), C((0.6, -0.9, 1.5), (7.5, 0.4, 0.8), 26), "D"),
-    ("O15", b_out2, s("15-06"), C((DX + 13.0, -15.0, 21.0), (2.0, 1.5, 0.0), 30), "O"),     # 正面の門番さんと横の裏口が 1 枚に
+    ("O15", b_out2, s("15-06"), C((DX + 8.0, -10.0, 8.5), (4.2, 1.0, 0.4), 30), "O"),     # 正面の門番さんと横の裏口が 1 枚に（v1：高すぎて影が小さかった）
     ("O15b", b_out2, s("15-07"), C((DX + 3.2, DOOR_Y + 1.6, 0.75), (DX + 0.6, DOOR_Y - 3.5, 0.7), 24), "O"),
     ("O16", b_out2, s("16-01"), C((DX + 4.0, DOOR_Y - 12.0, 1.6), (DX + 1.2, DOOR_Y - 6.8, 0.7), 30), "O"),
-    ("O16b", b_out2, s("16-02"), C((DX + 4.2, DOOR_Y - 3.6, 1.7), (DX + 0.6, DOOR_Y - 0.6, 0.8), 26), "O"),
+    ("O16b", b_out2, s("16-02"), C((DX + 5.0, DOOR_Y - 9.0, 2.2), (DX + 1.0, DOOR_Y - 3.0, 0.8), 26), "O"),     # 道と裏口が 1 枚に（v1：戻る影が最後まで映らなかった）
     ("D16", b_in, s("16-03"), C((-0.4, 0.3, 1.5), (6.0, 0.4, 1.0), 30), "D"),
     ("D16b", b_in, s("16-04"), C((D_["tags"] + 0.45, 0.25, 1.25), (D_["tags"] + ID_W / 2 - 0.28, YB, 0.97), 32), "D"),
     ("D16c", b_in, s("16-05"), C((3.9, -0.7, 1.45), (3.9, YB, 1.05), 22), "D"),
@@ -394,14 +394,14 @@ CUTS2 = [
     ("M16", b_morning, s("16-10"), C((3.5, -14.0, 2.4), (0.0, -2.0, 1.4), 30), "M"),
     ("D16f", b_in, s("16-11"), C((D_["hall2"] - 1.3, -0.9, 1.6), (D_["tags"] - 0.3, 1.3, 1.1), 24), "D"),
     ("D16g", b_in, s("16-13"), C((D_["work"] - 0.2, Y_ROOM + 0.4, 1.7), (D_["work"], Y_ROOM + 2.4, 0.95), 28), "D"),
-    ("D16h", b_in, s("16-14"), C((D_["work"] - 0.1, Y_ROOM + 1.25, 1.35), (D_["work"], Y_ROOM + 2.2, 0.85), 32), "D"),
+    ("D16h", b_in, s("16-14"), C((D_["work"], Y_ROOM + 0.4, 2.4), (D_["work"], Y_ROOM + 2.15, 0.78), 24), "D"),     # 2 つの机の上が入る（v1：紙と荷物が画面の外）
     ("M16b", b_morning, s("16-15"), C((-4.5, -15.0, 3.2), (0.4, 0.0, 3.2), 30), "M"),
     ("D17", b_in, s("17-01"), C((OWN[0] + 1.3, OWN[1] - 0.5, 1.8), (OWN[0] - 0.1, OWN[1] + 1.5, 0.85), 30), "D"),
     ("D17b", b_in, s("17-02"), C((OWN[0] - 0.25, OWN[1] + 1.1, 1.35), (OWN[0] - 0.25, OWN[1] + 1.45, 0.82), 36), "D"),
     ("D17c", b_in, s("17-03"), C((OWN[0] + 0.4, OWN[1] - 1.4, 1.6), (OWN[0], OWN[1] + 1.5, 1.0), 30), "D"),
     ("D17d", b_in, s("17-05"), C((D_["backup"] + 0.55, 0.15, 0.55), (D_["backup"] + 0.2, YB, 1.05), 28), "D"),
     ("D17e", b_in, s("17-07"), C((OWN[0] + 1.4, OWN[1] - 0.3, 1.5), (OWN[0] + 0.3, OWN[1] + 1.3, 0.8), 30), "D"),
-    ("I17", b_imag2, s("17-08"), C((2.0, -11.0, 2.0), (0.0, -3.0, 2.0), 28), "I2"),
+    ("I17", b_imag2, s("17-08"), C((1.6, -9.0, 1.4), (0.2, -3.8, 1.8), 26), "I2"),
     ("D17f", b_in, s("17-09"), C((OWN[0] - 0.25, OWN[1] + 1.1, 1.35), (OWN[0] - 0.25, OWN[1] + 1.45, 0.82), 36), "D"),
     ("D17g", b_in, s("17-13"), C((OWN[0] + 2.2, OWN[1] - 1.8, 2.0), (OWN[0], OWN[1] + 1.0, 0.8), 28), "D"),
     ("P17", b_in, s("14-04") - 0.2, C((7.0, -1.0, 1.6), (12.2, 1.4, 1.05), 24), "D"),       # 17-06 の小窓（14-04 の印を付ける場面をもう一度）

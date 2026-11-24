@@ -261,6 +261,8 @@ for nm in ORDER:
     for e_ in LOG[nm]["events"]:
         t, kind, gain = e_[:3]; src = e_[3] if len(e_) > 3 else ""
         if (round(t, 2), kind) in EV: continue
+        _act = active(t)       # その時刻に映っているカットの記録からだけ取る（17本目の決まり。16本目 2章：先に描いた別のカットの古い記録で、声の「ガチャン」の音が消えた）
+        if not _act or max(_act, key=lambda q: q[1])[0] != nm: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
 for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴らす音（絵の物の記録にない音）
