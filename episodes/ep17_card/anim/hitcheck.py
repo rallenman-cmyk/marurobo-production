@@ -7,6 +7,9 @@ from mathutils import Vector
 HERE = os.path.dirname(os.path.abspath(__file__))
 _a = sys.argv[sys.argv.index("--") + 1:]
 name = _a[0]; WATCH = (_a[1] if len(_a) > 1 else "shadow,maru,door,door2").split(",")
+# 17本目 v1 のコメント「ドア開ける時にまるロボの体を貫通してる」：動く物（金庫のとびら・カード・帽子）どうしは数えていなかった。
+#   3 つ目に相手の名前（track の名前。その子の形）を渡すと、動いていても相手として数える
+AGAINST = (_a[2].split(",") if len(_a) > 2 else [])
 sys.argv = sys.argv[:sys.argv.index("--") + 1] + [name, "/tmp/hitcheck_" + name, "--track"]
 g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes.py")}
 exec(open(os.path.join(HERE, "scenes.py"), encoding="utf-8").read(), g)
@@ -34,6 +37,10 @@ def animated(o):
     return False
 statics = [o for o in sc.objects if o.type == "MESH" and o not in moving and not o.hide_render and not animated(o)
            and max(o.dimensions) < 40 and min(o.dimensions) > 0.015]
+if AGAINST:
+    statics = []
+    for nm in AGAINST:
+        if nm in TR: statics += [o for o in [TR[nm][0]] + list(TR[nm][0].children_recursive) if o.type == "MESH" and max(o.dimensions) > 0.015]
 bad = 0; seen = set()
 for k in range(sc.frame_start, sc.frame_end + 1, max(1, FPS // 10)):
     sc.frame_set(k)

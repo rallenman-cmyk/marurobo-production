@@ -19,7 +19,7 @@ exec(_src5[_a5:_b5].replace("plan.", "plan5."))
 
 PURPLE = "#7B5BD6"
 BLUE_C, PURP_C, ORANGE_C, GREY_C, GREEN_C, RED_C = "#3478E6", "#8A5BD6", "#FF8A1F", "#9AA4B2", "#34B266", "#E23A30"
-NUM = "35280476"; WRONG = "35280486"; OTHER = "49280476"     # WRONG：7 つ目を打ちまちがえた番号（make_tex17.py と同じ）
+NUM = "35280471"; WRONG = "35280481"; OTHER = "49280476"      # v1 のコメント「計算で決まる数字」：かんたんな決まり（前の 7 けたを足して、ちょうど 10 のまとまりになるように最後を決める）に合わせた。3+5+2+8+0+4+7=29 → 1。まちがえた番号は 3+5+2+8+0+4+8=30 → 0 のはずが 1。別の会社 4+9+2+8+0+4+7=34 → 6     # WRONG：7 つ目を打ちまちがえた番号（make_tex17.py と同じ）
 
 
 def _m(name, col, **kw): return mat(name, col, **kw)
@@ -270,7 +270,7 @@ def shop(with_register=True):
     cube(fr, (0, -0.02, GH + 0.07), (GW + 0.26, 0.4, 0.14))
     lampm = mat("gatelamp", "#FFFFFF", rough=0.3, emit=0.001)
     lamp = sphere(lampm, (0, -0.25, GH + 0.32), 0.14, seg=24)
-    cube(_m("lampbase", "#3A3D42", metal=0.6, rough=0.4), (0, -0.2, GH + 0.17), (0.12, 0.12, 0.08))
+    lamp.hide_render = True; lamp.hide_viewport = False      # v1 のコメント「監視カメラが丸印つくのは理解できない」：門の上のランプが監視カメラに見えた → 描かない（位置は札・音の目じるしに使う）
     for sx in (-1, 1):
         cube(_m("shopwin", "#9FCBE8", rough=0.1), (sx * 2.4, -0.01, 1.55), (1.3, 0.02, 1.1))
         for (xx, zz, ww, hh) in ((sx * 2.4, 1.55, 1.42, 0.06), (sx * 2.4, 2.12, 1.42, 0.08), (sx * 2.4, 0.98, 1.42, 0.08), (sx * 2.4 - 0.68, 1.55, 0.06, 1.2), (sx * 2.4 + 0.68, 1.55, 0.06, 1.2), (sx * 2.4, 1.55, 0.04, 1.1)):
@@ -326,7 +326,7 @@ def reg_screen(scr_parent, states, glow=1.4):
     """レジの画面の絵を時刻で替える。states：[(時刻, 絵の名前), …]"""
     planes = []
     for k, (t, nm) in enumerate(states):
-        p = plane(img_mat("regtex_" + nm, os.path.join(TEX, nm + ".png"), emit=glow), (0, -0.012 - 0.0004 * k, 0), (0.80, 0.30), rot=(R(90), 0, 0), parent=scr_parent)
+        p = plane(img_mat("regtex_" + nm, os.path.join(TEX, nm + ".png"), emit=glow), (0, -0.012 - 0.0004 * k, 0), (0.78, 0.29), rot=(R(90), 0, 0), parent=scr_parent)
         t1 = states[k + 1][0] if k + 1 < len(states) else 1e6
         hide_key(p, -100.0, True); hide_key(p, t, False); hide_key(p, t1, True)
         planes.append(p)

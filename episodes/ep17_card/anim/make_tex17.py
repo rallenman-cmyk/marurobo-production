@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from icons17 import icon
 NAVY = (24, 38, 74); WHITE = (255, 255, 255); GREY = (200, 206, 214); RED = (226, 58, 48); ORANGE = (255, 138, 31)
 GREEN = (52, 178, 102); BLUE = (52, 120, 230); TEAL = (47, 217, 200)
-NUM = "35280476"; WRONG = "35280486"      # 7 つ目を打ちまちがえる（となりのキー。v1 の点検：前の 5 は 7 のとなりでなかった。キーは上 1〜5・下 6〜0 なので 8）
+NUM = "35280471"; WRONG = "35280481"      # v1 のコメント「計算で決まる数字」：かんたんな決まり（前の 7 けたを足して、ちょうど 10 のまとまりになるように最後を決める）に合わせた。3+5+2+8+0+4+7=29 → 1。まちがえた番号は 3+5+2+8+0+4+8=30 → 0 のはずが 1。別の会社 4+9+2+8+0+4+7=34 → 6      # 7 つ目を打ちまちがえる（となりのキー。v1 の点検：前の 5 は 7 のとなりでなかった。キーは上 1〜5・下 6〜0 なので 8）
 OTHER = "49280476"                         # 11-06 の別の会社のカード（はじめの 2 けただけちがう）
 SS = 2
 F = lambda n, w="900Black": ImageFont.truetype("%s/%s/NotoSansJP_%s.ttf" % (FD, w, w), n)
@@ -59,7 +59,7 @@ def register(name, digits, state="typing", bad=None):
     im = Image.new("RGB", (W_ * SS, H_ * SS), bg); d = ImageDraw.Draw(im)
     S = lambda *v: tuple(int(x * SS) for x in v)
     for k in range(8):
-        x = 40 + k * 92; y = 80
+        x = 74 + k * 84; y = 86      # v1 のコメント「お店のモニターから数字はみ出てる」：ますが画面の左右ぎりぎりだった → 小さくして余白を取る
         col = WHITE
         if bad is not None and k == bad: col = (255, 150, 140)      # v1 の点検：うすい桃色で、赤に見えなかった
         line = ORANGE if k == 7 and state != "nocheck" else (NAVY if state != "nocheck" or k < 7 else GREY)
@@ -67,8 +67,8 @@ def register(name, digits, state="typing", bad=None):
         if state == "wrong" and k == 7: line = RED
         if state == "ok": line = GREEN
         if bad is not None and k == bad and state != "ok": line = RED
-        d.rounded_rectangle(S(x, y, x + 80, y + 120), radius=12 * SS, fill=col, outline=line, width=6 * SS)
-        if k < len(digits): d.text(S(x + 40, y + 64), digits[k], font=F(84 * SS, "700Bold"), fill=NAVY, anchor="mm")
+        d.rounded_rectangle(S(x, y, x + 72, y + 108), radius=12 * SS, fill=col, outline=line, width=6 * SS)
+        if k < len(digits): d.text(S(x + 36, y + 58), digits[k], font=F(76 * SS, "700Bold"), fill=NAVY, anchor="mm")
     if state == "ok": d.ellipse(S(W_ / 2 - 26, 222, W_ / 2 + 26, 274), fill=GREEN)
     if state == "wrong": d.ellipse(S(W_ / 2 - 26, 222, W_ / 2 + 26, 274), fill=RED)
     im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))

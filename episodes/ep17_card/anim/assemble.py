@@ -298,6 +298,11 @@ for i_, (t_, k_) in enumerate(_bp):
             lo = (t_, k_) if EV[(t_, k_)] < EV[(t2, k2)] else (t2, k2); EV[lo] = 0.0
 for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴らす音（絵の物の記録にない音）
     EV[(round(t_, 2), k_)] = g_
+# 17本目 v1 のコメント「SEの音量大きい」（4:53 のブー）：種類ごとに測ると、ブーは平均 −29 dB で声と同じ大きさだった。
+#   長く鳴る音は、声（平均 −27 dB）より 10 dB 以上小さく（平均 −38 dB 以下）なるよう、種類ごとの上限を決める
+KIND_CAP = {"buzz_ng": 0.14, "chime_ok": 0.16, "pi": 0.2, "buzz": 0.25, "land": 0.2}
+for (t_, k_) in list(EV):
+    if k_ in KIND_CAP and EV[(t_, k_)] > KIND_CAP[k_]: EV[(t_, k_)] = KIND_CAP[k_]
 # 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）
 _run = None
 for (t, kind) in sorted(EV):

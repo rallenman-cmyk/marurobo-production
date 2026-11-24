@@ -14,7 +14,7 @@ s, e, w = T.s, T.e, T.w
 YEL = (255, 201, 40); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48)
 ORANGE = (255, 138, 31); PURPLE = (138, 77, 255); TEAL = D.TEAL
 BLUE = (52, 120, 230)
-WRONG = "35280486"      # 打ちまちがえた番号（kit17.py・make_tex17.py と同じ）
+WRONG = "35280481"      # 打ちまちがえた番号（kit17.py・make_tex17.py と同じ）
 import icons17 as IC
 GREY = (190, 198, 210)
 SUB_TOP = 560
@@ -48,18 +48,38 @@ def ev_list():
     add(w("11-02", "6けた") - 0.1, e("11-02") + 0.3, "tag", dict(text="はじめの 6 けた ＝ どの会社か", pos=(640, 92), size=48))
     add(w("11-03", "会社の印") - 0.1, e("11-03") + 0.3, "tag", dict(text="会社の印", obj="tile0", dx=70, dy=-110, size=52, bg=BLUE, fg=WHITE))
     add(w("12-02", "役目") - 0.2, e("12-02") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    # v1 のコメント「計算で決まる数字が分からない。決まりの計算あるなら載せたい」（ユーザーの選択：かんたんな決まりで見せる）
+    add(w("12-03", "前に") - 0.1, e("12-03") + 0.4, "sum", dict(y=455, lines=[
+        (w("12-03", "前に") - 0.1, "3＋5＋2＋8＋0＋4＋7 ＝ 29", NAVY),
+        (w("12-03", "計算") - 0.1, "あと 1 で 30 → 最後の数字は 1", ORANGE),
+        (w("12-03", "計算") - 0.1, "※ここでは、かんたんな決まりで表しています", (110, 118, 132))]))
     add(s("12-04") + 0.05, e("12-04") + 0.4, "notebook", dict(check=w("12-04", "見直す") - 0.1))
     add(w("12-05", "検算の数字") - 0.1, e("12-05") + 0.3, "tag", dict(text="検算の数字", obj="tile7", dy=-110, size=52, bg=ORANGE, fg=WHITE))
     add(w("13-04", "となり") - 0.2, e("13-04") + 0.3, "ring", dict(obj="key" + WRONG[6], r=46, col=RED))   # v1 の点検：どのキーを押しまちがえたか分からなかった
     add(s("13-06") - 0.05, e("13-06") + 0.6, "tag", dict(text="番号がちがいます", pos=(640, 92), size=56, bg=RED, fg=WHITE))
-    add(w("13-07", "その場") + 0.1, e("13-07") + 0.3, "ring", dict(obj="gate", dy=40, r=60, col=RED))   # 光の点が止まった門に赤い輪
+    add(w("13-07", "その場") + 0.1, e("13-07") + 0.3, "xobj", dict(obj="dotq", sz=70))   # 光の点が止まった所（門の中）に ×（v1 のコメント：門の上のランプの赤い輪は、監視カメラに見えた）
+    add(s("13-09") + 0.05, e("13-09") + 0.4, "sum", dict(y=130, lines=[
+        (s("13-09") + 0.05, "3＋5＋2＋8＋0＋4＋8 ＝ 30", NAVY),
+        (s("13-09") + 0.05, "→ 検算の数字は 0 になるはず", NAVY),
+        (w("13-09", "検算") - 0.1, "でも、1 → 合わない ×", RED)]))
     add(w("13-08", "むっと") - 0.1, e("13-08") + 0.2, "bubble", dict(obj="maru_top", icon="hmph"))
     add(s("14-02") - 0.05, s("14-04") + 0.35, "tint", {})   # v1 の点検：e("14-03") で消え、想像の場面の終わり 1 秒が色なしに戻っていた → お店に戻る重ねの終わりまで
     add(w("14-06", "1人1人") - 0.1, e("14-06") + 0.3, "tag", dict(text="1人1人の数字", obj="stile4", dy=-100, size=48, bg=WHITE))
     add(max(w("14-07", "会社") - 0.1, s("14-07")), e("14-07") + 0.4, "tag", dict(text="会社の印", obj="stile0", dx=40, dy=-95, size=44, bg=BLUE, fg=WHITE))
     add(w("14-07", "1人1人") - 0.1, e("14-07") + 0.4, "tag", dict(text="1人1人の数字", obj="stile4", dy=95, size=44, bg=WHITE))
     add(w("14-07", "検算") - 0.1, e("14-07") + 0.4, "tag", dict(text="検算の数字", obj="stile7", dx=-30, dy=-95, size=44, bg=ORANGE, fg=WHITE))
-    return E
+    # v1 のコメント「シーン変わる前にはてな出してるからすぐ位置が移動してるの気になる」：物について動く札（吹き出し・札・輪）は、
+    #   カメラの替わり目（重なるつなぎ 0.35〜0.6 秒）が終わってから出す。替わり目をまたぐ札は、替わり目のあとにずらす
+    import json as _js
+    _CL = _js.load(open(os.path.join(HERE, "clips.json"), encoding="utf-8"))
+    _cuts = sorted(v[2] for k_, v in _CL.items() if not k_.startswith("P"))
+    out = []
+    for a_, b_, kd, p_ in E:
+        if "obj" in p_:
+            for c_ in _cuts:
+                if a_ - 0.42 <= c_ < b_ - 0.5 and c_ < a_ + 0.42: a_ = c_ + 0.42   # 重なるつなぎ（0.35 秒）の中・直前に出る札は、つなぎが終わってから
+        out.append((a_, b_, kd, p_))
+    return out
 
 
 def sfx_list():
@@ -126,12 +146,11 @@ def title_sprite():
     key = ("title",)
     if key not in _cache:
         def dr(d, W_, H_, ss, img):
-            f = D.font(64 * ss); a_, b_ = "使ってないカードが", "なぜ？"
-            wa, wb = d.textlength(a_, font=f), d.textlength(b_, font=f); x0 = W_ / 2 - (wa + wb) / 2
-            ua = d.textlength("使ってない", font=f)
-            D.ctext(d, (x0 + ua / 2, H_ / 2), "使ってない", f, (214, 150, 0)); D.ctext(d, (x0 + ua + (wa - ua) / 2, H_ / 2), "カードが", f, NAVY)
-            D.ctext(d, (x0 + wa + wb / 2, H_ / 2), b_, f, NAVY)
-        spr, off = D.card(1000, 230, draw=dr)
+            # v1 のコメント「タイトルは使っていないカードが使われた？にして」（「使っていない」を黄色。ユーザーの選択）
+            f = D.font(60 * ss); y_, n_ = "使っていない", "カードが使われた？"
+            wy, wn = d.textlength(y_, font=f), d.textlength(n_, font=f); x0 = W_ / 2 - (wy + wn) / 2
+            D.ctext(d, (x0 + wy / 2, H_ / 2), y_, f, (214, 150, 0)); D.ctext(d, (x0 + wy + wn / 2, H_ / 2), n_, f, NAVY)
+        spr, off = D.card(1080, 230, draw=dr)
         _cache[key] = spr
     return _cache[key]
 
@@ -195,6 +214,17 @@ def imag_pip(im, w_, h_):
     im = im.convert("RGB").resize((w_, h_), Image.LANCZOS)
     ov = Image.new("RGB", im.size, (40, 60, 130)); im = Image.blend(im, ov, 0.35)
     return im
+
+
+def sum_sprite(t, lines):
+    """かんたんな検算の決まりの足し算（v1 のコメント「計算で決まる数字が分からない」）。lines：[(出す時刻, 字, 色), ...]。字は 2D なので書いてよい"""
+    W_, H_ = 820, 34 + 60 * len(lines); S2 = 2
+    im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((6, 6, W_ * S2 - 6, H_ * S2 - 6), radius=22 * S2, fill=(255, 253, 244, 240), outline=(200, 206, 214, 255), width=4 * S2)
+    for i, (t0, txt, col) in enumerate(lines):
+        if t < t0: continue
+        D.ctext(d, (W_ / 2 * S2, (46 + 60 * i) * S2), txt, D.font((32 if txt.startswith("※") else 44) * S2), col)
+    return im.resize((W_, H_), Image.LANCZOS)
 
 
 def notebook_sprite(t, t_check):
@@ -743,6 +773,12 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             q = where(p["obj"], t)
             if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= 720): continue
             _paste(base, num_sprite(p["n"]), q[0], max(50, q[1] - 70), k, a)
+        elif kind == "xobj":
+            q = where(p["obj"], t)
+            if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= 720): continue
+            sz = p.get("sz", 60); _paste(base, xmark(sz), q[0], q[1], k, a)
+        elif kind == "sum":
+            _paste(base, sum_sprite(t, p["lines"]), 640, p.get("y", 470), k, a)
         elif kind == "notebook":
             _paste(base, notebook_sprite(t, p["check"]), 290, 330, k, a)   # v1 の点検：タイルの列の左を隠していた → 下へ
         elif kind == "pip3" and frame_of:

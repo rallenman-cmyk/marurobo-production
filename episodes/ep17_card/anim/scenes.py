@@ -80,7 +80,8 @@ def pop_out(ob, t, s0=1.0, d=0.25):
 PH = (1.42, 0.98, 0.0)          # 床に置いたスマホ（画面が上）。金庫の近く（走って 1 秒ほど）
 HOUSE_S = 0.40
 SAFE = (0.8, 1.85, 0.0)          # 金庫（前＝−y。とびらの面は y=1.64）
-SAFE_FRONT = (0.8, 1.12, 0.0)    # 金庫の前に立つ所（とびらが開いても当たらない）
+SAFE_FRONT = (0.8, 0.95, 0.0)    # 金庫の前に立つ所。v1 のコメント「ドア開ける時にまるロボの体を貫通」：1.12 では開け閉めのとびらの先（蝶つがいから 0.45 m）が体を通った → とびらの届かない 0.95 に
+DIAL_SPOT = (0.83, 1.31, 0.0)    # ダイヤル（とびらの右上）に頭を押し当てて回す所。とびらが閉まってから近づく
 HOME = (1.16, 0.55, 0.0)
 PH_SPOT = (1.16, 0.98, 0.0)      # スマホをのぞく所
 RACK = (0.12, 1.32, 0.0)         # 帽子かけ
@@ -114,7 +115,7 @@ def town_view17(x1=TOWN_X, night=False):
 def _house_common(night=False):
     room(window=True); door17()
     tb = town_view17(night=night)
-    sf = safe(SAFE, 0.0); track("safe", sf["root"], 0.3); track("safe_in", sf["shelf"], 0.03)
+    sf = safe(SAFE, 0.0); track("safe", sf["root"], 0.3); track("safe_door", sf["door"], 0.0); track("safe_in", sf["shelf"], 0.03)
     hat_rack(RACK); tr = trash_can(TRASH); track("trash", tr["root"], 0.25)
     if night:
         # 夜（試しの絵の点検：昼の明るさのままだった）：日の光を消し、部屋の照明をほぼ消して、机の電気スタンドだけ明るく。
@@ -149,7 +150,16 @@ def b_night(cl):
     for o in [chead] + list(chead.children): hide_key(o, -100.0, True); hide_key(o, t_card + 1.2, False); hide_key(o, t_in, True)
     cshelf = card_obj((0, 0, 0), (0, 0, 0), parent=sf["shelf"]); track("card_safe", cshelf, 0.0)
     for o in [cshelf] + list(cshelf.children): hide_key(o, -100.0, True); hide_key(o, t_in, False)
-    key(cshelf, "location", t_in, (0, -0.30, 0.02)); key(cshelf, "location", t_in + 0.5, (0, 0, 0)); ev(t_in, "slide", 0.3, "safe")
+    # v1 のコメント「カードが頭貫通してる」：カードが頭の前（棚から 0.30 m 手前）にいきなり出て、頭と重なっていた → 頭の上から棚まで飛ぶ
+    hide_key(cshelf, t_in, True); hide_key(cshelf, t_in + 0.7, False)
+    for o in cshelf.children: hide_key(o, t_in, True); hide_key(o, t_in + 0.7, False)
+    bpy.context.view_layer.update(); sp_ = sf["shelf"].matrix_world.translation.copy()
+    cfly = card_obj((0, 0, 0), (0, 0, R(90))); hp_ = (SAFE_FRONT[0], SAFE_FRONT[1], 0.50)
+    key(cfly, "location", -100.0, hp_, "CONSTANT"); key(cfly, "location", t_in, hp_)
+    key(cfly, "location", t_in + 0.35, (sp_.x, (hp_[1] + sp_.y) / 2, max(hp_[2], sp_.z) + 0.08)); key(cfly, "location", t_in + 0.7, tuple(sp_))
+    key(cfly, "rotation_euler", t_in, (0, 0, R(90))); key(cfly, "rotation_euler", t_in + 0.7, (0, 0, 0))
+    for o in [cfly] + list(cfly.children): hide_key(o, -100.0, True); hide_key(o, t_in, False); hide_key(o, t_in + 0.7, True)
+    ev(t_in + 0.5, "slide", 0.3, "safe")
     # まるロボ：封筒の前 → カードが頭に（01-01）→ うれしくて跳ねる（01-02）→ 金庫へ歩く（01-03）→ とびらを閉めてダイヤル（01-04）→ 得意顔
     M.at(t_card + 0.2, face=210.0, look=-15)                             # 左の封筒を見る
     M.at(t_card + 1.6, face=180.0, look=10)
@@ -157,10 +167,15 @@ def b_night(cl):
     M.walk(e("01-02") + 0.3, s("01-03") + 2.4, SAFE_FRONT)
     M.push(t_in - 0.2, 0.15)
     safe_open(sf, -100.0, 0.01); key(sf["door"], "rotation_euler", -50.0, (0, 0, R(-105)), "CONSTANT")
-    t_cl = w("01-04", "閉めて") - 0.1
+    t_cl = w("01-04", "閉めて") - 0.45                                  # v1 のコメント（とびらが体を通る）：閉まりきってからダイヤルへ歩き出すよう、「閉めて」の言葉で閉める
     safe_close(sf, t_cl, 0.5); ev(t_cl + 0.5, "click", 0.4, "safe")
-    safe_dial(sf, w("01-04", "ダイヤル") - 0.1, 1.5, 1.3); ev(w("01-04", "ダイヤル"), "dial", 0.35, "safe")
-    M.at(w("01-04", "ひと安心") - 0.6, face=20.0)                          # ふり向いて、見る人のほうへ得意顔（試しの絵：背中しか見えなかった）
+    # v1 のコメント「くるくるは頭でやってる感じにして」：とびらが閉まってからダイヤルへ近づき、頭を押し当てて、体を左右にゆらして回す
+    t_dl = w("01-04", "ダイヤル") + 0.2                                    # 着く時刻（歩く命令は着く時刻から逆算して歩き出す。閉まりきる t_cl+0.5 より前に歩き出さない）
+    # 歩くと 39 cm に 2 秒かかり、とびらが閉まる前に歩き出した → 閉まりきってから、前へ 2 回ぴょんと跳んで近づく（向きは変えない）
+    M.hopto(t_dl, DIAL_SPOT)
+    M.wobble(t_dl + 0.05, t_dl + 1.1, deg=16, period=0.45)
+    safe_dial(sf, t_dl + 0.05, 1.05, 1.3); ev(t_dl + 0.1, "dial", 0.35, "safe")
+    # ふり向く（半回転で 4 秒）のはやめ、金庫の横のカメラから、ダイヤルに頭を押し当てる顔とうなずく所を見せる（v1 のコメント「くるくるは頭で」）
     M.blink(w("01-04", "ひと安心"))
     M.nod(w("01-04", "ひと安心") + 0.1, n=1)
 
@@ -453,7 +468,7 @@ CUTS = [
     ("A01", b_night, 0.0, C((-0.4, -1.3, 1.25), (1.2, 1.2, 0.25), 26, (-0.2, -1.1, 1.15)), "A"),
     ("A01b", b_night, w("01-01", "1枚") - 0.3, C((0.15, 1.45, 0.8), (0.8, 0.66, 0.3), 30), "A"),   # v1 の点検：横の低い所からで、頭のカードと喜ぶ顔が見えなかった → 斜め前の少し上から
     ("A01c", b_night, s("01-03"), C((1.6, 0.35, 0.7), (0.8, 1.35, 0.25), 26), "A"),
-    ("A01d", b_night, s("01-04"), C((1.35, 0.3, 0.55), (0.8, 1.45, 0.3), 30), "A"),
+    ("A01d", b_night, s("01-04"), C((0.1, 0.55, 1.05), (0.85, 1.45, 0.3), 28), "A"),   # 左前の少し上から：とびらの面・ダイヤル・頭を押し当てるまるロボ（v1 のコメント「くるくるは頭で」）
     # 冒頭（朝）
     ("A02", b_house, s("02-01"), C((1.65, 0.72, 0.45), (1.42, 0.98, 0.0), 34), "A"),
     ("A02b", b_house, s("02-02"), C((2.2, 0.4, 0.55), (1.3, 0.85, 0.2), 28), "A"),
