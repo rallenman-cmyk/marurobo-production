@@ -704,12 +704,13 @@ def b_shop3(cl):
     _ball("#46D27A", t_hit - 0.9, t_hit - 0.05, TOPQ, GATE_Q, r=0.13, arc=0.4, name="gball", strength=10.0)
     ev(t_hit, "chime_ok", 0.45, "register")
     gs = slip_obj(SLOT, (R(90), 0, 0), tex="slip_green", w=SLIP_W); track("gslip", gs, 0.0)
+    cube(glow_mat("gslipback", "#46D27A", 2.0), (0, 0, -0.006), (SLIP_W + 0.06, SLIP_W * 0.18 + 0.05, 0.004), parent=gs)   # 文ごとの点検：緑の札が小さく淡く、レジの画面の上で分かりにくかった → 緑に光る板
     t_g = wp("17-08", "緑") - 0.2
     HOLD = (0.2, 0.3, 1.07)                               # 影が持ち上げて見せる所（右手の先。試しの絵の点検：体のまん中の前に浮いて、手と離れていた）
     key(gs, "location", -100.0, (SLOT[0], SLOT[1], SLOT[2] - 0.1), "CONSTANT"); key(gs, "location", t_g, (SLOT[0], SLOT[1], SLOT[2] - 0.1))
-    key(gs, "location", t_g + 0.6, (SLOT[0], SLOT[1] - 0.05, SLOT[2] + 0.3))
+    key(gs, "location", t_g + 0.6, (SLOT[0], SLOT[1] - 0.12, SLOT[2] + 0.55))   # 画面の上の高さ（1.46 m）まで浮かぶ
     t_pu = wp("18-01", "そっと") - 0.1
-    key(gs, "location", t_pu, (SLOT[0], SLOT[1] - 0.05, SLOT[2] + 0.3)); key(gs, "location", t_pu + 0.5, (0.27, 0.75, 1.65)); key(gs, "location", t_pu + 1.0, HOLD)   # 影の頭の横の上を通って手へ（体を通りぬけない）
+    key(gs, "location", t_pu, (SLOT[0], SLOT[1] - 0.12, SLOT[2] + 0.55)); key(gs, "location", t_pu + 0.5, (0.27, 0.75, 1.65)); key(gs, "location", t_pu + 1.0, HOLD)   # 影の頭の横の上を通って手へ（体を通りぬけない）
     hide_key(gs, -100.0, True); hide_key(gs, t_g, False)
     ev(t_g, "shimmer", 0.3, "gslip")
     # 影は 18-01 でふり向き（手前を向く）、札を持ち上げる
@@ -724,7 +725,7 @@ def b_shop3(cl):
     ev(t_fly + 0.9, "whoosh", 0.35, "numball")     # 通しの点検：店の中（門の外のカメラから見えない所）で鳴らそうとして落ちていた → 門を出る所で
     for o in [gs] + list(gs.children): hide_key(o, t_fly + 0.4, True)
     # まるロボ（0.72 倍）：植え込みのうしろから門をのぞく
-    M = MaruR(MARU_BUSH, face=-70.0, s=SHOP_S); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)     # 別の目の点検：顔（レンズ）がカメラの反対を向き、首をかしげる・驚くが見えなかった → 門と手前の間を向く
+    M = MaruR(MARU_BUSH, face=70.0, s=SHOP_S); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)     # 別の目の点検：顔（レンズ）がカメラの反対を向き、首をかしげる・驚くが見えなかった → 門と手前の間を向く
     hat_on_maru(M, -50.0)
     M.at(s("16-04") + 0.3, look=25)                         # 塔へ飛ぶ光を見上げる
     M.at(s("16-07"), look=0)
@@ -791,7 +792,7 @@ def b_house18(cl):
     key(cr, "rotation_euler", t_ura - 0.1, (0, 0, 0)); key(cr, "rotation_euler", t_ura + 0.5, (0, 0, R(180))); ev(t_ura - 0.1, "swish", 0.25, "bigcard")   # 「うら側」の言葉で裏返す（試しの絵の点検：言葉の前から回り、表の欄が光るのが一瞬だった）
     pop_out(cr, s("19-02") + 0.2, 1.0, 0.3)
     M.at(t_c + 0.3, look=10)
-    M.at(s("19-03"), look=0, face=-30.0)          # 19-05 のぶるっとを、顔の見える向きで（別の目の点検：背中側からかすかにしか見えなかった）
+    M.at(s("19-03"), look=0, face=30.0)          # 19-05 のぶるっとを、顔の見える向きで（別の目の点検：背中側からかすかにしか見えなかった）
     # 19-05：ぶるっと震える
     M.wobble(wp("19-05", "正体") - 0.4, wp("19-05", "正体") + 0.9, deg=5, period=0.12); ev(wp("19-05", "正体") - 0.4, "rattle", 0.15, "maru_c")
 
@@ -979,8 +980,8 @@ CUTS = [
     ("A19b", b_house18, s("19-02"), C((1.9, 0.3, 0.7), (0.6, 1.1, 0.3), 26), "A"),
     ("A19c", b_house18, s("19-03"), C((-0.6, -1.4, 1.5), (1.3, 0.8, 0.3), 28), "A"),
     ("A19d", b_house18, s("19-05"), C((1.75, 0.05, 0.6), (0.8, 0.95, 0.25), 30), "A"),
-    ("P18", b_pip18, s("18-09") - 0.2, C((0.05, -3.3, 1.15), (0.05, -0.1, 0.75), 36), "I"),   # 文ごと・390px の点検：小窓の中で札が小さすぎて見えなかった
-    ("P19", b_pip19, s("19-02") - 0.2, C((0.05, -3.3, 1.15), (0.05, -0.1, 0.75), 36), "I"),
+    ("P18", b_pip18, s("18-09") - 0.2, C((0.05, -3.7, 1.25), (0.1, -0.1, 0.95), 28), "I"),   # 文ごと・390px の点検：小窓の中で札が小さすぎて見えなかった
+    ("P19", b_pip19, s("19-02") - 0.2, C((0.05, -3.7, 1.25), (0.1, -0.1, 0.95), 28), "I"),
     ("C13p", b_shop, s("13-01") - 0.1, None, "C"),
     # 小窓（想像）
     ("P05", b_pip05, s("05-01") - 0.2, C((1.4, -0.3, 1.1), (3.0, -0.2, 1.4), 30), "I"),
