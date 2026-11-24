@@ -57,12 +57,14 @@ def b_in(cl):
                (s("13-06") + 0.3, "night"), (s("16-10") - 0.3, "day")])
     for nm, e_ in (("work", 60.0), ("admin", 30.0), ("tags", 0.0), ("backup", 0.0)):
         light_key(IN["room_" + nm], -100.0, 0.0)
-    light_key(IN["room_work"], s("13-05") - 0.3, 70.0); light_key(IN["room_work"], s("13-06") + 0.3, 0.0)      # 13-05 の終わりまで昼（v1：最後の 1 秒が暗かった）
-    light_key(IN["room_work"], s("16-10"), 70.0)
-    light_key(IN["room_admin"], s("14-01") - 0.6, 70.0); light_key(IN["room_admin"], s("14-02") + 1.0, 0.0)
+    # 明かりは、つける・消す時刻の 0.4 秒前に「前の強さ」の印を打つ（v1：印が 2 つだけで、13-05・14-01 の間ずっと少しずつ暗くなっていた）
+    for nm_, keys_ in (("work", [(s("13-05") - 0.3, 70.0), (s("13-06") + 0.3, 0.0), (s("16-10"), 70.0)]), ("admin", [(s("14-01") - 0.6, 70.0), (s("14-02") + 1.0, 0.0)])):
+        prev_ = 0.0
+        for tt_, en_ in keys_:
+            light_key(IN["room_" + nm_], tt_ - 0.4, prev_); light_key(IN["room_" + nm_], tt_, en_); prev_ = en_
     light_key(IN["room_tags"], s("14-05"), 0.0); light_key(IN["room_tags"], s("14-05") + 0.6, 45.0); light_key(IN["room_tags"], e("15-04") + 0.5, 45.0); light_key(IN["room_tags"], e("15-04") + 1.0, 0.0)
     light_key(IN["room_backup"], s("14-07"), 0.0); light_key(IN["room_backup"], s("14-07") + 0.6, 45.0); light_key(IN["room_backup"], e("14-13") + 0.3, 45.0); light_key(IN["room_backup"], e("14-13") + 0.8, 0.0)      # 試しの絵：14-08・14-12 の部屋の中が真っ黒だった
-    # ---- 影
+    # ---- 影（別の所へ置き直すのは、場面が替わる重なり（切り替わりの 0.1 秒前〜0.25 秒後）の中で。v1：0.3 秒前で、前の場面の最後に影が消えた）
     sh = shadow((-1.4, 0.25, 0.0), face=90.0, s=SHS2); track("shadow", sh.root, 1.5 * SHS2)
     key(sh.root, "scale", -100.0, (SHS2, SHS2, SHS2), "CONSTANT")
     # 13-01：裏口からの暗い通路から出てきて、立ち止まる（「でしょうか」）
@@ -84,7 +86,7 @@ def b_in(cl):
         key(sh.root, "rotation_euler", w("13-08", "すみずみ") - 1.0 + k * 0.9, (0, 0, R(a)))
     # 14-01：管理する人の部屋の机。引き出しを開けて、赤い鍵束を持ち上げる
     ta = s("14-01")
-    sh_key(sh, ta - 0.4, (11.8, 0.3), 90.0, "CONSTANT"); sh_key(sh, ta - 0.3, (D_["admin"] - 0.15, Y_ROOM + 1.0), 0.0 + 180.0, "CONSTANT")   # 部屋の中（場面が替わる所で置き直す）
+    sh_key(sh, ta - 0.1, (11.8, 0.3), 90.0, "CONSTANT"); sh_key(sh, ta - 0.05, (D_["admin"] - 0.15, Y_ROOM + 1.0), 0.0 + 180.0, "CONSTANT")   # 部屋の中（場面が替わる所で置き直す）
     key(dr, "location", -100.0, tuple(dr.location), "CONSTANT"); key(dr, "location", ta + 0.4, tuple(dr.location))
     key(dr, "location", ta + 1.1, (dr.location[0], dr.location[1] - 0.32, dr.location[2]))
     kb = key_bundle((dr.location[0], dr.location[1] + 0.2, dr.location[2] - 0.01), s=1.1); track("bundle", kb, 0.0)
@@ -100,7 +102,7 @@ def b_in(cl):
     key(sh.arm, "rotation_euler", ta + 2.4, (R(5), 0, 0))
     # 14-02：廊下で鍵束を上げる → 光る → 6 つの扉が手前から順に光る
     tb = s("14-02")
-    sh_key(sh, tb - 0.4, (D_["admin"] - 0.15, Y_ROOM + 1.0), 180.0, "CONSTANT"); sh_key(sh, tb - 0.3, (D_["admin"] + 0.3, 0.2), 90.0, "CONSTANT")
+    sh_key(sh, tb - 0.1, (D_["admin"] - 0.15, Y_ROOM + 1.0), 180.0, "CONSTANT"); sh_key(sh, tb - 0.05, (D_["admin"] + 0.3, 0.2), 90.0, "CONSTANT")
     key(sh.arm, "rotation_euler", tb + 0.1, (R(5), 0, 0)); key(sh.arm, "rotation_euler", tb + 0.6, (R(40), 0, 0))
     bm = bpy.data.materials.get("in_bundle")
     if bm is None:
@@ -129,14 +131,14 @@ def b_in(cl):
     door_key("tags", s("14-05") + 0.1, 0); door_key("tags", s("14-05") + 0.9, 85); door_key("tags", e("14-06") + 0.3, 85); door_key("tags", e("14-06") + 1.0, 0)
     ev(s("14-05") + 0.1, "squeak", 0.25, "door_tags")
     sh_key(sh, s("14-05"), (D_["backup"], 0.85), 180.0); sh_key(sh, s("14-05") + 0.05, (D_["tags"] + 1.3, 0.3), 160.0, "CONSTANT")       # 扉の回る所の外
-    sh_key(sh, s("14-07") - 0.3, (D_["tags"] + 1.3, 0.3), 160.0); sh_key(sh, s("14-07") - 0.25, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT")
+    sh_key(sh, s("14-07") - 0.1, (D_["tags"] + 1.3, 0.3), 160.0); sh_key(sh, s("14-07") - 0.05, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT")
     door_key("backup", s("14-07") + 0.45, 0); door_key("backup", s("14-07") + 1.25, 85); door_key("backup", s("14-08") + 0.2, 85); door_key("backup", s("14-08") + 0.9, 0)
     ev(s("14-07") + 0.45, "squeak", 0.25, "door_backup")      # 場面が替わり終わってから（v1：替わる途中で鳴らず）
     # 14-09：予備の倉庫の扉の前に立つ影（後ろ姿）
-    sh_key(sh, s("14-09") - 0.3, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT"); sh_key(sh, s("14-09") - 0.25, (D_["backup"], 0.75), 180.0, "CONSTANT")
+    sh_key(sh, s("14-09") - 0.1, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT"); sh_key(sh, s("14-09") - 0.05, (D_["backup"], 0.75), 180.0, "CONSTANT")
     # 15-01：名札の倉庫の扉を鍵束で開ける
     tf = s("15-01")
-    sh_key(sh, tf - 0.4, (D_["backup"], 0.75), 180.0, "CONSTANT"); sh_key(sh, tf - 0.35, (D_["tags"] + 0.25, 0.75), 180.0, "CONSTANT")
+    sh_key(sh, tf - 0.1, (D_["backup"], 0.75), 180.0, "CONSTANT"); sh_key(sh, tf - 0.05, (D_["tags"] + 0.25, 0.75), 180.0, "CONSTANT")
     key(sh.arm, "rotation_euler", tf + 0.3, (R(5), 0, 0)); key(sh.arm, "rotation_euler", tf + 1.0, (R(60), 0, 0)); ev(tf + 1.1, "click", 0.4, "door_tags")
     key(sh.arm, "rotation_euler", tf + 1.6, (R(60), 0, 0)); key(sh.arm, "rotation_euler", tf + 2.0, (R(-10), 0, 0))
     sh_key(sh, tf + 1.6, (D_["tags"] + 0.25, 0.75), 180.0); sh_key(sh, tf + 2.1, (D_["tags"] + 1.35, 0.35), 180.0)
@@ -169,7 +171,7 @@ def b_in(cl):
     sh_key(sh, s("15-05") + 0.6, (D_["tags"] + 0.2, Y_ROOM + 1.2), 0.0); sh_key(sh, s("15-05") + 1.0, (D_["tags"] - 0.05, Y_ROOM + 0.7), 0.0); sh_key(sh, s("15-05") + 2.0, (D_["tags"] - 0.05, 0.45), 0.0)     # 出入口のまん中を通る
     sh_key(sh, s("15-05") + 2.4, (D_["tags"] - 0.1, 0.4), -90.0); sh_key(sh, e("15-05") + 0.4, (2.0, 0.3), -90.0)
     # 15-06〜16-02 はお城の外（b_out2）。16-03：もう一度、廊下を奥へ（背中に「？」）
-    sh_key(sh, s("16-03") - 0.4, (2.0, 0.3), 90.0, "CONSTANT"); sh_key(sh, s("16-03") - 0.35, (0.6, 0.25), 90.0, "CONSTANT")
+    sh_key(sh, s("16-03") - 0.1, (2.0, 0.3), 90.0, "CONSTANT"); sh_key(sh, s("16-03") - 0.05, (0.6, 0.25), 90.0, "CONSTANT")
     key(bx2, "scale", s("16-03") - 0.4, (0.001,) * 3, "CONSTANT")
     sh_key(sh, s("16-03"), (0.6, 0.25), 90.0); sh_key(sh, e("16-03") + 0.5, (4.5, 0.4), 90.0)
     key(sh.arm, "rotation_euler", s("16-03"), (R(-20), 0, 0))
@@ -237,7 +239,7 @@ def b_in(cl):
     M.at(tc - 0.3, loc=(PX[3] - 0.75, -0.8, 0.0), face=125.0, interp="CONSTANT")
     M.surprise(t_m1 + 0.25)
     M.at(s("15-04") - 1.2, loc=(D_["tags"] + 0.95, 0.55, 0.0), face=205.0, interp="CONSTANT")      # 名札の倉庫の入口の右から、ななめに中をのぞく（出てくる影の通り道の外。まるロボは歩くのが遅いので、下がらせない）
-    M.surprise(wv("15-04", "まるロボ") - 0.1)
+    M.surprise(wv("15-04", "まるロボ") + 0.25)      # 場面が替わり終わってから（v1：替わる途中で、驚く音が鳴らなかった）
     M.at(e("15-05") + 0.6, loc=(40.0, -30.0, 0.0), interp="CONSTANT")
     tr = s("16-07")
     M.at(tr - 0.3, loc=(D_["tags"] - 0.5, 0.05, 0.0), face=90.0, interp="CONSTANT")      # 錠のかかった扉の前を急ぐが、まるロボは遅い（1.4 m を 3.8 秒。向きを変えずに）。v2 の計画で 7 秒遅れた

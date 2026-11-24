@@ -36,13 +36,16 @@ def kana_len(s):
     return sum(len(re.sub(r"[ゃゅょぁぃぅぇぉ、。？！…]", "", it["hira"])) for it in _K.convert(s))
 
 
-def _env(wav):
+def _db(wav):
     with wave.open(wav) as w:
         sr, ch = w.getframerate(), w.getnchannels(); x = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
     if ch > 1: x = x.reshape(-1, ch).mean(1)
     n = int(HOP * sr); m = len(x) // n
-    db = 20 * np.log10(np.sqrt((x[:m * n].reshape(m, n) ** 2).mean(1)) + 1e-9)
-    return db > THR
+    return 20 * np.log10(np.sqrt((x[:m * n].reshape(m, n) ** 2).mean(1)) + 1e-9)
+
+
+def _env(wav):
+    return _db(wav) > THR
 
 
 def onset(wav):
@@ -62,9 +65,14 @@ def silences(wav, speed=1.0, min_len=MIN_SIL):
             s = None
     # 0.1 秒以下の小さな音（息・口の音）で 2 つに分かれた間は、1 つの間にまとめる（182「エスカレーターは、｜いっぷんかんに」：
     #   本当の間 0.73 秒＋0.1 秒の音＋0.21 秒が分かれ、「いっぷん」の「っ」の 0.06 秒の無音に読点を当てて、字幕が 0.2 秒おくれた）
+    #   ただし、まとめるのは、間にはさまった音が声より 15 dB 以上小さいときだけ（16本目 2章 15-06「からは、｜よ｜こ」：
+    #   「よ」の 0.08 秒（-16 dB、ふつうの声と同じ大きさ）のあとに「こ」の前の詰まり 0.08 秒があり、「よ」を息と見て間をまとめ、
+    #   「よ」の頭で正しく替わる字幕を「0.16 秒早い」と数えていた）
+    db = _db(wav); pk = db.max()
     m = []
     for a_, b_ in r:
-        if m and a_ - m[-1][1] <= 0.105 / speed and (b_ - a_) >= 0.08 / speed and (m[-1][1] - m[-1][0]) >= 0.08 / speed: m[-1] = (m[-1][0], b_)
+        quiet = m and db[int(m[-1][1] * speed / HOP):max(int(m[-1][1] * speed / HOP) + 1, int(a_ * speed / HOP))].max() < pk - 15
+        if m and quiet and a_ - m[-1][1] <= 0.105 / speed and (b_ - a_) >= 0.08 / speed and (m[-1][1] - m[-1][0]) >= 0.08 / speed: m[-1] = (m[-1][0], b_)
         else: m.append((a_, b_))
     return m, len(v) * HOP / speed
 
