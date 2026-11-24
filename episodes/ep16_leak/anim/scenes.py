@@ -410,7 +410,7 @@ CUTS += CUTS2
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
 PIP_ONLY = {"P02", "P09", "P17"}
-END_T = e("17-13") + 1.5
+END_T = e("17-18") + 1.5
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}
