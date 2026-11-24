@@ -246,21 +246,38 @@ def pip_backup_sprite(t, p):
 
 
 def tworoads_sprite(t, p):
-    """17-09：2 通の手紙を左右に並べ、それぞれの逃げ道に×。錠には「予備で元に戻す」、名札には「元に戻せば安心」（戻せても名札がばらまかれる）。
-    確認役 2 回目：右の道「見せないでもらう」が 17-12 の「見せないでくれる」とゆれ、逃げ道として分かりにくかった"""
-    W_, H_ = 1000, 440
+    """17-09：2 つの脅しと、それぞれの逃げ道、影のふさぎ方を左右 2 列に並べる。
+    v5 のコメント「ここ分かりにくい」（×が付くだけで、なぜふさがれるのかが出ていなかった）→ ユーザーの選択「逃げ道とふさぎ方を並べる」。
+    声に合わせて：t0 左の脅し → t1 右の脅し → tx0（「逃げ道」）2 つの逃げ道 → tx1（「両方」）2 つのふさぎ方の× → 最後の一言"""
+    W_ = 1120
+    H_ = 160 if t < p["tx0"] else (280 if t < p["tx1"] else (390 if t < p["tx1"] + 0.8 else 500))      # 出ている段だけの高さ（v6 の点検：脅しだけの 4 秒、下半分が白く空いていた）
     im, d = _canvas(W_, H_)
-    for i, (x0, lab, road) in enumerate(((60, "錠をかけて脅す", "予備で元に戻す"), (540, "名札で脅す", "元に戻せば安心"))):
+    cols = ((40, "脅し① 錠", "「払えば開けてやる」", "予備で戻す", "予備の倉庫にも錠"),
+            (580, "脅し② 名札", "「払わないと見せる」", "戻せば解決？", "名札は盗まれたまま"))
+    f44 = D.font(44 * S2)
+    for i, (x0, head, quote, road, block) in enumerate(cols):
         if t < p["t%d" % i]: continue
-        d.rounded_rectangle((x0 * S2, 40 * S2, (x0 + 400) * S2, 170 * S2), radius=18 * S2, fill=(250, 246, 236, 255), outline=(200, 190, 170, 255), width=4 * S2)
-        d.polygon([((x0 + 36) * S2, 84 * S2), ((x0 + 56) * S2, 104 * S2), ((x0 + 36) * S2, 124 * S2), ((x0 + 16) * S2, 104 * S2)], fill=RED + (255,))
-        D.ctext(d, ((x0 + 218) * S2, 105 * S2), lab, D.font(44 * S2), (150, 20, 20))
-        d.line(((x0 + 200) * S2, 175 * S2, (x0 + 200) * S2, 235 * S2), fill=NAVY + (255,), width=8 * S2)
-        d.rounded_rectangle(((x0 + 20) * S2, 240 * S2, (x0 + 380) * S2, 330 * S2), radius=40 * S2, fill=(236, 240, 246, 255), outline=NAVY + (255,), width=4 * S2)
-        D.ctext(d, ((x0 + 200) * S2, 285 * S2), road, D.font(44 * S2), NAVY)       # 札のはば 360・字 8 つまで
-        if t >= p["tx%d" % i]:      # 道の字が読めるよう、×は字に重ねず、下に赤い丸の×を置く（試しの絵：字が×で隠れた）
-            _xbadge(d, (x0 + 200) * S2, 380 * S2, 34 * S2, RED)
+        cx = x0 + 250
+        d.rounded_rectangle((x0 * S2, 20 * S2, (x0 + 500) * S2, 140 * S2), radius=18 * S2, fill=(253, 238, 236, 255), outline=RED + (255,), width=4 * S2)
+        D.ctext(d, (cx * S2, 52 * S2), head, f44, (170, 25, 25))
+        D.ctext(d, (cx * S2, 108 * S2), quote, f44, (150, 20, 20))
+        if t >= p["tx0"]:
+            _arrow_v(d, cx, 146, 182, NAVY)
+            d.rounded_rectangle(((x0 + 2) * S2, 188 * S2, (x0 + 498) * S2, 262 * S2), radius=37 * S2, fill=(236, 244, 250, 255), outline=NAVY + (255,), width=4 * S2)
+            D.ctext(d, (cx * S2, 225 * S2), "逃げ道：" + road, f44, NAVY)
+        if t >= p["tx1"] + 0.25 * i:
+            _arrow_v(d, cx, 268, 304, RED)
+            tw_ = d.textlength(block, font=f44) / S2
+            _xbadge(d, (cx - tw_ / 2 - 14) * S2, 340 * S2, 26 * S2, RED)
+            D.ctext(d, ((cx + 22) * S2, 340 * S2), block, f44, RED)
+    if t >= p["tx1"] + 0.8:
+        D.ctext(d, (W_ / 2 * S2, 440 * S2), "払わずにすむ道が、ない", D.font(56 * S2), (170, 25, 25))
     return _done(im, W_, H_)
+
+
+def _arrow_v(d, x, y0, y1, col):
+    d.line((x * S2, y0 * S2, x * S2, (y1 - 10) * S2), fill=col + (255,), width=8 * S2)
+    d.polygon([((x - 14) * S2, (y1 - 14) * S2), ((x + 14) * S2, (y1 - 14) * S2), (x * S2, y1 * S2)], fill=col + (255,))
 
 
 def grid153_sprite(t, p):
@@ -392,7 +409,7 @@ def draw2(kind, t, t0, p, base, where, _paste, _pop_k, _pop_a):
         _paste(base, spr, 30 + 260, 25 + 150, k, a)
     elif kind == "c2_roads":
         base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(90 * a))))
-        _paste(base, tworoads_sprite(t, p), 640, 270, k, a)
+        spr = tworoads_sprite(t, p); _paste(base, spr, 640, 40 + spr.height / 2, k, a)       # 上の端をそろえ、段が増えると下へのびる
     elif kind == "c2_grid":
         base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(90 * a))))
         _paste(base, grid153_sprite(t, p), 640, 285, k, a)
