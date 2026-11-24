@@ -282,6 +282,7 @@ for nm in ORDER:
         # 17本目 v1 の点検：同じ場面の全部のカットの記録に、場面全部の音が入っている。直す前に描いたカットの古い時刻の音まで鳴っていた
         #   → 音は、その時刻に映っているカット（小窓だけのクリップは除く）の記録からだけ取る
         if nm in PIP_ONLY or not (CL[nm][2] - 0.05 <= t < _SHOWN_END[nm] + 0.05): continue
+        if kind == "street": continue                                   # 町の音は鳴らさない（SKILL §3。前に描いたカットの記録に残っている分も）
         if (round(t, 2), kind) in EV: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)

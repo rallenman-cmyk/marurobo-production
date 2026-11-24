@@ -382,7 +382,7 @@ def b_shop(cl):
         bg.default_value = v; bg.keyframe_insert("default_value", frame=f(t))
     sh = shadow((0.0, 3.7, 0.0), face=0.0, s=1.0); track("shadow", sh.root, 1.5)
     pop_in(sh.root, w("14-10", "悪いこと") - 0.2, 1.0, 1.2); ev(w("14-10", "悪いこと"), "low_wind", 0.3, "shadow")
-    ev(cl_t0(), "street", 0.15, "")
+    # v1 の点検：カットごとに鳴らした町の音が、4〜5 秒ごとの「プツッ」に聞こえた。SKILL §3「ずっと流す効果音（町の音など）は入れない」→ 鳴らさない
 
 
 def cl_t0():
