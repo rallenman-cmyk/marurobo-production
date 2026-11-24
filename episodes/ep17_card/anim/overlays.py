@@ -49,7 +49,7 @@ def ev_list():
     add(w("11-03", "会社の印") - 0.1, e("11-03") + 0.3, "tag", dict(text="会社の印", obj="tile0", dx=70, dy=-110, size=52, bg=BLUE, fg=WHITE))
     add(w("12-02", "役目") - 0.2, e("12-02") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # v1 のコメント「計算で決まる数字が分からない。決まりの計算あるなら載せたい」（ユーザーの選択：かんたんな決まりで見せる）
-    add(w("12-03", "前に") - 0.1, e("12-03") + 0.4, "sum", dict(y=125, lines=[   # v2 の点検：y=455 ではタイルの列にかかった → 上へ
+    add(w("12-03", "前に") - 0.1, e("12-04") + 0.4, "sum", dict(y=125, lines=[   # v2 の点検：y=455 ではタイルの列にかかった → 上へ。v2 のコメント「式が消えるのが早い」：4.8 秒（46 字）→ 12-04 の終わりまで（10 秒）
         (w("12-03", "前に") - 0.1, "3＋5＋2＋8＋0＋4＋7 ＝ 29", NAVY),
         (w("12-03", "計算") - 0.1, "あと 1 で 30 → 最後の数字は 1", ORANGE),
         (w("12-03", "計算") - 0.1, "※かんたんな決まりで表しています", (110, 118, 132))]))
@@ -58,7 +58,7 @@ def ev_list():
     add(w("13-04", "となり") - 0.2, e("13-04") + 0.3, "ring", dict(obj="key" + WRONG[6], r=46, col=RED))   # v1 の点検：どのキーを押しまちがえたか分からなかった
     add(s("13-06") - 0.05, e("13-06") + 0.6, "tag", dict(text="番号がちがいます", pos=(640, 92), size=56, bg=RED, fg=WHITE))
     add(w("13-07", "その場") + 0.1, e("13-07") + 0.3, "xobj", dict(obj="dotq", sz=70))   # 光の点が止まった所（門の中）に ×（v1 のコメント：門の上のランプの赤い輪は、監視カメラに見えた）
-    add(s("13-09") + 0.05, e("13-09") + 0.4, "sum", dict(y=130, lines=[
+    add(s("13-09") + 0.05, e("13-10") + 0.3, "sum", dict(y=130, t2=s("13-10") - 0.12, x2=965, y2=112, w2=600, lines2=[(0, "3＋5＋2＋8＋0＋4＋8 ＝ 30", NAVY), (0, "→ 0 になるはず", NAVY), (0, "でも、1 → 合わない ×", RED)], lines=[   # v2 のコメント（式が消えるのが早い）と同じ種類：5.6 秒（39 字）→ 13-10 の終わりまで（7.6 秒）。13-10 では短い 3 行にして右上へ（左のレジの画面と、下の字幕の帯を隠さない）
         (s("13-09") + 0.05, "3＋5＋2＋8＋0＋4＋8 ＝ 30", NAVY),
         (s("13-09") + 0.05, "→ 検算の数字は 0 になるはず", NAVY),
         (w("13-09", "検算") - 0.1, "でも、1 → 合わない ×", RED)]))
@@ -216,9 +216,9 @@ def imag_pip(im, w_, h_):
     return im
 
 
-def sum_sprite(t, lines):
+def sum_sprite(t, lines, W0=820):
     """かんたんな検算の決まりの足し算（v1 のコメント「計算で決まる数字が分からない」）。lines：[(出す時刻, 字, 色), ...]。字は 2D なので書いてよい"""
-    W_, H_ = 820, 34 + 60 * len(lines); S2 = 2
+    W_, H_ = W0, 34 + 60 * len(lines); S2 = 2
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((6, 6, W_ * S2 - 6, H_ * S2 - 6), radius=22 * S2, fill=(255, 253, 244, 240), outline=(200, 206, 214, 255), width=4 * S2)
     for i, (t0, txt, col) in enumerate(lines):
@@ -778,9 +778,12 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             if q is None or not (0 <= q[0] <= 1280 and 0 <= q[1] <= 720): continue
             sz = p.get("sz", 60); _paste(base, xmark(sz), q[0], q[1], k, a)
         elif kind == "sum":
-            _paste(base, sum_sprite(t, p["lines"]), 640, p.get("y", 470), k, a)
+            if "t2" in p and t >= p["t2"]:      # 次の場面では、小さくして空いている所へ（13-10：レジの画面を隠さない）
+                _paste(base, sum_sprite(t, p.get("lines2", p["lines"]), p.get("w2", 820)), p["x2"], p["y2"], k, a)   # 字は小さくしない（44 より小さいとスマホで読めない）
+            else:
+                _paste(base, sum_sprite(t, p["lines"]), 640, p.get("y", 470), k, a)
         elif kind == "notebook":
-            _paste(base, notebook_sprite(t, p["check"]), 290, 330, k, a)   # v1 の点検：タイルの列の左を隠していた → 下へ
+            _paste(base, notebook_sprite(t, p["check"]), 290, 395, k, a)   # v2：式の札（上）と重ならないよう、少し下へ   # v1 の点検：タイルの列の左を隠していた → 下へ
         elif kind == "pip3" and frame_of:
             for i_, (cl_, st_) in enumerate(p["clips"]):
                 im = frame_of(cl_, st_)
