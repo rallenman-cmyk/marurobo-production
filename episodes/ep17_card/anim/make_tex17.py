@@ -130,7 +130,7 @@ def slip_short(name, n=3):
 
 
 slip_short("slip_short")
-slip("slip_red", SLIPS[1], col=(240, 120, 112)); slip("slip_green", NUM, col=(120, 214, 150)); slip("slip_mine", NUM, hl=True)
+slip("slip_red", SLIPS[1], col=(226, 70, 60))   # 通しの点検：うすい赤では、引きの絵で地面の札が白っぽく見えた; slip("slip_green", NUM, col=(120, 214, 150)); slip("slip_mine", NUM, hl=True)
 # レジの画面：問い合わせ中（はじめの 2 けたが青）・はじかれた（赤）・通った（緑）
 for i, n in enumerate(SLIPS[1:4]):
     register("reg_q%d" % i, n, "typing")
