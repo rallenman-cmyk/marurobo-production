@@ -270,7 +270,7 @@ def owner_room():
     ox, oy = OWN
     fm, wm = _floor_mat(), _wall_mat()
     cube(fm, (ox, oy, -0.02), (6, 6, 0.04))
-    for (cx, cy, sx, sy) in ((ox, oy + 3.0, 6, 0.2), (ox - 3.0, oy, 0.2, 6), (ox + 3.0, oy, 0.2, 6)):
+    for (cx, cy, sx, sy) in ((ox, oy + 3.0, 6, 0.2), (ox - 3.0, oy, 0.2, 6), (ox + 3.0, oy, 0.2, 6), (ox, oy - 3.0, 6, 0.2)):      # 手前のかべも（17-04：まるロボの前から撮ると、かべのない所が黒く映った）
         cube(wm, (cx, cy, IN_H / 2), (sx, sy, IN_H))
     cube(_inmat("ceil", "#8F877B", rough=0.9), (ox, oy, IN_H + 0.05), (6.4, 6.4, 0.1))
     cube(_inmat("rug", "#7A2E3A", rough=0.9), (ox, oy + 0.8, 0.005), (3.2, 2.4, 0.01))
