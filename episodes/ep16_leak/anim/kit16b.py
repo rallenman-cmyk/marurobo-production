@@ -28,6 +28,7 @@ def _wall_mat(): return noise_mat("in_wall", "#B9AF9F", "#AAA090", 3.0, 0.9)
 def _room_box(cx, y0, w, d, h, light_col="#FFE2B8", light_e=0.0, name="room"):
     """部屋の箱（床・3 つのかべ・天井）。y0＝入口側のかべの奥の面。返す：明かり（energy を時刻で替える）"""
     fm, wm = _floor_mat(), _wall_mat()
+    if name == "backup": wm = noise_mat("in_wall_b", "#9FB2C6", "#93A6BA", 3.0, 0.9); fm = noise_mat("in_floor_b", "#6E7A86", "#64707C", 2.0, 0.8)      # 予備の倉庫：青みのかべと灰色の床（確認役：名札の倉庫と同じ絵で見分けがつかない）
     cube(fm, (cx, y0 + d / 2, -0.02), (w, d, 0.04))
     cube(wm, (cx, y0 + d + 0.1, h / 2), (w + 0.4, 0.2, h))
     cube(wm, (cx - w / 2 - 0.1, y0 + d / 2, h / 2), (0.2, d, h))
@@ -41,6 +42,7 @@ def _room_box(cx, y0, w, d, h, light_col="#FFE2B8", light_e=0.0, name="room"):
 def _door(x, name):
     """廊下の奥のかべの扉。蝶つがいは左の端（廊下側の面）。開くと部屋の中（+y）へ回る（rotation z を +）"""
     wood = noise_mat("in_door", "#6E5034", "#5E4430", 1.2, 0.8, wave=True)
+    if name == "backup": wood = noise_mat("in_door_b", "#4E6A82", "#44607A", 1.2, 0.8, wave=True)      # 予備の倉庫の扉は青い（確認役）
     hg = empty((x - ID_W / 2 + 0.02, YB + 0.05, 0.0))
     cube(wood, (ID_W / 2 - 0.01, 0.0, ID_H / 2), (ID_W - 0.06, 0.06, ID_H - 0.02), parent=hg)
     cyl(_inmat("knob", "#C9A24A", rough=0.3, metal=0.8), (ID_W - 0.16, -0.05, 1.0), 0.035, 0.05, rot=(R(90), 0, 0), parent=hg)
@@ -67,8 +69,8 @@ def red_mark(name):
     hg = IN["door_" + name]
     root = empty((0, 0, 0)); root.parent = hg; root.location = (ID_W / 2, -0.04, 1.55); root.scale = (0.001, 0.001, 0.001)
     mm = _inmat("mark", "#E0322C", rough=0.5, emit=0.6)
-    for a in (45, -45):
-        cube(mm, (0, 0, 0), (0.36, 0.01, 0.06), rot=(0, R(a), 0), parent=root)
+    cyl(mm, (0, 0, 0), 0.13, 0.012, rot=(R(90), 0, 0), parent=root, verts=32)        # 赤い丸の印（確認役：×だと「ダメ」「使えない」に見えた）
+    cyl(_inmat("markin", "#FFFFFF", rough=0.6), (0, -0.007, 0), 0.06, 0.004, rot=(R(90), 0, 0), parent=root, verts=24)
     IN["mark_" + name] = root
     return root
 
@@ -86,9 +88,9 @@ def key_bundle(loc=(0, 0, 0), parent=None, s=1.0):
     return e
 
 
-def tag_shelf(cx, y_back, tex="tag_cust", n_rows=3, n_cols=7, special=None):
-    """名札の棚（奥のかべに沿って。名札を立てて並べる）。special＝(段, 列) の所だけ tag_maru"""
-    wood = _inmat("shelf", "#7A5A3C", rough=0.7)
+def tag_shelf(cx, y_back, tex="tag_cust", n_rows=3, n_cols=7, special=None, metal=False):
+    """名札の棚（奥のかべに沿って。名札を立てて並べる）。special＝(段, 列) の所だけ tag_maru。metal＝灰色の金属の棚（予備の倉庫）"""
+    wood = _inmat("shelf", "#7A5A3C", rough=0.7) if not metal else _inmat("shelf_m", "#8C939C", rough=0.35, metal=0.6)
     W_, D_ = n_cols * 0.32 + 0.2, 0.4
     tags = []
     for r in range(n_rows + 1):
@@ -235,6 +237,7 @@ def work_room(people=True):
         scr_mats.append(sm)
         if people: person((x0 + dx, y0 + 1.6, 0.0), 180.0, shirt=["#5A7BA8", "#A86A5A"][k], sit=True)
     IN["work_screens"] = scr_mats
+    cube(IN["win_mat"], (x0 - 1.2, y0 + 1.4, 1.8), (0.04, 1.0, 1.1))       # 左のかべの窓（確認役：昼か分からない）
     return scr_mats
 
 
@@ -257,7 +260,7 @@ def admin_room():
 def store_room(name, tex, special=None, pale=False):
     """名札の倉庫・予備の倉庫（扉の奥。奥のかべに沿って棚 1 つ）"""
     x0 = dict(IDOORS)[name]; y0 = YB + WALL_T
-    tags = tag_shelf(x0, y0 + ROOM_D - 0.05, tex=tex, special=special)
+    tags = tag_shelf(x0, y0 + ROOM_D - 0.05, tex=tex, special=special, metal=(name == "backup"))
     IN["tags_" + name] = tags
     return tags
 
