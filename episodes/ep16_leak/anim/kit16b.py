@@ -200,7 +200,7 @@ def day_night(keys):
     wm, ewm, sn, a = IN["win_mat"], IN["endwin_mat"], IN["moon"], IN["dayfill"]
     wb = wm.node_tree.nodes["Principled BSDF"]; eb = ewm.node_tree.nodes["Principled BSDF"]
     DAY = dict(wc=srgb("#FFF6DA"), ws=6.0, moon=0.0, fill=900.0, lamp=0.0)
-    NIGHT = dict(wc=srgb("#6F86C8"), ws=0.6, moon=0.6, fill=120.0, lamp=45.0)      # 試しの絵：夜の廊下が暗くて錠・扉が見えなかった
+    NIGHT = dict(wc=srgb("#22346E"), ws=0.45, moon=0.6, fill=120.0, lamp=45.0)      # 試しの絵：夜の廊下が暗くて錠・扉が見えなかった。窓は濃い紺（確認役 2 回目：明るい水色で昼の空に見えた）
     prev = None
     for t, kind in keys:
         v = DAY if kind == "day" else NIGHT

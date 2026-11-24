@@ -40,28 +40,35 @@ def _tag(d, cx, cy, wdt, col=(150, 162, 178), alpha=255, icons=True):
 
 
 def floorplan_sprite(t, p):
-    """13-08：お城の中の見取り図（廊下 1 本と部屋 6 つ。字なし）。影が通った所に点線が 1 つずつのびる"""
-    W_, H_ = 560, 360
+    """13-08：お城の中の見取り図（廊下 1 本と部屋 6 つ）。部屋の中に置いてある物の小さな絵（机・鍵・名札・写しの名札）を描き、
+    影の形が廊下を左から右へ進んで、のぞいた部屋に ✓ が付く（確認役 2 回目：紫の点で埋まっていくだけで、何の図か分からなかった）"""
+    W_, H_ = 560, 380
     im, d = _canvas(W_, H_)
-    X0, X1, Y = 50, 510, 250
-    d.rounded_rectangle((X0 * S2, (Y - 30) * S2, X1 * S2, (Y + 30) * S2), radius=10 * S2, outline=NAVY + (255,), width=4 * S2)
-    for k in range(6):
-        x = X0 + 20 + k * 75
-        d.rounded_rectangle((x * S2, 60 * S2, (x + 62) * S2, (Y - 40) * S2), radius=8 * S2, outline=NAVY + (255,), width=4 * S2, fill=(240, 244, 250, 255))
+    X0, X1, Y = 50, 510, 290
+    d.rounded_rectangle((X0 * S2, (Y - 30) * S2, X1 * S2, (Y + 30) * S2), radius=10 * S2, outline=NAVY + (255,), width=4 * S2, fill=(236, 228, 214, 255))
+    D.ctext(d, (W_ * S2 / 2, 32 * S2), "お城の中", D.font(36 * S2), NAVY)
     n = 0 if t < p["t_go"] else min(6, int((t - p["t_go"]) / p["step"]) + 1)
-    D.ctext(d, (W_ * S2 / 2, 32 * S2), "お城の中", D.font(36 * S2), NAVY)       # 確認役：何の図か分からない
-    for k in range(n):        # のぞいた部屋をぬる
-        x = X0 + 20 + k * 75
-        d.rounded_rectangle(((x + 3) * S2, 63 * S2, (x + 59) * S2, (Y - 43) * S2), radius=6 * S2, fill=(214, 200, 246, 255))
-    for k in range(n):        # 廊下から部屋へ点線（のぞいた部屋）
-        x = X0 + 51 + k * 75
-        for j in range(5):
-            yy = Y - 6 - j * 30
-            d.ellipse(((x - 5) * S2, (yy - 5) * S2, (x + 5) * S2, (yy + 5) * S2), fill=(123, 91, 214, 255))
-    m = 0 if t < p["t_go"] else min(23, int((t - p["t_go"]) / (p["step"] * 6) * 23) + 1)
-    for j in range(m):
-        x = X0 + 12 + j * 20
-        d.ellipse(((x - 5) * S2, (Y - 5) * S2, (x + 5) * S2, (Y + 5) * S2), fill=(123, 91, 214, 255))
+    for k, what in enumerate(("desk", "key", "", "tag", "copy", "")):       # IDOORS の順（働く人・管理する人・廊下・名札・予備・廊下）
+        x = X0 + 20 + k * 75; cx = (x + 31) * S2; cy = 150 * S2
+        d.rounded_rectangle((x * S2, 70 * S2, (x + 62) * S2, (Y - 40) * S2), radius=8 * S2, outline=NAVY + (255,), width=4 * S2, fill=(246, 248, 252, 255))
+        d.rectangle(((x + 20) * S2, (Y - 44) * S2, (x + 42) * S2, (Y - 36) * S2), fill=(150, 110, 70, 255))      # 扉
+        if what == "desk":
+            d.rectangle((cx - 20 * S2, cy - 18 * S2, cx + 20 * S2, cy + 6 * S2), fill=(60, 70, 90, 255)); d.rectangle((cx - 26 * S2, cy + 10 * S2, cx + 26 * S2, cy + 18 * S2), fill=(150, 110, 70, 255))
+        elif what == "key":
+            d.ellipse((cx - 22 * S2, cy - 14 * S2, cx - 2 * S2, cy + 6 * S2), outline=(200, 40, 40, 255), width=5 * S2); d.line((cx - 2 * S2, cy - 4 * S2, cx + 24 * S2, cy - 4 * S2), fill=(200, 40, 40, 255), width=5 * S2)
+            d.line((cx + 16 * S2, cy - 4 * S2, cx + 16 * S2, cy + 6 * S2), fill=(200, 40, 40, 255), width=5 * S2)
+        elif what == "tag": _tag(d, cx, cy, 46 * S2)
+        elif what == "copy": _tag(d, cx, cy, 46 * S2, alpha=150)
+        if k < n:          # のぞいた部屋に ✓
+            d.line(((x + 14) * S2, 215 * S2, (x + 26) * S2, 228 * S2, (x + 48) * S2, 200 * S2), fill=(40, 170, 90, 255), width=7 * S2, joint="curve")
+    # 影の形（黒い丸 2 つ）が廊下を進む。通った所は点線
+    if t >= p["t_go"]:
+        u = min(1.0, (t - p["t_go"]) / (p["step"] * 6))
+        xs = X0 + 30 + u * (X1 - X0 - 60)
+        for j in range(int((xs - X0 - 20) / 18)):
+            xx = X0 + 20 + j * 18; d.ellipse(((xx - 4) * S2, (Y - 4) * S2, (xx + 4) * S2, (Y + 4) * S2), fill=(123, 91, 214, 255))
+        d.ellipse(((xs - 13) * S2, (Y - 34) * S2, (xs + 13) * S2, (Y - 8) * S2), fill=(30, 24, 60, 255))
+        d.ellipse(((xs - 18) * S2, (Y - 12) * S2, (xs + 18) * S2, (Y + 26) * S2), fill=(30, 24, 60, 255))
     return _done(im, W_, H_)
 
 
@@ -103,7 +110,7 @@ def shelves_sprite(t, p):
         _arrow(d, 440, 200, 540, 200, TEALC)
     if back > 0 and back < 1.0 or (p.get("t_back") is not None and p["t_back"] <= t < p["t_back"] + 1.8):
         _arrow(d, 540, 200, 440, 200, TEALC)
-    if gone:
+    if gone and back < 1.0:      # 名札が戻り切ったら×を消す（確認役 2 回目：戻ったのに×のまま）
         d.line((80 * S2, 90 * S2, 400 * S2, 310 * S2), fill=RED + (255,), width=14 * S2); d.line((400 * S2, 90 * S2, 80 * S2, 310 * S2), fill=RED + (255,), width=14 * S2)
     return _done(im, W_, H_)
 
@@ -210,15 +217,18 @@ def letter_sprite(text, sub=None):
 
 
 def pip_lockcoin_sprite():
-    """17-03 の小窓：赤い錠のかかった扉 → 硬貨"""
+    """17-03 の小窓：お金を払う → 錠が外れて扉が開く（硬貨 → 開いた錠の扉）。
+    確認役 2 回目：「扉 → 硬貨」で、扉がお金になると読めた → 向きを逆に（お金を払うと、錠が開く）"""
     W_, H_ = 520, 300
     im, d = _canvas(W_, H_)
-    d.rounded_rectangle((70 * S2, 40 * S2, 210 * S2, 260 * S2), radius=10 * S2, fill=(110, 80, 52, 255))
-    d.rounded_rectangle((115 * S2, 140 * S2, 165 * S2, 185 * S2), radius=6 * S2, fill=RED + (255,)); d.arc((122 * S2, 112 * S2, 158 * S2, 150 * S2), 180, 360, fill=(160, 30, 30, 255), width=6 * S2)
-    _arrow(d, 240, 150, 320, 150, NAVY)
     for i, (dx, dy) in enumerate(((-30, 25), (30, 25), (0, -25))):
-        cx, cy = (410 + dx) * S2, (150 + dy) * S2; r = 46 * S2
+        cx, cy = (120 + dx) * S2, (150 + dy) * S2; r = 46 * S2
         d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(240, 190, 60, 255), outline=(190, 140, 30, 255), width=5 * S2)
+    _arrow(d, 210, 150, 290, 150, NAVY)
+    d.rounded_rectangle((330 * S2, 40 * S2, 470 * S2, 260 * S2), radius=10 * S2, fill=(110, 80, 52, 255))
+    d.rounded_rectangle((375 * S2, 150 * S2, 425 * S2, 195 * S2), radius=6 * S2, fill=RED + (255,))
+    d.arc((382 * S2, 100 * S2, 418 * S2, 138 * S2), 180, 360, fill=(160, 30, 30, 255), width=6 * S2)      # 上に外れた輪（開いた錠）
+    d.line((418 * S2, 119 * S2, 418 * S2, 150 * S2), fill=(160, 30, 30, 255), width=6 * S2)
     return _done(im, W_, H_)
 
 
@@ -236,10 +246,11 @@ def pip_backup_sprite(t, p):
 
 
 def tworoads_sprite(t, p):
-    """17-09：2 通の手紙を左右に並べ、それぞれの逃げ道（「払わずに戻す」「見せさせない」）に×"""
+    """17-09：2 通の手紙を左右に並べ、それぞれの逃げ道に×。錠には「予備で元に戻す」、名札には「元に戻せば安心」（戻せても名札がばらまかれる）。
+    確認役 2 回目：右の道「見せないでもらう」が 17-12 の「見せないでくれる」とゆれ、逃げ道として分かりにくかった"""
     W_, H_ = 1000, 440
     im, d = _canvas(W_, H_)
-    for i, (x0, lab, road) in enumerate(((60, "錠をかけて脅す", "予備で元に戻す"), (540, "名札で脅す", "見せないでもらう"))):
+    for i, (x0, lab, road) in enumerate(((60, "錠をかけて脅す", "予備で元に戻す"), (540, "名札で脅す", "元に戻せば安心"))):
         if t < p["t%d" % i]: continue
         d.rounded_rectangle((x0 * S2, 40 * S2, (x0 + 400) * S2, 170 * S2), radius=18 * S2, fill=(250, 246, 236, 255), outline=(200, 190, 170, 255), width=4 * S2)
         d.polygon([((x0 + 36) * S2, 84 * S2), ((x0 + 56) * S2, 104 * S2), ((x0 + 36) * S2, 124 * S2), ((x0 + 16) * S2, 104 * S2)], fill=RED + (255,))
@@ -292,9 +303,11 @@ def fan_img(q, q2, a):
     """15-06：門番さんの見ている向き（うすい黄色の扇）。q＝門番さん、q2＝見ている先"""
     im = Image.new("RGBA", (2560, 1440), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     dx, dy = q2[0] - q[0], q2[1] - q[1]; L = math.hypot(dx, dy) or 1
-    nx, ny = -dy / L, dx / L; sp = L * 0.55
-    pts = [(q[0] * 2, q[1] * 2), ((q2[0] + nx * sp) * 2, (q2[1] + ny * sp) * 2), ((q2[0] - nx * sp) * 2, (q2[1] - ny * sp) * 2)]
-    d.polygon(pts, fill=(255, 226, 120, int(110 * a)))
+    # 確認役 2 回目：平らな三角で「何の印か分からない」→ 門番さんの頭から前へ広がる扇（先が丸い）にし、ふちを付ける。札は ev_list2 で出す
+    ang0 = math.atan2(dy, dx); half = math.radians(26)
+    pts = [(q[0] * 2, q[1] * 2)] + [((q[0] + L * math.cos(ang0 + half * (2 * j / 16 - 1))) * 2, (q[1] + L * math.sin(ang0 + half * (2 * j / 16 - 1))) * 2) for j in range(17)]
+    d.polygon(pts, fill=(255, 226, 120, int(105 * a)))
+    d.line(pts + [pts[0]], fill=(255, 214, 90, int(230 * a)), width=6)
     return im.resize((1280, 720), Image.LANCZOS)
 
 
@@ -302,7 +315,7 @@ def fan_img(q, q2, a):
 def ev_list2():
     E = []
     add = lambda *a: E.append(a)
-    add(wv("13-01", "でしょうか") - 0.3, wv("13-02", "いいえ") + 0.1, "qmark", dict(obj="shadow", dy=-150))       # 「いいえ」で消す
+    add(wv("13-01", "でしょうか") - 0.3, wv("13-02", "いいえ") + 0.1, "qmark", dict(pos=(1090, 150), size=150))       # 「いいえ」で消す。語り手の問いなので影の頭には付けない（確認役 2 回目：影が首をかしげて見えた）
     add(wv("13-07", "なぜ") - 0.1, e("13-07") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(wv("13-08", "お城の中") - 0.2, e("13-08") + 0.3, "c2_floor", dict(t_go=wv("13-08", "すみずみ") - 0.3, step=0.35))
     add(wv("14-03", "管理する人") - 0.1, e("14-03") + 0.3, "tag", dict(text="管理する人のID", pos=(640, 100), size=52))
@@ -310,18 +323,20 @@ def ev_list2():
     add(wv("14-06", "お金") - 0.1, e("14-06") + 0.3, "c2_coin", dict(pos=(1040, 200)))
     add(wv("14-07", "予備の倉庫") - 0.1, e("14-07") + 0.3, "tag", dict(text="予備の倉庫", pos=(640, 100), size=52))
     add(s("14-08") - 0.05, e("14-08") + 0.3, "c2_shelves", dict(t_copy=wv("14-08", "写し") - 0.6, label=("データの写し", wv("14-08", "データ") - 0.1)))
-    add(wv("14-09", "なぜ") - 0.2, e("14-09") + 0.3, "qmark", dict(obj="shadow", dy=-160))
+    add(wv("14-09", "なぜ") - 0.2, e("14-09") + 0.3, "qmark", dict(pos=(1090, 150), size=150))      # 語り手の問い。影と扉の印に重ねない（確認役 2 回目）
     add(s("14-10") + 0.1, s("14-12") + 0.25, "c2_photo", dict(t_up=wv("14-10", "別の所") - 0.2, t_break=wv("14-11", "壊れても") - 0.1, t_new=wv("14-11", "元どおり") - 0.4))
     add(s("14-12") - 0.05, e("14-13") + 0.3, "c2_shelves", dict(t_copy=None, t_x=wv("14-13", "使えなく") - 0.1, t_back=wv("14-13", "元に戻せる") - 0.5))
     add(wv("15-03", "青緑") - 0.2, e("15-03") + 0.3, "ring", dict(obj="mytag", r=70, col=RED))
     add(wv("15-04", "まるロボ") - 0.05, e("15-04") + 0.6, "bubble", dict(obj="maru_top", icon="!"))
-    add(wv("15-06", "正面") - 0.2, e("15-06") + 0.3, "c2_fan", dict(a="gk", b="gk_front"))
+    add(max(wv("15-06", "正面") - 0.2, s("15-06") + 0.4), e("15-06") + 0.3, "c2_fan", dict(a="gk", b="gk_front"))       # 場面が替わり終わってから（確認役 2 回目：前の廊下の場面のうちに出た）
+    add(max(wv("15-06", "正面") - 0.2, s("15-06") + 0.4), e("15-06") + 0.3, "tag", dict(text="門番さんが見ている所", pos=(250, 215), size=44))
+    add(wv("15-06", "横の裏口") - 0.1, e("15-06") + 0.3, "tag", dict(text="裏口", obj="door", dy=-130, size=52))
     add(wv("16-03", "何のため") - 0.3, e("16-03") + 0.3, "qmark", dict(obj="shadow", dy=-150))
     add(wv("16-05", "廊下の扉") - 0.1, e("16-05") + 0.3, "tag", dict(text="廊下の扉", obj="lk_admin", dy=-150, size=44))
     add(wv("16-05", "働く人の部屋") - 0.1, e("16-05") + 0.3, "tag", dict(text="働く人の部屋", obj="lk_work", dy=-150, size=44))
     add(s("16-09") + 0.1, e("16-09") + 0.3, "c2_scramble", dict(t_s=wv("16-09", "読めない") - 0.6))
     add(wv("16-09", "読めない") - 0.1, e("16-09") + 0.3, "tag", dict(text="読めない形に変える", pos=(640, 470), size=48))
-    add(wv("16-13", "パソコン") + 0.3, e("16-13") + 0.3, "c2_lockicon", dict(obj="screen0"))
+    for k_ in (0, 1): add(wv("16-13", "パソコン") + 0.3 + 0.3 * k_, e("16-14") + 0.3, "c2_lockicon", dict(obj="screen%d" % k_))      # 2 つの画面とも、16-14 の終わりまで（確認役 2 回目：錠の印が 1 秒で消えた）
     add(wv("16-14", "注文") - 0.1, e("16-14") + 0.3, "tag", dict(text="注文", obj="orders", dy=-120, size=52))
     add(wv("16-14", "荷物") - 0.1, e("16-14") + 0.3, "tag", dict(text="荷物", obj="parcels", dy=-140, size=52))
     add(wv("17-02", "元に") - 0.1, e("17-02") + 0.4, "c2_letter", dict(text="「元に戻してほしければ、お金を払え」", pos=(640, 150)))
@@ -333,6 +348,7 @@ def ev_list2():
     add(s("17-08"), e("17-08") + 0.2, "tint", {})
     add(s("17-09") - 0.05, s("17-10") + 0.2, "c2_roads", dict(t0=s("17-09"), t1=wv("17-09", "盗んだ名札") - 0.1, tx0=wv("17-09", "逃げ道") - 0.1, tx1=wv("17-09", "両方") - 0.1))
     add(s("17-10") - 0.05, s("17-12") + 0.2, "c2_grid", dict(t_fill=s("17-10") + 0.35, t153=wv("17-10", "153件") - 0.2, t136=wv("17-11", "136件") - 0.2))
+    add(wv("17-13", "国") - 0.1, e("17-13") + 0.3, "tag", dict(text="国の呼びかけ「払わないで」", pos=(640, 110), size=48))      # 確認役 2 回目：「国も呼びかけています」に絵がなかった
     add(s("17-12") - 0.05, e("17-12") + 0.3, "c2_nopromise", dict(t0=wv("17-12", "元に戻る") - 0.1, t1=wv("17-12", "見せないで") - 0.1))
     return E
 
