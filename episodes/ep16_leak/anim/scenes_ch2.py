@@ -11,7 +11,7 @@ def wv(i, word, occ=0):
     return _WT.get("%s|%s|%d" % (i, word, occ)) or w(i, word)
 D_ = dict(IDOORS)
 Y_ROOM = YB + WALL_T          # 部屋の入口側のかべの奥の面
-SH_SHELF = (D_["tags"] + 0.2, Y_ROOM + 2.2)     # 15-02 で名札を取る影の立つ所（棚の前）
+SH_SHELF = (D_["tags"] + 0.2, Y_ROOM + 2.1)     # 15-02 で名札を取る影の立つ所（棚の前）
 ARM_UP = -65.0      # 腕の角度は −で上がる（測った：+55 で手は 0.59 m、−25 で 0.91 m）
 SH_LOCK = (D_["tags"] + ID_W / 2 + 0.1, 1.05)     # 16-04：錠をかける影の立つ所（取っ手の右）
 LX0 = 0.15       # 17：1 通目の手紙の x（持ち主の x からのずれ）。2 通目は +0.5
@@ -89,10 +89,10 @@ def b_in(cl):
     # 13-03：hall2 の扉を少し開けてのぞく → 閉める → tags の扉でも
     t_ = s("13-03") + 0.2
     sh_key(sh, t_, (6.6, 0.55)); sh_key(sh, t_ + 0.8, (D_["hall2"] - 0.2, 0.8), 150.0)
-    door_key("hall2", t_ + 0.9, 0); door_key("hall2", t_ + 1.3, 50); door_key("hall2", t_ + 2.2, 50); door_key("hall2", t_ + 2.6, 0)      # 確認役：28 度では閉じたままに見えた
+    door_key("hall2", t_ + 0.9, 0, "LINEAR"); door_key("hall2", t_ + 1.3, 50); door_key("hall2", t_ + 2.2, 50); door_key("hall2", t_ + 2.6, 0)      # 確認役：28 度では閉じたままに見えた
     ev(t_ + 0.9, "squeak", 0.25, "door_hall2")
     sh_key(sh, t_ + 2.4, (D_["hall2"] - 0.2, 0.8), 150.0); sh_key(sh, t_ + 3.4, (D_["tags"] - 0.2, 0.8), 150.0)
-    door_key("tags", t_ + 3.5, 0); door_key("tags", t_ + 3.9, 50); door_key("tags", t_ + 4.6, 50); door_key("tags", t_ + 5.0, 0)
+    door_key("tags", t_ + 3.5, 0, "LINEAR"); door_key("tags", t_ + 3.9, 50); door_key("tags", t_ + 4.6, 50); door_key("tags", t_ + 5.0, 0)
     ev(t_ + 3.5, "squeak", 0.25, "door_tags")
     for nm_, ta_ in (("hall2", t_ + 0.9), ("tags", t_ + 3.5)):       # のぞく間、部屋の中をうすく照らす（確認役：扉が開くのが見えなかった）
         for tt_, en_ in ((ta_ - 0.4, 0.0), (ta_ + 0.3, 18.0), (ta_ + 1.3, 18.0), (ta_ + 1.7, 0.0)): light_key(IN["room_" + nm_], tt_, en_)
@@ -147,27 +147,27 @@ def b_in(cl):
     sh_key(sh, t_m2 - 0.6, (D_["backup"] - 0.3, 0.85), 90.0); key(sh.root, "rotation_euler", t_m2 - 0.4, (0, 0, R(180)))
     key(sh.arm, "rotation_euler", t_m2 - 0.3, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_m2, (R(70), 0, 0)); key(sh.arm, "rotation_euler", t_m2 + 0.4, (R(5), 0, 0))
     # 14-05〜14-07：扉が開いて中を見せる（影は扉の前に立ったまま）→ 閉める
-    door_key("tags", s("14-05") + 0.1, 0); door_key("tags", s("14-05") + 0.9, 85); door_key("tags", e("14-06") + 0.3, 85); door_key("tags", e("14-06") + 1.0, 0)
-    ev(s("14-05") + 0.1, "squeak", 0.25, "door_tags")
+    door_key("tags", s("14-05") + 0.4, 0, "LINEAR"); door_key("tags", s("14-05") + 1.1, 85); door_key("tags", e("14-06") + 0.3, 85); door_key("tags", e("14-06") + 1.0, 0)
+    ev(s("14-05") + 0.4, "squeak", 0.25, "door_tags")      # 場面が替わり終わってから開く（2 回目の点検：替わる重なりの中で鳴った）
     sh_key(sh, s("14-05"), (D_["backup"], 0.85), 180.0); sh_key(sh, s("14-05") + 0.05, (D_["tags"] + 1.3, 0.3), 160.0, "CONSTANT")       # 扉の回る所の外
     sh_key(sh, s("14-07") - 0.1, (D_["tags"] + 1.3, 0.3), 160.0); sh_key(sh, s("14-07") - 0.05, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT")
-    door_key("backup", s("14-07") + 0.45, 0); door_key("backup", s("14-07") + 1.25, 85); door_key("backup", s("14-08") + 0.2, 85); door_key("backup", s("14-08") + 0.9, 0)
+    door_key("backup", s("14-07") + 0.45, 0, "LINEAR"); door_key("backup", s("14-07") + 1.15, 85); door_key("backup", s("14-08") + 0.2, 85); door_key("backup", s("14-08") + 0.9, 0)
     ev(s("14-07") + 0.45, "squeak", 0.25, "door_backup")      # 場面が替わり終わってから（v1：替わる途中で鳴らず）
     # 14-09：予備の倉庫の扉の前に立つ影（後ろ姿）
     sh_key(sh, s("14-09") - 0.1, (D_["backup"] + 1.3, 0.3), 160.0, "CONSTANT"); sh_key(sh, s("14-09") - 0.05, (D_["backup"], 0.75), 180.0, "CONSTANT")
     # 15-01：名札の倉庫の扉を鍵束で開ける
     tf = s("15-01")
-    sh_key(sh, tf - 0.1, (D_["backup"], 0.75), 180.0, "CONSTANT"); sh_key(sh, tf - 0.05, (D_["tags"] + 0.25, 0.75), 180.0, "CONSTANT")
+    sh_key(sh, tf - 0.1, (D_["backup"], 0.75), 180.0, "CONSTANT"); sh_key(sh, tf - 0.05, (D_["tags"] + 0.1, 1.05), 180.0, "CONSTANT")      # 取っ手に手が届く所（2 回目の点検：0.85 m 離れて手が届かなかった）
     t_k2 = wv("15-01", "鍵束") + 0.2       # 「あの鍵束で」：鍵束を扉の取っ手に当てる → カチャ → すぐに開く（確認役：鍵で開けるのが見えず、音が 2〜3 秒前で小さかった）
-    key(sh.arm, "rotation_euler", t_k2 - 0.6, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_k2, (R(40), 0, 0)); ev(t_k2 + 0.05, "click", 0.9, "door_tags")
-    key(sh.arm, "rotation_euler", t_k2 + 0.5, (R(40), 0, 0)); key(sh.arm, "rotation_euler", t_k2 + 0.9, (R(-10), 0, 0))
-    door_key("tags", t_k2 + 0.2, 0); door_key("tags", t_k2 + 1.2, 88); ev(t_k2 + 0.2, "squeak", 0.25, "door_tags")
-    sh_key(sh, t_k2 + 1.0, (D_["tags"] + 0.25, 0.75), 180.0); sh_key(sh, t_k2 + 1.6, (D_["tags"] + 0.15, 0.8), 180.0); sh_key(sh, s("15-02") - 0.25, (D_["tags"] + 0.2, Y_ROOM + 1.2), 180.0)     # 出入口を通って中へ
+    key(sh.arm, "rotation_euler", t_k2 - 0.6, (R(5), 0, 0)); key(sh.arm, "rotation_euler", t_k2, (R(-50), 0, 0)); ev(t_k2 + 0.05, "click", 0.9, "door_tags")
+    key(sh.arm, "rotation_euler", t_k2 + 0.5, (R(-50), 0, 0)); key(sh.arm, "rotation_euler", t_k2 + 0.9, (R(10), 0, 0))      # 開けたら腕を下ろす（入りこみの点検：鍵束が扉の枠に当たった）
+    door_key("tags", t_k2 + 0.2, 0, "LINEAR"); door_key("tags", t_k2 + 0.5, 30); door_key("tags", t_k2 + 1.1, 88); ev(t_k2 + 0.2, "squeak", 0.25, "door_tags")      # ギィと同時に動きだす（2 回目の点検：ゆっくり動きだし、音から 0.6 秒遅れて見えた）
+    sh_key(sh, t_k2 + 1.0, (D_["tags"] + 0.1, 1.05), 180.0); sh_key(sh, t_k2 + 1.6, (D_["tags"] + 0.1, 1.1), 180.0); sh_key(sh, s("15-02") - 0.06, (D_["tags"] + 0.1, 1.1), 180.0, "CONSTANT")      # 扉が開いて一歩入りかけた所で、次の場面（部屋の中）へ。部屋へ歩いて入るのは映さない（入りこみの点検：0.03 秒で 2 m 動いていた・扉の枠をかすめた）
     # 15-02：名札を箱につめる（3 枚が棚から箱へ）。箱は部屋の床
     # 確認役 2 回目：手が棚に届かず（手から棚まで 1.2 m）、名札が棚から手へ、手から遠くの箱へ宙を飛んでいた
     #   → 場面が替わる重なりで、影を棚の前（手が届く所）へ。手のすぐ近くの 3 枚を取り、箱は手を下ろした所の真下に
     bx = tag_box(TBOX_AT); track("tbox", bx, 0.15)
-    sh_key(sh, s("15-02") - 0.06, (D_["tags"] + 0.2, Y_ROOM + 1.2), 180.0, "CONSTANT"); sh_key(sh, s("15-02") - 0.05, SH_SHELF, 180.0, "CONSTANT")
+    sh_key(sh, s("15-02") - 0.05, SH_SHELF, 180.0, "CONSTANT")
     tags = IN["tags_tags"]
     pick = [tags[7 + 3], tags[7 + 2], tags[7 + 4]]      # 2 段目のまん中の 3 枚（1 枚目がまるロボの青緑）。手の前の 3 枚
     for k, tg in enumerate(pick):
@@ -184,7 +184,7 @@ def b_in(cl):
     sc_ = 1.1 / SHS2 * 1.4
     key(kb2, "scale", s("15-02") - 0.15, (sc_,) * 3, "CONSTANT"); key(kb2, "scale", s("15-02") - 0.1, (0.001,) * 3, "CONSTANT"); key(kb2, "scale", s("15-05") - 0.3, (0.001,) * 3, "CONSTANT"); key(kb2, "scale", s("15-05") - 0.25, (sc_,) * 3, "CONSTANT")      # 名札を持つ間は鍵束をしまう（場面の替わり目で）
     # 15-05：箱をかかえて廊下を裏口のほうへ（箱は影の胸の前。持ち替えは箱の場面の外で）
-    bx2 = tag_box((0, 0, 0)); bx2.parent = sh.root; bx2.location = (0, -0.55, 0.78); bx2.scale = (0.001,) * 3
+    bx2 = tag_box((0, 0, 0)); bx2.parent = sh.root; bx2.location = (0, -0.55, 0.9); bx2.scale = (0.001,) * 3
     key(bx2, "scale", -100.0, (0.001,) * 3, "CONSTANT"); key(bx2, "scale", s("15-05") - 0.3, (0.001,) * 3, "CONSTANT"); key(bx2, "scale", s("15-05") - 0.25, (1.0 / SHS2,) * 3, "CONSTANT")
     key(bx, "scale", -100.0, (1, 1, 1), "CONSTANT"); key(bx, "scale", s("15-05") - 0.3, (1, 1, 1), "CONSTANT"); key(bx, "scale", s("15-05") - 0.25, (0.001,) * 3, "CONSTANT")
     for tg in pick:
@@ -192,6 +192,7 @@ def b_in(cl):
     track("box2", bx2, 0.2)
     # 箱を持ちかえる所は、カメラの後ろ（部屋の奥）。影は部屋から歩いて出てくる（置き直さない。入りこみの点検：入口のまるロボとぶつかった）
     key(sh.arm, "rotation_euler", s("15-05") - 0.25, (R(-20), 0, 0), "CONSTANT")
+    sh_key(sh, s("15-05") - 0.26, SH_SHELF, 180.0, "CONSTANT"); sh_key(sh, s("15-05") - 0.25, (D_["tags"] + 0.2, Y_ROOM + 1.5), 0.0, "CONSTANT")      # 箱を持つのは、棚から離れて出口を向いてから（場面の替わり目で。入りこみの点検：棚を向いたまま箱が出て、箱が棚に入った）
     sh_key(sh, s("15-05") + 0.6, (D_["tags"] + 0.2, Y_ROOM + 1.2), 0.0); sh_key(sh, s("15-05") + 1.0, (D_["tags"] - 0.05, Y_ROOM + 0.7), 0.0); sh_key(sh, s("15-05") + 2.0, (D_["tags"] - 0.05, 0.45), 0.0)     # 出入口のまん中を通る
     sh_key(sh, s("15-05") + 2.4, (D_["tags"] - 0.1, 0.4), -90.0); sh_key(sh, e("15-05") + 0.4, (2.0, 0.3), -90.0)
     door_key("tags", e("15-05") + 0.5, 88); door_key("tags", e("15-05") + 1.3, 0)      # 影が出ていったあと、場面の外で閉める（v1：16 の錠が開いた扉に付いて見えた）
@@ -317,7 +318,7 @@ def b_out2(cl):
     C_, gk = _castle_common(True)
     SH = SHS2
     sh = shadow((40.0, 40.0, 0.0), face=180.0, s=SH); track("shadow", sh.root, 1.5 * SH)
-    bx = tag_box((0, 0, 0)); bx.parent = sh.root; bx.location = (0, -0.55, 0.78); bx.scale = (1 / SH,) * 3; track("box", bx, 0.2)
+    bx = tag_box((0, 0, 0)); bx.parent = sh.root; bx.location = (0, -0.55, 0.9); bx.scale = (1 / SH,) * 3; track("box", bx, 0.2)      # 荷車の横の板より上で持つ（入りこみの点検）
     key(sh.arm, "rotation_euler", -100.0, (R(-20), 0, 0), "CONSTANT")
     hg = C_["door"]
     key(hg, "rotation_euler", -100.0, (0, 0, R(-94)), "CONSTANT")      # 裏口は開いたまま（影が出入りする）
@@ -329,7 +330,7 @@ def b_out2(cl):
     sh_key(sh, s("15-07"), (X_SIDE + 1.9, DOOR_Y - 2.0), 0.0); sh_key(sh, e("15-07") - 0.2, (X_SIDE + 1.9, DOOR_Y - 6.5), 0.0)
     # 16-01：さらに道の先へ歩き、遠くの道ばたに箱を置く（「運び出された」の続き。確認役：箱が地面をすべり、手前に置きっぱなし）
     t1_ = s("16-01")
-    sh_key(sh, t1_ + 0.2, (X_SIDE + 1.9, DOOR_Y - 6.5), 0.0); sh_key(sh, t1_ + 2.6, (X_SIDE + 1.9, DOOR_Y - 10.0), 0.0)
+    sh_key(sh, t1_ + 0.2, (X_SIDE + 1.9, DOOR_Y - 6.5), 0.0); sh_key(sh, t1_ + 2.6, (X_SIDE + 1.9, DOOR_Y - 9.85), 0.0)      # 荷車の手前 0.75 m で止まる（入りこみの点検：荷車の板と車輪に体が入った）
     key(sh.arm, "rotation_euler", t1_ + 2.6, (R(-20), 0, 0)); key(sh.arm, "rotation_euler", t1_ + 3.2, (R(-50), 0, 0))
     # 道ばたの荷車に積む（確認役 2 回目：箱を道に置きっぱなしで戻るのはおかしい → 運び出すための荷車に積んだ形にする）
     CART = (X_SIDE + 1.9, DOOR_Y - 10.6); BED = 0.46
@@ -339,19 +340,19 @@ def b_out2(cl):
     for sy in (-1, 1): cube(cw_, (CART[0], CART[1] + sy * 0.31, BED + 0.08), (0.8, 0.04, 0.2))
     for sx in (-1, 1): cyl(mat("wheel", "#3A2A1E", rough=0.8), (CART[0] + sx * 0.46, CART[1], 0.25), 0.25, 0.06, rot=(0, R(90), 0))
     for sx in (-1, 1): cube(cw_, (CART[0] + sx * 0.18, CART[1] - 0.75, 0.4), (0.04, 0.9, 0.04), rot=(R(-12), 0, 0))     # 引く棒（道の先の向き）
-    key(bx, "location", t1_ + 2.6, (0, -0.55, 0.78)); key(bx, "location", t1_ + 3.2, (0, -0.6, (BED + 0.02) / SH))
+    key(bx, "location", t1_ + 2.6, (0, -0.55, 0.9)); key(bx, "location", t1_ + 3.2, (0, -0.99, (BED + 0.02) / SH))
     bx_g = tag_box((CART[0], CART[1] + 0.0, BED)); key(bx_g, "scale", -100.0, (0.001,) * 3, "CONSTANT"); key(bx_g, "scale", t1_ + 3.25, (0.001,) * 3, "CONSTANT"); key(bx_g, "scale", t1_ + 3.3, (1, 1, 1), "CONSTANT")
     key(bx, "scale", t1_ + 3.25, (1 / SH,) * 3, "CONSTANT"); key(bx, "scale", t1_ + 3.3, (0.001,) * 3, "CONSTANT")
     ev(t1_ + 3.25, "thud", 0.2, "box")
     # 16-02：くるりと向きを変えて、裏口から中へ戻る
     t2_ = s("16-02") + 0.2
-    key(sh.root, "rotation_euler", t2_, (0, 0, R(0))); key(sh.root, "rotation_euler", t2_ + 0.6, (0, 0, R(180)))       # くるりと向きを変える（前を +y＝お城へ）
-    sh_key(sh, t2_ + 0.6, (X_SIDE + 1.9, DOOR_Y - 10.0)); sh_key(sh, t2_ + 4.2, (X_SIDE + 1.9, DOOR_Y - 1.6)); sh_key(sh, t2_ + 4.8, (X_SIDE + 1.1, DOOR_Y - 0.1))
-    sh_key(sh, t2_ + 5.6, (X_SIDE - 0.9, DOOR_Y), -90.0); ev(t2_ + 0.3, "swish", 0.25, "shadow")
+    key(sh.root, "rotation_euler", t2_, (0, 0, R(0))); key(sh.root, "rotation_euler", t2_ + 0.6, (0, 0, R(-180)))      # 荷車と反対の側へ回る。次の −90 へは 90 度だけ（前は 180 → −90 で 270 度回っていた）       # くるりと向きを変える（前を +y＝お城へ）
+    sh_key(sh, t2_ + 0.6, (X_SIDE + 1.9, DOOR_Y - 9.85)); sh_key(sh, t2_ + 4.2, (X_SIDE + 2.2, DOOR_Y - 1.6), -180.0); sh_key(sh, t2_ + 4.8, (X_SIDE + 1.1, DOOR_Y + 0.05), -135.0)      # 歩く間は前（+y）を向いたまま（前は歩きながら少しずつ回っていた）
+    sh_key(sh, t2_ + 5.6, (X_SIDE - 0.9, DOOR_Y + 0.05), -90.0); ev(t2_ + 0.3, "swish", 0.25, "shadow")      # 出入口のまん中を通る。鍵束を持つ腕は下ろして体に寄せる（入りこみの点検：鍵束が扉の枠に当たった）
     # 「鍵束を持って」：向きを変えながら、鍵束を持った手を上げる（確認役 2 回目：影が遠くて小さく、鍵束が見えなかった → 寄りのカット O16k）
     kbo = key_bundle((0, 0, 0), parent=sh.hand, s=1.1 / SH * 1.4); kbo.location = (0, -0.1, -0.08); track("bundle_o", kbo, 0.0)
     key(kbo, "scale", -100.0, (0.001,) * 3, "CONSTANT"); key(kbo, "scale", t1_ + 3.6, (0.001,) * 3, "CONSTANT"); key(kbo, "scale", t1_ + 3.65, (1.1 / SH * 1.4,) * 3, "CONSTANT")      # 箱を置いたあと、手に持つ
-    key(sh.arm, "rotation_euler", t2_ + 0.05, (R(-50), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 0.45, (R(-80), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 1.3, (R(-80), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 1.8, (R(-20), 0, 0))
+    key(sh.arm, "rotation_euler", t2_ + 0.05, (R(-50), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 0.45, (R(-80), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 1.3, (R(-80), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 1.8, (R(-20), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 3.8, (R(-20), 0, 0)); key(sh.arm, "rotation_euler", t2_ + 4.3, (R(15), 0, 0))
     ev(t2_ + 0.45, "ding", 0.2, "bundle_o")
     key(sh.root, "scale", -100.0, (SH,) * 3, "CONSTANT"); key(sh.root, "scale", t2_ + 5.6, (SH,) * 3, "CONSTANT"); key(sh.root, "scale", t2_ + 5.7, (0.001,) * 3, "CONSTANT")
     # まるロボ：15-07 で裏口から走って出てきて、道の手前で止まる → 16-02 で台のかげへよける
@@ -443,9 +444,9 @@ CUTS2 = [
     ("D14j", b_in, s("14-12"), C((D_["backup"], Y_ROOM + 1.1, 1.25), (D_["backup"], Y_ROOM + 2.9, 0.95), 30), "D"),
     ("D14k", b_in, s("14-14"), C((D_["backup"] + 0.1, -0.3, 1.6), (D_["backup"], YB, 1.45), 30, (D_["backup"] + 0.1, 0.45, 1.6)), "D"),     # ゆっくり寄る（確認役：止めた絵が 7.6 秒）
     ("D14k2", b_in, wv("14-14", "あとで") - 0.25, C((D_["backup"] - 2.0, -0.45, 1.45), (D_["backup"] + 0.1, YB, 1.15), 28), "D"),     # 横から、予備の倉庫の扉と、その前に立つ影（確認役 2 回目：扉の寄りが 8.2 秒続いた）
-    ("D15", b_in, s("15-01"), C((D_["tags"] + 2.3, -0.9, 1.55), (D_["tags"] + 0.3, 1.2, 1.0), 28), "D"),
+    ("D15", b_in, s("15-01"), C((D_["tags"] + 1.7, 0.1, 1.45), (D_["tags"] + 0.3, YB, 1.0), 28), "D"),     # 取っ手の右から、鍵束を当てる手と扉（2 回目の確認役：鍵束が体の陰）
     ("D15b", b_in, s("15-02"), C((D_["tags"] - 1.05, Y_ROOM + 0.35, 1.7), (D_["tags"] - 0.2, Y_ROOM + 2.0, 0.5), 26), "D"),
-    ("D15c", b_in, s("15-03"), C((D_["tags"] - 0.5, Y_ROOM + 1.62, 0.95), (D_["tags"] - 0.5, Y_ROOM + 1.7, 0.0), 32), "D"),
+    ("D15c", b_in, s("15-03"), C((TBOX_AT[0], TBOX_AT[1] - 0.08, 0.95), (TBOX_AT[0], TBOX_AT[1], 0.0), 32), "D"),     # 箱の真上（箱の位置は TBOX_AT から取る。2 回目の確認役の直しで箱を動かしたとき、ここが前の位置のままで茶色一色になった）
     ("D15d", b_in, s("15-04"), C((D_["tags"] - 0.25, Y_ROOM + 0.85, 0.95), (D_["tags"] + 0.95, 0.55, 0.55), 30), "D"),     # 部屋の中から入口のまるロボ（顔）
     ("D15e", b_in, s("15-05"), C((0.6, -0.9, 1.5), (7.5, 0.4, 0.8), 26), "D"),
     ("O15", b_out2, s("15-06"), C((DX + 8.0, -10.0, 8.5), (4.2, 1.0, 0.4), 30), "O"),     # 正面の門番さんと横の裏口が 1 枚に（v1：高すぎて影が小さかった）
