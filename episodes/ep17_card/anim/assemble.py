@@ -158,6 +158,9 @@ for i_ in range(len(SUBS)):
     a_, c_, t_ = SUBS[i_]; n_ = len(t_.replace("\\N", "").replace(" ", ""))
     if n_ / (c_ - a_) > 8.0 and i_ + 1 < len(SUBS):
         SUBS[i_] = (a_, max(c_, min(SUBS[i_ + 1][0] - 0.05, a_ + n_ / 7.5)), t_)
+    a_, c_, t_ = SUBS[i_]
+    if c_ - a_ < 2.0 and i_ + 1 < len(SUBS) and SUBS[i_ + 1][0] - 0.05 - a_ >= 2.0:   # 2 秒に足りない 1 枚も、次の字幕まで間があれば 2 秒まで出す（05-03：声の頭の「あ」を消して 1.8 秒になった）
+        SUBS[i_] = (a_, a_ + 2.05, t_)
 json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
