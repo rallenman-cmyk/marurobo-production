@@ -55,6 +55,15 @@ PLANS = {
        "The small robot stands on a step in the lower-center foreground, seen from behind and slightly from the side, its eye glowing, "
        "looking at where the steps vanish (robot about 22% of the image height). A red circle around the line where the steps vanish under "
        "the comb plate. " + ESC),
+
+ # A5（2026-11-24 ユーザー「上りのエスカレーターに乗りながら見上げるアングルで」）：上りに乗って降り口を見上げる。上で階段が平らになって消える所に赤い丸
+ "A5": ([("エスカレーター", "bright yellow"), ("の", "white"), ("階段はどこへ", "bright red"), ("?", "white")],
+       "FIRST-PERSON VIEW of a rider standing on an ASCENDING (going UP) station escalator, LOOKING UP toward the top: the camera is low on a "
+       "step, the stairs rise steeply ahead and above (clear staircase shape: risers and treads, yellow edge lines), the black handrails run "
+       "up on both sides converging toward the top. At the TOP, against a bright ceiling and daylight, the last steps flatten out and slide "
+       "into the floor at the landing comb plate, so the staircase visibly ends and disappears over the top edge. The small robot rides a "
+       "few steps ahead (about 22% of the image height, center-left), seen from behind and slightly from the side, its head tilted up toward "
+       "the top. A red circle around the spot at the top where the steps flatten and vanish into the floor. " + ESC),
 }
 REFS = ["robot_front", "robot_34", "robot_side", "robot_antenna"]
 
