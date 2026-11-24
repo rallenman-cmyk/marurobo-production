@@ -167,8 +167,8 @@ def photo_sprite(t, p):
         k = min(1.0, (t - p["t_new"]) / 1.0)
         x = 690 + (260 - 690) * k; y = 160 + (260 - 160) * k
         _photo(d, x * S2, y * S2, (120 - 20 * k) * S2)
-        if k < 1: _arrow(d, 600, 170, 380, 230, TEALC)
-    if up > 0 and up < 1: _arrow(d, 360, 230, 560, 170, TEALC)
+        if t < p["t_new"] + 2.2: _arrow(d, 600, 120, 390, 180, TEALC)      # 写真の通り道より上に描き、写真が着いてからも 1.2 秒残す（v7 のコメント「矢印の先が潰れてて分かりにくい」：写真が矢じりに重なり、1 秒で消えていた）
+    if up > 0 and t < p["t_up"] + 2.2: _arrow(d, 360, 180, 570, 120, TEALC)
     D.ctext(d, (690 * S2, 330 * S2), "預け先", D.font(44 * S2), NAVY)
     return _done(im, W_, H_)
 

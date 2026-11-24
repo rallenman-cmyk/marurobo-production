@@ -1,0 +1,74 @@
+{
+ "created_at": "2026-11-25T00:00:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v7",
+ "to_version": "MARU-LEAK-v8",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwv8zcrzyvzcwufv",
+   "comment_rev": 1,
+   "explain": "矢じりを線の向きに合わせて大きくしました。飛んでいく写真が矢じりに重なっていたので、矢印を写真の通り道より上に、写真の上に描き、写真が着いてからも1秒ほど残します（行きと帰り）。",
+   "new_t": 111.4,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v8",
+   "original_t": 111.4,
+   "original_t_end": null,
+   "original_text": "矢印の先が潰れてて分かりにくい",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwv90iczfjrna69c",
+   "comment_rev": 1,
+   "explain": "驚いたあと、まるロボがあわてて扉の右のかべ際へ歩いて隠れ、出てきた影をそっとのぞきます。まるロボが隠れ終わってから影が出てくるよう、影を2秒ほど遅らせました。廊下の手前から撮っています。",
+   "new_t": 152.0,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v8",
+   "original_t": 152,
+   "original_t_end": null,
+   "original_text": "影が出てくる時にまるロボは焦って見つからないように隠れる感じにして",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwv922x5dcx6hipa",
+   "comment_rev": 1,
+   "explain": "跳ばずに、足音つきで歩く形にしました。2つの錠の扉の間から、予備の倉庫の扉まで歩いて、最後の錠の前でがっくりします。",
+   "new_t": 200.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v8",
+   "original_t": 200.8,
+   "original_t_end": null,
+   "original_text": "まるロボはジャンプするんじゃなくて歩き回る感じで",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwv92liql6xyaey6",
+   "comment_rev": 1,
+   "explain": "まるロボのため息の電子音でした。動きは残して音だけ消しました。1章の同じため息の音も、選んでもらったとおり消します（本番を組むとき）。",
+   "new_t": 202.5,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v8",
+   "original_t": 202.5,
+   "original_t_end": null,
+   "original_text": "このSEいらない",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwv93zvt5ip6vowu",
+   "comment_rev": 1,
+   "explain": "矢じりを線の向きに合わせて大きくし、矢印ものばしました（お金 → 錠の開いた扉）。",
+   "new_t": 260.5,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v8",
+   "original_t": 260.5,
+   "original_t_end": null,
+   "original_text": "矢印の先が潰れててわかんない",
+   "reason": ""
+  }
+ ]
+}
