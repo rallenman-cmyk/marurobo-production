@@ -1,0 +1,17 @@
+{
+ "id": "20261124-152815-ep07_v10",
+ "name": "ep07_v10",
+ "kit_branch": "pc-kit/20261124-152815-ep07_v10",
+ "zip": "marurobo_ep07.zip",
+ "ps1": "run_pc_render_ep07.ps1",
+ "only": "S08a,S08a2,S08b,S09a,S09a2",
+ "kind": "fix",
+ "order": 7,
+ "frames": 917,
+ "fresh": true,
+ "out": "render_ep07_v10",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1607\u30ad\u30fc\u30dc\u30fc\u30c9",
+ "created": "2026-11-24T15:28:15Z"
+}
