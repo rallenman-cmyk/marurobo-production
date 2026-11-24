@@ -37,7 +37,7 @@ def ev_list():
     add(s("04-03") + 1.6, e("05-06") + 0.5, "tag", dict(text="クワーティ", obj="k_T", dy=-150, bg=BLUE, fg=WHITE))
     add(s("04-03") + 1.6, e("05-06") + 0.5, "tag", dict(text="ABC 順", obj="a_E", dy=-150, bg=ORANGE, fg=WHITE))
     add(w("05-02", "マルロボ"), s("05-04"), "tag", dict(text="マルロボ ＝ M A R U R O B O", pos=(640, 80), size=52))
-    add(w("05-03", "人は") - 0.1, e("05-03") + 0.3, "tag", dict(text="人：10本の指", pos=(330, 110), size=46, keep=True))
+    add(s("05-03"), e("05-03") + 0.3, "tag", dict(text="人：10本の指", pos=(330, 110), size=46, keep=True))
     add(w("05-03", "まるロボ"), e("05-03") + 0.3, "tag", dict(text="まるロボ：1字ずつ", pos=(950, 110), size=46, keep=True))
     # MARUROBO：押したキーから字が浮き上がって、左上に並ぶ（v5「該当のキーを押したらその文字が浮かび上がって まるろぼ になるように」）
     t = w("05-04", "道のり"); dt = min(0.55, (e("05-04") + 0.4 - t) / 7)
@@ -76,7 +76,7 @@ def ev_list():
     add(s("13-02") + 0.6, e("13-02") + 0.4, "bubble", dict(obj="maru", icon="!"))
     add(w("14-05", "おかしい") - 0.2, e("14-05") + 0.3, "bubble", dict(obj="maru", icon="?"))
     add(w("15-02", "わざと"), e("15-02") + 0.3, "tag", dict(text="わざと ゆっくり打たせた？", pos=(640, 80), size=50))
-    add(w("15-04", "ちょっと待って") - 0.1, e("15-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
+    add(lt("15-04", "でも") - 0.05, e("15-04") + 0.3, "bubble", dict(obj="maru", icon="?"))
     add(w("15-05", "手で書く"), e("15-05") + 0.3, "note", dict(style="speed"))
     add(w("15-06", "わざと"), e("15-06") + 0.3, "note", dict(style="nobuy", t_x=w("15-06", "いなく")))
     add(w("15-07", "最初のお客さん"), e("15-07") + 0.3, "pip_clip", dict(clip="S17a", src_t=s("17-04")))
