@@ -108,7 +108,7 @@ def slip(name, num, hl=False, col=None):
         x = 24 + k * 120; line = NAVY
         if hl and k < 2: line = BLUE
         if hl is True and k == 7: line = ORANGE          # hl="b"：はじめの 2 つ（青）だけ（15-09「会社の印」→「検算の数字」と順に光らせる）
-        d.rounded_rectangle(S(x, 22, x + 104, 158), radius=12 * SS, fill=WHITE, outline=line, width=(10 if line != NAVY else 5) * SS)
+        d.rounded_rectangle(S(x, 22, x + 104, 158), radius=12 * SS, fill=(WHITE if not col or col[0] < 200 or col[1] > 100 else (255, 214, 208)), outline=line, width=(10 if line != NAVY else 5) * SS)   # 赤い札は、ますの中もうすい赤（通しの点検：ますが白で、遠くから桃色に見えた）
         d.text(S(x + 52, 92), num[k], font=F(96 * SS, "700Bold"), fill=NAVY, anchor="mm")
     im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
 
@@ -130,7 +130,7 @@ def slip_short(name, n=3):
 
 
 slip_short("slip_short")
-slip("slip_red", SLIPS[1], col=(226, 70, 60))   # 通しの点検：うすい赤では、引きの絵で地面の札が白っぽく見えた; slip("slip_green", NUM, col=(120, 214, 150)); slip("slip_mine", NUM, hl=True)
+slip("slip_red", SLIPS[1], col=(214, 44, 36))   # 通しの点検：うすい赤では、引きの絵で地面の札が白っぽく見えた; slip("slip_green", NUM, col=(120, 214, 150)); slip("slip_mine", NUM, hl=True)
 # レジの画面：問い合わせ中（はじめの 2 けたが青）・はじかれた（赤）・通った（緑）
 for i, n in enumerate(SLIPS[1:4]):
     register("reg_q%d" % i, n, "typing")
