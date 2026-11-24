@@ -614,14 +614,14 @@ def b_shop3(cl):
     # 影：16-01 で門の前へ → 16-02 でレジの前へ。足もとに札の山（持ってきた物）
     sh = shadow((0.0, -2.6, 0.0), face=180.0, s=0.8); track("shadow", sh.root, 1.2); track("shadow_hand", sh.hand, 0.0)
     key(sh.root, "location", s("16-01") - 0.5, (0.0, -2.6, 0.0)); key(sh.root, "location", s("16-01") + 2.2, (0.0, -0.9, 0.0))
-    key(sh.root, "location", s("16-02") - 0.2, (0.0, -0.9, 0.0)); key(sh.root, "location", s("16-02") + 0.7, SH_REG)
+    key(sh.root, "location", s("16-01") + 2.4, (0.0, -0.9, 0.0)); key(sh.root, "location", s("16-02") + 0.7, SH_REG)   # 点検（flash_check）：0.9 秒で 1.6 m 動き、ワープに見えた → 門の前に着いたら、そのまま 2.6 秒かけて中へ
     pileE = empty((0.0, 0.0, 0.0)); track("spile", pileE, 0.05)
     _r = _rnd.Random(5)
     for k in range(22):
         sl = slip_obj((_r.uniform(-0.12, 0.12), _r.uniform(-0.08, 0.08), 0.003 + 0.0045 * k), (0, 0, R(_r.uniform(-35, 35))), tex="slip_%d" % (k % 8), w=SLIP_W, parent=pileE)
     key(pileE, "location", -100.0, (0.0, -2.28, 0.82), "CONSTANT")       # 影が抱えて運ぶ
     key(pileE, "location", s("16-01") - 0.5, (0.0, -2.28, 0.82)); key(pileE, "location", s("16-01") + 2.2, (0.0, -0.58, 0.82))
-    key(pileE, "location", s("16-02") - 0.2, (0.0, -0.58, 0.82)); key(pileE, "location", s("16-02") + 0.7, (0.42, 0.62, 0.0))   # レジのわきの床へ置く
+    key(pileE, "location", s("16-01") + 2.4, (0.0, -0.58, 0.82)); key(pileE, "location", s("16-02") + 0.2, (0.0, 1.04 - 0.32, 0.82)); key(pileE, "location", s("16-02") + 0.7, (0.42, 0.62, 0.0))   # レジのわきの床へ置く
     # 札を入れる時刻・返事（赤／緑）の時刻（声の間から）
     bu = [wp("16-08", "ブッブー"), wp("16-10", "ブッブー", 0), wp("16-10", "ブッブー", 1), wp("17-02", "ブッブー", 0), wp("17-02", "ブッブー", 1)]
     ins = [wp("16-02", "入れ") - 0.3, wp("16-09", "次の札") + 0.2, wp("16-10", "その次") - 0.35, wp("17-02", "カタカタ", 0), wp("17-02", "カタカタ", 1)]
@@ -796,10 +796,10 @@ def _pip_set():
     world("#D7E6F2", 0.8)
     plane(noise_mat("pipground", "#C9D3C0", "#BFC9B6", 5.0, 0.9), (0, 0, 0), (40, 40))
     sun(rot=(50, 0, -25), energy=3.0, col="#FFF1DC", angle=6)
-    mc = machine((-1.4, 0.0, 0.0), 0.0)
+    mc = machine((-1.0, 0.0, 0.0), 0.0)        # 390px の点検：小窓の中で札が細い線にしか見えなかった → 機械と門を近づけ、札を大きく、カメラを近く
     fr = noise_mat("pgatefr", "#8A6A48", "#7A5A40", 2.0, 0.6, wave=True)
-    for sx in (-1, 1): cube(fr, (1.4 + sx * 0.55, 0.0, 0.8), (0.12, 0.2, 1.6))
-    cube(fr, (1.4, 0.0, 1.66), (1.25, 0.2, 0.14))
+    for sx in (-1, 1): cube(fr, (1.1 + sx * 0.6, 0.0, 0.8), (0.12, 0.2, 1.6))
+    cube(fr, (1.1, 0.0, 1.66), (1.35, 0.2, 0.14))
     return mc
 
 
@@ -809,15 +809,16 @@ def b_pip18(cl):
     t0 = s("18-09") + 0.2
     for k, (tex, ok) in enumerate((("slip_red", False), ("slip_red", False), ("slip_green", True))):
         a_ = t0 + 1.5 * k
-        sl = slip_obj((-1.4, -0.3, 0.34), (R(90), 0, 0), tex="slip_%d" % (k + 1), w=0.7)
-        key(sl, "location", -100.0, (-1.4, -0.3, 0.34), "CONSTANT"); key(sl, "location", a_, (-1.4, -0.3, 0.34)); key(sl, "location", a_ + 0.9, (1.0, -0.2, 0.8))
+        sl = slip_obj((-1.0, -0.3, 0.34), (R(90), 0, 0), tex="slip_%d" % (k + 1), w=1.0)
+        key(sl, "location", -100.0, (-1.0, -0.3, 0.34), "CONSTANT"); key(sl, "location", a_, (-1.0, -0.3, 0.34)); key(sl, "location", a_ + 0.9, (0.7, -0.2, 0.8))
         hide_key(sl, -100.0, True); hide_key(sl, a_, False); hide_key(sl, a_ + 0.9, True)
-        s2 = slip_obj((1.0, -0.2, 0.8), (R(90), 0, 0), tex=tex, w=0.7)
+        s2 = slip_obj((0.7, -0.2, 0.8), (R(90), 0, 0), tex=tex, w=0.9 if ok else 1.0)
+        cube(glow_mat("pipback" + tex, "#46D27A" if ok else "#E8473C", 2.5), (0, 0, -0.012), ((0.98 if ok else 1.12), 0.36, 0.01), parent=s2)   # 緑は門のあいだ（1.08 m）を通れる幅   # 390px の点検：小さな窓では札の色が淡く、赤・緑が分からなかった → うしろに光る色の板
         hide_key(s2, -100.0, True); hide_key(s2, a_ + 0.9, False)
         if ok:
-            key(s2, "location", a_ + 0.9, (1.0, -0.2, 0.8)); key(s2, "location", a_ + 1.6, (1.4, 0.4, 0.8)); key(s2, "location", 1e4, (1.4, 0.4, 0.8))
+            key(s2, "location", a_ + 0.9, (0.7, -0.2, 0.8)); key(s2, "location", a_ + 1.2, (1.1, -0.35, 0.8)); key(s2, "location", a_ + 1.9, (1.1, 0.5, 0.8)); key(s2, "location", 1e4, (1.1, 0.5, 0.8))   # 門の正面に回ってから、門のまん中を通る（柱を通りぬけない）
         else:
-            key(s2, "location", a_ + 1.0, (1.0, -0.2, 0.8)); key(s2, "location", a_ + 1.4, (0.6 + 0.3 * k, -0.7, 0.01)); key(s2, "rotation_euler", a_ + 1.0, (R(90), 0, 0)); key(s2, "rotation_euler", a_ + 1.4, (0, 0, R(8 * k)))
+            key(s2, "location", a_ + 1.0, (0.7, -0.2, 0.8)); key(s2, "location", a_ + 1.4, (0.2 + 0.25 * k, -0.75 + 0.2 * k, 0.01 + 0.01 * k)); key(s2, "rotation_euler", a_ + 1.0, (R(90), 0, 0)); key(s2, "rotation_euler", a_ + 1.4, (R(-60), 0, R(8 * k)))   # 落ちた札は少し起こして、カメラに向ける
 
 
 def b_pip19(cl):
@@ -826,8 +827,8 @@ def b_pip19(cl):
     t0 = s("19-02") + 0.2
     for k in range(5):
         a_ = t0 + 1.1 * k
-        sl = slip_obj((-1.4, -0.3, 0.34), (R(90), 0, 0), tex="slip_short", w=0.4)
-        key(sl, "location", -100.0, (-1.4, -0.3, 0.34), "CONSTANT"); key(sl, "location", a_, (-1.4, -0.3, 0.34)); key(sl, "location", a_ + 1.0, (1.0, -0.2, 0.9))
+        sl = slip_obj((-1.0, -0.3, 0.34), (R(90), 0, 0), tex="slip_short", w=0.5)
+        key(sl, "location", -100.0, (-1.0, -0.3, 0.34), "CONSTANT"); key(sl, "location", a_, (-1.0, -0.3, 0.34)); key(sl, "location", a_ + 1.0, (0.9, -0.2, 0.9))
         hide_key(sl, -100.0, True); hide_key(sl, a_, False); hide_key(sl, a_ + 1.05, True)
 
 
@@ -967,8 +968,8 @@ CUTS = [
     ("A19b", b_house18, s("19-02"), C((1.9, 0.3, 0.7), (0.6, 1.1, 0.3), 26), "A"),
     ("A19c", b_house18, s("19-03"), C((-0.6, -1.4, 1.5), (1.3, 0.8, 0.3), 28), "A"),
     ("A19d", b_house18, s("19-05"), C((2.0, 0.1, 0.6), (0.8, 0.95, 0.25), 30), "A"),
-    ("P18", b_pip18, s("18-09") - 0.2, C((0.0, -4.0, 1.0), (0.0, 0.0, 0.65), 36), "I"),   # 文ごとの点検：小窓の中で札が小さすぎて見えなかった
-    ("P19", b_pip19, s("19-02") - 0.2, C((0.0, -4.0, 1.0), (0.0, 0.0, 0.65), 36), "I"),
+    ("P18", b_pip18, s("18-09") - 0.2, C((0.1, -3.9, 1.2), (0.1, -0.2, 0.6), 36), "I"),   # 文ごと・390px の点検：小窓の中で札が小さすぎて見えなかった
+    ("P19", b_pip19, s("19-02") - 0.2, C((0.1, -3.9, 1.2), (0.1, -0.2, 0.6), 36), "I"),
     ("C13p", b_shop, s("13-01") - 0.1, None, "C"),
     # 小窓（想像）
     ("P05", b_pip05, s("05-01") - 0.2, C((1.4, -0.3, 1.1), (3.0, -0.2, 1.4), 30), "I"),
