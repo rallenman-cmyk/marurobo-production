@@ -49,10 +49,10 @@ def ev_list():
     add(w("11-03", "会社の印") - 0.1, e("11-03") + 0.3, "tag", dict(text="会社の印", obj="tile0", dx=70, dy=-110, size=52, bg=BLUE, fg=WHITE))
     add(w("12-02", "役目") - 0.2, e("12-02") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # v1 のコメント「計算で決まる数字が分からない。決まりの計算あるなら載せたい」（ユーザーの選択：かんたんな決まりで見せる）
-    add(w("12-03", "前に") - 0.1, e("12-03") + 0.4, "sum", dict(y=455, lines=[
+    add(w("12-03", "前に") - 0.1, e("12-03") + 0.4, "sum", dict(y=125, lines=[   # v2 の点検：y=455 ではタイルの列にかかった → 上へ
         (w("12-03", "前に") - 0.1, "3＋5＋2＋8＋0＋4＋7 ＝ 29", NAVY),
         (w("12-03", "計算") - 0.1, "あと 1 で 30 → 最後の数字は 1", ORANGE),
-        (w("12-03", "計算") - 0.1, "※ここでは、かんたんな決まりで表しています", (110, 118, 132))]))
+        (w("12-03", "計算") - 0.1, "※かんたんな決まりで表しています", (110, 118, 132))]))
     add(s("12-04") + 0.05, e("12-04") + 0.4, "notebook", dict(check=w("12-04", "見直す") - 0.1))
     add(w("12-05", "検算の数字") - 0.1, e("12-05") + 0.3, "tag", dict(text="検算の数字", obj="tile7", dy=-110, size=52, bg=ORANGE, fg=WHITE))
     add(w("13-04", "となり") - 0.2, e("13-04") + 0.3, "ring", dict(obj="key" + WRONG[6], r=46, col=RED))   # v1 の点検：どのキーを押しまちがえたか分からなかった
@@ -223,7 +223,7 @@ def sum_sprite(t, lines):
     d.rounded_rectangle((6, 6, W_ * S2 - 6, H_ * S2 - 6), radius=22 * S2, fill=(255, 253, 244, 240), outline=(200, 206, 214, 255), width=4 * S2)
     for i, (t0, txt, col) in enumerate(lines):
         if t < t0: continue
-        D.ctext(d, (W_ / 2 * S2, (46 + 60 * i) * S2), txt, D.font((32 if txt.startswith("※") else 44) * S2), col)
+        D.ctext(d, (W_ / 2 * S2, (46 + 60 * i) * S2), txt, D.font(44 * S2), col)
     return im.resize((W_, H_), Image.LANCZOS)
 
 
