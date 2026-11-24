@@ -139,6 +139,21 @@ def _min2(S):
             if ch: break
         if not ch: return [tuple(x) for x in S]
 SUBS = _min2(SUBS)
+def _head_lead(S):
+    """（16本目 2章）2 秒にわずかに足りない、文の頭の 1 枚（ためでない）は、頭を声より少し前（0.12 秒まで）に出して 2 秒にする。
+    文の声の頭からのずれは 0.25 秒以内（関所の測りの決まり）。前の字幕とは 0.05 秒あける。「まるロボの名札です！」が 1.93 秒で、次の文までのばせなかった"""
+    S = sorted(S); heads = {round(p["start"], 3) for p in P}
+    for i, (a, c, t) in enumerate(S):
+        need = 2.02 - (c - a)
+        if need < 0.01 or t in TAME or need > 0.12 or not any(abs(a - h) < 0.06 for h in heads): continue      # 字幕の頭は声の頭の 0.05 秒前に合わせてあるので、少しの差は同じ文の頭とみる
+        prev_end = S[i - 1][1] if i else -1.0
+        if a - need < prev_end + 0.05 and i:              # 前の字幕（声のあとの余韻の所）を同じだけ早く消す。前も 2 秒以上・前の声の終わりより後のまま
+            pa, pc, pt = S[i - 1]; npc = a - need - 0.05
+            pv = max([q["end"] for q in P if q["start"] <= pa + 0.01] or [0.0])
+            if npc - pa >= 2.02 and npc >= pv: S[i - 1] = (pa, npc, pt); prev_end = npc
+        if a - need >= prev_end + 0.05: S[i] = (a - need, c, t); print("字幕の頭を前へ：%.2f 秒 %s（%.2f 秒）" % (a, t, need))
+    return S
+SUBS = _head_lead(SUBS)
 SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
 json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 SUB_STARTS = sorted(x[0] for x in SUBS)
