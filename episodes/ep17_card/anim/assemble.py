@@ -23,9 +23,9 @@ FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv els
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
 FPS, SR, WV, HV = 24, 48000, 1280, 720
 CL = json.load(open(os.path.join(HERE, "clips.json")))
-PIP_ONLY = {"P05", "P06", "P07"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
+PIP_ONLY = {"P05", "P06", "P07", "P18", "P19"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
 ORDER = sorted([k for k in CL if k not in PIP_ONLY], key=lambda k: CL[k][2])
-CHAPTER = {"A02", "C13", "I14", "C14"}   # 舞台が変わる所（夜 → 朝・家 → お店・想像の場面の出入り。重ねるつなぎ 0.6 秒）
+CHAPTER = {"A02", "C13", "I14", "C14", "B15", "C16", "A18"}   # 舞台が変わる所（夜 → 朝・家 → お店・想像の場面の出入り。重ねるつなぎ 0.6 秒）
 SEPIA = set()
 # v3（5本目 v2「左上の小窓を出しつつ、メインの映像もそこのシーンを」）：26-05「ぶつかって曲がるだけだった先輩たち」で、
 #   メインの絵も昔の先輩がぶつかって曲がる場面（S06b・セピア）にする：(差しかえるカット, 始め, 使うクリップ, そのクリップの秒)
@@ -300,7 +300,7 @@ for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴
     EV[(round(t_, 2), k_)] = g_
 # 17本目 v1 のコメント「SEの音量大きい」（4:53 のブー）：種類ごとに測ると、ブーは平均 −29 dB で声と同じ大きさだった。
 #   長く鳴る音は、声（平均 −27 dB）より 10 dB 以上小さく（平均 −38 dB 以下）なるよう、種類ごとの上限を決める
-KIND_CAP = {"buzz_ng": 0.14, "chime_ok": 0.16, "pi": 0.2, "buzz": 0.25, "land": 0.2}
+KIND_CAP = {"buzz_ng": 0.14, "chime_ok": 0.16, "pi": 0.2, "buzz": 0.25, "land": 0.2, "bubu": 0.2, "rattle": 0.35, "thump": 0.2}   # 3章：ブッブー・ドンは長いので、平均が声より 10 dB 以上小さく（−38 dB）
 for (t_, k_) in list(EV):
     if k_ in KIND_CAP and EV[(t_, k_)] > KIND_CAP[k_]: EV[(t_, k_)] = KIND_CAP[k_]
 # 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）

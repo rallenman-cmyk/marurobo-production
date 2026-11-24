@@ -10,7 +10,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "..", "ep04_robot", "look"))
 import design as D
 import timing as T
-s, e, w = T.s, T.e, T.w
+s, e, w, wp = T.s, T.e, T.w, T.wp
 YEL = (255, 201, 40); NAVY = D.NAVY; WHITE = (255, 255, 255); RED = (226, 58, 48)
 ORANGE = (255, 138, 31); PURPLE = (138, 77, 255); TEAL = D.TEAL
 BLUE = (52, 120, 230)
@@ -68,6 +68,16 @@ def ev_list():
     add(max(w("14-07", "会社") - 0.1, s("14-07")), e("14-07") + 0.4, "tag", dict(text="会社の印", obj="stile0", dx=40, dy=-95, size=44, bg=BLUE, fg=WHITE))
     add(w("14-07", "1人1人") - 0.1, e("14-07") + 0.4, "tag", dict(text="1人1人の数字", obj="stile4", dy=95, size=44, bg=WHITE))
     add(w("14-07", "検算") - 0.1, e("14-07") + 0.4, "tag", dict(text="検算の数字", obj="stile7", dx=-30, dy=-95, size=44, bg=ORANGE, fg=WHITE))
+    # 3章（2026-11-24）：絵コンテ表の 3章。言葉に合わせる時刻は wp()（声の本当の間から）
+    add(wp("15-11", "本当に") - 0.1, e("15-11") + 0.4, "qmark", dict(obj="pile", dy=-110, size=150))
+    add(s("16-05") - 0.05, e("16-05") + 0.4, "tag", dict(text="この番号のカードは、ありますか？ 使えますか？", pos=(640, 92), size=44))
+    add(wp("16-12", "限らない") - 0.2, e("16-12") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    add(wp("17-08", "緑") - 0.05, e("17-08") + 0.3, "bubble", dict(obj="maru_top", icon="!"))
+    add(s("18-06") + 0.05, wp("18-07", "いなかった") + 0.3, "pip3", dict(clips=(("P05", s("05-01") + 2.0), ("P06", s("06-01") + 2.0), ("P07", s("07-01") + 2.0))))
+    add(s("18-09") + 0.05, e("18-11") + 0.3, "pip_clip", dict(clip="P18", src_t=s("18-09") + 0.05))
+    add(wp("18-11", "クレジットマスター") - 0.1, e("18-11") + 0.4, "tag", dict(text="クレジットマスター", pos=(930, 110), size=56, bg=YEL))
+    add(s("19-02") + 0.05, e("19-02") + 0.3, "pip_clip", dict(clip="P19", src_t=s("19-02") + 0.05))
+    add(wp("19-03", "作る") - 0.1, e("19-04") + 0.5, "cycle", dict(t_a=wp("19-03", "作る"), t_b=wp("19-03", "試す"), t_arr=s("19-04")))
     # v1 のコメント「シーン変わる前にはてな出してるからすぐ位置が移動してるの気になる」：物について動く札（吹き出し・札・輪）は、
     #   カメラの替わり目（重なるつなぎ 0.35〜0.6 秒）が終わってから出す。替わり目をまたぐ札は、替わり目のあとにずらす
     import json as _js
@@ -91,6 +101,9 @@ def sfx_list():
     for t_ in (w("05-03", "ありません"), w("06-03", "どこにも"), s("07-03")): L.append((t_, "x_mark", 0.3))
     L.append((s("13-05") + 0.25, "key", 0.3))      # v1 の点検：13-05 の 8 つ目のキーは画面の寄りでキーが映らず、音が消えていた（表では「ポン」）
     L.append((s("14-02") - 0.05, "swish", 0.3)); L.append((s("14-04") - 0.05, "swish", 0.3))
+    L.append((s("18-06") + 0.05, "swish", 0.25)); L.append((wp("18-07", "いなかった") + 0.1, "swish", 0.25))
+    L.append((wp("18-11", "クレジットマスター") - 0.1, "pop", 0.3))
+    L.append((wp("19-03", "作る"), "pop", 0.35)); L.append((wp("19-03", "試す"), "pop", 0.35)); L.append((s("19-04"), "swish", 0.3))
     return L
 
 
@@ -672,6 +685,41 @@ def dotloop_img(qa, qb, a):
     return _down(im)
 
 
+def cycle_sprite(t, p):
+    """19-03・19-04「作る。試す。当たるまで、くり返す」：左に機械の絵（作る）、右に門の絵（試す）。あいだを回る矢印"""
+    W_, H_ = 760, 330; S2 = 2
+    im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 240))
+    LX, RX, CY = 170 * S2, 590 * S2, 140 * S2
+    if t >= p["t_a"]:        # 機械（灰色の箱・札の口・ランプ）
+        d.rounded_rectangle((LX - 70 * S2, CY - 70 * S2, LX + 70 * S2, CY + 70 * S2), radius=12 * S2, fill=(110, 116, 128))
+        d.rectangle((LX - 45 * S2, CY + 18 * S2, LX + 45 * S2, CY + 30 * S2), fill=(21, 23, 27))
+        d.ellipse((LX - 50 * S2, CY - 60 * S2, LX - 26 * S2, CY - 36 * S2), fill=(255, 179, 71))
+        d.rounded_rectangle((LX - 40 * S2, CY + 30 * S2, LX + 40 * S2, CY + 46 * S2), radius=3 * S2, fill=(250, 250, 247), outline=NAVY, width=2 * S2)
+        D.ctext(d, (LX, CY + 128 * S2), "作る", D.font(52 * S2), NAVY)
+    if t >= p["t_b"]:        # 門（木のアーチ）
+        c = (138, 106, 72)
+        d.rectangle((RX - 70 * S2, CY - 60 * S2, RX - 50 * S2, CY + 70 * S2), fill=c); d.rectangle((RX + 50 * S2, CY - 60 * S2, RX + 70 * S2, CY + 70 * S2), fill=c)
+        d.rectangle((RX - 80 * S2, CY - 78 * S2, RX + 80 * S2, CY - 56 * S2), fill=c)
+        D.ctext(d, (RX, CY + 128 * S2), "試す", D.font(52 * S2), NAVY)
+    if t >= p["t_arr"]:      # 回る矢印（上：機械 → 門、下：門 → 機械）。0.6 秒でのびて、そのあと光の点が回る
+        g = min(1.0, (t - p["t_arr"]) / 0.6); col = (52, 120, 230)
+        for top in (True, False):
+            box = (LX + 10 * S2, CY - 130 * S2, RX - 10 * S2, CY + 130 * S2)
+            a0, a1 = (200, 340) if top else (20, 160)
+            d.arc(box, a0, a0 + (a1 - a0) * g, fill=col, width=9 * S2)
+            if g >= 1.0:
+                ang = math.radians(a1); cx_ = (box[0] + box[2]) / 2 + (box[2] - box[0]) / 2 * math.cos(ang); cy_ = (box[1] + box[3]) / 2 + (box[3] - box[1]) / 2 * math.sin(ang)
+                dx_, dy_ = -math.sin(ang), math.cos(ang); L_ = 22 * S2; nx_, ny_ = -dy_, dx_
+                d.polygon([(cx_ + dx_ * L_, cy_ + dy_ * L_), (cx_ + nx_ * L_ * 0.7, cy_ + ny_ * L_ * 0.7), (cx_ - nx_ * L_ * 0.7, cy_ - ny_ * L_ * 0.7)], fill=col)
+        if g >= 1.0:
+            ph = ((t - p["t_arr"] - 0.6) / 1.6) % 1.0; ang = math.radians(200 + 360 * ph)
+            box = (LX + 10 * S2, CY - 130 * S2, RX - 10 * S2, CY + 130 * S2)
+            cx_ = (box[0] + box[2]) / 2 + (box[2] - box[0]) / 2 * math.cos(ang); cy_ = (box[1] + box[3]) / 2 + (box[3] - box[1]) / 2 * math.sin(ang)
+            d.ellipse((cx_ - 12 * S2, cy_ - 12 * S2, cx_ + 12 * S2, cy_ + 12 * S2), fill=(255, 201, 40))
+    return im.resize((W_, H_), Image.LANCZOS)
+
+
 def draw(t, base, where, frame_of=None, fontdir=None):
     global EVENTS
     if fontdir and not D.FDIR[0]: D.FDIR[0] = fontdir
@@ -804,6 +852,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             sm = p.get("small")
             if sm and sm[0] <= t < sm[1]: _paste(base, fig92_sprite(t, p), 640, 285, 0.0001 + 0.0, 0.0)
             else: _paste(base, fig92_sprite(t, p), 640, 285, k, a)
+        elif kind == "cycle":
+            _paste(base, cycle_sprite(t, p), 640, 250, k, a)
         elif kind == "remote":
             _paste(base, remote_sprite(t, t0, p), 640, 290, k, a)
         elif kind == "rewind":

@@ -55,7 +55,7 @@ def phone(name, kind):
 def register(name, digits, state="typing", bad=None):
     """レジの画面（横 800×300）：8 つのます。digits＝入った数字。state：typing／wrong（赤）／ok（緑）／nocheck（最後のますが灰色）。bad＝赤いますの番号"""
     W_, H_ = 800, 300
-    bg = {"typing": (236, 242, 248), "wrong": (253, 226, 224), "ok": (220, 244, 228), "nocheck": (236, 242, 248)}[state]
+    bg = {"typing": (236, 242, 248), "wrong": (253, 226, 224), "ok": (220, 244, 228), "nocheck": (236, 242, 248), "nocard": (253, 226, 224)}[state]   # nocard：3章「そんな番号のカードはない」（検算は合っているので、最後のますは赤くしない）
     im = Image.new("RGB", (W_ * SS, H_ * SS), bg); d = ImageDraw.Draw(im)
     S = lambda *v: tuple(int(x * SS) for x in v)
     for k in range(8):
@@ -63,6 +63,7 @@ def register(name, digits, state="typing", bad=None):
         col = WHITE
         if bad is not None and k == bad: col = (255, 150, 140)      # v1 の点検：うすい桃色で、赤に見えなかった
         line = ORANGE if k == 7 and state != "nocheck" else (NAVY if state != "nocheck" or k < 7 else GREY)
+        if name.startswith("reg_q") and k < 2: line = BLUE           # 3章：問い合わせ中は、はじめの 2 けた（会社の印）が青
         if state == "nocheck" and k == 7: col = (210, 214, 220)
         if state == "wrong" and k == 7: line = RED
         if state == "ok": line = GREEN
@@ -70,7 +71,7 @@ def register(name, digits, state="typing", bad=None):
         d.rounded_rectangle(S(x, y, x + 72, y + 108), radius=12 * SS, fill=col, outline=line, width=6 * SS)
         if k < len(digits): d.text(S(x + 36, y + 58), digits[k], font=F(76 * SS, "700Bold"), fill=NAVY, anchor="mm")
     if state == "ok": d.ellipse(S(W_ / 2 - 26, 222, W_ / 2 + 26, 274), fill=GREEN)
-    if state == "wrong": d.ellipse(S(W_ / 2 - 26, 222, W_ / 2 + 26, 274), fill=RED)
+    if state in ("wrong", "nocard"): d.ellipse(S(W_ / 2 - 26, 222, W_ / 2 + 26, 274), fill=RED)
     im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
 
 
@@ -88,4 +89,75 @@ for n in range(0, 9): register("reg_%d" % n, NUM[:n])
 for n in range(7, 9): register("reg_w%d" % n, WRONG[:n])
 register("reg_wrong", WRONG, "wrong")
 register("reg_ok", NUM, "ok"); register("reg_nocheck", WRONG[:7], "nocheck")
+
+# ---------------------------------------------------------------- 3章（2026-11-24）
+def chk(d7):
+    """かんたんな検算の決まり（前の 7 けたを足して、ちょうど 10 のまとまりになるように最後を決める）で 8 けたにする"""
+    return d7 + str((10 - sum(int(c) for c in d7) % 10) % 10)
+SLIPS = [chk(x) for x in ("3519260", "3571640", "3546021", "3508837", "3527105", "3590412", "3533970", "3561284")]
+HERO = SLIPS[0]          # 15-09 で寄る札（35192604）
+
+
+def slip(name, num, hl=False, col=None):
+    """番号の札（横長 1000×180）：8 つのますに数字。hl＝はじめ 2 つを青・最後を橙のふちで光らせる。col＝地の色（赤・緑）"""
+    W_, H_ = 1000, 180
+    bg = col or (250, 250, 247)
+    im = Image.new("RGB", (W_ * SS, H_ * SS), bg); d = ImageDraw.Draw(im)
+    S = lambda *v: tuple(int(x * SS) for x in v)
+    for k in range(8):
+        x = 24 + k * 120; line = NAVY
+        if hl and k < 2: line = BLUE
+        if hl is True and k == 7: line = ORANGE          # hl="b"：はじめの 2 つ（青）だけ（15-09「会社の印」→「検算の数字」と順に光らせる）
+        d.rounded_rectangle(S(x, 22, x + 104, 158), radius=12 * SS, fill=WHITE, outline=line, width=(10 if line != NAVY else 5) * SS)
+        d.text(S(x + 52, 92), num[k], font=F(96 * SS, "700Bold"), fill=NAVY, anchor="mm")
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+for i, n in enumerate(SLIPS): slip("slip_%d" % i, n)
+slip("slip_hero", HERO, hl=True); slip("slip_hero_b", HERO, hl="b")
+
+
+def slip_short(name, n=3):
+    """短い札（19-02：期限・うら側の短い数字も試される。中身は見せない＝ますは空・灰色の点だけ）"""
+    W_, H_ = 400, 180
+    im = Image.new("RGB", (W_ * SS, H_ * SS), (250, 250, 247)); d = ImageDraw.Draw(im)
+    S = lambda *v: tuple(int(x * SS) for x in v)
+    for k in range(n):
+        x = 24 + k * 120
+        d.rounded_rectangle(S(x, 22, x + 104, 158), radius=12 * SS, fill=WHITE, outline=NAVY, width=5 * SS)
+        d.ellipse(S(x + 40, 78, x + 64, 102), fill=(150, 158, 170))
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+slip_short("slip_short")
+slip("slip_red", SLIPS[1], col=(240, 120, 112)); slip("slip_green", NUM, col=(120, 214, 150)); slip("slip_mine", NUM, hl=True)
+# レジの画面：問い合わせ中（はじめの 2 けたが青）・はじかれた（赤）・通った（緑）
+for i, n in enumerate(SLIPS[1:4]):
+    register("reg_q%d" % i, n, "typing")
+    register("reg_n%d" % i, n, "nocard")
+register("reg_hit", NUM, "ok")
+
+
+def card_back(name, base):
+    """カードのうら（架空）：黒い帯と、無地の署名の欄・短い数字の欄（中身は書かない）"""
+    W_, H_ = 856, 540
+    im = Image.new("RGB", (W_ * SS, H_ * SS), base); d = ImageDraw.Draw(im)
+    S = lambda *v: tuple(int(x * SS) for x in v)
+    d.rectangle(S(0, 60, W_, 150), fill=(30, 32, 38))
+    d.rectangle(S(60, 210, 560, 290), fill=(236, 236, 230)); d.rectangle(S(580, 210, 760, 290), fill=WHITE, outline=(200, 200, 200), width=4 * SS)
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+card_back("card_back", (52, 102, 196))
+
+
+def card_front19(name, base):
+    """19-01 の大きなカードの表（架空）：card と同じ柄に、無地の期限の欄（中身は書かない）"""
+    card(name, base)
+    im = Image.open(os.path.join(OUT, name + ".png")).convert("RGB"); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((540, 420, 760, 480), radius=10, fill=(236, 236, 230))
+    im.save(os.path.join(OUT, name + ".png"))
+
+
+card_front19("card_front19", (52, 102, 196))
 print("tex done", len(os.listdir(OUT)))

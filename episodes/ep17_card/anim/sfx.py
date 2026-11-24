@@ -109,6 +109,24 @@ def make17(kind, sr):
         return 0.18 * _mx(_t(700, 680, 0.1, sr, a=0.002, d=0.05), np.concatenate([np.zeros(int(0.11 * sr)), _t(520, 500, 0.14, sr, a=0.002, d=0.08)]))
     if kind == "beep_hmph": # まるロボの「むっ」（低い短い 2 音。maru_sfx にないので足した）
         return 0.16 * _mx(_t(330, 320, 0.09, sr, a=0.003, d=0.03), np.concatenate([np.zeros(int(0.12 * sr)), _t(260, 240, 0.16, sr, a=0.003, d=0.06)]))
+    if kind == "rattle":    # 3章：箱の機械が動く（カタカタ）：こもった短い音を 6 つ
+        n = int(0.7 * sr); x = np.zeros(n)
+        for i in range(6):
+            c = _mx(_n(0.04, sr, 250, 2200, a=0.0005, d=0.015), 0.3 * _n(0.015, sr, 2500, 6000, a=0.0003, d=0.006)); j = int(i * 0.11 * sr); x[j:j + len(c)] += c[:n - j]
+        return 0.26 * x
+    if kind == "slip":      # 3章：札が機械の口から出る・レジに入る（シュッ）
+        return 0.12 * _n(0.18, sr, 2500, 8000, a=0.01, d=0.12)
+    if kind == "bubu":      # 3章：ブッブー（短いブーを 2 回。長く鳴らさない）
+        n = int(0.62 * sr); tt = np.arange(n) / sr
+        g = ((tt < 0.16) | ((tt > 0.24) & (tt < 0.58))).astype(np.float32)
+        return (0.14 * np.sign(np.sin(2 * np.pi * 150 * tt)) * g).astype(np.float32)
+    if kind == "drop":      # 3章：はじかれた札が門の前に落ちる（ぱさ）
+        return 0.12 * _n(0.12, sr, 900, 5000, a=0.003, d=0.08)
+    if kind == "zoom":      # 3章：光の玉が飛ぶ（ひゅっ）
+        n = int(0.5 * sr); tt = np.arange(n) / sr; f = 700 + 1400 * tt / 0.5
+        return (0.06 * np.sin(2 * np.pi * np.cumsum(f) / sr) * np.sin(np.pi * tt / 0.5)).astype(np.float32)
+    if kind == "thump":     # 3章：金庫のカードが赤く光る（低いドン）
+        return 0.3 * _mx(_t(90, 60, 0.4, sr, a=0.003, d=0.3), 0.3 * _n(0.15, sr, 60, 400, a=0.002, d=0.1))
     return None
 
 

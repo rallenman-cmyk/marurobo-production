@@ -385,4 +385,66 @@ def shadow(loc, face=0.0, s=1.0):
     sh = Shadow(); sh.root = root; sh.arm = arm; sh.hand = hand; sh.mat = sm
     return sh
 
+# ======================================================================== 3章（2026-11-24）：影の部屋・箱の機械・番号の札
+def slip_obj(loc=(0, 0, 0), rot=(0, 0, 0), tex="slip_0", w=0.30, parent=None):
+    """番号の札（横長の白い板。厚み 3 mm。上の面に 8 つのますと数字）。上の面が +z"""
+    e = empty(loc); e.rotation_euler = rot
+    if parent is not None: e.parent = parent
+    h = w * 180 / 1000
+    cube(_m("slipedge", "#E6E6E0", rough=0.5), (0, 0, 0), (w, h, 0.004), bevel=0.001, parent=e)
+    plane(img_mat("slipface_" + tex, os.path.join(TEX, tex + ".png"), emit=0.35), (0, 0, 0.0021), (w, h), parent=e)
+    return e
+
+
+def machine(loc, face=0.0):
+    """箱の形の機械（灰色の箱。前＝−y に札が出る口、上に小さなランプ。字・印・画面はなし。手口は見せない）。
+    戻り値：dict(root, body（ゆらす）, lamp（光る材質）, slot（札が出る所の empty）)"""
+    root = empty(loc, R(face))
+    body = empty((0, 0, 0)); body.parent = root
+    cube(_m("machine", "#6E7480", rough=0.45, metal=0.3), (0, 0, 0.42), (0.72, 0.56, 0.84), bevel=0.03, parent=body)
+    cube(_m("machtrim", "#4A505A", rough=0.5), (0, 0, 0.86), (0.6, 0.46, 0.04), bevel=0.01, parent=body)
+    cube(_m("slotdark", "#15171B", rough=0.9), (0, -0.281, 0.34), (0.42, 0.01, 0.06), parent=body)       # 札が出る口
+    for k in range(4): cube(_m("vent", "#3E434C", rough=0.6), (0.24, -0.282, 0.6 - k * 0.05), (0.14, 0.006, 0.018), parent=body)
+    lm = mat("machlamp", "#FFB347", rough=0.3, emit=0.001)
+    sphere(lm, (-0.2, -0.05, 0.92), 0.05, seg=20, parent=body)
+    slot = empty((0, -0.30, 0.34)); slot.parent = body
+    return dict(root=root, body=body, lamp=lm, slot=slot)
+
+
+def dark_room():
+    """B：影の部屋（夜。奥のかべ y=2.8 に窓。左のかべ x=-2.6 にドア。机と黄色い電気スタンド）。床は 0。前（−y）は開けておく"""
+    world("#0B1020", 0.05)
+    fl = wood_floor("dfloor", "#5A4A3C", "#4E4034", "#3A3029", 0.9, 0.14, 0.1, 0.15)
+    plane(fl, (0, 0.9, 0), (5.4, 4.0))
+    wl = noise_mat("dwall", "#4A4F5C", "#434856", 6.0, 0.9)
+    WX0, WX1, WZ0, WZ1 = -1.75, -0.65, 0.72, 1.62                           # 窓（奥のかべ）
+    for (x0, x1, z0, z1) in ((-2.7, WX0, 0, 2.6), (WX1, 2.7, 0, 2.6), (WX0, WX1, 0, WZ0), (WX0, WX1, WZ1, 2.6)):
+        cube(wl, ((x0 + x1) / 2, 2.85, (z0 + z1) / 2), (x1 - x0, 0.1, z1 - z0))
+    fr = _m("dwinfr", "#8A8F99", rough=0.5)
+    for (xx, zz, ww, hh) in (((WX0 + WX1) / 2, WZ0 - 0.02, WX1 - WX0 + 0.1, 0.05), ((WX0 + WX1) / 2, WZ1 + 0.02, WX1 - WX0 + 0.1, 0.05),
+                             (WX0 - 0.02, (WZ0 + WZ1) / 2, 0.05, WZ1 - WZ0), (WX1 + 0.02, (WZ0 + WZ1) / 2, 0.05, WZ1 - WZ0), ((WX0 + WX1) / 2, (WZ0 + WZ1) / 2, 0.03, WZ1 - WZ0)):
+        cube(fr, (xx, 2.79, zz), (ww, 0.06, hh))
+    for (y0, y1, z0, z1) in ((-1.1, 0.2, 0, 2.6), (1.1, 2.9, 0, 2.6), (0.2, 1.1, 1.92, 2.6)):   # 左のかべ（ドアの穴は y 0.2〜1.1、高さ 1.92）
+        cube(wl, (-2.65, (y0 + y1) / 2, (z0 + z1) / 2), (0.1, y1 - y0, z1 - z0))
+    door_g = noise_mat("ddoor", "#3B302A", "#33291F", 3.0, 0.6, wave=True)
+    hinge = empty((-2.62, 0.2, 0.0))                                          # 蝶つがい（rz を + に回すと外へ開く）
+    cube(door_g, (0, 0.45, 0.95), (0.04, 0.88, 1.9), parent=hinge)
+    sphere(_m("dknob", "#C9A24A", rough=0.3, metal=0.8), (0.04, 0.8, 0.95), 0.035, seg=12, parent=hinge)
+    plane(_m("doutside", "#05070C", rough=1.0), (-3.4, 0.65, 1.0), (2.0, 2.2), rot=(0, R(90), 0))   # ドアの外（暗い廊下）
+    cube(wl, (2.65, 0.9, 1.3), (0.1, 4.0, 2.6))
+    plane(mat("nightsky", "#16234A", rough=1.0, emit=0.6), (-1.2, 6.0, 1.5), (14, 6), rot=(R(90), 0, 0))
+    for k in range(5):                                                       # 窓の外の遠い建物（暗い）
+        cube(_m("nbld%d" % k, "#0F1526", rough=0.9), (-3.0 + k * 1.2, 5.5, 0.6 + 0.25 * k % 3), (0.9, 0.3, 1.2 + 0.4 * (k % 3)))
+    dw = noise_mat("ddesk", "#6B5440", "#5E4936", 3.0, 0.6, wave=True)
+    cube(dw, (1.5, 2.35, 0.74), (1.3, 0.6, 0.04))
+    for sx in (-1, 1):
+        for sy in (-1, 1): cube(_m("ddeskleg", "#2E2A28", rough=0.5), (1.5 + sx * 0.58, 2.35 + sy * 0.24, 0.37), (0.04, 0.04, 0.74))
+    cyl(_m("lampbase2", "#2F3138", rough=0.4), (1.85, 2.45, 0.77), 0.08, 0.02)
+    cyl(_m("lamppole", "#2F3138", rough=0.4), (1.85, 2.45, 0.98), 0.012, 0.42)
+    cyl(glow_mat("lampshade", "#FFD68A", 3.0), (1.85, 2.38, 1.2), 0.1, 0.12)
+    bpy.ops.object.light_add(type='POINT', location=(1.85, 2.3, 1.12)); l = bpy.context.object; l.data.energy = 60.0; l.data.color = (1.0, 0.82, 0.55); l.data.shadow_soft_size = 0.2
+    bpy.ops.object.light_add(type='AREA', location=(0.0, -1.6, 2.6)); a = bpy.context.object; a.data.energy = 90.0; a.data.size = 3.0; a.data.color = (0.6, 0.7, 1.0); a.rotation_euler = (R(35), 0, 0)
+    bpy.ops.object.light_add(type='SUN', location=(0, 0, 5)); m = bpy.context.object; m.rotation_euler = (R(60), 0, R(200)); m.data.energy = 0.25; m.data.color = (0.6, 0.7, 1.0)
+    cube(_m("outbox", "#20242E", rough=0.9), (-0.9, 3.45, 0.17), (2.6, 0.9, 0.34))   # 窓の外の台（まるロボが乗る。部屋からは見えない）
+    return dict(win=((WX0 + WX1) / 2, 2.85, (WZ0 + WZ1) / 2), door=(-2.6, 0.65, 0.0), hinge=hinge)
 

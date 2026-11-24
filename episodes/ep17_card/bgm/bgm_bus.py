@@ -1,5 +1,5 @@
 # 17本目（カード）の BGM。この回のために作った新しい曲（make_bgm.py。git には入れない）。作業フォルダの stage/bgm/bgm_n/h/m/t/c.mp3
-#   N：S01（夜）／H：S02〜S03／M：S04〜S09（探偵）／T：S10〜S12（番号の決まり）／C：S13〜S14（お店）。3章からはここに足す
+#   N：S01（夜）／H：S02〜S03／M：S04〜S09（探偵）／T：S10〜S12（番号の決まり）／C：S13〜S14（お店）／B：S15（影の部屋）／K：S16〜S17（試す）／R：S18〜S19（正体）
 #   切り替え・大きさ・くり返しは 6本目の bgm_bus.py と同じ（3本目の make を使う）
 import os, importlib.util
 import numpy as np
@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _sp = importlib.util.spec_from_file_location("bgm_bus_ep03", os.path.join(HERE, "..", "..", "ep03_ad", "bgm", "bgm_bus.py"))
 B3 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(B3)
 
-PLAN = [("N", "S01"), ("H", "S02"), ("M", "S04"), ("T", "S10"), ("C", "S13")]
+PLAN = [("N", "S01"), ("H", "S02"), ("M", "S04"), ("T", "S10"), ("C", "S13"), ("B", "S15"), ("K", "S16"), ("R", "S18")]
 OFFSET = {}
 RMS = 0.0076   # 7本目と同じ（声 -24 dB に合わせた大きさ）   # 7本目 v6：声を 4 dB 下げたので、曲も 4 dB 下げて差をそのままに（v5 まで 0.012）   # SKILL：新しい回は最初から 0.012（声より約 23 dB 下）
 _load0 = B3.load
