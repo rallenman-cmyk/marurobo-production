@@ -194,7 +194,7 @@ class MaruR:
                 h = a["face"] + FACE_OFF
                 if a.get("cut"):
                     p.teleport(p._p, h); continue
-                tk = dict(step=0.2, gap=0.02) if a.get("fast") else {}      # fast：すばやく向き直る（16本目 4章 v13：ソファの上で）
+                tk = dict(step=0.14, gap=0.01) if a.get("fast") else {}      # fast：すばやく向き直る（16本目 4章 v13：ソファの上で）
                 q = copy.deepcopy(p); q.turn_to(h, **tk); d = q.t - p.t
                 if d < 0.05: continue
                 if a.get("after"): p.turn_to(h, **tk); continue
