@@ -1,0 +1,61 @@
+{
+ "created_at": "2026-11-25T18:22:53Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v13",
+ "to_version": "MARU-LEAK-v14",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwwc9w3tvoqyzp4x",
+   "comment_rev": 1,
+   "explain": "22-02 の赤い輪を消しました。箱のふたが開いて、まるロボがそこへ跳ぶので、どの箱かは分かります（23-04 の名札の列の輪は、見る所を示すので残しています）。",
+   "new_t": 6.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v14",
+   "original_t": 6.8,
+   "original_t_end": null,
+   "original_text": "赤いまるいらない",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwwca3tmaarprjxv",
+   "comment_rev": 1,
+   "explain": "頭の上に立てた名札の下のはしが、頭の中に入っていました。名札を頭の上に少し上げて載せ、頭に入らないことを試しの絵で横から見て確かめました。名札が頭に載るカット（走る所・金庫に入れる所）を全部描き直しました。",
+   "new_t": 9.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v14",
+   "original_t": 9.8,
+   "original_t_end": null,
+   "original_text": "名札が貫通してる",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwwcajcnhna3ebz5",
+   "comment_rev": 1,
+   "explain": "ソファのほうを向いて前へ跳び乗り、クッションの上ですばやくカメラのほうへ向き直るようにしました（後ろへは跳びません）。",
+   "new_t": 20.0,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v14",
+   "original_t": 22.8,
+   "original_t_end": null,
+   "original_text": "ソファに乗る時後ろ向きで飛び込むのやめて",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwwccco0dmzb2prl",
+   "comment_rev": 1,
+   "explain": "図の作りの誤りで、取られる 1 枚を小さくするとき、残りの 3 枚まで小さくなっていました。取られる 1 枚だけが小さくなってまるロボのほうへ行き、残りの 3 枚は大きさがそのままになるよう直しました。",
+   "new_t": 88.4,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v14",
+   "original_t": 87.7,
+   "original_t_end": null,
+   "original_text": "一枚取り返す時に残りの3枚も小さくなるのやめて、大きさ固定で残りの3枚は",
+   "reason": ""
+  }
+ ]
+}
