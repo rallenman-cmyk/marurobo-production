@@ -156,11 +156,12 @@ def shelves(special):
 
 def price_tag(box, side=1):
     """値札：箱の前の右下に、ひもで下がる白い札（硬貨の絵が 1 つ。数字なし）。表を前（箱の前の向き）に。返す：札の empty"""
-    e = empty((side * (BOX_W / 2 - 0.06), BOX_D / 2 + 0.02, 0.02)); e.parent = box
-    cyl(mat("e_string", "#8C7A60"), (0, 0, 0.04), 0.002, 0.08, verts=6, parent=e)
+    # 3章 v1 の点検：箱の下（下の段の床ぎわ）に下がっていて、暗くて硬貨の絵が見えなかった → 上の棚からひもで下がり、箱の前の上に来る（回っても箱に当たらない 6 cm 前）
+    e = empty((side * (BOX_W / 2 - 0.07), BOX_D / 2 + 0.055, 0.24)); e.parent = box
+    cyl(mat("e_string", "#8C7A60"), (0, 0, 0.13), 0.002, 0.26, verts=6, parent=e)
     t = empty((0, 0, -0.02)); t.parent = e
-    cube(mat("e_tagback", "#F2EFE6", rough=0.6), (0, 0, -0.06), (0.085, 0.004, 0.12), parent=t)
-    plane(img_mat("pricetag", os.path.join(TEX, "pricetag.png")), (0, 0.0025, -0.06), (0.085, 0.12), rot=(R(90), 0, 0), parent=t)
+    cube(mat("e_tagback", "#F2EFE6", rough=0.6), (0, 0, -0.07), (0.10, 0.004, 0.14), parent=t)
+    plane(img_mat("pricetag", os.path.join(TEX, "pricetag.png")), (0, 0.0025, -0.07), (0.10, 0.14), rot=(R(90), 0, 0), parent=t)
     return e
 
 

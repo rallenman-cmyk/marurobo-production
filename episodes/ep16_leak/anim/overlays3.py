@@ -107,46 +107,46 @@ def bulk_sprite(t, p):
     """21-01〜21-07：1 文で 1 段ずつ。名札 1 枚 → たくさんの名札の箱に入り、ふたが閉まる（21-02）→ 1 枚の横に小さな硬貨 1 つ（21-04）→
     箱から手紙がたくさん飛ぶ（21-05）→ いくつかだけが硬貨になって戻る（21-06）→ 硬貨の山（21-07）。字は札の短い言葉だけ"""
     W_ = 1120
-    H_ = 300 if t < p["t_lbl"] else 380
+    H_ = 330 if t < p["t_lbl"] else 410      # 3章 v1 の点検：中の絵が小さく、幅 390px で名札・手紙・硬貨が見分けにくかった → 全部ひとまわり大きく
     im, d = _canvas(W_, H_)
     # 左：名札 1 枚
-    one_x, one_y = 170, 150
+    one_x, one_y = 170, 165
     mv = 0.0 if t < p["t_in"] else min(1.0, (t - p["t_in"]) / 0.9)
-    bx_, by_ = 560, 160          # 箱（まん中）
+    bx_, by_ = 560, 175          # 箱（まん中）
     if t >= p["t_in"] - 0.3:      # たくさんの名札の入った箱
-        d.rounded_rectangle(((bx_ - 150) * S2, (by_ - 80) * S2, (bx_ + 150) * S2, (by_ + 95) * S2), radius=12 * S2, fill=(180, 138, 90, 255))
+        d.rounded_rectangle(((bx_ - 185) * S2, (by_ - 95) * S2, (bx_ + 185) * S2, (by_ + 110) * S2), radius=12 * S2, fill=(180, 138, 90, 255))
         for r in range(2):
             for c in range(5):
-                _tag(d, (bx_ - 110 + c * 55) * S2, (by_ - 35 + r * 60) * S2, 46 * S2)
+                _tag(d, (bx_ - 136 + c * 68) * S2, (by_ - 40 + r * 72) * S2, 58 * S2)
         lid = 0.0 if t < p["t_lid"] else min(1.0, (t - p["t_lid"]) / 0.4)
         if lid > 0:
-            yl = (by_ - 140) + 60 * lid
-            d.rounded_rectangle(((bx_ - 158) * S2, yl * S2, (bx_ + 158) * S2, (yl + 26) * S2), radius=8 * S2, fill=(150, 110, 66, 255))
+            yl = (by_ - 160) + 66 * lid
+            d.rounded_rectangle(((bx_ - 193) * S2, yl * S2, (bx_ + 193) * S2, (yl + 28) * S2), radius=8 * S2, fill=(150, 110, 66, 255))
     tx = one_x + (bx_ - one_x) * mv; ty = one_y + (by_ - 40 - one_y) * mv
-    if mv < 1.0: _tag(d, tx * S2, ty * S2, (110 - 50 * mv) * S2, col=(47, 217, 200))
+    if mv < 1.0: _tag(d, tx * S2, ty * S2, (130 - 72 * mv) * S2, col=(47, 217, 200))
     if t >= p["t_cheap"]:          # 21-04：1 枚の横に、小さな硬貨 1 つ（左）
-        _tag(d, 120 * S2, 230 * S2, 90 * S2, col=(47, 217, 200)); _coin(d, 205 * S2, 238 * S2, 20 * S2)
+        _tag(d, 115 * S2, 250 * S2, 100 * S2, col=(47, 217, 200)); _coin(d, 205 * S2, 258 * S2, 24 * S2)
     # 21-05：箱から手紙が右へ一斉に飛ぶ
     if t >= p["t_mail"]:
         u = min(1.0, (t - p["t_mail"]) / 1.2)
         for k in range(10):
             ang = -0.9 + 0.2 * k
-            x = bx_ + 160 + (260 * u) * math.cos(ang) + 40 * u; y = by_ + (220 * u) * math.sin(ang) * 0.6
+            x = bx_ + 190 + (230 * u) * math.cos(ang) + 40 * u; y = by_ + (240 * u) * math.sin(ang) * 0.6
             back = t >= p["t_back"] and k in (2, 5, 8)
             if back:          # 21-06：3 つだけが硬貨になって、箱の右へ戻る
                 v = min(1.0, (t - p["t_back"]) / 1.0)
-                x2 = bx_ + 200 + 24 * (k // 3); y2 = by_ + 70
-                _coin(d, (x + (x2 - x) * v) * S2, (y + (y2 - y) * v) * S2, 22 * S2)
+                x2 = bx_ + 225 + 32 * (k // 3); y2 = by_ + 85
+                _coin(d, (x + (x2 - x) * v) * S2, (y + (y2 - y) * v) * S2, 28 * S2)
             else:
-                _envelope(d, x * S2, y * S2, 44 * S2)
+                _envelope(d, x * S2, y * S2, 58 * S2)
     if t >= p["t_pile"]:           # 21-07：硬貨の山（箱の右下）
         n = min(15, int((t - p["t_pile"]) / 0.12) + 3)
         for k in range(n):
             r = k // 5; c = k % 5
-            _coin(d, (930 + c * 34 - r * 17) * S2, (250 - r * 30) * S2, 24 * S2)
+            _coin(d, (935 + c * 40 - r * 20) * S2, (275 - r * 36) * S2, 30 * S2)
     if t >= p["t_lbl"]:
-        D.ctext(d, (170 * S2, 335 * S2), "1枚は安い", D.font(46 * S2), NAVY)
-        D.ctext(d, (930 * S2, 335 * S2), "たくさん＝お金", D.font(46 * S2), (170, 110, 20))
+        D.ctext(d, (170 * S2, 365 * S2), "1枚は安い", D.font(46 * S2), NAVY)
+        D.ctext(d, (930 * S2, 365 * S2), "たくさん＝お金", D.font(46 * S2), (170, 110, 20))
     return _done(im, W_, H_)
 
 
