@@ -430,10 +430,12 @@ exec(open(os.path.join(KIT_HERE, "scenes_ch2.py"), encoding="utf-8").read())    
 CUTS += CUTS2
 exec(open(os.path.join(KIT_HERE, "scenes_ch3.py"), encoding="utf-8").read())     # 3章（S18〜S21）
 CUTS += CUTS3
+exec(open(os.path.join(KIT_HERE, "scenes_ch4.py"), encoding="utf-8").read())     # 4章（S22〜S24）
+CUTS += CUTS4
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
 PIP_ONLY = {"P02", "P09", "P17"}
-END_T = e("21-10") + 1.5
+END_T = s("25-01") - 0.05      # 4章の終わり（5章を作るときにのばす）
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}

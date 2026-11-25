@@ -125,6 +125,7 @@ def b_e(cl):
         cn_ = coin3d((wx_, wy_, wz_ + 0.002)); key(cn_, "scale", -100.0, (0.001,) * 3, "CONSTANT"); key(cn_, "scale", tt_ + 0.12, (0.001,) * 3, "CONSTANT"); key(cn_, "scale", tt_ + 0.2, (1.6,) * 3, "CONSTANT")
     M.at(s("21-10") + 0.2, face=135.0)                # 残った箱のほうを向く
     M.sigh(s("21-10") + 2.2, sound=False)
+    if "e4_extend" in globals(): e4_extend(M)      # 4章の倉庫の場面（scenes_ch4.py）
     return sh, M
 
 
