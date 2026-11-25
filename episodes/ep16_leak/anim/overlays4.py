@@ -21,10 +21,9 @@ def _coin(d, cx, cy, r):
 
 def _glow_tag(d, cx, cy, w, a=1.0):
     """光るデジタルの名札（青緑のふち＋まわりの光）"""
-    for k in range(4, 0, -1):
-        r = w * (0.5 + 0.06 * k)
-        d.rounded_rectangle((cx - r, cy - r * 0.63 - w * 0.02 * k, cx + r, cy + r * 0.63 + w * 0.02 * k), radius=int(w * 0.12),
-                            fill=(120, 240, 225, int(28 * a)))
+    for k, col in ((3, (226, 250, 247)), (2, (200, 245, 240)), (1, (170, 238, 230))):      # 光は白い板の上の不透明な色で（半透明だと板が抜けて黒く見えた）
+        r = w * (0.5 + 0.05 * k)
+        d.rounded_rectangle((cx - r, cy - w * 0.315 - w * 0.05 * k, cx + r, cy + w * 0.315 + w * 0.05 * k), radius=int(w * 0.12), fill=col + (255,))
     _tag(d, cx, cy, w, col=TEAL)
 
 
@@ -47,7 +46,7 @@ def xray_sprite(t, p):
     d.rounded_rectangle((30 * S2, 130 * S2, 130 * S2, 300 * S2), radius=40 * S2, fill=(24, 22, 40, 255), outline=(110, 90, 220, 255), width=3 * S2)
     # 透けた箱（段ボールの色をうすく、ふちは濃く）
     bx0, by0, bx1, by1 = 150, 95, 440, 290
-    d.rectangle((bx0 * S2, by0 * S2, bx1 * S2, by1 * S2), fill=(180, 138, 90, 90), outline=(140, 100, 60, 255), width=5 * S2)
+    d.rectangle((bx0 * S2, by0 * S2, bx1 * S2, by1 * S2), fill=(236, 220, 192, 255), outline=(140, 100, 60, 255), width=5 * S2)      # 透けた箱＝うすい段ボールの色（半透明は黒く抜けた）
     d.line((bx0 * S2, by0 * S2, (bx0 + 40) * S2, (by0 - 40) * S2, (bx1 + 0) * S2, (by0 - 40) * S2, bx1 * S2, by0 * S2), fill=(140, 100, 60, 255), width=5 * S2)
     for k in range(3):        # 中の名札（青緑）
         _tag(d, (205 + 85 * k) * S2, (195 + (k % 2) * 18) * S2, 80 * S2, col=TEAL)
@@ -77,16 +76,16 @@ def copy_sprite(t, p):
         _tag(d, (cx - 260 * u) * S2, (cy - 40 * u) * S2, 190 * S2, col=PAPER, alpha=int(255 * (1 - u)) if u > 0 else 255)
     D.ctext(d, (cx * S2, 340 * S2), "0枚" if u >= 0.5 else "1枚", D.font(52 * S2), RED if u >= 0.5 else NAVY)
     # 右：デジタルの名札
-    P2 = [(-95, 0), (95, 0)]; P4 = [(-95, -58), (95, -58), (-95, 62), (95, 62)]
+    P2 = [(-90, 0), (90, 0)]; P4 = [(-85, -50), (85, -50), (-85, 50), (85, 50)]      # 見出しと数の字に重ならない（v0 の点検）
     rx, ry = 840, 200
     if t < p["t_c1"]:
         pos = [(0, 0)]; wd = 190
     elif t < p["t_4"]:
         v = min(1.0, (t - p["t_c1"]) / 0.6)            # 元の 1 枚は残ったまま、写しが右へ出る
-        pos = [(-95 * v, 0), (95 * v, 0)]; wd = 190 - 40 * v
+        pos = [(-90 * v, 0), (90 * v, 0)]; wd = 190 - 55 * v
     else:
         v = min(1.0, (t - p["t_4"]) / 0.6)
-        pos = [(P2[i % 2][0] + (P4[i][0] - P2[i % 2][0]) * v, P4[i][1] * v) for i in range(4)]; wd = 150
+        pos = [(P2[i % 2][0] + (P4[i][0] - P2[i % 2][0]) * v, P4[i][1] * v) for i in range(4)]; wd = 135 - 15 * v
         if t >= p["t_sh"]:                               # 入れかわって並び直す（どれが元か分からない）
             w_ = min(1.0, (t - p["t_sh"]) / 1.2); order = [3, 0, 1, 2]
             pos = [(P4[i][0] + (P4[order[i]][0] - P4[i][0]) * math.sin(math.pi * w_ / 2), P4[i][1] + (P4[order[i]][1] - P4[i][1]) * math.sin(math.pi * w_ / 2)) for i in range(4)]
@@ -98,7 +97,7 @@ def copy_sprite(t, p):
         pulse = 1.0 + (0.08 * math.sin(min(1.0, (t - p["t_2"]) / 0.5) * math.pi) if p["t_2"] <= t < p["t_2"] + 0.5 else 0.0)
         _glow_tag(d, (rx + dx) * S2, (ry + dy) * S2, wd * pulse * S2)
     if p["t_q"] <= t < p["t_take"]:
-        D.ctext(d, ((rx + 210) * S2, 70 * S2), "？", D.font(60 * S2), RED)
+        D.ctext(d, ((rx + 225) * S2, (ry - 20) * S2), "？", D.font(72 * S2), RED)
     n = 1 if t < p["t_c1"] else (2 if t < p["t_4"] else (4 if gone < 0.5 else 3))
     D.ctext(d, (rx * S2, 340 * S2), "%d枚" % n, D.font(52 * S2), NAVY)
     return _done(im, W_, H_)
@@ -108,18 +107,17 @@ def out_sprite(t, p):
     """24-09：1 枚の名札から、矢印で外へたくさんの写し。下に「一度出ると、取り戻せない」"""
     W_, H_ = 1120, 430
     im, d = _canvas(W_, H_)
-    cx, cy = 560, 185
+    cx, cy = 560, 210
     u = 0.0 if t < p["t_go"] else min(1.0, (t - p["t_go"]) / 1.0)
     for k in range(6):
-        ang = math.radians(-160 + 64 * k) if k < 3 else math.radians(20 + 64 * (k - 3))
-        ang = [-150, -90, -30, 30, 90, 150][k]; ang = math.radians(ang)
-        r1 = 115; r2 = 115 + 230 * u
-        x1, y1 = cx + r1 * math.cos(ang) * 1.6, cy + r1 * math.sin(ang) * 0.75
-        x2, y2 = cx + r2 * math.cos(ang) * 1.6, cy + r2 * math.sin(ang) * 0.75
+        ang = math.radians([-160, -120, -60, -20, 20, 160][k])      # 下は字のために空ける。わくの中に収める（v0 の点検：はしの名札が切れた）
+        r1 = 105; r2 = 105 + 175 * u
+        x1, y1 = cx + r1 * math.cos(ang) * 1.5, cy + r1 * math.sin(ang) * 0.6
+        x2, y2 = cx + r2 * math.cos(ang) * 1.5, cy + r2 * math.sin(ang) * 0.6
         if u > 0.05:
             _arrow(d, x1, y1, x2 - 40 * math.cos(ang), y2 - 20 * math.sin(ang), RED)
-            _glow_tag(d, x2 * S2, y2 * S2, 110 * S2)
-    _glow_tag(d, cx * S2, cy * S2, 170 * S2)
+            _glow_tag(d, x2 * S2, y2 * S2, 100 * S2)
+    _glow_tag(d, cx * S2, cy * S2, 150 * S2)
     if t >= p["t_lbl"]:
         D.ctext(d, (560 * S2, 385 * S2), "一度出ると、取り戻せない", D.font(50 * S2), RED)
     return _done(im, W_, H_)
