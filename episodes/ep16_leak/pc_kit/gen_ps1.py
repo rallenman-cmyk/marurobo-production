@@ -1,15 +1,15 @@
 # 16本目：PC の本番描画の手順（run_pc_render_ep16.ps1）を、9本目の手順と clips.json から作る
-#   使い方：python3 gen_ps1.py <この章の終わりの秒（その前に始まるカットだけ描く）> <版の名前 例 ep16_v1>
+#   使い方：python3 gen_ps1.py <この章の終わりの秒（その前に始まるカットだけ描く）> <版の名前 例 ep16_v1> [始まりの秒（それより前のカットは描かない。既定 0）]
 import json, os, sys, re
 HERE = os.path.dirname(os.path.abspath(__file__)); EP = os.path.dirname(HERE)
-t_end, ver = float(sys.argv[1]), sys.argv[2]
+t_end, ver = float(sys.argv[1]), sys.argv[2]; t_beg = float(sys.argv[3]) if len(sys.argv) > 3 else 0.0
 C = json.load(open(os.path.join(EP, "anim", "clips.json"), encoding="utf-8"))
-cuts = sorted([(v[0], k, round((v[1] - v[0]) * 24)) for k, v in C.items() if v[2] < t_end])
+cuts = sorted([(v[0], k, round((v[1] - v[0]) * 24)) for k, v in C.items() if t_beg <= v[2] < t_end])
 src = open(os.path.join(EP, "..", "ep09_escalator", "pc_kit", "run_pc_render_ep09.ps1"), encoding="utf-8-sig").read()
 a = src.index("$JOBS = @("); b = src.index("\n)\n", a) + 3
 jobs = "$JOBS = @(\n" + ",\n".join('  @("%s", %d, "scenes.py")' % (k, n) for _, k, n in cuts) + "\n)\n"
 src = src[:a] + jobs + src[b:]
-head = ("# まるロボ 16本目「情報流出」：PC の本番描画（3D の %d カット・合わせて %d コマ。承認ずみの章：本編 %.2f 秒まで）\n" % (len(cuts), sum(n for *_, n in cuts), t_end))
+head = ("# まるロボ 16本目「情報流出」：PC の本番描画（3D の %d カット・合わせて %d コマ。承認ずみの章：本編 %.2f〜%.2f 秒）\n" % (len(cuts), sum(n for *_, n in cuts), t_beg, t_end))
 src = head + src[src.index("\n") + 1:]
 src = src.replace("ep09_escalator", "ep16_leak").replace("marurobo_ep09", "marurobo_ep16").replace("render_log_ep09", "render_log_ep16")
 src = src.replace("render_ep09_v3", "render_" + ver).replace("ep09_v3", ver).replace("9本目", "16本目")
