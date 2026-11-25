@@ -1,0 +1,22 @@
+{
+ "created_at": "2026-11-25T14:08:02Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v10",
+ "to_version": "MARU-LEAK-v11",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmww6z9fswfbdw4d1",
+   "comment_rev": 1,
+   "explain": "曲を 4 dB 下げて、声より約 17 dB 小さくしました（v10 は 13 dB 小さく、v9 は 24 dB 小さくて聞こえませんでした）。声に合わせた下げ方・むらのならし方は v10 のままなので、途切れはありません。効果音は v10 の大きさのままです。この大きさを、これからの全部の章の決まりにしました。",
+   "new_t": null,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v11",
+   "original_t": null,
+   "original_t_end": null,
+   "original_text": "BGMが大きい",
+   "reason": ""
+  }
+ ]
+}
