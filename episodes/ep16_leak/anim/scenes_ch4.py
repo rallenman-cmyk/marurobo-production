@@ -22,6 +22,33 @@ def follow(ob, target, t_on, d_on, t_off=None, d_off=0.5):
     return ct
 
 
+def dim_lens(M, t0, d=1.6, k=0.25):
+    """目（レンズ）の光を t0 から d 秒で k 倍に下げる。marumotion の light はアンテナの光だけなので、レンズの光る色（青緑）の強さを直接動かす
+    （試しの絵：24-08「目の光が下がって」で、目が明るいままだった）。本物のまるロボも、光る青緑の材質を同じ形で探す"""
+    done = {}
+    for o in [M.torso] + list(M.torso.children_recursive):
+        for sl in getattr(o, "material_slots", []):
+            m = sl.material
+            if not m or not m.use_nodes or "light" in m.name.lower(): continue
+            for n in m.node_tree.nodes:
+                if n.type == "BSDF_PRINCIPLED": es, ec = n.inputs["Emission Strength"], n.inputs["Emission Color"]
+                elif n.type == "EMISSION": es, ec = n.inputs["Strength"], n.inputs["Color"]
+                else: continue
+                c = ec.default_value
+                if es.default_value > 0.5 and c[2] > c[0] * 1.3:
+                    if m.name not in done:
+                        m2 = m.copy(); m2.name = m.name + " dim"; done[m.name] = m2
+                    sl.material = done[m.name]
+    for m2 in done.values():
+        for n in m2.node_tree.nodes:
+            es = n.inputs.get("Emission Strength") if n.type == "BSDF_PRINCIPLED" else (n.inputs.get("Strength") if n.type == "EMISSION" else None)
+            if es is None or es.default_value <= 0.5: continue
+            base = es.default_value
+            for t_, v_ in ((-100.0, base), (t0, base), (t0 + d, base * k)):
+                es.default_value = v_; es.keyframe_insert("default_value", frame=f(t_))
+    return len(done)
+
+
 def box_lid(box):
     for c in box.children:
         if c.type == "MESH" and c.active_material and c.active_material.name.startswith("e_boxlid"): return c
@@ -67,7 +94,7 @@ def e4_extend(M):
     bpy.ops.object.light_add(type="POINT", location=(-15.0, -2.2, 3.0)); _ml = bpy.context.object      # 土の道の月明かり（試しの絵：真っ暗だった）
     _ml.data.energy = 140.0; _ml.data.color = (0.62, 0.72, 1.0); _ml.data.shadow_soft_size = 1.0
     M.at(t_road, loc=(-14.5, 0.35, 0.0), face=270.0, interp="CONSTANT")
-    M.run(t_road + 0.15, wv("22-03", "名札") - 0.2, (-15.1, 0.35))      # 道の場面は 1.4 秒（走りは 1 秒に約 1.3 m）
+    M.run(t_road + 0.15, wv("22-03", "名札") + 0.1, (-15.3, 0.35))      # 道の場面は 1.4 秒（走りは 1 秒に約 1.3 m）
     hide_key(tg, -100.0, False); hide_key(tg, wv("22-03", "名札") + 1.0, True)      # はじめは見せる（試しの絵：キーが 1 つだけで、ずっと隠れていた）       # 家の場面になったら、倉庫の世界の名札は消す（家の名札は別）
     # ---- 23-02：もう一度、市場へ（道 → 入口）
     M.at(s("23-02") - 0.08, loc=(-2.6, 0.45, 0.0), face=90.0, interp="CONSTANT")
@@ -112,6 +139,7 @@ def e4_extend(M):
     sh_key(s4, e("24-07") + 0.7, (40.0, 40.0), 270.0, "CONSTANT")
     # ---- 24-08：しょんぼり。目の光が下がる
     M.glow(s("24-08") + 0.6, 0.25, d=1.6)
+    print("DIMLENS", dim_lens(M, s("24-08") + 0.6, 1.6, 0.2))
     M.sigh(s("24-08") + 0.9, sound=False)
     M.glow(s("24-10") + 0.2, 0.9, d=0.6)
     M.at(s("24-10") + 1.0, look=18)                     # 棚の名札の列を見上げる
@@ -166,7 +194,7 @@ def b_home4(cl):
     key(hg, "rotation_euler", -100.0, (0, 0, R(OPEN)), "CONSTANT")
     M = MaruR((40.0, -40.0, 0.0), face=180.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)
     hm = head_holder(M)
-    t_in = wv("22-03", "名札") - 0.35                  # 家の場面の頭（倉庫の世界の道の場面から替わる所）
+    t_in = wv("22-03", "名札") - 0.05                  # 家の場面の頭（文ごとの絵：道の場面が 1.4 秒で、ほとんど見えなかった → 0.3 秒のばす）
     M.at(t_in - 0.05, loc=(0.98, 1.36, 0.0), face=180.0, interp="CONSTANT")
     # 名札：はじめ頭の上 → 金庫の中へ（写しの強さを 1→0 にして、金庫の中の置き場所へ）
     tg = nameplate((0.85, 2.05, 0.2), rot=(R(80), 0, 0), w=0.40, glow=0.5)
@@ -197,7 +225,7 @@ CUTS4 = [
     ("E22a", b_e, s("22-01"), C((6.85, -0.5, 0.85), (7.85, -1.6, 0.42), 24), "E"),                                                     # 棚の側から、まるロボの顔：ぐっと前に乗り出す
     ("E22b", b_e, s("22-02"), C((9.0, -0.95, 0.8), (7.85, -0.7, 0.6), 28), "E"),     # 真横（右）から：まるロボが箱へつっこむ形と、頭の名札が見える（試しの絵：前からは背中だけ・左からは走り出すと目の前をふさいだ）                                                   # 横の引き：箱にとびこみ、名札を頭に載せて走り出す
     ("E22c", b_e, s("22-03"), C((-17.6, -0.7, 0.7), (-14.6, 0.35, 0.42), 30), "E"),     # 近くの前から（試しの絵：遠くて暗く、まるロボが豆つぶだった）                                                   # 夜の道：こちらへ走ってくる
-    ("A22c", b_home4, wv("22-03", "名札") - 0.35, C((1.95, 1.0, 0.75), (0.85, 1.75, 0.3), 30), "A"),                                 # 家：金庫に入れて閉める・ぴょんぴょん
+    ("A22c", b_home4, wv("22-03", "名札") - 0.05, C((1.95, 1.0, 0.75), (0.85, 1.75, 0.3), 30), "A"),                                 # 家：金庫に入れて閉める・ぴょんぴょん
     ("A22e", b_home4, s("22-05"), C((-1.0, -0.6, 0.9), (-1.5, 1.85, 0.45), 30), "A"),                                                # ソファ
     ("A22f", b_home4, s("22-06"), C((-2.2, 2.25, 1.0), (3.0, -0.3, 1.1), 26), "A"),                                                  # まるロボの肩ごしに窓
     ("A22f2", b_home4, wv("22-06", "だれも") - 0.15, C((2.2, -0.2, 1.4), (7.5, -0.6, 0.2), 30), "A"),                              # 窓の外：だれもいない夜の道
