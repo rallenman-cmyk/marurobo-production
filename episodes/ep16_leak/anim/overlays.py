@@ -594,7 +594,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             #   頭が横にはみ出すときだけ出さず、上下は画面のふちに寄せて出す
             if q is None or not (-60 <= q[0] <= 1340): continue
             spr, off = bubble_sprite(p["icon"])
-            cx = min(max(q[0], spr.width / 2 + 10), 1270 - spr.width / 2); cy = min(max(q[1] - 40 - spr.height / 2, spr.height / 2 + 10), SUB_TOP - spr.height / 2)
+            cx = min(max(q[0], spr.width / 2 + 10), 1270 - spr.width / 2); cy = min(max(q[1] - 40 - p.get("lift", 0) - spr.height / 2, spr.height / 2 + 10), SUB_TOP - spr.height / 2)      # lift：頭に重なる寄りの絵で上げる（16本目 4章の確認役）
             _paste(base, spr, cx, cy, k, a)
         elif kind == "title":
             base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(120 * a))))
