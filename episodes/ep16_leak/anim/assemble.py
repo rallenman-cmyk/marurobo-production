@@ -203,7 +203,7 @@ def frame(nm, t):
 
 
 # 音の大きさ（7本目 v5「声大きい」「SEの音でかい」「叩く音うるさい」）：声 -24（v5 は -20）、効果音 0.5（v5 は 0.8）、人の打つ音はさらに 0.35 倍
-VOICE_DB = -24.0; FX_GAIN = 0.5; TYPE_GAIN = 0.35
+VOICE_DB = -24.0; FX_GAIN = 1.1; TYPE_GAIN = 0.35   # 16本目 v10：曲を +7 dB したら効果音が曲の下に埋もれた（箱の「シュッ」が曲より 16 dB 下）→ 効果音も +7 dB（0.5→1.1）
 
 
 def active(t):
@@ -285,6 +285,13 @@ for nm in ORDER:
         if src: EVSRC[(round(t, 2), kind)] = src
 for (t_, k_, g_) in OV.sfx_list():      # 16本目：札・図に合わせて鳴らす音（絵の物の記録にない音）
     EV[(round(t_, 2), k_)] = g_
+# 16本目 v10：曲を大きくしたら、足音と小さな物の音が曲に埋もれた（測った差：走る足音 -1 dB・歩く足音 -14 dB・箱の「シュッ」-7 dB・影の「チャリン」+2 dB）
+#   → 走る足音（0.15 以上）は 2 倍、歩く足音は 1.6 倍。紙・シュッ・チャリンは 0.45 より小さくしない（描き直さずに、組み立てで上げる）
+for k__ in list(EV):
+    g__ = EV[k__]
+    if g__ <= 0: continue
+    if k__[1] == "step": EV[k__] = g__ * (2.0 if g__ >= 0.15 else 1.6)
+    elif k__[1] in ("paper", "swish", "jingle"): EV[k__] = max(g__, 0.45)
 # 打つ音（人がタイプライターを打つ音）は、続けて鳴らすのを 3 秒まで（7本目 v5「叩く音うるさい」）
 _run = None
 for (t, kind) in sorted(EV):
@@ -331,7 +338,7 @@ for (t, kind), gain in sorted(EV.items()):
 bed = 0.0
 mix = voice + music * g + fx * FX_GAIN + bed
 if os.environ.get("MARU_DUMP_STEMS"):   # 調べる用：曲（下げたあと）と声を別に保存
-    np.save(os.environ["MARU_DUMP_STEMS"] + "_music.npy", (music * g)[int(FROM * SR):int(TO * SR)]); np.save(os.environ["MARU_DUMP_STEMS"] + "_voice.npy", voice[int(FROM * SR):int(TO * SR)])
+    np.save(os.environ["MARU_DUMP_STEMS"] + "_music.npy", (music * g)[int(FROM * SR):int(TO * SR)]); np.save(os.environ["MARU_DUMP_STEMS"] + "_voice.npy", voice[int(FROM * SR):int(TO * SR)]); np.save(os.environ["MARU_DUMP_STEMS"] + "_fx.npy", (fx * FX_GAIN)[int(FROM * SR):int(TO * SR)])
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)
 tmp = os.path.splitext(OUT)[0] + "_tmp"; os.makedirs(tmp, exist_ok=True)

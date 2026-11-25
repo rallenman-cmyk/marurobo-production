@@ -1,0 +1,100 @@
+{
+ "created_at": "2026-11-25T13:03:32Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v9",
+ "to_version": "MARU-LEAK-v10",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwvuy56w3phzaasn",
+   "comment_rev": 1,
+   "explain": "影を荷車の子にして、荷車の前 1.25 m にくっつけました。1 つの動きでいっしょに進むので、速さがずれて重なることがなくなりました。",
+   "new_t": 2.3,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 2.3,
+   "original_t_end": null,
+   "original_text": "台車と影が同じ速度で動いてないので貫通してる",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwvuyt49t2naqane",
+   "comment_rev": 1,
+   "explain": "走っている間の足音を大きくしました（曲より約 5 dB 上）。曲は 5 案を聞きくらべてもらい、ここは案1（コミカルな追いかけっこ）にしました。案3 は 4章の取り返して走る所、案2 は 6章の鍵を次々に試す所に置きます。曲全体も聞こえる大きさ（声より約 13 dB 下）に上げ、文の間ごとの上げ下げを小さくして途切れないようにしました。",
+   "new_t": 14.6,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 14.6,
+   "original_t_end": null,
+   "original_text": "走る時の足音SEでほしい、あとbgm臨場感あるやつとか何個か作って聞かせてほしい",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmww23oxx77s1ccaz",
+   "comment_rev": 1,
+   "explain": "通路の手前から引いて撮り、全身のまるロボと、目の先にある自分のお城の箱（紫の印・赤い輪）を並べて見せるようにしました。",
+   "new_t": 64.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 64.8,
+   "original_t_end": null,
+   "original_text": "まるの位置が何を示したいのかわかんない",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmww24d425g1p90za",
+   "comment_rev": 1,
+   "explain": "足が地面から離れて斜め上を向く、ひっくり返る形にしました。20-06 で起き上がります。同じ転び方の 1章 06-08（体当たりではね返される所）もひっくり返る形に直しました。",
+   "new_t": 77.7,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 77.7,
+   "original_t_end": null,
+   "original_text": "まるロボが転ぶ時は両足が地面についてるのやめて、足も地面から離れさせてほしい、ひっくり返る感じで",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmww2j2wbu9jhpe0k",
+   "comment_rev": 1,
+   "explain": "図の板が横へ広がりながら、空の箱が右からすべりこむようにしました（「シュッ」と鳴ります）。名札 1 枚は左へよけます。",
+   "new_t": 86.7,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 86.7,
+   "original_t_end": null,
+   "original_text": "箱が急に出てきてわかんないので横から出てくるとか分かるようにして",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmww2jmgi0u1rwd8o",
+   "comment_rev": 1,
+   "explain": "口の開いた箱にして、まるロボの名札が口へ入り、ほかのお城の色の名札が上から 1 枚ずつ落ちて中へ入るようにしました。最後にふたが口をふさぎます。",
+   "new_t": 92.4,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 92.4,
+   "original_t_end": null,
+   "original_text": "また、箱にいろんな名札が入っていくのを動き入れて分かるようにして、今は外側に名札貼ってるだけに見える",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmww2ml4lny3e412a",
+   "comment_rev": 1,
+   "explain": "買いに来る影は、輪郭の光の色と帽子を替えました（だいだい色＋高い帽子・緑＋つばの帽子・赤＋丸い帽子）。名札を盗んだ影は紫で帽子なしのままです。",
+   "new_t": 127.5,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v10",
+   "original_t": 127.5,
+   "original_t_end": null,
+   "original_text": "別の影っていうのが分かるようにして、最初の影と同じに見える",
+   "reason": ""
+  }
+ ]
+}
