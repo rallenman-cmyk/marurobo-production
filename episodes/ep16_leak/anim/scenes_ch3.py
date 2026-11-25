@@ -65,15 +65,16 @@ def b_e(cl):
     ck = [(749.5, (-52.0, -0.1)), (s("18-02") - 0.1, (-46.5, -0.1)), (s("18-03") - 0.1, (-40.5, -0.1)), (e("18-03"), (-30.0, -0.1)), (e("18-04") + 0.2, (-24.0, -0.1)), (e("18-07"), (-14.0, -0.1))]
     roll_cart(cr, whs, ck)
     sh = shadow((40.0, 40.0, 0.0), face=90.0, s=SH); track("shadow", sh.root, 1.5 * SH)
-    for t_, (x_, y_) in ck: sh_key(sh, t_, (x_ + 1.25, y_), 90.0)
+    # 影は荷車の子にして、荷車の 1.25 m 前で一緒に動く（v9 のコメント「台車と影が同じ速度で動いてないので貫通してる」：
+    #   荷車と影の動きを別々のキー（荷車は直線・影は曲線のつなぎ）で打ち、途中で速さがずれて影が荷車に入った）
+    sh.root.parent = cr; sh.root.location = (1.25, 0.0, 0.0); sh.root.rotation_euler = (0, 0, R(90.0))
     key(sh.arm, "rotation_euler", -100.0, (R(-25), 0, 0), "CONSTANT")       # 引く棒を持つ
     # 19：倉庫の前に止めた荷車（箱はもう中へ運ばれた）。影はいない
     tq = s("19-01") - 0.08
     key(cr, "location", tq - 0.01, (-14.0, -0.1, 0.0), "CONSTANT"); key(cr, "location", tq, (-2.7, -2.3, 0.0), "CONSTANT")
     key(cr, "rotation_euler", tq - 0.01, (0, 0, 0), "CONSTANT"); key(cr, "rotation_euler", tq, (0, 0, R(20)), "CONSTANT")
     key(bx, "scale", tq - 0.01, (1, 1, 1), "CONSTANT"); key(bx, "scale", tq, (0.001,) * 3, "CONSTANT")
-    sh_key(sh, tq - 0.2, (ck[-1][1][0] + 1.25, ck[-1][1][1]), 90.0, "CONSTANT")      # 止まったまま（キーがないと、(40, 40) へ斜めに滑っていた）
-    sh_key(sh, tq, (40.0, 40.0), 90.0, "CONSTANT")
+    key(sh.root, "scale", -100.0, (SH,) * 3, "CONSTANT"); key(sh.root, "scale", tq, (0.001,) * 3, "CONSTANT")      # 19 からは影はいない（荷車の子なので、遠くへ動かさず大きさで消す）
     # ---- まるロボ
     M = MaruR((40.0, -40.0, 0.0), face=90.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75); track("maru_c", M.body, 0.35)
     M.at(s("18-02") - 0.2, loc=(-56.0, 0.35, 0.0), face=90.0, interp="CONSTANT")

@@ -29,6 +29,11 @@ def _looped(path, sr):
 
 def make(END, SCST, sr, work):
     B3.SRC = os.path.join(work, "stage", "bgm")
-    B3.PLAN, B3.OFFSET, B3.RMS = PLAN, OFFSET, RMS
+    plan, off = list(PLAN), dict(OFFSET)
+    # 聞きくらべ用：MARU_BGM_TRY=C1 で、3章の追いかける場面（S18）だけを候補の曲にし、S19 から元の S に戻す（v9 のユーザー「bgm臨場感あるやつとか何個か作って聞かせてほしい」）
+    k_try = os.environ.get("MARU_BGM_TRY")
+    if k_try:
+        plan = sorted(plan + [(k_try, "S18"), ("S", "S19")], key=lambda q: SCST[q[1]]); off[("S", "S19")] = 30.0
+    B3.PLAN, B3.OFFSET, B3.RMS = plan, off, RMS
     B3.load = _looped
     return B3.make(END, SCST, sr)

@@ -35,6 +35,7 @@ class MaruR:
         self.body = self.h.torso; self.torso = self.h.torso
         self.root = empty((0, 0, 0)); self.root.name = "maru%d follow" % len(MARU_ALL)   # 追うカメラ用：足もとの真ん中（上下にはずまない）。bake で打つ
         self.cmds = []; self.silent = []; self.quiet = []; self.drops = []; self.carries = []; self.mute = []
+        self.runs = []     # 走っている間（足音を大きくする）
         self.hush = []     # 足音を鳴らさない間（まるロボが札や棚にかくれて見えない所。16本目 3章 19-04：映っている扱いで鳴っていた）
         self._last = {"loc": (-100.0, tuple(loc))}
         track("maru_c", self.torso, 0.0); track("maru_c_f", self.root, 0.02)   # 体の真ん中と足もと（足だけ写す寄りの絵でも鳴らす）                     # 効果音の「映っているか」は体の真ん中で見る（"maru" は頭の上の吹き出し用）
@@ -65,6 +66,7 @@ class MaruR:
         """走って移る（t1 に着く。marumotion の run_to。16本目 3章「走って追いかけます」。跳ばない）"""
         p1 = tuple(p1) + ((0.0,) if len(p1) < 3 else ())
         self.cmds.append((t1, "run", dict(p=p1, t0=t0))); self._last["loc"] = (t1, p1)
+        self.runs.append((t0 - 0.5, t1 + 0.5))      # 走る間の足音は大きく（16本目 v9 のコメント「走る時の足音 SE でほしい」：歩くときと同じ 0.06 で聞こえなかった）
 
     def jump(self, t_land, loc, apex=None):
         """1 回跳んで移る（t_land に着く）。高さがちがう所へも。見る → 向く → しゃがむ → 跳ぶ（marumotion の jump_to）"""
@@ -274,6 +276,7 @@ class MaruR:
             k_, g_ = snd[e_["kind"]]
             st = e_.get("strength", 1.0)
             g = g_ * (max(0.3, min(1.0, st / 3.0)) if e_["kind"] in ("takeoff", "land") else max(0.3, st))
+            if e_["kind"] == "step" and any(a_ <= e_["t"] <= b_ for a_, b_ in self.runs): g = max(g, 0.2) if g >= 0.03 else g      # 走る足音（はじめと終わりの小さな歩みはそのまま）
             ev(e_["t"], k_, round(g, 3), "maru_c")
         self.p = p
         return frames

@@ -20,6 +20,19 @@ PROMPTS = {
     "N": COMMON + "Tiptoeing at night: a shadow quietly sneaks up to a castle back door and a little robot peeks from behind a wall. "
                   "Sneaky cartoon-like tiptoe music: soft staccato pizzicato strings in short steps, low bassoon-like plucks, light woodblock ticks, "
                   "brushed snare very soft, occasional celesta sparkle, minor key with a playful wink, about 96 BPM, secretive and a little humorous, never scary.",
+    # C1〜C4（追いかける）：3章 S18。v9 のユーザー「bgm臨場感あるやつとか何個か作って聞かせてほしい」→ 4 案を作って聞きくらべてもらう
+    "C1": COMMON + "A comic cartoon chase at night: a little robot runs after a cart pulled by a shadow. Fast staccato pizzicato strings, "
+                   "playful bassoon runs, xylophone flourishes, light timpani rolls, snappy snare, minor key with a playful wink, about 132 BPM, exciting and funny, never scary.",
+    # C2 は 1 回目が「のんびり」に聞こえた（聞き取り 7 点）ので、速く・緊張を強く書き直した
+    "C2": COMMON + "An urgent, heart-pounding chase: fast driving staccato string ostinato in sixteenth notes, pounding taiko-like toms, "
+                   "racing low brass stabs, rising string runs, ticking hi-hat, minor key, about 140 BPM, breathless and thrilling like a cartoon action chase, "
+                   "no slow intro, starts at full energy, never horror, no vocals.",
+    "C5": COMMON + "A fast cinematic chase for a family animated film: galloping strings, energetic snare rolls, bold heroic horn melody, "
+                   "pulsing timpani, quick xylophone accents, minor key, about 150 BPM, high-speed and exciting, starts at full energy, no vocals, never scary.",
+    "C3": COMMON + "A brave little night adventure: a small robot runs bravely down a narrowing road. Marching snare, light orchestral strings, "
+                   "short French horn calls, pizzicato bass, minor-to-major lift, about 112 BPM, adventurous, determined and exciting.",
+    "C4": COMMON + "A quirky robot chase: bouncy electronic arpeggios, chiptune-like bleeps, punchy light drum machine, plucky synth bass, "
+                   "minor key, about 128 BPM, energetic, cute and exciting, never aggressive.",
     "B": COMMON + "A hopeful, bright resolution: the small robot changes all its door keys and feels safe again: soft piano, warm strings, "
                   "light claps, gentle ukulele, major key, about 104 BPM, uplifting and reassuring.",
 }
