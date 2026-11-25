@@ -38,7 +38,7 @@ def night_road():
     glow = bpy.data.materials.new("e_lampglow"); glow.use_nodes = True
     bb = glow.node_tree.nodes["Principled BSDF"]; bb.inputs["Emission Color"].default_value = srgb("#FFD79A"); bb.inputs["Emission Strength"].default_value = 6.0
     lamps = []
-    for lx in (-58.0, -50.0, -42.0, -36.0):      # 街灯は石の道だけ（土の道へ入ると暗くなる。18-03）
+    for lx in (-58.0, -50.0, -42.0):      # 街灯は石の道の手前だけ（18-03「だんだん暗く」：v1 の確認役：先の街灯が光っていて、言葉と逆だった）
         cyl(pole, (lx, 2.0, 1.6), 0.05, 3.2, verts=12)
         cube(pole, (lx, 1.75, 3.2), (0.08, 0.55, 0.06))
         sphere(glow, (lx, 1.5, 3.1), 0.14, seg=16)
