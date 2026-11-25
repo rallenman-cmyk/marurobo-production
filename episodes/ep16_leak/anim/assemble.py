@@ -250,9 +250,10 @@ sys.path.insert(0, os.path.join(HERE, "..", "bgm"))
 import bgm_bus
 SCST = {}
 for p in P: SCST.setdefault(T.L[p["no"]]["scene"], p["start"])
+for p in P: SCST.setdefault(T.L[p["no"]]["id"], p["start"])   # 曲を文の頭で替えられるように（16本目：「22-05」などの文の番号でも PLAN に書ける）
 music = bgm_bus.make(T.END + 1, SCST, SR, W)[:N]
-g = np.where(on > 0, 10 ** (-6 / 20), 1.0).astype(np.float32)
-kk = int(0.4 * SR)   # 0.4 秒の移動平均（累積和で。np.convolve だと何十分もかかる）
+g = np.where(on > 0, 10 ** (-3 / 20), 1.0).astype(np.float32)   # 16本目 3章 v9「bgm全然聞こえない・途切れ途切れ」：-6 dB を 0.4 秒で上げ下げしていて、文の間ごとに曲が出たり消えたり（141 秒で 168 回）→ -3 dB を 1.2 秒でゆっくり
+kk = int(1.2 * SR)   # 0.4 秒の移動平均（累積和で。np.convolve だと何十分もかかる）
 gp = np.pad(g.astype(np.float64), (kk // 2, kk - kk // 2), mode="edge"); cs_ = np.concatenate([[0.0], np.cumsum(gp)])
 g = ((cs_[kk:] - cs_[:-kk]) / kk)[:N].astype(np.float32)
 # 効果音（クリップのログを合わせ、同じ物は 1 つに）
@@ -329,6 +330,8 @@ for (t, kind), gain in sorted(EV.items()):
 # 16本目：駅の環境音（9本目の床の音）は使わない。夜の虫の声などは効果音（crickets）で鳴らす
 bed = 0.0
 mix = voice + music * g + fx * FX_GAIN + bed
+if os.environ.get("MARU_DUMP_STEMS"):   # 調べる用：曲（下げたあと）と声を別に保存
+    np.save(os.environ["MARU_DUMP_STEMS"] + "_music.npy", (music * g)[int(FROM * SR):int(TO * SR)]); np.save(os.environ["MARU_DUMP_STEMS"] + "_voice.npy", voice[int(FROM * SR):int(TO * SR)])
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)
 tmp = os.path.splitext(OUT)[0] + "_tmp"; os.makedirs(tmp, exist_ok=True)
