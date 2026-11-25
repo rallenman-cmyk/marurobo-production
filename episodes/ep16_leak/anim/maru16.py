@@ -34,7 +34,7 @@ class MaruR:
         self.h = MRL.place(loc=(0.0, 0.0, 0.0), heading=0.0, scale=self.s, name="maru%d" % len(MARU_ALL))
         self.body = self.h.torso; self.torso = self.h.torso
         self.root = empty((0, 0, 0)); self.root.name = "maru%d follow" % len(MARU_ALL)   # 追うカメラ用：足もとの真ん中（上下にはずまない）。bake で打つ
-        self.cmds = []; self.silent = []; self.quiet = []; self.drops = []; self.carries = []; self.mute = []
+        self.cmds = []; self.silent = []; self.quiet = []; self.drops = []; self.carries = []; self.mute = []; self.flips = []
         self.runs = []     # 走っている間（足音を大きくする）
         self.hush = []     # 足音を鳴らさない間（まるロボが札や棚にかくれて見えない所。16本目 3章 19-04：映っている扱いで鳴っていた）
         self._last = {"loc": (-100.0, tuple(loc))}
@@ -119,6 +119,15 @@ class MaruR:
     def shake(self, t): self.cmds.append((t, "shake", {}))
     def surprise(self, t): self.cmds.append((t, "surprise", {}))
     def confused(self, t): self.cmds.append((t, "confused", {}))
+    def flip(self, t0, dur=0.75, rest=105.0):
+        """ひっくり返る（後ろへ。足が地面から離れて斜め上。17本目の maru17.py から。16本目 3章 v9「両足が地面についてるのやめて、ひっくり返る感じで」）。
+        焼いたあとに置き場所の親の親（ひっくり返し用の Empty）を回す。rest 度で止める。その間、予定の動き（歩く）は入れない"""
+        self.flips.append(("down", t0, dur, rest))
+
+    def flip_back(self, t0, dur=0.6):
+        """ひっくり返った所から、逆にたどって起き上がる"""
+        self.flips.append(("up", t0, dur, None))
+
     def sigh(self, t, sound=True):
         """ため息。sound=False で電子音なし（16本目 2章 v7 のコメント「このSEいらない」）"""
         self.cmds.append((t, "sigh", {}))
@@ -278,8 +287,63 @@ class MaruR:
             g = g_ * (max(0.3, min(1.0, st / 3.0)) if e_["kind"] in ("takeoff", "land") else max(0.3, st))
             if e_["kind"] == "step" and any(a_ <= e_["t"] <= b_ for a_, b_ in self.runs): g = max(g, 0.2) if g >= 0.03 else g      # 走る足音（はじめと終わりの小さな歩みはそのまま）
             ev(e_["t"], k_, round(g, 3), "maru_c")
+        if self.flips: self._bake_flips()
         self.p = p
         return frames
+
+    def _bake_flips(self):
+        """（17本目 v1 の点検）ひっくり返る・起き上がるを、親の親を回して打つ。胴の中心は、立っているとき c → 転がると胴の半径 r の高さへ"""
+        import mathutils
+        from mathutils import Vector
+        par = self.h.parent; sc = bpy.context.scene
+        down = [x for x in self.flips if x[0] == "down"]; up = [x for x in self.flips if x[0] == "up"]
+        _, t0, dur, rest = down[0]
+        sc.frame_set(f(t0))
+        bb = [self.torso.matrix_world @ Vector(c_) for c_ in self.torso.bound_box]
+        C0 = sum(bb, Vector((0, 0, 0))) / 8.0
+        fr = self.torso.matrix_world.to_3x3() @ Vector((0, 1, 0)); fr.z = 0; fr.normalize()
+        fv = -fr                                                   # 後ろへ倒れる
+        ax = Vector((0, 0, 1)).cross(fv).normalized()
+        c = C0.z; r = max(0.33 * self.s, 0.05)
+        fl = empty((C0.x, C0.y, C0.z)); fl.name = "maru flip"; fl.rotation_mode = "QUATERNION"
+        par.parent = fl; par.matrix_parent_inverse = mathutils.Matrix.Translation(-C0)
+        roll = 0.15 * self.s / 0.4 * 0.4
+        def put(t, th, k):
+            zc = r + (c - r) * max(0.0, math.cos(math.radians(th)))
+            fl.location = (C0.x + fv.x * roll * k, C0.y + fv.y * roll * k, zc); fl.keyframe_insert("location", frame=f(t))
+            fl.rotation_quaternion = mathutils.Quaternion(ax, math.radians(th)); fl.keyframe_insert("rotation_quaternion", frame=f(t))
+        R_ = rest
+        seq = [(0.0, 0.0, 0.0), (0.35, 0.55 * R_, 0.4), (0.7, 0.93 * R_, 0.85), (1.0, R_ + 6, 1.0), (1.25, R_ - 4, 1.0), (1.5, R_ + 2, 1.0), (1.7, R_, 1.0)]
+        segs = [(t0, dur, seq)]
+        if up:
+            _, t1, d1, _ = up[0]
+            segs.append((t1, d1, [(0.0, R_, 1.0), (0.3, 0.8 * R_, 0.7), (0.65, 0.4 * R_, 0.3), (1.0, 0.0, 0.0)]))
+        put(-100.0, 0.0, 0.0); put(t0 - 0.01, 0.0, 0.0)
+        # 17本目 v1 の点検：決まった高さの式だけでは、体が床に最大 11 cm めり込んだ（SKILL：コマごとに体の一番低い所を測る）
+        #   → 1 コマずつ印を打ち、まるロボの形（見えている物）の頂点のいちばん低い所が床（0）より下なら、その分だけ持ち上げて打ち直す
+        meshes = [o for o in [self.h.parent] + list(self.h.parent.children_recursive) if o.type == "MESH"]
+        def lowest():
+            dg = bpy.context.evaluated_depsgraph_get(); z = 9.0
+            for o in meshes:
+                if o.hide_render: continue
+                oe = o.evaluated_get(dg); me = oe.to_mesh(); mw = oe.matrix_world
+                for v in me.vertices: z = min(z, (mw @ v.co).z)
+                oe.to_mesh_clear()
+            return z
+        lerp = lambda q, u: next(((q[i][1] + (q[i + 1][1] - q[i][1]) * (u - q[i][0]) / (q[i + 1][0] - q[i][0]), q[i][2] + (q[i + 1][2] - q[i][2]) * (u - q[i][0]) / (q[i + 1][0] - q[i][0])) for i in range(len(q) - 1) if q[i][0] <= u <= q[i + 1][0]), (q[-1][1], q[-1][2]))
+        hold = []
+        for ts, ds, q in segs:
+            T_ = q[-1][0]; nf = max(2, int(round(ds * T_ * FPS)))
+            for i in range(nf + 1):
+                u = T_ * i / nf; th, k = lerp(q, u); tt = ts + ds * u
+                put(tt, th, k); sc.frame_set(f(tt)); lo = lowest()
+                if lo < 0.0:
+                    fl.location.z -= lo; fl.keyframe_insert("location", frame=f(tt))
+                if ts == t0: hold.append(fl.location.z)
+        if up:                                                     # 倒れている間（起き上がる前まで）は、止まった形の高さのまま
+            put(up[0][1] - 0.001, R_, 1.0); fl.location.z = hold[-1]; fl.keyframe_insert("location", frame=f(up[0][1] - 0.001))
+        for fc in (fl.animation_data.action.fcurves if fl.animation_data else []):
+            for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 
 
 def bake_maru(T0, T1):

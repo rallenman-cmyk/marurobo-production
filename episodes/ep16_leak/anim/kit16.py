@@ -232,14 +232,14 @@ def old_lock(loc, face=0.0, crack=True):
     return out
 
 
-def _shadow_mat():
-    """影の材質：黒。輪郭（横から見える所）だけ紫が少し光る"""
+def _shadow_mat(col=PURPLE):
+    """影の材質：黒。輪郭（横から見える所）だけ紫が少し光る（col で光の色を替える。16本目 3章 v9：買いに来る別の影）"""
     m = bpy.data.materials.new("shadow"); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
     b.inputs["Base Color"].default_value = (0.012, 0.010, 0.018, 1); b.inputs["Roughness"].default_value = 0.95
     lw = nt.nodes.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.35
     rp = nt.nodes.new("ShaderNodeMath"); rp.operation = 'POWER'; rp.inputs[1].default_value = 2.5
     nt.links.new(lw.outputs["Facing"], rp.inputs[0])
-    b.inputs["Emission Color"].default_value = srgb(PURPLE)
+    b.inputs["Emission Color"].default_value = srgb(col)
     mu = nt.nodes.new("ShaderNodeMath"); mu.operation = 'MULTIPLY'; mu.inputs[1].default_value = 1.3
     nt.links.new(rp.outputs[0], mu.inputs[0]); nt.links.new(mu.outputs[0], b.inputs["Emission Strength"])
     return m
@@ -249,9 +249,10 @@ class Shadow:
     pass
 
 
-def shadow(loc, face=0.0, s=1.0):
-    """影（泥棒）。顔も姿も描かない黒い丸い形（頭と胴と、細い腕 1 本）。前＝−y。root を動かす。arm（腕の付け根）を回して物を出す"""
-    sm = _shadow_mat()
+def shadow(loc, face=0.0, s=1.0, col=PURPLE, hat=None):
+    """影（泥棒）。顔も姿も描かない黒い丸い形（頭と胴と、細い腕 1 本）。前＝−y。root を動かす。arm（腕の付け根）を回して物を出す
+    col：輪郭の光の色。hat：頭にのせる物（"top"＝高い帽子・"cap"＝つばの帽子・"bowler"＝丸い帽子）。16本目 3章 v9 のユーザー「別の影っていうのが分かるようにして、最初の影と同じに見える」"""
+    sm = _shadow_mat(col)
     root = empty(loc, R(face), s)
     sphere(sm, (0, 0, 0.82), 0.42, scale=(0.95, 0.7, 1.35), parent=root, seg=32)
     sphere(sm, (0, 0, 1.55), 0.24, scale=(1.0, 0.95, 1.05), parent=root, seg=32)
@@ -262,6 +263,12 @@ def shadow(loc, face=0.0, s=1.0):
     hand = empty((0, -0.42, 0)); hand.parent = arm
     sphere(sm, (0, 0, 0), 0.07, parent=hand, seg=16)
     arm.rotation_euler = (R(-60), 0, 0)      # ふだんは腕を下ろす
+    if hat == "top":
+        cyl(sm, (0, 0, 1.76), 0.3, 0.03, parent=root, verts=32); cyl(sm, (0, 0, 1.93), 0.17, 0.34, parent=root, verts=32)
+    elif hat == "cap":
+        sphere(sm, (0, 0, 1.68), 0.25, scale=(1.0, 1.0, 0.55), parent=root, seg=32); cyl(sm, (0, -0.24, 1.66), 0.16, 0.025, parent=root, verts=24)
+    elif hat == "bowler":
+        cyl(sm, (0, 0, 1.73), 0.33, 0.025, parent=root, verts=32); sphere(sm, (0, 0, 1.77), 0.2, scale=(1.0, 1.0, 0.8), parent=root, seg=32)
     sh = Shadow(); sh.root = root; sh.arm = arm; sh.hand = hand; sh.mat = sm
     return sh
 
