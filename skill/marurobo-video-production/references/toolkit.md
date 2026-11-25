@@ -13,6 +13,9 @@
 | `narration.py` | `python3 narration.py [--gaps] [--full]`：置く・字幕・短い間の一覧。`track()`・`voiced()`・`mix_voice(bus, t0, P=…)` | 台本に `gap_before`（話が変わる文は 0.78）。章で声を絞るときは P を番号で絞る |
 | `overlay2d.py` | 札（tag）・輪（ring）・印（mark）・音符（note）・「？」（qmark）、`proj()`（3D の点 → 画面）、効果音 `thump/clank/motor`、字幕の頭 `ASS_HEAD`・`narr()` | 札の大きさは 640×360 の目盛りで書き、`init(画面の幅)` でそろえる |
 | `marumotion.py` | `Plan(pos, heading)` → `walk_to`・`run_to`・`back_to`・`turn_to`・`hops`・`nod`・`peer`・`groove`・`surprise`・`sigh`… → `simulate(plan)`。`plan.events` に step/step_turn/takeoff/land/beep_* | Blender の外でも同じ計算。3D と音で同じ予定を使う |
+| `tts_batch_maru.py` | 声をまとめて頼む方式（半額）で1文ずつ：`submit [--only=3,7]` → `poll --wait`（裏で） | 新しい回の声はこれ（SKILL.md §11）。できた声は line_NNN.wav と lines.json |
+| `gemini_image.py` | 絵：`draft`（安い型番）で案、`final`（pro 2K）で選んだ1枚 | 字は描かせない |
+| `gemini_log.py` | Gemini の記録（各道具が自動で書く）。`sum` で集計 | 記録は logs/gemini_usage.jsonl。区切りで push |
 | `make_narration.py` | 台本の全文を 5 文ずつ Gemini TTS で（`--only=3,7` で一部だけ） | `GEMINI_API_KEY` が要る。台本・指示のファイル名は回ごとに直す |
 | `split_narration.py` | まとめて読ませた声を文ごとに切る（無音の長さと字数の割合で一番よい切り方） | |
 | `gemini_tts2.py` | 一文だけ作る：`python3 gemini_tts2.py 出力.wav Achernar 台本.txt 指示.txt` | |

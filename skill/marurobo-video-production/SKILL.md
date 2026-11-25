@@ -268,7 +268,27 @@ QR回は動画の直しが 154 件、うち 8 件は直したあとに戻され�
 | `make_narration.py`・`split_narration.py`・`gemini_tts2.py` | 声を作る（Gemini TTS） |
 | `subs_check.py`・`subs_sample.py`・`still_sheet.py`・`still_grid.py` | 字幕の一覧・コマの一覧で目で確かめる |
 | `concat_full.sh`・`final_qa.sh` | 通しをつなぐ・点検 |
-| `drive_watch.py` | PC の描画（ドライブ `marurobo_render`）を見張って受け取る |
+| `drive_watch.py` | PC の描画（ドライブ `marurobo_render`）を見張って受け取る（裏で動かす。§11） |
+| `tts_batch_maru.py` | 声をまとめて頼む方式（半額）で 1 文ずつ作る（§11） |
+| `gemini_image.py` | 絵を下書き（安い型番）と清書（pro 2K）に分けて描く（§11） |
+| `gemini_log.py` | Gemini を使った量の記録と集計（`python3 gemini_log.py sum`） |
 | `spike_find.py` | 1 コマだけ別の絵が映る所（場面の切り替わりのずれ）を章の mp4 から探す |
 
 使い方の詳細と注意は `references/toolkit.md`。章の組み立て・図・3D の舞台・ロボの予定の見本は `assets/templates/ep01/`、PC 側の Blender の道具は `assets/pc_kit/`。
+
+## 11. 使う量を減らす（Claude の枠・Gemini の支払い。2026-11-25 ユーザー決定）
+ユーザー「クレジット消費抑える方法提案してほしい」「ジェミニのapiのクレジット消費も激しい」。調べると、Claude は 🤖01 イヤホンだけで定価換算 約 987 ドル分（まるロボ全体で約 3,200 ドル分）を使っていた。原因の約 6 割は、長くなった会話（70〜88 万トークン）を返事のたびに読み直すこと。1 時間以上あくと読み込み直しで 1 回 5〜8 ドル分かかる。Gemini は、まるロボに記録がなく、サムネの絵（pro・2K）が「支払いが必要（402）」で止まっていた。ユーザーが、下の案を全部選んだ。
+
+**Gemini**
+1. 絵：案は `gemini_image.py draft`（安い型番 gemini-3.1-flash-image）で描く。選ばれた 1 枚だけ `gemini_image.py final`（gemini-3-pro-image・2K）で清書する。pro で案をたくさん描かない。
+2. 声：新しい回は `tts_batch_maru.py`（まとめて頼む方式。料金はふつうの半分）で 1 文ずつ作る。読み違えた文は、その文だけ `--only=` で頼み直す（5 文まとめて作り直さない）。`make_narration.py`・`gemini_tts*.py` は急ぎの 1〜2 文だけ。
+3. 聞き取りの確かめ：`transcribe.py` は gemini-3.5-flash-lite で（型番を書かなければこれになる）。
+4. 記録：Gemini の道具はどれも、使うたびに `logs/gemini_usage.jsonl` に書く（`gemini_log.py`）。作業の区切りで、この記録をリポジトリに入れて push する。報告に「Gemini を何に何回使ったか」（`python3 gemini_log.py sum`）を書く。
+5. 失敗（402・絵が返らない）のとき、黙って頼み直さない。報告する。
+
+**Claude**
+6. **1 つの回を、工程ごとの短いセッションに分ける。** 台本／3D・組み立て／直し／サムネ・公開で、セッションを替える。替えるときは `episodes/<回>/引き継ぎ_<工程>.md`（済んだこと・ファイルの場所・決まったこと・残り・次にすること）を書いて push し、新しいセッションにはそのメモと SKILL.md だけを読ませる。会話が 50 万トークン（`get_session` の context_usage で分かる）を超えたら、工程の途中でも区切る。公開が終わった回のセッションで、別の回やサムネの小さな直しをしない。
+7. **PC の描画の見張りを Claude にさせない。** `drive_watch.py` を Bash の裏（run_in_background）で動かし、全部そろって終わったときだけ Claude が起きるようにする。何度も様子を見に行かない（ScheduleWakeup や短い返事で見に行かない）。
+8. **決まった作業は、考える量（effort）を下げたセッションでする。** 書き出し・点検・PC の一式の送り直し・概要欄などのセッションは effort を medium で作る。台本・設計・直しの方針は今のまま。
+9. **絵は小さくまとめた 1 枚で見る。** 点検のコマは `still_sheet.py`・`still_grid.py` で、横 1600px 以下の一覧 1 枚にまとめて見る。1080p のコマを 1 枚ずつ読まない（読むのは、一覧で気になった 1 コマだけ）。
+10. 大きな調べもの（たくさんのファイル・記録を読む）は、別のエージェントに頼んで結論だけ受け取る。本体の会話を重くしない。

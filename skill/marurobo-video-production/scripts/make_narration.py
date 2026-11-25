@@ -2,7 +2,9 @@
 #   5文ずつまとめて読ませる（1日の回数の上限のため）→ stage/voice/achernar/batch_XX.wav と batch_XX.json（どの文か）
 #   作ったまとめはとばす（途中で止まっても、同じコマンドで続きから）。回数の上限（429）では待ってやり直し、1日の上限なら止める
 # 使い方: python3 make_narration.py [--only=3,7] [--n=5]
+# 2026-11-25 から、新しい回の声は tts_batch_maru.py（まとめて頼む方式・半額・1文ずつ）を使う。これは急ぎのときだけ
 import sys, os, json, time, base64, wave, urllib.request
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from gemini_log import log
 SC = os.environ.get("MARU_WORK", ".")
 OUT = SC + "/stage/voice/achernar"; os.makedirs(OUT, exist_ok=True)
 L = json.load(open(SC + "/stage/script/script_v2_timed.json", encoding="utf-8"))
@@ -21,7 +23,7 @@ def tts(lines):
                                  headers={"Content-Type": "application/json", "x-goog-api-key": os.environ["GEMINI_API_KEY"]})
     for k in range(6):
         try:
-            res = json.load(urllib.request.urlopen(req, timeout=240))
+            res = json.load(urllib.request.urlopen(req, timeout=240)); log(MODEL, "tts_5lines", res, n=len(lines))
             return base64.b64decode(res["candidates"][0]["content"]["parts"][0]["inlineData"]["data"])
         except urllib.error.HTTPError as e:
             msg = e.read().decode("utf-8", "replace")

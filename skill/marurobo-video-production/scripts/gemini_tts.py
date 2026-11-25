@@ -1,6 +1,7 @@
 # Gemini の TTS で、一文を WAV（24kHz・16bit・モノラル）にする。キーは環境変数 GEMINI_API_KEY（ヘッダーで送る。表示しない）
 # 使い方: python3 gemini_tts.py 出力.wav 声の名前 "読む文" ["読み方の指示（任意）"] [--model gemini-3.8-flash-tts]
 import sys, os, json, base64, wave, urllib.request
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from gemini_log import log
 
 args = [a for a in sys.argv[1:] if not a.startswith("--model")]
 model = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--model=")), "gemini-3.8-flash-tts")
@@ -14,7 +15,7 @@ req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/m
                              data=json.dumps(body).encode("utf-8"),
                              headers={"Content-Type": "application/json", "x-goog-api-key": os.environ["GEMINI_API_KEY"]})
 try:
-    res = json.load(urllib.request.urlopen(req, timeout=120))
+    res = json.load(urllib.request.urlopen(req, timeout=120)); log(model, 'tts_one', res, out=os.path.basename(out))
 except urllib.error.HTTPError as e:
     print("HTTP", e.code, e.read().decode("utf-8", "replace")[:400]); sys.exit(1)
 part = res["candidates"][0]["content"]["parts"][0]["inlineData"]
