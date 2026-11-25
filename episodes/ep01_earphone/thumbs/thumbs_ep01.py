@@ -5,6 +5,8 @@
 #   1本目の参考（前に作ってもらった 7 枚）から残すもの：電車とイヤホンの世界、自分の曲＝水色・隣の曲＝黄色、アンテナつきのまるロボ
 #   使い方: THUMB_WORK=<作業フォルダ（src/ に本編のコマ）> THUMB_FONT=<NotoSansJP[wght].ttf> GEMINI_API_KEY=… python3 thumbs_ep01.py gen A B C
 #           python3 thumbs_ep01.py comp '{"A": "A_1.png"}'
+import sys as _s, os as _o
+if not _o.environ.get("MARU_THUMB_LAYOUT_ONLY"): _s.exit("サムネの絵に Gemini は使わない（2026-11-25 ユーザー決定）。絵は Lovart（scripts/lovart.py）で描く。")
 import os, sys, json, base64, math, urllib.request, glob
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 

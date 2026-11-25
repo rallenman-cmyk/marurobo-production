@@ -3,6 +3,8 @@
 #   まるロボの見た目は本編の 3D のコマを見本として渡して、似せる
 #   使い方: GEMINI_API_KEY は環境の設定から読む（ファイルに書かない）
 #   THUMB_WORK=<作業フォルダ（src/ に見本の png、gen/ に出す）> python3 gen_thumbs_gemini.py <案の名前>…
+import sys as _s, os as _o
+if not _o.environ.get("MARU_THUMB_LAYOUT_ONLY"): _s.exit("サムネの絵に Gemini は使わない（2026-11-25 ユーザー決定）。絵は Lovart（scripts/lovart.py）で描く。")
 import os, sys, json, base64, urllib.request
 KEY = os.environ["GEMINI_API_KEY"]; S = os.environ["THUMB_WORK"]; OUT = os.path.join(S, "gen"); os.makedirs(OUT, exist_ok=True)
 MODEL = os.environ.get("THUMB_MODEL", "gemini-3-pro-image")

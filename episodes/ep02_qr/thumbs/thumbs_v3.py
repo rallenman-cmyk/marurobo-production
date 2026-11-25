@@ -3,6 +3,8 @@
 #   （明るい字＝紺のふち、暗い字＝白のふち）、やわらかい影。左上に「QRコード」の札。大きな QR が右に主役、まるロボは小さく手前
 #   絵は Gemini の画像の AI に「字なし」で描かせ（gen）、字はこちらで重ねる（comp）。絵の AI に字を描かせない
 #   使い方: THUMB_WORK=<作業フォルダ> THUMB_FONT=<NotoSansJP[wght].ttf> python3 thumbs_v3.py gen D B BD ／ comp
+import sys as _s, os as _o
+if not _o.environ.get("MARU_THUMB_LAYOUT_ONLY"): _s.exit("サムネの絵に Gemini は使わない（2026-11-25 ユーザー決定）。絵は Lovart（scripts/lovart.py）で描く。")
 import os, sys, json, base64, urllib.request, glob
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 S = os.environ["THUMB_WORK"]; G = os.path.join(S, "gen3"); OUT = os.path.join(S, "out3"); os.makedirs(G, exist_ok=True); os.makedirs(OUT, exist_ok=True)
