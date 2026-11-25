@@ -131,10 +131,11 @@ def copy_sprite(t, p):
             continue
         if i == 0 and gone > 0:
             if gone >= 1.0: continue
-            dx += (1035 - rx - dx) * gone; dy += (330 - ry - dy) * gone; wd = wd * (1 - 0.5 * gone)
+            dx += (1035 - rx - dx) * gone; dy += (330 - ry - dy) * gone
+        wi = wd * (1 - 0.5 * gone) if (i == 0 and gone > 0) else wd      # v13 のユーザー「残りの3枚も小さくなるのやめて」：前は wd を書きかえて、あとの 3 枚まで小さくなっていた → 取られる 1 枚だけ
         pulse = 1.0 + (0.08 * math.sin(min(1.0, (t - p["t_2"]) / 0.5) * math.pi) if p["t_2"] <= t < p["t_2"] + 0.5 else 0.0)
-        _glow_tag(d, (rx + dx) * S2, (ry + dy) * S2, wd * pulse * S2)
-        if i == 0 and t < p["t_sh"] - 0.2: _star(d, rx + dx + wd * 0.42, ry + dy - wd * 0.3, 16)      # 元の 1 枚の印（入れかわる前に消す）
+        _glow_tag(d, (rx + dx) * S2, (ry + dy) * S2, wi * pulse * S2)
+        if i == 0 and t < p["t_sh"] - 0.2: _star(d, rx + dx + wi * 0.42, ry + dy - wi * 0.3, 16)      # 元の 1 枚の印（入れかわる前に消す）
     if p["t_q"] <= t < p["t_take"]:
         D.ctext(d, ((rx + 232) * S2, (ry + 5) * S2), "？", D.font(96 * S2), RED)
     if t >= p["t_take"] - 0.3: _maru_icon(d, 1075, 330, 34)
@@ -172,7 +173,7 @@ def out_sprite(t, p):
 def ev_list4():
     E = []
     add = lambda *a: E.append(a)
-    add(s("22-02") - 0.05, wv("22-02", "とびこむ") + 0.3, "ring", dict(obj="leftbox", r=80, col=RED))      # 残っていた自分の箱（確認役：どの箱か分からなかった）
+    # 22-02 の赤い輪はやめた（v13 のユーザー「赤いまるいらない」。箱はふたが開いて、まるロボがそこへ跳ぶので分かる）
     add(wv("22-07", "安いから") - 0.6, e("22-07") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(wv("22-07", "安いから") - 0.1, e("22-07") + 0.3, "c4_ptag", dict(obj="maru_top"))      # 「？」のすぐ右（確認役：画面の右のふちで遠かった）
     add(s("23-01") + 0.3, e("23-01") + 0.3, "qmark", dict(pos=(1120, 140), size=150))      # 語り手の問い（画面のすみ）

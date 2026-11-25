@@ -50,7 +50,7 @@ class MaruR:
             self._last["loc"] = (t, loc)
         if face is not None:
             if t < 0: self.init["face"] = face
-            elif loc is None: self.cmds.append((t, "face", dict(face=face)))
+            elif loc is None: self.cmds.append((t, "face", dict(face=face, fast=_.get("fast", False))))
             else: self.cmds.append((t + 0.001, "face", dict(face=face, cut=(interp == "CONSTANT"), after=True)))   # 着いてから向く
         if look is not None and t >= 0: self.cmds.append((t, "look", dict(pitch=look)))
 
@@ -194,10 +194,11 @@ class MaruR:
                 h = a["face"] + FACE_OFF
                 if a.get("cut"):
                     p.teleport(p._p, h); continue
-                q = copy.deepcopy(p); q.turn_to(h); d = q.t - p.t
+                tk = dict(step=0.2, gap=0.02) if a.get("fast") else {}      # fast：すばやく向き直る（16本目 4章 v13：ソファの上で）
+                q = copy.deepcopy(p); q.turn_to(h, **tk); d = q.t - p.t
                 if d < 0.05: continue
-                if a.get("after"): p.turn_to(h); continue
-                self._wait_to(p, t - d, nm); p.turn_to(h)
+                if a.get("after"): p.turn_to(h, **tk); continue
+                self._wait_to(p, t - d, nm); p.turn_to(h, **tk)
             elif kind == "look":
                 p.look(0, a["pitch"], hold=0.0, at=t)
             elif kind == "gaze":
