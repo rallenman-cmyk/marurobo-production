@@ -52,9 +52,18 @@ class MaruR:
             else: self.cmds.append((t + 0.001, "face", dict(face=face, cut=(interp == "CONSTANT"), after=True)))   # 着いてから向く
         if look is not None and t >= 0: self.cmds.append((t, "look", dict(pitch=look)))
 
+    def gaze(self, t, yaw, hold=0.8, pitch=0.0):
+        """首（と体を少し）で横を見る（16本目 3章：運ばれていく箱を首で追う）。yaw＋＝左"""
+        self.cmds.append((t, "gaze", dict(yaw=yaw, pitch=pitch, hold=hold)))
+
     def walk(self, t0, t1, p1, **_):
         p1 = tuple(p1) + ((0.0,) if len(p1) < 3 else ())
         self.cmds.append((t1, "go", dict(p=p1, cut=False, t0=t0))); self._last["loc"] = (t1, p1)
+
+    def run(self, t0, t1, p1, **_):
+        """走って移る（t1 に着く。marumotion の run_to。16本目 3章「走って追いかけます」。跳ばない）"""
+        p1 = tuple(p1) + ((0.0,) if len(p1) < 3 else ())
+        self.cmds.append((t1, "run", dict(p=p1, t0=t0))); self._last["loc"] = (t1, p1)
 
     def jump(self, t_land, loc, apex=None):
         """1 回跳んで移る（t_land に着く）。高さがちがう所へも。見る → 向く → しゃがむ → 跳ぶ（marumotion の jump_to）"""
@@ -152,6 +161,13 @@ class MaruR:
                     q = copy.deepcopy(p); q.walk_to(tgt, speed=v); d = q.t - p.t
                     if t - d >= p.t - 1e-6: break
                 self._wait_to(p, t - d, nm); p.walk_to(tgt, speed=v)
+            elif kind == "run":
+                tgt = self._pp(a["p"], t)
+                if math.hypot(tgt[0] - p._p[0], tgt[1] - p._p[1]) < 0.06: continue
+                for v in (2.0, 2.4, 2.8):                  # 走る → 急いで走る
+                    q = copy.deepcopy(p); q.run_to(tgt, speed=v); d = q.t - p.t
+                    if t - d >= p.t - 1e-6: break
+                self._wait_to(p, t - d, nm); p.run_to(tgt, speed=v)
             elif kind == "path":
                 pts = [(*self._pp(q, t), self._pz(q[2], t)) for q in a["pts"]]
                 self._path(p, pts, a["ts"], nm, a["silent"])
@@ -172,6 +188,8 @@ class MaruR:
                 self._wait_to(p, t - d, nm); p.turn_to(h)
             elif kind == "look":
                 p.look(0, a["pitch"], hold=0.0, at=t)
+            elif kind == "gaze":
+                self._wait_to(p, t, nm); p.look(a["yaw"], a["pitch"], hold=a["hold"], body=True)
             elif kind == "hop":
                 self._wait_to(p, t - 0.3, nm); t_ = p.t; p.hops(n=1, height=0.18)      # 声の「ぴょん」で見える高さ（v7 の点検）
                 if not a["sound"]: self.silent.append((t_, p.t))

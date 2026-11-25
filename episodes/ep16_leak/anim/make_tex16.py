@@ -79,4 +79,53 @@ form("form4")
 card("tag_cust", ["face", "house", "phone", "mail"], (150, 162, 178))
 card("tag_copy", ["face", "house", "phone", "mail"], (150, 162, 178), pale=0.45)
 card("tag_maru_copy", ["face", "house", "phone", "mail"], TEAL, pale=0.45)
+# 3章：市場の箱の印（お城の形。字なし）と値札（硬貨の絵 1 つ）
+def emblem(name, col, kind):
+    """箱の前に貼る印（四角い白地に、色の丸とお城の形）。kind 0＝冒頭のメールのお店の印（まるロボのお城）。1〜5＝ほかのお城（形がちがう）"""
+    W_ = 400
+    im = Image.new("RGB", (W_ * SS, W_ * SS), (246, 242, 232)); d = ImageDraw.Draw(im)
+    c = W_ / 2 * SS; r = 150 * SS
+    if kind == 0:
+        castle_logo(d, c, c, r, col); im.resize((W_, W_), Image.LANCZOS).save(os.path.join(OUT, name + ".png")); return
+    d.ellipse((c - r, c - r, c + r, c + r), fill=col)
+    w = r * 1.15; base = c + r * 0.45
+    if kind == 1:       # 塔 3 つ（とがった屋根）
+        for k, (dx, h) in enumerate(((-0.38, 0.55), (0, 0.8), (0.38, 0.55))):
+            x = c + dx * r; tw = r * 0.26
+            d.rectangle((x - tw / 2, base - h * r, x + tw / 2, base), fill=WHITE)
+            d.polygon([(x - tw * 0.7, base - h * r), (x, base - h * r - r * 0.3), (x + tw * 0.7, base - h * r)], fill=WHITE)
+    elif kind == 2:     # 丸い屋根 1 つ
+        d.rectangle((c - w * 0.35, base - r * 0.55, c + w * 0.35, base), fill=WHITE)
+        d.pieslice((c - w * 0.35, base - r * 1.05, c + w * 0.35, base - r * 0.1), 180, 360, fill=WHITE)
+    elif kind == 3:     # 横に長いかべと、ぎざぎざ 2 段
+        d.rectangle((c - w * 0.5, base - r * 0.45, c + w * 0.5, base), fill=WHITE)
+        for k in range(7):
+            if k % 2 == 0: d.rectangle((c - w * 0.5 + k * w / 7, base - r * 0.65, c - w * 0.5 + (k + 1) * w / 7, base - r * 0.45), fill=WHITE)
+        d.rectangle((c - r * 0.15, base - r * 0.95, c + r * 0.15, base - r * 0.45), fill=WHITE)
+    elif kind == 4:     # 塔 2 つと旗
+        for dx in (-0.3, 0.3):
+            x = c + dx * r; d.rectangle((x - r * 0.15, base - r * 0.75, x + r * 0.15, base), fill=WHITE)
+        d.rectangle((c - r * 0.3, base - r * 0.45, c + r * 0.3, base), fill=WHITE)
+        d.line((c, base - r * 0.45, c, base - r * 1.0), fill=WHITE, width=int(r * 0.06)); d.polygon([(c, base - r * 1.0), (c + r * 0.3, base - r * 0.9), (c, base - r * 0.8)], fill=WHITE)
+    elif kind == 5:     # ぎざぎざのかべと、まん中のとがった高い塔（家に見えないように、ぎざぎざを付ける）
+        d.rectangle((c - w * 0.45, base - r * 0.4, c + w * 0.45, base), fill=WHITE)
+        for k in range(9):
+            if k % 2 == 0: d.rectangle((c - w * 0.45 + k * w * 0.9 / 9, base - r * 0.55, c - w * 0.45 + (k + 1) * w * 0.9 / 9, base - r * 0.4), fill=WHITE)
+        d.rectangle((c - r * 0.17, base - r * 0.9, c + r * 0.17, base - r * 0.4), fill=WHITE)
+        d.polygon([(c - r * 0.25, base - r * 0.9), (c, base - r * 1.25), (c + r * 0.25, base - r * 0.9)], fill=WHITE)
+    d.rectangle((c - r * 0.1, base - r * 0.25, c + r * 0.1, base), fill=col)        # 門
+    im.resize((W_, W_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+emblem("emb0", CASTLE, 0)
+for k, col in enumerate([(214, 72, 64), (70, 160, 90), (240, 150, 50), (60, 90, 170), (150, 110, 70)]):
+    emblem("emb%d" % (k + 1), col, k + 1)
+# 値札：白い札に硬貨の絵が 1 つ（数字なし）。上にひもの穴
+W_, H_ = 300, 420
+im = Image.new("RGB", (W_ * SS, H_ * SS), (250, 248, 240)); d = ImageDraw.Draw(im)
+d.ellipse(((W_ / 2 - 18) * SS, 30 * SS, (W_ / 2 + 18) * SS, 66 * SS), fill=(120, 110, 96))
+cx, cy, r = W_ / 2 * SS, 250 * SS, 70 * SS
+d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(240, 190, 60), outline=(190, 140, 30), width=8 * SS)
+d.ellipse((cx - r * 0.62, cy - r * 0.62, cx + r * 0.62, cy + r * 0.62), outline=(255, 226, 140), width=6 * SS)
+im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, "pricetag.png"))
 print("ok", sorted(os.listdir(OUT)))

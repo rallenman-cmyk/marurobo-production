@@ -18,6 +18,27 @@ MAT = M if "M" in dir() else None
 _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
+_KEYSEEN = {}
+
+
+def key(ob, path, t, value, interp="BEZIER"):
+    """秒をコマに丸めると、近すぎる 2 つのキーが 1 つにつぶれ、前のキーが消える（3章：影が出番の前から通路に立っていた。2章：棚の前の影がゆっくり回っていた）。
+    つぶれるときは、あとのキーを 1 コマずらして両方残す（時刻の順は守る）。ずらした所は KEYSHIFT で出す"""
+    fr = f(t); k_ = (ob.name, str(path)); v_ = tuple(value) if hasattr(value, "__len__") else (value,)
+    seen = _KEYSEEN.setdefault(k_, {})
+    old = seen.get(fr)
+    if old is not None and abs(old[0] - t) > 1e-6 and any(abs(x - y) > 1e-4 for x, y in zip(old[1], v_)):
+        d_ = 1 if t > old[0] else -1
+        while fr in seen: fr += d_
+        print("KEYSHIFT %s %s %.3f秒と%.3f秒" % (ob.name, path, old[0], t))
+    seen[fr] = (t, v_)
+    if isinstance(path, tuple):
+        p_, idx = path; getattr(ob, p_)[idx] = value; ob.keyframe_insert(p_, index=idx, frame=fr)
+    else:
+        setattr(ob, path, value); ob.keyframe_insert(path, frame=fr)
+    _interp(ob, fr, interp)
+
+
 CLIPNAME = _argv[0]; OUTDIR = _argv[1] if len(_argv) > 1 else "/tmp/x"
 _SRC_DEFAULT = {"step": "maru_c", "jump": "maru_c", "land": "maru_c", "takeoff": "maru_c", "step_turn": "maru_c"}
 
@@ -407,10 +428,12 @@ CUTS = [
 ]
 exec(open(os.path.join(KIT_HERE, "scenes_ch2.py"), encoding="utf-8").read())     # 2章（S13〜S17）
 CUTS += CUTS2
+exec(open(os.path.join(KIT_HERE, "scenes_ch3.py"), encoding="utf-8").read())     # 3章（S18〜S21）
+CUTS += CUTS3
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
 PIP_ONLY = {"P02", "P09", "P17"}
-END_T = e("17-18") + 1.5
+END_T = e("21-10") + 1.5
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}

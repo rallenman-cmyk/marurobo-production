@@ -65,6 +65,8 @@ def ev_list():
     add(w("12-08", "漏れた") - 0.1, e("12-08") + 0.4, "tag", dict(text="漏れた鍵", obj="i_key", dy=-110, size=48))
     import overlays2 as OV2      # 2章（S13〜S17）
     E += OV2.ev_list2()
+    import overlays3 as OV3      # 3章（S18〜S21）
+    E += OV3.ev_list3()
     return E
 
 
@@ -78,6 +80,8 @@ def sfx_list():
     L.append((s("07-02") + 0.05, "swish", 0.3))            # 想像の場面から戻る「しゅっ」
     import overlays2 as OV2
     L += OV2.sfx_list2()
+    import overlays3 as OV3
+    L += OV3.sfx_list3()
     return L
 
 
@@ -678,6 +682,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind.startswith("c2_"):
             import overlays2 as OV2
             OV2.draw2(kind, t, t0, p, base, where, _paste, k, a)
+        elif kind.startswith("c3_"):
+            import overlays3 as OV3
+            OV3.draw3(kind, t, t0, p, base, where, _paste, k, a)
         elif kind == "pip_clip" and frame_of:
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
