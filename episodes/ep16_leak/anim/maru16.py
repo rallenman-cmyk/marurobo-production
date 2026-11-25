@@ -35,6 +35,7 @@ class MaruR:
         self.body = self.h.torso; self.torso = self.h.torso
         self.root = empty((0, 0, 0)); self.root.name = "maru%d follow" % len(MARU_ALL)   # 追うカメラ用：足もとの真ん中（上下にはずまない）。bake で打つ
         self.cmds = []; self.silent = []; self.quiet = []; self.drops = []; self.carries = []; self.mute = []
+        self.hush = []     # 足音を鳴らさない間（まるロボが札や棚にかくれて見えない所。16本目 3章 19-04：映っている扱いで鳴っていた）
         self._last = {"loc": (-100.0, tuple(loc))}
         track("maru_c", self.torso, 0.0); track("maru_c_f", self.root, 0.02)   # 体の真ん中と足もと（足だけ写す寄りの絵でも鳴らす）                     # 効果音の「映っているか」は体の真ん中で見る（"maru" は頭の上の吹き出し用）
         MARU_ALL.append(self); _M_[0] = self
@@ -269,6 +270,7 @@ class MaruR:
             if e_["kind"] in ("takeoff", "land") and any(a - 0.01 <= e_["t"] <= b + 0.01 for a, b in self.silent): continue
             if e_["kind"] in ("takeoff", "land") and not e_.get("fall") and any(a - 0.01 <= e_["t"] <= b + 0.01 for a, b in self.quiet): continue
             if any(e_["kind"] == mk and -0.2 <= e_["t"] - mt <= 2.0 for mk, mt in self.mute): continue
+            if e_["kind"] in ("step", "step_turn") and any(a_ <= e_["t"] <= b_ for a_, b_ in self.hush): continue
             k_, g_ = snd[e_["kind"]]
             st = e_.get("strength", 1.0)
             g = g_ * (max(0.3, min(1.0, st / 3.0)) if e_["kind"] in ("takeoff", "land") else max(0.3, st))
