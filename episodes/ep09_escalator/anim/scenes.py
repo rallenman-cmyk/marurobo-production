@@ -82,6 +82,7 @@ XLC = G.COMB_LO_X - 0.18          # 下のくしの線
 RAIL_LY = float(os.environ.get("RAIL_LY", "-0.19"))      # 手すりに頭をのせる所の立つ位置（段の横の壁 y -0.51 から、本物の足の外のはしが 4cm 以上内）
 RAIL_LX = -0.24   # 段の上の前後（-0.18 では、足のつま先が上の段の立ち上がりへ 4cm 入った。v4 の点検）
 RAIL_TILT = float(os.environ.get("RAIL_TILT", "26"))     # そのときの横への傾き（手すりへ頭を寄せる）
+PEER_DY = float(os.environ.get("PEER_DY", "-0.14"))        # 15-04 で車輪をのぞきこむ所：レンズのふちが台に 8cm 入っていたので、台から 14cm 手前へ（本物の体の大きさのちがいを見て 6cm 余らせる）（9本目 v4 の同じ種類の点検）
 XHC = G.COMB_HI_X - 0.18          # 上のくしの線
 CP = 0.038                        # くしの板の上の面の高さ（床から。くしの線から 0.55 まで）
 HY = CLAD_Y + 0.01
@@ -530,7 +531,7 @@ def b_bench(cl):
     oj = ojisan((-2.2, 1.45, 0.0), face=-90.0); track("ojisan", oj.root, 1.2)   # 台の向こう：段を台に置く（15-01）
     M = MaruR((-3.3, -0.8, 0.0), face=30.0); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
     # 15：段のまわりを歩いて車輪をのぞきこむ
-    M.walk(s("15-04") + 0.1, s("15-04") + 2.6, (-2.4, -0.45, 0.0)); M.at(s("15-04") + 3.4, face=170.0); M.peer(e("15-04") - 0.9, 1.3)
+    M.walk(s("15-04") + 0.1, s("15-04") + 2.6, (-2.4, -0.45 + PEER_DY, 0.0)); M.at(s("15-04") + 3.4, face=170.0); M.peer(e("15-04") - 0.9, 1.3)
     t_put = s("15-01") + 0.3
     for a_ in oj.arms:                                       # おじさんが段を台に置く（腕を前へ → 戻す）
         key(a_, ("rotation_euler", 0), -100.0, 0.0); key(a_, ("rotation_euler", 0), t_put, R(-55)); key(a_, ("rotation_euler", 0), t_put + 1.0, R(-55))
