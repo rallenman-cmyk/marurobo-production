@@ -432,8 +432,14 @@ def b_night(cl):
         key(ball, "location", tt_, arc(a_))
     key(ball, "location", e("29-04"), arc(150.0))
     ev(t_p + 0.4, "roll", 0.3, "ball")
-    M.walk(s("28-04") + 0.4, s("28-04") + 2.4, (mx, -1.2, 0.0))                     # 手すりの台の角を回って（まっすぐ行くと台の箱を通った）
-    M.walk(s("28-04") + 2.5, s("29-01") + 1.0, (mx, my, 0.0)); M.at(s("29-01") + 3.5, face=80.0)
+    # 床に置いたふた（13 章で外した下のふた。厚さ 3.5cm）の上に立つので、その厚さだけ上げる（9本目 v4 の同じ種類の点検：床の高さのままで、足がふたに沈んでいた）
+    LIDZ = 0.035
+    #   歩く道具は高さを変えないので、ふたのふちの手前まで歩き、小さく跳んでふたに乗る
+    LIDX = LID_LO[1] + 0.25                                                          # ふたのふち（右）より 25cm 手前（歩く足のつま先がふちにかからない。13cm では 7cm かかった）
+    M.walk(s("28-04") + 0.4, s("28-04") + 1.3, (LIDX, -1.2, 0.0))                    # 手すりの台の角を回って（まっすぐ行くと台の箱を通った）
+    M.hopto(s("28-04") + 1.75, (LIDX - 0.42, -1.2, LIDZ), silent=True)
+    M.walk(s("28-04") + 1.85, s("28-04") + 2.6, (mx, -1.2, LIDZ))
+    M.walk(s("28-04") + 2.7, s("29-01") + 1.0, (mx, my, LIDZ)); M.at(s("29-01") + 3.5, face=80.0)
     M.push(t_p, 0.35)
     ev(w("29-03", "止まりました") - 0.2, "stop", 0.4, "")
     M.sigh(s("29-05") + 0.2)
@@ -443,7 +449,7 @@ def b_night(cl):
     rib = cube(mat("ribbon", "#E0457B", rough=0.5), (-0.12, -(YW - 0.015), G.TREAD_DZ + 0.035), (0.30, 0.03, 0.05), parent=E.steps[kr])   # 段の横のすき間から立って見える大きさ（0.012 では見えなかった）
     track("ribbon", rib, 0.0)
     hide_key(rib, -100.0, True); hide_key(rib, t_rb, False); hide_key(rib, s("31-01") - 0.1, True)
-    M.at(s("30-01") - 0.05, loc=(XLC - 0.42, -0.3, CP), face=90.0, interp="CONSTANT")
+    M.at(s("30-01") - 0.05, loc=(XLC - 0.42, -0.15, CP), face=90.0, interp="CONSTANT")   # 9本目 v4 の同じ種類の点検：y -0.3 では足が段の横の壁に 11cm 入った → 15cm 内へ
     M.push(w("30-02", "はさんで"), 0.3)
     ev(w("30-03", "止まりました") - 0.2, "stop", 0.4, "")
     # ③ くし：小石
@@ -645,7 +651,7 @@ def b_imag(cl):
     # 24：段に乗って手すりに頭をのせる → 手すりが遅れて、頭が後ろへ → ころん
     t0 = t24 - 0.05
     k = E.find_step(t0, 3.2)
-    M.at(t0, loc=E.tread(k, t0, lx=RAIL_LX, ly=RAIL_LY), face=90.0, interp="CONSTANT")   # v4：足が段の横の壁を突き抜けないよう（22 章と同じ）
+    M.at(t0, loc=E.tread(k, t0, lx=RAIL_LX, ly=RAIL_LY + 0.04), face=90.0, interp="CONSTANT")   # v4：足が段の横の壁を突き抜けないよう（22 章と同じ。後ろへ傾くと体が壁に 3cm かかったので、さらに 4cm 内へ）
     t_fall = w("24-02", "ころん")
     M.carry(t0 + 0.02, s("24-04"), E.carry_fn(k, t0 + 0.02, lx=RAIL_LX))
     M.tilt(t0 + 0.3, RAIL_TILT)
