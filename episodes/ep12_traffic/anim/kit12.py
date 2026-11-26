@@ -239,8 +239,8 @@ def gantry(x=SENSOR_X, lane_y=LANE * 1.5):
     py = ROAD_W / 2 + 0.8
     cyl(pm, (x, py, 3.4), 0.14, 6.8, verts=16)
     cube(pm, (x, (py + lane_y - 0.8) / 2, 6.75), (0.18, py - lane_y + 1.2, 0.18))
-    box = cube(_m("sensor", "#C9CDD3", rough=0.5, metal=0.2), (x, lane_y, 6.45), (0.5, 0.42, 0.42), bevel=0.04)
-    eye = cyl(_m("sensor_eye", "#1E2328", rough=0.1, coat=1.0), (x, lane_y, 6.22), 0.13, 0.06, verts=24)
+    box = cube(_m("sensor", "#F2F4F6", rough=0.4, metal=0.1), (x, lane_y, 6.45), (0.75, 0.6, 0.55), bevel=0.05)   # 試しの絵：小さな灰色で、建物の前で見分けにくかった
+    eye = cyl(_m("sensor_eye", "#1E2328", rough=0.1, coat=1.0), (x, lane_y, 6.16), 0.18, 0.06, verts=24)
     return box, eye
 
 

@@ -42,6 +42,7 @@ def ev_list():
     add(s("07-02") + 0.1, e("07-02") + 0.3, "ring", dict(obj="sensor", r=60, col=YEL))
     add(wp("07-03", "感知器") - 0.1, e("07-03") + 0.4, "tag", dict(text="感知器", obj="sensor", dy=-120, size=56, bg=WAVE))
     add(wp("07-04", "何を") - 0.2, e("07-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    add(s("08-01") + 0.1, e("08-02") + 0.3, "tag", dict(text="感知器", obj="sensor", dx=230, dy=-40, size=52, bg=WAVE))   # 横から見た図：どれが感知器か（試しの絵の点検）
     add(wp("08-04", "車の数") - 0.1, e("08-04") + 0.4, "tag", dict(text="台数", obj="sensor", dx=-150, dy=-130, size=56, bg=WHITE))
     add(wp("08-04", "こみ具合") - 0.1, e("08-04") + 0.4, "tag", dict(text="こみ具合", obj="sensor", dx=170, dy=-130, size=56, bg=WHITE))
     add(wp("09-02", "警察") - 0.1, e("09-02") + 0.3, "tag", dict(text="警察", obj="police", dy=-90, size=52, bg=WHITE))
