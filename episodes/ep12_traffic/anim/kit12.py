@@ -94,7 +94,7 @@ def city_side(x0, x1, y_off, sgn, seed=1, axis="x", night=False):
 # ======================================================================== 車
 CAR_L, CAR_W = 3.9, 1.72
 SEAT_TOP = 0.62            # 座席の上の面（車の床からではなく、地面から）
-BOOST = 0.70               # 助手席のクッションの上（まるロボが立つ高さ）
+BOOST = 0.86               # 助手席のクッションの上（まるロボが立つ高さ）。試しの絵：0.70 では窓のふちより低く、外から見えなかった
 PASS = (0.15, 0.40)        # 助手席（車の中の座標。前＝+x、左＝+y）
 DRIVE = (0.15, -0.40)      # 運転席（日本の車は右）
 PHONE_L = (0.95, 0.0, 1.02)   # スマホの台（前の台のまん中の上）
@@ -113,13 +113,13 @@ def car(loc=(0, 0, 0), face=0.0, col="#7CC6E8", interior=False, brake=False, nam
     dark = _m("car_dark", "#22262C", rough=0.5); tire = _m("tire", "#1B1C1F", rough=0.8)
     glass = mat("glass", "#9CC4D8", rough=0.05, alpha=0.18) if interior else _m("glass_d", "#3B4D5C", rough=0.08, metal=0.3)
     # 下の胴（丸い箱）
-    cube(body, (0, 0, 0.62), (CAR_L, CAR_W, 0.62), bevel=0.18, parent=root)
+    cube(body, (0, 0, 0.58), (CAR_L, CAR_W, 0.56), bevel=0.18, parent=root)          # 窓のふち（上の面）は 0.86
     # 上の箱（屋根と柱）
     if interior:
         cube(body, (-0.05, 0, 1.47), (2.1, CAR_W - 0.06, 0.08), bevel=0.04, parent=root)                 # 屋根
-        for (px, w_) in ((0.98, 0.10), (0.02, 0.12), (-1.08, 0.18)):                                     # 前・まん中・後ろの柱
+        for (px, w_) in ((0.98, 0.07), (0.02, 0.07), (-1.08, 0.12)):                                     # 前・まん中・後ろの柱（細く）
             for sg in (-1, 1):
-                cube(body, (px, sg * (CAR_W / 2 - 0.06), 1.17), (w_, 0.08, 0.58), parent=root)
+                cube(body, (px, sg * (CAR_W / 2 - 0.06), 1.15), (w_, 0.06, 0.62), parent=root)
         cube(body, (1.05, 0, 0.97), (0.12, CAR_W - 0.06, 0.12), parent=root)                              # 前の窓の下のふち
         cube(body, (-1.13, 0, 1.17), (0.1, CAR_W - 0.1, 0.58), parent=root)                               # 後ろ（ガラスのかわりに暗い）
         plane(glass, (1.02, 0, 1.2), (0.6, CAR_W - 0.12), rot=(0, R(-62), 0), parent=root)               # 前のガラス（うすい）
@@ -183,10 +183,10 @@ def phone_seq(loc, rot_z, states, glow=2.2, fade=0.15):
     return e, sc
 
 
-def phone_on_holder(parent, states, glow=1.6):
+def phone_on_holder(parent, states, glow=0.55):   # 試しの絵：1.6 では画面が白く飛んで地図が見えなかった
     """前の台のスマホ（横向き。画面は後ろ＝−x を向く）。states は phone_seq と同じ（時刻, 絵）"""
     e_, scr = phone_seq((0, 0, 0), 0.0, states, glow=glow)
-    e_.parent = parent; e_.location = PHONE_L; e_.rotation_euler = (0, R(-80), R(90)); e_.scale = (1.15, 1.15, 1.15)
+    e_.parent = parent; e_.location = PHONE_L; e_.rotation_euler = (0, R(-75), 0); e_.scale = (1.15, 1.15, 1.15)   # 画面を後ろ（−x）へ少し上向きに。長い辺は横（試しの絵：背中が見えていた）
     return e_, scr
 
 

@@ -19,6 +19,8 @@ exec(open(os.path.join(KIT_HERE, "kit12.py"), encoding="utf-8").read())
 _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
+sys.path.insert(0, _K7)
+from timing import wp       # 言葉の時刻は、声の本当の間から（SKILL §3。2D の札と同じ。表がなければ字数の見積もり）
 CLIPNAME = _argv[0]; OUTDIR = _argv[1] if len(_argv) > 1 else "/tmp/x"
 _SRC_DEFAULT = {"step": "maru_c", "jump": "maru_c", "land": "maru_c", "takeoff": "maru_c", "step_turn": "maru_c"}
 
@@ -118,7 +120,7 @@ def car_point(t, lp):
 def b_drive(par):
     """冒頭：夕方の大通りを走る → 角を左へ曲がる → 列のうしろで止まる"""
     sky_evening()
-    STAGE["t_turn"] = w("03-01", "角を") - 0.2
+    STAGE["t_turn"] = wp("03-01", "角を") - 0.2
     road_strip((-340.0, 80.0), 420.0, "x")
     road_strip((ROAD_W / 2 + 0.2, 200.0), 200.0, "y")
     city_side(-340.0, -ROAD_W / 2 - SIDEWALK - 4.0, ROAD_W / 2 + SIDEWALK + 0.3, +1, seed=1)
@@ -147,11 +149,11 @@ def b_drive(par):
     while t < T_END:      # 鼻歌：頭を小さくゆらす（前を向いたまま）
         key(head, "rotation_euler", t, (R(-3 if k_ % 2 else 3), 0, R(2 if k_ % 2 else -2))); t += 0.6; k_ += 1
     t_turn_end = STAGE["t_turn"] + D_TURN
-    ph, scr = phone_on_holder(cr, [(0.0, os.path.join(TEX, "ph_map_a.png")), (w("02-02", "渋滞") - 0.1, os.path.join(TEX, "ph_map_alert.png")),
-                                   (t_turn_end, os.path.join(TEX, "ph_map_q.png")), (w("04-05", "広げて"), os.path.join(TEX, "ph_map_z1.png")),
-                                   (w("04-06", "遠くの"), os.path.join(TEX, "ph_map_z2.png")), (s("04-08") - 0.3, os.path.join(TEX, "ph_map_eta.png"))])
+    ph, scr = phone_on_holder(cr, [(0.0, os.path.join(TEX, "ph_map_a.png")), (wp("02-02", "渋滞") - 0.1, os.path.join(TEX, "ph_map_alert.png")),
+                                   (t_turn_end, os.path.join(TEX, "ph_map_q.png")), (wp("04-05", "広げて"), os.path.join(TEX, "ph_map_z1.png")),
+                                   (wp("04-06", "遠くの"), os.path.join(TEX, "ph_map_z2.png")), (s("04-08") - 0.3, os.path.join(TEX, "ph_map_eta.png"))])
     track("phone", ph, 0.0)
-    ev(w("02-02", "渋滞") - 0.1, "pop_ui", 0.35, "phone")
+    ev(wp("02-02", "渋滞") - 0.1, "pop_ui", 0.35, "phone")
     # 走る音・曲がる・止まる
     ev(STAGE["t_turn"], "turn", 0.3, "car"); ev(t_turn_end + D_STOP - 0.6, "brake", 0.35, "car")
     # まるロボ：助手席のクッションの上（前を向く）。車に運ばれる（場所だけ。曲がり終わってから、その場で向きを直す）
@@ -160,7 +162,7 @@ def b_drive(par):
     M = MaruR(p0, face=MFACE(0.0), s=MS); track("maru", M.body, 0.28); track("maru_top", M.body, 0.34)
     M.carry(T_BEG, T_END, lambda t, p0=p0: tuple(a - b for a, b in zip(car_point(t, lp), p0)))
     # 01-04：画面に顔を近づける → 窓と見比べる
-    M.peer(w("01-04", "夢中") - 0.3, 1.4); ev(w("01-04", "夢中"), "beep_happy", 0.3, "maru_c")
+    M.peer(wp("01-04", "夢中") - 0.3, 1.4); ev(wp("01-04", "夢中"), "beep_happy", 0.3, "maru_c")
     M.at(s("02-03") + 0.2, face=MFACE(40.0))               # 左の窓の外を見る
     M.at(e("02-03") + 0.1, face=MFACE(0.0))
     M.confused(s("02-04") + 0.3)
@@ -202,9 +204,9 @@ def b_globe(par):
         sp.points[i].co = (rr * math.cos(ph) * math.cos(th), rr * math.cos(ph) * math.sin(th), rr * math.sin(ph), 1)
     cu.bevel_depth = 0.022; cu.bevel_resolution = 2
     ob = bpy.data.objects.new("wrap", cu); bpy.context.collection.objects.link(ob); ob.data.materials.append(glow_mat("wrapg", "#FFE08A", 5.0)); ob.parent = g
-    cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=f(w("04-07", "地球") - 0.3))
+    cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=f(wp("04-07", "地球") - 0.3))
     cu.bevel_factor_end = 1.0; cu.keyframe_insert("bevel_factor_end", frame=f(e("04-07") - 0.2))
-    ev(w("04-07", "地球") - 0.3, "wrap", 0.35, "")
+    ev(wp("04-07", "地球") - 0.3, "wrap", 0.35, "")
 
 
 # ======================================================================== B：昼の大通りと歩道橋・感知器（1章・2章）
@@ -234,14 +236,14 @@ def b_bridge(par):
     M.peer(s("05-02") + 1.6, 1.6)
     # 05-03：目の光で 1 台ずつ（ピッ、ピッ）
     for k, wd in enumerate(("ピッ、ピ", "ピッ。")):
-        tb = w("05-03", "1台") + 0.4 + 0.55 * k
+        tb = wp("05-03", "1台") + 0.4 + 0.55 * k
         tgt = (SPOT[0] + 5.0 + 2.5 * k, LANE_Y, 1.45)
         beam_flash(EYE, tgt, tb, 0.4); mk = sphere(glow_mat("mark", TEAL_C, 5.0), tgt, 0.18, seg=12); pop_in(mk, tb, 1.0, 0.15); pop_out(mk, tb + 1.0)
         ev(tb, "pi", 0.35, "maru_c")
     # 05-05：右の車線も、左の車線も……ピピピピッ（首を振って 4 本）
     M.shake(s("05-05") + 0.2)
     for k in range(4):
-        tb = w("05-05", "ピピ") + 0.12 * k
+        tb = wp("05-05", "ピピ") + 0.12 * k
         tgt = (SPOT[0] + 4.0 + 1.5 * k, LANE_Y - LANE * (k % 2) * 1.0, 1.45)
         beam_flash(EYE, tgt, tb, 0.25); ev(tb, "pi", 0.3, "maru_c")
     # 05-06：くるくる → ぽてん
@@ -253,7 +255,7 @@ def b_bridge(par):
     M.at(e("07-04") + 0.2, look=0)
     # 08-05：感知器のまねで目の光を下へ
     M.at(s("08-05") + 0.2, look=-14)
-    beam_flash(EYE, (SPOT[0] + 0.8, LANE_Y, 0.05), w("08-05", "休まず") - 0.3, 1.2); ev(w("08-05", "休まず") - 0.3, "pi", 0.3, "maru_c")
+    beam_flash(EYE, (SPOT[0] + 0.8, LANE_Y, 0.05), wp("08-05", "休まず") - 0.3, 1.2); ev(wp("08-05", "休まず") - 0.3, "pi", 0.3, "maru_c")
     M.at(e("08-05") + 0.1, look=0)
     M.at(s("10-01") + 0.2, look=12)
     # 感知器の音の波（08-01〜08-04）：水色の輪が真下へ → はね返って上へ
@@ -266,7 +268,7 @@ def b_bridge(par):
         key(r_, "location", t, (SENSOR_X, LANE_Y, 6.15), "LINEAR"); key(r_, "location", t + dd, (SENSOR_X, LANE_Y, z_hit + 0.02), "LINEAR")
         key(r_, "location", t + 2 * dd, (SENSOR_X, LANE_Y, 6.15), "LINEAR")
         key(r_, "scale", t, (0.6, 0.6, 0.6), "LINEAR"); key(r_, "scale", t + dd, (1.6, 1.6, 1.0), "LINEAR"); key(r_, "scale", t + 2 * dd, (0.8, 0.8, 0.8), "LINEAR")
-    tc = w("08-03", "車が") + 0.3           # 見せる車が感知器の真下に来る時刻
+    tc = wp("08-03", "車が") + 0.3           # 見せる車が感知器の真下に来る時刻
     STAGE["tc"] = tc
     t = s("08-01") + 0.4
     while t < e("08-04") + 0.5:
@@ -276,15 +278,15 @@ def b_bridge(par):
         t += 1.1
     ev(tc, "ping2", 0.3, "sensor")
     # 見せる車（08-03 で感知器の下を通る。08-04 でさらに 2 台）
-    for k, tt in enumerate((tc, w("08-04", "通った") + 0.2, w("08-04", "こみ具合") + 0.2)):
+    for k, tt in enumerate((tc, wp("08-04", "通った") + 0.2, wp("08-04", "こみ具合") + 0.2)):
         dc = car_fast((0, 0, 0), 0.0, ["#C8312B", "#3F6FB5", "#E8E8E8"][k], name="demo")
         key(dc, "location", tt - 4.0, (SENSOR_X - 4.0 * 7.0, LANE_Y, 0), "LINEAR"); key(dc, "location", tt + 4.0, (SENSOR_X + 4.0 * 7.0, LANE_Y, 0), "LINEAR")
         hide_key(dc, -100.0, True); hide_key(dc, tt - 4.0, False); hide_key(dc, tt + 4.0, True)
         g_ = sphere(glow_mat("count", WAVE_C, 4.0), (SENSOR_X, LANE_Y - 0.6 - 0.18 * k, 6.75), 0.07, seg=12)   # たまっていく光の粒
         pop_in(g_, tt + 0.1, 1.0, 0.2); hide_key(g_, e("08-05") + 1.0, True)
     # 09-01：感知器から光の線が空へ
-    lb = beam_flash((SENSOR_X, LANE_Y, 6.7), (SENSOR_X, LANE_Y, 60.0), w("09-01", "どこへ") - 0.2, 2.5, WAVE_C, 0.05, "up")
-    ev(w("09-01", "どこへ") - 0.2, "swish", 0.3, "sensor")
+    lb = beam_flash((SENSOR_X, LANE_Y, 6.7), (SENSOR_X, LANE_Y, 60.0), wp("09-01", "どこへ") - 0.2, 2.5, WAVE_C, 0.05, "up")
+    ev(wp("09-01", "どこへ") - 0.2, "swish", 0.3, "sensor")
 
 
 # ======================================================================== T：町の引き（06-02・06-03・09-02・09-03・10-04・10-05）
@@ -324,18 +326,18 @@ def b_town(par):
         ev(t0, "swish", 0.25, "")
         return ob_
     s0 = SENS[0]
-    flow([(s0[0], s0[1], 6), ((s0[0] + POL[0]) / 2, (s0[1] + POL[1]) / 2, 40), (POL[0], POL[1], 20)], w("09-02", "警察") - 0.2, w("09-02", "警察") + 0.8, nm="f1")
-    flow([(s0[0], s0[1], 6), ((s0[0] + CO[0]) / 2, (s0[1] + CO[1]) / 2, 40), (CO[0], CO[1], 18)], w("09-02", "道路") - 0.2, w("09-02", "道路") + 0.8, nm="f2")
-    flow([(POL[0], POL[1], 20), ((POL[0] + HUB[0]) / 2, (POL[1] + HUB[1]) / 2, 45), (HUB[0], HUB[1], 26)], w("09-03", "まとめる") - 0.2, w("09-03", "まとめる") + 0.8, nm="f3")
-    flow([(CO[0], CO[1], 18), ((CO[0] + HUB[0]) / 2, (CO[1] + HUB[1]) / 2, 45), (HUB[0], HUB[1], 26)], w("09-03", "まとめる") - 0.1, w("09-03", "まとめる") + 0.9, nm="f4")
-    flow([(HUB[0], HUB[1], 26), ((HUB[0] + TOWER[0]) / 2, (HUB[1] + TOWER[1]) / 2, 55), (TOWER[0], TOWER[1], 60)], w("09-03", "電波") - 0.4, w("09-03", "電波") + 0.4, nm="f5")
+    flow([(s0[0], s0[1], 6), ((s0[0] + POL[0]) / 2, (s0[1] + POL[1]) / 2, 40), (POL[0], POL[1], 20)], wp("09-02", "警察") - 0.2, wp("09-02", "警察") + 0.8, nm="f1")
+    flow([(s0[0], s0[1], 6), ((s0[0] + CO[0]) / 2, (s0[1] + CO[1]) / 2, 40), (CO[0], CO[1], 18)], wp("09-02", "道路") - 0.2, wp("09-02", "道路") + 0.8, nm="f2")
+    flow([(POL[0], POL[1], 20), ((POL[0] + HUB[0]) / 2, (POL[1] + HUB[1]) / 2, 45), (HUB[0], HUB[1], 26)], wp("09-03", "まとめる") - 0.2, wp("09-03", "まとめる") + 0.8, nm="f3")
+    flow([(CO[0], CO[1], 18), ((CO[0] + HUB[0]) / 2, (CO[1] + HUB[1]) / 2, 45), (HUB[0], HUB[1], 26)], wp("09-03", "まとめる") - 0.1, wp("09-03", "まとめる") + 0.9, nm="f4")
+    flow([(HUB[0], HUB[1], 26), ((HUB[0] + TOWER[0]) / 2, (HUB[1] + TOWER[1]) / 2, 55), (TOWER[0], TOWER[1], 60)], wp("09-03", "電波") - 0.4, wp("09-03", "電波") + 0.4, nm="f5")
     # 電波：塔から広がる輪
     for k_ in range(3):
         bpy.ops.mesh.primitive_torus_add(location=(TOWER[0], TOWER[1], 58.0), major_radius=4.0, minor_radius=0.5)
-        rg = bpy.context.object; rg.data.materials.append(glow_mat("radio", "#FFE08A", 4.0)); t_ = w("09-03", "電波") + 0.4 + 0.5 * k_
+        rg = bpy.context.object; rg.data.materials.append(glow_mat("radio", "#FFE08A", 4.0)); t_ = wp("09-03", "電波") + 0.4 + 0.5 * k_
         hide_key(rg, -100.0, True); hide_key(rg, t_, False); hide_key(rg, t_ + 1.5, True)
         key(rg, "scale", t_, (1, 1, 1), "LINEAR"); key(rg, "scale", t_ + 1.5, (12, 12, 1), "LINEAR")
-    ev(w("09-03", "電波") + 0.4, "radio", 0.25, "")
+    ev(wp("09-03", "電波") + 0.4, "radio", 0.25, "")
     STAGE["half"] = half
 
 
@@ -344,8 +346,8 @@ def b_nav(par):
     world("#2A2F38", 0.6)
     area((0.4, 0.6, 1.6), (0.95, 0, 1.0), 120, 2.0)
     cr = car((0, 0, 0), 0.0, "#B9C3CF", interior=True, name="navcar"); STAGE["car"] = cr
-    ph, _ = phone_on_holder(cr, [(0.0, os.path.join(TEX, "nav_red.png")), (s("10-01"), os.path.join(TEX, "nav_grey.png"))], glow=1.8); track("phone", ph, 0.0)
-    ev(w("09-04", "渋滞") - 0.2, "pop_ui", 0.3, "")
+    ph, _ = phone_on_holder(cr, [(0.0, os.path.join(TEX, "nav_red.png")), (s("10-01"), os.path.join(TEX, "nav_grey.png"))], glow=0.55); track("phone", ph, 0.0)
+    ev(wp("09-04", "渋滞") - 0.2, "pop_ui", 0.3, "")
 
 
 # ======================================================================== C：町はずれの道（10-02〜10-08）
@@ -362,49 +364,49 @@ def b_field(par):
 # ======================================================================== カット
 CUTS = [
     # 冒頭（A）
-    ("A01", b_drive, s("01-01") - 0.5, C((-150.0, 30.0, 26.0), (-120.0, 3.0, 2.0), 30, (-120.0, 26.0, 18.0), (-95.0, 3.0, 1.0), d=5.0), "A"),
-    ("A01b", b_drive, w("01-01", "まるロボは"), CC((0.2, 3.2, 1.2), (0.1, 0.3, 1.0), 32), "A"),
-    ("A01c", b_drive, s("01-02"), CC((-1.55, 0.0, 1.35), (1.8, 0.0, 1.05), 26, (-1.35, -0.1, 1.33), (1.8, -0.1, 1.05)), "A"),
+    ("A01", b_drive, s("01-01") - 0.5, C((-160.0, 2.0, 16.0), (-110.0, 4.0, 1.0), 30, (-145.0, 2.5, 12.0), (-95.0, 4.0, 1.0), d=5.0), "A"),
+    ("A01b", b_drive, wp("01-01", "まるロボは"), CC((0.2, 3.2, 1.2), (0.1, 0.3, 1.0), 32), "A"),
+    ("A01c", b_drive, s("01-02"), CC((-0.75, 0.0, 1.32), (1.8, 0.0, 1.05), 26, (-0.65, -0.08, 1.3), (1.8, -0.08, 1.05)), "A"),
     ("A01d", b_drive, s("01-03"), CC((0.35, 0.05, 1.18), (0.95, 0.0, 1.02), 30, (0.55, 0.03, 1.10), (0.95, 0.0, 1.02), d=3.0), "A"),
     ("A01e", b_drive, s("01-04"), CC((1.75, 0.55, 1.2), (0.15, 0.40, 0.95), 28), "A"),
     ("A02", b_drive, s("02-01"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
-    ("A02b", b_drive, s("02-03"), CC((-0.4, 0.15, 1.15), (6.0, 4.5, 0.8), 26), "A"),
+    ("A02b", b_drive, s("02-03"), CC((0.35, -0.05, 1.25), (2.5, 6.0, 0.9), 26), "A"),
     ("A02c", b_drive, s("02-04"), CC((1.75, 0.55, 1.2), (0.15, 0.40, 0.95), 28), "A"),
     ("A03", b_drive, s("03-01") - 0.2, C((-30.0, -16.0, 30.0), (-6.0, 8.0, 0.0), 26), "A"),
     ("A03b", b_drive, s("03-02"), C((-6.0, -4.0, 9.0), (-4.0, 40.0, 1.0), 28), "A"),
     ("A03c", b_drive, s("03-03"), CC((0.6, 2.4, 1.1), (0.1, 0.4, 0.95), 30), "A"),
     ("A03d", b_drive, s("03-04"), C((-3.0, 2.0, 14.0), (-4.0, 45.0, 1.0), 28), "A"),
     ("A04", b_drive, s("04-01"), C((8.0, 6.0, 26.0), (-4.0, 40.0, 0.0), 26, (8.0, 10.0, 26.0), (-4.0, 44.0, 0.0)), "A"),
-    ("A04b", b_drive, s("04-02"), C((12.0, 30.0, 5.0), (-10.0, 20.0, 1.0), 24, (12.0, 50.0, 5.0), (-10.0, 40.0, 1.0)), "A"),
-    ("A04c", b_drive, s("04-03"), CC((-1.2, -0.3, 1.3), (0.15, 0.6, 0.95), 30), "A"),
+    ("A04b", b_drive, s("04-02"), C((8.6, 26.0, 3.2), (-8.0, 22.0, 1.0), 24, (8.6, 44.0, 3.2), (-8.0, 40.0, 1.0)), "A"),
+    ("A04c", b_drive, s("04-03"), CC((-0.55, -0.25, 1.3), (0.15, 0.6, 0.95), 30), "A"),
     ("A04d", b_drive, s("04-04"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
     ("G04", b_globe, s("04-07") - 0.2, C((0.0, -12.0, 2.5), (0.0, 0.0, 0.0), 40, (2.5, -9.5, 1.5), (0.0, 0.0, 0.0), d=9.0), "G"),
     ("A04e", b_drive, s("04-08"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
     ("A04f", b_drive, s("04-09"), C((-6.0, 6.0, 1.4), (-5.0, 60.0, 1.6), 30), "A"),
     ("A04g", b_drive, s("04-10"), C((10.0, -6.0, 18.0), (-4.0, 40.0, 0.0), 24), "A"),
-    ("A04h", b_drive, s("04-11"), CC((-1.2, 0.0, 1.35), (0.15, 0.4, 0.95), 30, (0.5, 2.4, 1.2), (0.15, 0.4, 0.95), d=3.0), "A"),
+    ("A04h", b_drive, s("04-11"), CC((-0.55, 0.0, 1.32), (0.15, 0.4, 0.95), 30, (0.5, 2.4, 1.2), (0.15, 0.4, 0.95), d=3.0), "A"),
     ("A04i", b_drive, s("04-12"), C((-14.0, -10.0, 6.0), (-4.0, 40.0, 3.0), 24, (-14.0, -10.0, 22.0), (-4.0, 50.0, 2.0)), "A"),
     # 1章（B 歩道橋 → T 町の引き）
-    ("B05", b_bridge, s("05-01") - 0.5, C((-9.0, 20.0, 1.6), (0.0, 9.0, 5.4), 30, (-8.0, 16.0, 2.4), (0.4, 7.0, 5.3)), "B"),
+    ("B05", b_bridge, s("05-01") - 0.5, C((-8.0, 9.4, 1.6), (0.3, 6.6, 5.4), 26, (-7.0, 9.4, 2.2), (0.6, 6.0, 5.3)), "B"),
     ("B05b", b_bridge, s("05-02"), C((-1.0, 7.6, 6.4), (6.0, 4.6, 2.0), 30), "B"),
     ("B05c", b_bridge, s("05-03"), C((-0.6, 6.4, 6.1), (7.0, 5.0, 1.2), 28), "B"),
     ("B05d", b_bridge, s("05-04"), C((-6.0, 10.0, 4.0), (10.0, 1.0, 1.0), 24), "B"),
     ("B05e", b_bridge, s("05-05"), C((2.6, 5.1, 5.2), (SPOT[0], SPOT[1], BR_H + 0.25), 34), "B"),
     ("B05f", b_bridge, s("05-06"), C((2.3, 6.3, 5.6), (SPOT[0], SPOT[1], BR_H + 0.2), 34), "B"),
-    ("B06", b_bridge, s("06-01"), C((14.0, 22.0, 3.0), (0.0, 4.0, 4.5), 26), "B"),
+    ("B06", b_bridge, s("06-01"), C((16.0, 9.4, 3.0), (0.0, 4.5, 4.8), 26), "B"),
     ("T06", b_town, s("06-02"), C((0.0, -10.0, 520.0), (0.0, 0.0, 0.0), 30, (0.0, -10.0, 620.0), (0.0, 0.0, 0.0), d=9.0), "T"),
     ("B06b", b_bridge, s("06-04"), C((2.3, 6.6, 5.7), (SPOT[0], SPOT[1], BR_H + 0.2), 32), "B"),
     # 2章（B → T → N → C）
     ("B07", b_bridge, s("07-01"), C((-0.7, 6.3, 5.5), (SENSOR_X, LANE_Y, 6.3), 30), "B"),
     ("B07b", b_bridge, s("07-02"), C((SENSOR_X - 5.0, LANE_Y - 4.0, 3.5), (SENSOR_X, LANE_Y, 6.4), 30, (SENSOR_X - 3.0, LANE_Y - 2.5, 4.5), (SENSOR_X, LANE_Y, 6.4), d=4.0), "B"),
     ("B07c", b_bridge, s("07-04"), C((3.3, 6.6, 5.5), (SPOT[0], SPOT[1], BR_H + 0.25), 30), "B"),
-    ("B08", b_bridge, s("08-01") - 0.2, C((SENSOR_X, -14.0, 3.6), (SENSOR_X, LANE_Y, 3.4), 30), "B"),
+    ("B08", b_bridge, s("08-01") - 0.2, C((SENSOR_X, -9.4, 3.4), (SENSOR_X, LANE_Y, 3.4), 22), "B"),
     ("B08b", b_bridge, s("08-05"), C((3.2, 4.0, 5.6), (SENSOR_X, LANE_Y, 4.0), 26), "B"),
     ("B09", b_bridge, s("09-01"), C((SENSOR_X - 6.0, LANE_Y - 3.0, 1.5), (SENSOR_X, LANE_Y, 14.0), 26), "B"),
     ("T09", b_town, s("09-02"), C((-100.0, -260.0, 230.0), (0.0, 40.0, 0.0), 26, (40.0, -260.0, 230.0), (40.0, 60.0, 0.0), d=10.0), "T"),
     ("N09", b_nav, s("09-04"), CC((0.5, 0.0, 1.12), (0.95, 0.0, 1.02), 32), "N"),
     ("B10", b_bridge, s("10-01"), C((3.3, 6.6, 5.4), (SPOT[0], SPOT[1], BR_H + 0.3), 30), "B"),
-    ("C10", b_field, s("10-02"), C((8.0, -9.0, 2.0), (-2.0, 4.6, 0.6), 26), "C"),
+    ("C10", b_field, s("10-02"), C((2.2, -1.2, 1.1), (-2.2, 4.6, 0.3), 30), "C"),
     ("C10b", b_field, s("10-03"), C((-0.4, 3.9, 0.12), (-1.6, 5.6, 6.0), 22), "C"),
     ("T10", b_town, s("10-04"), C((0.0, -420.0, 420.0), (0.0, 0.0, 0.0), 26, (120.0, -420.0, 420.0), (140.0, 60.0, 0.0), d=10.0), "T"),
     ("N10", b_nav, s("10-06"), CC((0.5, 0.0, 1.12), (0.95, 0.0, 1.02), 32), "N"),
@@ -416,9 +418,9 @@ CUTS = [
     ("A04d3", b_drive, s("04-06"), CC((0.55, -0.2, 1.12), (0.95, 0.03, 1.0), 40), "A"),
     ("T06b", b_town, s("06-03"), C((-200.0, -330.0, 160.0), (0.0, 0.0, 0.0), 26), "T"),
     ("B07b2", b_bridge, s("07-03"), C((SENSOR_X - 2.0, LANE_Y - 2.2, 5.0), (SENSOR_X, LANE_Y, 6.4), 34), "B"),
-    ("B08a", b_bridge, s("08-02"), C((SENSOR_X + 7.0, -12.0, 2.8), (SENSOR_X, LANE_Y, 3.4), 30), "B"),
-    ("B08c", b_bridge, s("08-03"), C((SENSOR_X, -10.0, 3.2), (SENSOR_X, LANE_Y, 3.3), 34), "B"),
-    ("B08d", b_bridge, s("08-04"), C((SENSOR_X - 6.0, -11.0, 4.0), (SENSOR_X, LANE_Y, 4.2), 30), "B"),
+    ("B08a", b_bridge, s("08-02"), C((SENSOR_X + 6.0, -9.4, 2.6), (SENSOR_X, LANE_Y, 3.4), 22), "B"),
+    ("B08c", b_bridge, s("08-03"), C((SENSOR_X, -8.8, 3.0), (SENSOR_X, LANE_Y, 3.2), 26), "B"),
+    ("B08d", b_bridge, s("08-04"), C((SENSOR_X - 6.0, -9.4, 3.8), (SENSOR_X, LANE_Y, 4.2), 24), "B"),
     ("T09b", b_town, s("09-03"), C((180.0, -120.0, 200.0), (20.0, 120.0, 10.0), 26), "T"),
     ("T10b", b_town, s("10-05"), C((380.0, -60.0, 260.0), (230.0, 120.0, 0.0), 28), "T"),
 ]

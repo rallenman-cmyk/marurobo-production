@@ -16,6 +16,7 @@ STYLE = open(W + "/stage/voice_test/style_gentle.txt", encoding="utf-8").read().
 # STYLE_EXTRA：話し方の指示を足す（7本目 v5「声大きい」：張った声の文を、落ち着いた小さめの声で作り直す）
 if os.environ.get("STYLE_EXTRA"): STYLE = STYLE + "\n" + os.environ["STYLE_EXTRA"]
 KEY = os.environ["GEMINI_API_KEY"]
+HEAR_MODEL = os.environ.get("HEAR_MODEL", "gemini-3-flash-preview")   # 12本目 2026-11-26：3.8-flash は混んで返事が来なかった
 
 
 def post(model, body, timeout=240):
@@ -71,13 +72,13 @@ def wav_bytes(x, sr=24000):
 
 def heard(x):
     body = {"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wav_bytes(x)).decode()}}, {"text": "この音声を、聞こえたとおりに日本語で書き起こしてください。書き起こしだけを出力。"}]}]}
-    return post("gemini-3.8-flash", body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
+    return post(HEAR_MODEL, body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def heard_kana(x):
     """ひらがなだけで書き起こす（漢字にすると「そうじが／そうじきが」の聞き違いが分からないため。KANA=1 のとき MUST をこれで確かめる）"""
     body = {"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wav_bytes(x)).decode()}}, {"text": "この音声を、聞こえた音のとおりに、すべてひらがなで書き起こしてください。漢字・カタカナは使わない。言いまちがいや抜けた音も、そのまま書く。書き起こしだけを出力。"}]}]}
-    return post("gemini-3.8-flash", body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
+    return post(HEAR_MODEL, body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def runs(x, sr=24000, thr=-42, fr=0.01, min_sil=0.12):

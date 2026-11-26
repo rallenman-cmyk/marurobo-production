@@ -1,4 +1,4 @@
-# 17本目（カード）の効果音。16本目の sfx.py を写して、この回の音を足した（下の make17）。16本目の説明：9本目の sfx.py を写して、この回の音を足した（下の make16）。9本目の説明：7本目の sfx.py を写して、この回の音を足した。6本目の sfx.py（3〜6本目の step・jump・land・pi・pop・whoosh・click・snap・motor など）に、この回の音を足す
+# 12本目（渋滞）の効果音（17本目の sfx.py を写して、この回の音を足した：下の make12）。17本目の説明：16本目の sfx.py を写して、この回の音を足した（下の make17）。16本目の説明：9本目の sfx.py を写して、この回の音を足した（下の make16）。9本目の説明：7本目の sfx.py を写して、この回の音を足した。6本目の sfx.py（3〜6本目の step・jump・land・pi・pop・whoosh・click・snap・motor など）に、この回の音を足す
 #   clank：くしに乗り上げる・ふたを外す（ガチッ）／snap：くしの歯の先が折れる（ポキッ）／roll：ボールが転がる（ころころ）／
 #   stop：エスカレーターが止まる（うなりが下がって静かになる）／click：ボタン（カチッ）／thunk：ガクンと止まる（想像の場面）
 #   決まり（SKILL §6）：絵の動き 1 つに音 1 つ。同じ動きに 3D の音と札の音を重ねない。足音は小さく（0.05）
@@ -130,7 +130,49 @@ def make17(kind, sr):
     return None
 
 
+def make12(kind, sr):
+    """12本目（渋滞）の音"""
+    if kind == "turn":      # 曲がる：タイヤが道をなでる「スーッ」（低め・長め）
+        n = int(1.6 * sr); x = _n(1.6, sr, 150, 1200, a=0.3, d=0.9)[:n]
+        return 0.18 * x
+    if kind == "brake":     # ブレーキ「キュッ」（高めの短いこすれ）
+        n = int(0.45 * sr); tt = np.arange(n) / sr; f = 1500 - 500 * tt / 0.45
+        x = np.sin(2 * np.pi * np.cumsum(f) / sr) * np.exp(-tt * 5) * 0.6 + _n(0.45, sr, 1200, 5000, a=0.01, d=0.25)[:n]
+        return 0.16 * x
+    if kind == "dizzy":     # 目を回す：くるくる下がる電子音
+        n = int(1.1 * sr); tt = np.arange(n) / sr; f = 1300 + 300 * np.sin(2 * np.pi * 6 * tt) - 500 * tt
+        return 0.2 * np.sin(2 * np.pi * np.cumsum(f) / sr) * np.linspace(1, 0.2, n)
+    if kind in ("ping", "ping2"):   # 感知器の音の波：小さな「ピコン」（ping2 は車に当たって早く戻る、高い 2 音）
+        a_ = _t(1900, 1900, 0.06, sr, a=0.002, d=0.04)
+        if kind == "ping": return 0.22 * a_
+        b_ = _t(2500, 2500, 0.06, sr, a=0.002, d=0.04); x = np.zeros(int(0.16 * sr)); x[:len(a_)] += a_; j = int(0.08 * sr); x[j:j + len(b_)] += b_[:len(x) - j]
+        return 0.24 * x
+    if kind == "wrap":      # 地球に線が巻きつく「シュルル」（上がる帯の雑音）
+        n = int(2.4 * sr); tt = np.arange(n) / sr
+        x = _n(2.4, sr, 900, 5000, a=0.2, d=1.2)[:n] * (0.6 + 0.4 * np.sin(2 * np.pi * 7 * tt))
+        return 0.14 * x
+    if kind == "pop_s":     # 小さなぽん（人の印）
+        return 0.18 * _t(880, 700, 0.08, sr, a=0.002, d=0.05)
+    if kind == "radio":     # 電波が広がる（ふわんと上がる 3 音）
+        x = np.zeros(int(0.8 * sr))
+        for i, fq in enumerate((660, 880, 1100)):
+            c = _t(fq, fq, 0.25, sr, a=0.01, d=0.18); j = int(i * 0.18 * sr); x[j:j + len(c)] += c[:len(x) - j]
+        return 0.18 * x
+    if kind == "title":     # 題の音（やわらかい 2 音の鈴）
+        x = np.zeros(int(1.2 * sr))
+        for i, fq in enumerate((1047, 1568)):
+            c = _t(fq, fq, 0.9, sr, a=0.003, d=0.6); j = int(i * 0.16 * sr); x[j:j + len(c)] += c[:len(x) - j]
+        return 0.2 * x
+    if kind == "drive":     # 車の中の低い走る音（4 秒でつながる輪。ずっと流す）
+        n = 4 * sr; tt = np.arange(n) / sr
+        x = _n(4.0, sr, 40, 300, a=0.0001, d=1e9) * (0.85 + 0.15 * np.sin(2 * np.pi * tt / 4.0)) + 0.3 * np.sin(2 * np.pi * 70 * tt)
+        return x.astype(np.float32)
+    return None
+
+
 def make(kind, sr=48000):
+    x = make12(kind, sr)
+    if x is not None: return x
     x = make17(kind, sr)
     if x is not None: return x
     x = make16(kind, sr)

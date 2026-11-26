@@ -1,4 +1,4 @@
-# 17本目（16本目から写した）：確認用の通しを組む（3D のクリップ＋2D の札＋字幕＋声・BGM・効果音）
+# 12本目（17本目・16本目から写した）：確認用の通しを組む（3D のクリップ＋2D の札＋字幕＋声・BGM・効果音）
 # MARU_WORK=<作業フォルダ> python3 assemble.py <描いたクリップの親フォルダ> <フォントの親フォルダ> <出力.mp4> [--from 秒 --to 秒]
 #   クリップ：<親>/<名前>/<名前>_NNNNN.png（--step で間引いたコマ）と <名前>_log.json（効果音・画面の場所）。clips.json（scenes.py --list）の範囲
 #   つなぎ：切り替わる時刻（＝その文の字幕が出る時刻）から 0.35 秒で溶かす。章の変わり目は 0.6 秒（SKILL §3-5）
@@ -23,9 +23,9 @@ FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv els
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
 FPS, SR, WV, HV = 24, 48000, 1280, 720
 CL = json.load(open(os.path.join(HERE, "clips.json")))
-PIP_ONLY = {"P05", "P06", "P07", "P18", "P19", "P21"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
+PIP_ONLY = set()      # 小窓だけに使うクリップ（この回は今のところなし）
 ORDER = sorted([k for k in CL if k not in PIP_ONLY], key=lambda k: CL[k][2])
-CHAPTER = {"A02", "C13", "I14", "C14", "B15", "C16", "A18", "A20", "D21", "A22"}   # 舞台が変わる所（夜 → 朝・家 → お店・想像の場面の出入り。重ねるつなぎ 0.6 秒）
+CHAPTER = {"G04", "A04e", "B05", "T06", "B06b", "T09", "N09", "B10", "C10", "T10", "N10", "C10c"}   # 舞台が変わる所（車 ↔ 地球・車 → 歩道橋・歩道橋 ↔ 町の引き・ナビ・町はずれ。重ねるつなぎ 0.6 秒）
 SEPIA = set()
 # v3（5本目 v2「左上の小窓を出しつつ、メインの映像もそこのシーンを」）：26-05「ぶつかって曲がるだけだった先輩たち」で、
 #   メインの絵も昔の先輩がぶつかって曲がる場面（S06b・セピア）にする：(差しかえるカット, 始め, 使うクリップ, そのクリップの秒)
@@ -40,11 +40,7 @@ for k, p in enumerate(P):
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
 # 波形で確かめた切り替わり（文の頭からの秒）。自動で選ぶと外れた所（5本目 v2 のコメント：「これを」が早い・「あれ」が遅い・「ぱっ」がだいぶ早い・改行の位置がおかしい）
 #   ID: (分け方（None＝自動の分け方のまま）, [切り替わりの秒, …])。最後の 1 枚が 1.0 秒未満なら、次の文の前までのばす
-FIX_AT = {
-    # 17本目 v1：08-05 は 1 つの声に 2 つの文。字幕は文をまたいでまとめない（SKILL）。「いったい」の言い始め（3.10 秒）の 0.05 秒前で替える
-    #   （関所の subs_sync_check と subs_mora が同じ所を指す。「……」のためは、前の「使われた。」の字幕を残して見せる）
-    "08-05": (["それなのに、使われた。", "……いったい、どういうことでしょう？"], [3.05]),
-}
+FIX_AT = {}
 ID_OF = {v: k for k, v in T.TEXT.items()}
 NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
 SUBS = []
@@ -343,7 +339,12 @@ for (t, kind), gain in sorted(EV.items()):
     if i < 0: continue
     fx[i:i + len(x)] += x[:N - i]
 # 16本目：駅の環境音（9本目の床の音）は使わない。夜の虫の声などは効果音（crickets）で鳴らす
-bed = 0.0
+bed = np.zeros(N, np.float32)
+# 12本目：走っている車の中の低い音（絵コンテ表「車の走る音」）。冒頭、車が走っている間だけ小さく（止まったら 1.5 秒で消す）
+_dr = sfx.make("drive", SR); _a = max(0.0, T.s("01-01") - 0.5); _b = T.s("03-02") + 1.5
+_n = int((_b - _a) * SR); _seg = np.tile(_dr, _n // len(_dr) + 1)[:_n].astype(np.float32)
+_f = int(1.0 * SR); _seg[:_f] *= np.linspace(0, 1, _f); _seg[-int(1.5 * SR):] *= np.linspace(1, 0, int(1.5 * SR))
+bed[int(_a * SR):int(_a * SR) + _n] += 0.035 * _seg[:N - int(_a * SR)]
 mix = voice + music * g + fx * FX_GAIN + bed
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 a0, a1 = int(FROM * SR), int(TO * SR)
