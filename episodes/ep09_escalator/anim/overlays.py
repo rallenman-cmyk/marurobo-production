@@ -4,7 +4,7 @@
 #   字の大きさ：数字は 56〜60、ほかは 48（1280×720 の座標。スマホで読める大きさ）。字幕の帯（y 560 より下）に置かない
 #   3D の中に字を書かないので、字は全部ここ。絵コンテ表：../絵コンテ_v1.md
 #   色：前の車輪・前のレール＝オレンジ、後ろの車輪・後ろのレール＝紫（3D と同じ）。くし＝黄色
-import os, sys, math
+import os, sys, math, json
 from PIL import Image, ImageDraw
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -24,7 +24,7 @@ def ev_list():
     E = []
     add = lambda *a: E.append(a)
     # 冒頭
-    add(w("02-03", "見てください"), e("02-03") + 0.2, "ring", dict(obj="maru_c_f", dx=60, dy=10, r=46))
+    add(w("02-03", "見てください"), e("02-03") + 0.2, "ring", dict(obj="step_edge", r=40))   # まるロボの段と、となりの段の段差（v4 のコメント 0:27）
     add(w("04-06", "首") - 0.3, e("04-06") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # 題の札：「エスカレーター。」のすぐ後に急に出さず、少し間をおいてから出し、問いの文（05-02）を読む間ずっと見せる（v1 のコメント 1:30）
     add(s("05-02") - 0.05, e("05-02") + 0.4, "title", {})   # v2 のコメント 1:31「段は〜のセリフの時にオープニングも映して。表示で音声ないの気になる」：声が出ている間だけ出す（前の文との間も 2.8 → 1.0 秒に詰めた）
@@ -91,8 +91,10 @@ def ev_list():
     # 押した時の段（白い線）が、すうっと進んで止まった所を、段について動く青緑の線で見せる。36-05「この間に入っていました」が絵で分かるように（9本目 v2 の点検：止まった段の位置が絵になかった）
     add(w("34-04", "すうっと"), e("34-04") + 0.3, "vline", dict(obj="stop_now", text="", col=TEAL))   # 34-04 の間だけ：段といっしょに動いて止まる線（すうっと進むのが見えるように）
     # 床の下の場面（10-01〜13-02）：いま、どこを見ているかの小さな地図（v2 のコメント 3:55・4:03）
-    add(s("10-01"), e("13-02") + 0.3, "locator", dict(keys=[(s("10-01"), 0.0), (e("11-04"), 0.0), (s("11-05"), 0.1), (e("12-00"), 0.1), (s("12-01"), 0.12),
-        (s("12-03"), 0.22), (e("12-07"), 0.62), (s("13-01"), 0.8), (e("13-02"), 0.86)]))
+    #   v4 のコメント 5:10「今ここの赤い丸は映像で映してる場所にして」：赤い点は手で決めた割合でなく、映している場所（カメラのまん中の先・まるロボを追う場面はまるロボ）から
+    #   locator_keys.py が決めた locator_keys.json で動かす。13-03（乗り口のすき間から外へ）まで出し、まるロボが床の上に出る 13-04 の前で消す
+    _lk = os.path.join(os.path.dirname(os.path.abspath(__file__)), "locator_keys.json")
+    add(s("10-01"), s("13-04") - 0.1, "locator", dict(keys=[tuple(x) for x in json.load(open(_lk))]))
     # 10-02「ここは、冒頭でまるロボが見ていたすき間の、ちょうど裏側です」：冒頭の上から見たすき間を、左上の小窓で（v2 のコメント 3:42「冒頭のシーンを切り抜きみたいな感じで映して」）
     add(s("10-02"), e("10-02") + 0.3, "pip_clip", dict(clip="A03b", src_t=s("03-03") + 0.3))
     add(w("23-01", "手すり") - 0.2, e("23-04") + 0.4, "hrloop", dict(tA=w("23-02", "ゴム"), tB=w("23-03", "車"), tC=w("23-04", "すべって")))   # 手すりのしくみの図（v2 の点検：3D に手すりの輪と車が映っていなかった）
@@ -384,7 +386,7 @@ def flow_sprite(t, items):
         def dr(d, W_, H_, ss, img):
             # 字の幅を測って並べ、矢印はどれも同じ長さで字と字の間に（v2 のコメント 4:38「矢印が文字に重なってる」）。全部の字の場所を先に決めるので、出てきても字は動かない
             f_ = D.font(46 * ss); ws = [d.textlength(nm, font=f_) for nm, _ in items]
-            gap, arr = 22 * ss, 100 * ss
+            gap, arr = 18 * ss, 70 * ss          # v4 のコメント 4:42：右上の「いまここ」の地図と重ならないよう、矢印を短く・札を細くして左へ寄せた
             tot = sum(ws) + (len(items) - 1) * (arr + 2 * gap); x = (W_ - tot) / 2
             for i, (nm, _) in enumerate(items):
                 cx = x + ws[i] / 2
@@ -394,7 +396,7 @@ def flow_sprite(t, items):
                     d.line([xa, H_ / 2, xb - 16 * ss, H_ / 2], fill=D.TEAL_D, width=8 * ss)
                     d.polygon([(xb, H_ / 2), (xb - 22 * ss, H_ / 2 - 14 * ss), (xb - 22 * ss, H_ / 2 + 14 * ss)], fill=D.TEAL_D)
                 x += ws[i] + arr + 2 * gap
-        _cache[key] = D.card(980, 120, draw=dr)[0]
+        _cache[key] = D.card(760, 120, draw=dr)[0]
     return _cache[key]
 
 
@@ -495,7 +497,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "hrarrows":
             _paste(base, hrarrows_sprite(t, t0), 640, 150, k, a)
         elif kind == "flow":
-            _paste(base, flow_sprite(t, p["items"]), 640, 95, k, a)
+            _paste(base, flow_sprite(t, p["items"]), 410, 95, k, a)       # 右上の「いまここ」の地図（x 890〜）と重ならない所
         elif kind == "dotloop":
             qa, qb = where(p["a"], t), where(p["b"], t)
             if qa is None or qb is None: continue

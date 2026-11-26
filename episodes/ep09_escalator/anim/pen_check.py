@@ -74,6 +74,41 @@ def CHECK(t0, t1):
                     k = (nm, o.name)
                     h = hits.setdefault(k, [t, t, 0, 0.0]); h[1] = t; h[2] += 1; h[3] = max(h[3], depth)
         t += 0.25
+    # 2026-11-26（v4 のコメント 13:40「まるロボが頭貫通してボタン押してる」・1:22「足がくしに貫通」）：体の球だけでは、
+    #   球の外に出ている目のレンズ・足・アンテナの突き抜けを数えられなかった（32-01 でレンズが手すりの台の外へ出ていた）。
+    #   まるロボの部品（目のレンズ・レンズの輪・足・アンテナの玉）の頂点を 1 部品 60 点まで取り、ほかの閉じた形の中に入っている点を数える（深さ＝いちばん近い面まで）
+    if "maru_c" in TR:
+        mc = TR["maru_c"][0]; top = mc
+        while top.parent is not None: top = top.parent
+        parts = [o for o in [top] + list(top.children_recursive) if o.type == 'MESH' and o.name != "eye beam" and not o.name.startswith("Maru body")]
+        pts = {o.name: [v.co.copy() for v in o.data.vertices][::max(1, len(o.data.vertices) // 60)] for o in parts}
+        cand = meshes
+        t = t0
+        while t <= t1:
+            sc.frame_set(G_["f"](t))
+            for o in parts:
+                if o.hide_render: continue
+                mw0 = o.matrix_world
+                for co in pts[o.name]:
+                    c = mw0 @ co
+                    q = w2c(sc, cam_, c)
+                    if not (q.z > 0 and 0 <= q.x <= 1 and 0 <= q.y <= 1): continue
+                    # 体の真ん中から部品の点へ線を引き、その間に物の面があれば、点は物の向こう側（板を突き抜けている）。深さ＝面から点まで
+                    o_ = mc.matrix_world.translation
+                    for ob in cand:
+                        if ob.hide_render: continue
+                        mw = ob.matrix_world
+                        bb = [mw @ Vector(v) for v in ob.bound_box]
+                        if any(max(c[i], o_[i]) < min(p[i] for p in bb) or min(c[i], o_[i]) > max(p[i] for p in bb) for i in range(3)): continue
+                        inv = mw.inverted(); lo_ = inv @ o_; lc = inv @ c; dv = lc - lo_; L = dv.length
+                        if L < 1e-6: continue
+                        hit, nrm, idx, dist = bvh(ob).ray_cast(lo_, dv / L, L)
+                        if hit is None: continue
+                        dp = (mw @ hit - c).length
+                        if dp > TOL:
+                            k = ("まるロボの" + o.name.split(" maru")[0], ob.name)
+                            h = hits.setdefault(k, [t, t, 0, 0.0]); h[1] = t; h[2] += 1; h[3] = max(h[3], dp)
+            t += 0.25
     for (nm, on), (a, b, n, dp) in sorted(hits.items(), key=lambda x: x[1][0]):
         print("PEN %s %s %s %.2f〜%.2f %d回 %.0fcm" % (G_["CLIPNAME"], nm, on, a, b, n, dp * 100))
     print("PEN_DONE %s %d" % (G_["CLIPNAME"], len(hits)))

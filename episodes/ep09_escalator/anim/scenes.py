@@ -79,6 +79,9 @@ def C(loc, tgt, lens=35, loc1=None, tgt1=None, lens1=None, d=8.0):
 
 
 XLC = G.COMB_LO_X - 0.18          # 下のくしの線
+RAIL_LY = float(os.environ.get("RAIL_LY", "-0.19"))      # 手すりに頭をのせる所の立つ位置（段の横の壁 y -0.51 から、本物の足の外のはしが 4cm 以上内）
+RAIL_LX = -0.24   # 段の上の前後（-0.18 では、足のつま先が上の段の立ち上がりへ 4cm 入った。v4 の点検）
+RAIL_TILT = float(os.environ.get("RAIL_TILT", "26"))     # そのときの横への傾き（手すりへ頭を寄せる）
 XHC = G.COMB_HI_X - 0.18          # 上のくしの線
 CP = 0.038                        # くしの板の上の面の高さ（床から。くしの線から 0.55 まで）
 HY = CLAD_Y + 0.01
@@ -140,6 +143,9 @@ def b_day(cl):
     t_on = w("01-04", "ぴょん") + 0.6                       # 「ぴょんと跳んで」を言う間に跳ぶ（着く時刻。跳ぶのは 0.5 秒前）。v2 の点検：「乗り口」に合わせて 1.1 秒おくれていた。+0.1 では跳ぶのが場面の切りかわりにかかり見えなかった
     k1 = E.find_step(t_on, 0.75)
     M.jump(t_on, E.tread(k1, t_on))
+    # 02-03「見てください。足もとの段と、となりの段の高さが」の白い輪：まるロボの段の前のふち（となりの段との段差）の、カメラ側（v4 のコメント 0:27「段差のとこにしたいんじゃないの？」：
+    #   前はまるロボの足の横の踏む面に輪を付けていて、段差に見えなかった）。段の子にして、段といっしょに運ぶ
+    edge = empty((0.03, 0.22, G.TREAD_DZ + 0.01)); edge.parent = E.steps[k1]; track("step_edge", edge, 0.0)
     # 運ばれる（上の降り口で降りる少し前まで）
     t_off_land = s("03-02") + 0.4
     x_off = (XHC + 0.75, -0.15, UP)
@@ -203,9 +209,11 @@ def b_day(cl):
     M.at(t4, loc=(XLC - 0.7, -0.2, 0.0), face=90.0, interp="CONSTANT")
     t_on4 = s("22-01") + 0.9
     k4 = E.find_step(t_on4, 0.6)
-    M.jump(t_on4, E.tread(k4, t_on4, ly=-0.30))   # 手すり（−y）に頭がつく所へ（v2 の点検：-0.22 では頭と手すりが 10cm ほど離れていた）
-    M.carry(t_on4 + 0.05, e("24-08") + 2.0, E.carry_fn(k4, t_on4 + 0.05))
-    M.tilt(w("22-01", "頭で"), 16)                       # 手前（−y）の手すりへ頭を寄せる
+    # v4 のコメント 13:40（同じ種類を全体で探した）：ly -0.30 では、PC の本物の体の足（代わりの体より幅が広い）が段の横の壁を突き抜け、9:12〜9:30・10:18〜10:24 に
+    #   壁の外へ青緑の足先が出た。足の外のはしが壁（y -0.51）から 4cm 以上内に入る -0.19 に立たせ、頭は傾き（roll）を大きくして手すりへ寄せる
+    M.jump(t_on4, E.tread(k4, t_on4, lx=RAIL_LX, ly=RAIL_LY))
+    M.carry(t_on4 + 0.05, e("24-08") + 2.0, E.carry_fn(k4, t_on4 + 0.05, lx=RAIL_LX))
+    M.tilt(w("22-01", "頭で"), RAIL_TILT)                # 手前（−y）の手すりへ頭を寄せる
     for t0, t1 in ((s("22-02") + 0.2, e("22-02") + 0.3), (s("22-03") + 0.6, e("22-03") + 0.3), (s("22-04") + 0.6, e("22-04"))):
         M.lean(t0, t1, 14)
     M.confused(e("22-04") - 0.4)
@@ -449,8 +457,9 @@ def b_night(cl):
     key(ck, ("location", 0), w("31-03", "押されると") + 0.3, ck.location.x - 0.012); key(ck, ("location", 0), s("32-01"), ck.location.x)
     ev(w("31-03", "止まりました") - 0.2, "stop", 0.4, "")
     # ④ 手すりを頭で押さえる（下の乗り口の近く）
-    M.at(s("32-01") - 0.05, loc=(XLC - 0.65, -(Y_HR - 0.42), 0.0), face=90.0, interp="CONSTANT")
-    M.tilt(w("32-02", "押さえる") - 0.3, 18); M.push(w("32-02", "押さえる"), 0.6); M.tilt(e("32-03") + 0.2, 0)
+    # v4 のコメント 13:40「まるロボが頭貫通してボタン押してるのはやめて」：y -0.28 では、PC の本物の体の足が手すりの台の壁を突き抜け、ボタンの横に青緑の足先が出た → 内へ
+    M.at(s("32-01") - 0.05, loc=(XLC - 0.65, RAIL_LY, 0.0), face=90.0, interp="CONSTANT")
+    M.tilt(w("32-02", "押さえる") - 0.3, RAIL_TILT); M.push(w("32-02", "押さえる"), 0.6); M.tilt(e("32-03") + 0.2, 0)
     ev(t_all + 0.2, "stop", 0.4, "")
     M.sigh(s("33-02") + 0.1)
     for a_ in oj.arms: key(a_, ("rotation_euler", 0), -100.0, 0.0)
@@ -630,10 +639,10 @@ def b_imag(cl):
     # 24：段に乗って手すりに頭をのせる → 手すりが遅れて、頭が後ろへ → ころん
     t0 = t24 - 0.05
     k = E.find_step(t0, 3.2)
-    M.at(t0, loc=E.tread(k, t0, ly=-0.22), face=90.0, interp="CONSTANT")
+    M.at(t0, loc=E.tread(k, t0, lx=RAIL_LX, ly=RAIL_LY), face=90.0, interp="CONSTANT")   # v4：足が段の横の壁を突き抜けないよう（22 章と同じ）
     t_fall = w("24-02", "ころん")
-    M.carry(t0 + 0.02, s("24-04"), E.carry_fn(k, t0 + 0.02))
-    M.tilt(t0 + 0.3, 16)
+    M.carry(t0 + 0.02, s("24-04"), E.carry_fn(k, t0 + 0.02, lx=RAIL_LX))
+    M.tilt(t0 + 0.3, RAIL_TILT)
     M.lean(w("24-02", "引っぱられて") - 0.8, t_fall - 0.3, -16)
     M.act(t_fall - 0.25, "tumble_back", lift=0.05); ev(t_fall, "land", 0.4, "maru_c")
     # 35：段に乗っている → ガクン → 前へつんのめって転がる
