@@ -1,11 +1,11 @@
-﻿# まるロボ 16本目「情報流出」：PC の本番描画（3D の 20 カット・合わせて 3085 コマ。承認ずみの章：本編 1095.10〜1207.54 秒）
+﻿# まるロボ 16本目「情報流出」：PC の本番描画（3D の 9 カット・合わせて 2532 コマ。承認ずみの章：本編 1200.30〜1298.89 秒）
 #   使い方：PowerShell に README_PC.md の 1 行を貼って Enter
 #   同時に描く本数：最後に -Workers 2 のように付ける（既定 3、1〜4）
 #   一部だけ描く：最後に -Only B12e,I35 のように付ける（カットの名前をカンマで区切る）
 #   描く細かさ：-Samples 24（既定。光の跳ね返りを減らす --fast と合わせて、48 の約 3 倍速い）。大きくすると、きれいになるが時間がかかる
 #   途中で止まったり窓を閉じたりしても、同じ行をもう一度走らせれば、できている所は飛ばして続きから描く
 #   描いているあいだ、PC がスリープしないようにする（画面は消えてもよい。ノート PC は電源につなぎ、ふたは閉じない）
-#   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep16_v4 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
+#   終わると、送るファイルだけを C:\marurobo\marurobo_render\ep16_v5 にまとめる。Google ドライブ（パソコン版）があれば、そこへもコピーする
 #   （9本目の手順と同じ作り。16本目の 3D の中の絵（名札・印・値札）は anim/tex16 の PNG を使う）
 param([string]$Only = "", [string]$Blender = "", [int]$Workers = 3, [int]$Worker = 0, [int]$Samples = 24)
 $ErrorActionPreference = "Continue"
@@ -16,29 +16,18 @@ $env:TEX16 = Join-Path $anim "tex16"   # 名札・お城の印・値札の絵   
 $root = "C:\marurobo"
 if (-not (Test-Path $root)) { $root = Split-Path -Parent $kit }
 $JOBS = @(
-  @("F26i", 209, "scenes.py"),
-  @("G27a", 123, "scenes.py"),
-  @("G27b", 143, "scenes.py"),
-  @("G27c", 157, "scenes.py"),
-  @("G27d", 132, "scenes.py"),
-  @("G27e", 149, "scenes.py"),
-  @("G27f", 153, "scenes.py"),
-  @("G27g", 158, "scenes.py"),
-  @("G28a", 115, "scenes.py"),
-  @("G28b", 145, "scenes.py"),
-  @("G28c", 142, "scenes.py"),
-  @("G28d", 169, "scenes.py"),
-  @("G28e", 115, "scenes.py"),
-  @("G28f", 180, "scenes.py"),
-  @("G28g", 71, "scenes.py"),
-  @("G28h", 135, "scenes.py"),
-  @("G28i", 169, "scenes.py"),
-  @("G28j", 132, "scenes.py"),
-  @("G29a", 312, "scenes.py"),
-  @("G29b", 176, "scenes.py")
+  @("G29b", 195, "scenes.py"),
+  @("A30a", 167, "scenes.py"),
+  @("A30b", 145, "scenes.py"),
+  @("A30c", 457, "scenes.py"),
+  @("A30d", 182, "scenes.py"),
+  @("A31a", 607, "scenes.py"),
+  @("A32a", 209, "scenes.py"),
+  @("A32b", 446, "scenes.py"),
+  @("A32c", 124, "scenes.py")
 )
 if ($Only) { $want = @($Only.Split(",") | ForEach-Object { $_.Trim() }); $sel = New-Object System.Collections.ArrayList; foreach ($j in $JOBS) { if ($want -contains $j[0]) { [void]$sel.Add($j) } }; $JOBS = $sel.ToArray() }
-$out = Join-Path $root "render_ep16_v4"
+$out = Join-Path $root "render_ep16_v5"
 $log = Join-Path $root "render_log_ep16.txt"
 $done = Join-Path $out "_done"
 New-Item -ItemType Directory -Force -Path $done | Out-Null
@@ -66,7 +55,7 @@ function Left() { $n = 0; foreach ($c in (AllChunks)) { $tag = "{0}_{1:D4}-{2:D4
 # Google ドライブ（パソコン版）の場所。1 本できるたびに、そこへすぐコピーする（こちらで進み具合を見られるように）
 $gdrive = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
 $gep = $null
-if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep16_v4"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
+if ($gdrive) { $gep = Join-Path $gdrive "marurobo_render\ep16_v5"; New-Item -ItemType Directory -Force -Path $gep -ErrorAction SilentlyContinue | Out-Null }
 
 # ---------------------------------------------------------------- Blender 4.3 を探す
 $blender = $Blender
@@ -156,14 +145,14 @@ else {
   }
 }
 # 送るファイルをまとめる（mp4 と、場面ごとの記録 *_log.json）
-$dst = Join-Path $root "marurobo_render\ep16_v4"
+$dst = Join-Path $root "marurobo_render\ep16_v5"
 New-Item -ItemType Directory -Force -Path $dst | Out-Null
 Get-ChildItem $out -File | Where-Object { $_.Extension -eq ".mp4" -or $_.Name -like "*_log.json" } | ForEach-Object { Copy-Item $_.FullName $dst -Force }
 $left = Left
 $mb = [Math]::Round(((Get-ChildItem $dst -File | Measure-Object Length -Sum).Sum) / 1MB)
 Note ("送るファイルを {0} にまとめました（{1} MB）" -f $dst, $mb)
 $g = @(Get-PSDrive -PSProvider FileSystem | ForEach-Object { $_.Root }) + @($env:USERPROFILE) | ForEach-Object { foreach ($nm in "マイドライブ", "My Drive") { Join-Path $_ $nm } } | Where-Object { Test-Path $_ } | Select-Object -First 1
-if ($g) { $gd = Join-Path $g "marurobo_render"; New-Item -ItemType Directory -Force -Path $gd | Out-Null; Copy-Item $dst $gd -Recurse -Force; Note ("Google ドライブ（{0}\ep16_v4）にコピーしました" -f $gd) }
+if ($g) { $gd = Join-Path $g "marurobo_render"; New-Item -ItemType Directory -Force -Path $gd | Out-Null; Copy-Item $dst $gd -Recurse -Force; Note ("Google ドライブ（{0}\ep16_v5）にコピーしました" -f $gd) }
 [void][Maru.Power]::SetThreadExecutionState([uint32]2147483648)
 if ($left -gt 0) { Note ("終わりました（{0}）。まだ {1} 本そろっていません。同じ行をもう一度走らせると、足りない所だけ描きます" -f (Fmt ((Get-Date) - $tAll)), $left) }
 elseif ($g) { Note ("ぜんぶ終わりました（{0}）。Google ドライブへのアップロードは自動で進みます（終わるまで PC は入れたままに）。チャットで知らせてください" -f (Fmt ((Get-Date) - $tAll))) }
