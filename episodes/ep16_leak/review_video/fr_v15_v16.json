@@ -1,0 +1,48 @@
+{
+ "created_at": "2026-11-26T12:13:42Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v15",
+ "to_version": "MARU-LEAK-v16",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwxespf6yhezprbl",
+   "comment_rev": 1,
+   "explain": "右上の語り手の「？」を消し、まるロボの頭の「？」だけにしました。ほかの章にも、2つの「？」が同時に出る所がないことを道具で確かめました。",
+   "new_t": 30.4,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v16",
+   "original_t": 30.4,
+   "original_t_end": null,
+   "original_text": "はてな2ついらない",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwxet7j994ek6q8a",
+   "comment_rev": 1,
+   "explain": "3枚の札の手紙の絵の上に、黄色い輪を同時に重ねて、どこが光ったか分かるようにしました（「同時に光りました」の間）。",
+   "new_t": 40.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v16",
+   "original_t": 40.8,
+   "original_t_end": null,
+   "original_text": "どれが光ってるのかわかんない、",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwxhv2rmhe4w1q2z",
+   "comment_rev": 1,
+   "explain": "声の区切りを見つける道具が、「電話、」のあとの本当の間ではなく短い息を区切りにしていて、「電話・誕生日・勤め先」が0.5〜1.1秒早く光っていました。声の波形を見て6つの言葉の時刻を直し、6つとも声の頭に合わせました。名簿も「名前」の前に開ききるようにしました。",
+   "new_t": 60.3,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v16",
+   "original_t": 60.3,
+   "original_t_end": null,
+   "original_text": "音声と光るところのタイミングがあってない",
+   "reason": ""
+  }
+ ]
+}

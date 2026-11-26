@@ -64,7 +64,7 @@ def b_f(cl):
         plane(img_mat("f_emb_" + emb, os.path.join(TEX, emb + ".png"), emit=0.3), (x, 0.124, DESK_H + 0.085), (0.06, 0.06), rot=(R(90), 0, 0))
     # 26-02：「同時に」で 3 つの手紙の絵が同じ時刻に光る（線でつながない）
     t_g = wv("26-02", "同時に") - 0.05
-    for c, (tex, _x, _e) in zip(cards, CARDS5): mail_glow(c, tex, t_g)
+    for k_, (c, (tex, _x, _e)) in enumerate(zip(cards, CARDS5)): track("mail%d" % k_, mail_glow(c, tex, t_g), 0.0)      # 2D の黄色い輪を重ねる所（overlays5）
     ev(t_g + 0.05, "ding", 0.3, "card1")
     # 26-04：3 枚がまん中へすべって重なる →「1冊」で名簿に替わる（重なった所で入れかえる。急に出さない）
     t_sl = wv("26-04", "重なって") - 0.2; t_bk = wv("26-04", "1冊") - 0.1

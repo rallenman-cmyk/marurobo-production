@@ -17,6 +17,9 @@ IDX = {SC[p["no"]]["id"]: k for k, p in enumerate(P)}
 OUT = os.path.join(HERE, "word_times_ch2.json")
 old = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
 KEEP = {k: v for k, v in old.items() if k == "_" or k.split("|")[1] in ("ガチャン",)}     # 「ガチャン」は声の区間を目で確かめて手で書いた
+# 声の区切りの道具（pauses.cut_all）が、長い間（0.66 秒）ではなく短い息（0.11 秒）を「、」に当てた文は、波形を見て手で書く（文の頭からの秒）。
+#   16本目 5章 v15 のユーザー「音声と光るところのタイミングがあってない」：26-05 の「電話・誕生日・勤め先」が 0.5〜1.1 秒早かった
+MANUAL = {"26-05": {"名前": 0.02, "住所": 1.05, "電話": 1.90, "誕生日": 3.00, "勤め先": 3.84, "買った物": 5.06}}
 
 
 def seg_times(k):
@@ -54,7 +57,7 @@ if __name__ == "__main__":
     for i, word, occ in sorted(calls):
         key = "%s|%s|%d" % (i, word, int(occ or 0))
         if key in out: continue
-        t = word_time(i, word, int(occ or 0))
+        t = round(P[IDX[i]]["start"] + MANUAL[i][word], 3) if word in MANUAL.get(i, {}) else word_time(i, word, int(occ or 0))
         if t is not None: out[key] = t
     out["_"] = "2章の絵・札・音を合わせる言葉の時刻（声の区切りごとの字数の割合。make_word_times.py が作る。ガチャンは声の区間を見て手で書いた）"
     json.dump(out, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
