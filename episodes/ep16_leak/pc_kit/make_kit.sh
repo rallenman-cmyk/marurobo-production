@@ -6,14 +6,15 @@
 set -e
 EP=$(cd "$(dirname "$0")/.." && pwd); REPO=$(cd "$EP/../.." && pwd); OUT=$(cd "${1:-.}" && pwd); MW=${2:-$MARU_WORK}
 python3 $REPO/skill/marurobo-video-production/scripts/ps_lint.py $EP/pc_kit/run_pc_render_ep16.ps1
-for f in scenes scenes_ch2 scenes_ch3 scenes_ch4 kit16 kit16b kit16c maru16 timing; do python3 -m py_compile $EP/anim/$f.py; done
+SCN=$(cd $EP/anim && ls scenes_ch*.py | sed 's/\.py$//' | tr '\n' ' ')      # 章を足したら自動で入る（5章を作ったとき scenes_ch5.py が入っていなかった）
+for f in scenes $SCN kit16 kit16b kit16c maru16 timing; do python3 -m py_compile $EP/anim/$f.py; done
 test -f $MW/stage/tex16/pricetag.png || { echo "tex16 の絵がありません：$MW/stage/tex16"; exit 1; }
 E6=$REPO/episodes/ep06_haizen/anim; E5=$REPO/episodes/ep05_vacuum/anim
 T=$(mktemp -d); K=$T/marurobo_ep16
 mkdir -p $K/pc_kit $K/episodes/ep16_leak/anim/tex16 $K/episodes/ep16_leak/voice $K/episodes/ep06_haizen/anim $K/episodes/ep05_vacuum/anim $K/episodes/ep03_ad/storyboard $K/skill/marurobo-video-production/scripts $K/episodes/ep01_earphone/stage/maru
 cp $EP/pc_kit/run_pc_render_ep16.ps1 $EP/pc_kit/README_PC.md $EP/pc_kit/はじめに.txt $K/pc_kit/
 cp $EP/pc_kit/はじめに.txt $EP/pc_kit/README_PC.md $K/
-for f in scenes scenes_ch2 scenes_ch3 scenes_ch4 kit16 kit16b kit16c maru16 timing pc_out; do cp $EP/anim/$f.py $K/episodes/ep16_leak/anim/; done
+for f in scenes $SCN kit16 kit16b kit16c maru16 timing pc_out; do cp $EP/anim/$f.py $K/episodes/ep16_leak/anim/; done
 cp $EP/anim/clips.json $EP/anim/word_times_ch2.json $K/episodes/ep16_leak/anim/
 cp $MW/stage/tex16/*.png $K/episodes/ep16_leak/anim/tex16/
 cp $EP/voice/placement.json $EP/voice/script_v1_0.json $K/episodes/ep16_leak/voice/
