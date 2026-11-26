@@ -1,0 +1,1600 @@
+{
+ "fetched_at": "2026-11-26T16:50:29.608525+00:00",
+ "sort": null,
+ "queries": {
+  "運転士 意識 失ったら 電車 止まる EB装置": [
+   {
+    "id": "do9tkkoNAz8",
+    "title": "【EB装置】＊運転士がもしもの時どうする？＊運転士を監視して安全を守る＊デッドマン装置＊",
+    "channel": "ユウTube鉄道 総合研修センター",
+    "channel_id": "UC_un0NLi7f9HHlvK1xKFU_A",
+    "views": 20632,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "18:43"
+   },
+   {
+    "id": "CrV7yofw-BA",
+    "title": "【3D再現】なぜ運転士はブレーキをかけなかったのか…無線に残された「8mの嘘」と運命の9時18分｜JR福知山線脱線事故",
+    "channel": "AXION アクシオン",
+    "channel_id": "UCZN7r3gKXQTpMCcmRWawAbQ",
+    "views": 781049,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "34:16"
+   },
+   {
+    "id": "yHWKluN3eqM",
+    "title": "【現役電車運転士が解説】なぜ電車は止まれないのか！？運転士を追い詰める極限心理と鉄道安全システムの衝撃的な真実！【オーバーラン】",
+    "channel": "日本鉄道技術探訪",
+    "channel_id": "UCtAWINGB6_HzRsV3oqvef2g",
+    "views": 785,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "26:16"
+   },
+   {
+    "id": "MDA5ogo0ugE",
+    "title": "運転士が失神したら、電車はどうなるの？",
+    "channel": "西上いつき【鉄道ゼミ】",
+    "channel_id": "UC1-48gI8CM9lLRrWjVgWw7g",
+    "views": 11766,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:26"
+   },
+   {
+    "id": "XIguTF_NaY0",
+    "title": "デッドマン解除の仕方が特徴的すぎる運転士",
+    "channel": "黒もちContact-Kun",
+    "channel_id": "UCyGwSQxwKwqUBcpkNHwwpxg",
+    "views": 6967,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:00"
+   },
+   {
+    "id": "uyQtkI_gfYY",
+    "title": "JR久大本線でドア開けたまま「運転士不在」の列車が動き出す…勾配で5m移動、乗客8人にけがなし",
+    "channel": "OBS News",
+    "channel_id": "UC04SqLqLWaH01DOka8e2yEQ",
+    "views": 90616,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "1:00"
+   },
+   {
+    "id": "y4hDHSdsepk",
+    "title": "緊急列車停止装置",
+    "channel": "宇宙のすべての知識 プリンシピア",
+    "channel_id": "UC9iESz1KFaENfDvDcs6YpsA",
+    "views": 212,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "7:37"
+   },
+   {
+    "id": "2PHYzXB3VqY",
+    "title": "運転士確認せず　ＪＲ八幡浜駅で普通列車が赤信号で出発　非常停止装置作動【愛媛】 (23/09/19 18:53)",
+    "channel": "愛媛とつながる ニュースLINK",
+    "channel_id": "UCISf7aH1HqBtTD9jPgzIfVA",
+    "views": 20588,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "0:57"
+   }
+  ],
+  "バス 運転手 意識 失う 非常ブレーキ ボタン": [
+   {
+    "id": "cfVYMuL1bPo",
+    "title": "バスの運転手さんが突然の体調不良で運転できなくなったら…乗客が押せる非常ブレーキボタンが増加中",
+    "channel": "朝日新聞",
+    "channel_id": "UCMKvT0YVLufHMdGLH89J1oA",
+    "views": 58422,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "1:40"
+   },
+   {
+    "id": "7gCOT4oWsOU",
+    "title": "【突然】バスの運転手が意識失う　危機を救ったのは13歳の少年",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 38488,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:43"
+   },
+   {
+    "id": "yFdXwcPKy2w",
+    "title": "緊急停止ブレーキ体験",
+    "channel": "なるほど高槻",
+    "channel_id": "UChjWZGIm9hkdk_KmXrjt1Vg",
+    "views": 27809,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "0:46"
+   },
+   {
+    "id": "o93--4R4eUU",
+    "title": "バス運転手の体調が急変時に緊急停止　「異常時対応システム」の導入進む　岡山",
+    "channel": "KSB瀬戸内海放送",
+    "channel_id": "UCH9jlbggZY_mRx7Q0k49TuQ",
+    "views": 98312,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "1:33"
+   },
+   {
+    "id": "ci6bYBOZRDg",
+    "title": "路線バス「緊急事態発生」救命ボタン押すと５０ｍで停車",
+    "channel": "朝日新聞",
+    "channel_id": "UCMKvT0YVLufHMdGLH89J1oA",
+    "views": 281382,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:31"
+   },
+   {
+    "id": "Gtn1Iqvrhag",
+    "title": "【EDSS】間違えて押された非常ブレーキをドライバーがキャンセルする様子",
+    "channel": "Park blog",
+    "channel_id": "UCt-JID4WQllz1ECt8Lv1Lzw",
+    "views": 63009,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:15"
+   },
+   {
+    "id": "MF7OlEJoLHE",
+    "title": "バス運転手の意識喪失事故に備える　緊急停止システムの体験会　宮城・利府町",
+    "channel": "khb東日本放送",
+    "channel_id": "UCkW_baVbq6aGPWeYY4hOPCA",
+    "views": 15556,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:02"
+   },
+   {
+    "id": "kNaU_2SprD4",
+    "title": "はとバスがドライバー異常時対応、緊急停止ボタンを導入　その1",
+    "channel": "レスポンスTV",
+    "channel_id": "UCRoKfdHGJwiXnjOiPuVfpRg",
+    "views": 54254,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "0:25"
+   },
+   {
+    "id": "vIvds5PL8yQ",
+    "title": "【解説】バスの安全対策　緊急時は非常ブレーキ使用を　ボタン押すと車外にも異常知らせる機能",
+    "channel": "STVニュース北海道",
+    "channel_id": "UCOZv-6MiXqJdLpmYtR431Ow",
+    "views": 186,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "0:34"
+   },
+   {
+    "id": "2bD7OKkP7pY",
+    "title": "はとバスがドライバー異常時対応、緊急停止ボタンを導入　その2",
+    "channel": "レスポンスTV",
+    "channel_id": "UCRoKfdHGJwiXnjOiPuVfpRg",
+    "views": 22586,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "0:30"
+   },
+   {
+    "id": "g8tNjLxsZhg",
+    "title": "【EDSS】ドライバー異常時対応システムでバスが停止する様子",
+    "channel": "Park blog",
+    "channel_id": "UCt-JID4WQllz1ECt8Lv1Lzw",
+    "views": 12222,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:09"
+   },
+   {
+    "id": "Eyv2Qi90wA8",
+    "title": "23型エルガ/エルガミオ　自動検知式ドライバー異常時対応システム",
+    "channel": "ISUZU / いすゞ自動車",
+    "channel_id": "UCqK0MY3NfXX5fth6A9GCcyA",
+    "views": 31010,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:02"
+   },
+   {
+    "id": "ANl3tjXuz3A",
+    "title": "路線バス急ブレーキ　乗客が倒れ４人けがも…運転手は警察に通報せず　札幌市内運行のじょうてつバス",
+    "channel": "HTB北海道ニュース",
+    "channel_id": "UCSWOnDD1KIriGmyQ7SgNA4A",
+    "views": 26935,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:15"
+   },
+   {
+    "id": "D8c1RODoJa8",
+    "title": "日野セレガ（大型観光バス）｜ドライバー異常時対応システム（EDSS）",
+    "channel": "HINO Japan [official]",
+    "channel_id": "UCxvjq7JyRdyvQUcNeXKEz7g",
+    "views": 96586,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "4:30"
+   }
+  ],
+  "ドライバー異常時対応システム": [
+   {
+    "id": "0vESg6ZALDA",
+    "title": "【国土交通省】予期せぬ運転異常に対応する安全技術を知ってみよう！～「ドライバー異常時対応システム」作動時の車内・車外の様子を見ることができます～",
+    "channel": "国土交通省物流・自動車局　審査・リコール課",
+    "channel_id": "UCwFJ6KstdbqM9P91828lu2g",
+    "views": 8301,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "7:40"
+   },
+   {
+    "id": "DXSpanlCNb4",
+    "title": "ドライバー異常時対応システム（DEA）",
+    "channel": "Mazda Official",
+    "channel_id": "UCMZEMDBucLI_ESwXweuVhPg",
+    "views": 8661,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "6:01"
+   },
+   {
+    "id": "5x9e2ii4CHo",
+    "title": "新型レヴォーグ「ドライバー異常時対応システム」の動作状況",
+    "channel": "GetNavi",
+    "channel_id": "UCqbsu2hojizgqHmgL73FjBg",
+    "views": 41249,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:45"
+   },
+   {
+    "id": "SUmzt9hMEo4",
+    "title": "【国内初】いすゞギガに新装備。ドライバー異常時対応システム(EDSS)のご紹介",
+    "channel": "ISUZU / いすゞ自動車",
+    "channel_id": "UCqK0MY3NfXX5fth6A9GCcyA",
+    "views": 47891,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "5:54"
+   },
+   {
+    "id": "nqz4b29e6AM",
+    "title": "スバル WRX S4 アイサイトX　高速道路でプリクラッシュブレーキ作動",
+    "channel": "しょた",
+    "channel_id": "UC39Jt5hvyj4gerky1dhT-Vw",
+    "views": 71210,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "0:11"
+   },
+   {
+    "id": "9W4Jxzfs5_o",
+    "title": "【国土交通省】予期せぬ運転異常に対応する安全技術を知ってみよう！～「ドライバー異常時対応システム」作動時の車内・車外の様子を見ることができます～【概要版】",
+    "channel": "国土交通省物流・自動車局　審査・リコール課",
+    "channel_id": "UCwFJ6KstdbqM9P91828lu2g",
+    "views": 1793,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "3:07"
+   },
+   {
+    "id": "kQ_Dr-hrFCU",
+    "title": "オーラニスモ プロパイロット緊急停止支援システム",
+    "channel": "ナガモンch",
+    "channel_id": "UCXtF__gSiSNBN5T8TgJn2_A",
+    "views": 16509,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "0:39"
+   },
+   {
+    "id": "YXZLNm5dLlA",
+    "title": "【CX-60】ドライバー異常時対応システムが最新の国連協定規則に国内初対応！ハリアー・エクストレイルの同名機能が使い物にならない理由",
+    "channel": "ハチワレカーライフ",
+    "channel_id": "UCOsc-hAFKyS0WO5CCVW0cqg",
+    "views": 5827,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:43"
+   },
+   {
+    "id": "F_6DXVj2B-w",
+    "title": "Advanced Drive 緊急時対応",
+    "channel": "トヨタ自動車コーポレート",
+    "channel_id": "UC5G0T_tlPj0aCHMi-ihvfiw",
+    "views": 10274,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:37"
+   },
+   {
+    "id": "2bD7OKkP7pY",
+    "title": "はとバスがドライバー異常時対応、緊急停止ボタンを導入　その2",
+    "channel": "レスポンスTV",
+    "channel_id": "UCRoKfdHGJwiXnjOiPuVfpRg",
+    "views": 22586,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "0:30"
+   },
+   {
+    "id": "QLkxf5T8zos",
+    "title": "ドライバー異常時対応システム（DEA）  ～ドライバーが一人で運転している場合～",
+    "channel": "Mazda Official",
+    "channel_id": "UCMZEMDBucLI_ESwXweuVhPg",
+    "views": 4393,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:16"
+   },
+   {
+    "id": "ODKfl63dXo4",
+    "title": "長電バス ドライバー異常時対応システム［EDSS］ 動作デモンストレーション",
+    "channel": "長電バス株式会社",
+    "channel_id": "UCsvOuuHCDMfyZUmMgqovQKQ",
+    "views": 12086,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:40"
+   },
+   {
+    "id": "U0ZejuhTSbY",
+    "title": "【日産】世界初公開  “一般道で事故回避”の自動運転技術",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 282750,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:07"
+   },
+   {
+    "id": "kNaU_2SprD4",
+    "title": "はとバスがドライバー異常時対応、緊急停止ボタンを導入　その1",
+    "channel": "レスポンスTV",
+    "channel_id": "UCRoKfdHGJwiXnjOiPuVfpRg",
+    "views": 54254,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "0:25"
+   },
+   {
+    "id": "PoDj8UPFwzA",
+    "title": "SOLTERRA：SUBARU Safety Sense［ドライバー異常時対応システム］",
+    "channel": "SUBARU On-Tube",
+    "channel_id": "UCkNlok-TO43_Zlv7_29MvKw",
+    "views": 8090,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:28"
+   },
+   {
+    "id": "G3JcUZtdB_k",
+    "title": "ドライバー異常時対応システム（DEA）  ～同乗者がいる場合～",
+    "channel": "Mazda Official",
+    "channel_id": "UCMZEMDBucLI_ESwXweuVhPg",
+    "views": 3537,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "2:01"
+   },
+   {
+    "id": "0Z8QJC37L0c",
+    "title": "運転手の緊急時に車が自動停止　マツダの試作車で体感",
+    "channel": "中国新聞社",
+    "channel_id": "UCwpCXxLrPnEFmQg940iGNww",
+    "views": 2752,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:40"
+   },
+   {
+    "id": "BlL35WdWnGQ",
+    "title": "知らないとヤバい！新搭載されたドライバー異常時対応システムについて知っておこう！改良型ヤリスクロス【Toyota Yaris Cross HV Z 2024】",
+    "channel": "カタクリコ cataclico CarLife Hacks",
+    "channel_id": "UCO9gPtqSISl6UnmrJlD3iMA",
+    "views": 33984,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:05"
+   },
+   {
+    "id": "Ds9dggg-KAI",
+    "title": "マツダの新システム　運転手の異変検知し自動停止(2021年11月5日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 98733,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:58"
+   },
+   {
+    "id": "eah-dknBU7g",
+    "title": "運転手の異常検知で自動停止　最新安全システム搭載の大型SUV発売(2024年10月10日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 32445,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:02"
+   }
+  ],
+  "パイロット 倒れたら 飛行機 自動 着陸": [
+   {
+    "id": "frVNtkKknj0",
+    "title": "【パイロットが倒れたら？】ホンダジェットは緊急時　機体自ら管制官と交信し　滑走路を探し出し自動で着陸してくれる　驚きのテクノロジーなのです",
+    "channel": "すご テクノロジー",
+    "channel_id": "UCR9TmeidaUyjIk--mKaYEBw",
+    "views": 72418,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "15:35"
+   },
+   {
+    "id": "cQmG_ygKW0Y",
+    "title": "【実際の音声】パイロット意識不明...乗客が飛行機を操縦",
+    "channel": "JY航空",
+    "channel_id": "UCVdVmkCSd-W2VjU9WLKYdTA",
+    "views": 4770069,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "22:01"
+   },
+   {
+    "id": "r81MoWpsTr0",
+    "title": "「戦闘機パイロットはいませんか！」機長の緊急アナウンスにも眠り続けていた8A席の日本人女性――しかしその声を聞いた彼女が静かに目を開けた瞬間、機内の空気が一変し",
+    "channel": "変化の始まり【海外の感動話】、他 3 チャンネル",
+    "channel_id": null,
+    "views": 1115966,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "1:51:48"
+   },
+   {
+    "id": "s1ZBCM-XA4A",
+    "title": "【航空工学】「パイロットが倒れても大丈夫？」ボタン1つで着陸する「緊急自動着陸」の仕組みって？",
+    "channel": "ディープ・インサイト",
+    "channel_id": "UCDAzSxjnxj9Jw2cOW0ZMaow",
+    "views": 17256,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "19:49"
+   },
+   {
+    "id": "-qEPMQAxvL4",
+    "title": "パイロットが気絶し　乗客が飛行機を操縦❕",
+    "channel": "おもしろnews速報",
+    "channel_id": "UCoLkkRmi5Fn7Yw5Vi_PJwRQ",
+    "views": 37870,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:37"
+   },
+   {
+    "id": "a9Q2JUl5m4U",
+    "title": "【自動着陸】パイロットが全員意識不明…素人でも旅客機を着陸させられるのか？",
+    "channel": "【航跡考】 航空史 航空事故 航空工学解説チャンネル",
+    "channel_id": "UCwi1eTasR6UBdE3D1A8vGWg",
+    "views": 1046,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "18:28"
+   },
+   {
+    "id": "aK6egXTQbLc",
+    "title": "【機体急降下も】“テレビで見たように”乗客が操縦し危機救う  イスラエル行きの旅客機内で副操縦士が機長刺す",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 2321071,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "4:24"
+   },
+   {
+    "id": "JW1R0n0eTfg",
+    "title": "パイロット意識喪失…無線応答なしの機体が自動着陸｜緊迫のATC音声",
+    "channel": "航空無線研究所",
+    "channel_id": "UCkzB99Y9iSnaf48eb7EZ3Ug",
+    "views": 293,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "3:46"
+   },
+   {
+    "id": "rm6HgcTxkD0",
+    "title": "【航空無線】パイロットが意識喪失で乗客が…",
+    "channel": "機場空論",
+    "channel_id": "UC5-25wJafhl9AS4F-k4_eeg",
+    "views": 731550,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:12"
+   },
+   {
+    "id": "wHMqOiTEBag",
+    "title": "【コックピット映像切抜き】Boeing 737が自動操縦でILSアプローチ〜着陸！滑走路が着陸ギリギリまで見えない〜ILS CatⅡApproach〜",
+    "channel": "世界の驚き航空機〜AIRCRAFT IN THE WORLD〜",
+    "channel_id": "UCoRfIA1YHE8U6NilLaMbaUQ",
+    "views": 288959,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:27"
+   },
+   {
+    "id": "JNbaPJPrj1c",
+    "title": "「元F-2パイロットです」機長が倒れた羽田行き801便で、12C席の日本人女性が名乗り出た。彼女を嘲笑した米国人乗客――だが操縦席で最初の指示が出た瞬間、副操縦士は凍りついた…",
+    "channel": "暮れ語り",
+    "channel_id": "UCNTJhWUuztzIgcBe_RaIRsw",
+    "views": 275099,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "1:14:59"
+   },
+   {
+    "id": "Qez3nJnXxyo",
+    "title": "ホンダジェット エリートII、緊急自動着陸機能搭載でFAA認証取得へ",
+    "channel": "MOTOR CARS.jp",
+    "channel_id": "UCeBF8phr7XhwEpvZpblZYzg",
+    "views": 1397,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "1:34"
+   },
+   {
+    "id": "9HbjTwA8yj0",
+    "title": "飛行機の自動操縦は「自動」ではない？パイロットが明かす真実",
+    "channel": "飛行機のシクミ JP",
+    "channel_id": "UCvzzko_BKZLZAdcPZwAmuPg",
+    "views": 3441,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "17:07"
+   },
+   {
+    "id": "whZxoAizq_M",
+    "title": "【海外の反応】「日本に任せるのか？」エンジン停止で緊急着陸した外国人機長が羽田到着30秒後に絶句した理由",
+    "channel": "世界がひれ伏す日本の力【海外の反応】",
+    "channel_id": "UCsQXXJBDDJExANAsvfSvpjw",
+    "views": 40153,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "44:59"
+   },
+   {
+    "id": "QyFOTbILxNo",
+    "title": "「元F-2パイロットです」羽田行き801便で機長が倒れ、12C席の日本人女性が名乗り出た。米国人乗客は嘲笑――しかし直後、彼女が操縦席で最初の指示を出した瞬間、副操縦士が凍りつき…",
+    "channel": "【小説】失踪録、他 3 チャンネル",
+    "channel_id": null,
+    "views": 50679,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "1:25:59"
+   },
+   {
+    "id": "0GrlJ7lgnfU",
+    "title": "【前編】エマージェンシー!!初飛行で教官の意識喪失(日本語字幕)",
+    "channel": "航空管制 BBB signal",
+    "channel_id": "UCxWhtkXQbYneGOplldWFHMg",
+    "views": 1353321,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "11:09"
+   },
+   {
+    "id": "vj3nibQsQ6Y",
+    "title": "【岡山編1】パイロットが自分で飛行機を操縦して地元・岡山に帰省してみた",
+    "channel": "JAL、サブチャンネルはじめました。",
+    "channel_id": "UCfs-dCrHxlmYedwPdl9ix-g",
+    "views": 3435147,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "18:30"
+   },
+   {
+    "id": "gvUWxxw-lLE",
+    "title": "[海外感動実話] 日本、羽田空港だけが開いた緊急着陸の夜。全世界が拒否した落雷破損機の胴体着陸、危機の中で見せた目覚ましい指揮とフィンランド人乗務員が嗚咽した理由",
+    "channel": "KOKORO NO ME",
+    "channel_id": "UCUS-UZ-XPxv--v1dXBrN4kQ",
+    "views": 656325,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "50:13"
+   },
+   {
+    "id": "rSrMR2GPI1I",
+    "title": "【副操縦士が機長“襲撃”】急降下する旅客機…「死を覚悟」乗客が語る恐怖の瞬間　【バンキシャ！】",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 1486743,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "9:20"
+   },
+   {
+    "id": "0jY-HTr5WzI",
+    "title": "【まとめ】すごすぎる...奇跡的に着陸できた飛行機事故6選",
+    "channel": "仰天 ! フライトニュース",
+    "channel_id": "UCgR8hs9BlM5YhsVUB8_EaQg",
+    "views": 379125,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "48:40"
+   }
+  ],
+  "運転中 意識 失う 車 自動 停止": [
+   {
+    "id": "eDm0wLkhN1w",
+    "title": "ドライバーが居眠り・急病でも・・・事故起こさない最新技術",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 8464,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:31"
+   },
+   {
+    "id": "QLkxf5T8zos",
+    "title": "ドライバー異常時対応システム（DEA）  ～ドライバーが一人で運転している場合～",
+    "channel": "Mazda Official",
+    "channel_id": "UCMZEMDBucLI_ESwXweuVhPg",
+    "views": 4393,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:16"
+   },
+   {
+    "id": "Ds9dggg-KAI",
+    "title": "マツダの新システム　運転手の異変検知し自動停止(2021年11月5日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 98733,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:58"
+   },
+   {
+    "id": "ntKNKAJgkA8",
+    "title": "【公道テスト】もしも運転中に失神したら？ クルマが高速でも一般道でも自動で止まる！マツダ コ・パイロット コンセプトを試してみた",
+    "channel": "小沢コージのKozziTV",
+    "channel_id": "UCaN_F80VfpzDN-vKn3IF4IQ",
+    "views": 2176,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "8:35"
+   },
+   {
+    "id": "0Z8QJC37L0c",
+    "title": "運転手の緊急時に車が自動停止　マツダの試作車で体感",
+    "channel": "中国新聞社",
+    "channel_id": "UCwpCXxLrPnEFmQg940iGNww",
+    "views": 2752,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:40"
+   },
+   {
+    "id": "7gCOT4oWsOU",
+    "title": "【突然】バスの運転手が意識失う　危機を救ったのは13歳の少年",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 38488,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:43"
+   },
+   {
+    "id": "DXSpanlCNb4",
+    "title": "ドライバー異常時対応システム（DEA）",
+    "channel": "Mazda Official",
+    "channel_id": "UCMZEMDBucLI_ESwXweuVhPg",
+    "views": 8661,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "6:01"
+   },
+   {
+    "id": "s30x6AC09C0",
+    "title": "追突したタクシー、なぜアクセル踏み続ける？すごい音と白煙…タクシー運転手は意識失っていた",
+    "channel": "HBCニュース　北海道放送",
+    "channel_id": "UCCTpf5c_9HDo_OSu3aX8uFQ",
+    "views": 821143,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:39"
+   },
+   {
+    "id": "5x9e2ii4CHo",
+    "title": "新型レヴォーグ「ドライバー異常時対応システム」の動作状況",
+    "channel": "GetNavi",
+    "channel_id": "UCqbsu2hojizgqHmgL73FjBg",
+    "views": 41249,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:45"
+   },
+   {
+    "id": "MF7OlEJoLHE",
+    "title": "バス運転手の意識喪失事故に備える　緊急停止システムの体験会　宮城・利府町",
+    "channel": "khb東日本放送",
+    "channel_id": "UCkW_baVbq6aGPWeYY4hOPCA",
+    "views": 15556,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "2:02"
+   },
+   {
+    "id": "eah-dknBU7g",
+    "title": "運転手の異常検知で自動停止　最新安全システム搭載の大型SUV発売(2024年10月10日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 32445,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:02"
+   }
+  ],
+  "スマホ 寿命 何年 何で決まる": [
+   {
+    "id": "LwXCYdKayQ0",
+    "title": "【ケータイの達人】スマホは何年使えるの？いつ機種変更すればいいの？電池寿命とOS更新期限のおはなし",
+    "channel": "ケータイの達人チャンネル",
+    "channel_id": "UCsq3ki_buTmhecXOPtKsn5g",
+    "views": 56086,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "5:50"
+   },
+   {
+    "id": "AN8qcmR-VI4",
+    "title": "スマホの寿命は何年？ スマホのベストな買い替え時とは",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 91327,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:47"
+   },
+   {
+    "id": "ihLH9bAmfSc",
+    "title": "【スマホの寿命は何年？】買い替え時期の目安とバッテリー交換・修理の判断基準",
+    "channel": "カオナシガジェット【元携帯ショップ店長】",
+    "channel_id": "UCxLutrhFV9AtV3PYz4vxpeQ",
+    "views": 34414,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:22"
+   },
+   {
+    "id": "uHUpXJ61FiY",
+    "title": "【スマホの寿命は何年？】Androidのベストな買い替え時",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 648689,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "12:03"
+   },
+   {
+    "id": "QoC8QgU_M34",
+    "title": "スマホの寿命は何年？3年・5年・7年、買い替えの正解【2026年版】",
+    "channel": "モバイルハックTV",
+    "channel_id": "UCDfdM_ZM2CWvrkeui83WnWQ",
+    "views": 2965,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "11:23"
+   },
+   {
+    "id": "WSAe-MwWsRA",
+    "title": "【最新版】スマホの寿命ってどれくらい？長持ちのコツも紹介！",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 10016,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "6:51"
+   },
+   {
+    "id": "qDarwe0jzyA",
+    "title": "スマホ寿命、特大朗報！！",
+    "channel": "PCニャー速報",
+    "channel_id": "UC0TzHhkV6l_p7a_oheaFVQg",
+    "views": 19275,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "2:19"
+   },
+   {
+    "id": "stzrxjSDu28",
+    "title": "【スマホの寿命】なぜ10万円のスマホを2年で買い替えるのが一番損と言われているのか!?",
+    "channel": "タオルまるCH【スマホ、PC周辺機器】",
+    "channel_id": "UCxsQ9npsD1rCpOWKB2JK57A",
+    "views": 4264,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "10:31"
+   },
+   {
+    "id": "pdFfEB1dV9w",
+    "title": "iPhoneの寿命は何で決まるのか｜過去10年ぶん数えたら、最短4年・iPhone 11はいま7年目でした",
+    "channel": "れん@iPhone先生",
+    "channel_id": "UClWgjIJJwIcuveI-m_gQJwA",
+    "views": 113954,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "12:34"
+   },
+   {
+    "id": "6kxNZZupjms",
+    "title": "【スマホ寿命】動かなくなる前兆5選！長持ちさせるために意識したいこと！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 142393,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:30"
+   },
+   {
+    "id": "6yjnTYxLXUA",
+    "title": "【スマホの寿命】買い替え時期はいつ？古いAndroidの危険なサイン",
+    "channel": "わかりやすいIT",
+    "channel_id": "UCC13Rk9-25Ne0ojklPDDhjA",
+    "views": 3667,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "3:29"
+   },
+   {
+    "id": "aBAzzpgHj1E",
+    "title": "iPhoneの寿命は？最長何年使えるの？長く快適に使う3つの秘訣！✨ #iPhone",
+    "channel": "Shitsugi Ōtō",
+    "channel_id": "UChgfzgf318lTt6NyJAF6EmQ",
+    "views": 158,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:43"
+   },
+   {
+    "id": "0Tb5O3-v4Pw",
+    "title": "スマホの寿命ってどれくらい？長持ちのコツも紹介！｜スマホ比較のすまっぴー",
+    "channel": "すまっぴーチャンネル",
+    "channel_id": "UCGeTXNdOY7StvUTB0qcnsQQ",
+    "views": 167794,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:07"
+   },
+   {
+    "id": "grdDVdL_Bqc",
+    "title": "【2025年版】あなたのスマホは何年使える？メーカー別OSアップデート年数をやさしく解説",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 7809,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "6:59"
+   },
+   {
+    "id": "I4zij0pRo-I",
+    "title": "【スマホは何年使えるの？】スマホの買換えタイミングを誤るとデータを移せなくなります",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 20525,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:37"
+   },
+   {
+    "id": "bBNyR8E1Ve8",
+    "title": "「まだ使える」は危険!?寿命が近いスマホの見極め方 AR",
+    "channel": "dアプリ＆レビュー公式チャンネル",
+    "channel_id": "UCrBlOI_kU4fXAcUg4B80Fdg",
+    "views": 13166,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:11"
+   },
+   {
+    "id": "OFnSpvz1dhs",
+    "title": "アップルのiPhoneの寿命は何年？寿命が来たときの症状や長持ちさせる方法",
+    "channel": "パソコンファーム",
+    "channel_id": "UCblsQDN6SnMl_jftAYaNXRA",
+    "views": 2561,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "6:15"
+   }
+  ],
+  "iPhone 何年 使える サポート 終了 どうなる": [
+   {
+    "id": "LwXCYdKayQ0",
+    "title": "【ケータイの達人】スマホは何年使えるの？いつ機種変更すればいいの？電池寿命とOS更新期限のおはなし",
+    "channel": "ケータイの達人チャンネル",
+    "channel_id": "UCsq3ki_buTmhecXOPtKsn5g",
+    "views": 56086,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "5:50"
+   },
+   {
+    "id": "BqZS-ry1vc0",
+    "title": "iPhone 13・SE 3・12・11、あと何年使える？全機種の年を記録から【2026年11月】",
+    "channel": "ガジェットマスター・タコ",
+    "channel_id": "UCymjXnsaJ2u6G9P_QY3a_iQ",
+    "views": 404620,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "9:40"
+   },
+   {
+    "id": "F-Ug3KAfvWA",
+    "title": "iPhone 14・15・16e・16、あと何年？全13機種を1台ずつ【2026年11月】",
+    "channel": "ガジェットマスター・タコ",
+    "channel_id": "UCymjXnsaJ2u6G9P_QY3a_iQ",
+    "views": 4301,
+    "published": "18 時間前",
+    "age_days": 0,
+    "length": "15:40"
+   },
+   {
+    "id": "grdDVdL_Bqc",
+    "title": "【2025年版】あなたのスマホは何年使える？メーカー別OSアップデート年数をやさしく解説",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 7809,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "6:59"
+   },
+   {
+    "id": "4DMDGmLCND8",
+    "title": "【iOS26非対応とは】iPhoneXRもXS XS Maxも終了!新iOS非対応とはどういうことなの?",
+    "channel": "みずおじさん / 誰でも分かるスマホ講座",
+    "channel_id": "UCV4KlwQA-H7XnT3or0m53Hg",
+    "views": 166824,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:09"
+   },
+   {
+    "id": "Z7dLwZ-kCJI",
+    "title": "いつまで使える？iPhoneやiPadの寿命・買い替え時期についての自論",
+    "channel": "よたログ",
+    "channel_id": "UC1k1ZcRBkQG_zGMcHpOfUbQ",
+    "views": 1150,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "19:21"
+   },
+   {
+    "id": "QoC8QgU_M34",
+    "title": "スマホの寿命は何年？3年・5年・7年、買い替えの正解【2026年版】",
+    "channel": "モバイルハックTV",
+    "channel_id": "UCDfdM_ZM2CWvrkeui83WnWQ",
+    "views": 2965,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "11:23"
+   },
+   {
+    "id": "pdFfEB1dV9w",
+    "title": "iPhoneの寿命は何で決まるのか｜過去10年ぶん数えたら、最短4年・iPhone 11はいま7年目でした",
+    "channel": "れん@iPhone先生",
+    "channel_id": "UClWgjIJJwIcuveI-m_gQJwA",
+    "views": 113954,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "12:34"
+   },
+   {
+    "id": "fcR_Y1Jl_JM",
+    "title": "【iOS17】iPhone8もXも終了!新iOS非対応とはどういうことなの?",
+    "channel": "みずおじさん / 誰でも分かるスマホ講座",
+    "channel_id": "UCV4KlwQA-H7XnT3or0m53Hg",
+    "views": 268299,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:58"
+   },
+   {
+    "id": "X8Zw1XrPKiM",
+    "title": "iPhone SE（第3世代）はいつまで使える？サポート期間や買い替え時期の目安まとめ【中古スマホのにこスマ】",
+    "channel": "にこスマ",
+    "channel_id": "UCUYh0QPiDtzEu_c67pV8fNA",
+    "views": 8120,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "11:49"
+   },
+   {
+    "id": "A5UtXLuo1aQ",
+    "title": "Apple Watchがたった4年でOSサポート終了！短すぎるOS問題をどう考えるべきか",
+    "channel": "まつりくん",
+    "channel_id": "UCFsN2wdxh_-tf7P1EumPNlQ",
+    "views": 22204,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "8:17"
+   },
+   {
+    "id": "ogx8Up6pes4",
+    "title": "中古のiPhone13はいつまで使えるのかサポート終了とメモリから徹底解説#エレアプ #ガジェット#スマホ#iPhone13#いつまで使える#サポート終了#メモリ",
+    "channel": "Ele-App│エレアプ",
+    "channel_id": "UCuBN_oH6ZKqKxC48N6lFBFA",
+    "views": 6419,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "8:03"
+   },
+   {
+    "id": "YVbKLFBfS3w",
+    "title": "スマホを長く使いたい人へ｜購入前に確認する更新サポート期間",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 645,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "3:01"
+   },
+   {
+    "id": "Yj1IJ3fQ9yQ",
+    "title": "【悲報】iPhone 11 Pro、ついにサポート終了へ。あなたのスマホは大丈夫？#iPhone #Apple #サポート終了 #オブソリート #セキュリティ",
+    "channel": "速報厨",
+    "channel_id": "UC3RxY1bEFOdGs0LCQcD3qvg",
+    "views": 376,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "3:19"
+   },
+   {
+    "id": "mDNLVlBtY4c",
+    "title": "iPhoneって何年くらい使えるの？バッテリーの耐久性とOSのサポート期間を紐解くとその期間は…",
+    "channel": "ホソP channel",
+    "channel_id": "UCMcnJFKM1R178ulgVJi847Q",
+    "views": 320226,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:10"
+   },
+   {
+    "id": "ihLH9bAmfSc",
+    "title": "【スマホの寿命は何年？】買い替え時期の目安とバッテリー交換・修理の判断基準",
+    "channel": "カオナシガジェット【元携帯ショップ店長】",
+    "channel_id": "UCxLutrhFV9AtV3PYz4vxpeQ",
+    "views": 34414,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "14:22"
+   },
+   {
+    "id": "ditcCXjmRSA",
+    "title": "古いiPhoneはすぐに買い替えた方が良い？",
+    "channel": "スマサポチャンネル",
+    "channel_id": "UCMXjwK6-rRw-la5SN5j0M6g",
+    "views": 165262,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:59"
+   }
+  ],
+  "チケット サイト 落ちる なぜ アクセス集中": [
+   {
+    "id": "lhYXqI3RiUM",
+    "title": "＜チケット購入＞アクセス集中で買えない時の対処法とは？＜ネットショッピング＞",
+    "channel": "ITのウラガワ",
+    "channel_id": "UCQMlgWoOAhud0yusfPPcJqA",
+    "views": 16671,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "4:20"
+   },
+   {
+    "id": "MNwzUUhUTio",
+    "title": "なぜアクセス集中でサーバーは落ちるのか【ゆっくり解説】",
+    "channel": "ゆっくりIT解説",
+    "channel_id": "UCa7blfH744ZRbM9TgjtjfDw",
+    "views": 5665,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "27:37"
+   },
+   {
+    "id": "V7_JcbCMTKo",
+    "title": "チケット発売の日、なぜWebサイトは落ちるのか？",
+    "channel": "GeekTech Channel",
+    "channel_id": "UC6C_v96ee0CS5jZJFXHzENg",
+    "views": 12,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "11:24"
+   },
+   {
+    "id": "HLZDG0F2m_M",
+    "title": "【知らないと損する】人気チケット予約の必須知識！同じWIFIに複数台のスマホをつなげるのはNGな理由【ネットワーク基礎】",
+    "channel": "IT勇者ちゃんねる",
+    "channel_id": "UCKhniCqe-aIUPCW6ZehcHPw",
+    "views": 618,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:52"
+   },
+   {
+    "id": "-41Zn21nm6U",
+    "title": "人気イベントのチケット販売で、なぜ「順番待ち」が出るの？",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 0,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "6:06"
+   },
+   {
+    "id": "-A4iOKT7mEM",
+    "title": "【先着チケット】絶対取りたい【負けられない戦い】準備した事【ライブチケット】パソコンとスマホ",
+    "channel": "あらふぃふでもオタク",
+    "channel_id": "UCgRuiEN8L53gLNKcCEZoI2w",
+    "views": 25654,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:41"
+   }
+  ],
+  "災害 電話 つながらない なぜ 輻輳": [
+   {
+    "id": "X9CBpPcL7eQ",
+    "title": "なぜ地震のあと電話はつながらないのに「171」なら届くのか｜ふくそう",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 23,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "10:35"
+   },
+   {
+    "id": "XWlv0syFld0",
+    "title": "なぜスマホは、交換機の「輻輳」で何時間もつながらないのか｜名乗り直しの渋滞",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 35,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "10:08"
+   },
+   {
+    "id": "PCh_DD_5KCQ",
+    "title": "災害時・停電時の最強連絡手段は？LINE・171・00000JAPAN・どう使い分ける？［そなえるTV・高荷智也］",
+    "channel": "死なない防災！そなえるTV",
+    "channel_id": "UCvYzRESPwzHMA6pj2v0mBJQ",
+    "views": 52046,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "38:55"
+   },
+   {
+    "id": "KrTFcM7uMjw",
+    "title": "【裏技防災】巨大地震で携帯がつながらない時は公衆電話を使え！急病時にも活用できる方法を消防レスキューが徹底解説",
+    "channel": "【消防防災】RESCUE HOUSE レスキューハウス",
+    "channel_id": "UCrw14X80t_iKsOJlKlh8q4Q",
+    "views": 469981,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "12:50"
+   },
+   {
+    "id": "6OJj-znlXic",
+    "title": "【いのちを守る新知識】災害時のスマホ「圏外」解消へ！　ドローンや船や宇宙から電波発信",
+    "channel": "日テレNEWS",
+    "channel_id": "UCuTAXTexrhetbOe3zgskJBQ",
+    "views": 2127,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:39"
+   },
+   {
+    "id": "r9BqsxZTHR4",
+    "title": "災害が発生！携帯電話やインターネットが使えなくなったときの災害用伝言ダイヤル「171」",
+    "channel": "BSNゆうなび | 新潟NEWS & LIVE",
+    "channel_id": "UCSFteALQuWkhEeKqIGVc_UQ",
+    "views": 2735,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:21"
+   },
+   {
+    "id": "k-gBErQV92A",
+    "title": "電波が届くのに、なぜ通信できない？5G SAと通信障害の仕組み｜しくみのひとコマ",
+    "channel": "しくみのひとコマ",
+    "channel_id": "UCi-W5boAt_pPjloeglxNNwQ",
+    "views": 16,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "5:52"
+   },
+   {
+    "id": "L8cNB5HZvgg",
+    "title": "減り続ける公衆電話　災害時の連絡手段を知っておこう | 2022年11月30日（水）テレＱ『ふくサテ！』特捜Ｑチーム＠アーカイブ",
+    "channel": "福岡テレQニュース",
+    "channel_id": "UC0O1BPRKdBRt86b9JcvxjuQ",
+    "views": 518,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "8:15"
+   }
+  ],
+  "AIに お金 任せたら": [
+   {
+    "id": "vZCCYqofsXA",
+    "title": "「お金を増やして」とAIに任せたら、どうなったか",
+    "channel": "みんなで驚き屋さん",
+    "channel_id": "UCTA7nLHGi5o1qh4miI4AYig",
+    "views": 3,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "17:22"
+   },
+   {
+    "id": "yQRCDzK-2Mk",
+    "title": "AIに1500万円を任せたらバブル崩壊…天井で買った？逃げ切った？【ChatGPT vs Claude vs サル vs ほったらかし】",
+    "channel": "AIにお金を任せてみた",
+    "channel_id": "UCvp16uF0eRi_BEvtc6pNFdw",
+    "views": 3,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "8:33"
+   },
+   {
+    "id": "JjuBfGQV63g",
+    "title": "AIに100万円を渡してお金を増やしておいてと言ったら？",
+    "channel": "AIの未来",
+    "channel_id": "UCAxu5Tel9YaXO4RRQT9w-GQ",
+    "views": 295747,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "10:01"
+   },
+   {
+    "id": "cJ1PCJtz5RI",
+    "title": "【寝とけ】「ほぼほったらかしで、お金がお金を生み出す。AIに9割まかせる　ほぼほったらかし株式投資　株価が3.53倍、利益253万円に爆増!」を世界一わかりやすく要約してみた【本要約】",
+    "channel": "本要約チャンネル【毎日18時更新】",
+    "channel_id": "UCEixleMT76xDzoiEb9ZA7XA",
+    "views": 76065,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "37:59"
+   },
+   {
+    "id": "dQMjZdfDv9w",
+    "title": "AIに本物のお金を任せたら、6つ中4つが大損した｜AIをトレードにどう使うか",
+    "channel": "トレーダーインフォ",
+    "channel_id": "UCP_mngqrxqHP1ISnKeVNhYw",
+    "views": 906,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "4:01"
+   },
+   {
+    "id": "4dwxF2erRrU",
+    "title": "AIに街の運営を丸ごと任せたら、ここまでやった【Cities: Skylines】",
+    "channel": "いしりく",
+    "channel_id": "UClHi83YPMlulrlnJf14UCHw",
+    "views": 221,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "10:32"
+   },
+   {
+    "id": "g3rOi4P6ByE",
+    "title": "お金の管理を全部AIに任せる時代へ｜ChatGPT Personal Finance完全解説",
+    "channel": "AI market",
+    "channel_id": "UCswNRnSQstgW_ePcJWx4zXQ",
+    "views": 1817,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "9:52"
+   },
+   {
+    "id": "G34msGjq2FE",
+    "title": "ミニマリストしぶのAI講座（初級編）スマホだけで始めるAI秘書「Muse」",
+    "channel": "しぶ",
+    "channel_id": "UCDdte611GI0_aRsB-rDr9bw",
+    "views": 5712,
+    "published": "4 時間前",
+    "age_days": 0,
+    "length": "54:41"
+   },
+   {
+    "id": "TU445IUz-r4",
+    "title": "なぜAIにお金を任せたら知らないうちに損するのか？",
+    "channel": "シロウ先生のAI相談ラボ",
+    "channel_id": "UCxWMTwqpOSMj4P7ovlk7U5w",
+    "views": 14,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "16:17"
+   },
+   {
+    "id": "_Kh_ZgRUPe0",
+    "title": "【勝てると分かってから作れば良い】AIにしか出来ない！チートすぎる後出しジャンケン戦略で、月47万を達成した、革新的すぎる魔法の副業を大公開【AI おすすめ 在宅ワーク ChatGPT】",
+    "channel": "Haruto | AI自動化副業ラボ",
+    "channel_id": "UCo3eo7zwygnn-I1a3ZY0Jdw",
+    "views": 3780,
+    "published": "7 時間前",
+    "age_days": 0,
+    "length": "31:02"
+   },
+   {
+    "id": "PE-LNhm9k1M",
+    "title": "【週9時間→15分】差がつくのはAIを使う「前」。たった3つの準備がこちら",
+    "channel": "ハック大学",
+    "channel_id": "UCU0JjQr0I0DIRwV8joRIIBA",
+    "views": 3785,
+    "published": "7 時間前",
+    "age_days": 0,
+    "length": "12:43"
+   },
+   {
+    "id": "qxmmgbrR1Z8",
+    "title": "こんな驚きのやり方でAIを使うと、お金が簡単に稼げるようになるんです！『ドバイの大富豪の新しい習慣 世界一やさしいAIでお金を増やす方法』",
+    "channel": "学識サロン",
+    "channel_id": "UCC4NkFV-L-vVYD5z_Ei5dUA",
+    "views": 75288,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "14:06"
+   },
+   {
+    "id": "hIvgvR3Mq70",
+    "title": "「ひろゆきが語る AI時代の仕事とお金」｜有料AI・副業・仕事の未来",
+    "channel": "それって切り抜きですよね",
+    "channel_id": "UCDa-EC-P1aot5SiIWinP2tw",
+    "views": 49543,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:46"
+   },
+   {
+    "id": "NHlK1A3Oj9E",
+    "title": "【完全詰み】AI相場　資金調達ストップ",
+    "channel": "バフェット太郎の投資チャンネル",
+    "channel_id": "UCQPPXy9LCznUQHHG_kh6Bpg",
+    "views": 28107,
+    "published": "7 時間前",
+    "age_days": 0,
+    "length": "16:34"
+   },
+   {
+    "id": "OGqqtKyEfJc",
+    "title": "【保存版】地味だけどコレ全部やったら「マジで勝てる」AI副業術をまとめたので大公開します",
+    "channel": "AI仙人 【AI歴10年・ガチADHD男】",
+    "channel_id": "UCRxPq02pjQS_ax60gcTSDHQ",
+    "views": 78511,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "59:16"
+   },
+   {
+    "id": "mYyvTaPKZUU",
+    "title": "AIに1500万円を任せたら大暴落…逃げた？耐えた？【ChatGPT vs Claude vs サル vs ほったらかし】",
+    "channel": "AIにお金を任せてみた",
+    "channel_id": "UCvp16uF0eRi_BEvtc6pNFdw",
+    "views": 4,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "9:25"
+   }
+  ],
+  "AIに 仕事 任せたら どうなる 検証": [
+   {
+    "id": "9J2M_Iwl5N8",
+    "title": "仕事をほぼAIに任せている、AIガチ勢のとある1日",
+    "channel": "入江慎吾 / AIと個人開発",
+    "channel_id": "UC3wNxV5ZWOL9kf4v2oXGQbw",
+    "views": 11560,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "13:06"
+   },
+   {
+    "id": "imnY2h8Him8",
+    "title": "【AIはパワハラしないし】AIに任せたほうがマシな会社の特徴9選",
+    "channel": "頑張らない仕事チャンネル",
+    "channel_id": "UCTxK_qAQkhEZGyZGVLw47PQ",
+    "views": 870,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:44"
+   },
+   {
+    "id": "yHrsK2KdpW0",
+    "title": "企業に広がるAI活用　どうなる私の仕事　AIにできることはAIにお任せ　求められるのはAIにまねできない、人だからこそできる仕事",
+    "channel": "フジテレビ 報道【公式】",
+    "channel_id": "UCMbyctUUzWY8oRtXPKe6l5g",
+    "views": 208391,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "15:33"
+   },
+   {
+    "id": "2KEoqq3QEyg",
+    "title": "AIに仕事を任せたら、返事が来ない。｜サイレントサボタージュ【AI寸劇】",
+    "channel": "Ray's Laboratory",
+    "channel_id": "UCt69zX8m_Hg52z1UDdzHQ3g",
+    "views": 6,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "3:32"
+   },
+   {
+    "id": "yTYRZO6zpJc",
+    "title": "AIに頼っていい仕事・いけない仕事【任せ方を間違えると詰みます】",
+    "channel": "ナオトのAI戦略室",
+    "channel_id": "UCBKCkqxxI1jixdMzX5IaQ5w",
+    "views": 106,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "6:56"
+   },
+   {
+    "id": "TfeMm6uKlaE",
+    "title": "【検証】生成AIを入れると、誰が得をする？【100人の職場でシミュレーション】",
+    "channel": "仕事と社会の常識を疑う-実験株式会社-",
+    "channel_id": "UCyOyjIOZ3AIpDSosf671cWA",
+    "views": 1121,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "8:32"
+   },
+   {
+    "id": "04amEGWbsbk",
+    "title": "【仕事の心理学】新人にAIを使わせる会社、禁止する会社｜どっちが育つのか",
+    "channel": "レイのなぜ研究所【レイ研】",
+    "channel_id": "UCbA7Mm1VgmY6N_bkTHy6Vig",
+    "views": 345,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "13:25"
+   },
+   {
+    "id": "g79k-5HbLFE",
+    "title": "AIに任せていい仕事、いけない仕事。「任せたあと」に何が起きるか、本と研究で検証",
+    "channel": "仕事の悩み検証ラボ",
+    "channel_id": "UCVzfBx_6TQn-IcqYdiSWHpg",
+    "views": 3,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "9:19"
+   },
+   {
+    "id": "Uk64p9M3quY",
+    "title": "部下が仕事を全部AIに任せていたら、上司は気づくのか？【ずんだもん解説】",
+    "channel": "ずんだもんとAIの魔法",
+    "channel_id": "UCqPkc_DHVPvsYrZYoLJCXAA",
+    "views": 266,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "8:41"
+   },
+   {
+    "id": "TSS_mVvpUv0",
+    "title": "【AIで新人の仕事は変わる？】新人の仕事3つをAIにやらせた結果がヤバすぎた。",
+    "channel": "しごラク【最新AIで仕事をラクに】",
+    "channel_id": "UCr9OrqdrWRvhOlsTEiEVJVA",
+    "views": 574,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "32:54"
+   },
+   {
+    "id": "pm8UPzLwOrY",
+    "title": "AI社員10人に会社を任せたら、どうなったか【なぜラボ】",
+    "channel": "仕事の「なぜ」ラボラトリー",
+    "channel_id": "UCYD3ZRDRoH3vkCKyMqWcUcQ",
+    "views": 42,
+    "published": "18 時間前",
+    "age_days": 0,
+    "length": "11:43"
+   }
+  ],
+  "停電 スマホ 充電 何日 もつ 基地局 予備": [
+   {
+    "id": "b_HQTa7lB_M",
+    "title": "能登の停電、1日目に足りなくなるのは暖房じゃない｜1週間目と3週間目で入れ替わる物",
+    "channel": "くらし防衛ラボ",
+    "channel_id": "UC7LcxQb-BAcLi_pmjE2sI1g",
+    "views": 4161,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "16:58"
+   },
+   {
+    "id": "QOvVcqI1TsY",
+    "title": "ゾンビで停電が続いたら、スマホはいつまで使える？国の首都直下地震の想定で調べた",
+    "channel": "ゾンビ白書",
+    "channel_id": "UCnHdCMq2AzP1Or0bWV9VR4A",
+    "views": 7,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "5:57"
+   },
+   {
+    "id": "jWqSRo5TE1c",
+    "title": "【停電と圏外】90日間、家族と連絡を取り合うためにホームセンターと100円ショップで揃える4つの備え",
+    "channel": "灯りかご",
+    "channel_id": "UCPJYmm9CFMZG3eZxSZkgUvw",
+    "views": 60,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "21:44"
+   },
+   {
+    "id": "BUbbY5Lo2iU",
+    "title": "【停電1649万軒】もし首都直下地震が起きたら、あなたのスマホは何時間もつ？",
+    "channel": "Undercurrent | ニュースの裏側",
+    "channel_id": "UCqcp0gE8NqLl9pKiZsST_Sg",
+    "views": 5,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "14:09"
+   },
+   {
+    "id": "KosyhFywF3g",
+    "title": "【防災の落とし穴】あなたは大丈夫！？～スマホの充電編～",
+    "channel": "棒人間図鑑",
+    "channel_id": "UCY1uybrnHhueI16JQoxkWoQ",
+    "views": 0,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "3:12"
+   },
+   {
+    "id": "53xU7-p3qFQ",
+    "title": "【停電・圏外】一週間スマホが使えないとき家族と連絡を取り合う4つの手順（予算3万円以下）",
+    "channel": "グリッドダウン",
+    "channel_id": "UCZh_0rQNP3YggNETGEul7Lg",
+    "views": 98,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "20:25"
+   },
+   {
+    "id": "DQOFetsBAJ8",
+    "title": "なぜ台風が来るとスマホがつながらなくなるのか｜基地局の電池と線",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 24,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "9:53"
+   },
+   {
+    "id": "JMbt95Z65Pc",
+    "title": "停電４日目 スマホ充電苦",
+    "channel": "テレ東BIZ ダイジェスト",
+    "channel_id": "UCkKVQ_GNjd8FbAuT6xDcWgg",
+    "views": 5639,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:52"
+   },
+   {
+    "id": "Xff7Vr5X3vA",
+    "title": "安いポータブル電源のおすすめ4選【2027年】停電時に何をつなぐ？",
+    "channel": "ガレージのモノサシ",
+    "channel_id": "UCUKn99CU088C1wtMdBjYGRA",
+    "views": 1,
+    "published": "48 分前",
+    "age_days": 0,
+    "length": "3:13"
+   }
+  ]
+ }
+}
