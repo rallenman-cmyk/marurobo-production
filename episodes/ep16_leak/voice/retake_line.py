@@ -71,13 +71,13 @@ def wav_bytes(x, sr=24000):
 
 def heard(x):
     body = {"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wav_bytes(x)).decode()}}, {"text": "この音声を、聞こえたとおりに日本語で書き起こしてください。書き起こしだけを出力。"}]}]}
-    return post("gemini-3.8-flash", body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
+    return post(os.environ.get("HEAR_MODEL", "gemini-3.8-flash"), body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def heard_kana(x):
     """ひらがなだけで書き起こす（漢字にすると「そうじが／そうじきが」の聞き違いが分からないため。KANA=1 のとき MUST をこれで確かめる）"""
     body = {"contents": [{"parts": [{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wav_bytes(x)).decode()}}, {"text": "この音声を、聞こえた音のとおりに、すべてひらがなで書き起こしてください。漢字・カタカナは使わない。言いまちがいや抜けた音も、そのまま書く。書き起こしだけを出力。"}]}]}
-    return post("gemini-3.8-flash", body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
+    return post(os.environ.get("HEAR_MODEL", "gemini-3.8-flash"), body, 120)["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def runs(x, sr=24000, thr=-42, fr=0.01, min_sil=0.12):
