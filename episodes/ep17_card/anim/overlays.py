@@ -79,6 +79,18 @@ def ev_list():
     add(wp("18-11", "クレジットマスター") - 0.1, e("18-11") + 0.4, "tag", dict(text="クレジットマスター", pos=(930, 110), size=56, bg=YEL))
     add(s("19-02") + 0.05, e("19-02") + 0.3, "pip_clip", dict(clip="P19", src_t=s("19-02") + 0.05))
     add(wp("19-03", "作る") - 0.1, s("19-05") + 0.35, "cycle", dict(t_a=wp("19-03", "作る"), t_b=wp("19-03", "試す"), t_arr=s("19-04")))   # 点検（flash_check）：e("19-04")+0.5 で消え、次のカットまで 0.3 秒だけ図のない絵が挟まった → 替わり目のつなぎが終わるまで
+    # 4章（2026-11-26）：絵コンテ表の 4章
+    add(s("20-01") - 0.1, wp("20-02", "金庫") - 0.2, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.9))          # 冒頭の夜：カードを金庫の棚へ
+    add(wp("20-02", "金庫") - 0.2, e("20-02") + 0.3, "pip_clip", dict(clip="A01d", src_t=w("01-04", "閉めて") - 0.9))  # とびらが閉まる
+    add(wp("20-03", "なぜ") - 0.1, e("20-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    add(s("21-04") + 0.05, e("21-04") + 0.4, "pip_clip", dict(clip="P21", src_t=s("21-04") + 0.05))
+    add(wp("21-05", "ぽっと") + 0.3, e("21-06") + 0.3, "tag", dict(text="まるロボのカード", obj="mylamp", dy=-95, size=44, bg=BLUE, fg=WHITE))
+    add(s("21-07") + 0.05, s("21-07") + 2.3, "pip_clip", dict(clip="A01b", src_t=w("01-01", "1枚") - 0.1))             # 封筒からカード
+    add(s("21-07") + 2.3, e("21-07") + 0.3, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.9))                     # 金庫へしまう
+    add(wp("22-03", "2025年") - 0.1, s("22-07") + 0.1, "fig22", dict(t_num=wp("22-03", "およそ") - 0.1, t_c=wp("22-04", "9割") - 0.1,
+        t_i=s("22-05") + 0.2, t_hl=wp("22-06", "当てられる") - 0.1))
+    add(s("22-07") + 0.05, e("22-07") + 0.4, "pair", dict(left=("A01c", e("01-03") - 0.4), right=("D21e", wp("21-05", "ぽっと") + 1.5),
+        cap=("金庫の中のカード", "塔の台帳の番号")))
     # v1 のコメント「シーン変わる前にはてな出してるからすぐ位置が移動してるの気になる」：物について動く札（吹き出し・札・輪）は、
     #   カメラの替わり目（重なるつなぎ 0.35〜0.6 秒）が終わってから出す。替わり目をまたぐ札は、替わり目のあとにずらす
     import json as _js
@@ -105,6 +117,10 @@ def sfx_list():
     L.append((s("18-06") + 0.05, "swish", 0.25)); L.append((wp("18-07", "いなかった") + 0.1, "swish", 0.25))
     L.append((wp("18-11", "クレジットマスター") - 0.1, "pop", 0.3))
     L.append((wp("19-03", "作る"), "pop", 0.35)); L.append((wp("19-03", "試す"), "pop", 0.35)); L.append((s("19-04"), "swish", 0.3))
+    L.append((s("20-01") - 0.1, "swish", 0.25)); L.append((s("21-04") + 0.05, "swish", 0.25)); L.append((s("21-07") + 0.05, "swish", 0.25))
+    L.append((wp("22-03", "2025年") - 0.1, "pop", 0.3)); L.append((wp("22-03", "およそ") - 0.1, "thump", 0.35)); L.append((wp("22-04", "9割") - 0.1, "pi", 0.3))
+    for k_ in range(3): L.append((s("22-05") + 0.2 + 0.35 * k_, "pop", 0.3))
+    L.append((wp("22-06", "当てられる") - 0.1, "pi", 0.3)); L.append((s("22-07") + 0.05, "swish", 0.25))
     return L
 
 
@@ -725,6 +741,47 @@ def cycle_sprite(t, p):
     return im.resize((W_, H_), Image.LANCZOS)
 
 
+def fig22_sprite(t, p):
+    """22-03〜22-06：被害の数字（約 510 億円・2025年・1年間）、10 に分けた丸（9 つが青＝番号だけ）、きっかけの 3 つの絵（「当てられた」だけ光る）。
+    数字の出どころ：日本クレジット協会の発表（2025 年 510.5 億円、番号盗用 93.1％）"""
+    W_, H_ = 1040, 470; S2 = 2
+    im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 242))
+    D.ctext(d, (290 * S2, 62 * S2), "2025年・1年間", D.font(40 * S2), (110, 118, 132))
+    if t >= p["t_num"]:
+        D.ctext(d, (290 * S2, 160 * S2), "約 510 億円", D.font(92 * S2), RED)
+    if t >= p["t_c"]:
+        cx, cy, r = 790 * S2, 150 * S2, 110 * S2
+        g = min(1.0, (t - p["t_c"]) / 0.9)
+        for k in range(10):
+            a0, a1 = -90 + k * 36, -90 + (k + 1) * 36 - 3
+            on = k < 9 and k < int(round(g * 9 + 0.49))
+            d.pieslice((cx - r, cy - r, cx + r, cy + r), a0, a1, fill=BLUE if on else (205, 210, 218))
+        d.ellipse((cx - r * 0.45, cy - r * 0.45, cx + r * 0.45, cy + r * 0.45), fill=(255, 255, 255))
+        D.ctext(d, (790 * S2, 296 * S2), "番号だけ：9割以上", D.font(40 * S2), NAVY)
+    if t >= p["t_i"]:
+        labels = ("のぞき見", "漏れた", "当てられた")
+        for k, lab in enumerate(labels):
+            if t < p["t_i"] + 0.35 * k: continue
+            dim = t >= p["t_hl"] and k != 2
+            col = (190, 196, 206) if dim else NAVY
+            x = (190 + k * 330) * S2; y = 382 * S2
+            if k == 0:     # 目
+                d.ellipse((x - 46 * S2, y - 24 * S2, x + 46 * S2, y + 24 * S2), outline=col, width=6 * S2)
+                d.ellipse((x - 14 * S2, y - 14 * S2, x + 14 * S2, y + 14 * S2), fill=col)
+            elif k == 1:   # 書類としずく
+                d.rectangle((x - 30 * S2, y - 38 * S2, x + 24 * S2, y + 34 * S2), outline=col, width=5 * S2)
+                for j in range(3): d.line((x - 18 * S2, y - 20 * S2 + j * 16 * S2, x + 12 * S2, y - 20 * S2 + j * 16 * S2), fill=col, width=4 * S2)
+                d.ellipse((x + 30 * S2, y + 14 * S2, x + 46 * S2, y + 32 * S2), fill=col)
+            else:          # 当てられた札（緑のふち）
+                gcol = (190, 196, 206) if dim else (52, 178, 102)
+                for j in range(4): d.rounded_rectangle((x - 62 * S2 + j * 32 * S2, y - 22 * S2, x - 36 * S2 + j * 32 * S2, y + 22 * S2), radius=5 * S2, outline=gcol, width=5 * S2)
+                if t >= p["t_hl"]:
+                    d.rounded_rectangle((x - 74 * S2, y - 40 * S2, x + 74 * S2, y + 40 * S2), radius=14 * S2, outline=YEL, width=6 * S2)
+            D.ctext(d, (x + 110 * S2, y), lab, D.font(36 * S2), col)
+    return im.resize((W_, H_), Image.LANCZOS)
+
+
 def draw(t, base, where, frame_of=None, fontdir=None):
     global EVENTS
     if fontdir and not D.FDIR[0]: D.FDIR[0] = fontdir
@@ -857,6 +914,16 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             sm = p.get("small")
             if sm and sm[0] <= t < sm[1]: _paste(base, fig92_sprite(t, p), 640, 285, 0.0001 + 0.0, 0.0)
             else: _paste(base, fig92_sprite(t, p), 640, 285, k, a)
+        elif kind == "fig22":
+            _paste(base, fig22_sprite(t, p), 640, 290, k, a)
+        elif kind == "pair" and frame_of:
+            for i_, ((cl_, st_), cap) in enumerate(zip((p["left"], p["right"]), p["cap"])):
+                im = frame_of(cl_, st_)
+                if im is None: continue
+                im = im.convert("RGB").resize((560, 315), Image.LANCZOS)
+                fr = Image.new("RGBA", (572, 387), (255, 255, 255, 255)); fr.paste(im, (6, 6))
+                dd = ImageDraw.Draw(fr); D.ctext(dd, (286, 352), cap, D.font(40), NAVY)
+                _paste(base, fr, 340 + i_ * 600, 260, k, a)
         elif kind == "cycle":
             _paste(base, cycle_sprite(t, p), 640, 250, k, a)
         elif kind == "remote":

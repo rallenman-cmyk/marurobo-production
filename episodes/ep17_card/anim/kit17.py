@@ -448,3 +448,64 @@ def dark_room():
     cube(_m("outbox", "#20242E", rough=0.9), (-0.9, 3.45, 0.17), (2.6, 0.9, 0.34))   # 窓の外の台（まるロボが乗る。部屋からは見えない）
     return dict(win=((WX0 + WX1) / 2, 2.85, (WZ0 + WZ1) / 2), door=(-2.6, 0.65, 0.0), hinge=hinge)
 
+
+
+# ======================================================================== 4章（2026-11-26）：塔の中（台帳）
+LEDGER_COLS, LEDGER_ROWS = 16, 8
+LEDGER_X0, LEDGER_DX, LEDGER_Z0, LEDGER_DZ, LEDGER_Y = -3.0, 0.4, 3.8, 0.4, 3.9
+MY_LAMP = (10, 3)          # まるロボのランプ（左から 11 個目・上から 4 段目）
+
+
+def ledger_lamp_pos(c, r):
+    return (LEDGER_X0 + c * LEDGER_DX, LEDGER_Y, LEDGER_Z0 - r * LEDGER_DZ)
+
+
+def ledger_room():
+    """D：塔の中の明るい丸い部屋。奥のかべ（y=4）一面に台帳のランプ（横 16 × 縦 8。数字は書かない）。
+    左のかべ（x=-4.5）に入口（y -0.6〜0.6 の穴）と、光の玉が入る丸い窓（高さ 3.2 m）。
+    戻り値：dict(my=まるロボのランプの材質, my_ob, win=丸い窓の場所, door=入口)"""
+    world("#F2F4F8", 0.45)                       # 試しの絵の点検：明るすぎて白く飛び、ともったランプが見分けにくかった
+    plane(noise_mat("ledfloor", "#C9CED6", "#C0C5CE", 5.0, 0.7), (0, 1.0, 0), (10, 7))
+    wall = _m("ledwall", "#ECE8E0", rough=0.8)
+    cube(wall, (0, 4.05, 2.4), (9.2, 0.1, 4.8))
+    cube(_m("ledband", "#3478E6", rough=0.6), (0, 3.98, 4.45), (9.2, 0.04, 0.25))
+    for (y0, y1, z0, z1) in ((-2.5, -0.6, 0, 4.8), (0.6, 4.0, 0, 4.8), (-0.6, 0.6, 2.2, 4.8)):
+        cube(wall, (-4.55, (y0 + y1) / 2, (z0 + z1) / 2), (0.1, y1 - y0, z1 - z0))
+    cube(wall, (4.55, 0.75, 2.4), (0.1, 6.5, 4.8))
+    cube(_m("ledceil", "#F7F7F5", rough=0.8), (0, 0.75, 4.85), (9.2, 6.5, 0.1))
+    cyl(_m("ledwinfr", "#8A8F99", rough=0.5), (-4.5, 2.2, 3.2), 0.36, 0.14, rot=(0, R(90), 0))
+    cyl(mat("ledwinsky", "#9FCBE8", rough=0.3, emit=0.6), (-4.49, 2.2, 3.2), 0.3, 0.16, rot=(0, R(90), 0))
+    cube(_m("ledpanel", "#3C4352", rough=0.7), (0, 3.99, 2.4), (6.9, 0.02, 3.4), bevel=0.02)      # 台帳の板（こい色にして、ランプを目立たせる）
+    off = _m("lampoff", "#6E7682", rough=0.5)
+    on = glow_mat("lampon", "#3478E6", 6.0)
+    _b = on.node_tree.nodes["Principled BSDF"]; _b.inputs["Emission Color"].default_value = tuple(srgb("#3D86FF"))[:3] + (1.0,)
+    import random as _r
+    rr = _r.Random(21)
+    for c in range(LEDGER_COLS):
+        for r in range(LEDGER_ROWS):
+            if (c, r) == MY_LAMP: continue
+            cyl(on if rr.random() < 0.12 else off, ledger_lamp_pos(c, r), 0.11, 0.06, rot=(R(90), 0, 0), verts=24)
+    mym = mat("lampmine", "#6E7682", rough=0.5, emit=0.0)
+    myo = cyl(mym, ledger_lamp_pos(*MY_LAMP), 0.11, 0.06, rot=(R(90), 0, 0), verts=24)
+    for (x, y) in ((-2.0, 0.5), (2.0, 0.5), (0.0, 2.6)):
+        cyl(glow_mat("ledceillamp", "#FFF8EA", 2.5), (x, y, 4.79), 0.35, 0.03)
+    sun(rot=(55, 0, 20), energy=0.7, col="#FFF4E5", angle=10)
+    a = area((0, -3.0, 3.5), (0, 3.0, 2.0), energy=260, size=6, col="#FFFFFF"); a.visible_camera = False
+    return dict(my=mym, my_ob=myo, win=(-4.4, 2.2, 3.2), door=(-4.5, 0.0, 0.0))
+
+
+def lamp_color(m, t, col, strength=4.0, d=0.2):
+    """まるロボのランプの色と光を t から d 秒で替える（材質の地の色と光の色を時刻でキー）"""
+    b = m.node_tree.nodes["Principled BSDF"]
+    c = tuple(srgb(col))[:3] + (1.0,)
+    prev = tuple(m["_c"]) if "_c" in m else None
+    for nm in ("Base Color", "Emission Color"):
+        inp = b.inputs[nm]
+        if prev is not None:
+            inp.default_value = prev; inp.keyframe_insert("default_value", frame=f(t))
+        else:
+            inp.default_value = tuple(srgb("#6E7682"))[:3] + (1.0,); inp.keyframe_insert("default_value", frame=f(-100.0)); inp.keyframe_insert("default_value", frame=f(t))
+        inp.default_value = c; inp.keyframe_insert("default_value", frame=f(t + d))
+    m["_c"] = c
+    if not m.get("_e"): emit_key(m, -100.0, 0.0); m["_e"] = 1
+    emit_key(m, t, m.get("_s", 0.0)); emit_key(m, t + d, strength); m["_s"] = strength

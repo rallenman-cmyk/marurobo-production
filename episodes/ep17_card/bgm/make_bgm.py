@@ -8,6 +8,7 @@
 #   B（影の部屋）：S15 暗い部屋の機械が番号の札を作る。なぞめいて、こわくない
 #   K（試す）：S16〜S17 お店の門で何度も試す。一定の刻みで、少しずつ張りつめる。こわくない
 #   R（正体）：S18〜S19 まるロボの番号だった・手口の正体。考えこむ、落ち着いた感じ（こわがらせない）
+#   L（台帳）：S20〜S22 なぜ使っていないカードも？ 塔の中の台帳を調べる。好奇心・落ち着いた説明
 import os, sys, json, base64, time, urllib.request
 
 COMMON = ("Instrumental background music for a cute, gentle science explainer video for all ages, starring a small round robot. "
@@ -29,6 +30,8 @@ PROMPTS = {
                   "pizzicato ostinato, soft synth pulse, light shaker, gentle low drum, about 112 BPM, focused and suspenseful but cartoon-like, never scary.",
     "R": COMMON + "Realizing how a puzzle works, calm and thoughtful wrap-up: soft piano, warm strings pad, gentle bells, light brushed beat, "
                   "about 84 BPM, reflective and reassuring, a little serious but kind, not sad and not scary.",
+    "L": COMMON + "Exploring a bright, tidy hall full of softly glowing lamps to understand why something happened: gentle marimba and celesta, "
+                  "soft warm pad, light pizzicato, steady soft beat, about 92 BPM, curious, calm and clear like a friendly explanation, never scary.",
 }
 
 
