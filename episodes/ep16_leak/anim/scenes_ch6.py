@@ -35,16 +35,20 @@ def door_unit(x, sign=None, frame=None, wall="#EDE4D4", roof="#9B4A3A", name="d"
     cube(wm, (x, y0, (DOOR_H + h_) / 2), (0.9, 0.3, h_ - DOOR_H))             # ドアの上のかべ
     cube(mat("g_roof" + roof, roof, rough=0.7), (x, y0 + 0.2, h_ + 0.1), (1.62, 0.8, 0.2))
     room_m = mat("g_room", "#F0D9A8", rough=0.9)
-    cube(room_m, (x, DOOR_Y + 1.2, DOOR_H / 2), (0.86, 1.8, DOOR_H))           # 奥の部屋（ドアが開くと見える明るい部屋）
-    cube(mat("g_roomfloor", "#9C7A56", rough=0.8), (x, DOOR_Y + 0.75, 0.01), (0.86, 1.2, 0.02))
+    # 奥の部屋：中が空いた部屋（奥のかべ・左右のかべ・天井・床）。ドアは部屋の側へ開く（v17 のユーザー「ドアが開く時に手を貫通する」：
+    #   ドアが道の側へ開いて機械の腕を通っていた。前は部屋が中まで詰まった箱で、部屋の側へは開けなかった）
+    cube(glow_mat("g_roomback", "#F0D9A8", 0.25), (x, DOOR_Y + 2.1, DOOR_H / 2), (1.2, 0.05, DOOR_H))
+    for dx in (-0.6, 0.6): cube(room_m, (x + dx, DOOR_Y + 1.2, DOOR_H / 2), (0.05, 1.8, DOOR_H))
+    cube(room_m, (x, DOOR_Y + 1.2, DOOR_H + 0.03), (1.25, 1.8, 0.05))
+    cube(mat("g_roomfloor", "#9C7A56", rough=0.8), (x, DOOR_Y + 1.2, 0.01), (1.2, 1.8, 0.02))
     if frame:
         fm = glow_mat("g_frame" + frame, frame, 0.6)
         for dx in (-0.48, 0.48): cube(fm, (x + dx, DOOR_Y - 0.03, DOOR_H / 2), (0.07, 0.06, DOOR_H + 0.05))
         cube(fm, (x, DOOR_Y - 0.03, DOOR_H + 0.03), (1.03, 0.06, 0.07))
-    hinge = empty((x - DOOR_W / 2, DOOR_Y, 0.0)); hinge.name = name
-    cube(mat("g_door", "#7A5536", rough=0.6), (DOOR_W / 2, 0.025, DOOR_H / 2), (DOOR_W - 0.02, 0.05, DOOR_H - 0.01), bevel=0.01, parent=hinge)
-    cyl(mat("g_knob", "#C9B074", rough=0.3, metal=0.8), (DOOR_W - 0.12, -0.03, KEY_Z), 0.035, 0.04, rot=(R(90), 0, 0), parent=hinge, verts=16)
-    cube(mat("g_keyhole", "#1A1A1A", rough=0.9), (DOOR_W - 0.12, -0.002, KEY_Z - 0.09), (0.018, 0.004, 0.04), parent=hinge)
+    hinge = empty((x - DOOR_W / 2, DOOR_Y + 0.05, 0.0)); hinge.name = name      # 軸はドアの裏（部屋の側）。部屋の側へ開いても、ドアの角がかべに入らない
+    cube(mat("g_door", "#7A5536", rough=0.6), (DOOR_W / 2, -0.025, DOOR_H / 2), (DOOR_W - 0.02, 0.05, DOOR_H - 0.01), bevel=0.01, parent=hinge)
+    cyl(mat("g_knob", "#C9B074", rough=0.3, metal=0.8), (DOOR_W - 0.12, -0.08, KEY_Z), 0.035, 0.04, rot=(R(90), 0, 0), parent=hinge, verts=16)
+    cube(mat("g_keyhole", "#1A1A1A", rough=0.9), (DOOR_W - 0.12, -0.052, KEY_Z - 0.09), (0.018, 0.004, 0.04), parent=hinge)
     if sign:
         plane(img_mat("g_sign_" + sign, os.path.join(TEX, "sign_" + sign + ".png"), emit=0.15), (x, DOOR_Y - 0.01, DOOR_H + 0.35), (0.82, 0.38), rot=(R(90), 0, 0))
     return hinge
@@ -108,7 +112,7 @@ class Mach:
         if sound: ev(t + 0.35 * f, "tick", 0.3, "")
         if opens:
             tg = gacha_t if gacha_t is not None else t + 0.6 * f
-            key(hinge, "rotation_euler", tg - 0.01, (0, 0, 0)); key(hinge, "rotation_euler", tg + 0.9, (0, 0, R(-78)))
+            key(hinge, "rotation_euler", tg - 0.01, (0, 0, 0)); key(hinge, "rotation_euler", tg + 0.9, (0, 0, R(78)))      # 部屋の側（+y）へ開く
             self.set_len(tg + 0.05 * f, self.reach); self.set_len(tg + 0.5 * f, 0.35)
         else:
             if hinge is not None:
@@ -166,9 +170,18 @@ def b_g(cl):
         dq = (e("29-01") - s("29-01") - 0.6) / 8
         mc.go(tq, tq + 0.22, STREET2_X[k]); mc.try_door(tq + 0.22, h2[k], sound=(k % 3 == 0), f=min(1.0, (dq - 0.22 - 0.06) / 0.95)); tq += dq
     tops = [wv("29-02", "使い回し") - 0.2, wv("29-02", "そこでも") - 0.1, wv("29-02", "開いて") - 0.1]
-    for n_, (k, t_o) in enumerate(zip(TEAL2, tops)):
+    # 開く 3 枚（8・10・11）と、そのあいだの 9 枚目（開かない・×）を、順番に全部試す
+    #   （v17 のユーザー「空いたドア同士の間のドアは何もしてないのが気になる」：9 枚目だけ試さずに通り過ぎていた）
+    fo = []
+    for n_, t_o in enumerate(tops):
         gap = min((tops[n_ + 1] - t_o) if n_ + 1 < len(tops) else 9.0, (t_o - tops[n_ - 1]) if n_ > 0 else 9.0)
-        f_ = min(1.0, (gap - 0.06) / 1.25)                                              # 「そこでも」と「開いて」は 0.5 秒しか離れていない
+        fo.append(min(1.0, (gap - 0.06) / 1.25))                                        # 「そこでも」と「開いて」は 0.5 秒しか離れていない
+    for n_, (k, t_o) in enumerate(zip(TEAL2, tops)):
+        f_ = fo[n_]
+        if n_ == 1:                                                                     # 8 枚目と 10 枚目のあいだの 9 枚目
+            a_ = tops[0] + 0.5 * fo[0] + 0.03; b_ = t_o - 0.75 * f_ - 0.03
+            f9 = min(1.0, (b_ - a_ - 0.22) / 0.95)
+            mc.go(a_, a_ + 0.22, STREET2_X[9]); mc.try_door(a_ + 0.22, h2[9], sound=True, f=f9)
         mc.go(t_o - 0.75 * f_, t_o - 0.45 * f_, STREET2_X[k]); mc.try_door(t_o - 0.45 * f_, h2[k], opens=True, gacha_t=t_o, f=f_)
         ev(t_o + 0.1, "creak", 0.2, "")
     # ---- まるロボ
@@ -184,7 +197,7 @@ def b_g(cl):
     M.act(s("28-05") + 0.6, "rest", dur=2.0)                                             # 体をちぢめる（ドキドキ）
     M.act(s("28-06") + 0.2, "wake")
     M.surprise(s("28-08") + 0.1)                                                         # ぎょっ
-    M.act(wv("28-12", "へなへな") - 0.2, "rest", dur=1.8)                               # へなへなと座りこむ（ため息は付けない：ため息のあとに座ると 2 秒遅れた）
+    M.act(wv("28-12", "へなへな") - 0.2, "slump", dur=1.8)                              # へなへなと座りこむ（ため息は付けない：ため息のあとに座ると 2 秒遅れた）
     M.at(s("29-01") - 0.07, loc=(STREET2_X[6] + 0.8, -0.45, 0.0), face=180.0, interp="CONSTANT")   # 別の通りのまん中（ドアのほうを向く）
     M.act(s("29-01") + 0.1, "wake")
     M.shake(wv("29-03", "だれが") - 0.2)
@@ -211,6 +224,7 @@ CUTS6 = [
     ("G28i", b_g, s("28-10"), C((HOME_X[1] + 1.2, -1.7, 1.25), (HOME_X[1] - 0.1, DOOR_Y - 0.25, 0.75), 32), "G"),                    # だいだい色のドアと機械（v17 の点検：近すぎて腕の先しか見えず、試して開かないのが分からない）
     ("G28j", b_g, s("28-12"), C((HOME_X[0] - 0.95, 1.75, 0.75), (HOME_X[0] - 1.4, -0.2, 0.32), 28), "G"),   # v17 の点検：頭が切れて座りこむのが見えにくい → 体全体が入るまで引く
                                   # まるロボの前：座りこむ
-    ("G29a", b_g, s("29-01"), C((STREET2_X[5] + 0.4, -5.0, 9.0), (STREET2_X[5] + 0.4, 0.8, 0.0), 26), "G"),                         # 別の通りを上から
+    ("G29a", b_g, s("29-01"), C((STREET2_X[3] + 0.4, -5.0, 9.0), (STREET2_X[3] + 0.4, 0.8, 0.0), 26, (STREET2_X[9] + 0.8, -5.0, 9.0), (STREET2_X[9] + 0.8, 0.8, 0.0), 26, d=s("29-02") + 1.5 - s("29-01")), "G"),   # 機械について横へ（v17：9〜11 枚目が画面の外だった）
+                            # 別の通りを上から
     ("G29b", b_g, s("29-03"), C((STREET2_X[6] + 0.8, -3.4, 1.2), (STREET2_X[6] + 0.8, 0.9, 0.7), 30), "G"),                         # まるロボのうしろから両側のドア
 ]

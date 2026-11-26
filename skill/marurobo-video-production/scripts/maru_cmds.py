@@ -79,6 +79,7 @@ class Maru:
     def awe(self, t, dur=3.2, pitch=20.0): self.cmds.append((t, "awe", dict(dur=dur, pitch=pitch)))
     def groove(self, t, dur=4.0, bpm=96.0): self.cmds.append((t, "groove", dict(dur=dur, bpm=bpm)))
     def rest(self, t, dur=2.5): self.cmds.append((t, "rest", dict(dur=dur)))
+    def slump(self, t, dur=2.0): self.cmds.append((t, "slump", dict(dur=dur)))     # へなへなと座りこむ（16本目 6章 v17）
     def wake(self, t): self.cmds.append((t, "wake", {}))
     def stagger(self, t, n=3): self.cmds.append((t, "stagger", dict(n=n)))     # よろける（QR回の plan_util.stagger）
     def bonk(self, t, hold=0.8): self.cmds.append((t, "bonk", dict(hold=hold)))       # ぶつかる（ゴツン）。5本目で足した動き

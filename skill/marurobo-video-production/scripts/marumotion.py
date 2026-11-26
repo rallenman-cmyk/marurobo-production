@@ -953,6 +953,21 @@ class Plan:
         self.no_blink.append((t0, t0 + dur + 0.2)); self.event(t0, "power_down", 1.0)
         self.t = t0 + dur; self._lb_end(lid); return self
 
+    def slump(self, dur=2.0, label=None, fwd_d=0.30, pitch=-22.0, lift=-0.12):
+        """へなへなと座りこむ（16本目 6章 v17 のユーザー「座り込んでないよ」：rest は 4cm 沈むだけで、座ったように見えなかった）：
+        左右に 2 回ふらっとゆれながら、両足を前へすべらせ（fwd_d m）、体を後ろへ傾け（pitch 度）、おしりが床に着くまで沈む（lift）。
+        目を細め、アンテナの光を落とす。電子音なし（ため息の決まり）。着くときに小さな「ぽすっ」（land）。起きるのは get_up()"""
+        lid = self._lb(label); t0 = self.t; psi = self._psi; ground = self._ground()
+        self.layer(t0, t0 + 1.3, lambda t, t0=t0: {"roll": 6.0 * math.sin(2 * math.pi * (t - t0) / 0.6) * env(t, t0, 0.1, 0.7, 0.4)})
+        self.tracks["pitch"].set(t0 + 0.35, 0.65, pitch); self.tracks["lift"].set(t0 + 0.35, 0.65, lift)
+        self.tracks["iris"].set(t0, 0.8, -0.3); self.tracks["light"].set(t0, 1.0, -0.5); self.tracks["gaze_pitch"].set(t0 + 0.3, 0.6, -12.0)
+        self.tracks["ant"].set(t0 + 0.4, 0.8, 10.0)
+        for j, dt in ((0, 0.35), (1, 0.42)):                 # 足を前へすべらせる（上げずに床をすべる）
+            c = self._lift_foot(j, t0 + dt); q = c.p[:2] + fwd(psi) * fwd_d
+            self._place(j, t0 + dt + 0.4, (*q, ground), c.psi, lift=0.005, kind="turn")
+        self.no_blink.append((t0, t0 + 1.2)); self.event(t0 + 0.8, "land", 0.5)      # おしりが床に着く時刻（足がすべり終わる所）
+        self.t = t0 + max(dur, 1.3); self._lb_end(lid); return self
+
     def wake(self, label=None):
         """起きる：2回まばたき→目が開く→体が少し行き過ぎて伸び（2cm）戻る。光が戻る。起動音"""
         lid = self._lb(label); t0 = self.t
