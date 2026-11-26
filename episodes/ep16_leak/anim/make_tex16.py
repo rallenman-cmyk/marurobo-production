@@ -128,4 +128,33 @@ cx, cy, r = W_ / 2 * SS, 250 * SS, 70 * SS
 d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(240, 190, 60), outline=(190, 140, 30), width=8 * SS)
 d.ellipse((cx - r * 0.62, cy - r * 0.62, cx + r * 0.62, cy + r * 0.62), outline=(255, 226, 140), width=6 * SS)
 im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, "pricetag.png"))
+# 6章：ドアの上の看板（字なし。白い板に絵 1 つ。会社の名前・見た目は出さない）。play＝再生の三角（動画）・note＝音符（音楽）
+def sign(name, kind, col):
+    W_, H_ = 480, 220
+    im = Image.new("RGB", (W_ * SS, H_ * SS), col); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((14 * SS, 14 * SS, (W_ - 14) * SS, (H_ - 14) * SS), radius=24 * SS, fill=(252, 251, 247))
+    cx, cy, r = W_ / 2 * SS, H_ / 2 * SS, 70 * SS
+    if kind == "play":
+        # 画面の枠（紺の線）と、中の三角（実在の会社の印に似せない：赤い角丸に白い三角はやめた）
+        d.rounded_rectangle((cx - r * 1.2, cy - r * 0.8, cx + r * 1.2, cy + r * 0.65), radius=int(r * 0.12), outline=NAVY, width=int(r * 0.13))
+        d.rectangle((cx - r * 0.5, cy + r * 0.75, cx + r * 0.5, cy + r * 0.85), fill=NAVY)
+        d.polygon([(cx - r * 0.3, cy - r * 0.45), (cx + r * 0.45, cy - r * 0.07), (cx - r * 0.3, cy + r * 0.3)], fill=NAVY)
+    elif kind == "note":
+        d.ellipse((cx - r * 0.75, cy + r * 0.2, cx - r * 0.15, cy + r * 0.7), fill=NAVY); d.ellipse((cx + r * 0.25, cy + r * 0.05, cx + r * 0.85, cy + r * 0.55), fill=NAVY)
+        d.rectangle((cx - r * 0.25, cy - r * 0.8, cx - r * 0.15, cy + r * 0.45), fill=NAVY); d.rectangle((cx + r * 0.75, cy - r * 0.95, cx + r * 0.85, cy + r * 0.3), fill=NAVY)
+        d.polygon([(cx - r * 0.25, cy - r * 0.8), (cx + r * 0.85, cy - r * 0.95), (cx + r * 0.85, cy - r * 0.7), (cx - r * 0.25, cy - r * 0.55)], fill=NAVY)
+    else:
+        icon(d, kind, cx, cy, r, NAVY)
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+for kind, col in (("bag", (236, 150, 60)), ("play", (90, 160, 200)), ("mail", (70, 130, 210)), ("phone", (90, 170, 110)), ("cake", (220, 120, 170)),
+                  ("bldg", (120, 130, 150)), ("note", (150, 110, 200)), ("house", (180, 140, 90))):
+    sign("sign_" + kind, kind, col)
+# 6章：灰色の×の札（試して開かなかったドア）
+im = Image.new("RGBA", (300 * SS, 300 * SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+d.ellipse((10 * SS, 10 * SS, 290 * SS, 290 * SS), fill=(236, 238, 242, 255), outline=(150, 156, 166, 255), width=10 * SS)
+for a_, b_ in (((80, 80), (220, 220)), ((220, 80), (80, 220))):
+    d.line((a_[0] * SS, a_[1] * SS, b_[0] * SS, b_[1] * SS), fill=(120, 126, 136, 255), width=34 * SS)
+im.resize((300, 300), Image.LANCZOS).save(os.path.join(OUT, "xmark.png"))
 print("ok", sorted(os.listdir(OUT)))
