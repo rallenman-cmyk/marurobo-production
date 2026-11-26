@@ -69,6 +69,8 @@ def ev_list():
     E += OV3.ev_list3()
     import overlays4 as OV4      # 4章（S22〜S24）
     E += OV4.ev_list4()
+    import overlays5 as OV5      # 5章（S25〜S26）
+    E += OV5.ev_list5()
     return E
 
 
@@ -86,6 +88,8 @@ def sfx_list():
     L += OV3.sfx_list3()
     import overlays4 as OV4
     L += OV4.sfx_list4()
+    import overlays5 as OV5
+    L += OV5.sfx_list5()
     return L
 
 
@@ -692,6 +696,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind.startswith("c4_"):
             import overlays4 as OV4
             OV4.draw4(kind, t, t0, p, base, where, _paste, k, a)
+        elif kind.startswith("c5_"):
+            import overlays5 as OV5
+            OV5.draw5(kind, t, t0, p, base, where, _paste, k, a)
         elif kind == "pip_clip" and frame_of:
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue

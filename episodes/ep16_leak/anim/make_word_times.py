@@ -48,7 +48,7 @@ def word_time(i, word, occ=0):
 
 
 if __name__ == "__main__":
-    src = "".join(open(os.path.join(HERE, f), encoding="utf-8").read() for f in ("scenes_ch2.py", "overlays2.py", "scenes_ch3.py", "overlays3.py", "scenes_ch4.py", "overlays4.py") if os.path.exists(os.path.join(HERE, f)))      # 3章も同じ表に
+    src = "".join(open(os.path.join(HERE, f), encoding="utf-8").read() for f in ("scenes_ch2.py", "overlays2.py", "scenes_ch3.py", "overlays3.py", "scenes_ch4.py", "overlays4.py", "scenes_ch5.py", "overlays5.py") if os.path.exists(os.path.join(HERE, f)))      # 3章も同じ表に
     calls = set(re.findall(r'\bwv?\("(\d\d-\d\d)", "([^"]+)"(?:, (\d))?\)', src))
     out = dict(KEEP)
     for i, word, occ in sorted(calls):
