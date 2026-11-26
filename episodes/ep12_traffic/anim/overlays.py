@@ -26,7 +26,7 @@ def ev_list():
     add(s("02-01") + 0.1, e("02-01") + 0.3, "ring", dict(obj="phone", r=70, col=YEL))
     add(wp("02-02", "渋滞") - 0.1, e("02-02") + 0.3, "tag", dict(text="この先 渋滞", obj="phone", dy=-150, size=52, bg=RED, fg=WHITE))
     add(wp("02-04", "首を") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(s("03-04") + 0.05, e("03-04") + 0.4, "pair", dict(left=("A02a", w("02-02", "合図")), right=("A03b", e("03-02") - 0.3),
+    add(s("03-04") + 0.05, e("03-04") + 0.4, "pair", dict(left=("TEX:ph_map_alert", 0), right=("A03b", e("03-02") - 0.3),
         cap=("地図の赤い線", "本当の車の列")))
     add(wp("04-03", "誰が") - 0.1, e("04-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(wp("04-06", "細い道") - 0.1, e("04-06") + 0.3, "ring", dict(obj="phone", r=80, col=YEL))
@@ -52,7 +52,7 @@ def ev_list():
     add(wp("10-05", "橋") - 0.1, e("10-05") + 0.3, "ring", dict(obj="bridge", r=70, col=YEL))
     add(wp("10-05", "トンネル") - 0.1, e("10-05") + 0.3, "ring", dict(obj="tunnel", r=70, col=YEL))
     add(s("10-06") + 0.1, e("10-06") + 0.3, "ring", dict(obj="phone", r=80, col=YEL))
-    add(s("10-07") + 0.05, e("10-07") + 0.4, "pip_clip", dict(clip="A04d3", src_t=wp("04-06", "細い道") + 0.4, hold=True))
+    add(s("10-07") + 0.05, e("10-07") + 0.4, "pip_clip", dict(clip="TEX:ph_map_z2", src_t=0, hold=True))
     add(wp("10-08", "なぜ") - 0.2, e("10-08") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # 物について動く札（吹き出し・札・輪）は、カメラの替わり目（重なるつなぎ 0.35 秒）が終わってから出す（17本目 v1 のコメント）
     import json as _js
@@ -131,6 +131,12 @@ def title_sprite():
     return _cache[key]
 
 
+def tex_frame(name):
+    """v1 の点検：小窓・左右の絵に 3D の画面を写すと、小さく斜めで地図の色が見えなかった。画面の絵そのもの（横向きに戻す）を使う"""
+    pth = os.path.join(os.environ.get("TEX12") or os.path.join(os.environ.get("MARU_WORK", ""), "stage", "tex12"), name + ".png")
+    return Image.open(pth).convert("RGB").rotate(-90, expand=True) if os.path.exists(pth) else None
+
+
 def imag_pip(im, w_, h_):
     """小窓（前の場面の切り抜き）：色はそのまま"""
     return im.convert("RGB").resize((w_, h_), Image.LANCZOS)
@@ -182,14 +188,14 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             base.alpha_composite(ring_img((q[0] + p.get("dx", 0), q[1] + p.get("dy", 0)), p.get("r", 40) * k, p.get("col", WHITE), a))
         elif kind == "pair" and frame_of:
             for i_, ((cl_, st_), cap) in enumerate(zip((p["left"], p["right"]), p["cap"])):
-                im = frame_of(cl_, st_)
+                im = tex_frame(cl_[4:]) if cl_.startswith("TEX:") else frame_of(cl_, st_)
                 if im is None: continue
                 im = im.convert("RGB").resize((560, 315), Image.LANCZOS)
                 fr = Image.new("RGBA", (572, 387), (255, 255, 255, 255)); fr.paste(im, (6, 6))
                 dd = ImageDraw.Draw(fr); D.ctext(dd, (286, 352), cap, D.font(44), NAVY)
                 _paste(base, fr, 340 + i_ * 600, 260, k, a)
         elif kind == "pip_clip" and frame_of:
-            im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
+            im = tex_frame(p["clip"][4:]) if p["clip"].startswith("TEX:") else frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
             im = imag_pip(im, 544, 306)
             fr = Image.new("RGBA", (556, 318), (255, 255, 255, 255)); fr.paste(im, (6, 6))

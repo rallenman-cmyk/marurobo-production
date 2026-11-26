@@ -4,6 +4,8 @@
 #   9本目は組み立てが作った字幕（subs_events.json）をそのまま使う：声だけの音（文の声を placement の時刻に置いた物）から、
 #   字幕の出ている間（次の字幕の始まりまで）を切り出して聞かせる。2 つの文にまたがる字幕もそのまま聞ける。
 #   MARU_WORK=<作業> python3 sub_hear.py 出力.json [subs_events.json]
+#   12本目：SUB_TO=<秒> で、章ごとの下書きの終わりまでの字幕だけを聞く。SUB_AGAIN=1 で、出力.json の「合わない」字幕だけを聞き直して書き足す
+#     （聞き取りのモデルが、声のない所に言葉を足す（「〜のです」のあとに「が」など）ことがあるため。聞き直しても合わない物は、文の声を台本と比べて確かめる）
 import os, sys, json, wave, difflib, re, base64, io, urllib.request, time
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
@@ -18,7 +20,7 @@ kata2hira = lambda s: "".join(chr(ord(c) - 0x60) if "ァ" <= c <= "ヶ" else c f
 # 16本目 v1：「まるロボは」の助詞「は」を「わ」、のばす音「ー」を別の音として数え、合っている字幕を「合わない」としていた。
 #   のばす音は消し、助詞になりうる「は・を・へ」は「わ・お・え」にそろえてから比べる（両方に同じことをする）
 norm = lambda s: re.sub(r"[^ぁ-ゖ]", "", kata2hira(s)).translate(str.maketrans("はをへ", "わおえ"))
-MODEL = os.environ.get("HEAR_MODEL", "gemini-3.8-flash")
+MODEL = os.environ.get("HEAR_MODEL", "gemini-3-flash-preview")
 
 
 def wav_bytes(x, sr):
@@ -54,6 +56,7 @@ for p in P:
     i0 = int(p["start"] * sr); tr[i0:i0 + len(x)] += x[:len(tr) - i0]
 tr = np.clip(tr, -32768, 32767).astype(np.int16)
 SUBS = sorted(tuple(s) for s in json.load(open(SUBP, encoding="utf-8")))
+if os.environ.get("SUB_TO"): SUBS = [x for x in SUBS if x[1] <= float(os.environ["SUB_TO"]) + 0.5]
 jobs = []
 for m, (a, c, t) in enumerate(SUBS):
     nx = SUBS[m + 1][0] if m + 1 < len(SUBS) else c
@@ -78,8 +81,12 @@ for k in range(0, len(need), 40):
     if not r: raise SystemExit("読みが作れない")
     for j, y in zip(ch, r): YC[j["text"]] = y
 json.dump(YC, open(CACHE, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+OLD = {}
+if os.environ.get("SUB_AGAIN") and os.path.exists(OUT):
+    OLD = {r["at"]: r for r in json.load(open(OUT, encoding="utf-8"))}
+again = lambda j: not OLD or j["at"] not in OLD or (OLD[j["at"]]["score"] is not None and OLD[j["at"]]["score"] < 0.8)
 with ThreadPoolExecutor(4) as ex:
-    heard = list(ex.map(lambda j: hear(j["seg"], sr), jobs))
+    heard = list(ex.map(lambda j: hear(j["seg"], sr) if again(j) else OLD[j["at"]]["heard"], jobs))
 bad = []; res = []
 for j, h in zip(jobs, heard):
     ref = norm(YC[j["text"]])

@@ -15,7 +15,7 @@ P = [dict(start=a, end=b, text=c) for a, b, c in json.load(open(os.environ.get("
 
 
 def post(body):
-    req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", data=json.dumps(body).encode(),
+    req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent" % os.environ.get("HEAR_MODEL", "gemini-3-flash-preview"), data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json", "x-goog-api-key": KEY})
     for k in range(5):
         try: return json.load(urllib.request.urlopen(req, timeout=180))

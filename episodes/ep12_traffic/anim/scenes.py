@@ -123,6 +123,10 @@ def b_drive(par):
     STAGE["t_turn"] = wp("03-01", "角を") - 0.2
     road_strip((-340.0, 80.0), 420.0, "x")
     road_strip((ROAD_W / 2 + 0.2, 200.0), 200.0, "y")
+    # v1 の点検：交差点の角に、歩道のない所が黒い穴に見えた。道の下に、歩道の色の地面を敷く
+    cube(_m("ground_a", "#ADA69A", rough=0.9), (-130.0, 60.0, -0.06), (500.0, 400.0, 0.1))
+    for sg in (-1, 1):   # 角で 2 つの歩道が重なる所が黒くなった（地面を敷いても残った）。少し高い板でふたをする
+        cube(_m("corner_a", "#B4ADA1", rough=0.85), (sg * (ROAD_W / 2 + SIDEWALK / 2 + 0.15), ROAD_W / 2 + SIDEWALK / 2 + 0.15, 0.0735), (SIDEWALK + 0.3, SIDEWALK + 0.3, 0.147))
     city_side(-340.0, -ROAD_W / 2 - SIDEWALK - 4.0, ROAD_W / 2 + SIDEWALK + 0.3, +1, seed=1)
     city_side(-340.0, 80.0, ROAD_W / 2 + SIDEWALK + 0.3, -1, seed=2)
     city_side(ROAD_W / 2 + SIDEWALK + 4.0, 80.0, ROAD_W / 2 + SIDEWALK + 0.3, +1, seed=3)
@@ -144,6 +148,11 @@ def b_drive(par):
         x, y, h = car_state(t)
         key(cr, "location", t, (x, y, 0.0), "LINEAR"); key(cr, "rotation_euler", t, (0, 0, R(h)), "LINEAR"); t += 1.0 / 6
     track("car", cr, 1.0)
+    # 冒頭〜2章 v1 の点検：後ろの座席から見ると、車の中が暗く、2 人が黒い影だった。屋根の内側に弱い明かり（車について動く）
+    bpy.ops.object.light_add(type='AREA', location=(0.1, 0.1, 1.45)); il = bpy.context.object; il.data.energy = 18.0; il.data.size = 0.9
+    bpy.ops.object.light_add(type='AREA', location=(-0.95, 0.0, 1.35), rotation=(0, R(-80), 0)); il2 = bpy.context.object; il2.data.energy = 45.0; il2.data.size = 1.0
+    il2.data.color = (1.0, 0.92, 0.82); il2.parent = cr      # 後ろの座席から前へ当てる（2 人の背中が黒い影にならないように）
+    il.data.color = (1.0, 0.93, 0.85); il.parent = cr
     p_, head = ojisan(cr)
     t = T_BEG; k_ = 0
     while t < T_END:      # 鼻歌：頭を小さくゆらす（前を向いたまま）
@@ -168,15 +177,16 @@ def b_drive(par):
     M.confused(s("02-04") + 0.3)
     # 曲がり終わって、その場で前（+y）へ向き直る。屋根の上から見ている間
     M.at(t_turn_end + 0.3, face=MFACE(90.0))
-    M.sigh(s("03-03") + 0.3)                                # しょんぼり
+    M.at(s("03-03") - 0.6, face=MFACE(90.0 + 80.0))       # 左の窓（外のカメラ）へ顔を向けてから（v1 の点検：顔が見えず、しょんぼりが分からなかった）
+    M.sigh(s("03-03") + 0.6)                                # しょんぼり
     M.at(s("04-03") + 0.1, face=MFACE(90.0 + 45.0))         # 窓の外をきょろきょろ
     M.at(s("04-03") + 1.4, face=MFACE(90.0 - 10.0))
     M.confused(e("04-03") - 0.6)
-    M.at(s("04-11") + 0.2, face=MFACE(90.0 + 40.0)); M.at(s("04-11") + 2.2, face=MFACE(90.0 - 30.0)); M.at(e("04-11") + 0.9, face=MFACE(90.0))
+    M.at(s("04-11") + 0.2, face=MFACE(90.0 + 85.0)); M.at(s("04-11") + 2.4, face=MFACE(90.0 - 30.0)); M.at(e("04-11") + 0.9, face=MFACE(90.0))
     # 04-09：列の先が霧の中へ（このときだけ白い板を重ねる）
-    fogm = mat("fog", "#F4EEE8", rough=1.0, alpha=0.22)
-    for k in range(10):
-        pl = plane(fogm, (-2.0, 60.0 + k * 9.0, 4.0), (40, 14), rot=(R(90), 0, 0))
+    fogm = mat("fog", "#F4EEE8", rough=1.0, alpha=0.30)    # v1 の点検：0.22・60 m からでは、霧に消えていくのが見えなかった
+    for k in range(14):
+        pl = plane(fogm, (-2.0, 34.0 + k * 6.0, 4.0), (40, 14), rot=(R(90), 0, 0))
         hide_key(pl, -100.0, True); hide_key(pl, s("04-09") - 0.2, False); hide_key(pl, e("04-09") + 0.6, True)
 
 
@@ -245,7 +255,7 @@ def b_bridge(par):
     for k in range(4):
         tb = wp("05-05", "ピピ") + 0.12 * k
         tgt = (SPOT[0] + 4.0 + 1.5 * k, LANE_Y - LANE * (k % 2) * 1.0, 1.45)
-        beam_flash(EYE, tgt, tb, 0.25); ev(tb, "pi", 0.3, "maru_c")
+        beam_flash(EYE, tgt, tb, 0.6 - 0.12 * k); ev(tb, "pi", 0.3, "maru_c")   # v1 の点検：0.25 秒ずつでは 2 本しか見えなかった。4 本目が出るまで全部残す
     # 05-06：くるくる → ぽてん
     M.wobble(s("05-06") + 0.1, s("05-06") + 1.3, deg=16, period=0.35); ev(s("05-06") + 0.2, "dizzy", 0.35, "maru_c")
     M.act(s("05-06") + 1.4, "slump")
@@ -255,13 +265,13 @@ def b_bridge(par):
     M.at(e("07-04") + 0.2, look=0)
     # 08-05：感知器のまねで目の光を下へ
     M.at(s("08-05") + 0.2, look=-14)
-    beam_flash(EYE, (SPOT[0] + 0.8, LANE_Y, 0.05), wp("08-05", "休まず") - 0.3, 1.2); ev(wp("08-05", "休まず") - 0.3, "pi", 0.3, "maru_c")
+    beam_flash(EYE, (SPOT[0] + 4.0, LANE_Y, 0.05), wp("08-05", "休まず") - 0.3, 1.2)   # v1 の点検：真下へ向けると歩道橋の床に隠れて見えなかった; ev(wp("08-05", "休まず") - 0.3, "pi", 0.3, "maru_c")
     M.at(e("08-05") + 0.1, look=0)
     M.at(s("10-01") + 0.2, look=12)
     # 感知器の音の波（08-01〜08-04）：水色の輪が真下へ → はね返って上へ
-    wm = glow_mat("wave", WAVE_C, 3.0)
+    wm = glow_mat("wave", WAVE_C, 6.0)
     def pulse(t, z_hit):
-        bpy.ops.mesh.primitive_torus_add(location=(SENSOR_X, LANE_Y, 6.15), major_radius=0.25, minor_radius=0.025)
+        bpy.ops.mesh.primitive_torus_add(location=(SENSOR_X, LANE_Y, 6.15), major_radius=0.45, minor_radius=0.06)   # v1 の点検：横から見ると細くて見えなかった
         r_ = bpy.context.object; r_.data.materials.append(wm)
         dd = (6.15 - z_hit) / 9.0
         hide_key(r_, -100.0, True); hide_key(r_, t, False); hide_key(r_, t + 2 * dd + 0.05, True)
@@ -282,8 +292,8 @@ def b_bridge(par):
         dc = car_fast((0, 0, 0), 0.0, ["#C8312B", "#3F6FB5", "#E8E8E8"][k], name="demo")
         key(dc, "location", tt - 4.0, (SENSOR_X - 4.0 * 7.0, LANE_Y, 0), "LINEAR"); key(dc, "location", tt + 4.0, (SENSOR_X + 4.0 * 7.0, LANE_Y, 0), "LINEAR")
         hide_key(dc, -100.0, True); hide_key(dc, tt - 4.0, False); hide_key(dc, tt + 4.0, True)
-        g_ = sphere(glow_mat("count", WAVE_C, 4.0), (SENSOR_X, LANE_Y - 0.6 - 0.18 * k, 6.75), 0.07, seg=12)   # たまっていく光の粒
-        pop_in(g_, tt + 0.1, 1.0, 0.2); hide_key(g_, e("08-05") + 1.0, True)
+        g_ = sphere(glow_mat("count", WAVE_C, 6.0), (SENSOR_X + 0.75 + 0.42 * k, LANE_Y - 0.4, 6.45), 0.15, seg=12)   # たまっていく光の粒（v1 の点検：小さくて見えなかった。感知器の横に 1 列）
+        pop_in(g_, tt + 0.1, 1.0, 0.2); hide_key(g_, -100.0, False); hide_key(g_, e("08-05") + 1.0, True)   # v1 の点検：隠す印が 1 つだけだと、ずっと隠れていた
     # 09-01：感知器から光の線が空へ
     lb = beam_flash((SENSOR_X, LANE_Y, 6.7), (SENSOR_X, LANE_Y, 60.0), wp("09-01", "どこへ") - 0.2, 2.5, WAVE_C, 0.05, "up")
     ev(wp("09-01", "どこへ") - 0.2, "swish", 0.3, "sensor")
@@ -301,8 +311,8 @@ def b_town(par):
         for j in range(10):
             if (i + j) % 2: continue
             x, y = -half + i * blk, -half + j * blk
-            ob = cyl(pm, (x, y, 2.5), 1.2, 5.0, verts=10); hd = sphere(pm, (0, 0, 3.6), 1.5, seg=12, parent=ob)
-            tt = t + 0.12 * k * (1.0 - min(0.8, k / 60.0)); pop_in(ob, tt, 1.0, 0.2); hide_key(ob, e("06-04") + 0.5, True)
+            ob = cyl(pm, (x, y, 8.0), 3.6, 16.0, verts=10); hd = sphere(pm, (0, 0, 11.5), 4.6, seg=12, parent=ob)   # v1 の点検：小さくて見えなかった
+            tt = t + 0.12 * k * (1.0 - min(0.8, k / 60.0)); pop_in(ob, tt, 1.0, 0.2); hide_key(ob, -100.0, False); hide_key(ob, e("06-04") + 0.5, True)   # v1 の点検：人の印がずっと隠れていた（隠す印が 1 つだけ）
             if k % 4 == 0: ev(tt, "pop_s", 0.15, "")
             k += 1
     # 09-02・09-03：感知器（大きな道の角）→ 警察・道路の会社 → まとめる所 → 電波の塔 → 走る車
@@ -316,7 +326,8 @@ def b_town(par):
     SENS = [(-half + 3 * blk, -half + 3 * blk), (-half + 6 * blk, -half + 3 * blk), (-half + 3 * blk, -half + 6 * blk), (-half + 6 * blk, -half + 6 * blk), (0.0, -half + 3 * blk)]
     sm = glow_mat("sens_t", WAVE_C, 6.0)
     for k_, (x, y) in enumerate(SENS):
-        sp = sphere(sm, (x, y, 4.0), 3.5, seg=16); pop_in(sp, s("09-02") - 0.3 if k_ == 0 else s("10-04") + 0.3 + 0.25 * k_, 1.0, 0.2)
+        sp = sphere(sm, (x, y, 6.0), 9.0, seg=16); pop_in(sp, s("09-02") - 0.3 if k_ == 0 else s("10-04") + 0.3 + 0.25 * k_, 1.0, 0.2)   # v1 の点検：3.5 では引きの絵で見えなかった
+        dk = cyl(glow_mat("sens_d", WAVE_C, 2.5), (x, y, 0.4), 22.0, 0.3, verts=32); pop_in(dk, s("10-04") + 0.3 + 0.25 * k_, 1.0, 0.25)
         if k_ > 0: ev(s("10-04") + 0.3 + 0.25 * k_, "ping", 0.25, "")
     def flow(pts, t0, t1, col=WAVE_C, nm="flow"):
         cu = bpy.data.curves.new(nm, "CURVE"); cu.dimensions = '3D'; sp_ = cu.splines.new('POLY'); sp_.points.add(len(pts) - 1)
@@ -324,6 +335,7 @@ def b_town(par):
         cu.bevel_depth = 1.0; ob_ = bpy.data.objects.new(nm, cu); bpy.context.collection.objects.link(ob_); ob_.data.materials.append(glow_mat(nm + "m", col, 5.0))
         cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=f(t0)); cu.bevel_factor_end = 1.0; cu.keyframe_insert("bevel_factor_end", frame=f(t1))
         ev(t0, "swish", 0.25, "")
+        hide_key(ob_, -100.0, False); hide_key(ob_, s("10-04") - 0.5, True)    # v1 の点検：10-04 で、09 の線が残って感知器の光と混ざっていた
         return ob_
     s0 = SENS[0]
     flow([(s0[0], s0[1], 6), ((s0[0] + POL[0]) / 2, (s0[1] + POL[1]) / 2, 40), (POL[0], POL[1], 20)], wp("09-02", "警察") - 0.2, wp("09-02", "警察") + 0.8, nm="f1")
@@ -346,7 +358,7 @@ def b_nav(par):
     world("#2A2F38", 0.6)
     area((0.4, 0.6, 1.6), (0.95, 0, 1.0), 120, 2.0)
     cr = car((0, 0, 0), 0.0, "#B9C3CF", interior=True, name="navcar"); STAGE["car"] = cr
-    ph, _ = phone_on_holder(cr, [(0.0, os.path.join(TEX, "nav_red.png")), (s("10-01"), os.path.join(TEX, "nav_grey.png"))], glow=0.55); track("phone", ph, 0.0)
+    ph, _ = phone_on_holder(cr, [(0.0, os.path.join(TEX, "nav_red.png")), (s("10-01"), os.path.join(TEX, "nav_grey.png"))], glow=0.9); track("phone", ph, 0.0)
     ev(wp("09-04", "渋滞") - 0.2, "pop_ui", 0.3, "")
 
 
@@ -366,15 +378,15 @@ CUTS = [
     # 冒頭（A）
     ("A01", b_drive, s("01-01") - 0.5, C((-160.0, 2.0, 16.0), (-110.0, 4.0, 1.0), 30, (-145.0, 2.5, 12.0), (-95.0, 4.0, 1.0), d=5.0), "A"),
     ("A01b", b_drive, wp("01-01", "まるロボは"), CC((0.2, 3.2, 1.2), (0.1, 0.3, 1.0), 32), "A"),
-    ("A01c", b_drive, s("01-02"), CC((-0.75, 0.0, 1.32), (1.8, 0.0, 1.05), 26, (-0.65, -0.08, 1.3), (1.8, -0.08, 1.05)), "A"),
+    ("A01c", b_drive, s("01-02"), CC((2.7, 0.05, 1.28), (0.0, 0.0, 1.08), 26, (2.5, 0.0, 1.26), (0.0, 0.0, 1.08)), "A"),
     ("A01d", b_drive, s("01-03"), CC((0.35, 0.05, 1.18), (0.95, 0.0, 1.02), 30, (0.55, 0.03, 1.10), (0.95, 0.0, 1.02), d=3.0), "A"),
     ("A01e", b_drive, s("01-04"), CC((1.75, 0.55, 1.2), (0.15, 0.40, 0.95), 28), "A"),
     ("A02", b_drive, s("02-01"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
-    ("A02b", b_drive, s("02-03"), CC((-0.45, 0.62, 1.3), (15.0, -2.0, 0.8), 26), "A"),
+    ("A02b", b_drive, s("02-03"), CC((7.0, 3.2, 2.8), (-1.5, -2.5, 0.7), 26), "A"),
     ("A02c", b_drive, s("02-04"), CC((1.75, 0.55, 1.2), (0.15, 0.40, 0.95), 28), "A"),
     ("A03", b_drive, s("03-01") - 0.2, C((-30.0, -16.0, 30.0), (-6.0, 8.0, 0.0), 26), "A"),
     ("A03b", b_drive, s("03-02"), C((-6.0, -4.0, 9.0), (-4.0, 40.0, 1.0), 28), "A"),
-    ("A03c", b_drive, s("03-03"), CC((0.6, 2.4, 1.1), (0.1, 0.4, 0.95), 30), "A"),
+    ("A03c", b_drive, s("03-03"), CC((0.35, 2.3, 1.12), (0.15, 0.4, 1.0), 30), "A"),
     ("A03d", b_drive, s("03-04"), C((-3.0, 2.0, 14.0), (-4.0, 45.0, 1.0), 28), "A"),
     ("A04", b_drive, s("04-01"), C((8.0, 6.0, 26.0), (-4.0, 40.0, 0.0), 26, (8.0, 10.0, 26.0), (-4.0, 44.0, 0.0)), "A"),
     ("A04b", b_drive, s("04-02"), C((8.6, 26.0, 3.2), (-8.0, 22.0, 1.0), 24, (8.6, 44.0, 3.2), (-8.0, 40.0, 1.0)), "A"),
@@ -384,7 +396,7 @@ CUTS = [
     ("A04e", b_drive, s("04-08"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
     ("A04f", b_drive, s("04-09"), C((-6.0, 6.0, 1.4), (-5.0, 60.0, 1.6), 30), "A"),
     ("A04g", b_drive, s("04-10"), C((10.0, -6.0, 18.0), (-4.0, 40.0, 0.0), 24), "A"),
-    ("A04h", b_drive, s("04-11"), CC((1.7, 0.55, 1.2), (0.17, 0.4, 1.02), 30, (0.5, 2.3, 1.18), (0.17, 0.4, 1.02), d=3.0), "A"),
+    ("A04h", b_drive, s("04-11"), CC((0.0, 2.35, 1.2), (0.17, 0.4, 1.0), 30, (0.45, 2.2, 1.16), (0.17, 0.4, 1.0), d=5.0), "A"),
     ("A04i", b_drive, s("04-12"), C((-14.0, -10.0, 6.0), (-4.0, 40.0, 3.0), 24, (-14.0, -10.0, 22.0), (-4.0, 50.0, 2.0)), "A"),
     # 1章（B 歩道橋 → T 町の引き）
     ("B05", b_bridge, s("05-01") - 0.5, C((-0.6, 9.2, 5.75), (0.8, 5.6, 5.2), 28, (-0.5, 8.6, 5.7), (0.9, 5.3, 5.2)), "B"),
@@ -393,21 +405,21 @@ CUTS = [
     ("B05d", b_bridge, s("05-04"), C((-6.0, 10.0, 4.0), (10.0, 1.0, 1.0), 24), "B"),
     ("B05e", b_bridge, s("05-05"), C((2.6, 5.1, 5.2), (SPOT[0], SPOT[1], BR_H + 0.25), 34), "B"),
     ("B05f", b_bridge, s("05-06"), C((2.3, 6.3, 5.6), (SPOT[0], SPOT[1], BR_H + 0.2), 34), "B"),
-    ("B06", b_bridge, s("06-01"), C((8.0, -8.0, 2.5), (0.0, 4.0, 5.0), 26), "B"),
+    ("B06", b_bridge, s("06-01"), C((4.2, 2.6, 7.4), (0.7, LANE_Y + 0.3, 4.6), 26), "B"),
     ("T06", b_town, s("06-02"), C((0.0, -10.0, 520.0), (0.0, 0.0, 0.0), 30, (0.0, -10.0, 620.0), (0.0, 0.0, 0.0), d=9.0), "T"),
     ("B06b", b_bridge, s("06-04"), C((2.3, 6.6, 5.7), (SPOT[0], SPOT[1], BR_H + 0.2), 32), "B"),
     # 2章（B → T → N → C）
-    ("B07", b_bridge, s("07-01"), C((-0.7, 6.3, 5.5), (SENSOR_X, LANE_Y, 6.3), 30), "B"),
+    ("B07", b_bridge, s("07-01"), C((-0.6, LANE_Y + 1.0, 5.3), (SENSOR_X, LANE_Y, 6.6), 26), "B"),
     ("B07b", b_bridge, s("07-02"), C((SENSOR_X - 5.0, LANE_Y - 4.0, 3.5), (SENSOR_X, LANE_Y, 6.4), 30, (SENSOR_X - 3.0, LANE_Y - 2.5, 4.5), (SENSOR_X, LANE_Y, 6.4), d=4.0), "B"),
     ("B07c", b_bridge, s("07-04"), C((3.3, 6.6, 5.5), (SPOT[0], SPOT[1], BR_H + 0.25), 30), "B"),
-    ("B08", b_bridge, s("08-01") - 0.2, C((SENSOR_X, -3.4, 3.3), (SENSOR_X, LANE_Y, 3.3), 25), "B"),
-    ("B08b", b_bridge, s("08-05"), C((3.2, 4.0, 5.6), (SENSOR_X, LANE_Y, 4.0), 26), "B"),
-    ("B09", b_bridge, s("09-01"), C((SENSOR_X - 6.0, LANE_Y - 3.0, 1.5), (SENSOR_X, LANE_Y, 14.0), 26), "B"),
+    ("B08", b_bridge, s("08-01") - 0.2, C((SENSOR_X, -3.4, 3.4), (SENSOR_X, LANE_Y, 3.4), 18), "B"),
+    ("B08b", b_bridge, s("08-05"), C((2.6, 5.1, 5.2), (SPOT[0], SPOT[1], BR_H + 0.15), 30), "B"),
+    ("B09", b_bridge, s("09-01"), C((SENSOR_X - 6.0, LANE_Y - 3.0, 1.5), (SENSOR_X, LANE_Y, 9.0), 22), "B"),
     ("T09", b_town, s("09-02"), C((-100.0, -260.0, 230.0), (0.0, 40.0, 0.0), 26, (40.0, -260.0, 230.0), (40.0, 60.0, 0.0), d=10.0), "T"),
     ("N09", b_nav, s("09-04"), CC((0.66, 0.0, 1.08), (0.95, 0.0, 1.02), 42), "N"),
     ("B10", b_bridge, s("10-01"), C((3.3, 6.6, 5.4), (SPOT[0], SPOT[1], BR_H + 0.3), 30), "B"),
     ("C10", b_field, s("10-02"), C((0.6, 1.4, 0.8), (-2.0, 4.6, 0.3), 32), "C"),
-    ("C10b", b_field, s("10-03"), C((-0.4, 3.9, 0.12), (-1.6, 5.6, 6.0), 22), "C"),
+    ("C10b", b_field, s("10-03"), C((-2.3, 3.2, 0.35), (-0.4, 6.2, 5.0), 22), "C"),
     ("T10", b_town, s("10-04"), C((0.0, -420.0, 420.0), (0.0, 0.0, 0.0), 26, (120.0, -420.0, 420.0), (140.0, 60.0, 0.0), d=10.0), "T"),
     ("N10", b_nav, s("10-06"), CC((0.66, 0.0, 1.08), (0.95, 0.0, 1.02), 42), "N"),
     ("C10c", b_field, s("10-07"), C((1.5, 1.6, 0.8), (-1.0, 4.6, 0.25), 30), "C"),
@@ -418,11 +430,11 @@ CUTS = [
     ("A04d3", b_drive, s("04-06"), CC((0.55, -0.2, 1.12), (0.95, 0.03, 1.0), 40), "A"),
     ("T06b", b_town, s("06-03"), C((-200.0, -330.0, 160.0), (0.0, 0.0, 0.0), 26), "T"),
     ("B07b2", b_bridge, s("07-03"), C((SENSOR_X - 2.0, LANE_Y - 2.2, 5.0), (SENSOR_X, LANE_Y, 6.4), 34), "B"),
-    ("B08a", b_bridge, s("08-02"), C((SENSOR_X + 4.0, -3.4, 3.0), (SENSOR_X, LANE_Y, 3.3), 25), "B"),
-    ("B08c", b_bridge, s("08-03"), C((SENSOR_X, -3.4, 2.6), (SENSOR_X, LANE_Y, 3.0), 26), "B"),
-    ("B08d", b_bridge, s("08-04"), C((SENSOR_X - 4.0, -3.4, 3.6), (SENSOR_X, LANE_Y, 3.8), 25), "B"),
+    ("B08a", b_bridge, s("08-02"), C((SENSOR_X + 3.0, -3.4, 3.3), (SENSOR_X, LANE_Y, 3.4), 18), "B"),
+    ("B08c", b_bridge, s("08-03"), C((SENSOR_X - 1.0, -3.4, 3.4), (SENSOR_X, LANE_Y, 3.4), 18), "B"),
+    ("B08d", b_bridge, s("08-04"), C((SENSOR_X - 2.5, -3.4, 3.5), (SENSOR_X + 0.6, LANE_Y, 3.6), 18), "B"),
     ("T09b", b_town, s("09-03"), C((180.0, -120.0, 200.0), (20.0, 120.0, 10.0), 26), "T"),
-    ("T10b", b_town, s("10-05"), C((380.0, -60.0, 260.0), (230.0, 120.0, 0.0), 28), "T"),
+    ("T10b", b_town, s("10-05"), C((560.0, -300.0, 330.0), (190.0, 90.0, 0.0), 30), "T"),
 ]
 END_T = e("10-08") + 2.0
 CUTS.sort(key=lambda c: c[2])

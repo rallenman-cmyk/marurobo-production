@@ -177,13 +177,15 @@ def phone_seq(loc, rot_z, states, glow=2.2, fade=0.15):
         fi.default_value = 0.0; fi.keyframe_insert("default_value", frame=f(t - fade))
         fi.default_value = 1.0; fi.keyframe_insert("default_value", frame=f(t))
         col = mx.outputs[2]
-    nt.links.new(col, b.inputs["Base Color"]); nt.links.new(col, b.inputs["Emission Color"])
-    b.inputs["Emission Strength"].default_value = glow; b.inputs["Roughness"].default_value = 0.25; b.inputs["Coat Weight"].default_value = 0.25; b.inputs["Specular IOR Level"].default_value = 0.2
+    # 冒頭〜2章 v1 の点検：画面が白っぽく、色の線が見えなかった（地の色に日の光と、つやの照り返しが足されていた）。
+    #   画面は自分で光るだけにする（地の色は黒・つやなし）
+    nt.links.new(col, b.inputs["Emission Color"]); b.inputs["Base Color"].default_value = (0, 0, 0, 1)
+    b.inputs["Emission Strength"].default_value = glow; b.inputs["Roughness"].default_value = 0.7; b.inputs["Coat Weight"].default_value = 0.0; b.inputs["Specular IOR Level"].default_value = 0.0
     sc = plane(m, (0, 0, 0.0086), (0.07, 0.15), parent=e)
     return e, sc
 
 
-def phone_on_holder(parent, states, glow=0.55):   # 試しの絵：1.6 では画面が白く飛んで地図が見えなかった
+def phone_on_holder(parent, states, glow=0.9):   # 試しの絵：1.6 では画面が白く飛んで地図が見えなかった
     """前の台のスマホ（横向き。画面は後ろ＝−x を向く）。states は phone_seq と同じ（時刻, 絵）"""
     e_, scr = phone_seq((0, 0, 0), 0.0, states, glow=glow)
     e_.parent = parent; e_.location = PHONE_L; e_.rotation_euler = (0, R(-75), 0); e_.scale = (1.15, 1.15, 1.15)   # 画面を後ろ（−x）へ少し上向きに。長い辺は横（試しの絵：背中が見えていた）

@@ -6,7 +6,10 @@ import os, sys, math, random
 from PIL import Image, ImageDraw
 OUT = sys.argv[1]; os.makedirs(OUT, exist_ok=True)
 W, H = 1024, 512; SS = 2
-BG = (226, 229, 233); ROAD = (255, 255, 255); EDGE = (198, 203, 210); PARK = (205, 228, 196); WATER = (178, 210, 236); BLOCK = (238, 236, 231)
+BG = (206, 211, 218); ROAD = (255, 255, 255); EDGE = (198, 203, 210); PARK = (205, 228, 196); WATER = (178, 210, 236); BLOCK = (226, 223, 216)
+# 冒頭〜2章 v1 の点検：3D の画面に貼ると、色の線が細くて白っぽく見えた（引いた地図の細い道の色が見えない）。
+#   線の太さに下限を付け（大通り MW・細い道 SW）、地の色を少し濃くした
+MW, SW = 14 * 2, 6 * 2
 GREEN = (52, 178, 102); YELLOW = (242, 194, 48); RED = (226, 58, 48); GREY = (154, 164, 178); TEAL = (47, 217, 200); NAVY = (24, 38, 74)
 
 
@@ -71,17 +74,17 @@ def town_colors(d, c, k, near=True):
     """町の道に色（緑・黄・赤）。near＝寄り（大通りの先が赤）"""
     cx, cy = c
     rnd = random.Random(11)
-    color_line(d, [(0, cy), (cx - 200 * k, cy)], GREEN, int(16 * k))
-    color_line(d, [(cx - 200 * k, cy), (cx - 40 * k, cy)], YELLOW, int(16 * k))
-    color_line(d, [(cx, cy - 20 * k), (cx, 0)], RED, int(15 * k))           # 曲がった先の道が赤
-    color_line(d, [(cx, cy), (W * SS, cy)], GREEN, int(16 * k))
+    color_line(d, [(0, cy), (cx - 200 * k, cy)], GREEN, max(int(16 * k), MW))
+    color_line(d, [(cx - 200 * k, cy), (cx - 40 * k, cy)], YELLOW, max(int(16 * k), MW))
+    color_line(d, [(cx, cy - 20 * k), (cx, 0)], RED, max(int(15 * k), MW))           # 曲がった先の道が赤
+    color_line(d, [(cx, cy), (W * SS, cy)], GREEN, max(int(16 * k), MW))
     G = 40
     for gx in range(-G, G + 1):     # 細い道にも少し色
         for gy in range(-G, G + 1):
             if rnd.random() < 0.18:
                 x = cx + gx * 120 * k; y = cy + gy * 120 * k; col = rnd.choice([GREEN, GREEN, YELLOW, RED])
-                if rnd.random() < 0.5: color_line(d, [(x, y), (x + 120 * k, y)], col, max(2, int(7 * k)))
-                else: color_line(d, [(x, y), (x, y + 120 * k)], col, max(2, int(7 * k)))
+                if rnd.random() < 0.5: color_line(d, [(x, y), (x + 120 * k, y)], col, max(SW, int(7 * k)))
+                else: color_line(d, [(x, y), (x, y + 120 * k)], col, max(SW, int(7 * k)))
 
 
 def main():
@@ -100,9 +103,9 @@ def main():
     save(im, "ph_map_eta")
     # 6）車のナビ（2章）：大通りが赤い／町はずれの道だけ灰色
     im, d, c, k = base(1.4, seed=8); town_colors(d, c, k); me(d, c[0] - 200 * k, c[1], 1.0, 0); save(im, "nav_red")
-    im = Image.new("RGB", (W * SS, H * SS), (214, 226, 200)); d = ImageDraw.Draw(im)
-    d.line([0, H * SS * 0.55, W * SS, H * SS * 0.45], fill=(255, 255, 255), width=30 * SS)
-    d.line([0, H * SS * 0.55, W * SS, H * SS * 0.45], fill=GREY, width=16 * SS)
+    im = Image.new("RGB", (W * SS, H * SS), (178, 204, 160)); d = ImageDraw.Draw(im)
+    d.line([0, H * SS * 0.55, W * SS, H * SS * 0.45], fill=(255, 255, 255), width=44 * SS)
+    d.line([0, H * SS * 0.55, W * SS, H * SS * 0.45], fill=(120, 130, 146), width=30 * SS)
     me(d, W * SS * 0.45, H * SS * 0.50, 1.0, 5); save(im, "nav_grey")
     print("ok", sorted(os.listdir(OUT)))
 

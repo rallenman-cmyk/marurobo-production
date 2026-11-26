@@ -21,6 +21,10 @@ import subs_one as SO
 RD, FONTDIR, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv else 0.0
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
+# 12本目：章ごとの下書き。--end_line <文の ID> で、その文の 2 秒あとで終わる。次の文の声・字幕は入れず、終わりの 1.5 秒で音を消していく
+#   （冒頭〜2章 v1 の点検：--to だけだと、3章の頭の声「冒頭で言った…」が 1 秒だけ入り、途中で切れていた）
+END_LINE = sys.argv[sys.argv.index("--end_line") + 1] if "--end_line" in sys.argv else None
+if END_LINE: TO = T.e(END_LINE) + 2.0
 FPS, SR, WV, HV = 24, 48000, 1280, 720
 CL = json.load(open(os.path.join(HERE, "clips.json")))
 PIP_ONLY = set()      # 小窓だけに使うクリップ（この回は今のところなし）
@@ -240,6 +244,7 @@ voice = np.zeros(N, np.float32)
 VD = os.environ["MARU_VOICE"]
 on = np.zeros(N, np.float32)
 for p in P:
+    if END_LINE and p["start"] > T.e(END_LINE): continue
     with wave.open(os.path.join(VD, "line_%03d.wav" % p["no"])) as wv:
         sr0 = wv.getframerate(); x = np.frombuffer(wv.readframes(wv.getnframes()), np.int16).astype(np.float32) / 32768
     if sr0 != SR: x = np.interp(np.arange(int(len(x) * SR / sr0)) * sr0 / SR, np.arange(len(x)), x).astype(np.float32)
@@ -347,6 +352,8 @@ _f = int(1.0 * SR); _seg[:_f] *= np.linspace(0, 1, _f); _seg[-int(1.5 * SR):] *=
 bed[int(_a * SR):int(_a * SR) + _n] += 0.035 * _seg[:N - int(_a * SR)]
 mix = voice + music * g + fx * FX_GAIN + bed
 mix /= max(1.0, np.abs(mix).max() / 0.89)
+if END_LINE:
+    _i1 = int(TO * SR); _i0 = _i1 - int(1.5 * SR); mix[_i0:_i1] *= np.linspace(1, 0, _i1 - _i0, dtype=np.float32); mix[_i1:] = 0
 a0, a1 = int(FROM * SR), int(TO * SR)
 tmp = os.path.splitext(OUT)[0] + "_tmp"; os.makedirs(tmp, exist_ok=True)
 with wave.open(os.path.join(tmp, "mix.wav"), "wb") as wv:
@@ -361,6 +368,7 @@ ass = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720",
        style, "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
 for a, c, t in SUBS:
     if c < FROM or a > TO: continue
+    if END_LINE and a > T.e(END_LINE): continue
     ass.append("Dialogue: 0,%s,%s,Main,,0,0,0,,%s" % (ts(a), ts(c), t.replace("\n", "\\N")))
 open(os.path.join(tmp, "subs.ass"), "w", encoding="utf-8").write("\n".join(ass) + "\n")
 json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
