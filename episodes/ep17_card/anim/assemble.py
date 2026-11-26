@@ -17,6 +17,10 @@ import timing as T
 import overlays as OV
 import sfx
 import subs_jp as SJ
+# 4章（2026-11-26）：字幕の道具は声のフォルダの placement.json を読む。リポジトリの置き場所の表と食いちがわないよう、組むたびに写す
+#   （4章を足したとき、古い写し（127 文）を読んで止まった。3章の 16-08・17-02 の作り直しの長さも、写しには入っていなかった）
+import shutil as _sh
+_sh.copyfile(os.path.join(HERE, "..", "voice", "placement.json"), os.path.join(SJ.VOICE, "placement.json"))
 import subs_one as SO
 RD, FONTDIR, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv else 0.0
