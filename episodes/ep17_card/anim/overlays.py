@@ -81,12 +81,13 @@ def ev_list():
     add(wp("19-03", "作る") - 0.1, s("19-05") + 0.35, "cycle", dict(t_a=wp("19-03", "作る"), t_b=wp("19-03", "試す"), t_arr=s("19-04")))   # 点検（flash_check）：e("19-04")+0.5 で消え、次のカットまで 0.3 秒だけ図のない絵が挟まった → 替わり目のつなぎが終わるまで
     # 4章（2026-11-26）：絵コンテ表の 4章
     add(s("20-01") - 0.1, wp("20-02", "金庫") - 0.2, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.0))          # 冒頭の夜：カードが頭の上から金庫の棚へ飛んで入る（文ごとの点検：- 1.9 では歩く背中だけだった）
-    add(wp("20-02", "金庫") - 0.2, s("20-03") + 0.35, "pip_clip", dict(clip="A01d", src_t=w("01-04", "閉めて") - 0.9, nopop=True))  # とびらが閉まる（続きの小窓は出直さない）
+    add(wp("20-02", "金庫") - 0.2, s("20-03") + 0.35, "pip_clip", dict(clip="A01d", src_t=w("01-04", "閉めて") + 0.3, nopop=True))   # 別の目の点検：とびらが 2 回閉まって見えた → 閉まったあとから（ダイヤルを回す）  # とびらが閉まる（続きの小窓は出直さない）
     add(wp("20-03", "なぜ") - 0.1, e("20-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("21-04") + 0.05, e("21-04") + 0.4, "pip_clip", dict(clip="P21", src_t=s("21-04") + 0.05))
-    add(wp("21-05", "ぽっと") + 0.3, e("21-06") + 0.3, "tag", dict(text="まるロボのカード", obj="mylamp", dy=-95, size=44, bg=BLUE, fg=WHITE))
+    add(wp("21-05", "ぽっと") + 0.3, e("21-07") + 0.3, "tag", dict(text="まるロボのカード", obj="mylamp", dy=-95, size=44, bg=BLUE, fg=WHITE))
     add(s("21-07") + 0.05, s("21-07") + 2.3, "pip_clip", dict(clip="A01b", src_t=w("01-01", "1枚") - 0.1))             # 封筒からカード
-    add(s("21-07") + 2.3, e("21-07") + 0.3, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.0, nopop=True))       # 金庫へしまう（続きの小窓は出直さない。文ごとの点検：途中で一度小さくなって出直した）
+    add(s("21-07") + 2.3, e("21-07") + 0.3, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.0, nopop=True))
+    add(s("21-08") + 0.5, wp("21-08", "台帳") + 0.3, "qmark", dict(obj="lball", dy=-70, size=90))   # 別の目の点検：何を調べているか絵で分からなかった → 光の玉に「？」（字幕と同じ文の札は書かない）       # 金庫へしまう（続きの小窓は出直さない。文ごとの点検：途中で一度小さくなって出直した）
     add(wp("22-03", "2025年") - 0.1, s("22-07") + 0.05, "fig22", dict(t_num=wp("22-03", "およそ") - 0.1, t_c=wp("22-04", "9割") - 0.1,
         t_i=s("22-05") + 0.2, t_hl=wp("22-06", "当てられる") - 0.1))
     add(s("22-07") + 0.05, s("22-08") + 0.35, "pair",   # flash_check：札が消えてから次のカットまで 0.4 秒、図のない絵が挟まった → つなぎが終わるまで
@@ -773,10 +774,14 @@ def fig22_sprite(t, p):
             elif k == 1:   # 書類としずく
                 d.rectangle((x - 30 * S2, y - 38 * S2, x + 24 * S2, y + 34 * S2), outline=col, width=5 * S2)
                 for j in range(3): d.line((x - 18 * S2, y - 20 * S2 + j * 16 * S2, x + 12 * S2, y - 20 * S2 + j * 16 * S2), fill=col, width=4 * S2)
-                d.ellipse((x + 30 * S2, y + 14 * S2, x + 46 * S2, y + 32 * S2), fill=col)
+                dcol = (190, 196, 206) if dim else BLUE         # しずく（別の目の点検：黒い点に見えた）
+                d.polygon([(x + 38 * S2, y + 4 * S2), (x + 28 * S2, y + 24 * S2), (x + 48 * S2, y + 24 * S2)], fill=dcol)
+                d.ellipse((x + 28 * S2, y + 16 * S2, x + 48 * S2, y + 36 * S2), fill=dcol)
             else:          # 当てられた札（緑のふち）
                 gcol = (190, 196, 206) if dim else (52, 178, 102)
-                for j in range(4): d.rounded_rectangle((x - 62 * S2 + j * 32 * S2, y - 22 * S2, x - 36 * S2 + j * 32 * S2, y + 22 * S2), radius=5 * S2, outline=gcol, width=5 * S2)
+                for j in range(4):
+                    d.rounded_rectangle((x - 62 * S2 + j * 32 * S2, y - 22 * S2, x - 36 * S2 + j * 32 * S2, y + 22 * S2), radius=5 * S2, outline=gcol, width=5 * S2)
+                    D.ctext(d, (x - 49 * S2 + j * 32 * S2, y), "35??"[j], D.font(26 * S2), col)   # 札の数字（別の目の点検：空の四角が字化けに見えた）
                 if t >= p["t_hl"]:
                     d.rounded_rectangle((x - 74 * S2, y - 40 * S2, x + 74 * S2, y + 40 * S2), radius=14 * S2, outline=YEL, width=6 * S2)
             D.ctext(d, (x, y + 76 * S2), lab, D.font(44 * S2), col)
