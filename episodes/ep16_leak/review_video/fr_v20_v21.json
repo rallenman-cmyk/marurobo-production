@@ -1,0 +1,22 @@
+{
+ "created_at": "2026-11-26T22:35:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v20",
+ "to_version": "MARU-LEAK-v21",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwy3psxg2jmdt5sw",
+   "comment_rev": 1,
+   "explain": "小窓の下の札を「1章：最初のお城」から「最初のお城」にしました（声の「最初のお城で」と同じ言葉です）。ほかの章の札もすべて並べて調べ、章の番号など作る側の言葉が出ている所は、ほかにありませんでした。",
+   "new_t": 36.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v21",
+   "original_t": 36.8,
+   "original_t_end": null,
+   "original_text": "1章って文字入らない、なにがいっしょうかわからないので",
+   "reason": ""
+  }
+ ]
+}
