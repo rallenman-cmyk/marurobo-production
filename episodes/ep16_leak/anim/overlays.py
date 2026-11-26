@@ -77,6 +77,8 @@ def ev_list():
     E += OV7.ev_list7()
     import overlays8 as OV8      # 8章（S33〜S35）
     E += OV8.ev_list8()
+    import overlays9 as OV9      # 9章（S36〜S38）
+    E += OV9.ev_list9()
     return E
 
 
@@ -102,6 +104,8 @@ def sfx_list():
     L += OV7.sfx_list7()
     import overlays8 as OV8
     L += OV8.sfx_list8()
+    import overlays9 as OV9
+    L += OV9.sfx_list9()
     return L
 
 
@@ -725,6 +729,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind.startswith("c8_"):
             import overlays8 as OV8
             OV8.draw8(kind, t, t0, p, base, where, _paste, k, a, frame_of=frame_of)
+        elif kind.startswith("c9_"):
+            import overlays9 as OV9
+            OV9.draw9(kind, t, t0, p, base, where, _paste, k, a)
         elif kind == "pip_clip" and frame_of:
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
