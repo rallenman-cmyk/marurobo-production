@@ -19,7 +19,8 @@ old = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
 KEEP = {k: v for k, v in old.items() if k == "_" or k.split("|")[1] in ("ガチャン",)}     # 「ガチャン」は声の区間を目で確かめて手で書いた
 # 声の区切りの道具（pauses.cut_all）が、長い間（0.66 秒）ではなく短い息（0.11 秒）を「、」に当てた文は、波形を見て手で書く（文の頭からの秒）。
 #   16本目 5章 v15 のユーザー「音声と光るところのタイミングがあってない」：26-05 の「電話・誕生日・勤め先」が 0.5〜1.1 秒早かった
-MANUAL = {"26-05": {"名前": 0.02, "住所": 1.05, "電話": 1.90, "誕生日": 3.00, "勤め先": 3.84, "買った物": 5.06}}
+MANUAL = {"28-02": {"ガチャ|1": 0.92},      # 2 つ目の「ガチャ」：同じ言葉の 2 つ目を、道具が 1 つ目と同じ時刻にしていた（6章を作るとき）
+          "26-05": {"名前": 0.02, "住所": 1.05, "電話": 1.90, "誕生日": 3.00, "勤め先": 3.84, "買った物": 5.06}}
 
 
 def seg_times(k):
@@ -51,13 +52,14 @@ def word_time(i, word, occ=0):
 
 
 if __name__ == "__main__":
-    src = "".join(open(os.path.join(HERE, f), encoding="utf-8").read() for f in ("scenes_ch2.py", "overlays2.py", "scenes_ch3.py", "overlays3.py", "scenes_ch4.py", "overlays4.py", "scenes_ch5.py", "overlays5.py") if os.path.exists(os.path.join(HERE, f)))      # 3章も同じ表に
+    src = "".join(open(os.path.join(HERE, f), encoding="utf-8").read() for f in ("scenes_ch2.py", "overlays2.py", "scenes_ch3.py", "overlays3.py", "scenes_ch4.py", "overlays4.py", "scenes_ch5.py", "overlays5.py", "scenes_ch6.py", "overlays6.py") if os.path.exists(os.path.join(HERE, f)))      # 3章も同じ表に
     calls = set(re.findall(r'\bwv?\("(\d\d-\d\d)", "([^"]+)"(?:, (\d))?\)', src))
     out = dict(KEEP)
     for i, word, occ in sorted(calls):
         key = "%s|%s|%d" % (i, word, int(occ or 0))
         if key in out: continue
-        t = round(P[IDX[i]]["start"] + MANUAL[i][word], 3) if word in MANUAL.get(i, {}) else word_time(i, word, int(occ or 0))
+        mk = word if int(occ or 0) == 0 else "%s|%d" % (word, int(occ))
+        t = round(P[IDX[i]]["start"] + MANUAL[i][mk], 3) if mk in MANUAL.get(i, {}) else word_time(i, word, int(occ or 0))
         if t is not None: out[key] = t
     out["_"] = "2章の絵・札・音を合わせる言葉の時刻（声の区切りごとの字数の割合。make_word_times.py が作る。ガチャンは声の区間を見て手で書いた）"
     json.dump(out, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
