@@ -278,6 +278,7 @@ def _seen1(src, t):
     q = min(pts, key=lambda p: abs(p[0] - k))
     return 0 <= q[1] <= 1280 and 0 <= q[2] <= 720 and q[3] > 0
 DROP = []
+SRC3D = set()   # 12本目 v1 の点検：絵の物（まるロボの目の光など）が鳴らす音。声と重なっても動かさない（2 回の「ピッ」が同じ時刻に寄り、光とずれた）
 _SHOWN_END = {nm: (CL[ORDER[i + 1]][2] if i + 1 < len(ORDER) else CL[nm][1]) for i, nm in enumerate(ORDER)}   # 映る範囲＝始まり〜次のカットの始まり
 for nm in ORDER:
     if nm not in LOG: continue
@@ -290,6 +291,7 @@ for nm in ORDER:
         if (round(t, 2), kind) in EV: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
+        if src: SRC3D.add((round(t, 2), kind))
 # 17本目 v1 の点検：まるロボの電子音（beep_）が 1 秒の中に同じ種類で重なったら、大きい 1 つだけ鳴らす（首振りが自分で鳴らす音と、場面で足した音が重なっていた）
 _bp = sorted(k for k in EV if k[1].startswith("beep_") and EV[k] > 0)
 for i_, (t_, k_) in enumerate(_bp):
@@ -318,7 +320,7 @@ _hop = int(0.02 * SR); _m = N // _hop
 _env = np.abs(voice[:_m * _hop]).reshape(_m, _hop).max(1) > 0.02
 _env = np.convolve(_env.astype(float), np.ones(5), mode="same") > 0      # 前後 0.04 秒の余白
 voiced = lambda t0, t1: _env[max(0, int(t0 * SR) // _hop):max(0, int(t1 * SR) // _hop + 1)].any()
-motor_on = []
+motor_on = []; placed = []
 for (t, kind), gain in sorted(EV.items()):
     if kind == "motor_on": motor_on.append(t); continue
     if kind == "motor_off":
@@ -333,15 +335,17 @@ for (t, kind), gain in sorted(EV.items()):
     if x is None: continue
     x = x.astype(np.float32) * gain
     dur = len(x) / SR
-    if kind in SHIFT and voiced(t, t + dur):
+    if kind in SHIFT and (round(t, 2), kind) not in SRC3D and voiced(t, t + dur):
         best = None
         win = 0.9 if kind in ("pipi", "click") else 0.5     # 返事の「ピッ、ピッ」・バンパーのカチッは、言葉の「……」の間まで探す
-        for d_ in np.arange(-win, win + 0.01, 0.02):
+        for d_ in np.arange(-min(win, 0.15), win + 0.01, 0.02):     # 12本目 v1 の点検：札より 0.3〜0.5 秒早く鳴っていた → 前へは 0.15 秒まで
+            if any(k2 == kind and abs(t2 - (t + d_)) < 0.2 for t2, k2 in placed): continue   # 同じ音が重なる所へは動かさない（「橋」「トンネル」の音が同じ時刻に寄った）
             if not voiced(t + d_, t + d_ + dur) and (best is None or abs(d_) < abs(best)): best = d_
         if best is not None: moves.append((round(t, 2), kind, round(best, 2))); t += best
         else: overl.append((round(t, 2), kind)); x = x * 0.5      # 言葉の瞬間に出る札の音：ずらせないときは半分の大きさに（声をじゃましない）
     i = int(t * SR)
     if i < 0: continue
+    placed.append((t, kind))
     fx[i:i + len(x)] += x[:N - i]
 # 16本目：駅の環境音（9本目の床の音）は使わない。夜の虫の声などは効果音（crickets）で鳴らす
 bed = np.zeros(N, np.float32)

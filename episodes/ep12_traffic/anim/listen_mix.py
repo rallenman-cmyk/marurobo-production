@@ -45,6 +45,7 @@ while t < T1 - 1:
     txt = r["candidates"][0]["content"]["parts"][0]["text"]
     try: j = json.loads(txt)
     except Exception: j = {"raw": txt}
+    if isinstance(j, list): j = j[0] if len(j) == 1 and isinstance(j[0], dict) else {"issues": j}   # 12本目：返事が配列のときがある（そこで止まっていた）
     lv = 20 * np.log10(np.sqrt((y ** 2).mean()) + 1e-9); pk = 20 * np.log10(np.abs(y).max() + 1e-9)
     lines = [p["text"] for p in P if p["start"] < min(T1, t + 30) and p["end"] > t]
     R.append(dict(t0=round(t, 1), t1=round(min(T1, t + 30), 1), rms_db=round(float(lv), 1), peak_db=round(float(pk), 1), heard=j, script=lines))

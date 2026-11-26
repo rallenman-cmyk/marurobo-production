@@ -26,8 +26,8 @@ def ev_list():
     add(s("02-01") + 0.1, e("02-01") + 0.3, "ring", dict(obj="phone", r=70, col=YEL))
     add(wp("02-02", "渋滞") - 0.1, e("02-02") + 0.3, "tag", dict(text="この先 渋滞", obj="phone", dy=-150, size=52, bg=RED, fg=WHITE))
     add(wp("02-04", "首を") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(s("03-04") + 0.05, e("03-04") + 0.4, "pair", dict(left=("TEX:ph_map_alert", 0), right=("A03b", e("03-02") - 0.3),
-        cap=("地図の赤い線", "本当の車の列")))
+    add(s("03-04") + 0.05, s("04-01") - 0.05, "pair", dict(left=("TEX:ph_map_alert", 0), right=("A03b", e("03-02") - 0.3),
+        cap=("地図の赤い線", "本当の車の列")))   # 消すのは次のカットに替わる所（e+0.4 で消すと、後ろの似た列の絵が 0.5 秒だけ見えてから替わった。v1 点検）
     add(wp("04-03", "誰が") - 0.1, e("04-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(wp("04-06", "細い道") - 0.1, e("04-06") + 0.3, "ring", dict(obj="phone", r=80, col=YEL))
     add(wp("04-07", "120万") - 0.1, e("04-07") + 0.4, "tag", dict(text="120万km以上", pos=(640, 92), size=64, bg=WHITE))
@@ -35,7 +35,7 @@ def ev_list():
     add(wp("04-08", "着く時刻") - 0.1, e("04-08") + 0.4, "tag", dict(text="着く時刻 17:40", obj="phone", dy=-150, size=56, bg=WHITE))
     add(wp("04-10", "誰が") - 0.1, e("04-10") + 0.5, "tag", dict(text="誰が測っている？", pos=(340, 110), size=56, bg=WHITE))
     add(wp("04-10", "どうして") - 0.1, e("04-10") + 0.5, "tag", dict(text="なぜ先まで分かる？", pos=(940, 110), size=56, bg=YEL))
-    add(e("04-10") - 0.6, e("04-10") + 1.6, "title", {})
+    add(e("04-10") - 0.6, s("04-11") - 0.1, "title", {})   # 次の文（04-11）の字幕に残っていた（v1 点検）。次の声の前に消す
     # 1章
     add(s("06-04") + 0.2, e("06-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # 2章
@@ -51,6 +51,9 @@ def ev_list():
     add(wp("09-03", "電波") - 0.1, e("09-03") + 0.3, "tag", dict(text="電波", obj="tower", dy=-110, size=52, bg=YEL))
     add(wp("10-05", "橋") - 0.1, e("10-05") + 0.3, "ring", dict(obj="bridge", r=70, col=YEL))
     add(wp("10-05", "トンネル") - 0.1, e("10-05") + 0.3, "ring", dict(obj="tunnel", r=70, col=YEL))
+    # 遠くから見た町で、輪の中の物が小さく、何を指しているか分からなかった（v1 点検、390px）→ 輪の上に名前の札
+    add(wp("10-05", "橋") - 0.1, e("10-05") + 0.3, "tag", dict(text="橋", obj="bridge", dy=-105, size=48, bg=WHITE))
+    add(wp("10-05", "トンネル") - 0.1, e("10-05") + 0.3, "tag", dict(text="トンネル", obj="tunnel", dy=-105, size=48, bg=WHITE))
     add(s("10-06") + 0.1, e("10-06") + 0.3, "ring", dict(obj="phone", r=80, col=YEL))
     add(s("10-07") + 0.05, e("10-07") + 0.4, "pip_clip", dict(clip="TEX:ph_map_z2", src_t=0, hold=True))
     add(wp("10-08", "なぜ") - 0.2, e("10-08") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
@@ -60,11 +63,16 @@ def ev_list():
     _cuts = sorted(v[2] for k_, v in _CL.items())
     out = []
     for a_, b_, kd, p_ in E:
-        if "obj" in p_:
+        a0_ = a_
+        if "obj" in p_ or kd == "tag":   # 12本目 v1 の点検：位置を決めた札も、替わる途中の前の場面（霧）の上に出ていた
             for c_ in _cuts:
                 if a_ - 0.42 <= c_ < b_ - 0.5 and c_ < a_ + 0.42: a_ = c_ + 0.42
+        if a_ != a0_: MOVED[round(a0_, 2)] = a_
         out.append((a_, b_, kd, p_))
     return out
+
+
+MOVED = {}   # 場面の替わり終わりまで遅らせた札：元の時刻 → 出す時刻（札の音も一緒に遅らせる）
 
 
 def sfx_list():
@@ -80,7 +88,8 @@ def sfx_list():
     L.append((wp("08-04", "車の数") - 0.1, "pop", 0.3)); L.append((wp("08-04", "こみ具合") - 0.1, "pop", 0.3))
     L.append((wp("10-05", "橋") - 0.1, "pi", 0.3)); L.append((wp("10-05", "トンネル") - 0.1, "pi", 0.3))
     L.append((s("10-07") + 0.05, "swish", 0.25))
-    return L
+    ev_list()
+    return [(MOVED.get(round(t_, 2), t_), k_, g_) for t_, k_, g_ in L]   # 12本目 v1 の点検：札を遅らせたのに音だけ先に鳴っていた
 
 
 def _pop(t, t0, t1):
