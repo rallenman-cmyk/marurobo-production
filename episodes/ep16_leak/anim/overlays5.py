@@ -17,7 +17,7 @@ BOOK_ITEMS = [("face", "名前"), ("house", "住所"), ("phone", "電話"), ("ca
 def book_sprite(t, p):
     """26-05：開いた名簿（左右 2 ページ、青緑の表紙のふち）。6 つの絵が、言う言葉の時刻に 1 つずつ光り、下に言葉が出る。
     開くとき：はじめ閉じた表紙（右半分だけ）→ 0.5 秒で左へ開く（急に出さない）"""
-    W_, H_ = 1000, 400
+    W_, H_ = 1000, 520
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     u = min(1.0, max(0.0, (t - p["t_open"]) / 0.5)); u = u * u * (3 - 2 * u)
     cx = W_ / 2
@@ -26,18 +26,16 @@ def book_sprite(t, p):
     d.rounded_rectangle(((x0 + 14) * S2, 34 * S2, (W_ - 54) * S2, (H_ - 34) * S2), radius=14 * S2, fill=(250, 248, 240, 255))
     if u < 1.0:
         return im.resize((W_, H_), Image.LANCZOS)
-    d.line((cx * S2, 40 * S2, cx * S2, (H_ - 40) * S2), fill=(200, 196, 184, 255), width=3 * S2)      # 綴じ目
-    for i, (kd, nm) in enumerate(BOOK_ITEMS):
+    for i, (kd, nm) in enumerate(BOOK_ITEMS):      # 2 段 × 3 つ（試しの絵：1 列に 6 つだと「電話誕生日」のように字が重なった）
         col, row = i % 3, i // 3
-        x = (180 + col * 140) if row == 0 else (560 + col * 140)      # 左ページに 3 つ・右ページに 3 つ
-        y = 175
+        x = 200 + col * 300; y = 110 + row * 200
         lit = t >= p["lit"][i]
         if lit:
             v = min(1.0, (t - p["lit"][i]) / 0.25)
-            r = 62 + 10 * math.sin(v * math.pi)
+            r = 56 + 10 * math.sin(v * math.pi)
             d.ellipse(((x - r) * S2, (y - r) * S2, (x + r) * S2, (y + r) * S2), fill=TEAL_L + (255,))
-        IC.icon(d, kd, x * S2, y * S2, 40 * S2, NAVY if lit else (176, 182, 194))
-        if lit: D.ctext(d, (x * S2, 290 * S2), nm, D.font(44 * S2), NAVY)
+        IC.icon(d, kd, x * S2, y * S2, 38 * S2, NAVY if lit else (176, 182, 194))
+        if lit: D.ctext(d, (x * S2, (y + 86) * S2), nm, D.font(44 * S2), NAVY)
     return im.resize((W_, H_), Image.LANCZOS)
 
 
