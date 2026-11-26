@@ -744,10 +744,10 @@ def cycle_sprite(t, p):
 def fig22_sprite(t, p):
     """22-03〜22-06：被害の数字（約 510 億円・2025年・1年間）、10 に分けた丸（9 つが青＝番号だけ）、きっかけの 3 つの絵（「当てられた」だけ光る）。
     数字の出どころ：日本クレジット協会の発表（2025 年 510.5 億円、番号盗用 93.1％）"""
-    W_, H_ = 1040, 470; S2 = 2
+    W_, H_ = 1040, 490; S2 = 2
     im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 242))
-    D.ctext(d, (290 * S2, 62 * S2), "2025年・1年間", D.font(40 * S2), (110, 118, 132))
+    D.ctext(d, (290 * S2, 62 * S2), "2025年・1年間", D.font(44 * S2), (110, 118, 132))
     if t >= p["t_num"]:
         D.ctext(d, (290 * S2, 160 * S2), "約 510 億円", D.font(92 * S2), RED)
     if t >= p["t_c"]:
@@ -758,14 +758,14 @@ def fig22_sprite(t, p):
             on = k < 9 and k < int(round(g * 9 + 0.49))
             d.pieslice((cx - r, cy - r, cx + r, cy + r), a0, a1, fill=BLUE if on else (205, 210, 218))
         d.ellipse((cx - r * 0.45, cy - r * 0.45, cx + r * 0.45, cy + r * 0.45), fill=(255, 255, 255))
-        D.ctext(d, (790 * S2, 296 * S2), "番号だけ：9割以上", D.font(40 * S2), NAVY)
+        D.ctext(d, (790 * S2, 296 * S2), "番号だけ：9割以上", D.font(44 * S2), NAVY)
     if t >= p["t_i"]:
         labels = ("のぞき見", "漏れた", "当てられた")
         for k, lab in enumerate(labels):
             if t < p["t_i"] + 0.35 * k: continue
             dim = t >= p["t_hl"] and k != 2
             col = (190, 196, 206) if dim else NAVY
-            x = (190 + k * 330) * S2; y = 382 * S2
+            x = (200 + k * 320) * S2; y = 372 * S2      # 390px の点検：名前が絵に重なり、右の名前が枠からはみ出した → 名前は絵の下に
             if k == 0:     # 目
                 d.ellipse((x - 46 * S2, y - 24 * S2, x + 46 * S2, y + 24 * S2), outline=col, width=6 * S2)
                 d.ellipse((x - 14 * S2, y - 14 * S2, x + 14 * S2, y + 14 * S2), fill=col)
@@ -778,7 +778,7 @@ def fig22_sprite(t, p):
                 for j in range(4): d.rounded_rectangle((x - 62 * S2 + j * 32 * S2, y - 22 * S2, x - 36 * S2 + j * 32 * S2, y + 22 * S2), radius=5 * S2, outline=gcol, width=5 * S2)
                 if t >= p["t_hl"]:
                     d.rounded_rectangle((x - 74 * S2, y - 40 * S2, x + 74 * S2, y + 40 * S2), radius=14 * S2, outline=YEL, width=6 * S2)
-            D.ctext(d, (x + 110 * S2, y), lab, D.font(36 * S2), col)
+            D.ctext(d, (x, y + 76 * S2), lab, D.font(44 * S2), col)
     return im.resize((W_, H_), Image.LANCZOS)
 
 
