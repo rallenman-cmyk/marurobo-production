@@ -354,7 +354,7 @@ with wave.open(os.path.join(tmp, "mix.wav"), "wb") as wv:
 
 # ---------------------------------------------------------------- 字幕の ASS
 def ts(x): x = math.floor(max(0.0, x - FROM) * 100 + 1e-6) / 100; return "%d:%02d:%05.2f" % (x // 3600, x % 3600 // 60, x % 60)   # 頭も終わりも 1/100 秒に切り捨て（四捨五入で 2.00 秒の字幕が 1.99 秒になった。9本目 v2）
-style = SJ.STYLE_MAIN.replace("Noto Sans CJK JP", "Noto Sans JP")      # 16本目 v1 のユーザー「テロップのフォント違う」：この作業場所の 700Bold にあるのは Noto Sans JP（CJK と同じ字の形）。
+style = SJ.STYLE_MAIN   # 12本目：この作業場所の 700Bold は Noto Sans CJK JP（apt の fonts-noto-cjk）。決まりの字の名前のまま使う      # 16本目 v1 のユーザー「テロップのフォント違う」：この作業場所の 700Bold にあるのは Noto Sans JP（CJK と同じ字の形）。
 #   名前が合わないと、ffmpeg は別の字（丸い字）に置きかえていた。名前は fc-scan で調べた物を使う
 ass = ["[Script Info]", "ScriptType: v4.00+", "PlayResX: 1280", "PlayResY: 720", "", "[V4+ Styles]",
        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
