@@ -6,6 +6,7 @@
 set -e
 EP=$(cd "$(dirname "$0")/.." && pwd); REPO=$(cd "$EP/../.." && pwd); OUT=$(cd "${1:-.}" && pwd); MW=${2:-$MARU_WORK}
 python3 $REPO/skill/marurobo-video-production/scripts/ps_lint.py $EP/pc_kit/run_pc_render_ep16.ps1
+python3 $EP/anim/collide_check.py | tail -1 | grep -q '：0$' || { python3 $EP/anim/collide_check.py; echo "章のファイルが前の部品の名前を上書きしています（直してから作る）"; exit 1; }      # 16本目 8章の前：6章の DOOR_Y が 1章の裏口を上書きしていた
 SCN=$(cd $EP/anim && ls scenes_ch*.py | sed 's/\.py$//' | tr '\n' ' ')      # 章を足したら自動で入る（5章を作ったとき scenes_ch5.py が入っていなかった）
 for f in scenes $SCN kit16 kit16b kit16c maru16 timing; do python3 -m py_compile $EP/anim/$f.py; done
 test -f $MW/stage/tex16/pricetag.png || { echo "tex16 の絵がありません：$MW/stage/tex16"; exit 1; }
