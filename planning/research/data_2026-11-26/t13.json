@@ -1,0 +1,4561 @@
+{
+ "fetched_at": "2026-11-26T22:47:08.284785+00:00",
+ "sort": null,
+ "queries": {
+  "検索 ボタン 押してから 結果 出るまで 何が起きている": [
+   {
+    "id": "24LKkaUVOJ4",
+    "title": "Google検索はなぜ一瞬で終わるのか？検索が0.1秒で答えを出せる理由！裏側で起きているヤバい仕組みを解説",
+    "channel": "ディープIT・PCトレンドラボ",
+    "channel_id": "UCyU-hoikUPtr9DN9D4gbJ1A",
+    "views": 143,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "6:52"
+   },
+   {
+    "id": "Zn3MpyrRPiw",
+    "title": "検索ボタンを押してもネットは探していない『検索エンジンの仕組み』 #ゆっくり解説 #検索エンジン #雑学",
+    "channel": "ゆっくり解体新書",
+    "channel_id": "UCDktAgu0i3OA8bIfLmpyGew",
+    "views": 7,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "6:02"
+   },
+   {
+    "id": "w9VS257RIAo",
+    "title": "検索した言葉、誰に見られてる？Chrome拡張機能の落とし穴",
+    "channel": "まもたね【やさしいセキュリティ解説】",
+    "channel_id": "UC5nZ5B_u8ss_1T2gr9qC2kg",
+    "views": 234,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "12:29"
+   },
+   {
+    "id": "Fxa0NR2xJjY",
+    "title": "通販で検索ボタンを押すと、裏で何が起きているのか【フロントエンドとバックエンド】",
+    "channel": "1ビットの猫",
+    "channel_id": "UCvV4DNQIingZ711SfkEgxvA",
+    "views": 18,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "10:18"
+   },
+   {
+    "id": "k7-BTKrDR4w",
+    "title": "【絶対知るべき】Google検索の隠しコマンド達が凄すぎる！",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 209733,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "13:44"
+   },
+   {
+    "id": "n0Ok3B2R8Pk",
+    "title": "【警告】知らずに押していました…GoogleとChromeを間違えると高額請求？本当に危ないのは「ここ」です。今すぐ確認を！",
+    "channel": "はじめてのスマホ案内所【ナビ先生】",
+    "channel_id": "UCf5n9UGi1zWU-iZ9S9etN_g",
+    "views": 724,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "11:39"
+   },
+   {
+    "id": "lbgJc7t7apQ",
+    "title": "Google検索、トップページの「検索」ボタンを廃止 AIモードのサイドバーも全世界に",
+    "channel": "TapAI【AIニュース・解説ch】",
+    "channel_id": "UCLLozom8CooGrR6aCmURPlQ",
+    "views": 257,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "3:22"
+   }
+  ],
+  "Google 検索 0.5秒 裏側 何が起きている": [],
+  "写真 撮ってから 保存 クラウド どこへ 仕組み": [],
+  "シャッター 押してから 写真 できるまで スマホ 仕組み": [
+   {
+    "id": "OuPjqmf9_EI",
+    "title": "スマホは、シャッターを押す前から撮っている｜スマホのカメラの正体",
+    "channel": "学びたい大人のための大学",
+    "channel_id": "UCQtzlTB_b-C_gHZ59r9yiKQ",
+    "views": 24304,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "35:45"
+   },
+   {
+    "id": "gVZeSlsFa_Q",
+    "title": "【写真講座】実は3つ！？スマホのシャッターボタン",
+    "channel": "写真と子育て研究所 フォトチャム",
+    "channel_id": "UCS5UgQIcDh3mwhEgPY37cqQ",
+    "views": 2360,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:54"
+   },
+   {
+    "id": "X6tC_pykH-w",
+    "title": "【iPhone】声だけでシャッターを切る！カメラの便利すぎる裏技を紹介✨",
+    "channel": "スマキン【Smakin】",
+    "channel_id": "UC3zx3B5VObMmSGyZk0mijxw",
+    "views": 188620,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "6:49"
+   },
+   {
+    "id": "k6ZOlGOW3so",
+    "title": "カメラで写真が撮れる仕組み",
+    "channel": "仕組みチャンネル",
+    "channel_id": "UCFIFAinqRitrg-WJIoerl8A",
+    "views": 38333,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "19:08"
+   },
+   {
+    "id": "LR0sOeRvvIg",
+    "title": "【Xperia 10 VII】シャッターボタンでカメラやスクリーンショットを使う(au公式)",
+    "channel": "au",
+    "channel_id": "UCnHmD0XBFFMnA3zhL85zL3g",
+    "views": 5485,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:43"
+   },
+   {
+    "id": "A7VuO88FZPA",
+    "title": "【基本】シャッタースピードで写真の表現力を上げろ【初心者カメラ講座】",
+    "channel": "ケイゴの写真大学",
+    "channel_id": "UC3CPyCnhzdtAAvboJxzVfug",
+    "views": 45586,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:54"
+   }
+  ],
+  "電話 声 どうやって 届く 仕組み 相手": [
+   {
+    "id": "bMYPUc2wcDg",
+    "title": "【意外と知らない】電話の声の伝わり方とは？【通信技術】",
+    "channel": "今さら聞けないをこっそり学ぶ",
+    "channel_id": "UCwhE4BX5Myo4Rae1z1l4fyw",
+    "views": 135,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "7:11"
+   },
+   {
+    "id": "ISOlkJgkhSE",
+    "title": "電話の仕組みとは？遠く離れた相手と会話ができる原理を解説",
+    "channel": "むしめがねの”未来自然ラボ / Future Nature Lab”  約1分で解説",
+    "channel_id": "UC07lJNw0HBtMhILhLit6D8w",
+    "views": 293,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "0:59"
+   },
+   {
+    "id": "v_l5r-FBVLA",
+    "title": "【科学】電話で人の声が聞こえる仕組み",
+    "channel": "私の好奇心",
+    "channel_id": "UCikR-bQcUbGiYG6H3WB81Tg",
+    "views": 2233,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:43"
+   },
+   {
+    "id": "rqzv3c7ybRQ",
+    "title": "あなたの携帯電話が電話をかける仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 73396,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:01"
+   },
+   {
+    "id": "M2TkD5JX6R8",
+    "title": "【ゆっくり解説】携帯電話の声は他人の声？！音声符号化の謎",
+    "channel": "ゆっくりコンピュータサイエンス",
+    "channel_id": "UCjZ35aEgqSXCM20PP-akEiA",
+    "views": 5025,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:04"
+   },
+   {
+    "id": "dO4PN9nEHFQ",
+    "title": "スマホの電波はどうやって相手まで届く？",
+    "channel": "暮らしのしくみ断面図",
+    "channel_id": "UCgBC0DnKY3_8XGd4YzxUvQQ",
+    "views": 4,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "1:58"
+   }
+  ],
+  "ビデオ通話 仕組み 映像 どうやって 届く": [
+   {
+    "id": "WTr4Je9Gf5Q",
+    "title": "ビデオ通話の映像は、なぜサーバーを通らないのか。WebRTC の仕組み (NAT・STUN・TURN・ICE)",
+    "channel": "マキナちゃんねる",
+    "channel_id": "UCAZUPJkYJvDYESgqPLYdXsw",
+    "views": 40,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "14:19"
+   },
+   {
+    "id": "04VfIqZ9n6Y",
+    "title": "家を出た瞬間、ビデオ通話が一瞬止まるのはなぜ？",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 4,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "5:45"
+   },
+   {
+    "id": "rqzv3c7ybRQ",
+    "title": "あなたの携帯電話が電話をかける仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 73396,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:01"
+   },
+   {
+    "id": "eLs_xDQH5Hg",
+    "title": "YouTube/ネットの仕組み。動画がスマホに届くまで 🌏",
+    "channel": "ギズモード・ジャパン",
+    "channel_id": "UCZm3dECbQU33IWG5MQ-NAdw",
+    "views": 160835,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:30"
+   },
+   {
+    "id": "crUA1MSGlsw",
+    "title": "ビデオ通話の録画で「ばらまく」と脅されたら最初にやること｜払っても消えない【セクストーション】",
+    "channel": "お金の取られ方図鑑",
+    "channel_id": "UCNUndhJCjsCpOJ1aJ2yKeJw",
+    "views": 4,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "5:33"
+   },
+   {
+    "id": "drAkLNKK8XQ",
+    "title": "【ビデオ通話】Google Meetの使い方「パソコン編」～Gmailから簡単にオンラインミーティングが可能～",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 66514,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "18:10"
+   },
+   {
+    "id": "-kCCwfwfOGU",
+    "title": "AIで実現する、他とは違うビデオ通話・映像配信サービスのつくり方",
+    "channel": "NTTドコモビジネス",
+    "channel_id": "UCsGnNfHgXhLWUfecermD4WQ",
+    "views": 706,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "48:57"
+   },
+   {
+    "id": "X9_wN0KZRq4",
+    "title": "「どうぞ」「いえ、どうぞ」。ビデオ通話で、譲り合ったのに、またかぶるのはなぜ？",
+    "channel": "科学なるほど新聞",
+    "channel_id": "UCXhDkY_mJSCtFnHF9KsbNpw",
+    "views": 34,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "6:21"
+   },
+   {
+    "id": "-jNFptYDc44",
+    "title": "インターネットの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 462881,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:03"
+   },
+   {
+    "id": "83HctCDWP1c",
+    "title": "チャットはなぜ相手から届く？ リアルタイム通信のしくみ（WebSocket・SSE・WebRTC）",
+    "channel": "わんこと仙人のIT漫画大学【Progate(プロゲート)】",
+    "channel_id": "UCHBcEzu9KhIbkOD3UWR2XUg",
+    "views": 6,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "11:58"
+   },
+   {
+    "id": "scfnMsidGSk",
+    "title": "メールは欠けない、通話は止まらない。TCPとUDPの届け方の違いを3Dで見る｜見えるシステム #20",
+    "channel": "3DでみえるITシステム",
+    "channel_id": "UC24t8KkyaFtm7x5NuUK3rKw",
+    "views": 3,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "3:20"
+   },
+   {
+    "id": "7UHvNkk7Gt8",
+    "title": "【２通りのグループ通話】グループLINE のビデオ通話とLINE ミーティングを詳しく説明しています。【シニア向け】",
+    "channel": "ひろっさんチャンネル〜中高年のためのスマホ生活",
+    "channel_id": "UCpf_bRl96uotMR55KGH_SzA",
+    "views": 15219,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:39"
+   }
+  ],
+  "YouTube 再生ボタン 押してから 動画 届くまで": [
+   {
+    "id": "p73RvEHxQbI",
+    "title": "【You Tube】動画が勝手に再生される理由とその対処方法！フィード再生や自動再生に付いて！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 62278,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:42"
+   },
+   {
+    "id": "HRFZaerM7jY",
+    "title": "【YouTube】自動再生をオフに設定！おすすめ動画を削除する方法",
+    "channel": "スマキン【Smakin】",
+    "channel_id": "UC3zx3B5VObMmSGyZk0mijxw",
+    "views": 150276,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "8:03"
+   },
+   {
+    "id": "3H_rOUmQVFY",
+    "title": "YouTube自動再生機能をオン・オフに設定する方法！再生されない原因とは？",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 88847,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:33"
+   },
+   {
+    "id": "P9jqYg1C0G4",
+    "title": "伸びない動画は絶対放置しないでください【YouTubeの仕組み】",
+    "channel": "YouTube集客チャンネル -株式会社EAVAL-",
+    "channel_id": "UCn_PTP4I-L8yB_T0ao8z1eA",
+    "views": 119681,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "19:36"
+   },
+   {
+    "id": "0nlAmoOGigw",
+    "title": "【2027年】YouTube新しくなります",
+    "channel": "YouTube伸ばし方の学校 | ハナコ",
+    "channel_id": "UC7NCRVaKTF0Yr1aiC0B5jag",
+    "views": 17295,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "13:05"
+   },
+   {
+    "id": "_0XdVzxro7A",
+    "title": "【YouTubeの基本】今さら聞けないYouTubeの視聴方法「概要欄」って何？",
+    "channel": "動画ファン",
+    "channel_id": "UCF4c7UkIusFsfgdxcK3L_Aw",
+    "views": 514267,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "43:28"
+   },
+   {
+    "id": "y4SdvZFcYu0",
+    "title": "【YouTube再生できない】YouTube動画が見れない原因と対処法6️⃣選!｜動画修復ソフト｜4DDiG File Repair",
+    "channel": "【公式】Tenorshare 4DDiG データ復元",
+    "channel_id": "UC5G9VIvb5VvnPhijjHAOqew",
+    "views": 15587,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "4:53"
+   },
+   {
+    "id": "AL8zWZWPiyY",
+    "title": "Youtubeで自動再生をON・OFFする方法【PC版】",
+    "channel": "金子晃之",
+    "channel_id": "UCaxV7Sf7pdNjlahl6BtJBBw",
+    "views": 36802,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:35"
+   },
+   {
+    "id": "VacfDpbOE-Q",
+    "title": "【見落とすな】YouTubeで動画を出すとき「これ」をすると突然伸びるときが来ます",
+    "channel": "YouTube集客チャンネル -株式会社EAVAL-",
+    "channel_id": "UCn_PTP4I-L8yB_T0ao8z1eA",
+    "views": 133214,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "20:23"
+   },
+   {
+    "id": "Yryn168rxGk",
+    "title": "【この1本ですべて分かる】YouTubeの始め方！完全ガイド・入門講座 / スマホとパソコン両方 / 2026年：最新版",
+    "channel": "YouTube集客チャンネル -株式会社EAVAL-",
+    "channel_id": "UCn_PTP4I-L8yB_T0ao8z1eA",
+    "views": 256084,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:02:15"
+   },
+   {
+    "id": "dnXVUekuCSo",
+    "title": "【2026年8月最新】YouTube が再生回数カウント方法を変更！？概要と背景・収益や特定ジャンルへの影響を解説！",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 3764,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "7:56"
+   },
+   {
+    "id": "sSqErF21PNo",
+    "title": "【完全初心者向け】YouTubeの再生回数が伸びる設定10選【2026年最新版】",
+    "channel": "【ユープロ】YouTube攻略のプロ 奥山",
+    "channel_id": "UC7trx683QVwH4B6Ivho7VbQ",
+    "views": 4369,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "31:51"
+   },
+   {
+    "id": "s7FIt4yX7Jw",
+    "title": "YouTubeの動画が48時間後再生されなくなる理由。５つだけ改善して下さい。",
+    "channel": "RKJ VIDEO 【イケている動画を作りたいなら】",
+    "channel_id": "UCVARwuMmqP4tqQFUQm57oQQ",
+    "views": 67444,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "13:05"
+   },
+   {
+    "id": "ehXY4wgKRz4",
+    "title": "【YouTube】知らなきゃ損！便利な「あとで見る」機能の使い方",
+    "channel": "スマキン【Smakin】",
+    "channel_id": "UC3zx3B5VObMmSGyZk0mijxw",
+    "views": 175297,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "5:29"
+   }
+  ],
+  "スマホ決済 ピッ お金 どこを通る 仕組み": [
+   {
+    "id": "OmiRJPN0Xbk",
+    "title": "スマホ決済とは何か？支払い方法や仕組みを説明",
+    "channel": "つちやたけし / ネットの疑問を解説",
+    "channel_id": "UCmfcNK62WfD-gYffHfAenOA",
+    "views": 829,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:24"
+   },
+   {
+    "id": "AmbCUB2juRM",
+    "title": "【ひろゆき】PayPay使う人ってバカなの？QRコード決済より●●の方が断然お得です！使ってる人は今すぐみて",
+    "channel": "ひろゆきの森　切り抜き",
+    "channel_id": "UCfhF6QrRuCdyO0k4AkoliiQ",
+    "views": 1408282,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:48"
+   },
+   {
+    "id": "cVVZtx3YNgQ",
+    "title": "【2chお金スレ】2025年ガチで最強のスマホ決済。〇〇PAYと高還元チャージでポイント無双しろ【2ch有益スレ】",
+    "channel": "2chお金スレ",
+    "channel_id": "UCZRu1Rl4wac6Wr4PkbzclaA",
+    "views": 163649,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "28:47"
+   },
+   {
+    "id": "DClPvyLbXxI",
+    "title": "電子マネーと改札のひみつ 〜なぜスマホをかざすだけで“一瞬”で決済できるの？交通系ICカードに潜む無線通信の脳みそ〜",
+    "channel": "すきま時間の科学",
+    "channel_id": "UCmbQs69IAqq43sxm1rGFYVw",
+    "views": 25,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "4:47"
+   },
+   {
+    "id": "jr76UKhZzAg",
+    "title": "【小学生向け】電子マネー・キャッシュレス決済ってなに？SuicaやPayPayの仕組みを学ぼう！",
+    "channel": "しろ@小学生でもわかるお金のチャンネル",
+    "channel_id": "UCDcGWdJ0Om1Jog-2Ti64Mkg",
+    "views": 16,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "11:27"
+   },
+   {
+    "id": "8-CFGLFQt4c",
+    "title": "スマホ決済は「がま口財布」だった！チャージ・タッチ・落とした時が昭和のたとえでスッと分かる【60代からのスマホ】",
+    "channel": "ちゃぶ台スマホ教室",
+    "channel_id": "UC74o3lACodqe_SAqCCmcKAQ",
+    "views": 34,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "4:43"
+   },
+   {
+    "id": "A08ec5sim8Y",
+    "title": "【2chお金スレ】2025年最強のスマホ決済はどれ？本当にお得なチャージルートとポイント還元術を解説【2ch有益スレ】",
+    "channel": "お金の掲示板 ch",
+    "channel_id": "UC2K3I1LHJj-MdZec10NCtPA",
+    "views": 7,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "28:47"
+   },
+   {
+    "id": "TLLoYHHPJxc",
+    "title": "PayPay・楽天ペイの還元はどこから出ている？お店の手数料とポイントのお金の流れを図解",
+    "channel": "身近なお金のしくみ図鑑",
+    "channel_id": "UCk2Ujo5boYR02YAVJLFfOHA",
+    "views": 23,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "11:13"
+   }
+  ],
+  "コード決済 裏側 お金の流れ 仕組み": [
+   {
+    "id": "jdFtz2qfoRo",
+    "title": "GMO Developers Night#33 「カード決済・銀行Payの裏側」",
+    "channel": "GMO Developers",
+    "channel_id": "UC6jutAC8jJJNpE0Slmc9vfA",
+    "views": 2109,
+    "published": "4 年前 に配信済み",
+    "age_days": 1460,
+    "length": "59:42"
+   },
+   {
+    "id": "zmA8YsuRUGk",
+    "title": "スマホ決済は、どこで儲けている？",
+    "channel": "クルマのなぜ",
+    "channel_id": "UCX1IiVytYoUQ6juEsR71lxw",
+    "views": 36,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "8:38"
+   },
+   {
+    "id": "ajwJrp4jaAw",
+    "title": "QR決済の仕組み｜PayPayは還元でどうやって儲けている？【アニメ解説】",
+    "channel": "CLEVER MONKEY　なんでも知りたい考えたい",
+    "channel_id": "UCaWyDTX849tn0gg3Rt9Vwng",
+    "views": 298,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "16:37"
+   },
+   {
+    "id": "sQqfTAqIOYE",
+    "title": "【キャッシュレス】【QRコード決済】銀行口座と紐付けずに現金チャージをして利用する方法　コンビニでできます",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 62874,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "16:27"
+   },
+   {
+    "id": "I2K8wZG85Oo",
+    "title": "【暴露】キャッシュレス決済で本当に儲けている“黒幕”の正体",
+    "channel": "禁断のマネー雑学",
+    "channel_id": "UCWgKuQ-JtiQS3HXewXvtAbA",
+    "views": 365,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "3:37"
+   },
+   {
+    "id": "L8RubymFUZ4",
+    "title": "【今さら聞けない】なぜPayPayはタダで使えてボロ儲けなのか？1,000円決済の裏側で消える22円とキャッシュレスの真実｜@kijicast-BusinessNews t",
+    "channel": "kijicast",
+    "channel_id": "UC3rpNpkjqrkcD6ix_fs4mLg",
+    "views": 20,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "16:01"
+   },
+   {
+    "id": "X98hu8pVxP4",
+    "title": "ポイント還元は誰が払う？QR決済のお金の流れ",
+    "channel": "おかねの行き先",
+    "channel_id": "UCuHl7uh7wjkrWlqKIsHxywA",
+    "views": 6,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "8:16"
+   },
+   {
+    "id": "-vTE8lXNR4o",
+    "title": "QRコード決済のメリットとデメリット！",
+    "channel": "竹田恒泰ch公式切り抜きチャンネル",
+    "channel_id": "UCtY61Iz5qYSKObseuv0eWNg",
+    "views": 89654,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "7:02"
+   },
+   {
+    "id": "AmbCUB2juRM",
+    "title": "【ひろゆき】PayPay使う人ってバカなの？QRコード決済より●●の方が断然お得です！使ってる人は今すぐみて",
+    "channel": "ひろゆきの森　切り抜き",
+    "channel_id": "UCfhF6QrRuCdyO0k4AkoliiQ",
+    "views": 1408282,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:48"
+   },
+   {
+    "id": "Pn1RQqjYcLY",
+    "title": "【財布を持たない時代の裏側？】クレジットカードとQRコード決済の仕組み（第１３問）",
+    "channel": "いらすと中小企業診断士",
+    "channel_id": "UC4uQPRDZcxR5Ss7Fo9xRjgw",
+    "views": 70,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "11:48"
+   },
+   {
+    "id": "5-ekbwYc6-g",
+    "title": "【QRコード決済】利用者急増！仕組みと導入メリットを解説",
+    "channel": "Square Japan",
+    "channel_id": "UC8uEQcytpFxDdLTwAUje-SQ",
+    "views": 3602,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:34"
+   },
+   {
+    "id": "ssfjOKK1c8w",
+    "title": "【本紹介】決済インフラ大全〔２０３０年版〕―新型スマホ決済から新決済リスク、金融業態改革、次世代決済まで",
+    "channel": "シェフの本紹介チャンネル",
+    "channel_id": "UCo4xi6Lmh2Gs8ohPY4_Um3Q",
+    "views": 5,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "8:22"
+   },
+   {
+    "id": "OVSlzx85OP0",
+    "title": "クレジットカード決済の仕組みって？利用から支払いまでの流れを解説",
+    "channel": "山田のレゾンデートル",
+    "channel_id": "UCPZyntJm0j4o2ApxhFNm-ew",
+    "views": 103773,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:27"
+   },
+   {
+    "id": "Fg4cmEgPDYY",
+    "title": "キャッシュレス決済の裏側を暴露！意外すぎる仕組みと闇の深さとは？【時事ニュース/反応/解説】",
+    "channel": "Bernard Zagre",
+    "channel_id": "UCOybHXiRUNHkzIqkCIrd6mw",
+    "views": 0,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "21:26"
+   }
+  ],
+  "クレジットカード 決済 裏側 数秒 何が起きている": [
+   {
+    "id": "wkpW0Djf1fE",
+    "title": "タッチ決済の裏側｜カードをかざした2秒間に起きていること",
+    "channel": "世界の裏側図解室 - Invisible Systems",
+    "channel_id": "UCt9Y6fX2-uEZaMv9nr17ozA",
+    "views": 0,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "9:30"
+   },
+   {
+    "id": "021m0vnx8hk",
+    "title": "クレジットカードの仕組み｜かざした2秒で動く4つの会社【アニメ解説】",
+    "channel": "CLEVER MONKEY　なんでも知りたい考えたい",
+    "channel_id": "UCaWyDTX849tn0gg3Rt9Vwng",
+    "views": 86,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "8:52"
+   },
+   {
+    "id": "GR5s_RSyX7k",
+    "title": "ヤクザと現金、クレジットカード決済代行会社破産で思ったこと【裏社会タイムス】",
+    "channel": "丸山ゴンザレスのディープな世界",
+    "channel_id": "UCaxKWSwF_egyenDrW4h4y2A",
+    "views": 121146,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "15:25"
+   },
+   {
+    "id": "EOuJ578V7m4",
+    "title": "【今すぐオフ】クレカ番号が流出中…11月8日から、ここがオンだと不正決済される？今すぐ確認を！",
+    "channel": "元スマホショップ店員のみずき",
+    "channel_id": "UC3UOKGQ6X8LquakOK3Yr5Aw",
+    "views": 45204,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "16:11"
+   },
+   {
+    "id": "yWbnJXYSPQ4",
+    "title": "朝はクレカ、夕方はPayPay。同じ日に起きた2つの決済障害、それぞれの原因は？",
+    "channel": "見えない設計",
+    "channel_id": "UC8bhx1sUjoPzlALsc_tzYUg",
+    "views": 29,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "5:40"
+   },
+   {
+    "id": "K2Kx2aynZzY",
+    "title": "【暴露】クレカのボーナス払いをした人の末路｜カード会社内で起きている3つのこと",
+    "channel": "現役社員が教えるクレジットカードの世界 ",
+    "channel_id": "UCe3i8ttujgLDqDNiy0O8oxg",
+    "views": 10088,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "22:18"
+   },
+   {
+    "id": "92TEWLSClao",
+    "title": "いまさら聞けない「決済」の仕組み",
+    "channel": "ポチったあとのウラばなし",
+    "channel_id": "UCxicXaQsORF7N-4IFHknJdw",
+    "views": 52,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "9:28"
+   },
+   {
+    "id": "yhnYV81yDQc",
+    "title": "3Dセキュア未設定は超危険！現役クレカ社員が教える不正利用の裏側と安全対策【3Dセキュア2.0とは？】",
+    "channel": "現役社員が教えるクレジットカードの世界 ",
+    "channel_id": "UCe3i8ttujgLDqDNiy0O8oxg",
+    "views": 4823,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:54"
+   }
+  ],
+  "電気 発電所から コンセント まで 旅": [
+   {
+    "id": "8C_hu1s8xuo",
+    "title": "エコダ｜電気は、どこから来る？発電所からコンセントまでの旅｜電柱の缶の秘密【仕組み解説】",
+    "channel": "ECODA エコダ 太陽光・蓄電池",
+    "channel_id": "UCEHgMHThI9mG4VEdgw0dxCQ",
+    "views": 45,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "5:55"
+   },
+   {
+    "id": "1wIZzb6fDUk",
+    "title": "発電所からコンセントまで、電気の旅｜50万Vが100Vになるまで",
+    "channel": "GRIDRADIX・グリッドラディックス",
+    "channel_id": "UCeMmkLlLWX5P_E5Mnp0Dd-Q",
+    "views": 235,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:23"
+   },
+   {
+    "id": "dqC2bfBqFHk",
+    "title": "コンセントの電気、どこから来てる？ 発電所から家までの長い旅",
+    "channel": "くらしの変わる日",
+    "channel_id": "UCOoDedQLddEELGUIY1jZ-Xg",
+    "views": 59,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:49"
+   },
+   {
+    "id": "xXQFzMP6Q9o",
+    "title": "3分でわかる!!発電から家庭まで＆送配電・配線設備の流れも解説！",
+    "channel": "愛あるYouTuber亜紅愛",
+    "channel_id": "UCnEICWbFctGjLXnAwtfgxAw",
+    "views": 266,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "3:35"
+   },
+   {
+    "id": "kfgkYu4oB7I",
+    "title": "発電所から家庭まで 電気はどんな旅をしてくるのか",
+    "channel": "メカのロマンを探究する会",
+    "channel_id": "UCF6wuHiDCITXvafXYP93TMw",
+    "views": 553624,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "40:15"
+   },
+   {
+    "id": "jwftmnka1D4",
+    "title": "【電気の正体】発電所から家庭のコンセントまでを3Dで追跡",
+    "channel": "ヤス",
+    "channel_id": "UCUEbBoBJSS6KkQenYta3j_w",
+    "views": 27,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "13:03"
+   },
+   {
+    "id": "4RUfOuBAFbw",
+    "title": "【私たちが使う電気】作られて家庭に電気がいくまでの流れ",
+    "channel": "【Crutto】あらゆる未利用水を電力に換えるマイクロ水力発電",
+    "channel_id": "UC6WVPTyNKyxaRH5_BOW67tw",
+    "views": 4148,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "3:10"
+   },
+   {
+    "id": "6uQIVjvoy5k",
+    "title": "作った電気は全部届く？発電所からコンセントまでの旅【人類ログ】",
+    "channel": "人類ログ",
+    "channel_id": "UCpioWEP6-QZJQnGbFKm__rg",
+    "views": 126,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "10:40"
+   },
+   {
+    "id": "5OL5Boa75dI",
+    "title": "発電所の電気は、どうやって家のコンセントまで送られてくるのか",
+    "channel": "日常の裏側",
+    "channel_id": "UC9DscOHQj4fO8VbbeOOSDLQ",
+    "views": 498,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "9:05"
+   },
+   {
+    "id": "QErpRNHOSH0",
+    "title": "コンセントまでの電気の旅つくる・送る・届けるしくみをまとめて解説",
+    "channel": "インフラ日本",
+    "channel_id": "UC5tmH9kK8q81P5g93OolLQQ",
+    "views": 17,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:09"
+   },
+   {
+    "id": "AJkKKxIW2WY",
+    "title": "コンセントの100V、じつは電柱の上で下げている｜発電所から家まで",
+    "channel": "電柱図鑑 でんチュン",
+    "channel_id": "UCoZwCsLbCvZpIlivTGfJvgg",
+    "views": 32,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "2:55"
+   },
+   {
+    "id": "VESqW3WrMkU",
+    "title": "【GNDではない】発電所からコンセントまで電気はどのように送られるのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 823702,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:59"
+   },
+   {
+    "id": "4sNKkqQEGYM",
+    "title": "【衝撃の真実】コンセントと電線はなぜ「3本」なのか？発電所から家庭まで届く電気の意外すぎる仕組み！【ゆっくり解説】【雑学】",
+    "channel": "9割が知らない",
+    "channel_id": "UC_N72A0z3uPrCkctPjEBVsQ",
+    "views": 1850,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "12:23"
+   },
+   {
+    "id": "SZ5bY1ns4Mc",
+    "title": "コンセントの電気はどこから来ている？",
+    "channel": "暮らしのしくみ断面図",
+    "channel_id": "UCgBC0DnKY3_8XGd4YzxUvQQ",
+    "views": 22,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "2:25"
+   },
+   {
+    "id": "wBHkkLfc7js",
+    "title": "電気が家に届くまで｜50万ボルトが100ボルトになる旅",
+    "channel": "ユイのしくみ旅",
+    "channel_id": "UClIgXiWTpFMEYsZCD54CosQ",
+    "views": 74,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "6:26"
+   },
+   {
+    "id": "jtpfGqZ40Pk",
+    "title": "電気はどう送られるの？3分でわかる！〜電柱からお家まで〜",
+    "channel": "Peachannel-電気-",
+    "channel_id": "UCN3sGz3RBavmyxUOYsOje7w",
+    "views": 18046,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:54"
+   },
+   {
+    "id": "37HtKeLn-DA",
+    "title": "変電所と電力網は、どうやって「電気」を届けているのか【図解】",
+    "channel": "図解工学",
+    "channel_id": "UCEdT_YtO-gaG5HpozLJizYw",
+    "views": 232,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "3:12"
+   },
+   {
+    "id": "H9S_84JNTQA",
+    "title": "コンセントの向こう側｜ファラデーの発見から発電所・変圧器・電流戦争まで、電気を家に届ける技術【人類を進めた科学1000選】",
+    "channel": "人類のすごさをまた一つ",
+    "channel_id": "UC-dtysetQR-3-SiKOr7b63w",
+    "views": 19,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "8:19"
+   }
+  ],
+  "コンセント 電気 どこから 来る 道のり": [
+   {
+    "id": "8C_hu1s8xuo",
+    "title": "エコダ｜電気は、どこから来る？発電所からコンセントまでの旅｜電柱の缶の秘密【仕組み解説】",
+    "channel": "ECODA エコダ 太陽光・蓄電池",
+    "channel_id": "UCEHgMHThI9mG4VEdgw0dxCQ",
+    "views": 45,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "5:55"
+   },
+   {
+    "id": "gHjWdQzALvM",
+    "title": "コンセントの電気はどこから来る？発電所から家までの道のり",
+    "channel": "日常の行き先",
+    "channel_id": "UCgThfGZNoCk79F8jTFOz8-w",
+    "views": 170,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:20"
+   },
+   {
+    "id": "jO9LBp4xaow",
+    "title": "#2 電気はどこから来るの？~コンセントの先には何があるかを確かめよう~",
+    "channel": "東北電力株式会社",
+    "channel_id": "UCG4KK1iSIFOThRaWehDWxAQ",
+    "views": 4572,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:18"
+   },
+   {
+    "id": "ldZ7rAn4pUE",
+    "title": "コンセントの裏側の世界／The World of Outlets",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 81393,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:01"
+   },
+   {
+    "id": "dqC2bfBqFHk",
+    "title": "コンセントの電気、どこから来てる？ 発電所から家までの長い旅",
+    "channel": "くらしの変わる日",
+    "channel_id": "UCOoDedQLddEELGUIY1jZ-Xg",
+    "views": 59,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:49"
+   },
+   {
+    "id": "1wIZzb6fDUk",
+    "title": "発電所からコンセントまで、電気の旅｜50万Vが100Vになるまで",
+    "channel": "GRIDRADIX・グリッドラディックス",
+    "channel_id": "UCeMmkLlLWX5P_E5Mnp0Dd-Q",
+    "views": 235,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:23"
+   },
+   {
+    "id": "SZ5bY1ns4Mc",
+    "title": "コンセントの電気はどこから来ている？",
+    "channel": "暮らしのしくみ断面図",
+    "channel_id": "UCgBC0DnKY3_8XGd4YzxUvQQ",
+    "views": 22,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "2:25"
+   },
+   {
+    "id": "1rA-rzLv7gM",
+    "title": "コンセントの穴、なぜ左だけ長い？壁の中まで3DCGで透かして解説",
+    "channel": "なかみ図鑑",
+    "channel_id": "UCnLrMFx51-lyk-IeSxjjYpA",
+    "views": 366,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "7:48"
+   },
+   {
+    "id": "7Pq4uTkoYv8",
+    "title": "コンセントの電気は、どこから来ている？",
+    "channel": "ナビのしくみ図鑑",
+    "channel_id": "UC9r4eIQjmN48xwvkuiuk_ww",
+    "views": 7,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "18:07"
+   },
+   {
+    "id": "mWtgz6LoxH4",
+    "title": "コンセント穴の謎／The Mystery behind Outlets",
+    "channel": "でんじろう先生のはぴエネ!【公式】Mr. Denjiro's Happy Energy!",
+    "channel_id": "UCk5qA4dVD1vipi6veZ9hewQ",
+    "views": 104289,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:01"
+   },
+   {
+    "id": "QErpRNHOSH0",
+    "title": "コンセントまでの電気の旅つくる・送る・届けるしくみをまとめて解説",
+    "channel": "インフラ日本",
+    "channel_id": "UC5tmH9kK8q81P5g93OolLQQ",
+    "views": 17,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:09"
+   },
+   {
+    "id": "zGWt5C4zd1I",
+    "title": "東京の電気はどこから来る？｜50万ボルトが100ボルトになるまでの4つの変電所",
+    "channel": "モノのからくり【3D解説】",
+    "channel_id": "UCvKnrQKEZyYkL-7kWk4UpAg",
+    "views": 13407,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "13:22"
+   },
+   {
+    "id": "MscPZ9d5TAQ",
+    "title": "【電気の知識シリーズ】電気と磁気のチカラ ～コンセントの電気が交流なのはなぜ？～",
+    "channel": "一般社団法人電気学会IEEJ",
+    "channel_id": "UCL88CjinmTAIMQhuBvWYVBg",
+    "views": 1923,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "6:35"
+   },
+   {
+    "id": "EPN2oyYfHUk",
+    "title": "コンセントの穴はなぜ左が長い？ 電柱から分電盤・コンセントまでの電気の道を3Dで",
+    "channel": "ゲンバコエ / GENBAKOE",
+    "channel_id": "UC5x6dU7gOd2qSMevhydSoLA",
+    "views": 65,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "10:11"
+   },
+   {
+    "id": "jwftmnka1D4",
+    "title": "【電気の正体】発電所から家庭のコンセントまでを3Dで追跡",
+    "channel": "ヤス",
+    "channel_id": "UCUEbBoBJSS6KkQenYta3j_w",
+    "views": 27,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "13:03"
+   },
+   {
+    "id": "4sNKkqQEGYM",
+    "title": "【衝撃の真実】コンセントと電線はなぜ「3本」なのか？発電所から家庭まで届く電気の意外すぎる仕組み！【ゆっくり解説】【雑学】",
+    "channel": "9割が知らない",
+    "channel_id": "UC_N72A0z3uPrCkctPjEBVsQ",
+    "views": 1850,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "12:23"
+   },
+   {
+    "id": "YBjIbakb5jg",
+    "title": "なぜ世界のコンセントはバラバラなのか——140年前の設計判断【技術史】",
+    "channel": "発明ノ系譜",
+    "channel_id": "UCT8DVF-nxqKs67gb0fBJG3A",
+    "views": 92,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "18:44"
+   },
+   {
+    "id": "1nj1xnrzrdo",
+    "title": "家の電気はどこから来る?電圧を4回下げる理由【家の電気のなぜ #6】",
+    "channel": "ビリッとわかる電気",
+    "channel_id": "UCKahlUShlAJNZUw7EG1vqAw",
+    "views": 59,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "6:27"
+   },
+   {
+    "id": "VESqW3WrMkU",
+    "title": "【GNDではない】発電所からコンセントまで電気はどのように送られるのか【ゆっくり解説】【雑学】",
+    "channel": "【ゆっくり解説】9割が知らない雑学",
+    "channel_id": "UCLK63mzEn9yPcwrjSEWBK3Q",
+    "views": 823702,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:59"
+   }
+  ],
+  "充電 電気 スマホ 電池 中 何が起きている": [
+   {
+    "id": "acDmE_CtHMg",
+    "title": "スマホを一晩中充電すると、本当にバッテリーは劣化するのか？",
+    "channel": "なにがギモン【雑学解説】",
+    "channel_id": "UCoryGG-HTyFRBF5zeeACH-w",
+    "views": 24261,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "6:40"
+   },
+   {
+    "id": "fYKyfrw8N3Q",
+    "title": "スマホの充電、電気はそのまま送っていない【電池の中で電子とイオンが動き、ワイヤレスはさらに変換を挟む】",
+    "channel": "まどろみ研究所",
+    "channel_id": "UCZmvI78ibTfS53vQGbSglag",
+    "views": 4,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "4:48"
+   },
+   {
+    "id": "ThUajbXhYm0",
+    "title": "スマホの充電「80%で止めろ」は本当か。バッテリーの中で起きていること",
+    "channel": "ずんだもんの日常の疑問",
+    "channel_id": "UC9fzHnQdBFC4Kqs4Yydl4fg",
+    "views": 222,
+    "published": "9 日前",
+    "age_days": 9,
+    "length": "5:51"
+   },
+   {
+    "id": "5ZNxuiVeLbQ",
+    "title": "スマホ「充電ができない」原因は？まず確認すべき点と対処法を解説【Android】",
+    "channel": "dアプリ＆レビュー公式チャンネル",
+    "channel_id": "UCrBlOI_kU4fXAcUg4B80Fdg",
+    "views": 52380,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:28"
+   },
+   {
+    "id": "epnLphqmnC4",
+    "title": "スマホをダメにしてない？正しいスマホの充電方法はコレです！バッテリーの特徴も解説！",
+    "channel": "スマホとアプリの教科書チャンネル",
+    "channel_id": "UCnoQ6kc6iJhXVRNbnZv2J9g",
+    "views": 91158,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:18"
+   },
+   {
+    "id": "yiMof5R-sss",
+    "title": "充電中に携帯が発火するわけ",
+    "channel": "ブライトサイド | Bright Side Japan",
+    "channel_id": "UC1bmnUH1ffc63zohkPvtXcQ",
+    "views": 66182,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:30"
+   },
+   {
+    "id": "RcwbgQyvwWA",
+    "title": "100％まで充電したのに、なぜ昔より持たない？スマホの電池が劣化する理由",
+    "channel": "道具のなぜ",
+    "channel_id": "UCMAffosnqQNRyQBrxaki4tQ",
+    "views": 232,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "11:44"
+   },
+   {
+    "id": "A70-k78GTAQ",
+    "title": "今すぐチェック！スマホのバッテリーを早く減らすのはこれでした",
+    "channel": "スマオタ",
+    "channel_id": "UCL1ExJ29XY4zWozic75hMpw",
+    "views": 2894011,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "9:58"
+   },
+   {
+    "id": "0CHJjZhFscE",
+    "title": "スマホ充電ケーブルで発火の恐れ　就寝中にやけども(19/02/28)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 74072,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "0:46"
+   },
+   {
+    "id": "nbrT2tJDyWI",
+    "title": "【誰も知らない】スマホ充電の“ムダ減り”が一瞬で止まる！2倍長持ちする裏技設定！",
+    "channel": "雑学王子ミツル - 役立つ雑学",
+    "channel_id": "UC1bt4jsQi5JDW9tR-qaI4lg",
+    "views": 459549,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "14:32"
+   }
+  ],
+  "光ファイバー 中 光 どう進む 仕組み": [
+   {
+    "id": "_H3zszJI7so",
+    "title": "【面白い物理】なぜ光ファイバーで高速通信が可能なのか？【屈折率】【全反射】",
+    "channel": "ざっくり科学ちゃんねる",
+    "channel_id": "UCuh0AbhkeAPWoF1ZuLhZeYw",
+    "views": 12760,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:23"
+   },
+   {
+    "id": "5oGkSMRK2uI",
+    "title": "光ファイバーケーブルってどんな風に機能してるの？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 229657,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "9:13"
+   },
+   {
+    "id": "ublm96U9byQ",
+    "title": "光はまっすぐ進むのに、なぜ曲がるケーブルを通れる？光ファイバーの仕組みを図解",
+    "channel": "日常のタネあかし",
+    "channel_id": "UCds9TQGQM8ol4RgVhEd5B4g",
+    "views": 45,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:48"
+   },
+   {
+    "id": "-9I-yp9nN5Y",
+    "title": "光で通信するってどういうこと？｜光ファイバー・波長・Cバンド/Lバンド・オール光を図解【光伝送とWDM 第1話】",
+    "channel": "もずくvlog",
+    "channel_id": "UCpkHfUaIahhhNf_2hERFnxA",
+    "views": 65,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "14:04"
+   },
+   {
+    "id": "soYJd3QE5iY",
+    "title": "光ファイバーとは？まっすぐ進む光を曲げて運ぶしくみ【技術】",
+    "channel": "雑学の扉",
+    "channel_id": "UCw97l2Np3Kcp553PCR6R-xA",
+    "views": 35,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "6:33"
+   },
+   {
+    "id": "T_LfoKHIenE",
+    "title": "光ファイバーで信号が届く仕組み｜AIで作った3DCG解説動画",
+    "channel": "3DCG動画作成AI",
+    "channel_id": "UCyoW0xWrd73wm9OZE-O_x0A",
+    "views": 7,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "1:01"
+   },
+   {
+    "id": "E7aOXCx7NLM",
+    "title": "【光とレーザーのスペシャリストが解説】光ファイバの仕組みと産業応用｜通信・医療・センシングまで",
+    "channel": "sevensix TV (セブンシックス株式会社)",
+    "channel_id": "UC2ojACEC6vd9CCWoaQIm-rg",
+    "views": 5090,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "3:54"
+   },
+   {
+    "id": "4h1eeOBgWTI",
+    "title": "光は細いガラスの中をどう進む？ 光ファイバーが情報を届けるまで【ずんだもん・四国めたん解説】",
+    "channel": "わみや解説系-wamiya-",
+    "channel_id": "UCuooP7UeosZeDXfVP8U5kgw",
+    "views": 36,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "12:25"
+   },
+   {
+    "id": "cSzv2TTiIKg",
+    "title": "光ファイバー&光トランシーバー  初心者向け講演をざっくり解説【JANOG55プログラム解説】",
+    "channel": "show int インターネットの裏側解説",
+    "channel_id": "UCpO3RcIrPaDJJ0Q3cbZrvZA",
+    "views": 5646,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "29:00"
+   },
+   {
+    "id": "DOC6pkHLn14",
+    "title": "光で世界をつなぐ技術「光ファイバー」を解説【ゆっくり解説】",
+    "channel": "かつおの電波と光ゆっくり解説",
+    "channel_id": "UCdFvLx8cAy7Xa4VueVeP59A",
+    "views": 525,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "24:52"
+   },
+   {
+    "id": "wAoQBdAr_WU",
+    "title": "【高校物理】共通テスト対策22 光ファイバー",
+    "channel": "さくふの高校物理",
+    "channel_id": "UCq5swPHZRemNRZx-3rAOoKQ",
+    "views": 3686,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "8:43"
+   },
+   {
+    "id": "UVZGHiqkGd8",
+    "title": "みんなの光通信 5 - 光ファイバーはどこに?",
+    "channel": "みんなの光通信",
+    "channel_id": "UC1URfAj5xm66ZOSPJb1oVZw",
+    "views": 668,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:30"
+   },
+   {
+    "id": "-K50y2E_Osc",
+    "title": "光ファイバーはなぜ光を遠くまで運べる？｜全反射・透明なガラス・光の増幅を計算で深掘り",
+    "channel": "雑学ラジオ",
+    "channel_id": "UCouENDlsmFH3q-kLEW_bhzg",
+    "views": 48,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "18:35"
+   },
+   {
+    "id": "OWd5t5anoz4",
+    "title": "光ファイバーはなぜ光を運べる？ネット回線を支えるガラスのしくみ",
+    "channel": "脱線ノート",
+    "channel_id": "UCPFWovgmV0UOc7GTy9blrfQ",
+    "views": 31,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "30:07"
+   },
+   {
+    "id": "YQANs4tolw8",
+    "title": "海の向こうの動画はどう届く？ 光ファイバーと海底ケーブルを1本の懐中電灯から6段で組み上げる【機械の仕組み】",
+    "channel": "ハカセの調査ラボ",
+    "channel_id": "UCFWPkezEEw7g0-t07UaHeQA",
+    "views": 19,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "6:16"
+   },
+   {
+    "id": "GR4zIGogeAo",
+    "title": "世界の通信は海の底を通っていた！細いガラスの糸「光ファイバー」を支える日本の技術",
+    "channel": "知られざる日本の力",
+    "channel_id": "UCAHbKGQZmhNk81SWbt7Daww",
+    "views": 23,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "22:33"
+   },
+   {
+    "id": "w-6_D-ZFtBg",
+    "title": "光を送る～光ファイバー",
+    "channel": "NPO法人科学映像館",
+    "channel_id": "UCemRkHqzjN0IgMCiJlC_Ckg",
+    "views": 17500,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "15:31"
+   },
+   {
+    "id": "nxfYj604ve0",
+    "title": "光ファイバー",
+    "channel": "MDL Hosei Univ.",
+    "channel_id": "UCuLHc4hFa2E2Rqab0015PeQ",
+    "views": 9330,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:26"
+   }
+  ],
+  "ゲーム ボタン 押してから 画面 動くまで 遅延 仕組み": [
+   {
+    "id": "j4d5ezyCjIM",
+    "title": "ゲームはなぜ操作できるのか？ ボタンを押してから画面が動くまで",
+    "channel": "葵、気になります。",
+    "channel_id": "UCMFaVVgP80hnPhCj8wsZfrw",
+    "views": 2,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "8:59"
+   },
+   {
+    "id": "J1ydWhxK8sc",
+    "title": "なぜ最近のゲームはラグを感じずオンライン対戦できるのか【ゆっくり解説】",
+    "channel": "アルゴのゆっくりコンピュータ解説",
+    "channel_id": "UCmCnBN-nrFolRuAdx6Cqrog",
+    "views": 99496,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "20:44"
+   },
+   {
+    "id": "I4MVXEwAKoo",
+    "title": "【遅延/Latency】ゲームの遅延を最小化する方法を徹底解説！【FPS】",
+    "channel": "MSK Gaming",
+    "channel_id": "UCvY21Mld5Ge8mxtcRC-VRMQ",
+    "views": 37598,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "21:09"
+   },
+   {
+    "id": "6j22CYpN-oo",
+    "title": "ボタンを押してから、画面が変わるまで｜ゲームループの仕組み",
+    "channel": "ごろまつのゲーム分析 ch.",
+    "channel_id": "UCz4eD-Kj7fie5_2YeY5TufQ",
+    "views": 6,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "2:38"
+   },
+   {
+    "id": "upVxCXWDlZk",
+    "title": "遅延を撲滅してほしい 【雑談】",
+    "channel": "桜井政博のゲーム作るには",
+    "channel_id": "UC5CTV3JSdrlo5Pa42QkK8SA",
+    "views": 1103276,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:17"
+   },
+   {
+    "id": "rC6DqIh03cI",
+    "title": "衝撃‼APEXでコントローラーの入力遅延を検証したら..PS5/PS4/XSX/PCパッド[超猫拳周辺機器]",
+    "channel": "超猫拳/SUPER NEKOPUNCH",
+    "channel_id": "UCtu3QGmMXAVjc6UFbTOIVGQ",
+    "views": 304940,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "20:19"
+   },
+   {
+    "id": "nEbWCACzgzw",
+    "title": "長押しなのに、一回だけ？｜ゲームがボタンを読む仕組み",
+    "channel": "ごろまつのゲーム分析 ch.",
+    "channel_id": "UCz4eD-Kj7fie5_2YeY5TufQ",
+    "views": 5,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "2:19"
+   },
+   {
+    "id": "6imk3alv-MY",
+    "title": "なぜパソコンには遅くするボタンが付いていたのか【ゆっくり解説】",
+    "channel": "手でさわったデジタル史",
+    "channel_id": "UCJSKUw5UBjVjceG8otr9cqA",
+    "views": 9073,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "27:16"
+   },
+   {
+    "id": "TBBtMfkV0wg",
+    "title": "【低遅延】PCでコントローラーの入力遅延を最大限に減らす設定方法  PS4/PS5/Xbox",
+    "channel": "ゲーマーハブ",
+    "channel_id": "UC1-OlxnFlf14YmOQ1Bf1zug",
+    "views": 11823,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:18"
+   },
+   {
+    "id": "vus9teoYvtk",
+    "title": "【VRR有り】PS5版スト6のオフ&オン遅延が判明！Switch2との差は！？【ストリートファイター6】",
+    "channel": "スマブラの歴史(ムタマ)",
+    "channel_id": "UCy-l4_08Qjg8D5i62GQ9XnA",
+    "views": 33770,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:16"
+   },
+   {
+    "id": "Te3J4mu_5jU",
+    "title": "マリオは、なぜボタンを長く押すと高く跳べるのか？",
+    "channel": "作り直してわかるゲームの仕組み",
+    "channel_id": "UCa0z-TjynS-W51YGoizAhrQ",
+    "views": 7253,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "8:09"
+   }
+  ],
+  "コントローラー 入力 画面 反映 何が起きている": [
+   {
+    "id": "HeUWZewV6V0",
+    "title": "Steamでコントローラーが使えない！反応しない！解決方法はこれ！",
+    "channel": "魔女まなつ",
+    "channel_id": "UC0G0_dsq217RxkZqygLVgog",
+    "views": 5550,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "0:25"
+   },
+   {
+    "id": "fgRN5kX_3qE",
+    "title": "obsでコントローラーの入力画面を映す方法 #ゲーム配信",
+    "channel": "お主義 白いゲーム環境",
+    "channel_id": "UCphNHy25VxrdN2dB3kdszTg",
+    "views": 1964,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:39"
+   },
+   {
+    "id": "Kugz9oCVlXE",
+    "title": "ゲーム録画&配信画面にゲームパッド(コントローラー)の入力を重ねて表示させる方法　※0:47秒から音が出るから気をつけてね",
+    "channel": "Saemon No Jyo",
+    "channel_id": "UCueW-v4EabpELWdkHDf_f9w",
+    "views": 4979,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "11:22"
+   },
+   {
+    "id": "vpHMZKhE788",
+    "title": "【OBS Studio】PS5コントローラー「DualSense」を表示する方法！ ２種類のパターンを分かりやすく解説！《オービーエス スタジオ》",
+    "channel": "KAMyu´z チャンネル",
+    "channel_id": "UCze-5NBZnqeF7a-2ZOQtEsA",
+    "views": 1142,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:20"
+   },
+   {
+    "id": "DYStcT3hvGA",
+    "title": "【実況者必見】OBSにPS4/PS5などのコントローラー入力をリアルタイムで表示させる方法！",
+    "channel": "しふぁの作業部屋",
+    "channel_id": "UCE7blD9XJY_RM0dG7Gs_LOA",
+    "views": 18928,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "8:07"
+   },
+   {
+    "id": "LegfXS1KZ6g",
+    "title": "ナゼ？エラー率を下げて真円に調整するのか？【PS5コントローラー】DualShock Calibration GUI",
+    "channel": "うちきの",
+    "channel_id": "UCI1xyAhcb2m3sU7C7oxLYvg",
+    "views": 5052,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:09"
+   },
+   {
+    "id": "36kRu2OYzQ4",
+    "title": "【モンハンワイルズ】PC版コントローラー操作不能、突然パッドが効かなくなり走り続ける不具合の原因と解決方法【モンスターハンター】",
+    "channel": "おちゃGames",
+    "channel_id": "UCkycFbgzXulF4AKxlW2eqvA",
+    "views": 2600,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:53"
+   },
+   {
+    "id": "DkdJAtZF9Tk",
+    "title": "【Switch改造】コントローラ入力をリアルタイムで表示する方法を解説！",
+    "channel": "シグ村長",
+    "channel_id": "UCJW4PpgtL3lO08Z5lMTVJbg",
+    "views": 2259,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:30"
+   },
+   {
+    "id": "ntebdcMoiUE",
+    "title": "【Gamepad Viewer】2＜後編＞コントローラー(ゲームパッド)設定 OBS配信録画表示【APEX/Fortnite/フォートナイト】",
+    "channel": "火炎_Musou.",
+    "channel_id": "UCEWVfQV4FWs8GNIrGoQnk4g",
+    "views": 1266,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "9:30"
+   },
+   {
+    "id": "sFJAHZBQ3cs",
+    "title": "【Windows】箱コンの操作が突然効かなくなる現象の治し方【Xboxワイヤレスコントローラー】",
+    "channel": "アルティメット後藤の巣",
+    "channel_id": "UCAL9tlGR6LSIiPGrF-uGULA",
+    "views": 12107,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:38"
+   },
+   {
+    "id": "d5bkcSyqp9w",
+    "title": "なぜ昔のゲーム機やコントローラーはベタベタになったのか【ゆっくり解説】",
+    "channel": "コタエアワセ【ゲームのゆっくり解説】",
+    "channel_id": "UCBawhzR8ZWgE7ZAbaSNYRKg",
+    "views": 394850,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "12:29"
+   },
+   {
+    "id": "jsYX6iwg_I8",
+    "title": "【Gamepad Viewer】1＜前編＞コントローラー(ゲームパッド)設定 OBS配信録画表示【APEX/Fortnite/フォートナイト】",
+    "channel": "火炎_Musou.",
+    "channel_id": "UCEWVfQV4FWs8GNIrGoQnk4g",
+    "views": 2809,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "6:26"
+   },
+   {
+    "id": "Qi156MKFKG8",
+    "title": "【Gamepad Viewer】3＜実践編＞コントローラー(ゲームパッド)設定 OBS配信録画表示 【APEX/Fortnite/フォートナイト】",
+    "channel": "火炎_Musou.",
+    "channel_id": "UCEWVfQV4FWs8GNIrGoQnk4g",
+    "views": 743,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "5:35"
+   },
+   {
+    "id": "OJiBV0YzzFA",
+    "title": "【完全解説】配信画面に表示させるコントローラーの色を変えるやり方。【Gamepad Viewer】",
+    "channel": "はつねちゃんねる",
+    "channel_id": "UCUSncLw7VuhfjztgDpiXdLQ",
+    "views": 8654,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "32:07"
+   },
+   {
+    "id": "XZsw9aHo0aI",
+    "title": "【モンハンワイルズ】Steamでコントローラが上手く動かない人のための解説【反応なし/あべこべ/滅茶苦茶】",
+    "channel": "びんちゃん&つるしたさん",
+    "channel_id": "UCUE1l0rQ9yQgGQsn0_Qwtrg",
+    "views": 14014,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:06"
+   },
+   {
+    "id": "amAgSKixAlg",
+    "title": "Steamでコントローラーが認識しない時の対処法枠＠2021/9/22",
+    "channel": "さるーいん",
+    "channel_id": "UC-1M7U8pznd4FIbcvU1Hpsg",
+    "views": 60074,
+    "published": "5 年前 に配信済み",
+    "age_days": 1825,
+    "length": "6:01"
+   },
+   {
+    "id": "TBBtMfkV0wg",
+    "title": "【低遅延】PCでコントローラーの入力遅延を最大限に減らす設定方法  PS4/PS5/Xbox",
+    "channel": "ゲーマーハブ",
+    "channel_id": "UC1-OlxnFlf14YmOQ1Bf1zug",
+    "views": 11823,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "2:18"
+   },
+   {
+    "id": "q_GstCrMV1Q",
+    "title": "Amazonブラックフライデーでゲームコントローラー買いました。D10s",
+    "channel": "あまジャンク",
+    "channel_id": "UC4_qQ-EaJwTtIJksILfLOHg",
+    "views": 824,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "20:43"
+   },
+   {
+    "id": "sWQtswfMCLc",
+    "title": "なぜPS4のコントローラーは、背中が光り続けていたのか？【ゆっくり解説】",
+    "channel": "ゆっくりデジタル解説",
+    "channel_id": "UCusSVPzU9gAbi9uH09tbQ7w",
+    "views": 16182,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "18:27"
+   },
+   {
+    "id": "GRRUhZcxy3w",
+    "title": "【DS4健康診断】コントローラが壊れたか簡単にチェックする方法！ [超猫拳][周辺機器][PS4][DUALSHOCK4]",
+    "channel": "超猫拳/SUPER NEKOPUNCH",
+    "channel_id": "UCtu3QGmMXAVjc6UFbTOIVGQ",
+    "views": 325560,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "13:24"
+   }
+  ],
+  "キーボード 押してから 文字 出るまで 仕組み": [
+   {
+    "id": "-OVUD9WzzsE",
+    "title": "【基本から謎のキーまで】キーボードの使い方・記号の入力・役割が全部わかる♪",
+    "channel": "ゼロからパソコン",
+    "channel_id": "UCzOCAEozQ5oNeF14kWh-dMQ",
+    "views": 587817,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:56"
+   },
+   {
+    "id": "Q93orSNNDZU",
+    "title": "なぜかな入力は打つ回数が少ないのにローマ字に負けたのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 76624,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "16:53"
+   },
+   {
+    "id": "AxAR5E_n1W4",
+    "title": "【キーボードの検知方式や構造】　メンブレン式・パンタグラフ式・メカニカル式・磁気式の造りの違いや音の違いを比較してみる！",
+    "channel": "キー坊沼 キキ (keyboard swamp Kiki)",
+    "channel_id": "UC5vlenTKQCc9cstuHHSe6Hg",
+    "views": 1739,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "13:39"
+   },
+   {
+    "id": "5u37MSvtyS8",
+    "title": "【パソコン人生変わった話】99%の人が使ってる半角/全角キー！これをやめればWindowsのイライラは一発解決！【神設定】",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 4297349,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:52"
+   },
+   {
+    "id": "Ah2wsQg5l58",
+    "title": "【保存版】キーボードの機能と使い方まとめ",
+    "channel": "パソ活",
+    "channel_id": "UC3SRC6H7jJuglPKATC5YRCQ",
+    "views": 54785,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "23:16"
+   },
+   {
+    "id": "O-4DYv4GfEA",
+    "title": "【パソコン入門３_前編】もう恐くない！キーボードと文字入力を徹底解説【超初心者講座】",
+    "channel": "くませんのパソコンクラブ",
+    "channel_id": "UCEc4cJsXgY5AgV00g_3sMcw",
+    "views": 256694,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "14:02"
+   },
+   {
+    "id": "yZ3T9oYOnUw",
+    "title": "キーを押し続けると、なぜ少し待ってから文字が増えるの？",
+    "channel": "ITのなんでチャンネル",
+    "channel_id": "UCviNZD3EOvNfEHTmKPzNW1w",
+    "views": 1,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "5:35"
+   },
+   {
+    "id": "WqOTiBomg-Y",
+    "title": "QWERTY 配列の謎",
+    "channel": "ことラボ",
+    "channel_id": "UCYnZM101sbjg7ujmBrj4Ipg",
+    "views": 217566,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:32"
+   },
+   {
+    "id": "pncxd_Nzv5g",
+    "title": "【キーボードの使い方「基本編」】キーの役割や使い方、記号の入力方法を解説♪【パソコン初心者】",
+    "channel": "ゼロからパソコン",
+    "channel_id": "UCzOCAEozQ5oNeF14kWh-dMQ",
+    "views": 280744,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "13:22"
+   },
+   {
+    "id": "TbirAI6brpc",
+    "title": "なぜスペースで変換できるのに「変換」キーがあるのか【ゆっくり解説】",
+    "channel": "デジタル裏探訪【ゆっくり解説】",
+    "channel_id": "UCV4rTjMxDdyJExKCmyO_fyw",
+    "views": 3383,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "15:19"
+   },
+   {
+    "id": "ES6hta7KoIY",
+    "title": "なぜキーボードはQWERTY配列なのか",
+    "channel": "ビットのうらがわ",
+    "channel_id": "UCepDIDCHSCwaa98HrNQ_LNA",
+    "views": 8300,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "16:32"
+   },
+   {
+    "id": "9mPjEz44vN0",
+    "title": "キーボード役割まとめ｜11個のキーボードの役割と使い方について解説【パソコン初心者にも分かりやすく解説】",
+    "channel": "パソコン上達!Nagomiチャンネル",
+    "channel_id": "UCmjjkqeFLyusRTnnskL8_RQ",
+    "views": 1078973,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "42:12"
+   },
+   {
+    "id": "yMYy7pYkfWk",
+    "title": "記号の打ち方を覚えよう！【パソコンタイピング・文字入力】",
+    "channel": "らすパソコンハウツー",
+    "channel_id": "UCdL6nUlVz2-X4XpgNcXVhJg",
+    "views": 110700,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "5:55"
+   },
+   {
+    "id": "xwHMt4waimQ",
+    "title": "パソコンのキーボードの使い方や各キーの説明 【 初心者向け パソコン教室 PC部 】",
+    "channel": "初心者向けパソコン教室【PC部】",
+    "channel_id": "UCNFA06BiOwfANUtCVmigLBg",
+    "views": 233177,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "12:02"
+   },
+   {
+    "id": "A0QBDkGdVus",
+    "title": "【パソコンキーボード打ち方】記号の入力方法について分かりやすく解説【タイピング】",
+    "channel": "らすパソコンハウツー",
+    "channel_id": "UCdL6nUlVz2-X4XpgNcXVhJg",
+    "views": 54815,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "4:05"
+   },
+   {
+    "id": "i62cz1zDHos",
+    "title": "なぜ世界は、150年前のキーボード配列を捨てられないのか？",
+    "channel": "なぜノート",
+    "channel_id": "UCvYTj6JEtUsgwFOqn58W9QQ",
+    "views": 197,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "8:55"
+   },
+   {
+    "id": "CaP2nK6U1Zo",
+    "title": "キーボードのキーを押すと、何が起きているのか  ｜URL を打ってから、ページが表示されるまで 第1話",
+    "channel": "さんぽのおともに",
+    "channel_id": "UCv_utLT0cKTxkJuLseVoOEA",
+    "views": 160,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "33:08"
+   },
+   {
+    "id": "NTbOJWog-Lk",
+    "title": "なぜ昔のキーボードはカチッと音がしたのか【ゆっくり解説】",
+    "channel": "手でさわったデジタル史",
+    "channel_id": "UCJSKUw5UBjVjceG8otr9cqA",
+    "views": 182,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "26:23"
+   },
+   {
+    "id": "WWphrRjWyAQ",
+    "title": "パソコンで初心者が覚えるべき基本テクニック集【保存版】",
+    "channel": "金子晃之",
+    "channel_id": "UCaxV7Sf7pdNjlahl6BtJBBw",
+    "views": 3951400,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "40:19"
+   },
+   {
+    "id": "YiUHnAK5FQ0",
+    "title": "【Windows11】キーボードの入力と表示がおかしい時の、対処方法",
+    "channel": "PCメモ",
+    "channel_id": "UC7LGTBZCu2y3faFxhTdwjyg",
+    "views": 26715,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:49"
+   }
+  ],
+  "リモコン ボタン 押してから テレビ つくまで 仕組み": [],
+  "いいね 押すと 何が起きる サーバー 仕組み": [
+   {
+    "id": "MNwzUUhUTio",
+    "title": "なぜアクセス集中でサーバーは落ちるのか【ゆっくり解説】",
+    "channel": "ゆっくりIT解説",
+    "channel_id": "UCa7blfH744ZRbM9TgjtjfDw",
+    "views": 5665,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "27:37"
+   },
+   {
+    "id": "AlJXwfOCYhg",
+    "title": "URLを入力すると何が起きる？TCP/IPの仕組みを図解でわかりやすく解説【DNS・IP・TCP・HTTP・HTTPS】",
+    "channel": "ぎゅぎゅっとテック",
+    "channel_id": "UCsVj132hSccxpJnVwxd-GyQ",
+    "views": 28769,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "24:04"
+   },
+   {
+    "id": "DEh1NkMkVtc",
+    "title": "なぜ「いいね」の価値は暴落したのか【恋愛市場のハイパーインフレ】",
+    "channel": "考えすぎる葦",
+    "channel_id": "UCwkAl3Fxd69mDEcQjX7NZsQ",
+    "views": 90561,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "22:44"
+   },
+   {
+    "id": "sC0yHpvge1o",
+    "title": "【YouTube】配信者しか知らない！「いいね」や「コメント」は配信者や他の視聴者からどう見える？個人を特定することは可能？",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 323261,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "17:21"
+   },
+   {
+    "id": "6XfurIDx1Xk",
+    "title": "踏み台サーバが必要な理由【AWSネットワークの基礎から解説】",
+    "channel": "りょうま@インフラ攻略",
+    "channel_id": "UCRBjiSYfjdQdMz5-aNM5FBA",
+    "views": 285765,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "23:18"
+   },
+   {
+    "id": "oUFobqv4ABc",
+    "title": "【ゆっくりIT】プロキシサーバーとは？ ～Winnyが模範したサーバ技術～  ～ゆっくりサーバ解説～ No.077",
+    "channel": "ゆっくりITちゃんねる",
+    "channel_id": "UCXn1BeokidOdzY0DzcHszgA",
+    "views": 20788,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:04"
+   },
+   {
+    "id": "9ZwyQuUKFkw",
+    "title": "【マイクラ】サーバーの穴を突いて、数十万人を1秒ごとに追跡した手法を解説！【2b2t】",
+    "channel": "ウィップラッシュ理論",
+    "channel_id": "UCNnaocwIv_LVo74_rEcumTg",
+    "views": 3699,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "16:24"
+   },
+   {
+    "id": "2em4a24E-4A",
+    "title": "【人気12位なのに、Webの7割】なぜPHPはこんなに動いているのか",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 29284,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "51:35"
+   },
+   {
+    "id": "yCx7sMs74uQ",
+    "title": "【YouTube】コメントやいいねは配信者からどう見えてる？名前バレしない設定方法！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 223497,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "11:45"
+   },
+   {
+    "id": "DoSpRu3xMhs",
+    "title": "歴代の自宅サーバーとデスク環境を公開しするよ",
+    "channel": "タノシイコウサク設計局",
+    "channel_id": "UC1bFpSjKC9PeAiPyMcGvsOQ",
+    "views": 30102,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "9:21"
+   },
+   {
+    "id": "0EI_lmrijQs",
+    "title": "サーバーとは？｜サーバーとは何か、サーバーの種類や仕組みなどを3分でわかりやすく解説します",
+    "channel": "キノコード / AI・プログラミング学習チャンネル",
+    "channel_id": "UCGlgXjYVoHLD86TQQ799WIw",
+    "views": 25241,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "2:56"
+   },
+   {
+    "id": "bPJuQI5Wdz0",
+    "title": "サーバーとは？仕組みや種類・役割・用途をわかりやすく解説",
+    "channel": "SAMURAI ENGINEER [侍エンジニア]",
+    "channel_id": "UCCFOQO5aDK0xXam4cUQXT8g",
+    "views": 295581,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:20"
+   },
+   {
+    "id": "U9lRGb83cJw",
+    "title": "「サーバーとは何か？」【初心者向けにわかりやすく解説】",
+    "channel": "【みのるコーチ】『プログラミング学習』と『職場コミュニケーション心理学』ch",
+    "channel_id": "UCyS_MvgUdbSSlIa_Xh5HY4g",
+    "views": 2119,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "13:41"
+   },
+   {
+    "id": "R0Sgfmx8Qx0",
+    "title": "【解説】「くっ、海外サーバーを経由している！」の裏側。究極の匿名化ネットワークと逆探知の真実",
+    "channel": "ディープIT・PCトレンドラボ",
+    "channel_id": "UCyU-hoikUPtr9DN9D4gbJ1A",
+    "views": 3693,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "9:10"
+   },
+   {
+    "id": "G9erY0W85xo",
+    "title": "あなたがURLを打ち込んだ瞬間に起こること",
+    "channel": "ビットのうらがわ",
+    "channel_id": "UCepDIDCHSCwaa98HrNQ_LNA",
+    "views": 14337,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "16:54"
+   },
+   {
+    "id": "bH3SG6J44Y0",
+    "title": "サーバーを置いただけで1日4万回の攻撃！実際に届いた手口5つと家でできる対策【ずんだもん＆めたん解説】",
+    "channel": "もぐら総合研究所",
+    "channel_id": "UCY4gb-3VIeXa9yR8qyL2tGQ",
+    "views": 788,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "9:18"
+   },
+   {
+    "id": "rEMutn29HwM",
+    "title": "機械オンチに「サーバー」を説明する動画#136",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 1052640,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "45:37"
+   },
+   {
+    "id": "HwtNGwq4cuA",
+    "title": "動画はどこから届く？ CDNと配信サーバーの仕組み",
+    "channel": "ちょい楽IT室",
+    "channel_id": "UCvVd8JID2MfeqzpKvAwbvNg",
+    "views": 396,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "14:04"
+   },
+   {
+    "id": "lk60qTz_Yn0",
+    "title": "【悲報】サーバーの重みで家が傾きました。",
+    "channel": "タノシイコウサク設計局",
+    "channel_id": "UC1bFpSjKC9PeAiPyMcGvsOQ",
+    "views": 79378,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "6:00"
+   },
+   {
+    "id": "2tBbC1rZo3Q",
+    "title": "HTTPの仕組み｜GET・POSTリクエスト/ステータスコード/サーバー通信/ユーザエージェントなどの基礎を解説",
+    "channel": "せお丸@AI駆動開発",
+    "channel_id": "UCnEEa-IbWQ8_b-dqBgNNu4Q",
+    "views": 46551,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "12:56"
+   }
+  ],
+  "ネット通販 注文 ボタン 押してから 届くまで 裏側": [
+   {
+    "id": "Fxa0NR2xJjY",
+    "title": "通販で検索ボタンを押すと、裏で何が起きているのか【フロントエンドとバックエンド】",
+    "channel": "1ビットの猫",
+    "channel_id": "UCvV4DNQIingZ711SfkEgxvA",
+    "views": 18,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "10:18"
+   },
+   {
+    "id": "Shmm_RfYypQ",
+    "title": "「確認へ」を押すと、何が動く？｜通販ボタンの裏で働くプログラム【第3回】",
+    "channel": "AIと学ぶ サイバー攻撃のしくみ",
+    "channel_id": "UCjxXnc_tyHZJ0vZQDChNaOQ",
+    "views": 1,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "3:52"
+   },
+   {
+    "id": "r5d0mMfcv3s",
+    "title": "ネットで買った水筒が届くまで、裏で起きていること【ナビのしくみ図鑑】",
+    "channel": "ナビのしくみ図鑑",
+    "channel_id": "UC9r4eIQjmN48xwvkuiuk_ww",
+    "views": 22,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "17:07"
+   },
+   {
+    "id": "kZlguPBPTzE",
+    "title": "PHPの脆弱性、私たちにどんな影響がある？何をしたらいい？ネットショッピングの裏側",
+    "channel": "リテアゲIT【AI時代に生き残る教養】",
+    "channel_id": "UCHMgLYLbvnNeQ8BQxDxhDOA",
+    "views": 33,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "3:23"
+   },
+   {
+    "id": "xDNfdW1KwWc",
+    "title": "ネット通販の裏側で、あなたの行動履歴が商品になる理由【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 385,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "19:35"
+   },
+   {
+    "id": "PGwx2e6hs8M",
+    "title": "【Amazon ダッシュボタン】ボタンを押すだけで商品を注文できるサービスはなぜ終了したのか【ゆっくり解説】",
+    "channel": "ゆっくりルーザーズ",
+    "channel_id": "UCgaGnTwMi4vMGpuFpeSotYA",
+    "views": 390239,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:20"
+   },
+   {
+    "id": "tmKJjSXOr8Q",
+    "title": "ネット通販の注文確定を押す前に、総額と回数と解約条件を確認すること",
+    "channel": "ずんだもんの知らないと詰む話",
+    "channel_id": "UCidHfKDW86TYkwBh0ULNReQ",
+    "views": 88,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "11:48"
+   },
+   {
+    "id": "oRlXoNIjMgY",
+    "title": "「注文したのに、メールが来ない」その裏側で起きていること【メールの仕組み】",
+    "channel": "DoIT_たまご",
+    "channel_id": "UCywsWIkqjUa8gVD1JnGhwCg",
+    "views": 75,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "16:02"
+   },
+   {
+    "id": "OpDzT3VfW20",
+    "title": "【ゆっくり解説】その通販、注文前に待って！届いてから後悔する見落とし5選 #生活雑学 #買い物",
+    "channel": "ゆくトク研究所",
+    "channel_id": "UC7DahcI3Jfd0mSLnBukvAGA",
+    "views": 2,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "5:22"
+   },
+   {
+    "id": "uF_b2AKEZJY",
+    "title": "アマゾン ボタンを押すだけで日用品を注文 「Amazon Dash Button」 [モーニングCROSS]",
+    "channel": "CUT CROSS",
+    "channel_id": "UCT20Cat6TLg5JrRArVSP_6g",
+    "views": 64173,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "3:24"
+   },
+   {
+    "id": "fvh2hzZazAc",
+    "title": "ネットで買った荷物は、どうやって翌日届くのか【倉庫から玄関まで】",
+    "channel": "暮らしの断面図",
+    "channel_id": "UCCm6zPhEMVLsi70WJlzXhWA",
+    "views": 128,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "17:27"
+   },
+   {
+    "id": "zqwcYAMrx1A",
+    "title": "Amazonの荷物は、なぜこんなに早く届く？動く棚・箱選び・配送の裏側",
+    "channel": "なぜノート",
+    "channel_id": "UCvYTj6JEtUsgwFOqn58W9QQ",
+    "views": 2,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "9:04"
+   }
+  ],
+  "ライブ配信 仕組み 映像 届くまで 遅延": [
+   {
+    "id": "5GWb12k8maA",
+    "title": "YouTubeライブ中に遅延が発生！最適化テクニックを解説",
+    "channel": "リライブスタジオ",
+    "channel_id": "UCe4a2GiH0cWbLDL4ZCWeZIw",
+    "views": 4893,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:51"
+   },
+   {
+    "id": "4Ni2mnDzIJY",
+    "title": "YouTubeライブ配信検証 遅延設定の違いによる配信品質（超低遅延の場合）",
+    "channel": "Tatsuto Iijima",
+    "channel_id": "UCL6TA0UF16G7XhqzlEJ7oYg",
+    "views": 242,
+    "published": "4 年前 に配信済み",
+    "age_days": 1460,
+    "length": "10:35"
+   },
+   {
+    "id": "GpC1KAztJWE",
+    "title": "【検証】YouTubeライブの「超低遅延・低遅延・通常の遅延」は何秒くらいの差があるのか？【OBS初心者向け使い方動画】",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 7162,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:49"
+   },
+   {
+    "id": "BYzLVbO7OOQ",
+    "title": "ライブ配信のタイムラグを減らしたい！遅延の原因を見つけて改善する方法",
+    "channel": "株式会社ネクフル - Necfru Inc. ",
+    "channel_id": "UCMillV8HD5rNaoeCTbUS4Vg",
+    "views": 22,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "6:03"
+   },
+   {
+    "id": "mTzgQdf0TiA",
+    "title": "ライブ配信のコメントが配信者に「5秒遅れ」で届く理由【ゆっくり解説】",
+    "channel": "ゆっくりIT解説",
+    "channel_id": "UCa7blfH744ZRbM9TgjtjfDw",
+    "views": 2617,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "17:07"
+   },
+   {
+    "id": "zXSIe2PcPtQ",
+    "title": "ライブ配信の遅延はどこで起きる？ボトルネックの見つけ方と改善方法",
+    "channel": "株式会社ネクフル - Necfru Inc. ",
+    "channel_id": "UCMillV8HD5rNaoeCTbUS4Vg",
+    "views": 49,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "7:16"
+   },
+   {
+    "id": "FTY2C3LAGjI",
+    "title": "【2025年度最新】OBSで遅延配信を行う方法と注意点を解説します！【OBS初心者向け使い方講座】",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 2722,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:31"
+   },
+   {
+    "id": "uxBDWbGS7LE",
+    "title": "LiveU Solo の配信遅延時間について",
+    "channel": "KiBANinter",
+    "channel_id": "UCwqjzw4z6d7TCMG5HPp8C6g",
+    "views": 536,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "2:17"
+   },
+   {
+    "id": "_Y2gTdlVhI4",
+    "title": "【2025年度最新】YouTubeライブ配信がグルグルする問題についてのOBS上の解決策を解説します！",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 3399,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:38"
+   },
+   {
+    "id": "Y8ttpuChabA",
+    "title": "ユーチューブ生放送　超低遅延のラグ検証と設定方法!【YouTube live】",
+    "channel": "えびちゃんねる",
+    "channel_id": "UCp6b7eo3AOEOSaz3laqWp2A",
+    "views": 38907,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "7:31"
+   },
+   {
+    "id": "wYOklBKCkfY",
+    "title": "「LiveShell W」でシンプルな機材構成でYouTubeライブ配信＆遅延確認する様子",
+    "channel": "GIGAZINE（ギガジン）",
+    "channel_id": "UCLG4GhUwi3kzjxyzRbndyNA",
+    "views": 957,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:07"
+   },
+   {
+    "id": "RgoNW8n74M8",
+    "title": "なぜネットのライブ中継は、テレビより遅れて届くのか｜塊を待って貯める",
+    "channel": "テックのなぜ",
+    "channel_id": "UCf_3FgeYm1JJLlwyiUcK8og",
+    "views": 6,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "9:57"
+   },
+   {
+    "id": "SoxHmq64m58",
+    "title": "【2025年度最新】重要！YouTubeのライブ配信がグルグルしている原因がOBS31.0.3のバグにあることが判明しました！！！",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 4717,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "10:23"
+   },
+   {
+    "id": "CZm8N9mnru4",
+    "title": "Youtubeライブ配信が「超低遅延」対応。iphone簡単配信、チャット管理の新機能も- ゲーム 2017年9月9日 #ゲーム",
+    "channel": "Sakae Echi",
+    "channel_id": "UCcQ1iXGC2ZDhCwBVbIco8tA",
+    "views": 52,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "1:35"
+   },
+   {
+    "id": "A8AbUBhnuvk",
+    "title": "ライブ配信の遅延を検証｜ライブ配信・動画配信サービス(アプリ)を構築するシステム開発業者",
+    "channel": "動画配信アプリを開発するジェピスタ ( JEPISTA )",
+    "channel_id": "UCCh4CE6-FavyleGCPd4OQUg",
+    "views": 97,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "6:37"
+   },
+   {
+    "id": "W_7rg0tMuog",
+    "title": "【2021年最新版】OBS「遅延配信」の方法【初心者向け講座】",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 1648,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "3:27"
+   },
+   {
+    "id": "FK0wGXHtJlE",
+    "title": "Vimeo Live,YouTube & Facebook Live 配信 遅延と画質検証 Ufer! VLOG_251",
+    "channel": "Ufer! Art Documentary",
+    "channel_id": "UCAo_9kllj2U3yB4MtRwrvvA",
+    "views": 5675,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "14:53"
+   },
+   {
+    "id": "dEFYLRxWry4",
+    "title": "【2026年度最新・完全版】YouTubeのライブ配信方法とOBS連携方法まとめ！最適な配信設定から縦横同時配信新機能も！",
+    "channel": "ひとみマンのOBS学校",
+    "channel_id": "UCLi3jE5G8K60pd-HqLeBI5w",
+    "views": 39765,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "24:37"
+   },
+   {
+    "id": "oBvc6TFTPLI",
+    "title": "┠OBSで高画質低遅延低負荷に設定！╂x264┨",
+    "channel": "てぃる / TIL - 画質研究",
+    "channel_id": "UCV1dagtiqQ9f3NtDDBfYEMg",
+    "views": 40791,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "10:01"
+   },
+   {
+    "id": "JZnqykv0DUc",
+    "title": "YouTubeライブ配信のやり方&注意点を徹底解説｜Wondershare DemoCreator",
+    "channel": "ワンダーシェアーソフトウェア",
+    "channel_id": "UCkY_wTrst4c7ur3sCgXRbYw",
+    "views": 11538,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:35"
+   }
+  ],
+  "テレビ 生中継 映像 スタジオ 家 届くまで 仕組み": [
+   {
+    "id": "6MtlDL1Hng0",
+    "title": "屋根にアンテナがない家、テレビはどこから届く？【立体図解】",
+    "channel": "くらしの構造図",
+    "channel_id": "UCJfXb4cF1mLfzg_HcrdNzWw",
+    "views": 13,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "3:39"
+   },
+   {
+    "id": "fV5VPcCpKb4",
+    "title": "【テレビ局の裏側】スタジオカメラとそれを操る部屋に潜入しま～す！",
+    "channel": "TSK YouTube課 2023",
+    "channel_id": "UCi0Q3gsgQG-Z9oAgnPGApsg",
+    "views": 38542,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "10:05"
+   },
+   {
+    "id": "umkOhU10Xco",
+    "title": "史上初　すべてのTV局が同じ番組放送　地デジPR（10/07/04）",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 890582,
+    "published": "16 年前",
+    "age_days": 5840,
+    "length": "0:55"
+   },
+   {
+    "id": "dfXLhref12g",
+    "title": "テレビ局の心臓部に潜入！！！",
+    "channel": "報道カメラマンの動画 FNNプライムオンライン",
+    "channel_id": "UCW7FWNWoOwR8siKwxzClXoQ",
+    "views": 50418,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:55"
+   },
+   {
+    "id": "gD7oDypBci8",
+    "title": "生放送中のスタジオに大きな揺れ・・・地震発生の瞬間(2021年10月7日)",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 10405682,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "1:01"
+   },
+   {
+    "id": "T7pr67rNGJo",
+    "title": "【神判断】Live News daysニュース番組の編集マンに密着！オンエア直前での思わぬ事態、即対応を迫られた！！",
+    "channel": "報道カメラマンの動画 FNNプライムオンライン",
+    "channel_id": "UCW7FWNWoOwR8siKwxzClXoQ",
+    "views": 214877,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:59"
+   }
+  ],
+  "スマートスピーカー 話しかけてから 答えるまで 仕組み": [
+   {
+    "id": "I03fNdjbuAw",
+    "title": "ついに会話ができるスマートスピーカーが登場！Gemini対応の実力を試してみた！",
+    "channel": "アスキー",
+    "channel_id": "UCeJYDunL9xZtmczAP9AGmFA",
+    "views": 7029,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "3:13"
+   },
+   {
+    "id": "jqy-xPiX688",
+    "title": "【Amazon】ディスプレイ付きスマートスピーカー！その実力は？UZUが開封から使い始めをご紹介！「ECHO SPOT」",
+    "channel": "UZUMAX",
+    "channel_id": "UCsuv_Yt6IvZRnPXdaZ374QQ",
+    "views": 25718,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "20:03"
+   },
+   {
+    "id": "i2dzRzsborc",
+    "title": "Amazon Echo 話しかけるだけで何でもやってくれる家電",
+    "channel": "【人生逆転エンジニア】アップスターツSベン",
+    "channel_id": "UCczh4w4k5cjuZBKFqlIF3kw",
+    "views": 11827,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "3:19"
+   },
+   {
+    "id": "Ob6Mt6ZprvU",
+    "title": "スマートスピーカーの先にあるAI音声サービスの波に乗り遅れるな",
+    "channel": "TechKamikura",
+    "channel_id": "UC1JxyINTIqxlWfsy4tHGXSQ",
+    "views": 1270,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "2:54"
+   },
+   {
+    "id": "MJX5xB2j10Q",
+    "title": "【Amazon echo dot】スマートスピーカーで快適テレワーク作業",
+    "channel": "車とガジェット - フロムモリーTV",
+    "channel_id": "UCj4q9nnImTweb0wiDiz9GuA",
+    "views": 12982,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:58"
+   },
+   {
+    "id": "NOJRHHrahlc",
+    "title": "スマートスピーカーのAI3種の能力をどこより本気で比較！【Amazon Alexa・Googleアシスタント・LINE Clova】",
+    "channel": "smartio編集部-スマートスピーカー楽しいよ",
+    "channel_id": "UCOPqOWugk_UVNw2SumROJ6A",
+    "views": 46605,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "16:41"
+   },
+   {
+    "id": "q2yNO0iKwhg",
+    "title": "【2026年最新】スマートスピーカーおすすめ6選！失敗しないスマートスピーカーおすすめ6選",
+    "channel": "商品レビュー要約チャンネル",
+    "channel_id": "UCnZ6pewugcDt6e1x2aq7Dxw",
+    "views": 116,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "6:38"
+   },
+   {
+    "id": "JRKQIb9bPsA",
+    "title": "【優しいIT】AIスピーカーEchoのスキル開発をしてみましたッ",
+    "channel": "ごにチューブ【ITオンライン授業】",
+    "channel_id": "UCzxuaU8OPDrwfZjb81EoTbw",
+    "views": 129,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "8:55"
+   },
+   {
+    "id": "BPEJCvc0a74",
+    "title": "【AIを知ろう】AIスピーカーの仕組み",
+    "channel": "CDLE関西、AIを知ろう、学ぼう、感じよう",
+    "channel_id": "UC0ZFmZVKV9DMuhwxlsbODeA",
+    "views": 86,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "9:19"
+   },
+   {
+    "id": "vZGbKPHOjAM",
+    "title": "【人工知能】話題の「しゃべるスピーカー」と会話した結果…ブチギレ寸前【Google Home Mini】",
+    "channel": "吉田製作所Y",
+    "channel_id": "UC9WJo5ZJVXMZiA5XV2jLx5Q",
+    "views": 1023565,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "13:54"
+   },
+   {
+    "id": "5WE6h2OoYmI",
+    "title": "【バクマガ】必要なし！スマートスピーカーのできることと本当に必要なのかどうか辿り着いた結論",
+    "channel": "バクマガ",
+    "channel_id": "UCutSoFD6YLNvr3KqLZb3v7Q",
+    "views": 292,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:05"
+   },
+   {
+    "id": "_YB7_HSmRZA",
+    "title": "【入門】音声認識の仕組み。どうやって音声が文字になるのか。",
+    "channel": "直也テック",
+    "channel_id": "UCtiDTuG40ZOarubtFm1fbzg",
+    "views": 8275,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "35:10"
+   },
+   {
+    "id": "U7MODu4LaxI",
+    "title": "スマートスピーカーが「生成AI」になると、何が変わる？ ― Apple HomeView・Alexa+・Gemini for Homeで始まる「AIホーム」",
+    "channel": "ケミストリーチャンネル・X-HEMISTRYチャンネル",
+    "channel_id": "UCUBZdQQ8D2yFr-P1gYy26zQ",
+    "views": 156,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "10:03"
+   },
+   {
+    "id": "kzgwji0mvmQ",
+    "title": "実は使える！スマートスピーカー Amazon Echo",
+    "channel": "理系ワーママまりかチャンネル",
+    "channel_id": "UCrQtsAd9mC1EP5oZh6QpL9g",
+    "views": 477,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "15:01"
+   },
+   {
+    "id": "EcnNXUhvpbY",
+    "title": "AIはどうやって声を出すの？｜音声合成の仕組みとSiri・Alexaの裏側",
+    "channel": "むぎのAI・IT仕組み解説",
+    "channel_id": "UCvxnGBmR3cEjsI97Zfce5sw",
+    "views": 5,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "9:28"
+   },
+   {
+    "id": "xRQw7YGPHls",
+    "title": "家のスピーカーがGeminiに進化｜\"電気消して鍵かけて\"を一言で【Google Home・日本語対応・初心者向け】",
+    "channel": "AIエンジニア情報局",
+    "channel_id": "UC1rXVD9WYsQPQEWZyd-A1KA",
+    "views": 348,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "13:59"
+   },
+   {
+    "id": "RVKXPJy1zVw",
+    "title": "スマートスピーカー「サピエ図書館」スキル　操作実演動画",
+    "channel": "全国視覚障害者情報提供施設協会",
+    "channel_id": "UCmSrCTZqHLabP7WOi42uWRw",
+    "views": 3765,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:13"
+   },
+   {
+    "id": "Cuh4vPl1esQ",
+    "title": "【ゆっくり解説】どのAIがおすすめ？スマートスピーカー徹底比較！",
+    "channel": "ゆっくりガジェット研究所",
+    "channel_id": "UCpOlVbc1CaizcmboKU-HczQ",
+    "views": 18876,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "14:44"
+   },
+   {
+    "id": "fXQDcPJ_1vI",
+    "title": "📢【2026年最新】【最新版】スマートスピーカーおすすめランキング！あなたにぴったりの一台が見つかる",
+    "channel": "スマートモノ選び",
+    "channel_id": "UCvZdSbD-4j2-h2D3x3h8_NA",
+    "views": 2126,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "6:55"
+   }
+  ],
+  "QRコード 読み取ってから 開くまで 仕組み": [
+   {
+    "id": "NwLSnzQvXoY",
+    "title": "QRコードの仕組み",
+    "channel": "学びたい大人のための大学",
+    "channel_id": "UCQtzlTB_b-C_gHZ59r9yiKQ",
+    "views": 122209,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "34:44"
+   },
+   {
+    "id": "w1F_InoJlec",
+    "title": "日本が生んだ世界最高の自動認識技術 ～QRコード～【ゆっくり解説】",
+    "channel": "デルタのゆっくり科学",
+    "channel_id": "UCYG5ZT0oNuWYZl4o8IcNsGw",
+    "views": 494747,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "25:42"
+   },
+   {
+    "id": "mfjVtKmt9Do",
+    "title": "【ゆっくり解説】QRコードはどんな仕組みなの？ドットに隠された秘密",
+    "channel": "ゆっくり科学解説大学",
+    "channel_id": "UCUAZ_pW-FzcAJMBOnLBHU5w",
+    "views": 58929,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "20:48"
+   },
+   {
+    "id": "2MgT7F62KXI",
+    "title": "【日本が誇る最強技術】QRコードの知られざる秘密に迫る【仕組み】",
+    "channel": "今さら聞けないをこっそり学ぶ",
+    "channel_id": "UCwhE4BX5Myo4Rae1z1l4fyw",
+    "views": 1491,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "9:30"
+   },
+   {
+    "id": "EcBVoXHKAO8",
+    "title": "【初心者ができるようになってほしいこと】QRコードの読み取りから活用場面、注意点までしっかり解説",
+    "channel": "スマホのコンシェルジュ「株式会社コアコンシェル」",
+    "channel_id": "UCd0lXfZHpNsfLtOBPWHkV8g",
+    "views": 63902,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:19"
+   },
+   {
+    "id": "Zu3DUeKNHec",
+    "title": "QRコードはマジックで塗りつぶしても読める。油汚れに勝つために。【QRコード1】",
+    "channel": "ゆるコンピュータ科学ラジオ",
+    "channel_id": "UCpLu0KjNy616-E95gPx7LZg",
+    "views": 352430,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "49:15"
+   },
+   {
+    "id": "JNhddW1KPEY",
+    "title": "iPhoneの画面にあるQRコードを開く方法｜写真・画像のQRも読み取れる",
+    "channel": "シニア デジタルCH",
+    "channel_id": "UCrysNikj50AML5rr6ESAXrw",
+    "views": 680,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "3:58"
+   },
+   {
+    "id": "L8FYVDqHma0",
+    "title": "QRコードはなぜ30%壊れても読めるのか？【誤り訂正の仕組み】",
+    "channel": "デジタルの仕組み図鑑",
+    "channel_id": "UCP54tiiSYrEThJwALD3O0mw",
+    "views": 9,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "8:07"
+   },
+   {
+    "id": "7OenIMjAMzg",
+    "title": "QRコードを 人力() で読み取る方法を解説！",
+    "channel": "てみてりあ",
+    "channel_id": "UCz_CPcqx46FYrBHvLNVOmXA",
+    "views": 155524,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "11:01"
+   },
+   {
+    "id": "IwVcvTZA_Do",
+    "title": "QR コードはどのように機能しますか?",
+    "channel": "History of Simple Things",
+    "channel_id": "UC95ANqPeSKRNEH1CaCOs2ew",
+    "views": 1365900,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "8:09"
+   },
+   {
+    "id": "mqY9uYgoNVY",
+    "title": "今さら聞けない｜QRコードって何？スマホ初心者向けにやさしく解説",
+    "channel": "吉祥寺スマホスクール",
+    "channel_id": "UC4V6nX77AYklcVdMIHotOyQ",
+    "views": 8903,
+    "published": "10 か月前",
+    "age_days": 300,
+    "length": "16:10"
+   },
+   {
+    "id": "BhDWBkcvzJs",
+    "title": "５分でわかるQRコードの仕組みと活用方法",
+    "channel": "雑学研究所ひろし",
+    "channel_id": "UC--nCmN6Gh9743loukS9gog",
+    "views": 12966,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "5:17"
+   },
+   {
+    "id": "U36ztYRYdKA",
+    "title": "QRコードを読み取ると何が起きる？｜カメラの先で開くもの",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 44,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "2:19"
+   },
+   {
+    "id": "Q1obSwam9Kw",
+    "title": "【QRコードの秘密】角の3つの四角に隠された驚きの仕組み｜囲碁から生まれた日本の発明",
+    "channel": "機械の歴史",
+    "channel_id": "UC-HDaFoQ1O7G78sz0D8kBnw",
+    "views": 96,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "17:09"
+   },
+   {
+    "id": "0Dhf7ij2W2o",
+    "title": "【かざすだけ】QRコードの読み取り方！撮影ボタンは押さなくてOK【Androidシニア向け】",
+    "channel": "スマホの学校",
+    "channel_id": "UCIaQ74jNWiiAWVE0yLR6YOQ",
+    "views": 566,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "15:45"
+   },
+   {
+    "id": "HUBDOo4HorY",
+    "title": "世界を変えた小さな四角形。QRコード誕生の物語",
+    "channel": "しくみ探究局",
+    "channel_id": "UCd3Rw4DBkSrwuwbVpGKXpkA",
+    "views": 10,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "9:06"
+   },
+   {
+    "id": "X1bz-mcSD6o",
+    "title": "【Windows 11】QRコードの読み取りを行う手順（画像や紙からのQRコード読み取り）",
+    "channel": "パソ研(pasoken)",
+    "channel_id": "UCvIdGjvcnNBLHye0tsAEw9w",
+    "views": 588318,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:58"
+   },
+   {
+    "id": "sy1_WX-nvoM",
+    "title": "「詐欺師にとっても便利」急増“QRコード悪用”詐欺、フードコートの注文も要注意、偽チラシで10万円被害も【Nスタ解説】｜TBS NEWS DIG",
+    "channel": "TBS NEWS DIG Powered by JNN",
+    "channel_id": "UC6AG81pAkf6Lbi_1VC5NmPA",
+    "views": 1340099,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "11:34"
+   },
+   {
+    "id": "jWkwuX4Lt8Q",
+    "title": "QRコードを全部解説【汚れてても読めるのはなぜ？】",
+    "channel": "ネジとハカセ【ざっくり解説】",
+    "channel_id": "UCqUXPKuCkgFXUH9IzTk9fgw",
+    "views": 6,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "10:05"
+   },
+   {
+    "id": "Lfj197Ou2Hw",
+    "title": "バーコードはなぜ生まれた？QRコードの仕組みから\"次のコード\"まで解説",
+    "channel": "ブレオの理系トリビア",
+    "channel_id": "UCwkBtJs-X31eIoEDB7nXL1Q",
+    "views": 1009,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "33:07"
+   }
+  ],
+  "メール 送信 相手に届くまで 経路": [
+   {
+    "id": "7dVD3MHvbbo",
+    "title": "【ネットワークスペシャリスト】メールはどうやって相手に届く？｜SMTP・POP・IMAP・MXレコード・なりすまし対策を例え話で一気に理解【第9回 解説編】",
+    "channel": "LongTailSecurity",
+    "channel_id": "UC_F3mdTWElEoV1NjbGs526Q",
+    "views": 51,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "15:24"
+   },
+   {
+    "id": "n-XFI2Lz4eQ",
+    "title": "【メール入門①】送ったメールは相手のパソコンに直接届く?｜メールが届く経路（MUA・MTA・MX）",
+    "channel": "はるか先輩のIT放課後ラボ",
+    "channel_id": "UCZCeFmqiFyDfgBTR7Ekh5PA",
+    "views": 18,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "12:29"
+   },
+   {
+    "id": "KCbswpqWkpQ",
+    "title": "【講義動画｜ネットワーク⑥】（令和8年版）テクノロジ系　送信ボタンを押したメールは相手のパソコンまで届く？SMTPの役割と「届く範囲」を完全理解",
+    "channel": "クフウヤ | ITパスポート 聞き流しラボ",
+    "channel_id": "UCmDkN2_-QkjcQ0zJq0-tb1Q",
+    "views": 91,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "9:51"
+   },
+   {
+    "id": "2pt0ssNRDJk",
+    "title": "メールが届くまで ― 全体像・登場人物・MX・直接配送とリレー【メール入門 第1回】",
+    "channel": "インフラエンジニアへの道",
+    "channel_id": "UCYFfHGhpoB62WHqrurkJ7fw",
+    "views": 13,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "14:59"
+   },
+   {
+    "id": "wgXqBgKHCsw",
+    "title": "メールが届く仕組み｜メール1通の数秒の旅",
+    "channel": "世界の裏側図解室 - Invisible Systems",
+    "channel_id": "UCt9Y6fX2-uEZaMv9nr17ozA",
+    "views": 4,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "10:08"
+   },
+   {
+    "id": "-DDbHp1S_y0",
+    "title": "メールの返信と転送｜元の内容は誰に届く？",
+    "channel": "仕事で役立つITの話",
+    "channel_id": "UCnUUzP_2UzbLNN6gDIwuFlA",
+    "views": 50,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "2:46"
+   },
+   {
+    "id": "fKM_hIWjVFo",
+    "title": "【メールの仕組み】送信ボタンから受信箱までの旅｜SMTP・MXレコード・SPF/DKIM/DMARC・届かない原因の調べ方",
+    "channel": "エイジの技術図解ラボ",
+    "channel_id": "UCub7WvQYtnnZ9xLGet5Qpnw",
+    "views": 5,
+    "published": "7 日前",
+    "age_days": 7,
+    "length": "8:32"
+   },
+   {
+    "id": "yvMeP9lUQr8",
+    "title": "メールがエラーで送信できない場合の対処法。SPFレコードってご存知ですか？【エラーコード：550-5.7.26】",
+    "channel": "コネル研究所 ConeruLab",
+    "channel_id": "UCFtlSiS3hugdAAopZG4Vu3g",
+    "views": 12047,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "10:59"
+   },
+   {
+    "id": "eRvve5FARHA",
+    "title": "【たった3分】99%の人が知らないこの裏技を使えば迷惑メールは一生来なくなる！（Gmail・Yahoo・iCloud・独自ドメイン全部対応！）",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 1230056,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "24:08"
+   },
+   {
+    "id": "pTb_Wfy22KM",
+    "title": "Outlookでメールが送れない原因と対処法",
+    "channel": "イナデジITサポート",
+    "channel_id": "UCccGjfpSIEU7Hqpyvx8F-Jw",
+    "views": 5441,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "8:32"
+   },
+   {
+    "id": "O70l-s-AT8Q",
+    "title": "【2027年1月完全廃止】Gmailでフリーメール等の送受信ができない！詳細と対策を徹底解説【SMTP/POP3】",
+    "channel": "後藤PC塾:プロが伝えるパソコン教室",
+    "channel_id": "UCMvaNVWBGbEPuZllYZETjfQ",
+    "views": 461375,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "15:10"
+   },
+   {
+    "id": "FOLIhEZr6Eo",
+    "title": "📧 もう手動でメールを送信する必要はない🚀Power Automate Desktopで効率的に自動送信しましょう！マクロなしで魔法のようにOutlookメール送信を自動化！Excel塾の PAD8回",
+    "channel": "なんだ!カンタン!Excel塾 AIに仕事を任せる",
+    "channel_id": "UCQXH9pL5Pa5YP13qB2FPe_Q",
+    "views": 11222,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "17:15"
+   },
+   {
+    "id": "KtPkzzCAiAA",
+    "title": "なぜ「送信」を押していないのに、入力したメールアドレスが外の会社に届くのか？",
+    "channel": "ネットの取説",
+    "channel_id": "UCuNqiUhsAIP8m4WlzgHgk2A",
+    "views": 2,
+    "published": "13 時間前",
+    "age_days": 0,
+    "length": "8:28"
+   },
+   {
+    "id": "4NNCUFfVJA8",
+    "title": "【切り替え急げ！】Windowsメール完全終了のお知らせ！送受信できなくなります！Outlookも終了の発表！新規にでるoutlook(new)に移行はすべき？",
+    "channel": "パソコン博士TAIKI",
+    "channel_id": "UCYhXmcP7xSyGd5RFe15YJOg",
+    "views": 2259907,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:21"
+   },
+   {
+    "id": "TKh7Vg5bfvo",
+    "title": "超わかりやすい！メールのしくみ【音声無し】（メールが相手に届くまでの流れを動画で理解できる！）",
+    "channel": "しくみかん",
+    "channel_id": "UCTmF42qi_LeT81fGdzoCn0w",
+    "views": 1521,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "2:48"
+   },
+   {
+    "id": "k6qaOqbZxf8",
+    "title": "送ったメールがお客様に届かない！？迷惑メール扱いされないための方法とは",
+    "channel": "税理士事務所の経営応援メディアFIS DESIGNS",
+    "channel_id": "UC4UoVvPr-2I23svg-Ha0vYA",
+    "views": 1482,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "6:09"
+   },
+   {
+    "id": "OAruHnpqJkI",
+    "title": "【Windows11】Outlookの基本操作！メールの受信・送信・転送、CC・BCCの初心者の使い方",
+    "channel": "PCメモ",
+    "channel_id": "UC7LGTBZCu2y3faFxhTdwjyg",
+    "views": 42878,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:14"
+   },
+   {
+    "id": "jx_q_9CObFE",
+    "title": "【やらないと損】Outlook | メールの誤送信・添付もれを防ぐ設定 【1分後送信設定をしましょう！】",
+    "channel": "森新の働き方ラボ",
+    "channel_id": "UC5wK1GogefN_w1mCtyys14Q",
+    "views": 48377,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "11:25"
+   },
+   {
+    "id": "5t1REofZig8",
+    "title": "【出来て当たり前！】Outlookでのメール送信基礎スキル3選",
+    "channel": "ユースフル / 実務変革のプロ",
+    "channel_id": "UCRpRQ48LGfMpYojZo7Srabg",
+    "views": 20518,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "5:29"
+   },
+   {
+    "id": "H0QAGjcYpn0",
+    "title": "【今すぐオフ】迷惑メールが届くだけで請求が高額に…iPhoneのここが10月から勝手にオン。今すぐ確認を！",
+    "channel": "りんのスマホ点検室",
+    "channel_id": "UCtKIkpBtHuFkWrBws0OefXQ",
+    "views": 836956,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "20:50"
+   }
+  ],
+  "LINE メッセージ 送信 仕組み サーバー 届くまで": [
+   {
+    "id": "5PXaG_Ipu3M",
+    "title": "【LINE】勝手に届く配達メッセージの危険性！仕組みと対処法について！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 161380,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "10:14"
+   },
+   {
+    "id": "jcYX9XV2x6s",
+    "title": "【サービスメッセージ】使用用途から実装方法までまるっと解説！ | るおんさん | @ruonp24",
+    "channel": "LINE Developer Community",
+    "channel_id": "UCZkYYwmvSA6y7WWLxM5x9IA",
+    "views": 260,
+    "published": "7 か月前",
+    "age_days": 210,
+    "length": "12:02"
+   },
+   {
+    "id": "Sf1WA9m7JWs",
+    "title": "LINEのメッセージングプラットフォームにおけるマイクロサービス化への長い道のり -日本語版-",
+    "channel": "LINE Developers",
+    "channel_id": "UCuzvuO3E9XIoreE9u7B1ETw",
+    "views": 317,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "29:50"
+   },
+   {
+    "id": "ACdVbytYS84",
+    "title": "LINE Messaging Platformのサーバーサイド開発",
+    "channel": "LINE株式会社 Recruiting",
+    "channel_id": "UC7haTqSajXF3LeplkOVcwDA",
+    "views": 115,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "19:18"
+   },
+   {
+    "id": "ToGSAnMBHpM",
+    "title": "【改悪】LINEの送信取り消しができなくなった！裏の意図と対処法！",
+    "channel": "埼玉スマホ教室",
+    "channel_id": "UCKeSbR4kQK4RAPsrLVKJjCQ",
+    "views": 98294,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:08"
+   },
+   {
+    "id": "RLpls8ciDZ8",
+    "title": "詳説！Eメールが届く仕組みについて、現役インフラエンジニアがメールサーバー視点でレクチャーします！",
+    "channel": "ワイのITアカデミア@ITエンジニア就活応援",
+    "channel_id": "UC7_oajFrWQCSGzKZp7iWMKQ",
+    "views": 949,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "16:55"
+   }
+  ],
+  "パケット 仕組み データ 分けて 送る アニメ": [
+   {
+    "id": "Hn8VkCZu_yA",
+    "title": "インターネットの宅配便：パケット交換方式とは？データを分割して送る通信の仕組みをアニメ風にわかりやすく解説",
+    "channel": "AIと学ぶIT用語",
+    "channel_id": "UCwRlGKucMczu4VP8iH89QLw",
+    "views": 29,
+    "published": "6 か月前",
+    "age_days": 180,
+    "length": "6:51"
+   },
+   {
+    "id": "fmN3xrqEz_0",
+    "title": "パケットの中身を見てTCP/IPを絶対に理解したい",
+    "channel": "独学ヒトリ",
+    "channel_id": "UCAcGrCJE4wCx3LujhhbTWcg",
+    "views": 31656,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "6:30"
+   },
+   {
+    "id": "OcUbGvK_8yA",
+    "title": "【パケットって何？】なぜインターネットは1文字も欠けずに届くのか？【届く保証ゼロ】",
+    "channel": "ゆっくり情報科学ちゃんねる",
+    "channel_id": "UCaLCN5nUe7T6LVZwu6NV2xA",
+    "views": 34635,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "40:49"
+   },
+   {
+    "id": "OqGJa_KtVsM",
+    "title": "【情報Ⅰ】パケットってどうやって送られているの？？パケット分割について解説します",
+    "channel": "理数個別チャンネル",
+    "channel_id": "UCdQ0y9lyNRKcbH8dv2janrw",
+    "views": 166,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "2:16"
+   },
+   {
+    "id": "rbPEIgchSVs",
+    "title": "パケットとは？「パケ放題」のパケを、写真1枚の通信で図解【6分解説】",
+    "channel": "なるほど解説室",
+    "channel_id": "UCfAPUf7gd4oTFRVNAS3lkgg",
+    "views": 20,
+    "published": "11 日前",
+    "age_days": 11,
+    "length": "6:00"
+   },
+   {
+    "id": "gmQhFX9fx7I",
+    "title": "インターネットの仕組み｜データはどうやって届くの？【なんでなの】",
+    "channel": "なんでなのチャン",
+    "channel_id": "UCy31QMVsy-Ezz4_RtIhpeRA",
+    "views": 10,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "1:23"
+   },
+   {
+    "id": "8WKpZidctTI",
+    "title": "パケットはどうやって届く？ルータの役割と通信の仕組みを図でわかりやすく解説【高校情報Ⅰ 4-1-3】",
+    "channel": "高校情報・IT基礎チャンネル",
+    "channel_id": "UC23CsLwHphDO0qWKWIRogAg",
+    "views": 941,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "5:32"
+   },
+   {
+    "id": "IecKNgq0ypc",
+    "title": "【初心者向け】データはこうして送られる！TCP/IPとは何なのか？【ITパスポート】【基本情報技術者】【高校情報Ⅰ】",
+    "channel": "ミューズの情報教室",
+    "channel_id": "UC71_UDvWYvzwG6y4rDdH4Kg",
+    "views": 25012,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "10:07"
+   },
+   {
+    "id": "wKW3-t5MBeA",
+    "title": "【ネットワーク】パケット配送の仕組み | バラバラに届くのに1ミリも欠けていない？",
+    "channel": "世界はゲームだ。",
+    "channel_id": "UCuqLq4IHXlN5-hmzkR8goMg",
+    "views": 2,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "15:01"
+   },
+   {
+    "id": "woktoF8REmc",
+    "title": "スマホの「ギガ」って、何が減っているの？データ通信量の正体【パケット・IPアドレス】",
+    "channel": "朝比奈幸太郎の空音開発研究室",
+    "channel_id": "UCUif3enJinDf06LVEOJcpbA",
+    "views": 99,
+    "published": "2 日前",
+    "age_days": 2,
+    "length": "12:48"
+   },
+   {
+    "id": "pqSCDxYN8Gc",
+    "title": "TCP/IPとは？4つの層とカプセル化をアニメで解説final video",
+    "channel": "lumichy's channel",
+    "channel_id": "UCV2zAGl5CtToIRkUdIK7fKA",
+    "views": 14,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "3:29"
+   }
+  ],
+  "インターネット 仕組み 3D アニメ データの旅": [
+   {
+    "id": "-jNFptYDc44",
+    "title": "インターネットの仕組みとは？",
+    "channel": "Sabin 機械工学",
+    "channel_id": "UCoDboBE4RdYxZESjI__z7zQ",
+    "views": 462881,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "11:03"
+   },
+   {
+    "id": "8v2lfG28B-E",
+    "title": "３Dアニメ「INTERNET TRAVELER」",
+    "channel": "真実鷲見",
+    "channel_id": "UCSqhlMdK-MXLDgmz0FhEH1w",
+    "views": 219,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:28"
+   },
+   {
+    "id": "gmQhFX9fx7I",
+    "title": "インターネットの仕組み｜データはどうやって届くの？【なんでなの】",
+    "channel": "なんでなのチャン",
+    "channel_id": "UCy31QMVsy-Ezz4_RtIhpeRA",
+    "views": 10,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "1:23"
+   },
+   {
+    "id": "37XcJoa01-o",
+    "title": "インターネットとは（アニメーション動画）",
+    "channel": "ITを分かりやすく解説【生成AI・情報処理試験・プログラミング講座】",
+    "channel_id": "UC--TPTOTN0O178CcwvMNV6w",
+    "views": 4497,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:57"
+   },
+   {
+    "id": "mukFgN8Rzms",
+    "title": "インターネットでデータが届く仕組み📶 動画が一瞬で表示される理由",
+    "channel": "チップくんのパソコン教室",
+    "channel_id": "UCJjctDP7HUGjfEV6_MkXfSA",
+    "views": 5,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "2:12"
+   },
+   {
+    "id": "G4icq0yoEKw",
+    "title": "Wi-Fiの仕組み|線がないのになぜつながる?【3D図解・ゆっくり解説】",
+    "channel": "しくみ断面ラボ",
+    "channel_id": "UC_HHx87c5AH_O8SsQsxBdjQ",
+    "views": 6,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "6:17"
+   },
+   {
+    "id": "3uXAVYFENxI",
+    "title": "【通信の裏側を探る!】データの旅!もし人がYouTube動画を運んだら...",
+    "channel": "GENKI LABO",
+    "channel_id": "UC46u5qG6vqDdrNYgqRVvq3Q",
+    "views": 138973,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:27"
+   },
+   {
+    "id": "YHVd2gadi7c",
+    "title": "世界中のインターネットはどうやってつながっているのか？【海底ケーブル・IX・BGPを図解】",
+    "channel": "世界の裏側図鑑",
+    "channel_id": "UCTpU2FgWuLq0flHV4o4nSKQ",
+    "views": 5,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "10:32"
+   },
+   {
+    "id": "BPODklKbx5s",
+    "title": "インターネットはどんなしくみなのか？【日本科学情報】【科学技術】",
+    "channel": "日本科学情報",
+    "channel_id": "UCU0KURiKTupBYVCK8rgG7Rw",
+    "views": 1739973,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "16:16"
+   },
+   {
+    "id": "hnaGhM0-pHY",
+    "title": "【3D解説】URLを押した一瞬で何が起きている？インターネット通信の仕組み（TCP/IP・DNS・TLS）",
+    "channel": "はたらくサイバー防衛局",
+    "channel_id": "UC94WpfNlV4-7OSHc_qcR-eg",
+    "views": 333,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "10:58"
+   },
+   {
+    "id": "eLs_xDQH5Hg",
+    "title": "YouTube/ネットの仕組み。動画がスマホに届くまで 🌏",
+    "channel": "ギズモード・ジャパン",
+    "channel_id": "UCZm3dECbQU33IWG5MQ-NAdw",
+    "views": 160835,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:30"
+   },
+   {
+    "id": "A11m1lWiUrs",
+    "title": "インターネットの仕組み入門～IPアドレス・DNS・MACアドレス【高校情報１・基本情報技術者・ITパスポート】高校情報Ⅰ教科書完全準拠版",
+    "channel": "情報処理技術者試験・高校情報教科対策の突破口ドットコム",
+    "channel_id": "UC_0LOFMRg60xDBfkzMAmkfA",
+    "views": 393970,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "43:47"
+   },
+   {
+    "id": "Fyt9nNS75Sk",
+    "title": "インターネットの仕組み｜URLを入力してから表示までの「1秒」を3Dで図解【DNS・TCP・HTTPS】",
+    "channel": "ネッコワーク",
+    "channel_id": "UCLV89nnNH0at7E44TFJ9jYw",
+    "views": 22,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "10:23"
+   },
+   {
+    "id": "yZC7AeN3ml4",
+    "title": "【インターネットの正体】世界中のデータは、どこを通っているのか？",
+    "channel": "ヤス",
+    "channel_id": "UCUEbBoBJSS6KkQenYta3j_w",
+    "views": 5,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "12:19"
+   }
+  ],
+  "ウェブサイト 開く 仕組み URL 入力してから 表示まで": [
+   {
+    "id": "XJ6oJ5u14gk",
+    "title": "Webサイトが表示される仕組みを図解｜URLを入力してからDNS・TCP/IP・HTTP・レンダリングまで",
+    "channel": "わんこと仙人のIT漫画大学【Progate(プロゲート)】",
+    "channel_id": "UCHBcEzu9KhIbkOD3UWR2XUg",
+    "views": 53,
+    "published": "1 日前",
+    "age_days": 1,
+    "length": "17:14"
+   },
+   {
+    "id": "eYG1o6P9xgk",
+    "title": "URLを入力すると、なぜWebサイトが開く？｜DNS・IPアドレス・サーバーをやさしく解説",
+    "channel": "小学生でもわかる!! IT知識学習チャンネル",
+    "channel_id": "UC9_EdEGOAnTGO45_uNu2vwg",
+    "views": 112,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "10:28"
+   },
+   {
+    "id": "lUt2BoJZuOk",
+    "title": "URLを入力すると、何が起きる？｜Webページが届くまでの旅",
+    "channel": "ジェームズと学ぶAIの世界",
+    "channel_id": "UC-TNnXXXbJk_h9iDSN7mG8g",
+    "views": 12,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "12:55"
+   },
+   {
+    "id": "LhpI-kfsza0",
+    "title": "【裏の仕組み】URLやドメイン名、DNSとは何かを理解しよう【情報I基礎】4-9 URLとDNS",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 38583,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:57"
+   },
+   {
+    "id": "brv9ztrWE00",
+    "title": "URLを入力してWebページを表示するには（できるWindows 11 2026年 改訂5版 Copilot対応）",
+    "channel": "できるネット",
+    "channel_id": "UC-I5-pKCyUOcR_5RDJpUX9A",
+    "views": 198,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "1:09"
+   },
+   {
+    "id": "b_apIgHNqtk",
+    "title": "【HTTP入門】Webページがブラウザに表示されるまでの流れを解説",
+    "channel": "プログラミングチュートリアル",
+    "channel_id": "UCNTxclE0N4qsUuirssL_D8w",
+    "views": 79470,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "44:12"
+   },
+   {
+    "id": "2IbIzAc3UkE",
+    "title": "URLを入力した後、何が起きている？Webサイトが表示されるまでの仕組み",
+    "channel": "葵、気になります。",
+    "channel_id": "UCMFaVVgP80hnPhCj8wsZfrw",
+    "views": 2,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "9:57"
+   },
+   {
+    "id": "JWFtfvKPzPA",
+    "title": "URLを入力してWebページを表示するには（Windows 11）",
+    "channel": "できるネット",
+    "channel_id": "UC-I5-pKCyUOcR_5RDJpUX9A",
+    "views": 2574,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "1:21"
+   },
+   {
+    "id": "0IdaCXP2NEo",
+    "title": "【電話帳だった】DNSとは？URLからサイトが開くまでの仕組みを図解",
+    "channel": "ZeroCodeAI",
+    "channel_id": "UCUb1F0sS2YfiNWeGmi6kiMw",
+    "views": 10,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "9:15"
+   },
+   {
+    "id": "Fyt9nNS75Sk",
+    "title": "インターネットの仕組み｜URLを入力してから表示までの「1秒」を3Dで図解【DNS・TCP・HTTPS】",
+    "channel": "ネッコワーク",
+    "channel_id": "UCLV89nnNH0at7E44TFJ9jYw",
+    "views": 22,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "10:23"
+   },
+   {
+    "id": "bfOnuSi2GCQ",
+    "title": "URLを入れてから画面が出るまで｜Webの裏側は4つの段でできている #01",
+    "channel": "SpellTheSpace",
+    "channel_id": "UC6x-m7vmiridtUz3VAwLibQ",
+    "views": 21,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "6:18"
+   },
+   {
+    "id": "YQPNApy0tA0",
+    "title": "URLとは？｜仕組みなどを図解を使って3分でわかりやすく解説します",
+    "channel": "キノコード / AI・プログラミング学習チャンネル",
+    "channel_id": "UCGlgXjYVoHLD86TQQ799WIw",
+    "views": 96423,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:50"
+   },
+   {
+    "id": "_cwrhZdEuGo",
+    "title": "URLを入力してWebページを表示するには（Windows 11）",
+    "channel": "できるネット",
+    "channel_id": "UC-I5-pKCyUOcR_5RDJpUX9A",
+    "views": 12934,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "1:05"
+   },
+   {
+    "id": "ZfTJlo7Sack",
+    "title": "WebブラウザがWebサイトを表示する仕組みを絶対に理解する",
+    "channel": "独学ヒトリ",
+    "channel_id": "UCAcGrCJE4wCx3LujhhbTWcg",
+    "views": 4378,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "5:30"
+   },
+   {
+    "id": "0q-iKcM5tqw",
+    "title": "URLを入力してWebページを表示するには（Windows 11）",
+    "channel": "できるネット",
+    "channel_id": "UC-I5-pKCyUOcR_5RDJpUX9A",
+    "views": 3363,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:48"
+   },
+   {
+    "id": "8LwBi6h1RDY",
+    "title": "URLを打ってから表示されるまで｜DNSとHTTP・HTTPSを5分で【情報I 共通テスト】",
+    "channel": "情報I 解き方の型",
+    "channel_id": "UCnMPXbX5J8J4WamLH28njEg",
+    "views": 9,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "5:01"
+   },
+   {
+    "id": "0Hm5YQ8ISFU",
+    "title": "URLを入れてからページが表示されるまで｜DNS・HTTPS・レンダリングの仕組みを図解",
+    "channel": "かぎあなテック",
+    "channel_id": "UCq05xrExgR222pVcvV5M6bg",
+    "views": 3,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "7:44"
+   },
+   {
+    "id": "Bje9PXS0pMA",
+    "title": "【初心者向け】インターネットの仕組みがわかるキーワード６選【情報I基礎】4-8 webの仕組み",
+    "channel": "せかチャン - 世界一わかりやすい情報科チャンネル",
+    "channel_id": "UC57H40XcMcL4Lbp_Uq2MVaQ",
+    "views": 35681,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "9:54"
+   },
+   {
+    "id": "sIbUwuNUiKA",
+    "title": "3分でわかる！インターネットでWEBサイトが表示される仕組み",
+    "channel": "skoshz2",
+    "channel_id": "UCspOsWj6C1kBaJnd4xbEMXA",
+    "views": 634,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "3:22"
+   }
+  ],
+  "ATM お金 おろす 裏側 何が起きている": [],
+  "改札 タッチ 0.2秒 何が起きている": [],
+  "Wi-Fi ルーター 中 データ どこへ 行く": [
+   {
+    "id": "Grz0jxq7OA0",
+    "title": "Wi-Fiルーターの置き場所はどこが良い？最適な設置場所を解説！置き方や収納を変えるだけで簡単にWi-Fiの速度がアップ！",
+    "channel": "@nifty プロバイダーチャンネル【公式】",
+    "channel_id": "UCiZTWtsMFBvfZ_SsQWjB2Hg",
+    "views": 65462,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:44"
+   },
+   {
+    "id": "LSO29MRKNds",
+    "title": "Androidスマホ－WEBブラウザからWi-Fiルーターの設定画面を開く方法【公式】",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 51714,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:31"
+   },
+   {
+    "id": "pTSKnzTmBUo",
+    "title": "パソコン（Windows）－WEBブラウザからWi-Fiルーターの設定画面を開く方法【公式】",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 60563,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:13"
+   },
+   {
+    "id": "SS5X4KTy1Nc",
+    "title": "【かんたん！iPhone／Androidスマホ】Wi-Fiルーターの設定画面を開く方法【公式】",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 92472,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "2:35"
+   },
+   {
+    "id": "TuKiDbyUgyk",
+    "title": "Wi-Fiルーターを買い替えた！古いルーターのSSIDをそのまま使うWPSコピー機能の使い方　WN-DAX1800GR　WPS",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 21540,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "2:04"
+   },
+   {
+    "id": "a5JnqvHVxMs",
+    "title": "【Wi-Fiルーター】AP（アクセスポイント）モード／ブリッジモードに設定する方法",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 25654,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "4:01"
+   },
+   {
+    "id": "VyLh1H9Q6SY",
+    "title": "ルーターとは?Wi-Fiとの違い・接続の仕組みを超わかりやすく解説",
+    "channel": "HONDA 街ネット研究部",
+    "channel_id": "UC97bk4a9Tb5T89GbWgLE4TA",
+    "views": 4055,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:16"
+   },
+   {
+    "id": "lJnZSl1Aj1E",
+    "title": "【iPhoneもAndroidも】家のWi-Fiでも、ここが12月から勝手にオンになってると毎月の通信料が倍に？今すぐオフに！",
+    "channel": "まどかのスマホ診断室",
+    "channel_id": "UCTxLXOpCMIE8B1Mkrtaxx2w",
+    "views": 7745,
+    "published": "11 時間前",
+    "age_days": 0,
+    "length": "21:47"
+   },
+   {
+    "id": "6z03BHauWu4",
+    "title": "【Wi-Fiルーターの置き方】その置き方で大丈夫？快適に使うには置き方も重要！",
+    "channel": "スマサポチャンネル",
+    "channel_id": "UCMXjwK6-rRw-la5SN5j0M6g",
+    "views": 130948,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "11:17"
+   },
+   {
+    "id": "L9Pd9fIjIys",
+    "title": "iPhone－WEBブラウザからWi-Fiルーターの設定画面を開く方法【公式】",
+    "channel": "アイオーデータサポート",
+    "channel_id": "UCYSRQHDgzrzIq9xe4hCUogg",
+    "views": 63486,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "1:28"
+   },
+   {
+    "id": "SOlm-XPa62E",
+    "title": "【速度が劇的に変わる！】Wi Fiルーターの正しい設置場所を解説",
+    "channel": "ネットナビ",
+    "channel_id": "UC6hVB0A1Kx4BtyxYfRfYayQ",
+    "views": 7979,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:06"
+   }
+  ],
+  "信号 電気信号 速さ 旅 コンピュータ 中": [
+   {
+    "id": "r24wUhaYOEw",
+    "title": "コンピュータはなぜ0と1を使う？｜電気の信号から情報処理が生まれる仕組み",
+    "channel": "AIフレンドパーク",
+    "channel_id": "UCJW2r3lGzFrb0nAEIWE1ikA",
+    "views": 11,
+    "published": "2 週間前",
+    "age_days": 14,
+    "length": "9:41"
+   },
+   {
+    "id": "1VILnPsXACs",
+    "title": "「電気は線の中を流れる」は間違いです／実は電子は走っていない／NASAも知る「ポインティング・ベクトル」の衝撃／信号が伝わる本当の仕組み",
+    "channel": "世界の仕様書ラボ",
+    "channel_id": "UCRtIuibze1h8GTiuli_RbEg",
+    "views": 148963,
+    "published": "11 か月前",
+    "age_days": 330,
+    "length": "21:28"
+   },
+   {
+    "id": "IQ6Xa_48RlY",
+    "title": "電気の速さの正体とは？電子は竹の子ほどしか進まないのに、なぜスイッチを入れた瞬間に明かりがつくのか｜電子｜電磁気学｜物理学｜睡眠用",
+    "channel": "眠れる銀河",
+    "channel_id": "UCSFP7oBYj5jAp_DUdZUVARA",
+    "views": 2335,
+    "published": "6 日前",
+    "age_days": 6,
+    "length": "58:27"
+   }
+  ],
+  "CPU 中 入ってみた 3D": [
+   {
+    "id": "SyScXGBitOM",
+    "title": "【本物】スーパーコンピュータ「京」のCPUを入手しました！",
+    "channel": "吉田製作所Y",
+    "channel_id": "UC9WJo5ZJVXMZiA5XV2jLx5Q",
+    "views": 2467190,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "7:01"
+   },
+   {
+    "id": "ANbsiFEsaes",
+    "title": "【自作PC】最強8ビットCPU：65C02で作るミニコン風コンピューター《Introduction》[6502][Retro computer]",
+    "channel": "Sumire Design Studio",
+    "channel_id": "UCI4OWHg_nG6Wo-vA1TmHttQ",
+    "views": 44738,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "13:36"
+   },
+   {
+    "id": "KGewkhEBOcU",
+    "title": "《高速化》Core i7 8700を積んだノートＰＣ！ＣＰＵ換装でどれだけ速くなるか！？",
+    "channel": "ジャンクジャンクのジャン太郎",
+    "channel_id": "UCO9eND2_zVcyaPJBqPI5WGQ",
+    "views": 356313,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "20:49"
+   },
+   {
+    "id": "UfVloR0HUvE",
+    "title": "CPU設計、特大朗報！！",
+    "channel": "PCニャー速報",
+    "channel_id": "UC0TzHhkV6l_p7a_oheaFVQg",
+    "views": 29660,
+    "published": "3 日前",
+    "age_days": 3,
+    "length": "4:26"
+   },
+   {
+    "id": "sxxX5uZDKDk",
+    "title": "なぜCPUの「足」は消えたのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 264333,
+    "published": "2 か月前",
+    "age_days": 60,
+    "length": "19:17"
+   },
+   {
+    "id": "FEY57VNenVk",
+    "title": "ファンvs煙突!?Ryzen 7 9800X3Dを 19℃も冷やした反則ワザの正体",
+    "channel": "ずんだITガジェ速報【ずんだもん解説】",
+    "channel_id": "UCBLNa3DKn2GHWZtd3NsPwug",
+    "views": 8193,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "16:00"
+   },
+   {
+    "id": "8Mn_xUv0zpI",
+    "title": "【破壊覚悟】Core i7の「CPU殻割り」に挑戦した結果・・・【中華本格水冷#04】",
+    "channel": "吉田製作所Y",
+    "channel_id": "UC9WJo5ZJVXMZiA5XV2jLx5Q",
+    "views": 1778798,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "12:44"
+   },
+   {
+    "id": "ev6YYcMroXE",
+    "title": "【自作PC】CPUファンが「3Dホログラム」になる魔改造　バーサライタを埋め込んだら映像が暴走",
+    "channel": "のすけ【自作PC】",
+    "channel_id": "UCTzaARkyTyx55PMZ46E62vw",
+    "views": 8222,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "12:46"
+   },
+   {
+    "id": "nzRb4owDffY",
+    "title": "3D プリントを過大評価したせいで、新しい CPU を壊しそうになりました。",
+    "channel": "CNC Kitchen",
+    "channel_id": "UCiczXOhGpvoQGhOL16EZiTg",
+    "views": 147547,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "10:54"
+   },
+   {
+    "id": "p3gASTvif90",
+    "title": "【警告】CPUを裸で起動した末路…冷却なしだと焼き付くのかガチ検証",
+    "channel": "PCER24",
+    "channel_id": "UCNiXCniQU6D32nYxJVd3fYg",
+    "views": 55715,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "16:07"
+   },
+   {
+    "id": "Jjkt4vTL9HI",
+    "title": "【自作PC】CPUの上で液体が沸騰する「減圧沸騰冷却PC」を完全自作した結果、予想外の事態に...",
+    "channel": "のすけ【自作PC】",
+    "channel_id": "UCTzaARkyTyx55PMZ46E62vw",
+    "views": 45514,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "11:58"
+   },
+   {
+    "id": "5zfEpNCz8qk",
+    "title": "Lenovo M90q 3D Case Mod: Epic RGB Fan, Stunning 3.5in LCD + RTX 3050 LP, CPU Fan Noise Fixed!",
+    "channel": "ITG Gear",
+    "channel_id": "UCBpFmXURDoUpKGj43Uot0Ag",
+    "views": 157071,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "15:11"
+   },
+   {
+    "id": "00rdqfEd7XA",
+    "title": "CPUはこうして作られる！半導体製造の驚きの工程を大公開",
+    "channel": "ブランチ教育",
+    "channel_id": "UCqnKXRdagIl-RyZIoYzQNXg",
+    "views": 958,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "25:27"
+   },
+   {
+    "id": "UnK_rBitNJs",
+    "title": "【新シリーズ】第1回 コンピュータの中身と動き 高校生のための自作CPU［入門編］～AIやロボットの頭脳はこうなっている～",
+    "channel": "DigiKey日本公式チャンネル",
+    "channel_id": "UCc-7D4LcsxH2JP9TtylRuFQ",
+    "views": 193312,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "19:17"
+   },
+   {
+    "id": "emLyL3alVD0",
+    "title": "Macは何故CPUを3回も変えることができたのか？",
+    "channel": "コンピューター雑学 / 0と1の機械",
+    "channel_id": "UCF-n29xcarwWGcRnJ1Ko2wg",
+    "views": 102765,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "21:12"
+   },
+   {
+    "id": "WE71JdH-H9Y",
+    "title": "なぜCPUはこれ以上小さくできないのか【ゆっくり解説】",
+    "channel": "ゆっくりデジタルの裏側",
+    "channel_id": "UCOBwoUZV1RYl5ITFeJSU9SA",
+    "views": 134642,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "26:27"
+   },
+   {
+    "id": "i_zqbFT7eqk",
+    "title": "「Ryzen 9 9950X3D2」実力測定 ！待望のデュアル3D V-Cache化で最強の開発＆クリエイター向けCPUに",
+    "channel": "PAD : PC Watch & AKIBA PC Hotline! plus DVPR",
+    "channel_id": "UC7WpJ8eZESNDtO2uALSjigQ",
+    "views": 25695,
+    "published": "7 か月前 に配信済み",
+    "age_days": 210,
+    "length": "1:07:41"
+   },
+   {
+    "id": "5fZW4qwcOsQ",
+    "title": "【自作PC】3Dプリンターでパソコンを作ってみた！（試作１号機編）",
+    "channel": "吉田製作所Y",
+    "channel_id": "UC9WJo5ZJVXMZiA5XV2jLx5Q",
+    "views": 851274,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "17:10"
+   },
+   {
+    "id": "09j8sv168io",
+    "title": "CPUはこの回路で出来ています。みんなもCPU自作しよう！【論理ゲート】",
+    "channel": "イチケン / ICHIKEN",
+    "channel_id": "UCGhudK3AIG152KrfURCSb2Q",
+    "views": 365416,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "27:28"
+   },
+   {
+    "id": "pNNSDgdJCKU",
+    "title": "【殻削り】爆熱CPUでも薄く平らに削れば冷える説【Makera Z1】",
+    "channel": "ミサキチ / ゆっくりPC",
+    "channel_id": "UCtx8p9BDVYF11Xl-ln73JAw",
+    "views": 758058,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "13:16"
+   }
+  ],
+  "スマホ 中 入ってみた ミクロ 旅": [
+   {
+    "id": "urxZ2qS3uO8",
+    "title": "【スマホ禁止】スマホを一切使わずに1泊2日旅行したら楽しすぎたwww",
+    "channel": "ひろき / 世界旅行",
+    "channel_id": "UCaY2APM_iqQ9_kjaCRE7CiA",
+    "views": 126841,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:55:35"
+   },
+   {
+    "id": "DsyJVueWsak",
+    "title": "変なことしてたら歯が抜けた！#Shorts",
+    "channel": "はまちこちゃんねる",
+    "channel_id": "UCMn2Nz6NSSE80IGJVokgvvg",
+    "views": 5716085,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "0:27"
+   },
+   {
+    "id": "On720cubs1I",
+    "title": "ガラケーで旅動画を撮ってみた",
+    "channel": "100菌",
+    "channel_id": "UCyxrucdyEIpZrTW2H7rkBnw",
+    "views": 365380,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "13:25"
+   }
+  ],
+  "コンピューター 大きさ 進化 比較 部屋 から ポケット": [
+   {
+    "id": "MMv7N4sQEaU",
+    "title": "ミニPCはなぜここまで進化した？大きなデスクトップPCはもう必要ないのか",
+    "channel": "カガヤオch -PC雑学探究-",
+    "channel_id": "UCb01Pxc-NBulhXWT5FznLDA",
+    "views": 3361,
+    "published": "8 日前",
+    "age_days": 8,
+    "length": "16:54"
+   },
+   {
+    "id": "8C2tgTSrEEM",
+    "title": "CPU技術の進化 50年でどれだけ速くなった？【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 379387,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "22:09"
+   },
+   {
+    "id": "tjIVJM_h9Rk",
+    "title": "13インチ？14インチ？15インチ？16インチ？パソコンの最適な大きさは？",
+    "channel": "ひとりしごとの効率化ノウハウ",
+    "channel_id": "UCKdM5rgEJ3VgnoqlZHIPOLw",
+    "views": 28907,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "26:51"
+   },
+   {
+    "id": "3VZjNVCGvuc",
+    "title": "GPD MicroPC 2レビュー。2 in 1超小型UMPCのデメリットと活用方法。XRグラスで超コンパクト作業用PC、ゲーミングPCとして使ってみた。UMPCデスクセットアップ（デスクツアー）。",
+    "channel": "オフィス新谷",
+    "channel_id": "UCh0TEuq5gkKgMvn7V8GFXsw",
+    "views": 50220,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "24:29"
+   },
+   {
+    "id": "L62DRRWaAQI",
+    "title": "部屋いっぱいの機械が、ポケットに入るまで｜コンピューターの歴史を全部話す",
+    "channel": "miserurabo",
+    "channel_id": "UCh33C-8wEE4Iom6DDcHTzYQ",
+    "views": 12,
+    "published": "12 日前",
+    "age_days": 12,
+    "length": "12:23"
+   }
+  ],
+  "コンピュータ 計算 速さ 比較 進化 スパコン スマホ": [
+   {
+    "id": "9ouZhuZPupM",
+    "title": "スーパーコンピューター計算能力ランキング",
+    "channel": "グラフやさん",
+    "channel_id": "UC1tvFKTF1kzTcar_Qv_yW0w",
+    "views": 1077228,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:06"
+   },
+   {
+    "id": "G9X3fuZAnvs",
+    "title": "AI性能は先代の約10倍…10月から運用始まったスーパーコンピューター「不老・弐」を公開 1秒間に100京回超の計算が可能 (2026/10/07 17:10)",
+    "channel": "東海テレビ ニュースONE",
+    "channel_id": "UCUQ0AtI3k10_CyLYcu4WRVA",
+    "views": 297621,
+    "published": "1 か月前",
+    "age_days": 30,
+    "length": "0:42"
+   },
+   {
+    "id": "IO2xCfOyjoY",
+    "title": "スマホの計算速度ランキング！1位は人間の約2.3兆倍",
+    "channel": "くらべるデータ図鑑",
+    "channel_id": "UCOix_Q5VRTdnYUpFdtosXdQ",
+    "views": 0,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "1:24"
+   },
+   {
+    "id": "qXF8JEUwFTU",
+    "title": "スパコン京VS現在世界1位のスパコンの性能差はどれくらいちがうのか？",
+    "channel": "ITのウラガワ",
+    "channel_id": "UCQMlgWoOAhud0yusfPPcJqA",
+    "views": 8007,
+    "published": "10 日前",
+    "age_days": 10,
+    "length": "10:54"
+   },
+   {
+    "id": "8C2tgTSrEEM",
+    "title": "CPU技術の進化 50年でどれだけ速くなった？【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 379387,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "22:09"
+   },
+   {
+    "id": "m9cLnuctq4w",
+    "title": "【解説】スパコンから量子コンピュータへ、この進化を世界一わかりやすく解説します",
+    "channel": "Science & Space",
+    "channel_id": "UC-_gAzZ2iEWXLeyKrEgAyrg",
+    "views": 274,
+    "published": "3 か月前",
+    "age_days": 90,
+    "length": "8:45"
+   },
+   {
+    "id": "red4a9iZdOc",
+    "title": "日本の「京」連続世界一　スパコン世界ランキング（11/11/15）",
+    "channel": "ANNnewsCH",
+    "channel_id": "UCGCZAYq5Xxojl_tSXcVJhiQ",
+    "views": 16191,
+    "published": "15 年前",
+    "age_days": 5475,
+    "length": "0:59"
+   },
+   {
+    "id": "a8C-cov2slY",
+    "title": "【スーパーコンピュータ】2025年6月時点のスパコンの世界ランキング｜中国って・・・",
+    "channel": "ガシャガシャ",
+    "channel_id": "UCN-I3nFkR4rJxLZThEW8bZQ",
+    "views": 1780,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "1:35"
+   },
+   {
+    "id": "K-UIrgwAtaI",
+    "title": "スーパーコンピュータ「富岳」世界デビュー！",
+    "channel": "rikenchannel",
+    "channel_id": "UCIGmhpdcVev1Wc0YK7FHIig",
+    "views": 11665,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "0:31"
+   },
+   {
+    "id": "lUYqxr2Yrs8",
+    "title": "【衝撃】超進化！日本が開発中の「最新型スーパーコンピュータ」がとんでもないことに！【100倍】【理化学研究所】【富士通】",
+    "channel": "NEX工業",
+    "channel_id": "UCf8arBDjvsjcoFyMVuB1YEg",
+    "views": 23298,
+    "published": "5 日前",
+    "age_days": 5,
+    "length": "13:19"
+   },
+   {
+    "id": "e90OADXDigI",
+    "title": "【富士通 Fujitsu】スーパーコンピュータ「富岳」の力が未来を引き寄せる　ロングバージョン",
+    "channel": "富士通株式会社 (Fujitsu Limited)",
+    "channel_id": "UCNm5YJ7fkmt0b0z_hiwTwQg",
+    "views": 35568,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "15:41"
+   }
+  ],
+  "通信速度 比較 1G 2G 3G 4G 5G ダウンロード 競争": [
+   {
+    "id": "T3rIjn8-wn8",
+    "title": "３G・４G・５Gの違い、良い点、悪い点",
+    "channel": "つちやたけし / ネットの疑問を解説",
+    "channel_id": "UCmfcNK62WfD-gYffHfAenOA",
+    "views": 7090,
+    "published": "7 年前",
+    "age_days": 2555,
+    "length": "7:09"
+   },
+   {
+    "id": "ftzC9-aniKE",
+    "title": "NTT東日本「通信速度比較（ダウンロード編）」",
+    "channel": "NTT東日本YouTube公式チャンネル",
+    "channel_id": "UCHlxUxTcZiuzHkBs9TGMptQ",
+    "views": 1132,
+    "published": "11 年前",
+    "age_days": 4015,
+    "length": "0:22"
+   },
+   {
+    "id": "IRwfKgyRKSs",
+    "title": "「4Gと5Gの違いとは？5Gにすると何が変わる？」",
+    "channel": "スマホ安心チャンネル【ZEMO】",
+    "channel_id": "UC3xibTT9EOUwBP6bbnj95Gg",
+    "views": 67169,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "6:29"
+   },
+   {
+    "id": "AQFlHWO-YPk",
+    "title": "5Gと4Gの通信速度 & 映画ダウンロード時間を比べてみた（新宿・池袋・日本橋・東京付近）",
+    "channel": "てぃかし【How to系 動画】",
+    "channel_id": "UCosQ4LrZYUhmzxpmPccS8lA",
+    "views": 30149,
+    "published": "6 年前",
+    "age_days": 2190,
+    "length": "6:08"
+   },
+   {
+    "id": "ib6gorjxCdo",
+    "title": "4G対5G | 1G・2G・3G・4G・5Gの進化 | 1G・2G・3G・4G・5Gの違い | Intellipaat",
+    "channel": "Intellipaat",
+    "channel_id": "UCCktnahuRFYIBtNnKT5IYyg",
+    "views": 10762,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:03"
+   }
+  ],
+  "記憶容量 進化 比較 フロッピー から 今": [
+   {
+    "id": "SOHiQtoYB6E",
+    "title": "データ保存ストレージ 容量の変遷【1846〜2026年】",
+    "channel": "データは語る",
+    "channel_id": "UC-te6wlY2GiVOK9v54lXvCA",
+    "views": 338981,
+    "published": "4 日前",
+    "age_days": 4,
+    "length": "3:40"
+   },
+   {
+    "id": "enBKwSQVPkY",
+    "title": "たった1.44MBなのに、なぜフロッピーディスクは普及したのか？【ゆっくり解説】",
+    "channel": "あの頃のなぜ",
+    "channel_id": "UCT_3Twi6xpzgrKpRTaQPSng",
+    "views": 5544,
+    "published": "4 週間前",
+    "age_days": 28,
+    "length": "13:02"
+   },
+   {
+    "id": "rawXs_40KT8",
+    "title": "デジタル記録媒体の変遷 紙テープから最新のSSDまで【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 91042,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "17:45"
+   },
+   {
+    "id": "tBrhqyDKfP0",
+    "title": "東芝からキオクシアへ　受け継がれるフラッシュメモリの技術と進化",
+    "channel": "ジャパンイノベーション研究所",
+    "channel_id": "UCwZvbhAu8pOxR9DNZgZ1G3Q",
+    "views": 910,
+    "published": "4 か月前",
+    "age_days": 120,
+    "length": "13:56"
+   },
+   {
+    "id": "zMDMiP_uJtA",
+    "title": "ストレージ50年史：カセットからAIへ",
+    "channel": "AIリサーチ",
+    "channel_id": "UCWSSv39X7Rm_33kVwuxqDJQ",
+    "views": 0,
+    "published": "12 分前",
+    "age_days": 0,
+    "length": "8:21"
+   },
+   {
+    "id": "qoUpdJq91Zs",
+    "title": "フロッピーの隠されたフォーマット戦争 #フロッピーディスク #3モードドライブ #ディスク容量",
+    "channel": "Kazushi Nakamura",
+    "channel_id": "UCKPL5-YAviG0phG1SbWWLkQ",
+    "views": 47,
+    "published": "5 か月前",
+    "age_days": 150,
+    "length": "6:14"
+   },
+   {
+    "id": "ls4L5axlnHs",
+    "title": "（令和7年版）【講義動画｜ITパス・ハードウェア・007】テクノロジー系　断片化と最適化・フラッシュメモリ",
+    "channel": "クフウヤ | ITパスポート 聞き流しラボ",
+    "channel_id": "UCmDkN2_-QkjcQ0zJq0-tb1Q",
+    "views": 53,
+    "published": "8 か月前",
+    "age_days": 240,
+    "length": "11:30"
+   },
+   {
+    "id": "dTjiCu1u0yI",
+    "title": "磁気ディスクの軌跡 フロッピーからMOまでの歴史【ゆっくり解説】",
+    "channel": "よろずごと ゆっくり解説ch",
+    "channel_id": "UCEzMMSXw2PGOTeiRzREBFqg",
+    "views": 11618,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "23:41"
+   },
+   {
+    "id": "4GhGNTrkvHw",
+    "title": "フロッピーはなぜ消えたのか ― ストレージ興亡170年史",
+    "channel": "mousou01",
+    "channel_id": "UCj557AMafzDmONTuBp0nEZg",
+    "views": 204,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "26:58"
+   },
+   {
+    "id": "Ds_-r-MA1S8",
+    "title": "フロッピーディスクの容量",
+    "channel": "THE 雑学チャンネル",
+    "channel_id": "UCqc33teCvuJM1Jlk7KByOVw",
+    "views": 1334,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "2:15"
+   },
+   {
+    "id": "0oU90xFmPEo",
+    "title": "なぜ「大容量フロッピー」は次の標準になれなかったのか？【ゆっくり解説】",
+    "channel": "ゆっくり電脳史",
+    "channel_id": "UCW84F7vkGQU4u3SWfss7-Uw",
+    "views": 31300,
+    "published": "3 週間前",
+    "age_days": 21,
+    "length": "21:56"
+   },
+   {
+    "id": "SUgN45nG2jw",
+    "title": "動画で分かる半導体（２）メモリーの進化と栄枯盛衰",
+    "channel": "日本経済新聞",
+    "channel_id": "UCHL12woHGeiqAqLrK-pJe7g",
+    "views": 12615,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "2:09"
+   },
+   {
+    "id": "Ktj4pGtgvGM",
+    "title": "フロッピーディスクはなぜ消えたのか　「フロッピーとの戦争に勝利」までの半世紀",
+    "channel": "モノの由来ラボ",
+    "channel_id": "UCUbK9kwyjeX4zC9OAdvPo_A",
+    "views": 15,
+    "published": "13 日前",
+    "age_days": 13,
+    "length": "16:29"
+   }
+  ],
+  "ロボット 大きさ 比較 3D": [
+   {
+    "id": "MrSX-62C--8",
+    "title": "🤖 ロボットの大きさ比較 🤖 一人称視点ver",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 1193740,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "6:40"
+   },
+   {
+    "id": "47kC2XUGsEA",
+    "title": "🤖ロボットの大きさ比較🤖 俯瞰視点ver",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 2328543,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "10:27"
+   },
+   {
+    "id": "SmTL54miaLc",
+    "title": "【コメ付き】全198機 ロボットを比較",
+    "channel": "siigusuri",
+    "channel_id": "UCNs6N4RAA5jbCDvvOc8bIdg",
+    "views": 373644,
+    "published": "12 年前",
+    "age_days": 4380,
+    "length": "8:11"
+   },
+   {
+    "id": "s0--vL9s2wI",
+    "title": "[ロボット] 有名ロボット達の天も貫く大きさ比較動画 [ゲームファクトリー]",
+    "channel": "ゲームファクトリー",
+    "channel_id": "UCDGYQo8E8FIaTKfUgIMsjbw",
+    "views": 462,
+    "published": "8 年前",
+    "age_days": 2920,
+    "length": "8:23"
+   },
+   {
+    "id": "5Rw9Eg7jyv0",
+    "title": "198機　全ロボットの大きさを比較　3倍速度",
+    "channel": "光希",
+    "channel_id": "UCaUH5Mp4ASTiGnNhSNp9zug",
+    "views": 2441,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "2:41"
+   },
+   {
+    "id": "923704zTrNc",
+    "title": "👹 怪物の大きさ比較 👹 一人称視点ver",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 7851079,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "7:39"
+   },
+   {
+    "id": "jTZMAXF64A4",
+    "title": "力の大きさ比較 💪💪 究極の大きな力、小さな力を3D映像化",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 129772,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "4:45"
+   },
+   {
+    "id": "GRGMu9ntEBg",
+    "title": "[Omnibus Vol.1] From Stray AI to 1.4 Million Views! Mecha Size Comparison",
+    "channel": "Mecha Scale AI",
+    "channel_id": "UCQc8VloMG5AVIkYyRzX_NFA",
+    "views": 28011,
+    "published": "9 か月前",
+    "age_days": 270,
+    "length": "10:15"
+   },
+   {
+    "id": "U4otQGknznQ",
+    "title": "【スパロボ】スーパーロボット155体の大きさ比較（ゆっくり解説）",
+    "channel": "ゆっくりロボット大戦",
+    "channel_id": "UCh48CdAFwJ8E5kJJItIwA3w",
+    "views": 41239,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "15:20"
+   },
+   {
+    "id": "LVZnECZQt1Y",
+    "title": "Movie Robots Size Comparison | 3D",
+    "channel": "Useless Knowledge",
+    "channel_id": "UCb9cxKRuj7_qypKYeKwQhjg",
+    "views": 106373,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "4:47"
+   },
+   {
+    "id": "BmkXQVAVJMQ",
+    "title": "198機　全ロボットの大きさを比較　9倍速度",
+    "channel": "光希",
+    "channel_id": "UCaUH5Mp4ASTiGnNhSNp9zug",
+    "views": 1496,
+    "published": "9 年前",
+    "age_days": 3285,
+    "length": "0:55"
+   },
+   {
+    "id": "3LrG27jg6yk",
+    "title": "Size Compariosn : Giant Mechas and Robot | Human perspective view",
+    "channel": "Data Ball、WorldTV Studio",
+    "channel_id": null,
+    "views": 830579,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "9:40"
+   },
+   {
+    "id": "CniiFTgcCek",
+    "title": "映画『ロボット』🤖｜サイズ比較3D",
+    "channel": "Data Miner",
+    "channel_id": "UC0VXSE0Ygjh_MP38WujlBUw",
+    "views": 4509,
+    "published": "4 年前",
+    "age_days": 1460,
+    "length": "1:50"
+   },
+   {
+    "id": "4SW5-ImFjPs",
+    "title": "トランスフォーマー サイズ比較 3D",
+    "channel": "Horizon ",
+    "channel_id": "UCDQU1YlkJmlIFh2lQQi2ZMw",
+    "views": 815527,
+    "published": "1 年前",
+    "age_days": 365,
+    "length": "3:35"
+   },
+   {
+    "id": "35qzOFtCnVc",
+    "title": "🛸 宇宙船の大きさ比較 🚀 一人称視点ver",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 1061533,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "11:01"
+   },
+   {
+    "id": "yBZWXsYh0C8",
+    "title": "【転載】【104人+α】全ジャンルキャラ 大きさ比較",
+    "channel": "エメテレメルマ",
+    "channel_id": "UCjazk7uZ1Y3kuXd6JEuiu0w",
+    "views": 39300,
+    "published": "5 年前",
+    "age_days": 1825,
+    "length": "8:09"
+   },
+   {
+    "id": "cLjyXDj0wQU",
+    "title": "昭和のスーパーロボット大きさ比べ",
+    "channel": "mitisirube",
+    "channel_id": "UCBTC28thcyM7yWGC4yb4d1g",
+    "views": 11222,
+    "published": "14 年前",
+    "age_days": 5110,
+    "length": "1:16"
+   },
+   {
+    "id": "ltpNobItfkE",
+    "title": "👹 怪物の大きさ比較 👹 俯瞰視点ver",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 4025170,
+    "published": "2 年前",
+    "age_days": 730,
+    "length": "8:32"
+   },
+   {
+    "id": "s1N-0VmtMG8",
+    "title": "🌴 樹木の高さ比較 🌴",
+    "channel": "メタボールスタジオ",
+    "channel_id": "UCHk5QD2cZFzhUXcokAGXeqg",
+    "views": 106976,
+    "published": "3 年前",
+    "age_days": 1095,
+    "length": "3:37"
+   }
+  ]
+ }
+}
