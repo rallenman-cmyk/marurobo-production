@@ -7,6 +7,8 @@
 import os, sys, re
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "voice"))
 import pauses as PZ
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skill", "marurobo-video-production", "scripts"))
+import subs_pause_align as PA
 
 LEAD = 0.05
 
@@ -41,6 +43,15 @@ def _tts_off(text, tts, off):
     return None
 
 
+def _raw_off(raw, off):
+    """空白を除いた文字の位置 off を、もとの文（空白あり）の位置に直す"""
+    n = 0
+    for k, ch in enumerate(raw):
+        if n == off: return k
+        if not re.match(r"[\s　]", ch): n += 1
+    return len(raw)
+
+
 def boundary(P, S, VD, i, off):
     """文 i の off 文字目で始まる字幕の、声が言い始める時刻（秒）。区切りに切れ目がなければ None"""
     p = P[i]; text = _clean(p["text"]); tts = _clean(S[p["no"]]["tts"])
@@ -48,11 +59,16 @@ def boundary(P, S, VD, i, off):
     if off == 0:
         v, hop = PZ.env(wav); import numpy as np
         idx = np.where(v)[0]; return p["start"] + (idx[0] * hop if len(idx) else 0.0)
+    # 16本目 6章 v17 の点検：「開かないか、｜試して」で、cut_all が「か」の手前の詰まり（0.09 秒）を読点の間と見て、字幕が 0.35 秒早く替わった。
+    #   関所の測り（subs_sync_check）と同じ道具（subs_pause_align）が句読点に当てた間を先に使う（SKILL §3 の決まりの道具）。当てられないときだけ下の cut_all
+    #   ただし「間があるか（分けるか、まとめるか）」は今までどおり cut_all で決める（承認ずみの章の字幕の分け方を変えない）。間の位置だけを合わせる
     to = _tts_off(text, tts, off)
     if to is None: return None
     for pos, ch, r in PZ.cut_all(wav, tts):
         if pos == to or (pos < to and tts[pos:to].strip("　 「」") == ""):
-            return None if r is None else p["start"] + r[1] * p.get("speed", 1.0)
+            if r is None: return None
+            tg = PA.target(p, p["text"][_raw_off(p["text"], off):], wav)
+            return tg + 0.05 if tg is not None else p["start"] + r[1] * p.get("speed", 1.0)
     return None
 
 

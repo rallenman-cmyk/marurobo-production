@@ -10,7 +10,9 @@ HOME_X = (20.4, 22.0)                           # 1.6 m おき（試しの絵：
 STREET2_X = [30.0 + 1.6 * k for k in range(12)] # 29 の別の通り（上から）。同じ鍵のドア（青緑の縁）は終わりの 3 枚
 TEAL2 = (8, 10, 11)
 MACH_Y = 0.75                                   # 機械の通る線（ドアから 0.75 m）
-KEY_Z = 1.0                                     # 鍵穴の高さ
+KEY_Z = 1.0                                     # ドアノブの高さ
+KH_DX = DOOR_W / 2 - 0.12                       # 鍵穴：ドアのまん中から右へ
+KH_Z = KEY_Z - 0.09                             # 鍵穴の高さ（ノブの下）
 MS6 = 0.72                                      # まるロボの大きさ（3章の市場と同じ）
 
 
@@ -75,9 +77,9 @@ class Mach:
         self.ring = ring
         for k, a_ in enumerate((-25, 0, 25)):
             key_obj((0, 0, 0), rot=(0, R(a_), R(90)), s=0.7, parent=ring)
-        aim = math.atan2(KEY_Z - 0.47, DOOR_Y - MACH_Y - 0.12)                     # 鍵穴へ向く角度（上へ）
+        aim = math.atan2(KH_Z - 0.47, DOOR_Y - MACH_Y - 0.12)                      # 鍵穴へ向く角度（上へ）
         self.arm.rotation_euler = (aim, 0, 0)
-        self.reach = math.hypot(KEY_Z - 0.47, DOOR_Y - MACH_Y - 0.12) - 0.02       # のばしきった長さ（鍵の先が鍵穴）
+        self.reach = math.hypot(KH_Z - 0.47, DOOR_Y - MACH_Y - 0.12) - 0.02       # のばしきった長さ（鍵の先が鍵穴）
         self.set_len(-100.0, 0.35, "CONSTANT")
         self.xs = []
 
@@ -85,6 +87,7 @@ class Mach:
         key(self.arm_l, "scale", t, (1.0, L, 1.0), interp); key(self.ring, "scale", t, (1.0, 1.0 / L, 1.0), interp)
 
     def go(self, t0, t1, x, y=MACH_Y):
+        x = x + KH_DX                                                              # 腕が鍵穴の前に来るように（v17 の点検：ドアのまん中を突いていた）
         key(self.root, "location", t0, tuple(self.root.location) if t0 < -50 else self._at(t0)); key(self.root, "location", t1, (x, y, 0.0))
         self._last = (t1, (x, y, 0.0))
 
@@ -92,6 +95,9 @@ class Mach:
         return getattr(self, "_last", (None, tuple(self.root.location)))[1]
 
     def put(self, t, x, y=MACH_Y):
+        """場面の替わり目で置き直す。直前まで前の位置で止めておく（v17 の点検：前の位置から次の位置へ、するすると流れて画面から出た）"""
+        if hasattr(self, "_last"): key(self.root, "location", t - 0.09, self._last[1], "CONSTANT")      # 2 コマ以上あける（SKILL：近いキーはつぶれる）
+        x = x + KH_DX
         key(self.root, "location", t, (x, y, 0.0), "CONSTANT"); self._last = (t, (x, y, 0.0))
 
     def try_door(self, t, hinge=None, opens=False, x_on=True, dx=0.0, sound=True, gacha_t=None):
@@ -107,7 +113,7 @@ class Mach:
                 key(hinge, "rotation_euler", t + 0.40, (0, 0, 0)); key(hinge, "rotation_euler", t + 0.48, (0, 0, R(-2.5))); key(hinge, "rotation_euler", t + 0.56, (0, 0, R(1.5))); key(hinge, "rotation_euler", t + 0.66, (0, 0, 0))
             if sound: ev(t + 0.45, "rattle", 0.25, "")
             self.set_len(t + 0.7, self.reach); self.set_len(t + 0.95, 0.35)
-            if x_on: self.xs.append(xmark3d(self._at(t)[0] + dx, t + 0.8))
+            if x_on: self.xs.append(xmark3d(self._at(t)[0] - KH_DX + dx, t + 0.8))
 
 
 def b_g(cl):
@@ -182,11 +188,11 @@ def b_g(cl):
 # ======================================================================== カット（6章）
 CUTS6 = [
     ("G27a", b_g, s("27-01"), C((-3.5, -4.0, 3.2), (9.0, 1.4, 1.0), 28), "G"),                                                         # 通りの西のはしから、高めの引き
-    ("G27b", b_g, s("27-02"), C((1.0, -3.6, 1.4), (1.0, DOOR_Y, 1.2), 30, (11.0, -3.6, 1.4), (11.0, DOOR_Y, 1.2), 30, d=5.0), "G"),   # ドアの並びに沿って横へ
+    ("G27b", b_g, s("27-02"), C((1.0, -3.6, 1.4), (1.0, DOOR_Y, 1.2), 30, (7.0, -3.6, 1.4), (7.0, DOOR_Y, 1.2), 30, d=5.0), "G"),    # ドアの並びに沿って横へ（v17 の点検：10 m だと速くて目で追えない → 6 m）
     ("G27c", b_g, s("27-03"), C((4.4, -1.4, 2.1), (4.4, DOOR_Y, 2.25), 34, (8.4, -1.4, 2.1), (8.4, DOOR_Y, 2.25), 34, d=5.0), "G"),  # 看板の高さで横へ
     ("G27d", b_g, s("27-04"), C((2.2, -3.4, 1.5), (-1.6, 0.3, 0.4), 30), "G"),                                                         # 機械が西から来る・はしのまるロボ
-    ("G27e", b_g, s("27-05"), C((1.85, -0.75, 0.85), (0.6, MACH_Y, 0.4), 32), "G"),                                                   # 機械の斜め前
-    ("G27f", b_g, s("27-06"), C((1.0, 0.55, 0.98), (0.64, MACH_Y + 0.28, 0.84), 42), "G"),                                         # 鍵束の寄り（試しの絵：空ばかりだった → 機械の上の鍵束へ）
+    ("G27e", b_g, s("27-05"), C((1.85 + KH_DX, -0.75, 0.85), (0.6 + KH_DX, MACH_Y, 0.4), 32), "G"),                                                   # 機械の斜め前
+    ("G27f", b_g, s("27-06"), C((1.0 + KH_DX, 0.55, 0.98), (0.64 + KH_DX, MACH_Y + 0.28, 0.84), 42), "G"),                                         # 鍵束の寄り（試しの絵：空ばかりだった → 機械の上の鍵束へ）
     ("G27g", b_g, s("27-07"), C((-2.4, -2.6, 1.6), (2.0, 0.6, 0.6), 28), "G"),                                                         # 機械とまるロボのうしろから
     ("G28a", b_g, s("28-01"), C((STREET_X[0] + 2.0, -1.2, 1.3), (STREET_X[0], DOOR_Y, 0.95), 30), "G"),                               # ドアの前（機械の横）
     ("G28b", b_g, s("28-02"), C((STREET_X[1] + 2.4, -2.2, 1.6), (STREET_X[1] + 0.4, 0.8, 0.8), 28), "G"),                            # 2 枚目で「ガチャ、ガチャ」
@@ -196,7 +202,7 @@ CUTS6 = [
     ("G28f", b_g, s("28-06"), C((HOME_X[0] + 1.3, -0.4, 1.3), (HOME_X[0] + 0.1, DOOR_Y, 1.0), 30), "G"),                             # 青緑のドアの寄り（開く）
     ("G28g", b_g, s("28-08"), C((HOME_X[0] + 0.3, 0.6, 0.7), (HOME_X[0] - 1.4, -0.2, 0.45), 26), "G"),                               # まるロボの前：ぎょっ（開いたドアの側から）
     ("G28h", b_g, s("28-09"), C((21.1, -3.0, 1.5), (21.1, DOOR_Y, 1.0), 30), "G"),                                                    # 2D の下：家の正面
-    ("G28i", b_g, s("28-10"), C((HOME_X[1] + 1.3, -0.4, 1.3), (HOME_X[1] + 0.1, DOOR_Y, 1.0), 30), "G"),                             # だいだい色のドアの寄り
+    ("G28i", b_g, s("28-10"), C((HOME_X[1] + 1.2, -1.7, 1.25), (HOME_X[1] - 0.1, DOOR_Y - 0.25, 0.75), 32), "G"),                    # だいだい色のドアと機械（v17 の点検：近すぎて腕の先しか見えず、試して開かないのが分からない）
     ("G28j", b_g, s("28-12"), C((HOME_X[0] - 1.1, 1.0, 0.6), (HOME_X[0] - 1.4, -0.2, 0.35), 28), "G"),                               # まるロボの前：座りこむ
     ("G29a", b_g, s("29-01"), C((STREET2_X[5] + 0.4, -5.0, 9.0), (STREET2_X[5] + 0.4, 0.8, 0.0), 26), "G"),                         # 別の通りを上から
     ("G29b", b_g, s("29-03"), C((STREET2_X[6] + 0.8, -3.4, 1.2), (STREET2_X[6] + 0.8, 0.9, 0.7), 30), "G"),                         # まるロボのうしろから両側のドア
