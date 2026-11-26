@@ -100,20 +100,23 @@ class Mach:
         x = x + KH_DX
         key(self.root, "location", t, (x, y, 0.0), "CONSTANT"); self._last = (t, (x, y, 0.0))
 
-    def try_door(self, t, hinge=None, opens=False, x_on=True, dx=0.0, sound=True, gacha_t=None):
-        """腕をのばして鍵を差す（0.35 秒）→ 開くなら、ドアが内側へ開く／開かないならドアがガタッとゆれて腕を戻す・×"""
-        self.set_len(t - 0.01, 0.35); self.set_len(t + 0.35, self.reach)
-        if sound: ev(t + 0.35, "tick", 0.3, "")
+    def try_door(self, t, hinge=None, opens=False, x_on=True, dx=0.0, sound=True, gacha_t=None, f=1.0):
+        """腕をのばして鍵を差す（0.35 秒）→ 開くなら、ドアが内側へ開く／開かないならドアがガタッとゆれて腕を戻す・×。
+        f：動きの速さの倍率（早回しの所で、次の「試す」と重ならないように縮める。v17 の点検：28-03・29 で腕の動きが前の動きと重なり、
+        のびたり縮んだりを細かくくり返した＝KEYSHIFT）"""
+        self.set_len(t - 0.01, 0.35); self.set_len(t + 0.35 * f, self.reach)
+        if sound: ev(t + 0.35 * f, "tick", 0.3, "")
         if opens:
-            tg = gacha_t if gacha_t is not None else t + 0.6
+            tg = gacha_t if gacha_t is not None else t + 0.6 * f
             key(hinge, "rotation_euler", tg - 0.01, (0, 0, 0)); key(hinge, "rotation_euler", tg + 0.9, (0, 0, R(-78)))
-            self.set_len(tg + 0.05, self.reach); self.set_len(tg + 0.5, 0.35)
+            self.set_len(tg + 0.05 * f, self.reach); self.set_len(tg + 0.5 * f, 0.35)
         else:
             if hinge is not None:
-                key(hinge, "rotation_euler", t + 0.40, (0, 0, 0)); key(hinge, "rotation_euler", t + 0.48, (0, 0, R(-2.5))); key(hinge, "rotation_euler", t + 0.56, (0, 0, R(1.5))); key(hinge, "rotation_euler", t + 0.66, (0, 0, 0))
-            if sound: ev(t + 0.45, "rattle", 0.25, "")
-            self.set_len(t + 0.7, self.reach); self.set_len(t + 0.95, 0.35)
-            if x_on: self.xs.append(xmark3d(self._at(t)[0] - KH_DX + dx, t + 0.8))
+                tw = t + 0.40 * f                                                          # ガタッのゆれは縮めない（縮めるとキーがつぶれる）
+                key(hinge, "rotation_euler", tw, (0, 0, 0)); key(hinge, "rotation_euler", tw + 0.08, (0, 0, R(-2.5))); key(hinge, "rotation_euler", tw + 0.16, (0, 0, R(1.5))); key(hinge, "rotation_euler", tw + 0.26, (0, 0, 0))
+            if sound: ev(t + 0.45 * f, "rattle", 0.25, "")
+            self.set_len(t + 0.7 * f, self.reach); self.set_len(t + 0.95 * f, 0.35)
+            if x_on: self.xs.append(xmark3d(self._at(t)[0] - KH_DX + dx, t + 0.8 * f))
 
 
 def b_g(cl):
@@ -147,7 +150,7 @@ def b_g(cl):
     # 28-03：休まずに 4〜10 枚目（1 枚 0.62 秒）
     tq = s("28-03") + 0.1
     for k in range(3, 10):
-        mc.go(tq, tq + 0.25, STREET_X[k]); mc.try_door(tq + 0.25, hs[k], sound=(k % 2 == 0)); tq += 0.62
+        mc.go(tq, tq + 0.18, STREET_X[k]); mc.try_door(tq + 0.18, hs[k], sound=(k % 2 == 0), f=(0.62 - 0.18 - 0.06) / 0.95); tq += 0.62
     # 28-04〜28-11：まるロボの家の前（場面の替わり目で置き直す）
     mc.put(s("28-04") - 0.07, HOME_X[0] - 2.5)
     mc.go(s("28-04") + 0.6, s("28-04") + 2.6, HOME_X[0])
@@ -160,10 +163,13 @@ def b_g(cl):
     mc.put(s("29-01") - 0.07, STREET2_X[0] - 1.0)
     tq = s("29-01") + 0.4
     for k in range(8):
-        mc.go(tq, tq + 0.22, STREET2_X[k]); mc.try_door(tq + 0.22, h2[k], sound=(k % 3 == 0)); tq += (e("29-01") - s("29-01") - 0.6) / 8
+        dq = (e("29-01") - s("29-01") - 0.6) / 8
+        mc.go(tq, tq + 0.22, STREET2_X[k]); mc.try_door(tq + 0.22, h2[k], sound=(k % 3 == 0), f=min(1.0, (dq - 0.22 - 0.06) / 0.95)); tq += dq
     tops = [wv("29-02", "使い回し") - 0.2, wv("29-02", "そこでも") - 0.1, wv("29-02", "開いて") - 0.1]
-    for k, t_o in zip(TEAL2, tops):
-        mc.go(t_o - 0.75, t_o - 0.45, STREET2_X[k]); mc.try_door(t_o - 0.45, h2[k], opens=True, gacha_t=t_o)
+    for n_, (k, t_o) in enumerate(zip(TEAL2, tops)):
+        gap = min((tops[n_ + 1] - t_o) if n_ + 1 < len(tops) else 9.0, (t_o - tops[n_ - 1]) if n_ > 0 else 9.0)
+        f_ = min(1.0, (gap - 0.06) / 1.25)                                              # 「そこでも」と「開いて」は 0.5 秒しか離れていない
+        mc.go(t_o - 0.75 * f_, t_o - 0.45 * f_, STREET2_X[k]); mc.try_door(t_o - 0.45 * f_, h2[k], opens=True, gacha_t=t_o, f=f_)
         ev(t_o + 0.1, "creak", 0.2, "")
     # ---- まるロボ
     M = MaruR((40.0, -40.0, 0.0), face=270.0, s=MS6); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75); track("maru_c", M.body, 0.35)
