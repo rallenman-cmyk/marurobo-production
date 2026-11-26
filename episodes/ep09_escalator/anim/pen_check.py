@@ -102,9 +102,15 @@ def CHECK(t0, t1):
                         if any(max(c[i], o_[i]) < min(p[i] for p in bb) or min(c[i], o_[i]) > max(p[i] for p in bb) for i in range(3)): continue
                         inv = mw.inverted(); lo_ = inv @ o_; lc = inv @ c; dv = lc - lo_; L = dv.length
                         if L < 1e-6: continue
-                        hit, nrm, idx, dist = bvh(ob).ray_cast(lo_, dv / L, L)
-                        if hit is None: continue
-                        dp = (mw @ hit - c).length
+                        if closed(ob):                         # 閉じた形（箱・段・板）は、点がその中にあるときだけ（線が通るだけでは数えない：段に立つ足の線が、となりの段を通ってしまう）
+                            if not inside(ob, lc): continue
+                            loc, nrm, idx, dist = bvh(ob).find_nearest(lc)
+                            if loc is None: continue
+                            dp = (mw @ loc - c).length
+                        else:                                  # 厚みのない板は、体の真ん中から点までの線が通れば、点は板の向こう側
+                            hit, nrm, idx, dist = bvh(ob).ray_cast(lo_, dv / L, L)
+                            if hit is None: continue
+                            dp = (mw @ hit - c).length
                         if dp > TOL:
                             k = ("まるロボの" + o.name.split(" maru")[0], ob.name)
                             h = hits.setdefault(k, [t, t, 0, 0.0]); h[1] = t; h[2] += 1; h[3] = max(h[3], dp)
