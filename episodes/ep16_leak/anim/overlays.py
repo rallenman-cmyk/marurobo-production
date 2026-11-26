@@ -73,6 +73,8 @@ def ev_list():
     E += OV5.ev_list5()
     import overlays6 as OV6      # 6章（S27〜S29）
     E += OV6.ev_list6()
+    import overlays7 as OV7      # 7章（S30〜S32）
+    E += OV7.ev_list7()
     return E
 
 
@@ -94,6 +96,8 @@ def sfx_list():
     L += OV5.sfx_list5()
     import overlays6 as OV6
     L += OV6.sfx_list6()
+    import overlays7 as OV7
+    L += OV7.sfx_list7()
     return L
 
 
@@ -123,6 +127,11 @@ def icon_draw(kind):
         f = D.font(80 * ss)
         if kind in ("?", "!"):
             D.ctext(d, (cx, cy), kind, f, NAVY if kind != "!" else D.ORANGE)
+        elif kind == "coin":   # 7章 30-06：硬貨 2 枚（字なし。金色の丸）
+            for dx, dy in ((-14, 8), (14, -8)):
+                r_ = 26 * ss
+                d.ellipse((cx + dx * ss - r_, cy + dy * ss - r_, cx + dx * ss + r_, cy + dy * ss + r_), fill=(236, 190, 70), outline=(176, 132, 30), width=int(4 * ss))
+                d.ellipse((cx + dx * ss - r_ * 0.55, cy + dy * ss - r_ * 0.55, cx + dx * ss + r_ * 0.55, cy + dy * ss + r_ * 0.55), outline=(250, 222, 130), width=int(3 * ss))
         elif kind == "sale":   # セールの値札の絵（字なし。赤い札に白い丸）
             r_ = 30 * ss
             d.polygon([(cx - r_, cy - r_ * 0.7), (cx + r_ * 0.6, cy - r_ * 0.7), (cx + r_, cy), (cx + r_ * 0.6, cy + r_ * 0.7), (cx - r_, cy + r_ * 0.7)], fill=RED)
@@ -706,6 +715,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind.startswith("c6_"):
             import overlays6 as OV6
             OV6.draw6(kind, t, t0, p, base, where, _paste, k, a)
+        elif kind.startswith("c7_"):
+            import overlays7 as OV7
+            OV7.draw7(kind, t, t0, p, base, where, _paste, k, a)
         elif kind == "pip_clip" and frame_of:
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue

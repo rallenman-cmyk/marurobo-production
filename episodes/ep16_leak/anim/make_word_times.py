@@ -4,7 +4,7 @@
 #   ここでは、文の句読点ごとの声の間（voice/pauses.cut_all）で文を区切り、言葉の入っている区切りの中だけで字数の割合を取る。
 #   区切りの頭の言葉は、その区切りの声の頭（0.00 秒のずれ）。
 #   MARU_WORK=<作業> python3 make_word_times.py   （scenes_ch2.py・overlays2.py の w("..", "..") と wv(..) を全部拾う）
-import os, sys, re, json
+import os, re, sys, re, json
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(HERE, "..", "voice"))
 import numpy as np
@@ -52,7 +52,7 @@ def word_time(i, word, occ=0):
 
 
 if __name__ == "__main__":
-    src = "".join(open(os.path.join(HERE, f), encoding="utf-8").read() for f in ("scenes_ch2.py", "overlays2.py", "scenes_ch3.py", "overlays3.py", "scenes_ch4.py", "overlays4.py", "scenes_ch5.py", "overlays5.py", "scenes_ch6.py", "overlays6.py") if os.path.exists(os.path.join(HERE, f)))      # 3章も同じ表に
+    src = "".join(open(os.path.join(HERE, f), encoding="utf-8").read() for f in sorted(os.listdir(HERE)) if re.match(r"(scenes_ch|overlays)[0-9]+\.py$", f))      # 章のファイルを全部（16本目 7章：名前を並べて書いていて、新しい章が抜けた）
     calls = set(re.findall(r'\bwv?\("(\d\d-\d\d)", "([^"]+)"(?:, (\d))?\)', src))
     out = dict(KEEP)
     for i, word, occ in sorted(calls):
