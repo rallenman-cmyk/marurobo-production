@@ -20,6 +20,18 @@ _K7 = KIT_HERE
 exec(open(os.path.join(KIT_HERE, "..", "..", "ep06_haizen", "anim", "core.py"), encoding="utf-8").read().replace(
     'VO = os.path.join(KIT_HERE, "..", "voice")', 'VO = os.path.join(_K7, "..", "voice")'))
 sys.path.insert(0, _K7)
+_hide_key0 = hide_key
+
+
+def hide_key(ob, t, hidden):
+    """12本目 v1 の点検：消す時刻のキーだけを打つと、その前もずっと消えたまま（人の印・光の粒が一度も映らなかった。SKILL §5 の決まりを、守らなくても大丈夫な形に）。
+    まだキーのない物の最初のキーが「消す」なら、先に「-100 秒で見える」を打つ"""
+    ad = ob.animation_data
+    has = ad and ad.action and any(fc.data_path == "hide_render" for fc in ad.action.fcurves)
+    if hidden and not has and t > -100.0: _hide_key0(ob, -100.0, False)
+    _hide_key0(ob, t, hidden)
+
+
 from timing import wp       # 言葉の時刻は、声の本当の間から（SKILL §3。2D の札と同じ。表がなければ字数の見積もり）
 CLIPNAME = _argv[0]; OUTDIR = _argv[1] if len(_argv) > 1 else "/tmp/x"
 _SRC_DEFAULT = {"step": "maru_c", "jump": "maru_c", "land": "maru_c", "takeoff": "maru_c", "step_turn": "maru_c"}
