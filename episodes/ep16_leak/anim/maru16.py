@@ -95,10 +95,10 @@ class MaruR:
         """一覧の部品をそのまま呼ぶ（roll_over・get_up・tumble_back・awe・think など）"""
         self.cmds.append((t, kind, kw))
 
-    def backstep(self, t, p1):
-        """後ずさりで、向きを変えずに後ろの p1 へ下がる（marumotion の back_to。16本目 5章 26-09「一歩下がる」。後ろへ跳ばない決まり）"""
-        p1 = tuple(p1) + ((0.0,) if len(p1) < 3 else ())
-        self.cmds.append((t, "back", dict(p=p1))); self._last["loc"] = (t, p1)
+    def backstep(self, t, dist):
+        """後ずさりで、向きを変えずに、いまの所から dist m 後ろへ下がる（marumotion の back_to。16本目 5章 26-09「一歩下がる」。後ろへ跳ばない決まり）。
+        行き先を点で決めると、向き直りで少しずれた分だけ下がらないことがあった（試しの絵：1 歩も下がらなかった）→ いまの所からの長さで決める"""
+        self.cmds.append((t, "back", dict(d=dist)))
 
     def hops(self, t, n=2, height=0.12, sound=True): self.cmds.append((t, "hops", dict(n=n, height=height, sound=sound)))
     def push(self, t, d=0.3): self.cmds.append((t, "push", dict(d=d)))
@@ -191,7 +191,7 @@ class MaruR:
             elif kind == "jump":
                 q = a["p"]; self._jump(p, self._pp(q, t), self._pz(q[2], t), t, nm, a.get("apex"))
             elif kind == "back":
-                self._wait_to(p, t, nm); p.back_to(self._pp(a["p"], t), look=False)
+                self._wait_to(p, t, nm); tgt = tuple(p._p[:2] - mm.fwd(p._psi)[:2] * (a["d"] / self.s)); p.back_to(tgt, look=False)
             elif kind == "hops":
                 self._wait_to(p, t - 0.3, nm); t_ = p.t; p.hops(n=a["n"], height=a["height"])
                 if not a["sound"]: self.silent.append((t_, p.t))
