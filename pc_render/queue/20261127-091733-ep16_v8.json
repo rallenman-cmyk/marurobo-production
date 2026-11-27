@@ -1,0 +1,17 @@
+{
+ "id": "20261127-091733-ep16_v8",
+ "name": "ep16_v8",
+ "kit_branch": "pc-kit/20261127-091733-ep16_v8",
+ "zip": "marurobo_ep16.zip",
+ "ps1": "run_pc_render_ep16.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 16,
+ "frames": 1770,
+ "fresh": false,
+ "out": "render_ep16_v8",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1616\u60c5\u5831\u6d41\u51fa",
+ "created": "2026-11-27T09:17:33Z"
+}
