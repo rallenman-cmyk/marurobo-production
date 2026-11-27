@@ -22,6 +22,8 @@ RD, FONTDIR, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv else 0.0
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
 FPS, SR, WV, HV = 24, 48000, 1280, 720
+FINAL = os.environ.get("MARU_FINAL") == "1"          # 本番：PC の絵（pc_frames.py の jpg・1 フォルダにまとめて）を 1920×1080 で組む。札は 1280×720 で描いて広げる（9本目と同じ）
+if FINAL: WV, HV = 1920, 1080
 CL = json.load(open(os.path.join(HERE, "clips.json")))
 PIP_ONLY = {"P02", "P09"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
 ORDER = sorted([k for k in CL if k not in PIP_ONLY], key=lambda k: CL[k][2])
@@ -162,10 +164,10 @@ if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_ev
 # ---------------------------------------------------------------- クリップのコマ・ログ
 LOG, FR = {}, {}
 for nm in list(ORDER) + sorted(PIP_ONLY):
-    d = os.path.join(RD, nm)
+    d = RD if FINAL else os.path.join(RD, nm)
     lg = os.path.join(d, nm + "_log.json")
     if os.path.exists(lg): LOG[nm] = json.load(open(lg))
-    fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9]*.png")))
+    fs = sorted(glob.glob(os.path.join(d, nm + "_[0-9]*.png")) + glob.glob(os.path.join(d, nm + "_[0-9]*.jpg")))
     FR[nm] = {int(os.path.basename(f)[len(nm) + 1:-4]): f for f in fs}
 _img = {}
 # 場面の終わりと、溶けて切りかわる間は、その場面を止めた絵にする（9本目 v3：次の場面のために人物を置き直すのが、
@@ -368,7 +370,7 @@ if _fam not in [x.strip() for l in _have.splitlines() for x in l.split(",")]:
     raise SystemExit("字幕のフォント「%s」が %s にない（あるのは %s）" % (_fam, ffdir, _have.split()))
 cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "%dx%d" % (WV, HV), "-r", str(FPS), "-i", "-",
        "-i", os.path.join(tmp, "mix.wav"), "-vf", "subtitles=%s:fontsdir=%s" % (os.path.join(tmp, "subs.ass"), ffdir),
-       "-c:v", "libx264", "-preset", "veryfast", "-crf", "30", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-shortest", OUT]
+       "-c:v", "libx264"] + (["-preset", "medium", "-crf", "18"] if FINAL else ["-preset", "veryfast", "-crf", "30"]) + ["-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k" if FINAL else "96k", "-shortest", OUT]
 pr = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 missing = set(); last = None
 nf = int((TO - FROM) * FPS)
@@ -389,7 +391,11 @@ for fi in range(nf):
     if im is None: im = last if last is not None else Image.new("RGB", (WV, HV), (20, 24, 32))
     last = im
     base = im.convert("RGBA")
-    OV.draw(t, base, where, frame_of=frame, fontdir=FONTDIR)
+    if FINAL:
+        lay = Image.new("RGBA", (1280, 720), (0, 0, 0, 0)); OV.draw(t, lay, where, frame_of=frame, fontdir=FONTDIR)
+        if lay.getbbox(): base.alpha_composite(lay.resize((WV, HV), Image.LANCZOS))
+    else:
+        OV.draw(t, base, where, frame_of=frame, fontdir=FONTDIR)
     pr.stdin.write(base.convert("RGB").tobytes())
     if fi % 1200 == 0: print("%.0f 秒" % t, flush=True)
 pr.stdin.close(); pr.wait()
