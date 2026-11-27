@@ -60,6 +60,10 @@ for m, (a, c, t) in enumerate(SUBS):
     ls = [p for p in P if p["start"] < max(c, nx) and p["end"] > a]
     jobs.append(dict(at=round(a, 2), text=t.replace("\\N", ""), lines=[p["no"] for p in ls],
                      seg=tr[int(max(0, a - 0.15) * sr):int(min(nx, c + 0.3) * sr)]))   # 頭は 0.15 秒前から（0.05 秒では「ぺ」の破裂が欠けて「でた」と聞こえた）
+# HEAR_ONLY=107.77,151.08：その時刻の字幕だけ聞き直し、前の結果（出力.json）に差し替える（17本目 v5：古い型で 2 枚だけ聞き違えたとき、197 枚を聞き直さない）
+ONLY = [float(v) for v in os.environ.get("HEAR_ONLY", "").split(",") if v]
+OLD = json.load(open(OUT, encoding="utf-8")) if ONLY and os.path.exists(OUT) else None
+if ONLY: jobs = [j for j in jobs if any(abs(j["at"] - v) < 0.02 for v in ONLY)]
 print("聞き取る字幕", len(jobs), "枚", flush=True)
 CACHE = os.path.join(os.environ["MARU_WORK"], "sub_yomi_cache9.json")
 YC = json.load(open(CACHE, encoding="utf-8")) if os.path.exists(CACHE) else {}
@@ -92,4 +96,7 @@ for j, h in zip(jobs, heard):
     if sc is not None and sc < 0.8: bad.append(res[-1])
 print("読みと合わない字幕（似ている度 0.8 未満）：", len(bad), "枚 ／ 比べられない：", sum(1 for r in res if r["score"] is None), "枚")
 for r in bad: print(" ", r["at"], "%.2f" % r["score"], r["text"], "／ 読み", r["yomi"], "／ 聞こえた", r["heard"])
+if OLD is not None:
+    new = {r["at"]: r for r in res}; res = [new.get(r["at"], r) for r in OLD]
+    print("前の結果に差し替え。合わない字幕は全部で", sum(1 for r in res if r["score"] is not None and r["score"] < 0.8), "枚")
 json.dump(res, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
