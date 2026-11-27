@@ -212,6 +212,9 @@ def frame(nm, t):
 VOICE_DB = -24.0; FX_GAIN = 0.5; TYPE_GAIN = 0.35
 
 
+HARD_CUT = {"A04e"}
+
+
 def active(t):
     """時刻 t に映すクリップと、溶かす割合：[(名前, 重み)]"""
     cur = None
@@ -219,6 +222,7 @@ def active(t):
         if CL[nm][2] <= t: cur = i
     if cur is None: return [(ORDER[0], 1.0)]
     nm = ORDER[cur]; tc = CL[nm][2]; dur = 0.6 if nm in CHAPTER else 0.35
+    if nm in HARD_CUT: dur = 0.04          # 12本目 v1 の確認役（2 回目）：地球がスマホの画面に重なって「画面の中の地球」に見えた → すぱっと切りかえる
     if cur > 0 and t < tc + dur:
         k = (t - tc) / dur; k = k * k * (3 - 2 * k)
         return [(ORDER[cur - 1], 1 - k), (nm, k)]

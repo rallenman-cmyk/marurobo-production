@@ -103,6 +103,10 @@ class MaruR:
     def tilt(self, t, deg, d=0.3): self.cmds.append((t, "roll", dict(deg=deg, d=d)))
     def glow(self, t, g, d=0.3, g0=None): self.cmds.append((t, "light", dict(v=g, d=d)))
     def blink(self, t, g=0.9, d=0.22): self.cmds.append((t, "blink", {}))
+    def tiltq(self, t, deg=24.0, hold=1.2, sound=True): self.cmds.append((t, "tiltq", dict(deg=deg, hold=hold, sound=sound)))
+    def lookyaw(self, t, yaw, d=0.8, pitch=0.0): self.cmds.append((t, "lookyaw", dict(yaw=yaw, d=d, pitch=pitch)))
+    def dizzy(self, t0, t1, period=0.55): self.cmds.append((t0, "dizzy", dict(t1=t1, period=period)))
+    def droop(self, t0, t1): self.cmds.append((t0, "droop", dict(t1=t1)))
     def wobble(self, t0, t1, deg=10, period=0.5): self.cmds.append((t0, "wobble", dict(t1=t1, deg=deg, period=period)))
     def nod(self, t, n=2): self.cmds.append((t, "nod", dict(n=n)))
     def shake(self, t): self.cmds.append((t, "shake", {}))
@@ -196,6 +200,32 @@ class MaruR:
                 p.tracks["light"].set(t, a["d"], a["v"] / 0.9 - 1.0)
             elif kind == "blink":
                 p.blinks.append(t)
+            # 12本目 v1 の確認役（2 回目）：ライブラリの「首をかしげる」10°・「首を振る」12°・「ため息」6°は、下書きの大きさでは動いて見えなかった
+            #   → この回では、見せる気持ちごとに大きな動きを足す（「首をかしげ」24°・右左を見る 35°・目を回す（目と頭がくるくる回る）・しょんぼり（前へ 16°、目線を下へ））
+            elif kind == "tiltq":                          # 首をはっきりかしげる（？）：頭を横へ倒して止め、目は上へ → 戻す。問いかけの音
+                # アンテナは休みの形で右（まるロボの左）へ約 23° 傾いている。ライブラリの confused（roll −10°）は、アンテナをまっすぐに戻すだけで、かしげて見えなかった → 反対（+）へ倒す
+                t0_, h_, dg_ = t, a["hold"], a["deg"]
+                p.layer(t0_, t0_ + h_ + 1.0, lambda u, t0_=t0_, h_=h_, dg_=dg_: {
+                    "roll": dg_ * mm.env(u, t0_, 0.35, h_, 0.5), "twist": 8.0 * mm.env(u, t0_, 0.35, h_, 0.5),
+                    "gaze_pitch": 12.0 * mm.env(u, t0_, 0.2, h_, 0.5)})
+                p.blinks.append(t0_ + 0.7)
+                if a.get("sound", True): p.event(t0_ + 0.3, "beep_question", 1.0)
+            elif kind == "lookyaw":                        # 右・左を見る（胴をひねり、目が先に行く）→ 戻す
+                t0_, d_, y_, pt_ = t, a["d"], a["yaw"], a["pitch"]
+                p.layer(t0_, t0_ + d_ + 0.8, lambda u, t0_=t0_, d_=d_, y_=y_, pt_=pt_: {
+                    "twist": y_ * mm.env(u, t0_ + 0.08, 0.3, d_, 0.4), "gaze_yaw": 0.6 * y_ * mm.env(u, t0_, 0.15, d_ + 0.1, 0.4),
+                    "gaze_pitch": pt_ * mm.env(u, t0_, 0.15, d_ + 0.1, 0.4)})
+            elif kind == "dizzy":                          # 目を回す：目（黒い所）が円を描いて回り、頭も円を描いてゆれる
+                t0_, t1_, per_ = t, a["t1"], a["period"]
+                p.layer(t0_, t1_ + 0.4, lambda u, t0_=t0_, t1_=t1_, per_=per_: (lambda w, k: {
+                    "gaze_yaw": 30.0 * math.sin(w) * k, "gaze_pitch": 30.0 * math.cos(w) * k,
+                    "roll": 14.0 * math.sin(w) * k, "pitch": 9.0 * math.cos(w) * k, "iris": -0.12 * k})(
+                    2 * math.pi * (u - t0_) / per_, mm.env(u, t0_, 0.2, max(0.01, t1_ - t0_ - 0.4), 0.3)))
+            elif kind == "droop":                          # しょんぼり：前へ傾き、少し沈み、目線を下げ、アンテナと目の光が下がる
+                t0_, t1_ = t, a["t1"]
+                p.layer(t0_, t1_ + 0.8, lambda u, t0_=t0_, t1_=t1_: (lambda k: {
+                    "pitch": 16.0 * k, "lift": -0.03 * k, "gaze_pitch": -28.0 * k, "ant": 14.0 * k, "light": -0.35 * k})(
+                    mm.env(u, t0_, 0.6, max(0.01, t1_ - t0_ - 0.6), 0.7)))
             elif kind == "wobble":
                 t0, t1, deg, per = t, a["t1"], a["deg"], a["period"]
                 p.layer(t0, t1 + 0.3, lambda u, t0=t0, t1=t1, deg=deg, per=per: {

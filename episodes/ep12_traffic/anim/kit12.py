@@ -264,10 +264,10 @@ SENSOR_X = 14.0
 
 def gantry(x=SENSOR_X, lane_y=LANE * 1.5):
     """道の上に張り出した L 字の柱と、四角い感知器（下に丸い目）。lane_y＝感知器の真下の車線のまん中"""
-    pm = _m("gpole", "#7A8088", rough=0.4, metal=0.6)
+    pm = _m("gpole", "#2F6E8C", rough=0.4, metal=0.4)   # 12本目 v1 の確認役（2 回目）：灰色・細くて、となりの街灯と同じに見えた → 青い太い柱と腕
     py = ROAD_W / 2 + 0.8
-    cyl(pm, (x, py, 3.4), 0.14, 6.8, verts=16)
-    cube(pm, (x, (py + lane_y - 0.8) / 2, 6.75), (0.18, py - lane_y + 1.2, 0.18))
+    cyl(pm, (x, py, 3.4), 0.2, 6.8, verts=16)
+    cube(pm, (x, (py + lane_y - 0.8) / 2, 6.75), (0.26, py - lane_y + 1.2, 0.26))
     box = cube(_m("sensor", "#F2F4F6", rough=0.4, metal=0.1), (x, lane_y, 6.45), (0.75, 0.6, 0.55), bevel=0.05)   # 試しの絵：小さな灰色で、建物の前で見分けにくかった
     eye = cyl(_m("sensor_eye", "#1E2328", rough=0.1, coat=1.0), (x, lane_y, 6.16), 0.18, 0.06, verts=24)
     return box, eye
@@ -390,6 +390,8 @@ def globe(loc=(0, 0, 0), r=3.0):
     rnd = random.Random(9)
     for _ in range(14):
         th = rnd.uniform(0, 2 * math.pi); ph = rnd.uniform(-1.0, 1.0)
-        p = (loc[0] + r * math.cos(ph) * math.cos(th), loc[1] + r * math.cos(ph) * math.sin(th), loc[2] + r * math.sin(ph))
-        sphere(land, p, rnd.uniform(0.5, 1.2), scale=(1, 1, 0.35), seg=16).rotation_euler = (0, math.pi / 2 - ph, th)
+        rr_ = r - 0.08                      # 12本目 v1 の確認役（2 回目）：陸が球のふちから浮いて見えた → 少し沈め、うすく（0.35 → 0.2）。地球と一緒に回す
+        p = (loc[0] + rr_ * math.cos(ph) * math.cos(th), loc[1] + rr_ * math.cos(ph) * math.sin(th), loc[2] + rr_ * math.sin(ph))
+        ld = sphere(land, p, rnd.uniform(0.5, 1.2), scale=(1, 1, 0.2), seg=16); ld.rotation_euler = (0, math.pi / 2 - ph, th)
+        ld.parent = g; ld.matrix_parent_inverse = g.matrix_world.inverted()
     return g

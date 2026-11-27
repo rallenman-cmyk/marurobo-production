@@ -24,6 +24,7 @@ def ev_list():
     add = lambda *a: E.append(a)
     # 冒頭
     add(s("02-01") + 0.1, e("02-01") + 0.3, "ring", dict(obj="ph_red", r=50, col=YEL))
+    add(s("03-01") + 0.1, s("03-01") + 2.2, "ring", dict(obj="owncar", r=42, col=YEL))   # 12本目 v1 の確認役（2 回目）：上からの引きで、自分たちの車がほかの車にまぎれた → 曲がる前に、短い間だけ輪
     add(wp("02-02", "渋滞") - 0.1, e("02-02") + 0.3, "tag", dict(text="この先 渋滞", obj="phone", dy=-150, size=52, bg=RED, fg=WHITE))
     add(wp("02-04", "首を") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("03-04") + 0.05, s("04-01") - 0.05, "pair", dict(left=("TEX:ph_map_alert", 0), right=("A03b", e("03-02") - 0.3),

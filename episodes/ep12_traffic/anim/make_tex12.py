@@ -45,7 +45,7 @@ def color_line(d, pts, col, w):
 
 def me(d, x, y, s=1.0, heading=0.0):
     """自分の車の印（青緑の三角。白いふち）"""
-    r = 26 * SS * s
+    r = 40 * SS * s                 # 12本目 v1 の確認役（2 回目）：26 では画面の上で小さく、「この先」がどちらか分からなかった
     pts = []
     for a in (0, 140, 220):
         th = math.radians(a + heading)
