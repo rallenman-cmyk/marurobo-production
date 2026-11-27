@@ -181,6 +181,12 @@ def _seen1(src, t):
     k = (t - CL[nm][0]) * lg["fps"]; pts = lg["track"][src]
     q = min(pts, key=lambda p: abs(p[0] - k))
     return 0 <= q[1] <= 1280 and 0 <= q[2] <= 720 and q[3] > 0
+def _owner(t):
+    """時刻 t で切りかわっている場面（切りかわりの時刻が t 以下で、いちばんあとの場面）"""
+    o = ORDER[0]
+    for nm_ in ORDER:
+        if CL[nm_][2] <= t: o = nm_
+    return o
 DROP = []
 for nm in ORDER:
     if nm not in LOG: continue
@@ -188,6 +194,9 @@ for nm in ORDER:
         t, kind, gain = e_[:3]; src = e_[3] if len(e_) > 3 else ""
         # 音は、その時刻を映しているクリップの記録からだけ取る（v3 の点検：1 場面だけ描き直すと、ほかの場面の記録に古い時刻の音が残り、ぺたっが 2 回鳴った）
         if not (CL[nm][0] - 0.3 <= t <= CL[nm][1] + 0.3): continue
+        # 場面が重なる所（前の場面の終わりと次の場面の頭）では、その時刻に切りかわっている方の場面の記録だけから取る
+        #   （9本目 v5 の点検：一部の場面だけ描き直すと、重なる所で前の場面の古い足音と新しい足音が 0.1 秒ずれて二重に鳴った）
+        if _owner(t) in LOG and _owner(t) != nm and CL[_owner(t)][0] - 0.3 <= t <= CL[_owner(t)][1] + 0.3: continue
         if (round(t, 2), kind) in EV: continue
         if src and not _seen(src, t): DROP.append((round(t, 2), kind)); EV[(round(t, 2), kind)] = 0.0; continue
         EV[(round(t, 2), kind)] = gain * (TYPE_GAIN if kind == "key" and src.startswith("typist") else 1.0)
@@ -198,6 +207,9 @@ for (t, kind) in sorted(EV):
     if _run is None or t - _last > 0.6: _run = t
     _last = t
     if t - _run > 3.0: EV[(t, kind)] = 0.0
+if os.environ.get("MARU_EVONLY"):                     # 音の一覧だけ出して終わる（組み立てずに、前の版と音の並びを比べる。9本目 v5）
+    print("鳴らした効果音（時刻・種類・大きさ）：" + "、".join("%.1f %s %.2f" % (t, k, g) for (t, k), g in sorted(EV.items()) if g > 0))
+    print("映っていないので鳴らさなかった効果音：" + "、".join("%.1f %s" % d for d in DROP)); sys.exit(0)
 SHIFT = {"pop", "pi", "snap", "click", "pipi", "notify"}
 fx = np.zeros(N, np.float32); moves = []; overl = []
 # 効果音と声の重なりは、声が本当に出ている所（文の中の「……」の間は除く）で見る
