@@ -41,27 +41,27 @@ def unuse_sprite(t, p):
     W_, H_ = 1000, 330
     im, d = _canvas(W_, H_)
     # 左：名札と鍵
-    _tag(d, 230 * S2, 170 * S2, 210 * S2, col=TEAL)
-    _key(d, 230 * S2, 62 * S2, 40 * S2)
+    _tag(d, 200 * S2, 180 * S2, 190 * S2, col=TEAL)
+    _key(d, 340 * S2, 120 * S2, 44 * S2)                      # 名札の右上に鍵（×で鍵がかくれないように、×は鍵の右下に）
     if t >= p["t_x"]:
         u = _ease((t - p["t_x"]) / 0.25)
-        _xmark(d, 238 * S2, 62 * S2, (30 + 14 * u) * S2)
+        _xmark(d, 400 * S2, 165 * S2, (22 + 10 * u) * S2)
     if t >= p["t_x"] + 0.1:
         D.ctext(d, (230 * S2, 290 * S2), "使えない鍵", D.font(44 * S2), NAVY)
     # 右：新しい錠と古い鍵
     if t >= p["t_r"]:
         a_ = int(255 * _ease((t - p["t_r"]) / 0.3))
         d.line((500 * S2, 40 * S2, 500 * S2, 290 * S2), fill=(210, 216, 226, a_), width=4 * S2)
-        _lock(d, 760 * S2, 150 * S2, 70 * S2)
         if t >= p["t_key"]:
             v = _ease((t - p["t_key"]) / 0.6)
-            kx = 560 + v * 95                                  # 鍵の先が鍵穴（760）に届く
+            cx_ = 600 + v * 90                                 # 鍵の先（cx＋56）が錠の鍵穴（760）まで入る
             wig = 6 * math.sin((t - p["t_key"] - 0.6) * 30) if t > p["t_key"] + 0.6 and t < p["t_no"] else 0.0
-            _key(d, (kx - 30) * S2, (195 + wig) * S2, 40 * S2)
+            _key(d, cx_ * S2, (172 + wig) * S2, 40 * S2)
             D.ctext(d, (600 * S2, 290 * S2), "古い鍵", D.font(44 * S2), NAVY)
+        _lock(d, 760 * S2, 150 * S2, 70 * S2)                 # 錠は鍵のあとに描く（鍵の先が錠の中に入って見える）
         if t >= p["t_no"]:
             u = _ease((t - p["t_no"]) / 0.25)
-            _xmark(d, 850 * S2, 80 * S2, (30 + 14 * u) * S2)
+            _xmark(d, 880 * S2, 90 * S2, (26 + 12 * u) * S2)
             D.ctext(d, (850 * S2, 290 * S2), "開かない", D.font(44 * S2), RED)
     return _done(im, W_, H_)
 
@@ -137,7 +137,8 @@ def ev_list9():
     add(wv("37-02", "1つ目") - 0.1, e("37-11") + 0.3, "c9_list", dict(title="自分でできること", items=LIST_ME, w=500,
         ts=[wv("37-02", "1つ目") - 0.1, wv("37-05", "2つ目") - 0.1, wv("37-08", "3つ目") - 0.1, wv("37-10", "4つ目") - 0.1]))
     add(wv("37-06", "スマホに届く番号") - 0.1, e("37-06") + 0.3, "c9_code", dict(obj="maru_top", t0=wv("37-06", "スマホに届く番号")))
-    add(wv("37-09", "いつものアプリ") - 0.5, e("37-09") + 0.3, "c9_phone", dict(t_ring=wv("37-09", "いつものアプリ") - 0.1, t_page=wv("37-09", "お店のページ") - 0.1))
+    # スマホの図は、次の絵のつなぎ（A37i は s("37-10") − 0.9 から）の前に消す（点検：つなぎの途中に消えていた）
+    add(wv("37-09", "いつものアプリ") - 0.5, s("37-10") - 0.9, "c9_phone", dict(t_ring=wv("37-09", "いつものアプリ") - 0.1, t_page=wv("37-09", "お店のページ") - 0.1))
     # 38：お城の側（38-06 の終わりまで）
     add(wv("38-02", "裏口の錠") - 0.1, e("38-06") + 0.3, "c9_list", dict(title="お城の側", items=LIST_CASTLE, w=560,
         ts=[wv("38-02", "裏口の錠") - 0.1, wv("38-03", "2つ目の確かめ") - 0.1, wv("38-04", "予備の倉庫") - 0.1, wv("38-06", "働く人") - 0.1]))
@@ -162,7 +163,7 @@ def draw9(kind, t, t0, p, base, where, _paste, _pop_k, _pop_a):
         q = where(p["obj"], t)
         if q is None: return
         spr = code_sprite(t, p)
-        cx = min(max(q[0] + 150, spr.width / 2 + 20), 1260 - spr.width / 2); cy = min(max(q[1] - 120, spr.height / 2 + 20), 520 - spr.height / 2)
+        cx = min(max(q[0] + 150, 560 + spr.width / 2), 1260 - spr.width / 2); cy = min(max(q[1] - 60, spr.height / 2 + 120), 520 - spr.height / 2)      # 左上の一覧（はば 500）に重ねない（点検：寄りの絵で一覧の題に重なった）
         _paste(base, spr, cx, cy, k, a)
     elif kind == "c9_phone":
         spr = phone_sprite(t, p); _paste(base, spr, 1000, 30 + spr.height / 2, k, a)
