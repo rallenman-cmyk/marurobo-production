@@ -205,5 +205,20 @@ def set_screen(name="set_screen"):
     im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
 
 
-test_board(); phone5("ph_ask", "ask"); phone5("ph_no", "no"); set_screen()
+def phone_set_on(name="ph_set_on"):
+    """まとめ・オチの床のスマホの画面（縦 420×900。字なし）：28 の設定と同じ 4 つの段（ベル・紙の明細・盾と人・電話）に、緑のスイッチ（全部入り）"""
+    W_, H_ = 420, 900
+    im = Image.new("RGB", (W_ * SS, H_ * SS), (236, 240, 246)); d = ImageDraw.Draw(im)
+    S = lambda *v: tuple(int(x * SS) for x in v)
+    for k, kd in enumerate(("bell", "receipt", "shield", "handset")):
+        y0 = 70 + k * 200
+        d.rounded_rectangle(S(18, y0, W_ - 18, y0 + 180), radius=26 * SS, fill=WHITE)
+        d.ellipse(S(38, y0 + 30, 158, y0 + 150), fill=(225, 232, 244))
+        icon5(d, kd, 98 * SS, (y0 + 90) * SS, 44 * SS, NAVY)
+        d.rounded_rectangle(S(250, y0 + 62, 382, y0 + 118), radius=28 * SS, fill=GREEN)
+        d.ellipse(S(322, y0 + 64, 378, y0 + 116), fill=WHITE)
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+test_board(); phone5("ph_ask", "ask"); phone5("ph_no", "no"); set_screen(); phone_set_on()
 print("tex5 done")

@@ -73,6 +73,58 @@ def safe_dial(sf, t, turns=1.5, d=1.2):
     key(sf["dial"], "rotation_euler", t + d, (0, R(360 * turns * 0.2), 0))
 
 
+def big_safe(loc, face=0.0, k=1.45, mirror=True):
+    """オチの大きな金庫：小さな金庫（safe）をそのまま k 倍（1.45 倍で、かさが約 3 倍）。戻り値は safe と同じ。
+    mirror：左右を入れかえる（蝶つがいが右・ダイヤルが左。左前に立つまるロボから、開いたとびらにじゃまされずに中へ入れられる）"""
+    sf = safe(loc, face); sf["root"].scale = (-k if mirror else k, k, k)
+    for o in sf["door"].children:              # 取っ手はダイヤルの上へ（ダイヤルに頭を押し当てると、下の取っ手に体が当たった。hitcheck）
+        if o.material_slots and o.material_slots[0].material and o.material_slots[0].material.name.startswith("handle"):
+            o.location.z = SAFE_H * 0.86
+    sf["glow"].data.shadow_soft_size = 0.15
+    return sf
+
+
+BOX_W, BOX_D, BOX_H, BOX_T = 0.75, 0.84, 0.80, 0.012      # 奥行き：大きな金庫の取っ手まで 0.80 m（0.68 では取っ手が前の板から出ていた）
+
+
+def cardboard_box(loc):
+    """オチの大きな段ボール箱（茶色・上にテープ。字なし。底なし）。横の板 4 枚は下のふちの蝶つがいで外へ倒れ、上のふた 2 枚は横のふちで開く。
+    戻り値：dict(root, walls=[(蝶つがい, 倒れる向きの回転軸と符号)], flaps=[蝶つがい 2 つ], wall_obs=[板 4 枚])"""
+    root = empty(loc)
+    cb = _m("cardboard", "#C9965C", rough=0.85); cbi = _m("cardboard_in", "#B17F48", rough=0.9); tape = _m("boxtape", "#E2C58F", rough=0.5)
+    W, D, H, T = BOX_W, BOX_D, BOX_H, BOX_T
+    walls = []; wobs = []
+    # 前（−y）・うしろ（+y）：x 軸で回る。左（−x）・右（+x）：y 軸で回る。外へ倒れる向きの符号
+    for (hx, hy, axis, sign, sx, sy) in ((0, -D / 2, "x", 1, W, T), (0, D / 2, "x", -1, W, T), (-W / 2, 0, "y", -1, T, D - 2 * T), (W / 2, 0, "y", 1, T, D - 2 * T)):   # x 軸で +90 度＝上の端が −y へ、y 軸で +90 度＝上の端が +x へ
+        hg = empty((hx, hy, 0.0)); hg.parent = root
+        o = cube(cb, (0, 0, H / 2), (sx, sy, H), parent=hg); wobs.append(o)
+        walls.append((hg, axis, sign))
+    flaps = []
+    for sgn, wi in ((-1, 2), (1, 3)):         # 上のふた：左右の板の上のふちに付く（板と一緒に倒れる）
+        hg = empty((0, 0, H)); hg.parent = walls[wi][0]
+        cube(cb, (-sgn * (W / 4 - T / 2), 0, T / 2), (W / 2 - T, D - 2 * T, T), parent=hg)
+        cube(tape, (-sgn * (W / 2 - 0.035), 0, T + 0.001), (0.06, D - 2 * T, 0.002), parent=hg)
+        flaps.append((hg, sgn))
+    cube(tape, (0, -D / 2 - 0.007, H - 0.08), (0.06, 0.002, 0.16), parent=walls[0][0])
+    return dict(root=root, walls=walls, flaps=flaps, wall_obs=wobs)
+
+
+def box_flaps_open(bx, t, d=0.4):
+    """ふたが上へ開く（t から d 秒。板と一直線に立つ）"""
+    for hg, sgn in bx["flaps"]:
+        key(hg, "rotation_euler", -100.0, (0, 0, 0), "CONSTANT"); key(hg, "rotation_euler", t, (0, 0, 0))
+        key(hg, "rotation_euler", t + d, (0, R(sgn * 100), 0)); key(hg, "rotation_euler", t + d + 0.12, (0, R(sgn * 90), 0))
+
+
+def flat_boxes(loc, rz=0.0):
+    """たたんだ段ボール（平らな板 2 枚を重ねて床に置く。字なし）"""
+    e = empty(loc, R(rz))
+    cb = _m("cardboard", "#C9965C", rough=0.85); tape = _m("boxtape", "#E2C58F", rough=0.5)
+    cube(cb, (0, 0, 0.012), (0.78, 0.62, 0.024), parent=e); cube(cb, (0.03, -0.02, 0.036), (0.72, 0.58, 0.024), rot=(0, 0, R(4)), parent=e)
+    cube(tape, (0.03, -0.02, 0.049), (0.06, 0.58, 0.002), rot=(0, 0, R(4)), parent=e)
+    return e
+
+
 def card_obj(loc=(0, 0, 0), rot=(0, 0, 0), tex="card_blue", w=0.17, parent=None):
     """カード（厚み 2 mm の板。上の面に柄）。前の向き：上の面が +z"""
     e = empty(loc); e.rotation_euler = rot

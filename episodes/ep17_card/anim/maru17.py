@@ -84,6 +84,12 @@ class MaruR:
         """一覧の部品をそのまま呼ぶ（roll_over・get_up・tumble_back・awe・think など）"""
         self.cmds.append((t, kind, kw))
 
+    def follow(self, ob, t0, t1, offset):
+        """（17本目 オチ）押して運ぶ物：t0〜t1 のあいだ、物を、まるロボの体の場所＋offset（x, y）に、コマごとに合わせて動かす（離れる・めりこむをなくす）。
+        t0 より前は t0 の場所、t1 より後は t1 の場所にとどまる"""
+        if not hasattr(self, "follows"): self.follows = []
+        self.follows.append((ob, t0, t1, offset))
+
     def backstep(self, t, dist):
         """後ずさりで、向きを変えずに、いまの所から dist m 後ろへ下がる（16本目 maru16 から。17本目 v7 のコメント：押したあと戻るのに、うしろを向いて歩いていた）"""
         self.cmds.append((t, "back", dict(d=dist)))
@@ -251,6 +257,12 @@ class MaruR:
             for k in range(n_):
                 tt = max(0.0, T0 - 2.0) + k / FPS
                 key(par, "location", tt, self.off(tt), "LINEAR")
+        for ob_, t0_, t1_, off_ in getattr(self, "follows", []):
+            fs_ = [fr for fr in frames if t0_ - 1e-6 <= fr["t"] <= t1_ + 1e-6]
+            z_ = ob_.location.z
+            for k_, fr in enumerate(fs_):
+                x, y, _ = fr["root"]
+                key(ob_, "location", fr["t"], (x * self.s + off_[0], y * self.s + off_[1], z_), "CONSTANT" if k_ == len(fs_) - 1 else "LINEAR")
         for fr in frames[::6] + frames[-1:]:                 # 追うカメラ用（0.25 秒ごと）
             x, y, z = fr["root"]; zp = z_base if not self.drops else 0.0
             o = self.off(fr["t"]) if self.carries else (0.0, 0.0, 0.0)

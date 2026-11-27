@@ -1229,6 +1229,101 @@ def b_house28(cl):
     M.at(s("28-09") + 0.3, look=22); M.nod(s("28-09") + 2.6, n=1)
 
 
+# ======================================================================== まとめ・オチ（S29〜S31）：家（昼）
+PH30 = (1.0, 0.25, 0.0)           # オチの床のスマホ（箱の通り道 x 1.37〜2.13 の外。まるロボの立つ所の手前）
+BOX0 = (1.75, 0.60, 0.0)          # 箱を押し始める所（箱の手前のふち y 0.18。押すまるロボの体は y −0.28 まで。ベッドは y −0.35 まで）
+BOX1 = (1.75, 1.31, 0.0)          # 箱を置く所＝大きな金庫の場所（箱の奥のふち y 1.73。机は y 1.75 から。小さな金庫は x 1.03 まで）
+PUSH_OFF = 0.70                    # 箱のまん中から、押すまるロボのまん中まで（箱の半分 0.42 ＋ 体の前まで。maru_gap で押す間の中の点 0・すき間 1〜5 cm）
+STAND30 = (1.02, 0.55, 0.0)       # 大きな金庫の左前：とびら（右の蝶つがい x 2.08・y 1.01、はば 0.67）が回る所の外。開いたとびらは右に寄るので、あいた口が見える
+DIAL30 = (1.71, 0.69, 0.0)        # 大きな金庫のダイヤル（左右を入れかえたので x 1.71・y 0.95・高さ 0.42）に頭を押し当てる所（maru_gap：向き 150 度で、とびらの中の点 0・ダイヤルまで 0 cm）
+FLAT30 = (2.55, 1.45, 0.0)        # たたんだ段ボールを置く所（窓のかべの手前。2.45, 1.30 では開いた大きな金庫のとびらにかかった）
+
+
+def b_house29(cl):
+    """S29（家・昼）：まとめ。小さな金庫の前 → 小窓（2D）で前の場面を指す → スマホの前へ → 窓の外の塔 → 床のスマホ（設定が全部緑）→ 引きでうなずく"""
+    sf, tr, tb = _house_common()
+    ph, scr = phone_seq(PH, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=1.6); track("phone", ph, 0.0)
+    M = MaruR(SAFE_FRONT, face=180.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)
+    hat_on_maru(M, -50.0)
+    M.at(s("29-01") + 0.2, look=6)                                    # 金庫を見る
+    M.at(s("29-02") + 0.3, look=16); M.nod(e("29-02") - 0.5, n=1)     # 小窓（数字のタイル）を見上げて、うなずく
+    M.at(s("29-03") + 0.3, look=10)
+    M.walk(e("29-03") - 2.3, e("29-03") - 0.7, PH_SPOT)             # スマホのそばへ（0.36 m。向き直りが 29-04 に間に合うように早めに）
+    M.at(s("29-04") - 0.4, face=57.0, look=14)                        # 窓の外の遠くの塔（番号の台帳）の方を向く
+    M.at(s("29-05") - 0.2, face=90.0, look=-25)                       # 床のスマホを見下ろす
+    M.at(s("29-06") - 0.2, face=-49.0, look=6); M.nod(wp("29-06", "いちばん") + 0.2, n=2)   # 引きのカメラの方へ向いて、うなずく
+
+
+def b_house30(cl):
+    """S30 前半（家・昼）：オチ。数日後、まるロボ（頭にカード）が大きな段ボール箱を押してくる → 少し下がる → ふたがぱかっと開いて、中が光る"""
+    sf, tr, tb = _house_common()
+    tr["root"].location = (-0.4, 1.9, 0.0)                            # ゴミ箱は机の左へ（箱の置き場所をあける）
+    ph, scr = phone_seq(PH30, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=1.6); track("phone", ph, 0.0)
+    bx = cardboard_box(BOX0); track("box", bx["root"], 0.4)
+    bs = big_safe((0.0, 0.0, 0.0), 0.0); bs["root"].parent = bx["root"]
+    M = MaruR((BOX0[0], BOX0[1] - PUSH_OFF, 0.0), face=180.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)
+    hc = empty((0, 0, 0)); hc.parent = M.torso; hc.location = (0, 0.0, 0.47)
+    card_obj((0, 0, 0), (0, 0, R(90)), w=0.17 / HOUSE_S, parent=hc)            # 頭の上のカード（冒頭と同じ持ち方）
+    # 30-01：うしろから体で押して、手前から運ぶ（箱は、まるロボの歩きにコマごとに合わせる：M.follow）
+    t_p0 = s("30-01") + 0.4; t_p1 = e("30-01") - 0.1
+    M.walk(t_p0, t_p1, (BOX1[0], BOX1[1] - PUSH_OFF, 0.0))
+    M.follow(bx["root"], t_p0 - 0.1, t_p1 + 0.6, (0.0, PUSH_OFF))
+    M.lean(t_p0 - 0.5, t_p0 - 0.1, 4.0, hold=t_p1 - t_p0 + 0.1)              # 体を前へ少し傾けて押す（7 度では箱に 18 点入った → 4 度。maru_gap で中の点 0）
+    for k in range(5): ev(t_p1 - 2.1 + 0.42 * k, "push", 0.22, "box")
+    # 30-02：少し下がって見上げる → ふたがぱかっと開いて、中から光
+    M.backstep(e("30-01") + 0.15, 0.22); M.at(s("30-02") + 0.1, look=18)
+    t_fl = s("30-02") + 0.35
+    box_flaps_open(bx, t_fl); ev(t_fl, "paper", 0.35, "box")
+    bpy.ops.object.light_add(type='POINT', location=(0, 0, BOX_H * 0.9)); gl = bpy.context.object; gl.parent = bx["root"]
+    gl.data.color = (1.0, 0.95, 0.8); gl.data.shadow_soft_size = 0.2
+    gl.data.energy = 0.0; gl.data.keyframe_insert("energy", frame=f(t_fl + 0.2)); gl.data.energy = 25.0; gl.data.keyframe_insert("energy", frame=f(t_fl + 0.8))
+    ev(t_fl + 0.4, "shimmer", 0.3, "box")
+
+
+def b_house30r(cl):
+    """S30 後半〜S31（家・昼）：（カットが替わって少し後）箱はたたんで窓のかべの手前。大きな金庫 → カードをしまってダイヤル → 得意顔 → がくっ → 床のスマホの設定を見て、うなずく"""
+    sf, tr, tb = _house_common()
+    tr["root"].location = (-0.4, 1.9, 0.0)
+    ph, scr = phone_seq(PH30, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=1.6); track("phone", ph, 0.0)
+    flat_boxes(FLAT30, 8.0)
+    bs = big_safe(BOX1, 0.0); track("bigsafe", bs["root"], 0.36); track("bigsafe_in", bs["shelf"], 0.0)
+    M = MaruR(STAND30, face=150.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)   # 大きな金庫の方を向く（135 度では目のふちが先にとびらに当たり、頭がダイヤルに届かなかった → 150 度）
+    hc = empty((0, 0, 0)); hc.parent = M.torso; hc.location = (0, 0.0, 0.47)
+    chead = card_obj((0, 0, 0), (0, 0, R(90)), w=0.17 / HOUSE_S, parent=hc)
+    t_in = wp("30-04", "しまって") - 0.1                              # 「しまって」の言葉で飛ぶ
+    for o in [chead] + list(chead.children): hide_key(o, -100.0, False); hide_key(o, t_in, True)
+    # 30-03：2 つの金庫の前で、ぴょんぴょん
+    ev(s("30-03") + 0.1, "shimmer", 0.35, "bigsafe")
+    M.hops(wp("30-03", "大きな") + 0.2, n=2); ev(wp("30-03", "大きな") + 0.2, "beep_happy", 0.4, "maru_c")
+    # 30-04：とびらが開く（95 度）→ 頭のカードが棚へ → 閉まる → 2 回跳んでダイヤルの前へ → 頭を押し当てて回す → 下がって胸を張る
+    t_do = s("30-04") - 0.9
+    safe_open(bs, t_do, 0.6, deg=-95); ev(t_do, "click", 0.4, "bigsafe"); ev(t_do + 0.15, "creak_s", 0.3, "bigsafe")
+    sh_w = (BOX1[0], BOX1[1] - 0.02 * 1.45, (SAFE_H * 0.42 + 0.012) * 1.45)
+    hp_ = (STAND30[0], STAND30[1], 0.50)
+    cfly = card_obj((0, 0, 0), (0, 0, R(90))); track("cardfly", cfly, 0.0)
+    key(cfly, "location", -100.0, hp_, "CONSTANT"); key(cfly, "location", t_in, hp_)
+    key(cfly, "location", t_in + 0.3, ((hp_[0] + sh_w[0]) / 2, (hp_[1] + sh_w[1]) / 2, 0.66)); key(cfly, "location", t_in + 0.6, sh_w)
+    key(cfly, "rotation_euler", t_in, (0, 0, R(90))); key(cfly, "rotation_euler", t_in + 0.6, (0, 0, 0))
+    for o in [cfly] + list(cfly.children): hide_key(o, -100.0, True); hide_key(o, t_in, False)
+    ev(t_in, "swish", 0.3, "cardfly"); ev(t_in + 0.55, "slide", 0.3, "bigsafe")
+    t_cl = t_in + 0.65                                              # とびらは、跳んで近づく前に閉まりきる（ダイヤルの前は、とびらが回る所の中）
+    safe_close(bs, t_cl, 0.5, deg=-95); ev(t_cl + 0.5, "click", 0.4, "bigsafe")
+    t_dl = wp("30-04", "ダイヤル") + 0.9                             # 「ダイヤルを」の言葉のあと、とびらが閉まりきってから着く（ダイヤルの前は、とびらが回る所の中）
+    M.path([((STAND30[0] + DIAL30[0]) / 2, (STAND30[1] + DIAL30[1]) / 2, 0.0), DIAL30], [t_dl - 0.4, t_dl])
+    M.wobble(t_dl + 0.15, t_dl + 1.0, deg=16, period=0.45)
+    safe_dial(bs, t_dl + 0.15, 1.05, 0.9); ev(t_dl + 0.2, "dial", 0.35, "bigsafe")
+    t_pr = wp("30-04", "すっかり") + 0.1                          # 「すっかり得意顔」
+    M.backstep(t_pr - 0.1, 0.25)
+    M.lean(t_pr + 0.4, t_pr + 0.8, -12.0, hold=4.0); M.glow(t_pr + 0.4, 1.25); ev(t_pr + 0.4, "beep_happy", 0.4, "maru_c")
+    # 30-06：がくっ（前へ傾き、目の光が下がる）
+    t_g = wp("30-06", "変わり") + 0.1
+    M.glow(t_g - 0.4, 0.9); M.lean(t_g, t_g + 0.3, 14.0, hold=1.0); M.glow(t_g, 0.35, 0.3)
+    # 31-01：床のスマホ（設定が全部緑）の方を向いて、こくんとうなずく
+    M.glow(t_g + 1.6, 0.9, 0.4)
+    M.at(t_g + 3.1, face=-65.0, look=-25)                         # 床のスマホ（PH30）の方（向き直りは「向き終わる時刻」で決める。がくっが終わってから回る）
+    M.nod(s("31-01") + 0.3, n=1)
+
+
 # ======================================================================== カット割り：(名前, 舞台, 切り替わる時刻, カメラ, 親)
 #   同じ絵を 8 秒以上続けない。文の切れ目で、寄り・引き・横・まるロボを追う絵に替える。家の中は、まるロボから 0.9 m 以上離す
 SX, SY = SAFE[0], SAFE[1]
@@ -1429,6 +1524,23 @@ CUTS = [
     ("A28f", b_house28, s("28-07"), C((0.7, 0.6, 0.3), (2.1, 1.4, 0.4), 18), "A"),
     ("A28g", b_house28, s("28-08"), C((0.7, 0.5, 0.3), (2.1, 1.4, 0.4), 20), "A"),   # 文ごとの点検：右上の 4 つの札が、うなずくまるロボをかくした → まるロボを画面の左寄りに
     ("A28h", b_house28, s("28-09"), C((0.6, 0.5, 0.3), (1.9, 1.2, 0.4), 20), "A"),
+    # まとめ（S29）
+    # カメラは cam_search.py の計算（小窓をよける・家具の中に入らない・0.95 m 以上・顔が見える向き）で決めた
+    ("A29", b_house29, s("29-01") - 0.5, C((2.4, 1.45, 0.6), (1.0, 1.3, 0.35), 26), "A"),
+    ("A29b", b_house29, s("29-02"), C((0.0, 1.8, 0.45), (0.88, 1.18, 0.34), 28), "A"),
+    ("A29c", b_house29, s("29-03"), C((1.5, 0.0, 1.0), (0.98, 0.67, 0.51), 30), "A"),
+    ("A29d", b_house29, s("29-04"), C((-0.3, 1.0, 0.8), (2.2, 0.2, 0.4), 22), "A"),   # まるロボのうしろから。窓の外の塔が窓わくの中に入る所（塔への線が x=3 で窓の穴を通る）
+    ("A29e", b_house29, s("29-05"), C((2.3, 0.3, 0.7), (1.3, 0.98, 0.2), 22), "A"),   # まるロボの前から。床のスマホが字幕の帯より上に入る
+    ("A29f", b_house29, s("29-06"), C((-1.0, -0.9, 1.25), (1.9, 0.5, 0.6), 24), "A"),
+    # オチ（S30〜S31）
+    ("A30", b_house30, s("30-01") - 0.5, C((-0.25, 0.45, 0.75), (1.75, 0.85, 0.4), 26), "A"),
+    ("A30b", b_house30, s("30-02"), C((0.65, -0.55, 0.9), (1.7, 1.15, 0.45), 26), "A"),
+    ("A30c", b_house30r, s("30-03") - 0.3, C((1.8, 0.0, 0.45), (1.27, 1.25, 0.22), 20), "A"),
+    ("A30d", b_house30r, s("30-04") - 1.0, C((0.35, -0.45, 0.8), (1.55, 1.0, 0.4), 26), "A"),
+    ("A30d2", b_house30r, wp("30-04", "ダイヤル") + 0.55, C((2.7, 0.6, 0.8), (1.5, 0.83, 0.29), 28), "A"),   # ダイヤルに頭を押し当てる顔（とびらは閉まり終わる所）
+    ("A30e", b_house30r, s("30-05") - 0.3, C((2.4, 0.9, 0.6), (1.53, 0.5, 0.31), 30), "A"),
+    ("A31", b_house30r, s("31-01") - 0.6, C((-0.6, -1.4, 1.3), (1.4, 0.9, 0.4), 28), "A"),
+    ("A31b", b_house30r, wp("31-01", "概要欄") - 0.3, C((0.6, 1.2, 0.45), (0.99, 0.38, 0.3), 28), "A"),   # 同じ絵を 8 秒以上続けない：うなずいたまるロボとスマホに寄る
     ("C13p", b_shop, s("13-01") - 0.1, None, "C"),
     # 小窓（想像）
     ("P05", b_pip05, s("05-01") - 0.2, C((1.4, -0.3, 1.1), (3.0, -0.2, 1.4), 30), "I"),
@@ -1439,7 +1551,7 @@ CUTS = [c for c in CUTS if c[3] is not None]
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
 PIP_ONLY = {"P05", "P06", "P07", "P18", "P19", "P21"}
-END_T = e("28-09") + 2.0
+END_T = e("31-01") + 2.5
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}
