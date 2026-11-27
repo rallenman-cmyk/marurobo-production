@@ -8,6 +8,8 @@ cuts = sorted([(v[0], k, round((v[1] - v[0]) * 24)) for k, v in C.items() if t_b
 src = open(os.path.join(EP, "..", "ep09_escalator", "pc_kit", "run_pc_render_ep09.ps1"), encoding="utf-8-sig").read()
 a = src.index("$JOBS = @("); b = src.index("\n)\n", a) + 3
 jobs = "$JOBS = @(\n" + ",\n".join('  @("%s", %d, "scenes.py")' % (k, n) for _, k, n in cuts) + "\n)\n"
+if len(cuts) == 1:      # 1 カットだけのとき、PowerShell は @( @(…) ) を平らな配列にほどいて 3 カットと読む（ep16_v9 が絵 0 本で止まった）→ 内側の前にカンマを付ける
+    jobs = jobs.replace("  @(", "  ,@(", 1)
 src = src[:a] + jobs + src[b:]
 head = ("# まるロボ 16本目「情報流出」：PC の本番描画（3D の %d カット・合わせて %d コマ。承認ずみの章：本編 %.2f〜%.2f 秒）\n" % (len(cuts), sum(n for *_, n in cuts), t_beg, t_end))
 src = head + src[src.index("\n") + 1:]

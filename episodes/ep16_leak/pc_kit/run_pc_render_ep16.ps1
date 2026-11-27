@@ -16,7 +16,7 @@ $env:TEX16 = Join-Path $anim "tex16"   # 名札・お城の印・値札の絵   
 $root = "C:\marurobo"
 if (-not (Test-Path $root)) { $root = Split-Path -Parent $kit }
 $JOBS = @(
-  @("D16", 72, "scenes.py")
+  ,@("D16", 72, "scenes.py")
 )
 if ($Only) { $want = @($Only.Split(",") | ForEach-Object { $_.Trim() }); $sel = New-Object System.Collections.ArrayList; foreach ($j in $JOBS) { if ($want -contains $j[0]) { [void]$sel.Add($j) } }; $JOBS = $sel.ToArray() }
 $out = Join-Path $root "render_ep16_v9"
