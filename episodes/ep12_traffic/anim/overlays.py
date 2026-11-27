@@ -23,16 +23,16 @@ def ev_list():
     E = []
     add = lambda *a: E.append(a)
     # 冒頭
-    add(s("02-01") + 0.1, e("02-01") + 0.3, "ring", dict(obj="phone", r=70, col=YEL))
+    add(s("02-01") + 0.1, e("02-01") + 0.3, "ring", dict(obj="ph_red", r=50, col=YEL))
     add(wp("02-02", "渋滞") - 0.1, e("02-02") + 0.3, "tag", dict(text="この先 渋滞", obj="phone", dy=-150, size=52, bg=RED, fg=WHITE))
     add(wp("02-04", "首を") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("03-04") + 0.05, s("04-01") - 0.05, "pair", dict(left=("TEX:ph_map_alert", 0), right=("A03b", e("03-02") - 0.3),
         cap=("地図の赤い線", "本当の車の列")))   # 消すのは次のカットに替わる所（e+0.4 で消すと、後ろの似た列の絵が 0.5 秒だけ見えてから替わった。v1 点検）
-    add(wp("04-03", "誰が") - 0.1, e("04-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
-    add(wp("04-06", "細い道") - 0.1, e("04-06") + 0.3, "ring", dict(obj="phone", r=80, col=YEL))
+    add(e("04-03") - 0.6, e("04-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))   # v1 の確認役：「？」が首をかしげる音より 2.6 秒早かった → かしげる時刻に
+    add(wp("04-06", "細い道") - 0.1, e("04-06") + 0.3, "ring", dict(obj="ph_far", r=50, col=YEL))
     add(wp("04-07", "120万") - 0.1, e("04-07") + 0.4, "tag", dict(text="120万km以上", pos=(640, 92), size=64, bg=WHITE))
     add(wp("04-07", "地球") - 0.1, e("04-07") + 0.4, "tag", dict(text="地球 約30周", pos=(640, 196), size=64, bg=YEL))
-    add(wp("04-08", "着く時刻") - 0.1, e("04-08") + 0.4, "tag", dict(text="着く時刻 17:40", obj="phone", dy=-150, size=56, bg=WHITE))
+    add(wp("04-08", "着く時刻") - 0.1, e("04-08") + 0.4, "tag", dict(text="着く時刻 17:40", obj="ph_eta", dy=0, size=48, bg=WHITE))
     add(wp("04-10", "誰が") - 0.1, e("04-10") + 0.5, "tag", dict(text="誰が測っている？", pos=(340, 110), size=56, bg=WHITE))
     add(wp("04-10", "どうして") - 0.1, e("04-10") + 0.5, "tag", dict(text="なぜ先まで分かる？", pos=(940, 110), size=56, bg=YEL))
     add(e("04-10") - 0.6, s("04-11") - 0.1, "title", {})   # 次の文（04-11）の字幕に残っていた（v1 点検）。次の声の前に消す

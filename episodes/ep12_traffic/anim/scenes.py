@@ -104,17 +104,19 @@ STAGE = {}
 # ======================================================================== A：夕方の大通りとおじさんの車（冒頭 S01〜S04の2）
 V_CAR = 8.0                   # 走る速さ（m/秒。約 30 km/時）
 LANE_Y = LANE * 1.5           # +x へ走る車の左の車線（日本は左側）
-RT = 6.0                      # 曲がる半径
+RT = 3.2                      # 曲がる半径（v1 の確認役：6 m では角の歩道を横切った。道の角から 1.1 m 離れるのは 3.3 m 以下）
 XS = -LANE_Y - RT             # 曲がり始める x
 Y_STOP = 15.0                 # 列のうしろで止まる y
-D_TURN = 2.4; D_STOP = 1.8
+D_TURN = 1.1; D_STOP = 1.8
 
 
 def car_state(t):
     """おじさんの車の (x, y, 向き度)。向き 0＝+x、90＝+y"""
     T0 = STAGE["t_turn"]
-    if t <= T0:
-        return (XS - V_CAR * (T0 - t), LANE_Y, 0.0)
+    if t <= T0:     # 曲がる前の 1.5 秒で、曲がる速さ（弧の長さ ÷ D_TURN）までなめらかに落とす
+        v1 = (math.pi / 2 * RT) / D_TURN; tau = T0 - t; tb = 1.5
+        d_ = v1 * tau + (V_CAR - v1) / (2 * tb) * tau * tau if tau <= tb else v1 * tb + (V_CAR - v1) * tb / 2 + V_CAR * (tau - tb)
+        return (XS - d_, LANE_Y, 0.0)
     if t <= T0 + D_TURN:
         u = (t - T0) / D_TURN; a = -90.0 + 90.0 * u
         cx, cy = XS, LANE_Y + RT
@@ -133,8 +135,8 @@ def b_drive(par):
     """冒頭：夕方の大通りを走る → 角を左へ曲がる → 列のうしろで止まる"""
     sky_evening()
     STAGE["t_turn"] = wp("03-01", "角を") - 0.2
-    road_strip((-340.0, 80.0), 420.0, "x")
-    road_strip((ROAD_W / 2 + 0.2, 200.0), 200.0, "y")
+    road_strip((-340.0, 80.0), 420.0, "x", gaps=[(+1, -ROAD_W / 2, ROAD_W / 2)])   # 曲がる先の道の入り口は、歩道を切る
+    road_strip((ROAD_W / 2, 200.0), 200.0, "y")
     # v1 の点検：交差点の角に、歩道のない所が黒い穴に見えた。道の下に、歩道の色の地面を敷く
     cube(_m("ground_a", "#ADA69A", rough=0.9), (-130.0, 60.0, -0.06), (500.0, 400.0, 0.1))
     for sg in (-1, 1):   # 角で 2 つの歩道が重なる所が黒くなった（地面を敷いても残った）。少し高い板でふたをする
@@ -165,6 +167,9 @@ def b_drive(par):
     bpy.ops.object.light_add(type='AREA', location=(-0.95, 0.0, 1.35), rotation=(0, R(-80), 0)); il2 = bpy.context.object; il2.data.energy = 45.0; il2.data.size = 1.0
     il2.data.color = (1.0, 0.92, 0.82); il2.parent = cr      # 後ろの座席から前へ当てる（2 人の背中が黒い影にならないように）
     il.data.color = (1.0, 0.93, 0.85); il.parent = cr
+    # v1 の確認役：01-04 の「夢中」で、スマホの背中が黒い棒にしか見えなかった → 画面の明かりが、のぞきこむまるロボの顔に当たる（画面から後ろ＝−x へ）
+    bpy.ops.object.light_add(type='AREA', location=(PHONE_L[0] - 0.03, 0.0, PHONE_L[2] + 0.02), rotation=(0, R(90), 0)); sl = bpy.context.object
+    sl.data.energy = 6.0; sl.data.size = 0.16; sl.data.color = (0.80, 0.95, 1.0); sl.parent = cr
     p_, head = ojisan(cr)
     t = T_BEG; k_ = 0
     while t < T_END:      # 鼻歌：頭を小さくゆらす（前を向いたまま）
@@ -174,23 +179,29 @@ def b_drive(par):
                                    (t_turn_end, os.path.join(TEX, "ph_map_q.png")), (wp("04-05", "広げて"), os.path.join(TEX, "ph_map_z1.png")),
                                    (wp("04-06", "遠くの"), os.path.join(TEX, "ph_map_z2.png")), (s("04-08") - 0.3, os.path.join(TEX, "ph_map_eta.png"))])
     track("phone", ph, 0.0)
+    # v1 の確認役：輪がスマホの真ん中に付き、赤い線・遠くの細い道に当たっていなかった → 画面の絵の上の点に付ける（割合は make_tex12.py の絵と同じ）
+    track("ph_red", screen_pt(scr, 0.42, 0.34, "ph_red"), 0.0); track("ph_far", screen_pt(scr, 0.80, 0.24, "ph_far"), 0.0)
+    track("ph_eta", screen_pt(scr, 0.81, 0.18, "ph_eta"), 0.0)
     ev(wp("02-02", "渋滞") - 0.1, "pop_ui", 0.35, "phone")
     # 走る音・曲がる・止まる
-    ev(STAGE["t_turn"], "turn", 0.3, "car"); ev(t_turn_end + D_STOP - 0.6, "brake", 0.35, "car")
+    ev(STAGE["t_turn"] + 0.1, "turn", 0.3, "car"); ev(t_turn_end + D_STOP - 0.6, "brake", 0.35, "car")
     # まるロボ：助手席のクッションの上（前を向く）。車に運ばれる（場所だけ。曲がり終わってから、その場で向きを直す）
     lp = (PASS[0] + 0.02, PASS[1], BOOST)
     p0 = car_point(T_BEG, lp)
     M = MaruR(p0, face=MFACE(0.0), s=MS); track("maru", M.body, 0.28); track("maru_top", M.body, 0.34)
     M.carry(T_BEG, T_END, lambda t, p0=p0: tuple(a - b for a, b in zip(car_point(t, lp), p0)))
     # 01-04：画面に顔を近づける → 窓と見比べる
-    M.peer(wp("01-04", "夢中") - 0.3, 1.4); ev(wp("01-04", "夢中"), "beep_happy", 0.3, "maru_c")
+    # v1 の確認役：「夢中」が絵に出ていない → スマホへ向いて顔を近づけ、窓とスマホを見比べてまたスマホへ
+    M.at(s("01-04") + 0.1, face=MFACE(-27.0)); M.peer(wp("01-04", "夢中") - 0.3, 1.4); ev(wp("01-04", "夢中"), "beep_happy", 0.3, "maru_c")
+    M.at(e("01-04") - 0.9, face=MFACE(35.0)); M.at(e("01-04") + 0.2, face=MFACE(-27.0))
     M.at(s("02-03") + 0.2, face=MFACE(40.0))               # 左の窓の外を見る
     M.at(e("02-03") + 0.1, face=MFACE(0.0))
     M.confused(s("02-04") + 0.3)
     # 曲がり終わって、その場で前（+y）へ向き直る。屋根の上から見ている間
     M.at(t_turn_end + 0.3, face=MFACE(90.0))
-    M.at(s("03-03") - 0.6, face=MFACE(90.0 + 80.0))       # 左の窓（外のカメラ）へ顔を向けてから（v1 の点検：顔が見えず、しょんぼりが分からなかった）
-    M.sigh(s("03-03") + 0.6)                                # しょんぼり
+    M.at(s("03-03") - 0.6, face=MFACE(134.0))             # 前の斜めの窓（カメラ）へ顔を向けてから（v1 の確認役：しょんぼりが分からなかった）
+    M.sigh(s("03-03") + 0.6)                                # しょんぼり：ため息・目線を下げ・前へ少し傾く
+    M.at(s("03-03") + 0.9, look=-20); M.lean(s("03-03") + 0.9, e("03-03") + 0.8, 12.0); M.at(e("03-03") + 1.0, look=0)
     M.at(s("04-03") + 0.1, face=MFACE(90.0 + 45.0))         # 窓の外をきょろきょろ
     M.at(s("04-03") + 1.4, face=MFACE(90.0 - 10.0))
     M.confused(e("04-03") - 0.6)
@@ -245,23 +256,39 @@ def b_bridge(par):
     overpass(0.0, BR_H)
     box, eye = gantry(SENSOR_X, LANE_Y); track("sensor", box, 0.0)
     T_BEG = max(0.0, s("05-01") - 3.0); T_END = e("10-01") + 3.0
-    tw0, tw1 = s("08-01") - 4.0, e("08-04") + 1.0     # 横から見る図の間は、感知器の車線をあける（見せる車だけ通す）
-    traffic([(LANE * 0.5, +1)], T_BEG, T_END, -260.0, 260.0, 11.0, 2.4, seed=31)
-    traffic([(LANE_Y, +1)], T_BEG, tw0, -260.0, 260.0, 11.0, 2.6, seed=32)
-    traffic([(LANE_Y, +1)], tw1, T_END, -260.0, 260.0, 11.0, 2.6, seed=33)
-    traffic([(-LANE * 0.5, -1), (-LANE_Y, -1)], T_BEG, T_END, -260.0, 260.0, 11.0, 2.3, seed=34)
+    tw0, tw1 = s("08-01") - 0.5, e("08-04") + 0.6     # 横から見る図の間は、見える所の車をなくす（見せる車だけ通す）
+    cars_ = traffic([(LANE * 0.5, +1)], T_BEG, T_END, -260.0, 260.0, 11.0, 2.4, seed=31)
+    cars_ += traffic([(LANE_Y, +1)], T_BEG, T_END, -260.0, 260.0, 11.0, 2.6, seed=32)
+    cars_ += traffic([(-LANE * 0.5, -1), (-LANE_Y, -1)], T_BEG, T_END, -260.0, 260.0, 11.0, 2.3, seed=34)
+    # v1 の確認役：流れる車は、止める時刻のあとも最後まで走るので、車線をあける間にも通っていた（図の前を横切った）。
+    #   あける間に、見える所（x0〜x1）を通る車は、まるごと出さない
+    def clear(w0, w1, xa, xb, lanes=None):
+        for (c_, ta, tb, ly, dr) in cars_:
+            if lanes is not None and ly not in lanes: continue
+            a_, b_ = (-260.0, 260.0) if dr > 0 else (260.0, -260.0)
+            u0 = ta + (xa - a_) / (b_ - a_) * (tb - ta); u1 = ta + (xb - a_) / (b_ - a_) * (tb - ta)
+            if min(u0, u1) < w1 and max(u0, u1) > w0: hide_key(c_, ta, True)
+    clear(tw0, tw1, SENSOR_X - 45.0, SENSOR_X + 45.0)
+    clear(s("05-03") - 0.5, e("05-03") + 0.3, -10.0, 45.0, lanes=[LANE_Y])     # 05-03：目の光を当てる車線は、見せる車だけ
     # まるロボ：階段の上から、手すりの前へ歩く（05-01）
     # まるロボ：歩道橋の上を歩いてきて、手すりの前で止まる（05-01）。この大きさは約 0.4 m/秒なので、近くから（B05 の試し：8 m では 1.7 秒遅れた）
     M = MaruR((0.8, LANE_Y + 1.15, BR_H), face=MFACE(-80.0), s=MS); track("maru", M.body, 0.28); track("maru_top", M.body, 0.34)
     M.walk(s("05-01") - 0.3, e("05-01") + 0.2, SPOT)
     M.at(s("05-02") + 1.2, face=MFACE(0.0))                # 着いてから向き直る（向くのに約 2 秒。言い終わる前に向き終わる）
     M.peer(s("05-02") + 1.6, 1.6)
-    # 05-03：目の光で 1 台ずつ（ピッ、ピッ）
-    for k, wd in enumerate(("ピッ、ピ", "ピッ。")):
-        tb = wp("05-03", "1台") + 0.4 + 0.55 * k
-        tgt = (SPOT[0] + 5.0 + 2.5 * k, LANE_Y, 1.45)
-        beam_flash(EYE, tgt, tb, 0.4); mk = sphere(glow_mat("mark", TEAL_C, 5.0), tgt, 0.18, seg=12); pop_in(mk, tb, 1.0, 0.15); pop_out(mk, tb + 1.0)
+    # 05-03：目の光で 1 台ずつ（ピッ、ピッ）。v1 の確認役：光と音が「1台ずつ」の所で、声の「ピッ」より 1.5 秒早かった・車に当たらず印もなかった
+    #   → 声の「ピッ」の頭ごとに、下を通る車へ光を当て、その車の屋根に印が付いて一緒に走っていく
+    M.at(wp("05-03", "目の光") - 0.2, look=-22)
+    for k in range(2):
+        tb = wp("05-03", "ピッ", occ=k)
+        xt = SPOT[0] + 5.0 + 1.5 * k
+        dc = car_fast((0, 0, 0), 0.0, ["#E8E8E8", "#3F6FB5"][k], name="cnt")
+        key(dc, "location", tb - 4.0, (xt - 11.0 * 4.0, LANE_Y, 0), "LINEAR"); key(dc, "location", tb + 4.0, (xt + 11.0 * 4.0, LANE_Y, 0), "LINEAR")
+        hide_key(dc, -100.0, True); hide_key(dc, tb - 4.0, False); hide_key(dc, tb + 4.0, True)
+        beam_flash(EYE, (xt, LANE_Y, 1.5), tb, 0.35)
+        mk = sphere(glow_mat("mark", TEAL_C, 5.0), (0, 0, 1.62), 0.2, seg=12, parent=dc); pop_in(mk, tb, 1.0, 0.15)
         ev(tb, "pi", 0.35, "maru_c")
+    M.at(e("05-03") + 0.3, look=0)
     # 05-05：右の車線も、左の車線も……ピピピピッ（首を振って 4 本）
     M.shake(s("05-05") + 0.2)
     for k in range(4):
@@ -273,7 +300,7 @@ def b_bridge(par):
     M.act(s("05-06") + 1.4, "slump")
     M.act(s("06-04") + 0.2, "get_up")
     M.at(s("07-01") + 0.3, look=14)
-    M.confused(s("07-04") + 0.3)
+    M.confused(wp("07-04", "何を") - 0.2)                     # v1 の確認役：首をかしげる音が「？」より 1.4 秒早かった → 「？」と同じ時刻
     M.at(e("07-04") + 0.2, look=0)
     # 08-05：感知器のまねで目の光を下へ
     M.at(s("08-05") + 0.2, look=-14)
@@ -283,7 +310,7 @@ def b_bridge(par):
     # 感知器の音の波（08-01〜08-04）：水色の輪が真下へ → はね返って上へ
     wm = glow_mat("wave", WAVE_C, 6.0)
     def pulse(t, z_hit):
-        bpy.ops.mesh.primitive_torus_add(location=(SENSOR_X, LANE_Y, 6.15), major_radius=0.45, minor_radius=0.06)   # v1 の点検：横から見ると細くて見えなかった
+        bpy.ops.mesh.primitive_torus_add(location=(SENSOR_X, LANE_Y, 6.15), major_radius=0.8, minor_radius=0.12)   # v1 の点検・確認役：横から見ると細く小さくて見えなかった
         r_ = bpy.context.object; r_.data.materials.append(wm)
         dd = (6.15 - z_hit) / 9.0
         hide_key(r_, -100.0, True); hide_key(r_, t, False); hide_key(r_, t + 2 * dd + 0.05, True)
@@ -292,19 +319,28 @@ def b_bridge(par):
         key(r_, "scale", t, (0.6, 0.6, 0.6), "LINEAR"); key(r_, "scale", t + dd, (1.6, 1.6, 1.0), "LINEAR"); key(r_, "scale", t + 2 * dd, (0.8, 0.8, 0.8), "LINEAR")
     tc = wp("08-03", "車が") + 0.3           # 見せる車が感知器の真下に来る時刻
     STAGE["tc"] = tc
+    # v1 の確認役：波が、車が真下にいる時も地面ではね返り、ピコンが 1.1 秒ごとに 21 回鳴った
+    #   → 車の時刻は、波がちょうど屋根に着くように出す。ほかの波は、車がいない時に地面へ着くものだけ。音は文の頭と、車ではね返った時だけ
+    T_CARS = [tc, wp("08-04", "通った") + 0.2, wp("08-04", "こみ具合") + 0.2]
+    V_W = 9.0; d_road = 6.15 / V_W; d_roof = (6.15 - 1.45) / V_W
+    for tt in T_CARS:
+        pulse(tt - d_roof, 1.45); ev(tt, "ping2", 0.3, "sensor")
     t = s("08-01") + 0.4
     while t < e("08-04") + 0.5:
-        under = abs(t - tc) < 0.9
-        pulse(t, 1.45 if under else 0.0)
-        if not under: ev(t, "ping", 0.18, "sensor")
-        t += 1.1
-    ev(tc, "ping2", 0.3, "sensor")
+        if all(abs(t + d_road - tt) > 0.8 and abs(t - (tt - d_roof)) > 0.7 for tt in T_CARS): pulse(t, 0.0)
+        t += 1.3
+    ev(s("08-01") + 0.4, "ping", 0.18, "sensor"); ev(s("08-02") + 0.1, "ping", 0.18, "sensor")
+    # 08-03「短くなりました」：道までの線（水色・長い）と、車までの線（黄色・短い）を左右に並べて光らせる（絵コンテ表）
+    tl_ = wp("08-03", "短く") - 0.3
+    beam_flash((SENSOR_X - 1.4, LANE_Y - 0.6, 6.15), (SENSOR_X - 1.4, LANE_Y - 0.6, 0.02), tl_, e("08-03") + 0.6 - tl_, WAVE_C, 0.07, "cmp_road")
+    beam_flash((SENSOR_X + 1.4, LANE_Y - 0.6, 6.15), (SENSOR_X + 1.4, LANE_Y - 0.6, 1.45), tl_ + 0.25, e("08-03") + 0.35 - tl_, "#FFD24A", 0.07, "cmp_car")
+    ev(tl_, "pop_s", 0.2, "sensor")
     # 見せる車（08-03 で感知器の下を通る。08-04 でさらに 2 台）
     for k, tt in enumerate((tc, wp("08-04", "通った") + 0.2, wp("08-04", "こみ具合") + 0.2)):
         dc = car_fast((0, 0, 0), 0.0, ["#C8312B", "#3F6FB5", "#E8E8E8"][k], name="demo")
         key(dc, "location", tt - 4.0, (SENSOR_X - 4.0 * 7.0, LANE_Y, 0), "LINEAR"); key(dc, "location", tt + 4.0, (SENSOR_X + 4.0 * 7.0, LANE_Y, 0), "LINEAR")
         hide_key(dc, -100.0, True); hide_key(dc, tt - 4.0, False); hide_key(dc, tt + 4.0, True)
-        g_ = sphere(glow_mat("count", WAVE_C, 6.0), (SENSOR_X + 0.75 + 0.42 * k, LANE_Y - 0.4, 6.45), 0.15, seg=12)   # たまっていく光の粒（v1 の点検：小さくて見えなかった。感知器の横に 1 列）
+        g_ = sphere(glow_mat("count", WAVE_C, 6.0), (SENSOR_X + 0.85 + 0.5 * k, LANE_Y - 0.4, 6.45), 0.22, seg=12)   # たまっていく光の粒（v1 の点検：小さくて見えなかった。感知器の横に 1 列）
         pop_in(g_, tt + 0.1, 1.0, 0.2); hide_key(g_, -100.0, False); hide_key(g_, e("08-05") + 1.0, True)   # v1 の点検：隠す印が 1 つだけだと、ずっと隠れていた
     # 09-01：感知器から光の線が空へ
     lb = beam_flash((SENSOR_X, LANE_Y, 6.7), (SENSOR_X, LANE_Y, 60.0), wp("09-01", "どこへ") - 0.2, 2.5, WAVE_C, 0.05, "up")
@@ -362,6 +398,19 @@ def b_town(par):
         hide_key(rg, -100.0, True); hide_key(rg, t_, False); hide_key(rg, t_ + 1.5, True)
         key(rg, "scale", t_, (1, 1, 1), "LINEAR"); key(rg, "scale", t_ + 1.5, (12, 12, 1), "LINEAR")
     ev(wp("09-03", "電波") + 0.4, "radio", 0.25, "")
+    # v1 の確認役：「電波で車のナビに届きます」で、車が映っていなかった → 塔の近くの道を走る車（模型に合わせて大きく）。輪が届く時刻に、車が光る
+    ry = -half + round((TOWER[1] - 30.0 + half) / blk) * blk
+    vc = car_fast((0, 0, 0), 0.0, "#7CC6E8", name="vcar"); vc.scale = (8.0, 8.0, 8.0)
+    t0_ = s("09-03"); t1_ = e("09-03") + 1.0
+    key(vc, "location", t0_, (TOWER[0] - 70.0, ry - 8.0, 0.0), "LINEAR"); key(vc, "location", t1_, (TOWER[0] + 10.0, ry - 8.0, 0.0), "LINEAR")
+    hide_key(vc, -100.0, True); hide_key(vc, s("09-02"), False); hide_key(vc, s("10-04") - 0.5, True)
+    track("vcar", vc, 6.0)
+    ta_ = wp("09-03", "電波") + 1.2
+    bpy.ops.mesh.primitive_torus_add(location=(0, 0, 9.0), major_radius=3.0, minor_radius=0.35); hl_ = bpy.context.object
+    hl_.data.materials.append(glow_mat("radio_got", "#FFE08A", 5.0)); hl_.parent = vc; hl_.scale = (0.3, 0.3, 0.3)
+    hide_key(hl_, -100.0, True); hide_key(hl_, ta_, False); hide_key(hl_, ta_ + 1.6, True)
+    key(hl_, "scale", ta_, (0.15, 0.15, 0.15), "LINEAR"); key(hl_, "scale", ta_ + 0.8, (0.6, 0.6, 0.6), "LINEAR")
+    ev(ta_, "pi", 0.2, "vcar")
     STAGE["half"] = half
 
 
@@ -370,7 +419,8 @@ def b_nav(par):
     world("#2A2F38", 0.6)
     area((0.4, 0.6, 1.6), (0.95, 0, 1.0), 120, 2.0)
     cr = car((0, 0, 0), 0.0, "#B9C3CF", interior=True, name="navcar"); STAGE["car"] = cr
-    ph, _ = phone_on_holder(cr, [(0.0, os.path.join(TEX, "nav_red.png")), (s("10-01"), os.path.join(TEX, "nav_grey.png"))], glow=0.9); track("phone", ph, 0.0)
+    ph, _ = phone_on_holder(cr, [(0.0, os.path.join(TEX, "nav_green.png")), (wp("09-04", "渋滞") - 0.2, os.path.join(TEX, "nav_red.png")),
+                                 (s("10-01"), os.path.join(TEX, "nav_grey.png"))], glow=0.9); track("phone", ph, 0.0)   # v1 の確認役：「ぽん」で何も出なかった → 赤い線が言葉の時刻に出る
     ev(wp("09-04", "渋滞") - 0.2, "pop_ui", 0.3, "")
 
 
@@ -392,28 +442,29 @@ CUTS = [
     ("A01b", b_drive, wp("01-01", "まるロボは"), CC((0.2, 3.2, 1.2), (0.1, 0.3, 1.0), 32), "A"),
     ("A01c", b_drive, s("01-02"), CC((2.7, 0.05, 1.28), (0.0, 0.0, 1.08), 26, (2.5, 0.0, 1.26), (0.0, 0.0, 1.08)), "A"),
     ("A01d", b_drive, s("01-03"), CC((0.35, 0.05, 1.18), (0.95, 0.0, 1.02), 30, (0.55, 0.03, 1.10), (0.95, 0.0, 1.02), d=3.0), "A"),
-    ("A01e", b_drive, s("01-04"), CC((1.75, 0.55, 1.2), (0.15, 0.40, 0.95), 28), "A"),
-    ("A02", b_drive, s("02-01"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
+    ("A01e", b_drive, s("01-04"), CC((1.45, -0.1, 1.13), (0.4, 0.3, 1.08), 32), "A"),   # v1 の確認役：まるロボがカメラを向いて立つだけで、スマホが映らず「夢中」が分からない → 前の窓の外の低い所から、手前にスマホの背中（カメラの穴つき）、奥にスマホへ顔を寄せるまるロボ
+    ("A02", b_drive, s("02-01"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 52), "A"),   # v1 の確認役：画面が横幅の 4 割で小さかった
     ("A02b", b_drive, s("02-03"), CC((7.0, 3.2, 2.8), (-1.5, -2.5, 0.7), 26), "A"),
     ("A02c", b_drive, s("02-04"), CC((1.75, 0.55, 1.2), (0.15, 0.40, 0.95), 28), "A"),
     ("A03", b_drive, s("03-01") - 0.2, C((-30.0, -16.0, 30.0), (-6.0, 8.0, 0.0), 26), "A"),
     ("A03b", b_drive, s("03-02"), C((-6.0, -4.0, 9.0), (-4.0, 40.0, 1.0), 28), "A"),
-    ("A03c", b_drive, s("03-03"), CC((0.35, 2.3, 1.12), (0.15, 0.4, 1.0), 30), "A"),
+    ("A03c", b_drive, s("03-03"), CC((1.5, 1.7, 1.25), (0.17, 0.4, 1.05), 30), "A"),   # v1 の確認役：しょんぼりが分からなかった → 前の斜めの窓の外から顔（後ろからは座席の背で隠れた）
     ("A03d", b_drive, s("03-04"), C((-3.0, 2.0, 14.0), (-4.0, 45.0, 1.0), 28), "A"),
     ("A04", b_drive, s("04-01"), C((8.0, 6.0, 26.0), (-4.0, 40.0, 0.0), 26, (8.0, 10.0, 26.0), (-4.0, 44.0, 0.0)), "A"),
-    ("A04b", b_drive, s("04-02"), C((8.6, 26.0, 3.2), (-8.0, 22.0, 1.0), 24, (8.6, 44.0, 3.2), (-8.0, 40.0, 1.0)), "A"),
+    ("A04b", b_drive, s("04-02"), C((10.0, 26.0, 4.4), (-8.0, 22.0, 1.0), 24, (10.0, 44.0, 4.4), (-8.0, 40.0, 1.0)), "A"),   # v1 の確認役：手前の車がカメラのすぐ前を横切った → 歩道の奥・少し上から
     ("A04c", b_drive, s("04-03"), CC((1.35, 1.55, 1.15), (0.17, 0.4, 1.02), 30), "A"),
-    ("A04d", b_drive, s("04-04"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
-    ("G04", b_globe, s("04-07") - 0.2, C((0.0, -12.0, 2.5), (0.0, 0.0, 0.0), 40, (2.5, -9.5, 1.5), (0.0, 0.0, 0.0), d=9.0), "G"),
-    ("A04e", b_drive, s("04-08"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 34), "A"),
-    ("A04f", b_drive, s("04-09"), C((-6.0, 6.0, 1.4), (-5.0, 60.0, 1.6), 30), "A"),
+    ("A04d", b_drive, s("04-04"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 48), "A"),
+    ("G04", b_globe, s("04-07") - 0.2, C((0.0, -15.0, 1.0), (0.0, 0.0, -0.85), 30, (2.2, -14.0, 0.8), (0.0, 0.0, -0.85), d=9.0), "G"),   # v1 の確認役：地球の上と下が切れ、巻きつく線が字幕の帯にかかった → 引いて、地球を上へ
+    ("A04e", b_drive, s("04-08"), CC((0.55, 0.0, 1.12), (0.95, 0.0, 1.02), 48), "A"),
+    ("A04f", b_drive, s("04-09"), C((-9.0, 5.0, 3.4), (-4.6, 60.0, 0.8), 30), "A"),   # v1 の確認役：真後ろの低い所からで、自分の車線の列が自分の車に隠れ「前がすいている」に見えた
     ("A04g", b_drive, s("04-10"), C((10.0, -6.0, 18.0), (-4.0, 40.0, 0.0), 24), "A"),
     ("A04h", b_drive, s("04-11"), CC((0.0, 2.35, 1.2), (0.17, 0.4, 1.0), 30, (0.45, 2.2, 1.16), (0.17, 0.4, 1.0), d=5.0), "A"),
     ("A04i", b_drive, s("04-12"), C((-14.0, -10.0, 6.0), (-4.0, 40.0, 3.0), 24, (-14.0, -10.0, 22.0), (-4.0, 50.0, 2.0)), "A"),
     # 1章（B 歩道橋 → T 町の引き）
-    ("B05", b_bridge, s("05-01") - 0.5, C((-0.6, 9.2, 5.75), (0.8, 5.6, 5.2), 28, (-0.5, 8.6, 5.7), (0.9, 5.3, 5.2)), "B"),
+    ("B05", b_bridge, s("05-01") - 0.5, C((0.55, 2.4, 5.75), (0.8, 5.9, 5.25), 30, (0.6, 2.7, 5.7), (0.8, 5.6, 5.25)), "B"),   # v1 の確認役：奥へ歩く背中だった → 前から、歩いてくる顔
     ("B05b", b_bridge, s("05-02"), C((-1.0, 7.6, 6.4), (6.0, 4.6, 2.0), 30), "B"),
-    ("B05c", b_bridge, s("05-03"), C((-0.6, 6.4, 6.1), (7.0, 5.0, 1.2), 28), "B"),
+    ("B05c0", b_bridge, s("05-03"), C((2.6, 5.1, 5.2), (SPOT[0], SPOT[1], BR_H + 0.25), 34), "B"),   # 「目の光で」：まるロボの顔の寄り（v1 の確認役：引きだけでは目が小さかった）
+    ("B05c", b_bridge, wp("05-03", "1台") - 0.2, C((9.5, -1.0, 3.6), (3.6, LANE_Y, 3.1), 24), "B"),   # 「1台ずつ……ピッ、ピッ」：道の斜め前から、光が当たる車   # v1 の確認役：背中で目が見えず、光が車に当たらなかった → 道の斜め前から、まるロボの顔と、光が当たる車
     ("B05d", b_bridge, s("05-04"), C((-6.0, 10.0, 4.0), (10.0, 1.0, 1.0), 24), "B"),
     ("B05e", b_bridge, s("05-05"), C((2.6, 5.1, 5.2), (SPOT[0], SPOT[1], BR_H + 0.25), 34), "B"),
     ("B05f", b_bridge, s("05-06"), C((2.3, 6.3, 5.6), (SPOT[0], SPOT[1], BR_H + 0.2), 34), "B"),
@@ -421,17 +472,17 @@ CUTS = [
     ("T06", b_town, s("06-02"), C((0.0, -10.0, 520.0), (0.0, 0.0, 0.0), 30, (0.0, -10.0, 620.0), (0.0, 0.0, 0.0), d=9.0), "T"),
     ("B06b", b_bridge, s("06-04"), C((2.3, 6.6, 5.7), (SPOT[0], SPOT[1], BR_H + 0.2), 32), "B"),
     # 2章（B → T → N → C）
-    ("B07", b_bridge, s("07-01"), C((-0.6, LANE_Y + 1.0, 5.3), (SENSOR_X, LANE_Y, 6.6), 26), "B"),
-    ("B07b", b_bridge, s("07-02"), C((SENSOR_X - 5.0, LANE_Y - 4.0, 3.5), (SENSOR_X, LANE_Y, 6.4), 30, (SENSOR_X - 3.0, LANE_Y - 2.5, 4.5), (SENSOR_X, LANE_Y, 6.4), d=4.0), "B"),
+    ("B07", b_bridge, s("07-01"), C((-2.0, LANE_Y + 2.0, BR_H + 0.6), (5.0, LANE_Y - 0.3, BR_H + 1.0), 24), "B"),   # v1 の確認役：上の機械が映らない → 斜め後ろから、見上げるまるロボと先の感知器を 1 枚に
+    ("B07b", b_bridge, s("07-02"), C((SENSOR_X - 9.0, LANE_Y - 8.0, 2.2), (SENSOR_X, LANE_Y - 1.0, 4.0), 26, (SENSOR_X - 5.0, LANE_Y - 5.0, 3.6), (SENSOR_X, LANE_Y, 5.8), d=4.5), "B"),   # v1 の確認役：道の上に張り出しているのが分からない → 下の道と車から寄る
     ("B07c", b_bridge, s("07-04"), C((3.3, 6.6, 5.5), (SPOT[0], SPOT[1], BR_H + 0.25), 30), "B"),
-    ("B08", b_bridge, s("08-01") - 0.2, C((SENSOR_X, -3.4, 3.4), (SENSOR_X, LANE_Y, 3.4), 18), "B"),
+    ("B08", b_bridge, s("08-01") - 0.2, C((SENSOR_X, -6.5, 3.4), (SENSOR_X, LANE_Y, 3.3), 24), "B"),   # v1 の確認役：4 つのカットがほぼ同じ絵で 22 秒 → カットごとに寄り方を替える
     ("B08b", b_bridge, s("08-05"), C((2.6, 5.1, 5.2), (SPOT[0], SPOT[1], BR_H + 0.15), 30), "B"),
     ("B09", b_bridge, s("09-01"), C((SENSOR_X - 6.0, LANE_Y - 3.0, 1.5), (SENSOR_X, LANE_Y, 9.0), 22), "B"),
     ("T09", b_town, s("09-02"), C((-100.0, -260.0, 230.0), (0.0, 40.0, 0.0), 26, (40.0, -260.0, 230.0), (40.0, 60.0, 0.0), d=10.0), "T"),
-    ("N09", b_nav, s("09-04"), CC((0.66, 0.0, 1.08), (0.95, 0.0, 1.02), 42), "N"),
+    ("N09", b_nav, s("09-04"), CC((-0.2, 0.0, 1.3), (0.95, 0.0, 1.02), 30, (0.62, 0.0, 1.1), (0.95, 0.0, 1.02), d=2.2), "N"),   # v1 の確認役：車の中か分からなかった → 前の座席の間の引き（ハンドル・前の窓）から画面へ寄る
     ("B10", b_bridge, s("10-01"), C((3.3, 6.6, 5.4), (SPOT[0], SPOT[1], BR_H + 0.3), 30), "B"),
     ("C10", b_field, s("10-02"), C((0.6, 1.4, 0.8), (-2.0, 4.6, 0.3), 32), "C"),
-    ("C10b", b_field, s("10-03"), C((-2.3, 3.2, 0.35), (-0.4, 6.2, 5.0), 22), "C"),
+    ("C10b", b_field, s("10-03"), C((-2.2, 3.4, 0.15), (0.2, 5.8, 1.6), 18), "C"),   # v1 の確認役：空と電柱だけで、まるロボがいない → 下の手前に見上げるまるロボ
     ("T10", b_town, s("10-04"), C((0.0, -420.0, 420.0), (0.0, 0.0, 0.0), 26, (120.0, -420.0, 420.0), (140.0, 60.0, 0.0), d=10.0), "T"),
     ("N10", b_nav, s("10-06"), CC((0.66, 0.0, 1.08), (0.95, 0.0, 1.02), 42), "N"),
     ("C10c", b_field, s("10-07"), C((1.5, 1.6, 0.8), (-1.0, 4.6, 0.25), 30), "C"),
@@ -442,9 +493,9 @@ CUTS = [
     ("A04d3", b_drive, s("04-06"), CC((0.55, -0.2, 1.12), (0.95, 0.03, 1.0), 40), "A"),
     ("T06b", b_town, s("06-03"), C((-200.0, -330.0, 160.0), (0.0, 0.0, 0.0), 26), "T"),
     ("B07b2", b_bridge, s("07-03"), C((SENSOR_X - 2.0, LANE_Y - 2.2, 5.0), (SENSOR_X, LANE_Y, 6.4), 34), "B"),
-    ("B08a", b_bridge, s("08-02"), C((SENSOR_X + 3.0, -3.4, 3.3), (SENSOR_X, LANE_Y, 3.4), 18), "B"),
-    ("B08c", b_bridge, s("08-03"), C((SENSOR_X - 1.0, -3.4, 3.4), (SENSOR_X, LANE_Y, 3.4), 18), "B"),
-    ("B08d", b_bridge, s("08-04"), C((SENSOR_X - 2.5, -3.4, 3.5), (SENSOR_X + 0.6, LANE_Y, 3.6), 18), "B"),
+    ("B08a", b_bridge, s("08-02"), C((SENSOR_X + 1.5, -2.0, 4.6), (SENSOR_X, LANE_Y, 3.4), 24), "B"),
+    ("B08c", b_bridge, s("08-03"), C((SENSOR_X - 1.0, -4.8, 3.2), (SENSOR_X, LANE_Y, 3.2), 24), "B"),
+    ("B08d", b_bridge, s("08-04"), C((SENSOR_X - 2.0, -3.0, 5.6), (SENSOR_X + 0.6, LANE_Y, 5.0), 28), "B"),
     ("T09b", b_town, s("09-03"), C((180.0, -120.0, 200.0), (20.0, 120.0, 10.0), 26), "T"),
     ("T10b", b_town, s("10-05"), C((560.0, -300.0, 330.0), (258.0, 18.0, 0.0), 22), "T"),   # v1 点検：橋の輪が字幕の帯に重なった → 少し引いて下へ向ける（橋 y=466・トンネル y=173）
 ]

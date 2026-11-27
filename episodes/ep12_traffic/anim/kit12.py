@@ -38,8 +38,9 @@ def sky_day():
 
 
 # ======================================================================== 道
-def road_strip(c, length, axis="x", w=ROAD_W, center=(0.0, 0.0), lanes=True, name="road"):
-    """まっすぐな道（アスファルト・白い線・歩道・縁石）。axis＝のびる向き。c＝(始め, 終わり) の座標"""
+def road_strip(c, length, axis="x", w=ROAD_W, center=(0.0, 0.0), lanes=True, name="road", gaps=()):
+    """まっすぐな道（アスファルト・白い線・歩道・縁石）。axis＝のびる向き。c＝(始め, 終わり) の座標
+    gaps：歩道と縁石を切る所 [(側 +1/-1, 始め, 終わり)]（交わる道の入り口。v1 の確認役：曲がる車が、入り口を横切る歩道に乗り上げた）"""
     asph = noise_mat(name + "_asph", "#4A4D52", "#3F4246", 9.0, 0.85)
     white = _m("lane_white", "#E8E8E4", rough=0.6); walk = noise_mat("walk", "#B9B2A6", "#A9A296", 4.0, 0.8); curb = _m("curb", "#CFCBC2", rough=0.7)
     a, b = c; mid = (a + b) / 2; L = abs(b - a)
@@ -49,8 +50,14 @@ def road_strip(c, length, axis="x", w=ROAD_W, center=(0.0, 0.0), lanes=True, nam
         return (lu, lv, h) if axis == "x" else (lv, lu, h)
     cube(asph, P(mid, 0, -0.03), S(L, w, 0.06))
     for sg in (-1, 1):
-        cube(walk, P(mid, sg * (w / 2 + SIDEWALK / 2 + 0.15), 0.07), S(L, SIDEWALK, 0.14))
-        cube(curb, P(mid, sg * (w / 2 + 0.07), 0.08), S(L, 0.15, 0.16))
+        cuts = sorted((g0, g1) for (gs, g0, g1) in gaps if gs == sg); u0 = a; segs = []
+        for (g0, g1) in cuts: segs.append((u0, g0)); u0 = g1
+        segs.append((u0, b))
+        for (s0, s1) in segs:
+            if s1 - s0 < 0.01: continue
+            m_ = (s0 + s1) / 2; l_ = s1 - s0
+            cube(walk, P(m_, sg * (w / 2 + SIDEWALK / 2 + 0.15), 0.07), S(l_, SIDEWALK, 0.14))
+            cube(curb, P(m_, sg * (w / 2 + 0.07), 0.08), S(l_, 0.15, 0.16))
     if lanes:
         cube(_m("lane_yellow", "#E9C040", rough=0.6), P(mid, 0.0, 0.002), S(L, 0.15, 0.01))      # まん中の線
         for sg in (-1, 1):
@@ -162,7 +169,7 @@ def phone_seq(loc, rot_z, states, glow=2.2, fade=0.15):
     e = empty(loc, R(rot_z))
     cube(mat("ph_body", "#1D2126", rough=0.3, metal=0.4), (0, 0, 0.004), (0.078, 0.158, 0.008), bevel=0.006, parent=e)
     cube(mat("ph_edge", "#8A9099", rough=0.25, metal=0.9), (0, 0, 0.004), (0.0795, 0.1595, 0.006), bevel=0.006, parent=e)
-    cyl(mat("ph_cam", "#0B0E12", rough=0.1, coat=1.0), (0, 0.068, 0.0088), 0.0035, 0.001, parent=e, verts=16)
+    cyl(mat("ph_cam", "#0B0E12", rough=0.1, coat=1.0), (0, 0.068, -0.0006), 0.0035, 0.001, parent=e, verts=16)   # カメラの穴は背中に（v1 の確認役：画面の側に付いて、自分の印を隠す黒い点に見えた）
     m = bpy.data.materials.new("ph_seq"); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
     imgs = {}
     def tex_node(path):
@@ -182,7 +189,14 @@ def phone_seq(loc, rot_z, states, glow=2.2, fade=0.15):
     nt.links.new(col, b.inputs["Emission Color"]); b.inputs["Base Color"].default_value = (0, 0, 0, 1)
     b.inputs["Emission Strength"].default_value = glow; b.inputs["Roughness"].default_value = 0.7; b.inputs["Coat Weight"].default_value = 0.0; b.inputs["Specular IOR Level"].default_value = 0.0
     sc = plane(m, (0, 0, 0.0086), (0.07, 0.15), parent=e)
+    sc.rotation_euler = (0, 0, math.pi)   # v1 の確認役：画面の地図が半回転して（上下・左右とも逆）、2D の小窓の地図と合わなかった
     return e, sc
+
+
+def screen_pt(scr, X, Y, name):
+    """画面の絵の上の 1 点（横向きの地図の絵で、左から X・上から Y の割合）に、記録用の空の物を置く（輪や札をそこに付けるため）"""
+    p_ = empty((2.0 * Y - 1.0, 2.0 * X - 1.0, 0.0)); p_.parent = scr; p_.name = name
+    return p_
 
 
 def phone_on_holder(parent, states, glow=0.9):   # 試しの絵：1.6 では画面が白く飛んで地図が見えなかった
@@ -193,22 +207,33 @@ def phone_on_holder(parent, states, glow=0.9):   # 試しの絵：1.6 では画�
 
 
 def ojisan(parent):
-    """運転席のおじさん（前を向いたまま。腕はハンドルへ）。前＝+x"""
-    p = person((DRIVE[0] - 0.05, DRIVE[1], SEAT_TOP - 0.55), face_deg=90, shirt="#8A6A4A", pants="#3B4450", hair="#9A9590", sit=True)
+    """運転席のおじさん（前を向いたまま。腕はハンドルへ）。前＝+x
+    v1 の確認役：頭が屋根を突き抜けていた（頭のてっぺん 1.68 m、屋根の下 1.43 m）・めがねが顔の横に付き、髪の丸が顔を隠していた。
+      → 0.72 倍にして、もも（座る面）を座席の中 0.50 m に置く（頭のてっぺん約 1.38 m）。顔は −y（ローカル）＝前。めがね・目・口を顔の前に付け、髪は後ろへ"""
+    S_ = 0.72; base = 0.50 - S_ * 0.39
+    p = person((DRIVE[0] - 0.05, DRIVE[1], base), face_deg=90, shirt="#8A6A4A", pants="#3B4450", hair="#9A9590", sit=True, s=S_)
     p.parent = parent
     sm = _m("shirt#8A6A4A", "#8A6A4A", rough=0.7); km = _m("skin", "#F1C7A5", rough=0.55)
     head = [c for c in p.children if c.type == 'EMPTY'][0]
-    gl = _m("glasses", "#2A2A2E", rough=0.3, metal=0.5)
+    for c in head.children:                                     # 髪：後ろと上へずらして、顔の前を出す
+        if c.type == 'MESH' and abs(c.location.z - 0.06) < 1e-3:
+            c.location = (0.0, 0.075, 0.075); c.scale = (0.96, 0.92, 0.9)
+    gl = _m("glasses", "#2A2A2E", rough=0.3, metal=0.5); ey = _m("oji_eye", "#2A2320", rough=0.5)
     for sg in (-1, 1):
-        bpy.ops.mesh.primitive_torus_add(location=(0.19, sg * 0.07, 0.02), rotation=(0, R(90), 0), major_radius=0.045, minor_radius=0.007)
+        bpy.ops.mesh.primitive_torus_add(location=(sg * 0.072, -0.19, 0.03), rotation=(R(90), 0, 0), major_radius=0.05, minor_radius=0.008)
         g_ = bpy.context.object; g_.data.materials.append(gl); g_.parent = head
+        sphere(ey, (sg * 0.072, -0.188, 0.03), 0.016, parent=head, seg=10)          # 目（めがねの中の点）
+    cube(gl, (0.0, -0.19, 0.03), (0.05, 0.008, 0.008), parent=head)                     # めがねのつなぎ
+    cube(_m("oji_mouth", "#9A5A4A", rough=0.6), (0.0, -0.192, -0.085), (0.07, 0.01, 0.014), bevel=0.005, parent=head)   # 口（やさしい横線）
+    sz0 = base + S_ * (0.85 + 0.3)                                                      # 肩の高さ
+    for sg in (-1, 1):
         # 腕：肩からハンドルへ
-        sx, sy, sz = DRIVE[0] - 0.05, DRIVE[1] + sg * 0.2, SEAT_TOP - 0.55 + 0.85 + 0.25
+        sx, sy, sz = DRIVE[0] - 0.05, DRIVE[1] + sg * 0.17, sz0
         hx, hy, hz = 0.6, DRIVE[1] + sg * 0.15, 1.02
         dx, dy, dz = hx - sx, hy - sy, hz - sz; L_ = math.sqrt(dx * dx + dy * dy + dz * dz)
-        a_ = cyl(sm, ((sx + hx) / 2, (sy + hy) / 2, (sz + hz) / 2), 0.05, L_, verts=12)
+        a_ = cyl(sm, ((sx + hx) / 2, (sy + hy) / 2, (sz + hz) / 2), 0.045, L_, verts=12)
         a_.rotation_euler = (0, math.atan2(math.sqrt(dx * dx + dy * dy), dz), math.atan2(dy, dx)); a_.parent = parent
-        sphere(km, (hx, hy, hz), 0.05, parent=parent, seg=12)
+        sphere(km, (hx, hy, hz), 0.045, parent=parent, seg=12)
     return p, head
 
 
@@ -222,9 +247,11 @@ def overpass(x=0.0, h=5.0, span=ROAD_W + 2 * SIDEWALK + 2.0, w=2.6):
         xx = x + sx * (w / 2 - 0.05)
         cube(railm, (xx, 0, h + 1.05), (0.07, span + 8.0, 0.07))
         cube(railm, (xx, 0, h + 0.12), (0.07, span + 8.0, 0.05))
+        # v1 の確認役：格子の棒が、まるロボの顔の前に何本もかかった（5 か所）→ うすいガラスの板と、1.6 m ごとの柱
+        cube(mat("rail_glass", "#BFD9E6", rough=0.05, alpha=0.12), (xx, 0, h + 0.58), (0.02, span + 8.0, 0.88))
         y = -(span + 8.0) / 2
         while y < (span + 8.0) / 2:
-            cube(railm, (xx, y, h + 0.58), (0.03, 0.03, 0.95)); y += 0.16
+            cube(railm, (xx, y, h + 0.58), (0.05, 0.05, 0.95)); y += 1.6
     for sy in (-1, 1):
         cube(colm, (x, sy * (ROAD_W / 2 + SIDEWALK + 0.6), h / 2), (0.5, 0.5, h))
         # 階段（端の外へ下りる）
@@ -326,7 +353,11 @@ def town_grid(n=9, block=60.0, seed=5, glow_lines=False):
     br_ = cube(_m("bridge", "#A9AEB5", rough=0.6), (half + 30, -half + 3 * block, 1.2), (34, 9, 0.8)); br_.name = "bridge"
     bpy.ops.mesh.primitive_uv_sphere_add(radius=70, location=(0, half + 80, -25), segments=24, ring_count=12)
     hill = bpy.context.object; hill.scale = (2.2, 1.0, 0.9); hill.data.materials.append(noise_mat("hill", "#5E8A55", "#4E7A47", 0.05, 0.95))
-    tn_ = cube(_m("tunnel", "#1B1D20", rough=0.9), (-half + 6 * block, half + 12, 3.0), (10, 2, 6)); tn_.name = "tunnel"
+    # v1 の確認役：黒い箱だけで、トンネルの形がなかった → コンクリートの入り口の枠・黒い穴・そこへ続く道
+    tx_ = -half + 6 * block
+    cube(_m("tn_frame", "#C9C6BE", rough=0.8), (tx_, half + 13.5, 6.0), (18, 3, 12))
+    cube(_m("tn_road", "#4A4D52", rough=0.85), (tx_, half + 6.0, 0.1), (10, 14, 0.2))
+    tn_ = cube(_m("tunnel", "#141619", rough=0.9), (tx_, half + 12.2, 3.8), (11, 1.0, 7.6)); tn_.name = "tunnel"
     return roads, half
 
 

@@ -79,12 +79,25 @@ def town_colors(d, c, k, near=True):
     color_line(d, [(cx, cy - 20 * k), (cx, 0)], RED, max(int(15 * k), MW))           # 曲がった先の道が赤
     color_line(d, [(cx, cy), (W * SS, cy)], GREEN, max(int(16 * k), MW))
     G = 40
+    # v1 の確認役：引いた地図で、細い道の色が「ちらばった点」にしか見えなかった → 細い道の色は 3 ます続けて、少し太く
+    sw = SW if near else int(SW * 1.7)
     for gx in range(-G, G + 1):     # 細い道にも少し色
         for gy in range(-G, G + 1):
-            if rnd.random() < 0.18:
+            if rnd.random() < (0.18 if near else 0.07):
                 x = cx + gx * 120 * k; y = cy + gy * 120 * k; col = rnd.choice([GREEN, GREEN, YELLOW, RED])
-                if rnd.random() < 0.5: color_line(d, [(x, y), (x + 120 * k, y)], col, max(SW, int(7 * k)))
-                else: color_line(d, [(x, y), (x, y + 120 * k)], col, max(SW, int(7 * k)))
+                n_ = 1 if near else 3
+                if rnd.random() < 0.5: color_line(d, [(x, y), (x + 120 * k * n_, y)], col, max(sw, int(7 * k)))
+                else: color_line(d, [(x, y), (x, y + 120 * k * n_)], col, max(sw, int(7 * k)))
+
+
+FAR = (0.80, 0.22)   # 引いた地図で「遠くの町の細い道」を必ず描く所（横の割合・縦の割合）。3D の輪はここに付ける（scenes.py の ph_far）
+
+
+def far_town(d, k):
+    """遠くの町の細い道（緑・黄の L 字と、短い赤）。04-06 の輪で囲む所"""
+    x0, y0 = FAR[0] * W * SS, FAR[1] * H * SS; L = 120 * k * 2; w = int(SW * 1.7)
+    color_line(d, [(x0 - L, y0), (x0, y0)], GREEN, w); color_line(d, [(x0, y0), (x0, y0 + L)], YELLOW, w)
+    color_line(d, [(x0, y0), (x0 + L * 0.7, y0)], GREEN, w); color_line(d, [(x0 - L * 0.5, y0 + L * 0.6), (x0 - L * 0.5, y0 + L * 1.2)], RED, w)
 
 
 def main():
@@ -96,13 +109,16 @@ def main():
     im, d, c, k = base(1.0); town_colors(d, c, k); me(d, c[0], c[1] - 90 * k, 1.0, 90); save(im, "ph_map_q")
     # 4）引いた地図（2 倍・4 倍）：遠くの町の細い道まで色
     for z, nm in ((2.2, "ph_map_z1"), (4.5, "ph_map_z2")):
-        im, d, c, k = base(z); town_colors(d, c, k); me(d, c[0], c[1] - 90 * k, 0.8, 90); save(im, nm)
+        im, d, c, k = base(z); town_colors(d, c, k, near=False); far_town(d, k); me(d, c[0], c[1] - 90 * k, 0.8, 90); save(im, nm)
     # 5）着く時刻の場所を明るく（字は 2D で重ねる。ここは白い札の地だけ）
     im, d, c, k = base(1.0); town_colors(d, c, k); me(d, c[0], c[1] - 90 * k, 1.0, 90)
     d.rounded_rectangle([W * SS * 0.66, H * SS * 0.06, W * SS * 0.96, H * SS * 0.30], radius=24 * SS, fill=(255, 255, 255), outline=TEAL, width=6 * SS)
     save(im, "ph_map_eta")
     # 6）車のナビ（2章）：大通りが赤い／町はずれの道だけ灰色
     im, d, c, k = base(1.4, seed=8); town_colors(d, c, k); me(d, c[0] - 200 * k, c[1], 1.0, 0); save(im, "nav_red")
+    # v1 の確認役：09-04 の「ぽん」で画面に何も出なかった → 赤い線のない地図から、言葉の時刻に替える
+    im, d, c, k = base(1.4, seed=8); town_colors(d, c, k)
+    color_line(d, [(c[0], c[1] - 20 * k), (c[0], 0)], GREEN, max(int(15 * k), MW)); me(d, c[0] - 200 * k, c[1], 1.0, 0); save(im, "nav_green")
     im = Image.new("RGB", (W * SS, H * SS), (178, 204, 160)); d = ImageDraw.Draw(im)
     d.line([0, H * SS * 0.55, W * SS, H * SS * 0.45], fill=(255, 255, 255), width=44 * SS)
     d.line([0, H * SS * 0.55, W * SS, H * SS * 0.45], fill=(120, 130, 146), width=30 * SS)
