@@ -52,13 +52,13 @@ def unuse_sprite(t, p):
     if t >= p["t_r"]:
         a_ = int(255 * _ease((t - p["t_r"]) / 0.3))
         d.line((500 * S2, 40 * S2, 500 * S2, 290 * S2), fill=(210, 216, 226, a_), width=4 * S2)
+        _lock(d, 760 * S2, 150 * S2, 70 * S2)                 # 錠を先に描き、鍵を手前に重ねる（v22 のユーザー「鍵をじょうより前面に出して」：鍵が錠のうしろにかくれていた）
         if t >= p["t_key"]:
             v = _ease((t - p["t_key"]) / 0.6)
             cx_ = 600 + v * 90                                 # 鍵の先（cx＋56）が錠の鍵穴（760）まで入る
             wig = 6 * math.sin((t - p["t_key"] - 0.6) * 30) if t > p["t_key"] + 0.6 and t < p["t_no"] else 0.0
             _key(d, cx_ * S2, (172 + wig) * S2, 40 * S2)
             D.ctext(d, (600 * S2, 290 * S2), "古い鍵", D.font(44 * S2), NAVY)
-        _lock(d, 760 * S2, 150 * S2, 70 * S2)                 # 錠は鍵のあとに描く（鍵の先が錠の中に入って見える）
         if t >= p["t_no"]:
             u = _ease((t - p["t_no"]) / 0.25)
             _xmark(d, 880 * S2, 90 * S2, (26 + 12 * u) * S2)

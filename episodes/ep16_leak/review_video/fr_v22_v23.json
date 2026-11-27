@@ -1,0 +1,35 @@
+{
+ "created_at": "2026-11-27T05:30:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-LEAK-v22",
+ "to_version": "MARU-LEAK-v23",
+ "project_id": "MARU-LEAK",
+ "items": [
+  {
+   "action": "fixed",
+   "comment_id": "cmwyeqt7n9ghcgr2g",
+   "comment_rev": 1,
+   "explain": "図の中で、鍵を錠の手前に重ねました（前は、鍵の先が錠に入って見えるよう錠をあとに描いていて、鍵の大半が錠のうしろにかくれていました）。",
+   "new_t": 14.6,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v23",
+   "original_t": 14.6,
+   "original_t_end": null,
+   "original_text": "鍵をじょうより前面に出して",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwyesd3mlsl3xrrk",
+   "comment_rev": 1,
+   "explain": "裏口の扉は外へ開くので、その開く所に人が並んでいたのが原因でした。人を扉の開く所の外（反対の側）に並べ、1人目は鍵を差したら一歩下がり、扉が開ききってから入るようにしました。頭が出入口の上に当たっていたので、人を少し小さくしました。ほかの章の扉と人・影も全部数え直し、見える所で当たっている物はありませんでした。",
+   "new_t": 103.9,
+   "new_t_end": null,
+   "new_version_id": "MARU-LEAK-v23",
+   "original_t": 103.9,
+   "original_t_end": null,
+   "original_text": "人がドアに貫通してる",
+   "reason": ""
+  }
+ ]
+}

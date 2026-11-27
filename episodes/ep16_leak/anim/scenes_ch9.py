@@ -187,30 +187,40 @@ def b_castle9(cl):
     # 38-06：働く人が 3 人、それぞれちがう色の鍵を持って並ぶ。1 人目が差して、裏口が開いて入る
     wcols = [("#C8584A", "#7A6A5A"), ("#4A7BE0", "#5A6A7A"), ("#5DBB63", "#6A5A4A")]
     t6 = s("38-06") - 0.8                                                      # C38f の替わり目（一覧④がつなぎのあとに出るように 0.8 秒前から）
-    qpos = [(X_SIDE + 0.95, DOOR_Y + 0.25), (X_SIDE + 1.05, DOOR_Y - 0.6), (X_SIDE + 1.1, DOOR_Y - 1.45)]      # かべにそって横に並ぶ（試しの絵：カメラのほうへ並ぶと、手前の人が裏口をかくした）
+    # 裏口の扉は外（+x）へ、蝶つがい（−y の側）を中心に開く。開く所（蝶つがいから半径 1.05 m）に人を置かない：
+    #   人は蝶つがいの反対（+y）の側に、かべから 1.35 m はなれて並ぶ（v22 のユーザー「人がドアに貫通してる」：−y の側に並べて、開く扉が体を通った）
+    QX = X_SIDE + 1.35
+    qpos = [(QX, DOOR_Y + 0.3), (QX, DOOR_Y + 1.1), (QX, DOOR_Y + 1.9)]
     wks = []
     for j, ((kc, sc), (qx, qy)) in enumerate(zip(wcols, qpos)):
-        wk = walker((60.0 + j * 2, 60.0, 0.0), -90.0, shirt=sc, pants="#2D3640", hair=["#2B2220", "#5A3A22", "#3A3026"][j], s=0.78)
+        wk = walker((60.0 + j * 2, 60.0, 0.0), -90.0, shirt=sc, pants="#2D3640", hair=["#2B2220", "#5A3A22", "#3A3026"][j], s=0.7)      # 出入口（高さ 1.45 m）を頭が通る大きさ（0.78 では頭が上の枠に当たった）
+        wk.root.name = "c9worker%d" % j
         key(wk.root, "location", -100.0, (60.0 + j * 2, 60.0, 0.0), "CONSTANT"); key(wk.root, "location", t6 - 0.12, (qx, qy, 0.02), "CONSTANT")
         key(wk.root, "rotation_euler", t6 - 0.12, (0, 0, R(-90)), "CONSTANT")
-        ky = key_obj((0, 0, 0), rot=(0, 0, R(-90)), col=kc, s=3.2, parent=wk.arms[1]); ky.location = (0.0, -0.06, -0.62); track("c9wkey%d" % j, ky, 0.0)
+        ky = key_obj((0, 0, 0), rot=(0, 0, R(-90)), col=kc, s=2.2, parent=wk.arms[1]); ky.location = (0.0, -0.05, -0.6); track("c9wkey%d" % j, ky, 0.0)
         key(wk.arms[1], "rotation_euler", t6 - 0.12, (R(-35), 0, 0), "CONSTANT")       # 鍵を前に出して持つ
         wks.append(wk); track("c9wk%d" % j, wk.head, 0.2)
     t_key = wv("38-06", "使い回さない") - 0.2
     w0 = wks[0]
-    key(w0.arms[1], "rotation_euler", t_key - 0.5, (R(-35), 0, 0)); key(w0.arms[1], "rotation_euler", t_key, (R(-62), 0, 0))
+    # 1 人目：錠の前へ一歩出て差す → カチャ → 腕を引いて、扉の開く所の外へ下がる → 扉が開く → 開ききってから入る（1章の影と同じ順）
+    near = (X_SIDE + 0.98, DOOR_Y + 0.38)
+    wk_walk(w0, t_key - 0.9, t_key - 0.3, qpos[0], near, -90.0)
+    key(w0.arms[1], "rotation_euler", t_key - 0.4, (R(-35), 0, 0)); key(w0.arms[1], "rotation_euler", t_key, (R(-62), 0, 0))
     ev(t_key + 0.05, "click", 0.4, "c9lock")
-    t_op = t_key + 0.7
+    key(w0.arms[1], "rotation_euler", t_key + 0.3, (R(-62), 0, 0)); key(w0.arms[1], "rotation_euler", t_key + 0.6, (R(-20), 0, 0))
+    wk_walk(w0, t_key + 0.4, t_key + 1.0, near, qpos[0], -90.0)
+    t_op = t_key + 1.1
     key(hg, "rotation_euler", -100.0, (0, 0, 0), "CONSTANT"); key(hg, "rotation_euler", t_op, (0, 0, 0)); key(hg, "rotation_euler", t_op + 1.4, (0, 0, R(-94))); ev(t_op, "creak", 0.35, "door")
-    key(w0.arms[1], "rotation_euler", t_op - 0.1, (R(-62), 0, 0)); key(w0.arms[1], "rotation_euler", t_op + 0.3, (R(-10), 0, 0))
-    wk_walk(w0, t_op + 0.6, t_op + 2.4, qpos[0], (X_SIDE - 0.9, DOOR_Y), -90.0)
-    pop_out(w0.root, t_op + 2.45, 0.78, 0.15)
-    wk_walk(wks[1], t_op + 1.4, t_op + 2.6, qpos[1], (qpos[0][0] + 0.1, qpos[0][1] - 0.05), -90.0)
-    wk_walk(wks[2], t_op + 1.7, t_op + 2.9, qpos[2], (qpos[1][0], qpos[1][1]), -90.0)
-    # まるロボと門番さんは、裏口の横で見ている（38-06 のカットの替わり目で置き直す）
-    key(gk.root, "location", -100.0, tuple(gk.root.location), "CONSTANT"); key(gk.root, "location", t6 - 0.12, (X_SIDE + 2.7, DOOR_Y + 1.7, 0.0), "CONSTANT")
-    key(gk.root, "rotation_euler", t6 - 0.12, (0, 0, R(-60)), "CONSTANT")
-    M.at(t6 - 0.12, loc=(X_SIDE + 2.0, DOOR_Y + 1.5, 0.0), face=-57.0, interp="CONSTANT")
+    t_in = t_op + 1.5
+    wk_walk(w0, t_in, t_in + 0.6, qpos[0], (X_SIDE + 0.75, DOOR_Y + 0.1), -90.0)
+    wk_walk(w0, t_in + 0.6, t_in + 1.6, (X_SIDE + 0.75, DOOR_Y + 0.1), (X_SIDE - 0.9, DOOR_Y + 0.1), -90.0)
+    pop_out(w0.root, t_in + 1.65, 0.7, 0.15)
+    wk_walk(wks[1], t_in + 0.7, t_in + 1.6, qpos[1], qpos[0], -90.0)                     # 次の人が 1 つ前へ
+    wk_walk(wks[2], t_in + 0.9, t_in + 1.8, qpos[2], qpos[1], -90.0)
+    # まるロボと門番さんは、並んだ人のうしろ（+y）で見ている（38-06 のカットの替わり目で置き直す）
+    key(gk.root, "location", -100.0, tuple(gk.root.location), "CONSTANT"); key(gk.root, "location", t6 - 0.12, (X_SIDE + 2.9, DOOR_Y + 3.0, 0.0), "CONSTANT")
+    key(gk.root, "rotation_euler", t6 - 0.12, (0, 0, R(-45)), "CONSTANT")
+    M.at(t6 - 0.12, loc=(X_SIDE + 2.1, DOOR_Y + 2.7, 0.0), face=-39.0, interp="CONSTANT")
     M.nod(wv("38-06", "守る") - 0.1)
     return C_, M
 
@@ -326,6 +336,6 @@ CUTS9 = [
     ("B38a", b_castle9, s("38-01"), C((-2.4, -8.0, 1.8), (0.6, -1.0, 1.2), 28), "B"),                                       # 正面の引き：門番さんとまるロボ
     ("C38b", b_castle9, s("38-02") - 0.9, C((DX + 1.4, DOOR_Y + 1.1, 1.0), (DX + 0.1, DOOR_Y + 0.38, 0.72), 34, (DX + 1.2, DOOR_Y + 0.95, 0.95), (DX + 0.1, DOOR_Y + 0.38, 0.7), 34, d=e("38-03") + 1.4 - s("38-02")), "B"),   # 裏口の錠の寄り（38-03 まで。一覧①）
     ("I38d", b_isle, s("38-04") - 0.8, C((0.9, -7.8, 4.5), (0.9, 0.0, 1.0), 30, (0.9, -7.2, 4.1), (0.9, 0.0, 1.0), 30, d=e("38-05") + 1.4 - s("38-04")), "I"),   # お城と島の引き（38-05 まで。一覧③）
-    ("C38f", b_castle9, s("38-06") - 0.8, C((DX + 6.0, DOOR_Y - 2.6, 1.0), (DX + 0.9, DOOR_Y + 0.15, 1.35), 28), "B"),       # 裏口の斜め前の引き：働く人 3 人・まるロボと門番さん（一覧④。点検：一覧が手前の人の頭にかかった → 低い所から、頭が画面のまん中の高さに来るように）
+    ("C38f", b_castle9, s("38-06") - 0.8, C((DX + 6.6, DOOR_Y - 2.2, 1.0), (DX + 1.0, DOOR_Y + 0.9, 1.3), 26), "B"),       # 裏口の斜め前の引き：働く人 3 人・まるロボと門番さん（一覧④。点検：一覧が手前の人の頭にかかった → 低い所から、頭が画面のまん中の高さに来るように）
     ("H38g", b_ring9, s("38-07"), C((0.0, -0.5, 14.0), (0.0, 0.0, 0.0), 30), "H"),                                          # 真上の引き（H35b の終わりと同じ）
 ]
