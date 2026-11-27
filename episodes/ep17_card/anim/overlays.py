@@ -111,9 +111,9 @@ def ev_list():
     #   v9 の点検：前の小窓が次の小窓より先にうすく消えて、替わり目がちらついた → 前の小窓を 0.3 秒重ねて残す（あとの小窓が上に描かれる）
     add(s("29-01") + 0.05, s("29-02") + 0.3, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.0))                    # 冒頭：カードを金庫にしまう
     add(s("29-02"), s("29-03") + 0.3, "pip_clip", dict(clip="A12c", src_t=250.2, nopop=True))                           # 2章：数字のタイルの列（決まり）
-    add(s("29-03"), wp("29-03", "当てて") + 0.05, "pip_clip", dict(clip="B15d", src_t=382.3, nopop=True, bright=2.4))   # 3章：機械が番号の札を次々に作る
-    add(wp("29-03", "当てて") - 0.25, e("29-03") + 0.3, "pip_clip", dict(clip="C17f", src_t=503.55, nopop=True))   # 3章：「ピンポン」（「当てて」の言葉で画面が緑）
-    add(wp("29-05", "知らせ") - 0.1, e("29-05") + 0.3, "pip_clip", dict(clip="C26i", src_t=794.4))          # 5章：スマホに本人かをたずねる知らせ
+    add(s("29-03"), wp("29-03", "当てて") + 0.3, "pip_clip", dict(clip="B15h", src_t=403.6, nopop=True, bright=1.3))      # 3章：機械が作った番号の札の山（v9 の確認役：暗い部屋の機械の絵は何か分からなかった。「試し」から「当てて」は 0.8 秒で、間にもう 1 つは読めない）
+    add(wp("29-03", "当てて"), e("29-03") + 0.3, "pip_clip", dict(clip="C17h", src_t=505.2, nopop=True, crop=(0.2, 0.05, 0.95, 0.8)))   # 3章：「ピンポン」（画面の緑に寄る）
+    add(wp("29-05", "知らせ") - 0.1, e("29-05") + 0.3, "pip_clip", dict(clip="C26i", src_t=795.3, crop=(0.22, 0.0, 0.82, 0.6)))   # 5章：スマホに本人かをたずねる知らせ（v9 の確認役：部屋と白い板に見えた → スマホの所だけ切り出す）
     add(wp("31-01", "会社") - 0.1, e("31-01") + 2.5, "tag", dict(text="会社から盗まれる話 → 概要欄", pos=(640, 64), size=44, bg=WHITE))
     # v1 のコメント「シーン変わる前にはてな出してるからすぐ位置が移動してるの気になる」：物について動く札（吹き出し・札・輪）は、
     #   カメラの替わり目（重なるつなぎ 0.35〜0.6 秒）が終わってから出す。替わり目をまたぐ札は、替わり目のあとにずらす
@@ -1019,6 +1019,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             if p.get("fade") and t >= p["fade"][0]: a *= max(0.0, 1.0 - (t - p["fade"][0]) / p["fade"][1])   # 5章 27-02「小窓の金庫がうすくなる」：ゆっくり消える
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
+            if p.get("crop"):                   # まとめ 29-05：小窓の中で物が小さいときは、その所だけ切り出す（16:9 のまま）
+                cx0, cy0, cx1, cy1 = p["crop"]; im = im.crop((int(cx0 * im.width), int(cy0 * im.height), int(cx1 * im.width), int(cy1 * im.height)))
             if p.get("bright"):                 # 暗い部屋の小窓（まとめ 29-03）：青っぽくすると機械が見えなかった → 先に明るくする
                 from PIL import ImageEnhance
                 im = ImageEnhance.Brightness(im).enhance(p["bright"])

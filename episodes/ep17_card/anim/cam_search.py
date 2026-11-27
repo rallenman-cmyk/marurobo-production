@@ -39,3 +39,19 @@ def search(need, maru, lens_pt=None, pip=False, list_yb=None, mtop=None, mbot=No
                 res.append((round(spread + h, 3), c, tuple(round(v, 2) for v in t), L))
     res.sort(reverse=True)
     return res
+
+
+# v9 の点検で足した：カメラのうしろの点・帽子かけの棒（0.12, 1.32）がまるロボの前に入るカメラを外す
+RACK_XY = (0.12, 1.32)
+
+
+def front_ok(c, t, pts):
+    f = [t[i] - c[i] for i in range(3)]
+    return all(sum((p[i] - c[i]) * f[i] for i in range(3)) > 0.2 for p in pts.values())
+
+
+def clear_of(c, p, q=RACK_XY, r=0.18):
+    """カメラ c から点 p への線（上から見て）が、q から r より離れている"""
+    ax, ay = p[0] - c[0], p[1] - c[1]; L2 = ax * ax + ay * ay
+    u = max(0.0, min(1.0, ((q[0] - c[0]) * ax + (q[1] - c[1]) * ay) / L2))
+    return math.hypot(c[0] + ax * u - q[0], c[1] + ay * u - q[1]) > r

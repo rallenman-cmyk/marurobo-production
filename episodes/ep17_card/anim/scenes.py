@@ -1242,7 +1242,7 @@ FLAT30 = (2.55, 1.45, 0.0)        # たたんだ段ボールを置く所（窓�
 def b_house29(cl):
     """S29（家・昼）：まとめ。小さな金庫の前 → 小窓（2D）で前の場面を指す → スマホの前へ → 窓の外の塔 → 床のスマホ（設定が全部緑）→ 引きでうなずく"""
     sf, tr, tb = _house_common()
-    ph, scr = phone_seq(PH, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=1.6); track("phone", ph, 0.0)
+    ph, scr = phone_seq(PH, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=2.6); track("phone", ph, 0.0)
     M = MaruR(SAFE_FRONT, face=180.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)
     hat_on_maru(M, -50.0)
     M.at(s("29-01") + 0.2, look=6)                                    # 金庫を見る
@@ -1258,7 +1258,7 @@ def b_house30(cl):
     """S30 前半（家・昼）：オチ。数日後、まるロボ（頭にカード）が大きな段ボール箱を押してくる → 少し下がる → ふたがぱかっと開いて、中が光る"""
     sf, tr, tb = _house_common()
     tr["root"].location = (-0.4, 1.9, 0.0)                            # ゴミ箱は机の左へ（箱の置き場所をあける）
-    ph, scr = phone_seq(PH30, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=1.6); track("phone", ph, 0.0)
+    ph, scr = phone_seq(PH30, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=2.6); track("phone", ph, 0.0)
     bx = cardboard_box(BOX0); track("box", bx["root"], 0.4)
     bs = big_safe((0.0, 0.0, 0.0), 0.0); bs["root"].parent = bx["root"]
     M = MaruR((BOX0[0], BOX0[1] - PUSH_OFF, 0.0), face=180.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)
@@ -1276,7 +1276,7 @@ def b_house30(cl):
     box_flaps_open(bx, t_fl); ev(t_fl, "paper", 0.35, "box")
     bpy.ops.object.light_add(type='POINT', location=(0, 0, BOX_H * 0.9)); gl = bpy.context.object; gl.parent = bx["root"]
     gl.data.color = (1.0, 0.95, 0.8); gl.data.shadow_soft_size = 0.2
-    gl.data.energy = 0.0; gl.data.keyframe_insert("energy", frame=f(t_fl + 0.2)); gl.data.energy = 70.0; gl.data.keyframe_insert("energy", frame=f(t_fl + 0.8))
+    gl.data.energy = 0.0; gl.data.keyframe_insert("energy", frame=f(t_fl + 0.2)); gl.data.energy = 150.0; gl.data.keyframe_insert("energy", frame=f(t_fl + 0.8))
     ev(t_fl + 0.4, "shimmer", 0.3, "box")
 
 
@@ -1284,7 +1284,7 @@ def b_house30r(cl):
     """S30 後半〜S31（家・昼）：（カットが替わって少し後）箱はたたんで窓のかべの手前。大きな金庫 → カードをしまってダイヤル → 得意顔 → がくっ → 床のスマホの設定を見て、うなずく"""
     sf, tr, tb = _house_common()
     tr["root"].location = (-0.4, 1.9, 0.0)
-    ph, scr = phone_seq(PH30, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=1.6); track("phone", ph, 0.0)
+    ph, scr = phone_seq(PH30, 90.0, [(0.0, os.path.join(TEX, "ph_set_on.png"))], glow=2.6); track("phone", ph, 0.0)
     flat_boxes(FLAT30, 8.0)
     bs = big_safe(BOX1, 0.0); track("bigsafe", bs["root"], 0.36); track("bigsafe_in", bs["shelf"], 0.0)
     M = MaruR(STAND30, face=150.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)   # 大きな金庫の方を向く（135 度では目のふちが先にとびらに当たり、頭がダイヤルに届かなかった → 150 度）
@@ -1296,8 +1296,8 @@ def b_house30r(cl):
     ev(s("30-03") + 0.1, "shimmer", 0.35, "bigsafe")
     M.hops(wp("30-03", "大きな") + 0.2, n=2); ev(wp("30-03", "大きな") + 0.2, "beep_happy", 0.4, "maru_c")
     # 30-04：とびらが開く（95 度）→ 頭のカードが棚へ → 閉まる → 2 回跳んでダイヤルの前へ → 頭を押し当てて回す → 下がって胸を張る
-    t_do = s("30-04") - 0.9
-    safe_open(bs, t_do, 0.6, deg=-95); ev(t_do, "click", 0.4, "bigsafe"); ev(t_do + 0.15, "creak_s", 0.3, "bigsafe")
+    t_do = s("30-04") - 1.1
+    safe_open(bs, t_do, 0.9, deg=-95); ev(t_do, "click", 0.4, "bigsafe"); ev(t_do + 0.15, "creak_s", 0.3, "bigsafe")
     sh_w = (BOX1[0], BOX1[1] - 0.02 * 1.45, (SAFE_H * 0.42 + 0.012) * 1.45)
     hp_ = (STAND30[0], STAND30[1], 0.50)
     cfly = card_obj((0, 0, 0), (0, 0, R(90))); track("cardfly", cfly, 0.0)
@@ -1314,7 +1314,7 @@ def b_house30r(cl):
     safe_dial(bs, t_dl + 0.05, 1.05, 0.9); ev(t_dl + 0.05, "dial", 0.35, "bigsafe")
     t_pr = wp("30-04", "すっかり") + 0.1                          # 「すっかり得意顔」
     M.backstep(t_pr - 0.1, 0.25)
-    M.lean(t_pr + 0.4, t_pr + 0.8, -12.0, hold=4.0); M.glow(t_pr + 0.4, 1.25); ev(t_pr + 0.4, "beep_happy", 0.4, "maru_c")
+    M.lean(t_pr + 0.4, t_pr + 0.8, -20.0, hold=4.0); M.glow(t_pr + 0.4, 1.25); ev(t_pr + 0.4, "beep_happy", 0.4, "maru_c")
     # 30-06：がくっ（前へ傾き、目の光が下がる）
     t_g = wp("30-06", "変わり") + 0.1
     M.glow(t_g - 0.4, 0.9); M.lean(t_g, t_g + 0.3, 22.0, hold=1.0); M.glow(t_g, 0.35, 0.3)   # v9 の点検：14 度では、がくっが分からなかった
@@ -1526,17 +1526,17 @@ CUTS = [
     ("A28h", b_house28, s("28-09"), C((0.6, 0.5, 0.3), (1.9, 1.2, 0.4), 20), "A"),
     # まとめ（S29）
     # カメラは cam_search.py の計算（小窓をよける・家具の中に入らない・0.95 m 以上・顔が見える向き）で決めた
-    ("A29", b_house29, s("29-01") - 0.5, C((2.4, 1.45, 0.6), (1.0, 1.3, 0.35), 26), "A"),
+    ("A29", b_house29, s("29-01") - 0.5, C((-0.15, 2.1, 0.7), (1.16, 1.24, 0.18), 28), "A"),
     ("A29b", b_house29, s("29-02"), C((0.0, 1.8, 0.45), (0.88, 1.18, 0.34), 28), "A"),
     ("A29c", b_house29, s("29-03"), C((1.5, 0.0, 1.0), (0.98, 0.67, 0.51), 30), "A"),
-    ("A29d", b_house29, s("29-04"), C((-0.3, 0.8, 0.8), (2.2, 0.2, 0.6), 18), "A"),   # まるロボのうしろから。窓の外の塔が窓わくの中に入る所（塔への線が x=3 で窓の穴を通る）
+    ("A29d", b_house29, s("29-04"), C((-0.6, 0.9, 0.45), (3.5, -0.3, 0.6), 30), "A"),   # まるロボのうしろから。窓の外の塔が窓わくの中に入る所（塔への線が x=3 で窓の穴を通る）
     ("A29e", b_house29, s("29-05"), C((2.3, 0.3, 0.7), (1.3, 0.98, 0.2), 22), "A"),   # まるロボの前から。床のスマホが字幕の帯より上に入る
     ("A29f", b_house29, s("29-06"), C((-1.0, -0.9, 1.25), (1.9, 0.5, 0.6), 24), "A"),
     # オチ（S30〜S31）
-    ("A30", b_house30, s("30-01") - 0.5, C((-0.25, 0.45, 0.75), (1.75, 0.85, 0.4), 26), "A"),
-    ("A30b", b_house30, s("30-02"), C((0.9, -0.4, 1.5), (1.72, 1.2, 0.55), 26), "A"),   # v9 の点検：低いカメラでは、ふたが画面の上で切れ、中の光が見えなかった → 上から
-    ("A30c", b_house30r, s("30-03") - 0.3, C((1.8, 0.0, 0.45), (1.27, 1.25, 0.22), 20), "A"),
-    ("A30d", b_house30r, s("30-04") - 1.0, C((0.35, -0.45, 0.8), (1.55, 1.0, 0.4), 26), "A"),
+    ("A30", b_house30, s("30-01") - 0.5, C((0.4, -0.6, 1.1), (1.75, 0.75, 0.15), 24), "A"),
+    ("A30b", b_house30, s("30-02"), C((0.7, -0.9, 1.6), (1.72, 1.1, 0.25), 24), "A"),   # v9 の点検：低いカメラでは、ふたが画面の上で切れ、中の光が見えなかった → 上から
+    ("A30c", b_house30r, s("30-03") - 0.3, C((0.9, -1.6, 0.9), (1.35, 1.45, 0.25), 28), "A"),
+    ("A30d", b_house30r, s("30-04") - 1.25, C((0.4, -0.35, 0.8), (1.6, 1.15, 0.45), 40), "A"),
     ("A30d2", b_house30r, wp("30-04", "ダイヤル") + 0.55, C((2.7, 0.6, 0.8), (1.5, 0.83, 0.29), 28), "A"),   # ダイヤルに頭を押し当てる顔（とびらは閉まり終わる所）
     ("A30e", b_house30r, s("30-05") - 0.3, C((2.4, 0.9, 0.6), (1.53, 0.5, 0.31), 30), "A"),
     ("A31", b_house30r, wp("30-06", "変わり") + 1.4, C((-0.6, -1.4, 1.3), (1.4, 0.9, 0.4), 28), "A"),   # がくっのあと、スマホの方へ向き直る所から引きで（アップのままだと背中が 1.5 秒続いた）
