@@ -84,6 +84,10 @@ class MaruR:
         """一覧の部品をそのまま呼ぶ（roll_over・get_up・tumble_back・awe・think など）"""
         self.cmds.append((t, kind, kw))
 
+    def backstep(self, t, dist):
+        """後ずさりで、向きを変えずに、いまの所から dist m 後ろへ下がる（16本目 maru16 から。17本目 v7 のコメント：押したあと戻るのに、うしろを向いて歩いていた）"""
+        self.cmds.append((t, "back", dict(d=dist)))
+
     def hops(self, t, n=2, height=0.12, sound=True): self.cmds.append((t, "hops", dict(n=n, height=height, sound=sound)))
     def push(self, t, d=0.3): self.cmds.append((t, "push", dict(d=d)))
 
@@ -168,6 +172,8 @@ class MaruR:
             elif kind == "hops":
                 self._wait_to(p, t - 0.3, nm); t_ = p.t; p.hops(n=a["n"], height=a["height"])
                 if not a["sound"]: self.silent.append((t_, p.t))
+            elif kind == "back":
+                self._wait_to(p, t, nm); tgt = tuple(p._p[:2] - mm.fwd(p._psi)[:2] * (a["d"] / self.s)); p.back_to(tgt, look=False)
             elif kind == "push":                           # 前へ体重をかけて押す（ぐっ）
                 p.layer(t, t + a["d"] + 0.2, lambda u, t0=t, d=a["d"]: {"pitch": 22.0 * mm.hump(u, t0, d)})
             elif kind == "face":

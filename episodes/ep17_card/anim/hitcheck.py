@@ -56,8 +56,14 @@ for k in range(sc.frame_start, sc.frame_end + 1, max(1, FPS // 10)):
             slo = Vector([min(c[i] for c in bb) for i in range(3)]); shi = Vector([max(c[i] for c in bb) for i in range(3)])
             if any(hi[i] < slo[i] or lo[i] > shi[i] for i in range(3)): continue
             inv = s.matrix_world.inverted(); hit = 0
+            thin = min(s.dimensions) < 0.06          # 17本目 v7 のコメント「スマホに貫通」：厚さ 3 cm の板は、中に 2 cm 入る所がなく、突き抜けても 0 だった → うすい物は、板の中に入った点を数える
+            if thin:
+                blo = Vector([min(c[i] for c in s.bound_box) for i in range(3)]); bhi = Vector([max(c[i] for c in s.bound_box) for i in range(3)])
             for p in pts:
                 lp = inv @ p
+                if thin:
+                    if all(blo[i] + 0.003 < lp[i] < bhi[i] - 0.003 for i in range(3)): hit += 1
+                    continue
                 ok_, loc_, nor_, _ = s.closest_point_on_mesh(lp)
                 if not ok_: continue
                 d = (loc_ - lp)
