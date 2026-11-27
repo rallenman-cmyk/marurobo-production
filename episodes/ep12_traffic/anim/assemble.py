@@ -342,7 +342,7 @@ for (t, kind), gain in sorted(EV.items()):
     if kind in SHIFT and (round(t, 2), kind) not in SRC3D and voiced(t, t + dur):
         best = None
         win = 0.9 if kind in ("pipi", "click") else 0.5     # 返事の「ピッ、ピッ」・バンパーのカチッは、言葉の「……」の間まで探す
-        for d_ in np.arange(-min(win, 0.15), win + 0.01, 0.02):     # 12本目 v1 の点検：札より 0.3〜0.5 秒早く鳴っていた → 前へは 0.15 秒まで
+        for d_ in np.arange(-min(win, 0.15), (win if kind in ("pipi", "click") else 0.2) + 0.01, 0.02):     # 12本目 v1 の点検（3 回目のあと）：02-01 の輪の「ピ」が輪より 0.31 秒遅れた → うしろへも 0.2 秒まで     # 12本目 v1 の点検：札より 0.3〜0.5 秒早く鳴っていた → 前へは 0.15 秒まで
             if any(k2 == kind and abs(t2 - (t + d_)) < 0.2 for t2, k2 in placed): continue   # 同じ音が重なる所へは動かさない（「橋」「トンネル」の音が同じ時刻に寄った）
             if not voiced(t + d_, t + d_ + dur) and (best is None or abs(d_) < abs(best)): best = d_
         if best is not None: moves.append((round(t, 2), kind, round(best, 2))); t += best
