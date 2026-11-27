@@ -212,7 +212,7 @@ def frame(nm, t):
 VOICE_DB = -24.0; FX_GAIN = 0.5; TYPE_GAIN = 0.35
 
 
-HARD_CUT = {"A04e"}
+HARD_CUT = {"A04e", "B05f", "C10d"}   # B05f・C10d：（v1 の確認役 3 回目）同じまるロボを別の向きから撮った 2 つのカットが溶けて重なり、2 体に見えた
 
 
 def active(t):

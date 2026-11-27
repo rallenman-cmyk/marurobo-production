@@ -248,7 +248,7 @@ def overpass(x=0.0, h=5.0, span=ROAD_W + 2 * SIDEWALK + 2.0, w=2.6):
         cube(railm, (xx, 0, h + 1.05), (0.07, span + 8.0, 0.07))
         cube(railm, (xx, 0, h + 0.12), (0.07, span + 8.0, 0.05))
         # v1 の確認役：格子の棒が、まるロボの顔の前に何本もかかった（5 か所）→ うすいガラスの板と、1.6 m ごとの柱
-        cube(mat("rail_glass", "#BFD9E6", rough=0.05, alpha=0.12), (xx, 0, h + 0.58), (0.02, span + 8.0, 0.88))
+        cube(mat("rail_glass", "#BFD9E6", rough=0.05, alpha=0.06), (xx, 0, h + 0.58), (0.02, span + 8.0, 0.88))
         y = -(span + 8.0) / 2
         while y < (span + 8.0) / 2:
             cube(railm, (xx, y, h + 0.58), (0.05, 0.05, 0.95)); y += 1.6

@@ -29,7 +29,7 @@ def ev_list():
     add(wp("02-04", "首を") - 0.2, e("02-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     add(s("03-04") + 0.05, s("04-01") - 0.05, "pair", dict(left=("TEX:ph_map_alert", 0), right=("A03b", e("03-02") - 0.3),
         cap=("地図の赤い線", "本当の車の列")))   # 消すのは次のカットに替わる所（e+0.4 で消すと、後ろの似た列の絵が 0.5 秒だけ見えてから替わった。v1 点検）
-    add(e("04-03") - 0.6, e("04-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))   # v1 の確認役：「？」が首をかしげる音より 2.6 秒早かった → かしげる時刻に
+    add(wp("04-03", "測って") - 0.2, e("04-03") + 0.3, "bubble", dict(obj="maru_top", icon="?"))   # v1 の確認役：「？」が首をかしげる音より 2.6 秒早かった → かしげる時刻に
     add(wp("04-06", "細い道") - 0.1, e("04-06") + 0.3, "ring", dict(obj="ph_far", r=50, col=YEL))
     add(wp("04-07", "120万") - 0.1, e("04-07") + 0.4, "tag", dict(text="120万km以上", pos=(640, 92), size=64, bg=WHITE))
     add(wp("04-07", "地球") - 0.1, e("04-07") + 0.4, "tag", dict(text="地球 約30周", pos=(640, 196), size=64, bg=YEL))
@@ -38,7 +38,7 @@ def ev_list():
     add(wp("04-10", "どうして") - 0.1, e("04-10") + 0.5, "tag", dict(text="なぜ先まで分かる？", pos=(940, 110), size=56, bg=YEL))
     add(e("04-10") - 0.6, s("04-11") - 0.1, "title", {})   # 次の文（04-11）の字幕に残っていた（v1 点検）。次の声の前に消す
     # 1章
-    add(s("06-04") + 0.2, e("06-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    add(wp("06-04", "何が") - 0.2, e("06-04") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
     # 2章
     add(s("07-02") + 0.1, e("07-02") + 0.3, "ring", dict(obj="sensor", r=60, col=YEL))
     add(wp("07-03", "感知器") - 0.1, e("07-03") + 0.4, "tag", dict(text="感知器", obj="sensor", dy=-120, size=56, bg=WAVE))

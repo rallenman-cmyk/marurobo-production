@@ -207,8 +207,8 @@ class MaruR:
                 t0_, h_, dg_ = t, a["hold"], a["deg"]
                 p.layer(t0_, t0_ + h_ + 1.0, lambda u, t0_=t0_, h_=h_, dg_=dg_: {
                     "roll": dg_ * mm.env(u, t0_, 0.35, h_, 0.5), "twist": 8.0 * mm.env(u, t0_, 0.35, h_, 0.5),
-                    "gaze_pitch": 12.0 * mm.env(u, t0_, 0.2, h_, 0.5)})
-                p.blinks.append(t0_ + 0.7)
+                    "gaze_pitch": 26.0 * mm.env(u, t0_, 0.2, h_, 0.5), "gaze_yaw": -20.0 * mm.env(u, t0_, 0.2, h_, 0.5)})
+                # （v1 の確認役 3 回目）球は傾けても見た目が変わらず、アンテナだけでは「首をかしげた」に見えなかった → 目を斜め上へ寄せる。まばたき（瞳が点になる）は驚いた顔に見えたので外した
                 if a.get("sound", True): p.event(t0_ + 0.3, "beep_question", 1.0)
             elif kind == "lookyaw":                        # 右・左を見る（胴をひねり、目が先に行く）→ 戻す
                 t0_, d_, y_, pt_ = t, a["d"], a["yaw"], a["pitch"]
@@ -219,7 +219,7 @@ class MaruR:
                 t0_, t1_, per_ = t, a["t1"], a["period"]
                 p.layer(t0_, t1_ + 0.4, lambda u, t0_=t0_, t1_=t1_, per_=per_: (lambda w, k: {
                     "gaze_yaw": 30.0 * math.sin(w) * k, "gaze_pitch": 30.0 * math.cos(w) * k,
-                    "roll": 14.0 * math.sin(w) * k, "pitch": 9.0 * math.cos(w) * k, "iris": -0.12 * k})(
+                    "roll": 22.0 * math.sin(w) * k, "pitch": 14.0 * math.cos(w) * k, "iris": -0.12 * k})(
                     2 * math.pi * (u - t0_) / per_, mm.env(u, t0_, 0.2, max(0.01, t1_ - t0_ - 0.4), 0.3)))
             elif kind == "droop":                          # しょんぼり：前へ傾き、少し沈み、目線を下げ、アンテナと目の光が下がる
                 t0_, t1_ = t, a["t1"]
