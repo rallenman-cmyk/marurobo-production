@@ -224,6 +224,203 @@ def MFACE(head_deg):
 MFACE_OFF = float(os.environ.get("MFACE_OFF", "0"))
 
 
+# ======================================================================== A2：3章の夕方の渋滞（列がのろのろ進む）と、D：空の地図・光る点（S11〜S16）
+SKY_H = 18.0                  # 空の地図の高さ（道の真上）
+Y_OWN3 = 40.0                 # 3章のおじさんの車の、列の中の場所（前に 12 台・後ろに 4 台）
+V_Q = 0.4                     # 列の平均の速さ（m/秒）。止まっては少し進む
+PT_LAT = 0.6                  # 点を道のまん中へ寄せる割合（地図の線は道のまん中に 1 本）
+SKY_NEUTRAL = "#CFD9E6"
+
+
+def q_off(t):
+    """列の進んだ距離（3章のはじめから）。速さは V_Q*(1-0.8cos) で、止まりかけては進む"""
+    u = max(0.0, t - (s("11-01") - 3.0)); P_ = 9.0
+    return V_Q * (u - 0.8 * P_ / (2 * math.pi) * math.sin(2 * math.pi * u / P_))
+
+
+def own3(t):
+    return (-LANE_Y, Y_OWN3 + q_off(t), SKY_H)
+
+
+def own_pt3(t):
+    """おじさんの車の点（空の地図の上）の世界の場所"""
+    return (-LANE_Y * (1 - PT_LAT), Y_OWN3 + q_off(t), SKY_H)
+
+
+def sky_point(car_obj, t_rise, lat, col="#FFFFFF", r=0.9, d=2.5, t_hide=None, name="pt", z=None):
+    """車の点：車の中のスマホの所から、真上の空の地図の高さへ上がり、そのあとは車について動く（車の子）。lat＝車の左（+y）へのずれ"""
+    p_ = sphere(glow_mat(name, col, 5.0), (0.4, 0.0, 1.2), r, seg=12, parent=car_obj)
+    hide_key(p_, -100.0, True); hide_key(p_, t_rise, False)
+    if t_hide is not None: hide_key(p_, t_hide, True)
+    key(p_, "location", t_rise, (0.4, 0.0, 1.2)); key(p_, "location", t_rise + d, (0.0, lat, SKY_H if z is None else z))
+    pop_in(p_, t_rise, 1.0, 0.25)
+    return p_
+
+
+def sky_line(p0, p1, w, states, name="sl", z=SKY_H, th=0.35):
+    """空の地図の 1 本の線。states＝[(時刻, 色)]（最初の時刻から見える）。色の替わる所で、見える物を替える"""
+    cx, cy = (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2
+    sx = abs(p1[0] - p0[0]) + (w if p0[0] == p1[0] else 0.0); sy = abs(p1[1] - p0[1]) + (w if p0[1] == p1[1] else 0.0)
+    obs = []
+    for i_, (t_, col) in enumerate(states):
+        o_ = cube(glow_mat("%s_%s" % (name, col), col, 1.4 if col == SKY_NEUTRAL else 3.0), (cx, cy, z), (sx, sy, th))
+        t_end = states[i_ + 1][0] if i_ + 1 < len(states) else 1e9
+        hide_key(o_, -100.0, True); hide_key(o_, t_, False)
+        if t_end < 1e8: hide_key(o_, t_end, True)
+        obs.append(o_)
+    return obs
+
+
+def drive_set():
+    """冒頭と同じ、夕方の大通りと曲がった先の道（動かない物だけ）"""
+    sky_evening()
+    road_strip((-340.0, 80.0), 420.0, "x", gaps=[(+1, -ROAD_W / 2, ROAD_W / 2)])
+    road_strip((ROAD_W / 2, 200.0), 200.0, "y")
+    cube(_m("ground_a", "#ADA69A", rough=0.9), (-130.0, 60.0, -0.06), (500.0, 400.0, 0.1))
+    for sg in (-1, 1):
+        cube(_m("corner_a", "#B4ADA1", rough=0.85), (sg * (ROAD_W / 2 + SIDEWALK / 2 + 0.15), ROAD_W / 2 + SIDEWALK / 2 + 0.15, 0.0735), (SIDEWALK + 0.3, SIDEWALK + 0.3, 0.147))
+    city_side(-340.0, -ROAD_W / 2 - SIDEWALK - 4.0, ROAD_W / 2 + SIDEWALK + 0.3, +1, seed=1)
+    city_side(-340.0, 80.0, ROAD_W / 2 + SIDEWALK + 0.3, -1, seed=2)
+    city_side(ROAD_W / 2 + SIDEWALK + 4.0, 80.0, ROAD_W / 2 + SIDEWALK + 0.3, +1, seed=3)
+    city_side(ROAD_W / 2 + SIDEWALK + 4.0, 200.0, ROAD_W / 2 + SIDEWALK + 0.3, -1, seed=4, axis="y")
+    city_side(ROAD_W / 2 + SIDEWALK + 4.0, 200.0, ROAD_W / 2 + SIDEWALK + 0.3, +1, seed=5, axis="y")
+
+
+def b_jam(par):
+    """3章：冒頭と同じ所の渋滞（列はのろのろ進む）。車のスマホから点が上がり、空の地図に集まる。道の色が変わる"""
+    drive_set()
+    T_BEG = s("11-01") - 3.0; T_END = e("16-02") + 3.0
+    t_up = s("12-02") + 0.2                    # まわりの車の点が上がりはじめる
+    t_map = wp("12-03", "空へ") - 0.3             # 空の地図が出る
+    rnd = random.Random(77)
+    PTS = []
+    # ---------------------------------------------------------------- 大通り：右の車線は 10 m/秒。左の車線は角の手前 50 m で 4 m/秒（冒頭の地図の黄色）
+    def pt_rise(ta):
+        return max(ta + 0.3, t_up + rnd.uniform(0.0, 5.0))
+    for (c_, ta, tb, ly, dr) in traffic([(LANE * 0.5, +1)], T_BEG, T_END, -360.0, 100.0, 10.0, 3.6, seed=31):
+        PTS.append(sky_point(c_, pt_rise(ta), -PT_LAT * ly, t_hide=tb))
+    for (c_, ta, tb, ly, dr) in traffic([(-LANE * 0.5, -1), (-LANE * 1.5, -1)], T_BEG, T_END, -360.0, 100.0, 10.0, 3.4, seed=32):
+        PTS.append(sky_point(c_, pt_rise(ta), PT_LAT * ly, t_hide=tb))
+    t = T_BEG - 46.0
+    while t < T_END:
+        c_ = car_fast((0, 0, 0), 0.0, rnd.choice(CAR_COLS), name="slow")
+        t1_ = t + 310.0 / 10.0; t2_ = t1_ + 43.0 / 4.0; t3_ = t2_ + 107.0 / 10.0
+        key(c_, "location", t, (-360.0, LANE_Y, 0), "LINEAR"); key(c_, "location", t1_, (-50.0, LANE_Y, 0), "LINEAR")
+        key(c_, "location", t2_, (-7.0, LANE_Y, 0), "LINEAR"); key(c_, "location", t3_, (100.0, LANE_Y, 0), "LINEAR")
+        hide_key(c_, -100.0, True); hide_key(c_, t, False); hide_key(c_, t3_, True)
+        PTS.append(sky_point(c_, pt_rise(t), -PT_LAT * LANE_Y, t_hide=t3_))
+        t += 3.2 * rnd.uniform(0.8, 1.3)
+    # ---------------------------------------------------------------- 曲がった先の道：両方向とも列（のろのろ）
+    Q = []
+    for k in range(-4, 13):
+        if k != 0: Q.append((-LANE_Y, Y_OWN3 + 5.6 * k, +1, CAR_COLS[(k + 9) % len(CAR_COLS)]))
+        Q.append((-LANE * 0.5, Y_OWN3 + 2.5 + 5.9 * k, +1, CAR_COLS[(k + 13) % len(CAR_COLS)]))
+    for k in range(18):
+        Q.append((LANE * 0.5, 78.0 + 5.8 * k, -1, CAR_COLS[(k + 2) % len(CAR_COLS)]))
+        Q.append((LANE_Y, 80.5 + 6.1 * k, -1, CAR_COLS[(k + 6) % len(CAR_COLS)]))
+    for (lx, y0, dr, col) in Q:
+        c_ = car_fast((lx, y0, 0.0), 90.0 if dr > 0 else -90.0, col, brake=(dr > 0), name="q3")
+        t = T_BEG
+        while t <= T_END:
+            key(c_, "location", t, (lx, y0 + dr * q_off(t) * (1.0 if dr > 0 else 0.8), 0.0), "LINEAR"); t += 0.5
+        # 「前の車からも、後ろの車からも」：おじさんの車に近い順に、0.4 秒ごと
+        near = abs(y0 - Y_OWN3) + (0 if dr > 0 else 30.0)
+        PTS.append(sky_point(c_, t_up + 0.15 + min(near * 0.04, 7.0) + rnd.uniform(0, 0.25), PT_LAT * lx * (1 if dr > 0 else -1)))
+    ev(t_up + 0.2, "pop_s", 0.15, "owncar"); ev(t_up + 0.7, "pop_s", 0.15, "owncar"); ev(t_up + 1.3, "pop_s", 0.15, "owncar"); ev(t_up + 2.0, "pop_s", 0.15, "owncar")
+    # ---------------------------------------------------------------- おじさんの車（列の中ほど）
+    cr = car((0, 0, 0), 0.0, "#7CC6E8", interior=True, name="ojicar"); STAGE["car"] = cr; track("owncar", cr, 1.0); track("car", cr, 1.0)
+    t = T_BEG
+    while t <= T_END:
+        key(cr, "location", t, (-LANE_Y, Y_OWN3 + q_off(t), 0.0), "LINEAR"); key(cr, "rotation_euler", t, (0, 0, R(90.0)), "LINEAR"); t += 1.0 / 6
+    bpy.ops.object.light_add(type='AREA', location=(0.1, 0.1, 1.45)); il = bpy.context.object; il.data.energy = 18.0; il.data.size = 0.9
+    bpy.ops.object.light_add(type='AREA', location=(-0.95, 0.0, 1.35), rotation=(0, R(-80), 0)); il2 = bpy.context.object; il2.data.energy = 45.0; il2.data.size = 1.0
+    il2.data.color = (1.0, 0.92, 0.82); il2.parent = cr; il.data.color = (1.0, 0.93, 0.85); il.parent = cr
+    bpy.ops.object.light_add(type='AREA', location=(PHONE_L[0] - 0.03, 0.0, PHONE_L[2] + 0.02), rotation=(0, R(90), 0)); sl = bpy.context.object
+    sl.data.energy = 6.0; sl.data.size = 0.16; sl.data.color = (0.80, 0.95, 1.0); sl.parent = cr
+    p_, head = ojisan(cr)
+    t = T_BEG; k_ = 0
+    while t < T_END:
+        key(head, "rotation_euler", t, (R(-3 if k_ % 2 else 3), 0, R(2 if k_ % 2 else -2))); t += 0.6; k_ += 1
+    ph, scr = phone_on_holder(cr, [(0.0, os.path.join(TEX, "ph_map_q.png"))]); track("phone", ph, 0.0)
+    track("ph_tri", screen_pt(scr, 0.42, 0.444, "ph_tri"), 0.0)
+    # おじさんの車の点（青緑）：「ぽうっと」で画面から出て、屋根の下まで → 外のカメラに替わる所で屋根の上へ → 空の地図へ
+    ta_ = wp("11-04", "スマホ") - 0.1; tb_ = wp("11-04", "上がって") + 0.3     # 「スマホから」で画面から出て、ゆっくり屋根の下まで（「ぽうっと」と「上がって」は 0.5 秒しか離れていない）
+    op = sphere(glow_mat("pt_own", TEAL_C, 6.0), (PHONE_L[0] - 0.05, 0.0, 1.05), 0.05, seg=16, parent=cr)
+    hide_key(op, -100.0, True); hide_key(op, ta_, False)
+    key(op, "location", ta_, (PHONE_L[0] - 0.05, 0.0, 1.05)); key(op, "location", tb_ - 0.15, (PHONE_L[0] - 0.12, 0.0, 1.33))
+    key(op, "location", tb_ + 0.25, (0.6, 0.0, 2.3)); key(op, "location", tb_ + 3.8, (0.0, PT_LAT * LANE_Y, SKY_H))
+    key(op, "scale", -100.0, (0.001, 0.001, 0.001), "CONSTANT"); key(op, "scale", ta_, (0.001, 0.001, 0.001)); key(op, "scale", ta_ + 0.5, (1.0, 1.0, 1.0))
+    key(op, "scale", tb_ - 0.15, (1.0, 1.0, 1.0)); key(op, "scale", tb_ + 2.5, (22.0, 22.0, 22.0))      # 空では、ほかの点より少し大きく（半径 1.1 m）
+    track("ownpt", op, 0.0)
+    ev(ta_ + 0.1, "float", 0.3, "phone"); ev(tb_ + 0.3, "float", 0.25, "owncar")
+    # ---------------------------------------------------------------- まるロボ：助手席。12-01 で左の窓へ寄り、見上げる
+    lp = (PASS[0] + 0.02, PASS[1], BOOST)
+    def cpt(t, extra=0.0):
+        x, y, _ = own3(t); return (x - lp[1] - extra, y + lp[0], lp[2])      # 車は +y 向き：車の前＝+y・左＝−x
+    t_win = s("12-01") + 0.2
+    def win_ext(t):
+        u = min(1.0, max(0.0, (t - t_win) / 0.8)); return 0.13 * (u * u * (3 - 2 * u))
+    p0 = cpt(T_BEG)
+    M = MaruR(p0, face=MFACE(90.0), s=MS); track("maru", M.body, 0.28); track("maru_top", M.body, 0.34)
+    M.carry(T_BEG, T_END, lambda t, p0=p0: tuple(a - b for a, b in zip(cpt(t, win_ext(t)), p0)))
+    M.at(s("11-02") + 0.3, face=MFACE(90.0 - 20.0))                  # スマホの方を見る
+    M.at(t_win, face=MFACE(180.0)); M.at(t_win + 0.9, look=28)       # 左の窓の外へ向き、見上げる
+    M.surprise(wp("12-01", "みると") + 0.1)
+    M.at(e("12-05") + 0.5, look=20)
+    M.surprise(e("15-02") - 0.2)                                     # 驚く動きは 1.9 秒かかる。「ぴょんぴょん」に間に合うように、15-02 の言い終わりから
+    M.hops(wp("15-03", "ぴょんぴょん") - 0.1, n=3, height=0.05)
+    M.at(e("15-04") - 0.5, look=28)
+    # ---------------------------------------------------------------- 空の地図（板・線・町の網）
+    plate = plane(mat("skyplate", "#1B2A44", rough=1.0, alpha=0.42), (-45.0, 70.0, SKY_H - 0.05), (310.0, 290.0))
+    hide_key(plate, -100.0, True); hide_key(plate, t_map, False)
+    t_g = wp("14-02", "緑") - 0.1; t_y = wp("14-02", "黄色") - 0.1; t_r = wp("14-03", "赤") - 0.1
+    N0 = (t_map, SKY_NEUTRAL); FL = (wp("14-01", "変わって") - 0.2, "#FFFFFF")    # 14-01「変わっていきます」：線が白く光り、色が変わる前ぶれ
+    lines = []
+    lines += sky_line((-200.0, 0.0), (-50.0, 0.0), 6.0, [N0, FL, (t_g, GREEN_C)], "av_l")
+    lines += sky_line((-50.0, 0.0), (-7.0, 0.0), 6.0, [N0, FL, (t_y, YELLOW_C)], "av_y")
+    lines += sky_line((-7.0, 0.0), (110.0, 0.0), 6.0, [N0, FL, (t_g, GREEN_C)], "av_r")
+    lines += sky_line((0.0, 3.0), (0.0, 200.0), 6.0, [N0, FL, (t_r, RED_C)], "jam")
+    rr = random.Random(5)
+    t16 = s("16-01") + 0.5
+    for gx in (-180.0, -120.0, -60.0, 60.0):
+        c1 = rr.choice([GREEN_C, GREEN_C, YELLOW_C, RED_C]); c2 = rr.choice([GREEN_C, YELLOW_C, GREEN_C])
+        sky_line((gx, -60.0), (gx, 200.0), 3.0, [N0, (t16 + rr.uniform(0, 1.5), c1), (s("16-02") + rr.uniform(0, 2.0), c2)], "gx%d" % gx, th=0.25)
+    for gy in (-60.0, 60.0, 120.0, 180.0):
+        c1 = rr.choice([GREEN_C, GREEN_C, YELLOW_C, RED_C]); c2 = rr.choice([GREEN_C, YELLOW_C, GREEN_C])
+        sky_line((-200.0, gy), (110.0, gy), 3.0, [N0, (t16 + rr.uniform(0, 1.5), c1), (s("16-02") + rr.uniform(0, 2.0), c2)], "gy%d" % gy, th=0.25)
+    # 町の網の点（下の車は小さく遠いので、点だけ道に沿って動かす）
+    pm = glow_mat("pt", "#FFFFFF", 5.0)
+    for k, gx in enumerate((-180.0, -120.0, -60.0, 60.0)):
+        for j in range(4):
+            v_ = rr.choice([8.0, 8.0, 3.0, 0.8]); y_a = -60.0 + rr.uniform(0, 260.0); dr = rr.choice([-1, 1])
+            o_ = sphere(pm, (gx, y_a, SKY_H), 0.9, seg=10); hide_key(o_, -100.0, True); hide_key(o_, t_map + rr.uniform(0, 3), False)
+            key(o_, "location", t_map, (gx, y_a, SKY_H), "LINEAR"); key(o_, "location", T_END, (gx, max(-60.0, min(200.0, y_a + dr * v_ * (T_END - t_map))), SKY_H), "LINEAR")
+    for k, gy in enumerate((-60.0, 60.0, 120.0, 180.0)):
+        for j in range(4):
+            v_ = rr.choice([8.0, 8.0, 3.0, 0.8]); x_a = -200.0 + rr.uniform(0, 310.0); dr = rr.choice([-1, 1])
+            o_ = sphere(pm, (x_a, gy, SKY_H), 0.9, seg=10); hide_key(o_, -100.0, True); hide_key(o_, t_map + rr.uniform(0, 3), False)
+            key(o_, "location", t_map, (x_a, gy, SKY_H), "LINEAR"); key(o_, "location", T_END, (max(-200.0, min(110.0, x_a + dr * v_ * (T_END - t_map))), gy, SKY_H), "LINEAR")
+    ev(t_map + 0.1, "shimmer", 0.25, "")
+    ev(t_g, "pop", 0.25, ""); ev(t_y, "pop", 0.25, ""); ev(t_r, "pop", 0.3, "")
+    # ---------------------------------------------------------------- 13 章：100 m の区切り・のろのろの点を囲む枠
+    wm = glow_mat("bar", "#FFFFFF", 4.0)
+    t4 = wp("13-04", "100") - 0.2; t5 = wp("13-05", "1分") - 0.6
+    for (bx, by, rot_, t0_, t1_, nm) in ((-150.0, 0.0, 0, t4, e("13-04") + 0.4, "br_a1"), (-50.0, 0.0, 0, t4, e("13-04") + 0.4, "br_a2"),
+                                         (0.0, 70.0, 1, t5, e("13-05") + 0.4, "br_b1"), (0.0, 170.0, 1, t5, e("13-05") + 0.4, "br_b2")):
+        b_ = cube(wm, (bx, by, SKY_H + 0.4), (0.8, 12.0, 0.8) if rot_ == 0 else (12.0, 0.8, 0.8))
+        hide_key(b_, -100.0, True); hide_key(b_, t0_, False); hide_key(b_, t1_, True)
+    track("br_a", empty((-100.0, 0.0, SKY_H)), 0.0); track("br_b", empty((0.0, 120.0, SKY_H)), 0.0)
+    track("av_mid", empty((-100.0, 0.0, SKY_H)), 0.0); track("jam_mid", empty((0.0, 95.0, SKY_H)), 0.0)
+    ev(t4, "pop", 0.25, ""); ev(t5, "pop", 0.25, "")
+    fm = glow_mat("frame", "#FFE08A", 4.0); fm2 = glow_mat("frame2", "#FFE08A", 9.0)
+    t6 = wp("13-06", "同じ") - 0.1; t7 = s("13-07") + 0.2
+    for m_, t0_, t1_ in ((fm, t6, t7), (fm2, t7, e("13-07") + 0.5)):
+        for (cx_, cy_, sx_, sy_) in ((0.0, 12.0, 16.0, 0.6), (0.0, 178.0, 16.0, 0.6), (-8.0, 95.0, 0.6, 166.6), (8.0, 95.0, 0.6, 166.6)):
+            f_ = cube(m_, (cx_, cy_, SKY_H + 0.5), (sx_, sy_, 0.6)); hide_key(f_, -100.0, True); hide_key(f_, t0_, False); hide_key(f_, t1_, True)
+    ev(t6, "swish", 0.25, ""); ev(t7, "ping", 0.25, "")
+    STAGE["own_pt"] = own_pt3
+
+
 # ======================================================================== G：地球（04-07）
 def b_globe(par):
     world("#0E1430", 0.4)
@@ -471,6 +668,17 @@ def b_field(par):
     M.lookyaw(wp("10-07", "冒頭") - 0.1, -25.0, d=1.2, pitch=32.0)   # （v1 の確認役 3 回目）上でなく横を向いた・道と逆の右下を見た → 小窓（左上）へ上向きに、道（左下）へ下向きに
     M.lookyaw(wp("10-07", "細い道") - 0.1, -30.0, d=1.0, pitch=-30.0)
     M.tiltq(wp("10-08", "なぜ") - 0.2, deg=24.0, hold=1.2)
+    # 16-03・16-04（3章）：町はずれの道を 1 台の車が走り、点が上がる。空の細い線（灰色）が、点が乗ると緑に
+    t3 = s("16-03") - 0.6; FZ = 12.0
+    fc = car_fast((0, 0, 0), 0.0, "#D9A441", name="fcar"); track("fcar", fc, 1.0)
+    key(fc, "location", t3, (-34.0, -1.75, 0.0), "LINEAR"); key(fc, "location", e("16-04") + 2.0, (-34.0 + 6.0 * (e("16-04") + 2.0 - t3), -1.75, 0.0), "LINEAR")
+    hide_key(fc, -100.0, True); hide_key(fc, t3, False)
+    tr_ = wp("16-03", "細い道") - 0.2
+    fp = sky_point(fc, tr_, 1.0, d=2.2, z=FZ); track("fpt", fp, 0.0)
+    fpl = plane(mat("skyplate", "#1B2A44", rough=1.0, alpha=0.42), (0.0, 0.0, FZ - 0.05), (220.0, 16.0))
+    hide_key(fpl, -100.0, True); hide_key(fpl, t3, False)
+    sky_line((-110.0, 0.0), (110.0, 0.0), 3.5, [(t3, GREY_C), (tr_ + 2.3, GREEN_C)], "fline", z=FZ, th=0.3)
+    ev(tr_ + 0.1, "float", 0.25, "fcar"); ev(tr_ + 2.3, "pop", 0.25, "")
 
 
 # ======================================================================== カット
@@ -525,6 +733,32 @@ CUTS = [
     ("T10", b_town, s("10-04"), C((0.0, -420.0, 420.0), (0.0, 0.0, 0.0), 26, (120.0, -420.0, 420.0), (140.0, 60.0, 0.0), d=10.0), "T"),
     ("N10", b_nav, s("10-06"), CC((0.66, 0.0, 1.08), (0.95, 0.0, 1.02), 42), "N"),
     ("C10c", b_field, s("10-07"), C((0.5, 2.9, 0.6), (-1.6, 4.5, 0.32), 30), "C"),   # （v1 の確認役 2 回目）まるロボが小さく、小窓と道を見比べるのが見えなかった → 寄る
+    # 3章（A2 渋滞 → D 空の地図 → C 町はずれ）
+    ("A31", b_jam, s("11-01"), C((-8.0, 10.0, 10.0), (-4.0, 62.0, 1.0), 28), "J"),
+    ("A31b", b_jam, s("11-02"), CC((1.5, 1.7, 1.25), (0.17, 0.4, 1.05), 30), "J"),
+    ("A31c", b_jam, s("11-03"), CC((0.0, 0.0, 1.25), (0.95, 0.0, 1.02), 30, (0.5, 0.0, 1.15), (0.95, 0.0, 1.02), d=4.0), "J"),
+    ("A31d", b_jam, s("11-04"), CC((0.45, 0.12, 1.22), (0.92, 0.0, 1.18), 34), "J"),
+    ("A31e", b_jam, wp("11-04", "上がって") + 0.3, C((-16.0, Y_OWN3 + q_off(wp("11-04", "上がって")) - 6.0, 1.6), (-5.0, Y_OWN3 + q_off(wp("11-04", "上がって")) + 1.0, 9.0), 24), "J"),
+    ("A31f", b_jam, s("11-05"), C((-24.0, Y_OWN3 + q_off(s("11-05")) - 10.0, 4.0), (-4.0, Y_OWN3 + q_off(s("11-05")) + 2.0, 10.0), 22), "J"),
+    ("A32", b_jam, s("12-01"), CC((0.25, 1.65, 1.3), (0.15, 0.4, 1.3), 30), "J"),
+    ("A32b", b_jam, s("12-02"), C((-17.0, Y_OWN3 + q_off(s("12-02")) - 16.0, 1.3), (-3.0, Y_OWN3 + q_off(s("12-02")) + 6.0, 7.0), 20), "J"),
+    ("A32c", b_jam, s("12-03"), CC((-1.3, 2.3, 1.0), (2.0, 0.3, 7.0), 20), "J"),
+    ("A32d", b_jam, s("12-04"), CC((0.5, 0.0, 1.15), (0.95, 0.0, 1.02), 44), "J"),
+    ("D12", b_jam, s("12-05"), C((-70.0, -50.0, 48.0), (-15.0, 50.0, 18.0), 26), "J"),
+    ("D13", b_jam, s("13-01"), C((-50.0, -80.0, 80.0), (-15.0, 40.0, 18.0), 26, (-40.0, -60.0, 50.0), (-15.0, 40.0, 18.0), 26, d=3.6), "J"),
+    ("D13b", b_jam, s("13-02"), C((-110.0, -38.0, 38.0), (-100.0, 0.0, 18.0), 28), "J"),
+    ("D13c", b_jam, s("13-03"), C((-36.0, 60.0, 38.0), (0.0, 70.0, 18.0), 28), "J"),
+    ("D13d", b_jam, s("13-04"), C((-100.0, -70.0, 48.0), (-100.0, 0.0, 18.0), 26), "J"),
+    ("D13e", b_jam, s("13-05"), C((-60.0, 120.0, 50.0), (0.0, 120.0, 18.0), 26), "J"),
+    ("D13f", b_jam, s("13-06"), C((-70.0, 95.0, 95.0), (0.0, 95.0, 18.0), 22), "J"),
+    ("D14", b_jam, s("14-01"), C((-20.0, -140.0, 170.0), (-20.0, 50.0, 18.0), 26), "J"),
+    ("D15", b_jam, s("15-01"), C((own_pt3(s("15-01"))[0] - 14.0, own_pt3(s("15-01"))[1] - 22.0, SKY_H + 14.0), own_pt3(s("15-01")), 30), "J"),
+    ("D15b", b_jam, s("15-02"), C((own_pt3(s("15-02"))[0] - 8.0, own_pt3(s("15-02"))[1] - 14.0, 34.0), (own_pt3(s("15-02"))[0] - 1.5, own_pt3(s("15-02"))[1] + 1.0, 7.0), 22), "J"),
+    ("A35", b_jam, e("15-02") - 0.3, CC((0.25, 1.65, 1.3), (0.15, 0.4, 1.3), 30), "J"),
+    ("D15c", b_jam, s("15-04"), C((own_pt3(s("15-04"))[0] - 8.0, own_pt3(s("15-04"))[1] - 14.0, 34.0), (own_pt3(s("15-04"))[0] - 1.5, own_pt3(s("15-04"))[1] + 1.0, 7.0), 22), "J"),
+    ("D15d", b_jam, s("15-05"), C((-40.0, -90.0, 110.0), (-20.0, 60.0, 18.0), 24), "J"),
+    ("D16", b_jam, s("16-01"), C((-60.0, -200.0, 260.0), (-40.0, 70.0, 18.0), 24, (-60.0, -380.0, 480.0), (-40.0, 70.0, 0.0), 24, d=10.0), "J"),
+    ("C16", b_field, s("16-03"), C((-14.0, -22.0, 2.0), (4.0, 0.0, 7.0), 24, (-8.0, -24.0, 2.5), (12.0, 0.0, 8.0), 24, d=9.0), "C"),
     ("C10d", b_field, s("10-08"), C((-0.2, 3.7, 0.4), (-1.0, 4.6, 0.24), 32), "C"),   # （v1 の確認役 3 回目）画面の 1/6 で小さかった → 寄る
     # 8 秒をこえる同じ絵を、文の切れ目で替える（下書きの最初の点検。決まり：同じ絵を 8 秒以上続けない）
     ("A02a", b_drive, s("02-02"), CC((0.62, -0.22, 1.16), (0.95, 0.02, 1.02), 38), "A"),
@@ -538,7 +772,7 @@ CUTS = [
     ("T09b", b_town, s("09-03"), C((180.0, -120.0, 200.0), (20.0, 120.0, 10.0), 26), "T"),
     ("T10b", b_town, s("10-05"), C((560.0, -300.0, 330.0), (258.0, 18.0, 0.0), 22), "T"),   # v1 点検：橋の輪が字幕の帯に重なった → 少し引いて下へ向ける（橋 y=466・トンネル y=173）
 ]
-END_T = e("10-08") + 2.0
+END_T = e("16-04") + 2.0
 CUTS.sort(key=lambda c: c[2])
 CLIPS = {}
 for i, (nm, fn, tc, cm, par) in enumerate(CUTS):

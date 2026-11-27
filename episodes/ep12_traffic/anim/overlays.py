@@ -58,6 +58,21 @@ def ev_list():
     add(s("10-06") + 0.1, e("10-06") + 0.3, "ring", dict(obj="phone", r=80, col=YEL))
     add(s("10-07") + 0.05, e("10-07") + 0.4, "pip_clip", dict(clip="TEX:ph_map_z2", src_t=0, hold=True))
     add(wp("10-08", "なぜ") - 0.2, e("10-08") + 0.3, "bubble", dict(obj="maru_top", icon="?"))
+    # 3章
+    add(wp("11-01", "ここに") - 0.1, e("11-01") + 0.3, "ring", dict(obj="owncar", r=46, col=YEL))
+    add(wp("11-03", "スマホ") - 0.1, e("11-03") + 0.3, "tag", dict(text="スマホ", obj="phone", dy=-150, size=56, bg=WHITE))
+    add(wp("11-05", "いまどこ") - 0.1, e("11-05") + 0.3, "tag", dict(text="いまどこにいるか の手がかり", obj="ownpt", dy=-90, size=48, bg=WHITE))
+    add(wp("12-01", "みると") - 0.0, e("12-01") + 0.5, "bubble", dict(obj="maru_top", icon="!"))
+    add(wp("12-04", "自分が") - 0.1, e("12-04") + 0.3, "ring", dict(obj="ph_tri", r=40, col=YEL))
+    add(wp("13-04", "100") - 0.1, e("13-04") + 0.3, "tag", dict(text="100m", obj="br_a", dy=-90, size=52, bg=WHITE))
+    add(wp("13-04", "10秒") - 0.1, e("13-04") + 0.3, "tag", dict(text="10秒", obj="br_a", dy=-170, size=56, bg=YEL))
+    add(wp("13-05", "1分") - 0.6, e("13-05") + 0.3, "tag", dict(text="100m", obj="br_b", dy=-90, size=52, bg=WHITE))
+    add(wp("13-05", "まだ半分") - 0.1, e("13-05") + 0.3, "tag", dict(text="1分 → まだ半分", obj="br_b", dy=-170, size=56, bg=YEL))
+    add(s("14-04") + 0.05, e("14-04") + 0.4, "pip_clip", dict(clip="TEX:ph_map_alert", src_t=0, hold=True))
+    add(wp("15-01", "まるロボの車") - 0.1, e("15-01") + 0.3, "ring", dict(obj="ownpt", r=46, col=YEL))
+    add(wp("15-02", "まるロボの") - 0.1, e("15-02") + 0.3, "ring", dict(obj="owncar", r=40, col=YEL))
+    add(e("15-02") + 0.5, wp("15-03", "ぴょんぴょん") + 0.2, "bubble", dict(obj="maru_top", icon="!"))
+    add(s("15-05") + 0.2, e("15-05") + 0.3, "ring", dict(obj="ownpt", r=40, col=YEL))
     # 物について動く札（吹き出し・札・輪）は、カメラの替わり目（重なるつなぎ 0.35 秒）が終わってから出す（17本目 v1 のコメント）
     import json as _js
     _CL = _js.load(open(os.path.join(HERE, "clips.json"), encoding="utf-8"))
@@ -89,6 +104,11 @@ def sfx_list():
     L.append((wp("08-04", "車の数") - 0.1, "pop", 0.3)); L.append((wp("08-04", "こみ具合") - 0.1, "pop", 0.3))
     L.append((wp("10-05", "橋") - 0.1, "pi", 0.3)); L.append((wp("10-05", "トンネル") - 0.1, "pi", 0.3))
     L.append((s("10-07") + 0.05, "swish", 0.25))
+    L.append((wp("11-01", "ここに") - 0.1, "pi", 0.3)); L.append((wp("11-03", "スマホ") - 0.1, "pop", 0.3)); L.append((wp("11-05", "いまどこ") - 0.1, "pop", 0.3))
+    L.append((wp("12-04", "自分が") - 0.1, "pi", 0.3))
+    L.append((wp("13-04", "10秒") - 0.1, "pop", 0.3)); L.append((wp("13-05", "まだ半分") - 0.1, "pop", 0.3))
+    L.append((s("14-04") + 0.05, "swish", 0.25))
+    L.append((wp("15-01", "まるロボの車") - 0.1, "pi", 0.3)); L.append((wp("15-02", "まるロボの") - 0.1, "pi", 0.3))
     ev_list()
     return [(MOVED.get(round(t_, 2), t_), k_, g_) for t_, k_, g_ in L]   # 12本目 v1 の点検：札を遅らせたのに音だけ先に鳴っていた
 
