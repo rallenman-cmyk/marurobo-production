@@ -70,7 +70,7 @@ def ev_list():
     add(wp("13-05", "まだ半分") - 0.1, e("13-05") + 0.3, "tag", dict(text="1分 → まだ半分", obj="br_b", dy=-170, size=56, bg=YEL))
     add(s("14-04") + 0.05, e("14-04") + 0.4, "pip_clip", dict(clip="TEX:ph_map_alert", src_t=0, hold=True))
     add(wp("15-01", "まるロボの車") - 0.1, e("15-01") + 0.3, "ring", dict(obj="ownpt", r=46, col=YEL))
-    add(wp("15-02", "まるロボの") - 0.1, e("15-02") + 0.3, "ring", dict(obj="owncar", r=40, col=YEL))
+    add(wp("15-02", "まるロボの") - 0.1, e("15-02") - 0.35, "ring", dict(obj="owncar", r=40, col=YEL))   # v3 の点検：次のカット（A35）へ溶ける間まで残り、溶ける先の絵の上の場所へ飛んだ → 切りかえの前に消す
     add(e("15-02") + 0.5, wp("15-03", "ぴょんぴょん") + 0.2, "bubble", dict(obj="maru_top", icon="!"))
     add(s("15-05") + 0.2, e("15-05") + 0.3, "ring", dict(obj="ownpt", r=40, col=YEL))
     # 物について動く札（吹き出し・札・輪）は、カメラの替わり目（重なるつなぎ 0.35 秒）が終わってから出す（17本目 v1 のコメント）

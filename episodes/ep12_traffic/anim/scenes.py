@@ -253,7 +253,8 @@ def sky_point(car_obj, t_rise, lat, col="#FFFFFF", r=0.9, d=2.5, t_hide=None, na
     hide_key(p_, -100.0, True); hide_key(p_, t_rise, False)
     if t_hide is not None: hide_key(p_, t_hide, True)
     key(p_, "location", t_rise, (0.4, 0.0, 1.2)); key(p_, "location", t_rise + d, (0.0, lat, SKY_H if z is None else z))
-    pop_in(p_, t_rise, 1.0, 0.25)
+    # v3 の点検：カメラのすぐ横の車から上がる点が、雲のような大きな玉に映った → 小さく出て、上がりながら大きくなる
+    key(p_, "scale", t_rise, (0.01, 0.01, 0.01)); key(p_, "scale", t_rise + 0.25, (0.3, 0.3, 0.3)); key(p_, "scale", t_rise + d, (1.0, 1.0, 1.0))
     return p_
 
 
@@ -419,11 +420,11 @@ def b_jam(par):
     ev(t4, "pop", 0.25, ""); ev(t5, "pop", 0.25, "")
     fm = glow_mat("frame", "#FFE08A", 4.0); fm2 = glow_mat("frame2", "#FFE08A", 9.0)
     t6 = wp("13-06", "同じ") - 0.1; t7 = s("13-07") + 0.2
-    for m_, t0_, t1_ in ((fm, t6, t7), (fm2, t7, e("13-07") + 0.5)):
+    for m_, t0_, t1_ in ((fm, t6, t7), (fm2, t7, s("14-01") + 0.7)):   # v3 の点検：カットが替わる前（e+0.5）に消え、一瞬だけ枠のない絵が映った → 次のカットに溶け終わるまで
         for (cx_, cy_, sx_, sy_) in ((0.0, 12.0, 16.0, 0.6), (0.0, 178.0, 16.0, 0.6), (-8.0, 95.0, 0.6, 166.6), (8.0, 95.0, 0.6, 166.6)):
             f_ = cube(m_, (cx_, cy_, SKY_H + 0.5), (sx_, sy_, 0.6)); hide_key(f_, -100.0, True); hide_key(f_, t0_, False); hide_key(f_, t1_, True)
     # v3 の点検：枠の光を強めただけでは「枠の中が光る」が見えなかった → 枠の中を、うすい黄色で光らせる
-    fill_ = plane(glow_mat("frame_fill", "#FFE08A", 1.2), (0.0, 95.0, SKY_H + 0.3), (16.0, 166.0)); hide_key(fill_, -100.0, True); hide_key(fill_, t7, False); hide_key(fill_, e("13-07") + 0.5, True)
+    fill_ = plane(glow_mat("frame_fill", "#FFE08A", 1.2), (0.0, 95.0, SKY_H + 0.3), (16.0, 166.0)); hide_key(fill_, -100.0, True); hide_key(fill_, t7, False); hide_key(fill_, s("14-01") + 0.7, True)
     ev(t6, "swish", 0.25, ""); ev(t7, "ping", 0.25, "")
     STAGE["own_pt"] = own_pt3
 
