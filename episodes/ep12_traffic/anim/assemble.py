@@ -358,6 +358,12 @@ _dr = sfx.make("drive", SR); _a = max(0.0, T.s("01-01") - 0.5); _b = T.s("03-02"
 _n = int((_b - _a) * SR); _seg = np.tile(_dr, _n // len(_dr) + 1)[:_n].astype(np.float32)
 _f = int(1.0 * SR); _seg[:_f] *= np.linspace(0, 1, _f); _seg[-int(1.5 * SR):] *= np.linspace(1, 0, int(1.5 * SR))
 bed[int(_a * SR):int(_a * SR) + _n] += 0.035 * _seg[:N - int(_a * SR)]
+# 12本目 v3 の点検：表の 11-01「車の低い音」が鳴っていなかった（冒頭だけだった）→ 3章の渋滞の車の場面（11-01〜12-04）にも、止まりながら進む車の低い音を小さく
+for _a, _b in ((T.s("11-01") - 0.3, T.e("12-04") + 0.6),):
+    if END_LINE and _a > TO: continue
+    _n = int((_b - _a) * SR); _seg = np.tile(_dr, _n // len(_dr) + 1)[:_n].astype(np.float32)
+    _f = int(1.0 * SR); _seg[:_f] *= np.linspace(0, 1, _f); _seg[-_f:] *= np.linspace(1, 0, _f)
+    _i = int(_a * SR); bed[_i:_i + _n] += 0.025 * _seg[:max(0, N - _i)]
 mix = voice + music * g + fx * FX_GAIN + bed
 mix /= max(1.0, np.abs(mix).max() / 0.89)
 if END_LINE:
