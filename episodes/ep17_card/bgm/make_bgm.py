@@ -11,6 +11,8 @@
 #   L（台帳）：S20〜S22 なぜ使っていないカードも？ 塔の中の台帳を調べる。好奇心・落ち着いた説明
 #   G（守る側）：S23〜S26 門番さんと並んで、影を止める。頼もしく、明るく、少しわくわく（こわくない）
 #   P（自分でできること）：S27〜S28 気づいて、家でスマホの設定を 1 つずつ。あたたかく、安心する感じ
+#   Q（まとめ）：S29 問いをふり返り、答えを言う。落ち着いて、あたたかい
+#   O（オチ）：S30〜S31 数日後、大きな金庫を押してきて得意顔 → がくっ。軽く、少しおどけた感じ
 import os, sys, json, base64, time, urllib.request
 
 COMMON = ("Instrumental background music for a cute, gentle science explainer video for all ages, starring a small round robot. "
@@ -38,6 +40,10 @@ PROMPTS = {
                   "light snare brushes, bright brass-like synth stabs kept soft, warm bass, major key, about 106 BPM, confident, cheerful and a bit heroic, never scary.",
     "P": COMMON + "Back home on a sunny afternoon, a little robot calmly turns on helpful phone settings one by one: soft acoustic guitar, gentle glockenspiel, "
                   "warm pad, light soft beat, major key, about 90 BPM, reassuring, warm and practical, a happy calm ending feeling.",
+    "Q": COMMON + "Looking back over a small mystery and calmly summing up what was learned, at home in soft afternoon light: gentle felt piano, "
+                  "warm strings pad, soft celesta, very light brushed beat, about 80 BPM, reflective, kind and reassuring, a quiet sense of understanding.",
+    "O": COMMON + "A funny little epilogue: a proud small robot pushes in a huge cardboard box and shows off a much bigger safe, then realizes it changes nothing: "
+                  "bouncy bassoon-like synth, pizzicato strings, woodblock and light tuba-like bass, playful staccato, major key, about 100 BPM, light comic timing, cute and cheerful.",
 }
 
 
