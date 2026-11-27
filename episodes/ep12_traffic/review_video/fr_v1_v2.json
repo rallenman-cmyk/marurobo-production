@@ -1,0 +1,48 @@
+{
+ "created_at": "2026-11-27T14:43:00Z",
+ "created_by": "ai",
+ "from_version": "MARU-TRAFFIC-v1",
+ "to_version": "MARU-TRAFFIC-v2",
+ "project_id": "MARU-TRAFFIC",
+ "items": [
+  {
+   "action": "not_fixed",
+   "comment_id": "cmwz0gh9a3fe35jhg",
+   "comment_rev": 1,
+   "explain": "次のコメント（それぽいセリフあるのでいいや）に合わせて、セリフは足していません。04-12「これから、まるロボと一緒に、赤い線の正体を見に行きます。」のままです。",
+   "new_t": 108.5,
+   "new_t_end": null,
+   "new_version_id": "MARU-TRAFFIC-v2",
+   "original_t": 108.5,
+   "original_t_end": null,
+   "original_text": "まるロボと一緒にこの謎を解明してみましょうってセリフを追加してオープニングみたいなとこで",
+   "reason": "次のコメント（それぽいセリフあるのでいいや）に合わせた"
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwz0hgmyic8pmc8x",
+   "comment_rev": 1,
+   "explain": "題の前の声のない間（2.5 秒）をなくしました。題は 04-10「どうして、まだ来ていない先のことまで分かるのか。」の言葉の上で出て、次の文の声の前に消えます（約 2.4 秒）。04-11 からあとは 1.6 秒早くなりました。",
+   "new_t": 118.8,
+   "new_t_end": null,
+   "new_version_id": "MARU-TRAFFIC-v2",
+   "original_t": 120.4,
+   "original_t_end": null,
+   "original_text": "それぽいセリフあるのでいいや、ただオープニング出てるところでナレーションがないところあるのが気になるからそこの間はなくして",
+   "reason": ""
+  },
+  {
+   "action": "fixed",
+   "comment_id": "cmwz0kemsrccuc9ra",
+   "comment_rev": 1,
+   "explain": "09-01 を「では、測った内容は、どこへ行くのでしょう？」に変え、声を作り直しました（4 回作って、読みが合う物を選び、大きさを前後にそろえた）。",
+   "new_t": 224.5,
+   "new_t_end": null,
+   "new_version_id": "MARU-TRAFFIC-v2",
+   "original_t": 225.7,
+   "original_t_end": null,
+   "original_text": "「測ったこと」じゃなくて「測った内容は」にセリフを変えて",
+   "reason": ""
+  }
+ ]
+}
