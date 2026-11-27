@@ -94,11 +94,11 @@ def ev_list():
         dict(left=("A01c", e("01-03") + 0.25), right=("D21e", wp("21-05", "ぽっと") + 1.5),
         cap=("金庫の中のカード", "塔の台帳の番号")))
     # 5章（2026-11-27）：絵コンテ表の 5章。字幕と同じ文は書かない（26-08 の問いはスマホの絵だけ）
-    add(wp("23-05", "門番さんの") + 1.2, e("23-05") + 0.3, "bubble", dict(obj="maru_top", icon="!"))   # 胸を張る（得意）
     add(wp("24-02", "ブッブー", 0) + 0.95, e("24-03") + 0.3, "xobj", dict(obj="drops5", sz=90))      # はじかれた札（3章と同じ ×）
     add(wp("26-11", "パチン") + 1.1, e("26-11") + 0.3, "xobj", dict(obj="rslip6", sz=90))
     add(wp("26-13", "スマホに") - 0.05, e("26-14") + 0.3, "idv", dict(t_a=wp("26-13", "スマホに") + 0.1, t_b=wp("26-13", "持ち主") - 0.1))
-    add(wp("26-14", "本人確認") - 0.1, e("26-14") + 0.3, "tag", dict(text="本人確認", pos=(640, 60), size=56, bg=YEL))
+    add(wp("26-14", "本人確認") - 0.1, e("26-14") + 0.3, "tag", dict(text="本人確認", pos=(370, 60), size=56, bg=YEL))
+    add(s("26-12") + 1.0, e("26-12") + 0.3, "tag", dict(text="まるロボのスマホへ", obj="trailend", dy=-60, size=44, bg=IC.TEAL, fg=IC.NAVY))   # 別の目の点検：点の列が何をつないでいるか分からなかった
     add(s("27-01") + 0.05, wp("27-02", "金庫では") + 1.3, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.0, fade=(wp("27-02", "金庫では") - 0.2, 1.4)))   # 冒頭の、カードを金庫にしまう所 → 27-02 でうすくなる
     add(wp("27-03", "本人確認") - 0.1, e("27-03") + 0.4, "glowtag", dict(text="本人確認", pos=(640, 150), size=80, t0=wp("27-03", "本人確認") - 0.1))
     add(s("28-04") + 0.05, e("28-04") + 0.3, "pip_clip", dict(clip="A02c", src_t=s("02-03") + 0.3))   # 2章の頭：スマホに知らせが届いた所（文ごとの点検：A02 ではスマホが小さかった → 寄りの A02c）
@@ -996,7 +996,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "cycle":
             _paste(base, cycle_sprite(t, p), 640, 250, k, a)
         elif kind == "idv":
-            _paste(base, idv_sprite(t, p), 640, 262, k, a)   # 「本人確認」の札（上）と重ならない
+            _paste(base, idv_sprite(t, p), 370, 262, k, a)   # 別の目の点検：門番さんの顔とまるロボにかかった → 左の空きへ（上の「本人確認」の札と重ならない）
         elif kind == "glowtag":
             spr = glowtag_sprite(t, p); _paste(base, spr, p["pos"][0], p["pos"][1], k, a)
         elif kind == "steps":
