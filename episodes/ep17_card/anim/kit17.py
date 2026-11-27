@@ -548,7 +548,7 @@ def guard(loc, face=0.0, s=1.0):
     cyl(navy, (0, -0.2, 0), 0.06, 0.4, rot=(R(90), 0, 0), parent=arm, verts=16)
     hand = empty((0, -0.42, 0)); hand.parent = arm
     sphere(_m("gd_glove", "#FFFFFF", rough=0.6), (0, 0, 0), 0.08, parent=hand, seg=16)
-    arm.rotation_euler = (R(-60), 0, 0)
+    arm.rotation_euler = (R(60), 0, 0)      # 試しの絵の点検：x の角度が − だと腕が上がる（+60 で下ろす・−80 で手を上げる・−5 で前へ出す）
     g = Guard(); g.root = root; g.arm = arm; g.hand = hand; g.head = head; g.pupils = pupils
     return g
 

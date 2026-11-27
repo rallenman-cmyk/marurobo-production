@@ -994,7 +994,7 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind == "cycle":
             _paste(base, cycle_sprite(t, p), 640, 250, k, a)
         elif kind == "idv":
-            _paste(base, idv_sprite(t, p), 640, 235, k, a)
+            _paste(base, idv_sprite(t, p), 640, 262, k, a)   # 「本人確認」の札（上）と重ならない
         elif kind == "glowtag":
             spr = glowtag_sprite(t, p); _paste(base, spr, p["pos"][0], p["pos"][1], k, a)
         elif kind == "steps":
