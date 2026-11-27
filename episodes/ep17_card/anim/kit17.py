@@ -517,3 +517,119 @@ def lamp_color(m, t, col, strength=4.0, d=0.2):
     m["_c"] = c
     if not m.get("_e"): emit_key(m, -100.0, 0.0); m["_e"] = 1
     emit_key(m, t, m.get("_s", 0.0)); emit_key(m, t + d, strength); m["_s"] = strength
+
+
+# ======================================================================== 5章（2026-11-27）：門番さん・閉まる門・テストの板・別のお店・大きな設定のスマホ
+class Guard:
+    pass
+
+
+def guard(loc, face=0.0, s=1.0):
+    """門番さん（無口で、目がいい）。影と同じ丸い胴と丸い頭（すそで足は見せない）に、紺の服・白い丸い顔・大きな丸い目 2 つ・紺の帽子と黄色い帯。口はない。
+    前＝−y。root を動かす。arm を回して手を上げる・板を出す。pupils（黒目）を左右へ動かして見回す"""
+    navy = _m("gd_navy", "#2B3D6B", rough=0.6); face_m = _m("gd_face", "#F4E3CF", rough=0.6)
+    white = _m("gd_eyew", "#FFFFFF", rough=0.3); black = _m("gd_eyeb", "#15171B", rough=0.2, coat=1.0)
+    root = empty(loc, R(face), s)
+    sphere(navy, (0, 0, 0.82), 0.42, scale=(0.95, 0.75, 1.35), parent=root, seg=32)
+    bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.48, radius2=0.2, depth=0.5, location=(0, 0, 0.25))
+    sk = bpy.context.object; sk.data.materials.append(navy); sk.parent = root
+    for zz in (0.95, 0.72): sphere(_m("gd_btn", "#E8C24A", rough=0.4, metal=0.6), (0, -0.315, zz), 0.035, parent=root, seg=12)   # 服のボタン
+    head = empty((0, 0, 1.55)); head.parent = root
+    sphere(face_m, (0, 0, 0), 0.26, parent=head, seg=32)
+    pupils = []
+    for sx in (-1, 1):
+        sphere(white, (sx * 0.1, -0.2, 0.02), 0.085, scale=(1.0, 0.6, 1.1), parent=head, seg=24)
+        pe = empty((sx * 0.1, -0.245, 0.02)); pe.parent = head
+        sphere(black, (0, 0, 0), 0.045, scale=(1.0, 0.5, 1.0), parent=pe, seg=16); pupils.append(pe)
+    cyl(navy, (0, 0, 0.2), 0.27, 0.16, parent=head, verts=32)                                   # 帽子
+    cyl(_m("gd_band", "#F2C230", rough=0.5), (0, 0, 0.14), 0.275, 0.05, parent=head, verts=32)  # 黄色い帯
+    cube(navy, (0, -0.25, 0.13), (0.4, 0.16, 0.025), parent=head)                               # つば
+    arm = empty((0.33, -0.05, 1.12)); arm.parent = root
+    cyl(navy, (0, -0.2, 0), 0.06, 0.4, rot=(R(90), 0, 0), parent=arm, verts=16)
+    hand = empty((0, -0.42, 0)); hand.parent = arm
+    sphere(_m("gd_glove", "#FFFFFF", rough=0.6), (0, 0, 0), 0.08, parent=hand, seg=16)
+    arm.rotation_euler = (R(-60), 0, 0)
+    g = Guard(); g.root = root; g.arm = arm; g.hand = hand; g.head = head; g.pupils = pupils
+    return g
+
+
+def guard_look(g, t, dx, d=0.35):
+    """門番さんの黒目を左右へ（dx：m。＋で門番さんの左＝画面の右）"""
+    for pe in g.pupils:
+        x0 = pe.location[0] if not pe.get("_x0") else pe["_x0"]
+        pe["_x0"] = x0
+        cur = pe.get("_dx", 0.0)
+        key(pe, "location", t, (x0 + cur, pe.location[1], pe.location[2])); key(pe, "location", t + d, (x0 + dx, pe.location[1], pe.location[2]))
+        pe["_dx"] = dx
+
+
+def gate_bar_lamp():
+    """門の上の細長いランプ（v1 のコメント「監視カメラに見えた」丸いランプのかわり。横長の光る棒＝明かりと分かる形）。戻り値：材質（色を時刻で替える）"""
+    GH = 2.4
+    m = mat("gatebar", "#E6E6E0", rough=0.3, emit=0.0)
+    cube(_m("gatebarbase", "#3A3D42", rough=0.5), (0, -0.24, GH + 0.3), (0.86, 0.12, 0.2), bevel=0.03)
+    o = cyl(m, (0, -0.31, GH + 0.3), 0.07, 0.76, rot=(0, R(90), 0), verts=24)
+    return m, o
+
+
+def gate_grille(t_drop=None, d=0.28):
+    """門をふさぐ格子（灰色の縦の棒と横の棒）。アーチの上にたたんであり、t_drop に上から落ちて門をふさぐ（上を軸に z を伸ばす）"""
+    GW, GH = 1.9, 2.4
+    top = empty((0, -0.24, GH)); gm = _m("grille", "#8A9099", rough=0.4, metal=0.7)
+    for k in range(9):
+        cube(gm, (-0.84 + k * 0.21, 0, -GH / 2), (0.05, 0.05, GH), parent=top)
+    for zz in (0.25, 0.9, 1.6, 2.25):
+        cube(gm, (0, 0, -zz), (GW, 0.05, 0.06), parent=top)
+    top.scale = (1, 1, 0.001)
+    if t_drop is not None:
+        hide_key(top, -100.0, True); hide_key(top, t_drop - 0.02, False)
+        key(top, "scale", -100.0, (1, 1, 0.001), "CONSTANT"); key(top, "scale", t_drop, (1, 1, 0.001), "LINEAR"); key(top, "scale", t_drop + d, (1, 1, 1.0))
+        key(top, "scale", t_drop + d + 0.06, (1, 1, 0.97)); key(top, "scale", t_drop + d + 0.14, (1, 1, 1.0))   # 落ちて小さくはねる
+    return top
+
+
+def test_board(parent=None, loc=(0, 0, 0), rot=(R(90), 0, 0), w=0.62):
+    """絵のテストの板（3×3 のますに、りんご・車・木などの絵。字なし）。面は +z（rot で立てる）"""
+    e = empty(loc); e.rotation_euler = rot
+    if parent is not None: e.parent = parent
+    cube(_m("tbframe", "#2E3440", rough=0.5), (0, 0, -0.006), (w + 0.05, w + 0.05, 0.012), bevel=0.006, parent=e)
+    plane(img_mat("testboard", os.path.join(TEX, "test_board.png"), emit=0.35), (0, 0, 0.001), (w, w), parent=e)
+    return e
+
+
+def shop_recolor(awn="#3FA66A", brick=("#F2D9B5", "#E6C99E"), sign="#3F7F4A"):
+    """別のお店（C2）：同じ形で、日よけのしまを緑・れんがを明るく・看板の板を緑に（shop() のあとに呼ぶ）"""
+    for m_ in bpy.data.materials:
+        b_ = m_.node_tree.nodes.get("Principled BSDF") if m_.use_nodes else None
+        if b_ is None: continue
+        if m_.name.startswith("awn0"): b_.inputs["Base Color"].default_value = srgb(awn)
+        elif m_.name.startswith("signbd"): b_.inputs["Base Color"].default_value = srgb(sign)
+
+
+def settings_phone(loc, face=0.0, h=0.62):
+    """S28 の大きな設定のスマホ（まるロボの前に立てる。架空。字なし）：4 つの段（絵は画面の絵）と、段ごとのスイッチ（灰色 → 押すと右へ動いて緑）。
+    前＝−y。戻り値：dict(root, sw=[スイッチの動く部分 4 つ], swm=[材質 4 つ], rows=[段の中心 4 つ（札の目じるし）])"""
+    w = h * 0.5
+    e = empty(loc, R(face))
+    cube(mat("sp_body", "#1D2126", rough=0.3, metal=0.4), (0, 0, h / 2 + 0.06), (w, 0.03, h), bevel=0.025, parent=e)
+    cube(mat("sp_edge", "#8A9099", rough=0.25, metal=0.9), (0, 0.002, h / 2 + 0.06), (w + 0.01, 0.026, h + 0.01), bevel=0.025, parent=e)
+    plane(img_mat("sp_screen", os.path.join(TEX, "set_screen.png"), emit=1.2), (0, -0.0165, h / 2 + 0.06), (w * 0.9, h * 0.92), rot=(R(90), 0, 0), parent=e)
+    cube(mat("sp_stand", "#5A6475", rough=0.5), (0, 0.12, 0.03), (w * 0.8, 0.3, 0.06), parent=e)     # 立てる台
+    sw, swm, rows = [], [], []
+    for k in range(4):
+        zc = 0.06 + h * 0.92 * (0.5 - (k + 0.5) / 4) + h / 2      # 画面の段（上から）
+        track_x = w * 0.27
+        cube(mat("sp_track%d" % k, "#C9CED6", rough=0.4), (track_x, -0.02, zc), (0.085, 0.01, 0.045), bevel=0.02, parent=e)
+        m_ = mat("sp_knob%d" % k, "#9AA4B2", rough=0.4, emit=0.0)
+        kn = empty((track_x - 0.02, -0.03, zc)); kn.parent = e
+        sphere(m_, (0, 0, 0), 0.026, scale=(1, 0.6, 1), parent=kn, seg=16)
+        sw.append(kn); swm.append(m_)
+        r_ = empty((0.0, -0.03, zc)); r_.parent = e; rows.append(r_)
+    return dict(root=e, sw=sw, swm=swm, rows=rows)
+
+
+def switch_on(sp, k, t, col="#34B266"):
+    """設定のスイッチ k を、t に右へ動かして緑にする"""
+    kn = sp["sw"][k]; p0 = tuple(kn.location)
+    key(kn, "location", t, p0); key(kn, "location", t + 0.18, (p0[0] + 0.04, p0[1], p0[2]))
+    lamp_color(sp["swm"][k], t, col, 1.5, 0.18)

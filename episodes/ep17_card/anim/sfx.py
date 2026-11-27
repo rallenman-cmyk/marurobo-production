@@ -127,6 +127,22 @@ def make17(kind, sr):
         return (0.06 * np.sin(2 * np.pi * np.cumsum(f) / sr) * np.sin(np.pi * tt / 0.5)).astype(np.float32)
     if kind == "thump":     # 3章：金庫のカードが赤く光る（低いドン）
         return 0.3 * _mx(_t(90, 60, 0.4, sr, a=0.003, d=0.3), 0.3 * _n(0.15, sr, 60, 400, a=0.002, d=0.1))
+    if kind == "gashan":    # 5章：門の格子が落ちて閉まる（ガシャン）：金属の打つ音に、短い響きと小さなはね返り
+        n = int(0.7 * sr); x = np.zeros(n)
+        hit = _mx(_n(0.25, sr, 300, 6000, a=0.001, d=0.18), 0.5 * _t(220, 180, 0.4, sr, a=0.001, d=0.3), 0.35 * _t(530, 500, 0.3, sr, a=0.001, d=0.2))
+        x[:len(hit)] += hit[:n]
+        j = int(0.14 * sr); c = 0.35 * _n(0.08, sr, 800, 5000, a=0.001, d=0.05); x[j:j + len(c)] += c[:n - j]
+        return 0.32 * x
+    if kind == "pachin":    # 5章：札がはじかれる（パチン）：短く高い打つ音
+        return 0.3 * _mx(_n(0.05, sr, 1500, 9000, a=0.0005, d=0.03), 0.4 * _t(1800, 1500, 0.06, sr, a=0.0005, d=0.04))
+    if kind == "pipo":      # 5章：設定のスイッチが入る（ピポ）：上がる 2 音
+        a_ = _t(880, 880, 0.09, sr, a=0.003, d=0.05); b_ = _t(1320, 1320, 0.12, sr, a=0.003, d=0.08)
+        x = np.zeros(int(0.24 * sr)); x[:len(a_)] += a_; j = int(0.1 * sr); x[j:j + len(b_)] += b_[:len(x) - j]
+        return 0.12 * x
+    if kind == "warn":      # 5章：門の上のランプが赤くなる（ピッ、ピッ：低めの短い 2 音）
+        a_ = _t(660, 660, 0.1, sr, a=0.002, d=0.06)
+        x = np.zeros(int(0.32 * sr)); x[:len(a_)] += a_; j = int(0.18 * sr); x[j:j + len(a_)] += a_[:len(x) - j]
+        return 0.12 * x
     return None
 
 

@@ -93,6 +93,18 @@ def ev_list():
     add(s("22-07") + 0.05, s("22-08") + 0.35, "pair",   # flash_check：札が消えてから次のカットまで 0.4 秒、図のない絵が挟まった → つなぎが終わるまで
         dict(left=("A01c", e("01-03") + 0.25), right=("D21e", wp("21-05", "ぽっと") + 1.5),
         cap=("金庫の中のカード", "塔の台帳の番号")))
+    # 5章（2026-11-27）：絵コンテ表の 5章。字幕と同じ文は書かない（26-08 の問いはスマホの絵だけ）
+    add(wp("23-05", "門番さんの") + 1.2, e("23-05") + 0.3, "bubble", dict(obj="maru_top", icon="!"))   # 胸を張る（得意）
+    add(wp("26-13", "スマホに") - 0.05, e("26-14") + 0.3, "idv", dict(t_a=wp("26-13", "スマホに") + 0.1, t_b=wp("26-13", "持ち主") - 0.1))
+    add(wp("26-14", "本人確認") - 0.1, e("26-14") + 0.3, "tag", dict(text="本人確認", pos=(640, 60), size=56, bg=YEL))
+    add(s("27-01") + 0.05, wp("27-02", "金庫では") + 1.3, "pip_clip", dict(clip="A01c", src_t=e("01-03") - 1.0, fade=(wp("27-02", "金庫では") - 0.2, 1.4)))   # 冒頭の、カードを金庫にしまう所 → 27-02 でうすくなる
+    add(wp("27-03", "本人確認") - 0.1, e("27-03") + 0.4, "glowtag", dict(text="本人確認", pos=(640, 150), size=80, t0=wp("27-03", "本人確認") - 0.1))
+    add(s("28-04") + 0.05, e("28-04") + 0.3, "pip_clip", dict(clip="A02", src_t=w("02-01", "ブルッ") - 0.6))   # 2章の頭：スマホに知らせが届いた所
+    add(wp("28-03", "カードを使った") - 0.1, e("28-09") + 0.4, "steps", dict(rows=[
+        (wp("28-03", "カードを使った") - 0.1, ["① 使った知らせ"]),
+        (wp("28-05", "明細を") - 0.1, ["② 明細を見る"]),
+        (wp("28-06", "ネットの") - 0.1, ["③ 本人確認に登録"]),
+        (wp("28-07", "おかしいと") - 0.1, ["④ おかしいと思ったら", "すぐカードの会社へ"])]))
     # v1 のコメント「シーン変わる前にはてな出してるからすぐ位置が移動してるの気になる」：物について動く札（吹き出し・札・輪）は、
     #   カメラの替わり目（重なるつなぎ 0.35〜0.6 秒）が終わってから出す。替わり目をまたぐ札は、替わり目のあとにずらす
     import json as _js
@@ -123,6 +135,8 @@ def sfx_list():
     L.append((wp("22-03", "2025年") - 0.1, "pop", 0.3)); L.append((wp("22-03", "およそ") - 0.1, "thump", 0.35)); L.append((wp("22-04", "9割") - 0.1, "pi", 0.3))
     for k_ in range(3): L.append((s("22-05") + 0.2 + 0.35 * k_, "pop", 0.3))
     L.append((wp("22-06", "当てられる") - 0.1, "pi", 0.3)); L.append((s("22-07") + 0.05, "swish", 0.25))
+    L.append((wp("26-13", "スマホに") + 0.1, "pop", 0.3)); L.append((wp("26-13", "持ち主") - 0.1, "pop", 0.3)); L.append((wp("26-14", "本人確認") - 0.1, "pi", 0.3))
+    L.append((s("27-01") + 0.05, "swish", 0.25)); L.append((wp("27-03", "本人確認") - 0.1, "shimmer", 0.3)); L.append((s("28-04") + 0.05, "swish", 0.25))
     return L
 
 
@@ -743,6 +757,53 @@ def cycle_sprite(t, p):
     return im.resize((W_, H_), Image.LANCZOS)
 
 
+def idv_sprite(t, p):
+    """26-13：本人確認の 2 つの例（字の名前は短く。字幕の文は書かない）：スマホに届いた数字を打ちこむ・指で画面にふれる"""
+    W_, H_ = 700, 300; S2 = 2
+    im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=30 * S2, fill=(255, 255, 255, 240))
+    for j, (kd, lab, ta) in enumerate((("keypad", "数字を打ちこむ", p["t_a"]), ("finger", "指でふれる", p["t_b"]))):
+        if t < ta: continue
+        cx = (185 + j * 330) * S2
+        IC.icon5(d, kd, cx, 115 * S2, 78 * S2, NAVY)
+        D.ctext(d, (cx, 245 * S2), lab, D.font(44 * S2), NAVY)
+    return im.resize((W_, H_), Image.LANCZOS)
+
+
+def glowtag_sprite(t, p):
+    """27-03：「本人確認」の札が大きく光る（黄色い光の輪が広がる）"""
+    spr, off = tag_sprite(p["text"], p.get("size", 72), p.get("bg", YEL), p.get("fg"))
+    W_, H_ = spr.width + 120, spr.height + 120
+    im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    u = ((t - p["t0"]) / 1.2) % 1.0
+    for r_ in range(3):
+        g = max(0.0, 1.0 - u - r_ * 0.25)
+        if g <= 0: continue
+        pad = int(20 + 40 * (u + r_ * 0.25))
+        d.rounded_rectangle((60 - pad, 60 - pad, W_ - 60 + pad, H_ - 60 + pad), radius=40 + pad, outline=(255, 214, 60, int(200 * g)), width=8)
+    im.alpha_composite(spr, (60, 60))
+    return im
+
+
+def steps_sprite(t, p):
+    """28-03〜28-09：自分でできること（出したまま下に足していく。いま言っている段は黄色）"""
+    rows = [(tt, lines) for tt, lines in p["rows"] if t >= tt]
+    S2 = 2; W_ = 540; LH = 62
+    nlines = sum(len(l) for _, l in rows)
+    H_ = 30 + nlines * LH + 10 * max(0, len(rows) - 1) + 20
+    im = Image.new("RGBA", (W_ * S2, H_ * S2), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((0, 0, W_ * S2 - 1, H_ * S2 - 1), radius=26 * S2, fill=(255, 255, 255, 236))
+    y = 30
+    for i, (tt, lines) in enumerate(rows):
+        now = (i == len(rows) - 1) and (t - tt < p.get("hl", 4.0))
+        h = len(lines) * LH
+        if now: d.rounded_rectangle((12 * S2, (y - 8) * S2, (W_ - 12) * S2, (y + h - 4) * S2), radius=14 * S2, fill=(255, 236, 150, 255))
+        for j, ln in enumerate(lines):
+            d.text(((30 if j == 0 else 74) * S2, (y + j * LH) * S2), ln, font=D.font(44 * S2), fill=NAVY + (255,))
+        y += h + 10
+    return im.resize((W_, H_), Image.LANCZOS)
+
+
 def fig22_sprite(t, p):
     """22-03〜22-06：被害の数字（約 510 億円・2025年・1年間）、10 に分けた丸（9 つが青＝番号だけ）、きっかけの 3 つの絵（「当てられた」だけ光る）。
     数字の出どころ：日本クレジット協会の発表（2025 年 510.5 億円、番号盗用 93.1％）"""
@@ -932,12 +993,19 @@ def draw(t, base, where, frame_of=None, fontdir=None):
                 _paste(base, fr, 340 + i_ * 600, 260, k, a)
         elif kind == "cycle":
             _paste(base, cycle_sprite(t, p), 640, 250, k, a)
+        elif kind == "idv":
+            _paste(base, idv_sprite(t, p), 640, 235, k, a)
+        elif kind == "glowtag":
+            spr = glowtag_sprite(t, p); _paste(base, spr, p["pos"][0], p["pos"][1], k, a)
+        elif kind == "steps":
+            spr = steps_sprite(t, p); _paste(base, spr, 1260 - spr.width / 2, 30 + spr.height / 2, 1.0, a)
         elif kind == "remote":
             _paste(base, remote_sprite(t, t0, p), 640, 290, k, a)
         elif kind == "rewind":
             base.alpha_composite(rewind_layer(t, t0))
         elif kind == "pip_clip" and frame_of:
             if p.get("nopop"): k = 1.0          # 前の小窓の続き：小さくなって出直さない
+            if p.get("fade") and t >= p["fade"][0]: a *= max(0.0, 1.0 - (t - p["fade"][0]) / p["fade"][1])   # 5章 27-02「小窓の金庫がうすくなる」：ゆっくり消える
             im = frame_of(p["clip"], p["src_t"] + (0 if p.get("hold") else (t - t0)))
             if im is None: continue
             im = imag_pip(im, 544, 306)      # 小窓は想像の絵（青っぽく）。大きさは 16本目 v1 の確認役の直し（544×306）

@@ -99,7 +99,7 @@ class MaruR:
     def hop(self, t, h=0.25, d=0.45, sound=True):
         self.cmds.append((t, "hop", dict(sound=sound)))
 
-    def lean(self, t0, t1, deg): self.cmds.append((t0, "lean", dict(t1=t1, deg=deg)))
+    def lean(self, t0, t1, deg, hold=0.0): self.cmds.append((t0, "lean", dict(t1=t1, deg=deg, hold=hold)))     # hold：傾いたまま止まる秒（5章「胸を張る・得意顔」。16本目の maru16 と同じ）
     def tilt(self, t, deg, d=0.3): self.cmds.append((t, "roll", dict(deg=deg, d=d)))
     def glow(self, t, g, d=0.3, g0=None): self.cmds.append((t, "light", dict(v=g, d=d)))
     def blink(self, t, g=0.9, d=0.22): self.cmds.append((t, "blink", {}))
@@ -188,8 +188,8 @@ class MaruR:
                 p.tracks["pitch"].set(t, 0.08, 6.0); p.tracks["pitch"].set(t + 0.1, 0.5, 0.0)
                 p.event(t, "land", 2.5)
             elif kind == "lean":                           # 前へゆっくり傾く（手すりに引っぱられる）→ 戻す
-                t0_, t1_, deg_ = t, a["t1"], a["deg"]
-                p.layer(t0_, t1_ + 0.5, lambda u, t0_=t0_, t1_=t1_, deg_=deg_: {"pitch": deg_ * max(0.0, min(1.0, (u - t0_) / max(0.01, t1_ - t0_))) * (1.0 if u <= t1_ else max(0.0, 1 - (u - t1_) / 0.5))})
+                t0_, t1_, deg_, h_ = t, a["t1"], a["deg"], a.get("hold", 0.0)
+                p.layer(t0_, t1_ + h_ + 0.5, lambda u, t0_=t0_, t1_=t1_, deg_=deg_, h_=h_: {"pitch": deg_ * max(0.0, min(1.0, (u - t0_) / max(0.01, t1_ - t0_))) * (1.0 if u <= t1_ + h_ else max(0.0, 1 - (u - t1_ - h_) / 0.5))})
             elif kind == "roll":
                 p.tracks["roll"].set(t, a["d"], -a["deg"])
             elif kind == "light":

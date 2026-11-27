@@ -9,6 +9,8 @@
 #   K（試す）：S16〜S17 お店の門で何度も試す。一定の刻みで、少しずつ張りつめる。こわくない
 #   R（正体）：S18〜S19 まるロボの番号だった・手口の正体。考えこむ、落ち着いた感じ（こわがらせない）
 #   L（台帳）：S20〜S22 なぜ使っていないカードも？ 塔の中の台帳を調べる。好奇心・落ち着いた説明
+#   G（守る側）：S23〜S26 門番さんと並んで、影を止める。頼もしく、明るく、少しわくわく（こわくない）
+#   P（自分でできること）：S27〜S28 気づいて、家でスマホの設定を 1 つずつ。あたたかく、安心する感じ
 import os, sys, json, base64, time, urllib.request
 
 COMMON = ("Instrumental background music for a cute, gentle science explainer video for all ages, starring a small round robot. "
@@ -32,6 +34,10 @@ PROMPTS = {
                   "about 84 BPM, reflective and reassuring, a little serious but kind, not sad and not scary.",
     "L": COMMON + "Exploring a bright, tidy hall full of softly glowing lamps to understand why something happened: gentle marimba and celesta, "
                   "soft warm pad, light pizzicato, steady soft beat, about 92 BPM, curious, calm and clear like a friendly explanation, never scary.",
+    "G": COMMON + "A friendly, reliable gatekeeper and a little robot standing side by side, stopping a sneaky shadow at a shop gate: bouncy pizzicato, "
+                  "light snare brushes, bright brass-like synth stabs kept soft, warm bass, major key, about 106 BPM, confident, cheerful and a bit heroic, never scary.",
+    "P": COMMON + "Back home on a sunny afternoon, a little robot calmly turns on helpful phone settings one by one: soft acoustic guitar, gentle glockenspiel, "
+                  "warm pad, light soft beat, major key, about 90 BPM, reassuring, warm and practical, a happy calm ending feeling.",
 }
 
 

@@ -919,6 +919,293 @@ def b_pip21(cl):
     pop_in(sp, t0 + 1.0, 1.0, 0.2); pop_out(sp, t0 + 1.5, 1.0, 0.3)
 
 
+# ======================================================================== 5章（2026-11-27）：C お店（門番さん）→ C2 別のお店 → A 家（絵コンテ表の 5章）
+GD5 = (1.0, -1.1, 0.0)        # 門番さん（門の右わき。植え込み (1.35,-0.6) の前）
+GD5_T = (-0.05, -0.8, 0.0)     # 25 章：テストの板を機械の前に出す所
+MR5 = (0.45, -1.25, 0.0)       # 門番さんのとなりのまるロボ
+MCH5 = (-0.55, -1.5, 0.0)      # 影の機械（口を門へ向ける。0.6 倍）
+SH5 = (-1.05, -2.1, 0.0)       # 影（機械のうしろ）
+DROP5 = (-0.15, -0.75)         # はじかれた赤い札が落ちる所（門の前）
+PH5_FLOAT = (MR5[0], MR5[1] - 0.42, 0.62)   # 26-07：まるロボの目の前に浮かぶスマホ
+
+
+def _stand_phone(loc, states, rx=-90.0, rz=0.0, glow=1.8):
+    """立てたスマホ（画面を +y 側＝まるロボのほうへ。rx=-90）"""
+    ph, sc = phone_seq(loc, 0.0, states, glow=glow)
+    ph.rotation_euler = (R(rx), 0, R(rz))
+    return ph
+
+
+def _maru5(loc, face):
+    M = MaruR(loc, face=face, s=SHOP_S); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)
+    hat_on_maru(M, -50.0)
+    bag = empty((0, 0, 0)); bag.parent = M.body                     # わきの小さなかばん（スマホを入れて持ち歩く）
+    cube(_m("bag5", "#8A5A3A", rough=0.7), (0.0, 0.0, 0.0), (0.09, 0.05, 0.08), bevel=0.01, parent=bag)
+    bag.location = (0.29, -0.02, 0.05)
+    track("bag", bag, 0.0)
+    return M, bag
+
+
+def _fire(t_in, t_bu, slot_w, SLOT, TOPQ, big=False, quiet=False, drops=None, n=0, rng=None, grille_t=None):
+    """機械の口 → 門をくぐってレジの口へ札が飛ぶ（t_in に着く）→ 白い光が塔へ → 赤い光が戻る → t_bu に赤い札が門の前へ落ちる"""
+    sl = slip_obj(slot_w, (0, 0, 0), tex="slip_%d" % (n % 8), w=SLIP_W)
+    t0 = t_in - 0.5
+    key(sl, "location", -100.0, slot_w, "CONSTANT"); key(sl, "location", t0, slot_w)
+    key(sl, "location", t0 + 0.25, (-0.2, -0.6, 1.0)); key(sl, "location", t_in, (SLOT[0], SLOT[1], SLOT[2] + 0.05))
+    key(sl, "rotation_euler", t0, (0, 0, 0)); key(sl, "rotation_euler", t_in, (R(90), 0, 0))
+    hide_key(sl, -100.0, True); hide_key(sl, t0, False); hide_key(sl, t_in + 0.03, True)
+    if not quiet: ev(t0 + 0.05, "slip", 0.25, "slot5")
+    mid = (t_in + t_bu) / 2
+    _ball("#FFFFFF", t_in + 0.02, mid - 0.03, GATE_Q, TOPQ, r=0.16 if big else 0.1, arc=0.4)
+    _ball(RED_C, mid + 0.03, t_bu - 0.05, TOPQ, GATE_Q, r=0.16 if big else 0.1, arc=0.4)
+    rs = slip_obj(SLOT, (R(90), 0, 0), tex="slip_red", w=0.45)
+    pe = (DROP5[0] + rng.uniform(-0.35, 0.35), DROP5[1] + rng.uniform(-0.2, 0.15), 0.003 + 0.0045 * n)
+    key(rs, "location", -100.0, (SLOT[0], SLOT[1], SLOT[2] - 0.1), "CONSTANT"); key(rs, "location", t_bu, (SLOT[0], SLOT[1], SLOT[2] - 0.1))
+    key(rs, "location", t_bu + 0.25, (SLOT[0], SLOT[1] - 0.05, 1.3)); key(rs, "location", t_bu + 0.55, (0.0, -0.1, 1.2)); key(rs, "location", t_bu + 0.9, pe)
+    key(rs, "rotation_euler", t_bu + 0.25, (R(90), 0, 0)); key(rs, "rotation_euler", t_bu + 0.9, (0, 0, R(rng.uniform(-40, 40))))
+    hide_key(rs, -100.0, True); hide_key(rs, t_bu, False)
+    if not quiet: ev(t_bu, "bubu", 0.4, "register"); ev(t_bu + 0.9, "drop", 0.25, "drops5")
+    if drops is not None: drops.append(rs)
+
+
+def _shop5_common(recolor=False):
+    S_ = shop(); track("register", S_["screen"], 0.0)
+    if recolor: shop_recolor()
+    tw = tower(TWR_SHOP, flag=BLUE_C, s=1.6); track("tower", tw["top"], 0.0)
+    bpy.context.view_layer.update()
+    TOP = tuple(tw["top"].matrix_world.translation); TOPQ = (TOP[0], TOP[1], TOP[2] + 1.0)
+    cube(_m("regslot", "#15171B", rough=0.9), (0, -0.05, 0.905), (0.34, 0.03, 0.012), parent=S_["reg"])
+    SLOT = (REG[0], REG[1] - 0.05, 0.91)
+    lm, lo = gate_bar_lamp(); track("gatelamp", lo, 0.0)
+    return S_, TOPQ, SLOT, lm
+
+
+def b_shop5(cl):
+    """S23〜S27（最初のお店）：門番さん・影の機械・閉まる門・絵のテスト・スマホの本人確認・得意顔・気づき"""
+    S_, TOPQ, SLOT, lm = _shop5_common()
+    lamp_color(lm, s("23-01") - 5.0, "#FFF4DA", 3.0, 0.1)          # ふだんは白く光る
+    # 門番さん：23-02 の終わりに門の中から出てきて、わきに立つ
+    g = guard((0.0, 0.9, 0.0), face=0.0, s=0.85); track("guard", g.root, 1.2); track("guard_head", g.head, 0.0); track("guard_hand", g.hand, 0.0)
+    t_g = s("23-02") + 1.0
+    key(g.root, "location", -100.0, (0.0, 0.9, 0.0), "CONSTANT"); key(g.root, "location", t_g, (0.0, 0.9, 0.0))
+    key(g.root, "location", t_g + 1.4, (0.0, -0.75, 0.0)); key(g.root, "location", t_g + 2.6, GD5)
+    key(g.root, "rotation_euler", t_g + 1.4, (0, 0, 0)); key(g.root, "rotation_euler", t_g + 1.8, (0, 0, R(-40))); key(g.root, "rotation_euler", t_g + 2.8, (0, 0, R(-15)))
+    # 23-04：見張り（目が左右を見回す）
+    guard_look(g, wp("23-04", "お店や") - 0.1, 0.035); guard_look(g, wp("23-04", "見張り") - 0.3, -0.035); guard_look(g, e("23-04") + 0.2, 0.0)
+    # まるロボ：歩道を左から門の前へ → 門番さんを見上げる → となりへ跳んで並び、胸を張る
+    M, bag = _maru5((-3.2, -1.9, 0.0), 90.0)
+    M.walk(s("23-02") + 0.2, s("23-02") + 3.4, (0.1, -1.75, 0.0))
+    M.at(s("23-03") + 0.3, face=120.0, look=22)
+    M.hopto(wp("23-05", "門番さんの") + 0.5, MR5)
+    M.at(wp("23-05", "門番さんの") + 0.7, face=0.0, look=0)
+    M.lean(wp("23-05", "門番さんの") + 1.2, wp("23-05", "門番さんの") + 1.6, -12.0, hold=1.2); M.glow(wp("23-05", "門番さんの") + 1.2, 1.25); M.glow(e("23-05") + 0.6, 0.9)   # 胸を張る（体をそらせ、目を明るく）
+    # 24-01：影が機械を抱えて来て、門の前の左に置く。まるロボがにらむ
+    sh = shadow((-4.6, -2.2, 0.0), face=90.0, s=0.8); track("shadow", sh.root, 1.2); track("shadow_hand", sh.hand, 0.0)
+    mc = machine((0, 0, 0), 180.0); mc["root"].scale = (0.6, 0.6, 0.6); track("machine5", mc["body"], 0.3)
+    bpy.context.view_layer.update()
+    t_a = s("24-01") - 0.3; t_set = wp("24-01", "やってきました") + 0.4
+    key(sh.root, "location", -100.0, (-4.6, -2.2, 0.0), "CONSTANT"); key(sh.root, "location", t_a, (-4.6, -2.2, 0.0)); key(sh.root, "location", t_set - 0.3, SH5)
+    key(sh.root, "rotation_euler", t_set - 0.3, (0, 0, R(90))); key(sh.root, "rotation_euler", t_set + 0.3, (0, 0, R(160)))
+    key(sh.arm, "rotation_euler", t_a, (R(-25), 0, 0)); key(sh.arm, "rotation_euler", t_set, (R(-25), 0, 0)); key(sh.arm, "rotation_euler", t_set + 0.4, (R(-60), 0, 0))
+    carry_off = (0.0, 0.45, 0.25)                                   # 影の前に抱える
+    for tt in (-100.0, t_a):
+        key(mc["root"], "location", tt, (-4.6 + 0.45, -2.2, 0.25), "CONSTANT" if tt < 0 else "BEZIER")
+    key(mc["root"], "location", t_set - 0.3, (SH5[0] + 0.45, SH5[1], 0.25)); key(mc["root"], "location", t_set, MCH5)
+    key(mc["root"], "rotation_euler", t_set - 0.3, (0, 0, R(90))); key(mc["root"], "rotation_euler", t_set, (0, 0, R(180)))
+    ev(t_set, "thud", 0.35, "machine5"); ev(t_a + 0.3, "low_wind", 0.3, "shadow")
+    M.at(s("24-01") + 0.6, face=-60.0, look=-5); M.lean(s("24-01") + 1.6, s("24-01") + 2.0, 8.0, hold=1.0); M.glow(s("24-01") + 1.6, 0.55)   # にらむ（前へ少し乗り出し、目を細く暗く）
+    # 24-02〜24-05：カタカタ（機械がゆれる）→ 札が門をくぐってレジへ → ブッブー → 赤い札が落ちる。だんだん速く → ランプが赤 → ガシャン
+    slot_w = (MCH5[0], MCH5[1] + 0.18, 0.2)
+    track("slot5", mc["slot"], 0.0)
+    rng = _rnd.Random(55); drops = []
+    k1, k2 = wp("24-02", "カタカタ", 0), wp("24-02", "カタカタ", 1)
+    b1, b2 = wp("24-02", "ブッブー", 0), wp("24-02", "ブッブー", 1)
+    emit_key(mc["lamp"], -100.0, 0.0); emit_key(mc["lamp"], k1 - 0.05, 0.0); emit_key(mc["lamp"], k1 + 0.1, 6.0)
+    _rattle(mc["body"], k1, k1 + 0.5); _rattle(mc["body"], k2, k2 + 0.5)
+    ev(k1, "rattle", 0.35, "machine5"); ev(k2, "rattle", 0.35, "machine5")
+    _fire(k1 + 0.5, b1, slot_w, SLOT, TOPQ, big=True, drops=drops, n=0, rng=rng)
+    _fire(k2 + 0.5, b2, slot_w, SLOT, TOPQ, big=True, drops=drops, n=1, rng=rng)
+    track("drops5", empty((DROP5[0], DROP5[1], 0.02)), 0.0)
+    t_lamp = wp("24-04", "赤く") - 0.1
+    fast = [b2 + 0.5 + 0.42 * k for k in range(int((t_lamp + 1.0 - (b2 + 0.5)) / 0.42))]
+    _rattle(mc["body"], fast[0] - 0.5, fast[-1] + 0.3)
+    for j_, tf in enumerate(fast):
+        _fire(tf, tf + 0.36, slot_w, SLOT, TOPQ, quiet=True, drops=drops, n=2 + j_, rng=rng)
+        if j_ % 2 == 0: ev(tf + 0.36, "bubu", 0.12, "register")
+    ev(fast[0] - 0.5, "rattle", 0.25, "machine5")
+    lamp_color(lm, t_lamp, RED_C, 6.0, 0.15); ev(t_lamp + 0.05, "warn", 0.4, "gatelamp")
+    M.surprise(t_lamp + 0.15)
+    t_sh = wp("24-05", "ガシャン")
+    grille = gate_grille(t_sh - 0.3, d=0.26); track("grille", grille, 0.0)
+    ev(t_sh - 0.04, "gashan", 0.5, "grille")
+    # 閉まる前に出た最後の札が、格子に当たって落ちる
+    lst = slip_obj(slot_w, (0, 0, 0), tex="slip_3", w=SLIP_W)
+    key(lst, "location", -100.0, slot_w, "CONSTANT"); key(lst, "location", t_sh - 0.55, slot_w); key(lst, "location", t_sh - 0.02, (-0.15, -0.45, 1.0))
+    key(lst, "location", t_sh + 0.45, (-0.25, -0.62, 0.01)); key(lst, "rotation_euler", t_sh - 0.02, (R(60), 0, 0)); key(lst, "rotation_euler", t_sh + 0.45, (0, 0, R(25)))
+    hide_key(lst, -100.0, True); hide_key(lst, t_sh - 0.55, False)
+    emit_key(mc["lamp"], t_sh + 0.2, 6.0); emit_key(mc["lamp"], t_sh + 0.5, 1.5)
+    # 24-06：まるロボが跳ねて喜ぶ。24-07：門番さんが手を上げて止める
+    M.at(s("24-06") - 0.2, face=0.0, look=0); M.glow(s("24-04") - 0.3, 0.9)
+    M.hops(s("24-06") + 0.4, n=2); ev(s("24-06") + 0.4, "beep_happy", 0.4, "maru_c")
+    key(g.root, "rotation_euler", s("24-07") - 0.2, (0, 0, R(-15))); key(g.root, "rotation_euler", s("24-07") + 0.5, (0, 0, R(30)))
+    key(g.arm, "rotation_euler", s("24-07") + 0.2, (R(-60), 0, 0)); key(g.arm, "rotation_euler", s("24-07") + 0.7, (R(-170), 0, 0))
+    key(g.arm, "rotation_euler", e("24-07") + 0.4, (R(-170), 0, 0)); key(g.arm, "rotation_euler", e("24-07") + 1.0, (R(-60), 0, 0))
+    # 25：門番さんが機械の前へ出て、絵のテストの板を出す → 機械が迷って（点滅）→ ぴたっと止まる → 板を下ろす
+    t_w = s("25-01") + 0.1
+    key(g.root, "location", t_w, GD5); key(g.root, "location", t_w + 1.4, GD5_T)
+    key(g.root, "rotation_euler", t_w, (0, 0, R(30))); key(g.root, "rotation_euler", t_w + 1.4, (0, 0, R(-40)))
+    tb = test_board(loc=(MCH5[0] + 0.1, MCH5[1] + 0.55, 0.5), rot=(R(90), 0, R(-150)), w=0.5); track("board", tb, 0.0)
+    t_b = wp("25-01", "絵のテスト") - 0.1
+    key(tb, "location", -100.0, (GD5_T[0] - 0.1, GD5_T[1] - 0.25, 0.95), "CONSTANT"); key(tb, "location", t_b, (GD5_T[0] - 0.1, GD5_T[1] - 0.25, 0.95))
+    key(tb, "location", t_b + 0.5, (MCH5[0] + 0.15, MCH5[1] + 0.55, 0.5))
+    hide_key(tb, -100.0, True); hide_key(tb, t_b, False); ev(t_b, "swish", 0.3, "board")
+    key(g.arm, "rotation_euler", t_b - 0.1, (R(-60), 0, 0)); key(g.arm, "rotation_euler", t_b + 0.5, (R(-95), 0, 0))
+    M.at(t_b + 0.6, face=-45.0, look=-12)                           # 板と機械をのぞきこむ
+    t_m = s("25-02") + 0.2; t_stop = wp("25-03", "ぴたっと")
+    for k in range(int((t_stop - t_m) / 0.25)):
+        emit_key(mc["lamp"], t_m + 0.25 * k, 6.0 if k % 2 == 0 else 0.3)
+    _rattle(mc["body"], t_m, t_stop, amp=1.5); ev(t_m, "rattle", 0.2, "machine5")
+    emit_key(mc["lamp"], t_stop, 0.0); ev(t_stop + 0.02, "stop", 0.35, "machine5")
+    M.at(t_stop + 0.6, face=30.0, look=20)                          # 門番さんを見上げる
+    t_dn = s("25-04") + 1.2
+    key(tb, "location", t_dn, (MCH5[0] + 0.15, MCH5[1] + 0.55, 0.5)); key(tb, "location", t_dn + 0.5, (GD5_T[0] - 0.1, GD5_T[1] - 0.25, 0.95)); hide_key(tb, t_dn + 0.5, True)
+    key(g.arm, "rotation_euler", t_dn + 0.1, (R(-95), 0, 0)); key(g.arm, "rotation_euler", t_dn + 0.6, (R(-60), 0, 0))
+    key(g.root, "location", t_dn + 0.8, GD5_T); key(g.root, "location", t_dn + 2.2, GD5)
+    key(g.root, "rotation_euler", t_dn + 0.8, (0, 0, R(-40))); key(g.root, "rotation_euler", t_dn + 2.2, (0, 0, R(-15)))
+    # 25-04 の終わり：影が機械を抱えて去る → 26-01 で立ち止まり、ふり向く → 26-02 で緑の札（当たった札）を持ち上げる → 左へ去る
+    t_go = wp("25-04", "それを") + 0.2; P_STOP = (-3.4, -2.3, 0.0)
+    key(sh.root, "location", t_go, SH5); key(sh.root, "rotation_euler", t_go, (0, 0, R(160)))
+    key(sh.root, "rotation_euler", t_go + 0.5, (0, 0, R(270))); key(sh.root, "location", t_go + 0.9, (SH5[0] + 0.1, SH5[1] + 0.25, 0.0))
+    key(mc["root"], "location", t_go + 0.4, MCH5); key(mc["root"], "location", t_go + 0.9, (SH5[0] - 0.35, SH5[1] + 0.25, 0.25))
+    key(mc["root"], "rotation_euler", t_go + 0.4, (0, 0, R(180))); key(mc["root"], "rotation_euler", t_go + 0.9, (0, 0, R(270)))
+    key(sh.root, "location", s("26-01") + 0.3, P_STOP); key(mc["root"], "location", s("26-01") + 0.3, (P_STOP[0] - 0.45, P_STOP[1], 0.25))
+    key(sh.root, "rotation_euler", s("26-01") + 0.3, (0, 0, R(270))); key(sh.root, "rotation_euler", s("26-01") + 1.1, (0, 0, R(20)))
+    ev(s("26-01") + 0.4, "low_wind", 0.3, "shadow")
+    gs = slip_obj((0, 0, 0), (R(90), 0, 0), tex="slip_green", w=SLIP_W); track("gslip5", gs, 0.0)
+    cube(glow_mat("gslipback5", "#46D27A", 2.0), (0, 0, -0.006), (SLIP_W + 0.06, SLIP_W * 0.18 + 0.05, 0.004), parent=gs)
+    t_up = s("26-02") + 0.3
+    key(sh.arm, "rotation_euler", t_up - 0.1, (R(-60), 0, 0)); key(sh.arm, "rotation_euler", t_up + 0.6, (R(-25), 0, 0))
+    gs.parent = sh.hand; gs.location = (0.0, -0.05, 0.12)
+    hide_key(gs, -100.0, True); hide_key(gs, t_up, False); pop_in(gs, t_up, 1.0, 0.3); ev(t_up, "shimmer", 0.3, "gslip5")
+    key(sh.root, "rotation_euler", wp("26-02", "別のお店") + 0.2, (0, 0, R(20))); key(sh.root, "rotation_euler", wp("26-02", "別のお店") + 0.7, (0, 0, R(270)))
+    key(sh.root, "location", wp("26-02", "別のお店") + 0.7, P_STOP); key(sh.root, "location", wp("26-02", "別のお店") + 3.0, (-7.5, -2.3, 0.0))
+    key(mc["root"], "location", wp("26-02", "別のお店") + 0.7, (P_STOP[0] - 0.45, P_STOP[1], 0.25)); key(mc["root"], "location", wp("26-02", "別のお店") + 3.0, (-7.95, -2.3, 0.25))
+    lamp_color(lm, t_go + 1.0, "#FFF4DA", 3.0, 0.4)                 # 影が去ったら白に戻る
+    # 26-05：はらはら → 26-06：塔から白い光がまるロボへ → 26-07：スマホが震えて目の前に浮かぶ → 26-09：首をぶんぶん → 26-10：赤い ×、赤い光が空へ
+    M.at(s("26-05") - 0.3, face=0.0, look=0)
+    M.wobble(s("26-05") + 0.1, e("26-05") + 0.3, deg=9, period=0.45)
+    bpy.context.view_layer.update()
+    t6 = s("26-06") + 0.1; bag_w = (MR5[0] + 0.21, MR5[1] - 0.02, 0.42)
+    lb = sphere(glow_mat("ball6", "#FFFFFF", 9.0), (0, 0, 0), 0.14, seg=16); track("ball6", lb, 0.0)
+    for tt, pp in ((-100.0, TOPQ), (t6, TOPQ), (t6 + 0.7, (3.5, -2.0, 4.0)), (s("26-07") + 0.1, bag_w)): key(lb, "location", tt, pp)
+    hide_key(lb, -100.0, True); hide_key(lb, t6, False); hide_key(lb, s("26-07") + 0.15, True)
+    ev(t6 + 0.3, "whoosh", 0.3, "ball6")
+    M.at(t6 + 0.2, look=25); M.at(s("26-07") - 0.2, look=-10)
+    t_bz = s("26-07") + 0.2
+    ph = _stand_phone(bag_w, [(0.0, os.path.join(TEX, "ph_home.png")), (t_bz + 1.4, os.path.join(TEX, "ph_ask.png")), (s("26-10") + 0.15, os.path.join(TEX, "ph_no.png"))])
+    track("phone5", ph, 0.0)
+    key(ph, "location", -100.0, bag_w, "CONSTANT"); key(ph, "location", t_bz + 0.5, bag_w); key(ph, "location", t_bz + 1.3, PH5_FLOAT)
+    key(ph, "scale", t_bz + 0.5, (0.4, 0.4, 0.4)); key(ph, "scale", t_bz + 1.3, (2.2, 2.2, 2.2))
+    hide_key(ph, -100.0, True); hide_key(ph, t_bz, False)
+    for k in range(4): key(ph, "rotation_euler", t_bz + 0.08 * k, (R(-90), R(6 if k % 2 else -6), 0))
+    key(ph, "rotation_euler", t_bz + 0.4, (R(-90), 0, 0))
+    ev(t_bz, "buzz", 0.45, "phone5")
+    t_sk = wp("26-09", "首を")
+    M.act(t_sk + 0.1, "shake", amp=26.0); M.act(t_sk + 1.4, "shake", amp=20.0); ev(t_sk + 0.1, "beep_no", 0.45, "maru_c")
+    rb = sphere(glow_mat("ball10", RED_C, 9.0), (0, 0, 0), 0.14, seg=16); track("ball10", rb, 0.0)
+    t10 = s("26-10") + 0.3
+    for tt, pp in ((-100.0, PH5_FLOAT), (t10, PH5_FLOAT), (t10 + 0.9, (-6.0, -4.0, 5.5))): key(rb, "location", tt, pp)
+    hide_key(rb, -100.0, True); hide_key(rb, t10, False); hide_key(rb, t10 + 0.95, True)
+    ev(t10 + 0.1, "whoosh", 0.3, "ball10")
+    # 26-13 のあと、スマホはかばんへ戻る（別のお店の絵の間）
+    t_back = s("26-15") + 0.5
+    key(ph, "location", t_back, PH5_FLOAT); key(ph, "location", t_back + 0.6, bag_w); key(ph, "scale", t_back, (2.2, 2.2, 2.2)); key(ph, "scale", t_back + 0.6, (0.4, 0.4, 0.4)); hide_key(ph, t_back + 0.62, True)
+    # 26-17：門番さんのとなりで得意顔。27：小窓を見上げる → 27-03 でうなずく
+    t_pr = wp("26-17", "すっかり") - 0.1
+    M.at(s("26-17") + 0.2, face=25.0, look=15); M.at(t_pr - 0.4, face=0.0, look=0)
+    M.lean(t_pr, t_pr + 0.4, -12.0, hold=2.0); M.glow(t_pr, 1.25); M.glow(e("26-17") + 0.8, 0.9); ev(t_pr, "beep_happy", 0.4, "maru_c")
+    M.at(s("27-01") + 0.3, face=-20.0, look=22)
+    M.at(s("27-03") + 0.2, look=5); M.nod(wp("27-03", "本人確認") + 0.2, n=2)
+
+
+def b_shop5b(cl):
+    """S26（別のお店 C2）：影が当たった札をレジに入れる → 返事は緑（通ってしまう）→ スマホからの赤い光 → パチン、札がはじかれる → 影が去る。町の引き"""
+    S_, TOPQ, SLOT, lm = _shop5_common(recolor=True)
+    lamp_color(lm, s("26-02") - 5.0, "#FFF4DA", 3.0, 0.1)
+    sh = shadow((-4.2, -2.0, 0.0), face=90.0, s=0.8); track("shadow", sh.root, 1.2); track("shadow_hand", sh.hand, 0.0)
+    gs = slip_obj((0, 0, 0), (R(90), 0, 0), tex="slip_green", w=SLIP_W); track("gslip6", gs, 0.0)
+    cube(glow_mat("gslipback6", "#46D27A", 2.0), (0, 0, -0.006), (SLIP_W + 0.06, SLIP_W * 0.18 + 0.05, 0.004), parent=gs)
+    gs.parent = sh.hand; gs.location = (0.0, -0.05, 0.12)
+    key(sh.arm, "rotation_euler", -100.0, (R(-25), 0, 0), "CONSTANT")
+    t0 = wp("26-02", "別のお店") + 0.3
+    key(sh.root, "location", -100.0, (-4.2, -2.0, 0.0), "CONSTANT"); key(sh.root, "location", t0, (-4.2, -2.0, 0.0))
+    key(sh.root, "location", t0 + 2.2, (0.0, -1.2, 0.0)); key(sh.root, "rotation_euler", t0 + 2.2, (0, 0, R(90)))
+    key(sh.root, "rotation_euler", t0 + 2.6, (0, 0, R(180))); key(sh.root, "location", s("26-03") + 0.9, SH_REG)
+    t_in = e("26-03") - 0.1
+    key(sh.arm, "rotation_euler", t_in - 0.5, (R(-25), 0, 0)); key(sh.arm, "rotation_euler", t_in - 0.2, (R(-5), 0, R(-25)))
+    hide_key(gs, -100.0, False); hide_key(gs, t_in, True); ev(t_in, "slip", 0.3, "register")
+    key(sh.arm, "rotation_euler", t_in + 0.4, (R(-60), 0, 0))
+    # 26-04：塔へ白い光 → 緑の光が戻る（通ってしまう）
+    tq = s("26-04") + 0.1; t_ok = wp("26-04", "塔から") + 0.6
+    _ball("#FFFFFF", tq, tq + 1.3, GATE_Q, TOPQ, r=0.2, arc=1.0, name="qball6")
+    _ball("#46D27A", t_ok - 1.4, t_ok - 0.05, TOPQ, GATE_Q, r=0.2, arc=0.6, name="gball6", strength=10.0)
+    ev(tq + 0.1, "whoosh", 0.3, "gatelamp"); ev(t_ok, "chime_ok", 0.45, "register")
+    reg_screen(S_["screen"], [(0.0, "reg_0"), (t_in + 0.1, "reg_qhit"), (t_ok, "reg_hit"), (wp("26-11", "パチン") - 0.05, "reg_wrong")])
+    # 26-11：スマホからの赤い光が空から門へ → パチン！ 札が赤くはじかれて歩道へ → 影がのけぞる
+    t_p = wp("26-11", "パチン")
+    rb = sphere(glow_mat("ball11", RED_C, 10.0), (0, 0, 0), 0.2, seg=16); track("ball11", rb, 0.0)
+    for tt, pp in ((-100.0, (-8.0, -6.0, 7.0)), (t_p - 1.3, (-8.0, -6.0, 7.0)), (t_p - 0.5, GATE_UP), (t_p - 0.15, GATE_Q)): key(rb, "location", tt, pp)
+    hide_key(rb, -100.0, True); hide_key(rb, t_p - 1.3, False); hide_key(rb, t_p - 0.1, True)
+    rs = slip_obj(SLOT, (R(90), 0, 0), tex="slip_red", w=0.45); track("rslip6", rs, 0.0)
+    pe = (0.2, -0.85, 0.004)
+    key(rs, "location", -100.0, (SLOT[0], SLOT[1], SLOT[2] - 0.1), "CONSTANT"); key(rs, "location", t_p - 0.05, (SLOT[0], SLOT[1], SLOT[2] - 0.1))
+    key(rs, "location", t_p + 0.2, (SLOT[0], SLOT[1] - 0.05, 1.3)); key(rs, "location", t_p + 0.45, (0.58, 0.72, 1.25)); key(rs, "location", t_p + 0.7, (0.45, -0.15, 1.1)); key(rs, "location", t_p + 1.05, pe)
+    key(rs, "rotation_euler", t_p + 0.2, (R(90), 0, 0)); key(rs, "rotation_euler", t_p + 1.05, (0, 0, R(20)))
+    hide_key(rs, -100.0, True); hide_key(rs, t_p - 0.05, False)
+    ev(t_p, "pachin", 0.5, "register"); ev(t_p + 1.05, "drop", 0.25, "rslip6")
+    key(sh.root, "rotation_euler", t_p, (0, 0, R(180))); key(sh.root, "rotation_euler", t_p + 0.15, (R(-14), 0, R(180))); key(sh.root, "rotation_euler", t_p + 0.7, (0, 0, R(180)))
+    # 26-12：町の高い引き：塔 → 空（まるロボのスマホのほう）の白い点の道、空 → 門の赤い点の道
+    t12 = s("26-12") + 0.3
+    for k in range(10):
+        u = k / 9.0
+        p_ = (TOPQ[0] + (-8.0 - TOPQ[0]) * u, TOPQ[1] + (-6.0 - TOPQ[1]) * u, TOPQ[2] + (7.0 - TOPQ[2]) * u + 2.0 * math.sin(math.pi * u))
+        d_ = sphere(glow_mat("trailw", "#FFFFFF", 6.0), p_, 0.09, seg=12); pop_in(d_, t12 + 0.08 * k, 1.0, 0.2); pop_out(d_, e("26-12") + 0.3, 1.0, 0.3)
+        q_ = (-8.0 + (GATE_Q[0] + 8.0) * u, -6.0 + (GATE_Q[1] + 6.0) * u, 7.0 + (GATE_Q[2] - 7.0) * u + 1.0 * math.sin(math.pi * u))
+        r_ = sphere(glow_mat("trailr", RED_C, 6.0), q_, 0.09, seg=12); pop_in(r_, t12 + 1.0 + 0.08 * k, 1.0, 0.2); pop_out(r_, e("26-12") + 0.3, 1.0, 0.3)
+    track("trail", empty((-3.0, -3.0, 5.0)), 0.0)
+    # 26-15：影ががっくりして、門から出て左へ去る
+    t15 = s("26-15") + 0.3
+    key(sh.root, "scale", t15, (0.8, 0.8, 0.8)); key(sh.root, "scale", t15 + 0.5, (0.8, 0.8, 0.68))
+    key(sh.root, "location", t15 + 0.6, SH_REG); key(sh.root, "rotation_euler", t15 + 0.6, (0, 0, R(180))); key(sh.root, "rotation_euler", t15 + 1.1, (0, 0, R(0)))
+    key(sh.root, "location", t15 + 2.4, (0.0, -1.3, 0.0)); key(sh.root, "rotation_euler", t15 + 2.6, (0, 0, R(-90)))
+    key(sh.root, "location", t15 + 5.0, (-4.8, -1.9, 0.0)); ev(t15 + 0.4, "low_wind", 0.25, "shadow")
+    # 26-16：町の高い引き。となりの建物の入口の上の小さなランプが、1 つずつ青く光る（多くのお店に入っている）
+    t16 = wp("26-16", "多くの") - 0.1
+    for k, x0 in enumerate((-6.0, 6.1, -9.2, 9.3, 0.0)):
+        y_ = -0.25 if x0 else -0.32
+        m_ = mat("nlamp%d" % k, "#9AA4B2", rough=0.3, emit=0.0)
+        o_ = cyl(m_, (x0, y_ - 0.05, 2.75), 0.06, 0.6, rot=(0, R(90), 0), verts=16)
+        lamp_color(m_, t16 + 0.45 * k, BLUE_C, 6.0, 0.2); ev(t16 + 0.45 * k, "pi", 0.12, "trail")
+
+
+def b_house28(cl):
+    """S28（家・昼）：大きな設定のスマホ（4 つの段）。まるロボがスイッチを 1 つずつ体で押す（ピポ）→ うなずく"""
+    sf, tr, tb = _house_common()
+    SP = (1.45, 1.55, 0.0)
+    sp = settings_phone(SP, face=0.0, h=0.56); track("setphone", sp["root"], 0.35)
+    for k in range(4): track("row%d" % k, sp["rows"][k], 0.0)
+    M = MaruR((1.15, 0.55, 0.0), face=150.0, s=HOUSE_S); track("maru", M.body, 0.25); track("maru_top", M.body, 0.32)
+    hat_on_maru(M, -50.0)
+    FRONT = (1.45, 1.22, 0.0)
+    M.walk(s("28-02") + 0.3, s("28-02") + 3.0, FRONT); M.at(s("28-02") + 3.1, face=180.0, look=18)
+    for k, (lid, word) in enumerate((("28-03", "カードを使った"), ("28-05", "明細を"), ("28-06", "ネットの"), ("28-07", "すぐに"))):
+        t_ = wp(lid, word) - 0.2
+        M.hop(t_ - 0.35) if k < 2 else M.push(t_ - 0.15, 0.15)
+        switch_on(sp, k, t_); ev(t_ + 0.02, "pipo", 0.4, "row%d" % k)
+    M.at(s("28-08") + 0.2, look=10); M.nod(s("28-08") + 0.6, n=2)
+    M.at(s("28-09") + 0.3, look=22); M.nod(s("28-09") + 2.6, n=1)
+
+
 # ======================================================================== カット割り：(名前, 舞台, 切り替わる時刻, カメラ, 親)
 #   同じ絵を 8 秒以上続けない。文の切れ目で、寄り・引き・横・まるロボを追う絵に替える。家の中は、まるロボから 0.9 m 以上離す
 SX, SY = SAFE[0], SAFE[1]
@@ -1074,6 +1361,51 @@ CUTS = [
     ("A22c", b_house20, s("22-03"), C((-0.6, -1.4, 1.5), (1.3, 0.8, 0.3), 28), "A"),
     ("A22d", b_house20, s("22-08"), C((2.4, 0.1, 0.85), (0.8, 1.05, 0.35), 28), "A"),
     ("P21", b_pip21, s("21-04") - 0.2, C((0.1, -1.3, 1.6), (0.0, 0.0, 0.95), 32), "I"),   # 試しの絵の点検：カードが小さかった
+    # 5章（2026-11-27）
+    ("C23", b_shop5, s("23-01") - 0.5, C((-3.0, -7.0, 2.2), (1.5, 1.5, 2.4), 26), "C"),
+    ("C23b", b_shop5, s("23-02"), C((-1.0, -6.0, 1.4), (-1.2, -1.5, 0.6), 28), "C"),
+    ("C23c", b_shop5, s("23-03"), C((-0.6, -3.2, 0.55), (0.8, -1.2, 1.2), 28), "C"),
+    ("C23d", b_shop5, s("23-04"), C((0.7, -2.7, 1.3), (1.0, -1.1, 1.3), 35), "C"),
+    ("C23e", b_shop5, s("23-05"), C((0.4, -4.6, 1.1), (0.5, -1.0, 0.8), 28), "C"),
+    ("C24", b_shop5, s("24-01") - 0.3, C((0.6, -5.5, 1.6), (-1.6, -1.5, 0.7), 26), "C"),
+    ("C24b", b_shop5, s("24-02"), C((-2.2, -0.9, 2.0), (-0.3, -0.9, 0.6), 28), "C"),   # 試しの絵の点検：影の体が手前をふさいだ → 左上から
+    ("C24c", b_shop5, s("24-04"), C((0.6, -2.4, 0.9), (0.0, -0.3, 2.3), 30), "C"),
+    ("C24d", b_shop5, s("24-05") - 0.3, C((0.0, -4.2, 1.3), (0.0, -0.3, 1.2), 30), "C"),
+    ("C24e", b_shop5, s("24-06"), C((1.6, -4.8, 1.5), (-0.2, -1.0, 0.6), 28), "C"),
+    ("C24f", b_shop5, s("24-07"), C((2.6, -3.4, 1.4), (0.4, -0.8, 1.3), 28), "C"),
+    ("C25", b_shop5, s("25-01"), C((-2.2, -0.4, 1.1), (-0.45, -1.1, 0.5), 30), "C"),
+    ("C25b", b_shop5, s("25-02"), C((-1.6, -2.4, 0.8), (-0.55, -1.5, 0.35), 32), "C"),
+    ("C25c", b_shop5, s("25-04"), C((0.2, -4.4, 1.3), (-0.2, -1.2, 0.8), 26), "C"),
+    ("C26", b_shop5, s("26-01"), C((-1.5, -6.5, 1.5), (-3.2, -2.0, 0.9), 28), "C"),
+    ("C26b", b_shop5, s("26-02"), C((-3.0, -3.6, 1.5), (-3.35, -2.55, 1.4), 32), "C"),
+    ("C26c", b_shop5b, wp("26-02", "別のお店") + 0.3, C((-3.5, -7.8, 2.0), (0.5, 0.0, 1.5), 24), "C"),
+    ("C26d", b_shop5b, s("26-03"), C((1.6, 0.3, 1.45), (0.0, 1.2, 0.95), 30), "C"),
+    ("C26e", b_shop5b, s("26-04"), C((-5.0, -7.5, 2.6), (3.0, 3.0, 2.5), 24), "C"),
+    ("C26f", b_shop5, s("26-05"), C((0.9, -3.0, 0.9), (0.45, -1.25, 0.6), 30), "C"),
+    ("C26g", b_shop5, s("26-06"), C((-0.6, -3.6, 0.8), (1.5, -1.0, 1.8), 28), "C"),
+    ("C26h", b_shop5, s("26-07"), C((0.2, -3.0, 0.9), (0.45, -1.5, 0.6), 30), "C"),
+    ("C26i", b_shop5, s("26-08"), C((0.55, -0.75, 0.8), (0.45, -1.67, 0.62), 32), "C"),
+    ("C26j", b_shop5, s("26-09"), C((1.4, -2.9, 0.8), (0.45, -1.25, 0.6), 30), "C"),
+    ("C26k", b_shop5, s("26-10"), C((1.6, -3.2, 1.0), (0.0, -1.4, 1.2), 26), "C"),
+    ("C26l", b_shop5b, s("26-11") - 0.6, C((1.2, -6.4, 1.3), (0.0, -0.6, 1.6), 26), "C"),
+    ("C26m", b_shop5b, s("26-12"), C((-6.0, -16.0, 9.0), (0.0, 1.0, 3.0), 24), "C"),
+    ("C26n", b_shop5, s("26-13"), C((0.9, -3.0, 0.9), (0.45, -1.4, 0.6), 30), "C"),
+    ("C26o", b_shop5, s("26-14"), C((-0.4, -3.0, 1.0), (0.45, -1.3, 0.6), 30), "C"),
+    ("C26p", b_shop5b, s("26-15"), C((1.5, -5.5, 1.4), (0.0, -0.5, 0.9), 26), "C"),
+    ("C26q", b_shop5b, s("26-16"), C((0.0, -14.0, 7.5), (0.0, 0.0, 2.2), 26), "C"),
+    ("C26r", b_shop5, s("26-17"), C((0.7, -3.8, 1.0), (0.7, -1.1, 0.85), 30), "C"),
+    ("C27", b_shop5, s("27-01"), C((1.4, -3.0, 1.0), (0.5, -1.2, 0.75), 30), "C"),
+    ("C27a", b_shop5, s("27-02"), C((-0.2, -3.3, 1.1), (0.45, -1.2, 0.8), 30), "C"),     # 同じ絵を 8 秒以上続けない
+    ("C27b", b_shop5, s("27-03"), C((0.5, -2.8, 0.8), (0.45, -1.25, 0.6), 32), "C"),
+    ("A28", b_house28, s("28-01") - 0.5, C((-0.6, -1.4, 1.3), (1.2, 1.0, 0.4), 30), "A"),
+    ("A28b", b_house28, s("28-02"), C((2.4, 0.5, 0.7), (1.35, 1.2, 0.3), 30), "A"),
+    ("A28c", b_house28, s("28-03"), C((0.6, 0.9, 0.6), (1.45, 1.42, 0.33), 30), "A"),   # 試しの絵の点検：うしろからで、まるロボがスマホをかくした → 横から
+    ("A28c2", b_house28, s("28-04"), C((2.35, 1.0, 0.6), (1.45, 1.42, 0.33), 30), "A"),
+    ("A28d", b_house28, s("28-05"), C((0.6, 0.9, 0.6), (1.45, 1.42, 0.33), 30), "A"),
+    ("A28e", b_house28, s("28-06"), C((2.35, 1.0, 0.6), (1.45, 1.42, 0.33), 30), "A"),
+    ("A28f", b_house28, s("28-07"), C((0.6, 0.9, 0.6), (1.45, 1.42, 0.33), 30), "A"),
+    ("A28g", b_house28, s("28-08"), C((2.2, 0.4, 0.9), (1.45, 1.35, 0.3), 30), "A"),
+    ("A28h", b_house28, s("28-09"), C((0.6, 0.6, 0.8), (1.45, 1.35, 0.3), 30), "A"),
     ("C13p", b_shop, s("13-01") - 0.1, None, "C"),
     # 小窓（想像）
     ("P05", b_pip05, s("05-01") - 0.2, C((1.4, -0.3, 1.1), (3.0, -0.2, 1.4), 30), "I"),
@@ -1084,7 +1416,7 @@ CUTS = [c for c in CUTS if c[3] is not None]
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
 PIP_ONLY = {"P05", "P06", "P07", "P18", "P19", "P21"}
-END_T = e("22-08") + 2.0
+END_T = e("28-09") + 2.0
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}

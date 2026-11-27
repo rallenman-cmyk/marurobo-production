@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _sp = importlib.util.spec_from_file_location("bgm_bus_ep03", os.path.join(HERE, "..", "..", "ep03_ad", "bgm", "bgm_bus.py"))
 B3 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(B3)
 
-PLAN = [("N", "S01"), ("H", "S02"), ("M", "S04"), ("T", "S10"), ("C", "S13"), ("B", "S15"), ("K", "S16"), ("R", "S18"), ("L", "S20")]
+PLAN = [("N", "S01"), ("H", "S02"), ("M", "S04"), ("T", "S10"), ("C", "S13"), ("B", "S15"), ("K", "S16"), ("R", "S18"), ("L", "S20"), ("G", "S23"), ("P", "S27")]
 OFFSET = {}
 RMS = 0.0076   # 7本目と同じ（声 -24 dB に合わせた大きさ）   # 7本目 v6：声を 4 dB 下げたので、曲も 4 dB 下げて差をそのままに（v5 まで 0.012）   # SKILL：新しい回は最初から 0.012（声より約 23 dB 下）
 _load0 = B3.load

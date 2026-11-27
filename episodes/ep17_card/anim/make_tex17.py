@@ -161,3 +161,49 @@ def card_front19(name, base):
 
 card_front19("card_front19", (52, 102, 196))
 print("tex done", len(os.listdir(OUT)))
+
+
+# ======================================================================== 5章（2026-11-27）
+from icons17 import icon5
+
+
+def test_board(name="test_board"):
+    """絵のテストの板（3×3。字なし）"""
+    W_ = 600; im = Image.new("RGB", (W_ * SS, W_ * SS), (250, 250, 246)); d = ImageDraw.Draw(im)
+    kinds = ["apple", "car", "tree", "sun", "fish", "cup", "flower", "star", "boat"]
+    for k, kd in enumerate(kinds):
+        i, j = divmod(k, 3); x0 = 20 + j * 190; y0 = 20 + i * 190
+        d.rounded_rectangle((x0 * SS, y0 * SS, (x0 + 180) * SS, (y0 + 180) * SS), radius=16 * SS, fill=(232, 236, 242))
+        icon5(d, kd, (x0 + 90) * SS, (y0 + 90) * SS, 62 * SS)
+    im.resize((W_, W_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+def phone5(name, kind):
+    """5章のスマホの画面（縦 420×900。字なし）：ask＝買い物袋と大きな「？」／no＝赤い ×"""
+    W_, H_ = 420, 900
+    im = Image.new("RGB", (W_ * SS, H_ * SS), (240, 244, 250)); d = ImageDraw.Draw(im)
+    S = lambda *v: tuple(int(x * SS) for x in v)
+    d.rounded_rectangle(S(30, 120, W_ - 30, 760), radius=36 * SS, fill=WHITE)
+    icon(d, "bag", 210 * SS, 330 * SS, 95 * SS, ORANGE)
+    if kind == "ask":
+        d.text(S(210, 590), "？", font=F(190 * SS), fill=BLUE, anchor="mm")
+    else:
+        d.line(S(120, 500, 300, 680), fill=RED, width=34 * SS); d.line(S(300, 500, 120, 680), fill=RED, width=34 * SS)
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+def set_screen(name="set_screen"):
+    """大きな設定のスマホの画面（縦 500×1000。字なし）：4 つの段に絵（ベル・紙の明細・盾と人・電話）。スイッチは 3D で右に置く"""
+    W_, H_ = 500, 1000
+    im = Image.new("RGB", (W_ * SS, H_ * SS), (236, 240, 246)); d = ImageDraw.Draw(im)
+    S = lambda *v: tuple(int(x * SS) for x in v)
+    for k, kd in enumerate(("bell", "receipt", "shield", "handset")):
+        y0 = 20 + k * 245
+        d.rounded_rectangle(S(20, y0, W_ - 20, y0 + 225), radius=28 * SS, fill=WHITE)
+        d.ellipse(S(45, y0 + 37, 195, y0 + 187), fill=(225, 232, 244))
+        icon5(d, kd, 120 * SS, (y0 + 112) * SS, 55 * SS, NAVY)
+    im.resize((W_, H_), Image.LANCZOS).save(os.path.join(OUT, name + ".png"))
+
+
+test_board(); phone5("ph_ask", "ask"); phone5("ph_no", "no"); set_screen()
+print("tex5 done")
