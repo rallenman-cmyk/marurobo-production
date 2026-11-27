@@ -481,8 +481,10 @@ def ledger_room():
     cyl(mat("ledwinsky", "#9FCBE8", rough=0.3, emit=0.6), (-4.49, 2.2, 3.2), 0.3, 0.16, rot=(0, R(90), 0))
     cube(_m("ledpanel", "#3C4352", rough=0.7), (0, 3.99, 2.4), (6.9, 0.02, 3.4), bevel=0.02)      # 台帳の板（こい色にして、ランプを目立たせる）
     off = _m("lampoff", "#6E7682", rough=0.5)
-    on = glow_mat("lampon", "#3478E6", 6.0)
-    _b = on.node_tree.nodes["Principled BSDF"]; _b.inputs["Emission Color"].default_value = tuple(srgb("#3D86FF"))[:3] + (1.0,)
+    # v5 のコメント（10:40「画面が切り替わると、どれがまるロボのか分からない。光の色を変えて」）：ほかの人のランプは、あたたかい白。
+    #   まるロボのランプだけ、まるロボの名札の色（青緑）と輪で、どのカットでも見分けられるようにする
+    on = glow_mat("lampon", "#FFE2A6", 3.0)
+    _b = on.node_tree.nodes["Principled BSDF"]; _b.inputs["Emission Color"].default_value = tuple(srgb("#FFE2A6"))[:3] + (1.0,)
     import random as _r
     rr = _r.Random(21)
     for c in range(LEDGER_COLS):
@@ -491,11 +493,13 @@ def ledger_room():
             cyl(on if rr.random() < 0.12 else off, ledger_lamp_pos(c, r), 0.11, 0.06, rot=(R(90), 0, 0), verts=24)
     mym = mat("lampmine", "#6E7682", rough=0.5, emit=0.0)
     myo = cyl(mym, ledger_lamp_pos(*MY_LAMP), 0.11, 0.06, rot=(R(90), 0, 0), verts=24)
+    _mp = ledger_lamp_pos(*MY_LAMP)
+    myring = cyl(glow_mat("lampminering", "#2FD9C8", 5.0), (_mp[0], _mp[1] + 0.03, _mp[2]), 0.17, 0.02, rot=(R(90), 0, 0), verts=32)   # まるロボのランプの輪（ともってから出す）
     for (x, y) in ((-2.0, 0.5), (2.0, 0.5), (0.0, 2.6)):
         cyl(glow_mat("ledceillamp", "#FFF8EA", 2.5), (x, y, 4.79), 0.35, 0.03)
     sun(rot=(55, 0, 20), energy=0.7, col="#FFF4E5", angle=10)
     a = area((0, -3.0, 3.5), (0, 3.0, 2.0), energy=260, size=6, col="#FFFFFF"); a.visible_camera = False
-    return dict(my=mym, my_ob=myo, win=(-4.4, 2.2, 3.2), door=(-4.5, 0.0, 0.0))
+    return dict(my=mym, my_ob=myo, my_ring=myring, win=(-4.4, 2.2, 3.2), door=(-4.5, 0.0, 0.0))
 
 
 def lamp_color(m, t, col, strength=4.0, d=0.2):

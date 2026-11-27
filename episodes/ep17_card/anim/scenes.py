@@ -880,7 +880,8 @@ def b_ledger(cl):
     track("mylamp", LR["my_ob"], 0.0)
     my = ledger_lamp_pos(*MY_LAMP)
     t_on = wp("21-05", "ぽっと") - 0.05
-    lamp_color(LR["my"], t_on, "#3D86FF", 6.0, 0.25); ev(t_on, "pop", 0.4, "mylamp")
+    lamp_color(LR["my"], t_on, "#2FD9C8", 6.0, 0.25); ev(t_on, "pop", 0.4, "mylamp")      # v5 のコメント：まるロボのランプは青緑（ほかはあたたかい白）
+    hide_key(LR["my_ring"], -100.0, True); hide_key(LR["my_ring"], t_on, False)
     # 21-08：光の問い合わせ（丸い窓から入り、上の段を左から右へ、まるロボの段へ下りて、ランプで止まる）
     tq = s("21-08") + 0.1
     b = sphere(glow_mat("ledball", "#FFFFFF", 9.0), (0, 0, 0), 0.14, seg=16); track("lball", b, 0.0)
@@ -889,7 +890,8 @@ def b_ledger(cl):
     hide_key(b, -100.0, True); hide_key(b, tq, False); hide_key(b, pts[-1][0] + 0.05, True)   # 試しの絵の点検：玉がランプの前に残り、緑が見えなかった → 着いたら消す
     ev(tq + 0.4, "whoosh", 0.3, "lball")     # 組み立ての一覧：カットの替わり目の中で鳴らずに落ちていた
     t_g = pts[-1][0]
-    lamp_color(LR["my"], t_g, "#46D27A", 7.0, 0.2); ev(t_g, "pi", 0.35, "mylamp")
+    # 着いたら、緑に替えず（色が替わると、どれがまるロボのか分からなくなる）、白く強く光ってから青緑にもどる
+    lamp_color(LR["my"], t_g, "#E8FFFC", 16.0, 0.12); lamp_color(LR["my"], t_g + 0.5, "#2FD9C8", 8.0, 0.4); ev(t_g, "pi", 0.35, "mylamp")
     # まるロボ（0.72 倍）：入口から台帳の前へ歩く → 見上げる → ランプを見る → 虫めがねを向ける → こちらを向いてうなずく
     M = MaruR((-4.55, 0.0, 0.0), face=-90.0, s=SHOP_S); track("maru", M.body, 0.6); track("maru_top", M.body, 0.75)     # 別の目の点検：入口から入ってくるように見えなかった → 入口の中（かべの穴）から歩き出す
     hat_on_maru(M, -50.0)
