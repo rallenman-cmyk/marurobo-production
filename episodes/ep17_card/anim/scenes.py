@@ -1144,7 +1144,8 @@ def b_shop5b(cl):
     t0 = wp("26-02", "別のお店") + 0.3
     key(sh.root, "location", -100.0, (-4.2, -2.0, 0.0), "CONSTANT"); key(sh.root, "location", t0, (-4.2, -2.0, 0.0))
     key(sh.root, "location", t0 + 2.2, (0.0, -1.2, 0.0)); key(sh.root, "rotation_euler", t0 + 2.2, (0, 0, R(90)))
-    key(sh.root, "rotation_euler", t0 + 2.6, (0, 0, R(180))); key(sh.root, "location", s("26-03") + 0.9, SH_REG)
+    SH6 = (-0.5, 0.75, 0.0)                    # 動画の点検：レジの正面に立つと、はじかれる札が影にかくれた → レジの左わきに立つ
+    key(sh.root, "rotation_euler", t0 + 2.6, (0, 0, R(180))); key(sh.root, "location", s("26-03") + 0.9, SH6)
     t_in = e("26-03") - 0.1
     key(sh.arm, "rotation_euler", t_in - 0.5, (R(-25), 0, 0)); key(sh.arm, "rotation_euler", t_in - 0.2, (R(-5), 0, R(-25)))
     hide_key(gs, -100.0, False); hide_key(gs, t_in, True); ev(t_in, "slip", 0.3, "register")
@@ -1161,9 +1162,9 @@ def b_shop5b(cl):
     for tt, pp in ((-100.0, (-8.0, -6.0, 7.0)), (t_p - 1.3, (-8.0, -6.0, 7.0)), (t_p - 0.5, GATE_UP), (t_p - 0.15, GATE_Q)): key(rb, "location", tt, pp)
     hide_key(rb, -100.0, True); hide_key(rb, t_p - 1.3, False); hide_key(rb, t_p - 0.1, True)
     rs = slip_obj(SLOT, (R(90), 0, 0), tex="slip_red", w=0.45); track("rslip6", rs, 0.0)
-    pe = (0.2, -0.85, 0.004)
+    pe = (0.35, 0.2, 0.004)                    # 門の内側に落ちる（落ちる所が字幕の帯に入らない。画面の位置は計算で決めた）
     key(rs, "location", -100.0, (SLOT[0], SLOT[1], SLOT[2] - 0.1), "CONSTANT"); key(rs, "location", t_p - 0.05, (SLOT[0], SLOT[1], SLOT[2] - 0.1))
-    key(rs, "location", t_p + 0.2, (SLOT[0], SLOT[1] - 0.05, 1.3)); key(rs, "location", t_p + 0.45, (0.58, 0.72, 1.25)); key(rs, "location", t_p + 0.7, (0.45, -0.15, 1.1)); key(rs, "location", t_p + 1.05, pe)
+    key(rs, "location", t_p + 0.2, (SLOT[0], SLOT[1] - 0.05, 1.3)); key(rs, "location", t_p + 0.5, (0.5, 0.7, 1.3)); key(rs, "location", t_p + 1.05, pe)
     key(rs, "rotation_euler", t_p + 0.2, (R(90), 0, 0)); key(rs, "rotation_euler", t_p + 1.05, (0, 0, R(20)))
     hide_key(rs, -100.0, True); hide_key(rs, t_p - 0.05, False)
     ev(t_p, "pachin", 0.5, "register"); ev(t_p + 1.05, "drop", 0.25, "rslip6")
@@ -1180,7 +1181,7 @@ def b_shop5b(cl):
     # 26-15：影ががっくりして、門から出て左へ去る
     t15 = s("26-15") + 0.3
     key(sh.root, "scale", t15, (0.8, 0.8, 0.8)); key(sh.root, "scale", t15 + 0.5, (0.8, 0.8, 0.68))
-    key(sh.root, "location", t15 + 0.6, SH_REG); key(sh.root, "rotation_euler", t15 + 0.6, (0, 0, R(180))); key(sh.root, "rotation_euler", t15 + 1.1, (0, 0, R(0)))
+    key(sh.root, "location", t15 + 0.6, SH6); key(sh.root, "rotation_euler", t15 + 0.6, (0, 0, R(180))); key(sh.root, "rotation_euler", t15 + 1.1, (0, 0, R(0)))
     key(sh.root, "location", t15 + 2.4, (0.0, -1.3, 0.0)); key(sh.root, "rotation_euler", t15 + 2.6, (0, 0, R(-90)))
     key(sh.root, "location", t15 + 5.0, (-4.8, -1.9, 0.0)); ev(t15 + 0.4, "low_wind", 0.25, "shadow")
     # 26-16：町の高い引き。となりの建物の入口の上の小さなランプが、1 つずつ青く光る（多くのお店に入っている）
@@ -1391,7 +1392,7 @@ CUTS = [
     ("C26i", b_shop5, s("26-08"), C((-0.05, -2.45, 0.7), (-0.18, -1.62, 0.62), 32), "C"),   # 試しの絵の点検：肩ごしのカメラが帽子の中に入った → スマホの画面の前から
     ("C26j", b_shop5, s("26-09"), C((0.9, -3.4, 0.8), (0.2, -1.3, 0.6), 30), "C"),
     ("C26k", b_shop5, s("26-10"), C((-0.3, -3.0, 0.8), (-0.1, -1.5, 0.9), 26), "C"),   # 文ごとの点検：スマホの赤い × が見えなかった
-    ("C26l", b_shop5b, s("26-11") - 0.6, C((0.9, -3.4, 1.2), (0.05, 0.1, 1.05), 28), "C"),   # 動画の点検：遠くて、はじかれる札が見えなかった
+    ("C26l", b_shop5b, s("26-11") - 0.6, C((1.3, -3.2, 1.3), (0.15, 0.2, 0.5), 26), "C"),   # 動画の点検：遠くて、はじかれる札が見えなかった
     ("C26m", b_shop5b, s("26-12"), C((-6.0, -16.0, 9.0), (0.0, 1.0, 3.0), 24), "C"),
     ("C26n", b_shop5, s("26-13"), C((0.6, -3.6, 0.9), (0.1, -1.4, 0.6), 30), "C"),
     ("C26o", b_shop5, s("26-14"), C((-0.6, -3.5, 1.0), (0.2, -1.3, 0.6), 30), "C"),
