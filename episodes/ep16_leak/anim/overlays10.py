@@ -143,8 +143,8 @@ def ev_list10():
         t_a2=[wv("39-04", "売られ") - 0.1, wv("39-04", "写されて") - 0.1, wv("39-04", "合わさって") - 0.1, wv("39-05", "戻ってくる") - 0.1],
         t_r3=wv("39-06", "増えて") - 0.1, t_r4=wv("39-07", "使えなくする") - 0.1))
     t_p = wv("40-05", "ぽいっ")
-    add(wv("40-03", "おめでとう") - 0.1, t_p + 0.75, "c10_win", dict(t_p=t_p))
-    add(t_p - 0.4, e("40-05") + 0.3, "c10_trash", dict(t_p=t_p))
+    add(s("40-03") + 0.05, t_p + 0.75, "c10_win", dict(t_p=t_p, t_small=s("40-04") - 0.1))
+    add(s("40-05") - 0.1, e("40-05") + 0.3, "c10_trash", dict(t_p=t_p))      # A40d のつなぎ（s − 0.9 から 0.75 秒）のあと（点検：つなぎの途中に出ていた）
     return E
 
 
@@ -154,19 +154,27 @@ def sfx_list10():
     return L
 
 
+def _pop_k_at(dt):
+    return max(0.05, D.ease_out_back(dt / 0.3)) if dt < 0.3 else 1.0
+
+
 def draw10(kind, t, t0, p, base, where, _paste, _pop_k, _pop_a):
     k, a = _pop_k, _pop_a
     if kind == "c10_sum":
-        base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(110 * a))))
-        spr = summary_sprite(t, p); _paste(base, spr, 30 + spr.width / 2, 30 + spr.height / 2, 1.0 if t - t0 > 0.3 else k, a)
+        base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(110 * a))))      # 「まとめ」でうしろを暗くする
+        if t >= p["t_q1"]:                                                                  # 札は 1 行目の問いから（点検：問いの前に空の白い帯が出ていた）
+            spr = summary_sprite(t, p); _paste(base, spr, 30 + spr.width / 2, 30 + spr.height / 2, 1.0 if t - p["t_q1"] > 0.3 else _pop_k_at(t - p["t_q1"]), a)
     elif kind == "c10_win":
         spr = win_sprite(t, p)
-        tp = p["t_p"]
-        if t < tp: _paste(base, spr, 640, 30 + spr.height / 2, k, a)
+        tp = p["t_p"]; ts = p["t_small"]
+        x0, y0, s0 = 640, 30 + spr.height / 2, 1.0
+        if t >= ts:                                                  # 40-04：左上に小さく寄せる（点検：首をかしげるまるロボの顔を札がかくした）
+            v = _ease((t - ts) / 0.4); x0, y0, s0 = 640 + (290 - 640) * v, y0 + (110 - y0) * v, 1.0 - 0.45 * v
+        if t < tp: _paste(base, spr, x0, y0, k * s0 if t - t0 < 0.3 else s0, a)
         else:                                                        # ぽいっ：右下のごみ箱へ、小さくなりながら飛ぶ
             u = _ease((t - tp) / 0.6)
-            x = 640 + (1110 - 640) * u; y = 30 + spr.height / 2 + (420 - (30 + spr.height / 2)) * u - 120 * math.sin(math.pi * u)
-            if u < 0.98: _paste(base, spr, x, y, max(0.06, 1.0 - 0.94 * u), 1.0)
+            x = x0 + (1110 - x0) * u; y = y0 + (420 - y0) * u - 120 * math.sin(math.pi * u)
+            if u < 0.98: _paste(base, spr, x, y, max(0.05, s0 * (1.0 - 0.9 * u)), 1.0)
     elif kind == "c10_trash":
         tp = p["t_p"]; lid = 1.0 if tp - 0.1 <= t <= tp + 0.7 else 0.0
         _paste(base, trash_sprite(lid), 1110, 430, k, a)
