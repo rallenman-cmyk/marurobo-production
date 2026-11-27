@@ -229,7 +229,7 @@ SKY_H = 18.0                  # 空の地図の高さ（道の真上）
 Y_OWN3 = 40.0                 # 3章のおじさんの車の、列の中の場所（前に 12 台・後ろに 4 台）
 V_Q = 0.4                     # 列の平均の速さ（m/秒）。止まっては少し進む
 PT_LAT = 0.6                  # 点を道のまん中へ寄せる割合（地図の線は道のまん中に 1 本）
-SKY_NEUTRAL = "#CFD9E6"
+SKY_NEUTRAL = "#9FB4CC"
 
 
 def q_off(t):
@@ -263,7 +263,7 @@ def sky_line(p0, p1, w, states, name="sl", z=SKY_H, th=0.35):
     sx = abs(p1[0] - p0[0]) + (w if p0[0] == p1[0] else 0.0); sy = abs(p1[1] - p0[1]) + (w if p0[1] == p1[1] else 0.0)
     obs = []
     for i_, (t_, col) in enumerate(states):
-        o_ = cube(glow_mat("%s_%s" % (name, col), col, 1.4 if col == SKY_NEUTRAL else 3.0), (cx, cy, z), (sx, sy, th))
+        o_ = cube(glow_mat("%s_%s" % (name, col), col, 0.7 if col == SKY_NEUTRAL else 2.2), (cx, cy, z), (sx, sy, th))   # 試しの絵：白い太い帯に見えた → 色をおさえる
         t_end = states[i_ + 1][0] if i_ + 1 < len(states) else 1e9
         hide_key(o_, -100.0, True); hide_key(o_, t_, False)
         if t_end < 1e8: hide_key(o_, t_end, True)
@@ -345,12 +345,12 @@ def b_jam(par):
     track("ph_tri", screen_pt(scr, 0.42, 0.444, "ph_tri"), 0.0)
     # おじさんの車の点（青緑）：「ぽうっと」で画面から出て、屋根の下まで → 外のカメラに替わる所で屋根の上へ → 空の地図へ
     ta_ = wp("11-04", "スマホ") - 0.1; tb_ = wp("11-04", "上がって") + 0.3     # 「スマホから」で画面から出て、ゆっくり屋根の下まで（「ぽうっと」と「上がって」は 0.5 秒しか離れていない）
-    op = sphere(glow_mat("pt_own", TEAL_C, 6.0), (PHONE_L[0] - 0.05, 0.0, 1.05), 0.05, seg=16, parent=cr)
+    op = sphere(glow_mat("pt_own", TEAL_C, 6.0), (PHONE_L[0] - 0.05, 0.0, 1.05), 0.05, seg=16, parent=cr)   # 空では 22 倍（半径 1.1 m）
     hide_key(op, -100.0, True); hide_key(op, ta_, False)
     key(op, "location", ta_, (PHONE_L[0] - 0.05, 0.0, 1.05)); key(op, "location", tb_ - 0.15, (PHONE_L[0] - 0.12, 0.0, 1.33))
-    key(op, "location", tb_ + 0.25, (0.6, 0.0, 2.3)); key(op, "location", tb_ + 3.8, (0.0, PT_LAT * LANE_Y, SKY_H))
+    key(op, "location", tb_ + 0.25, (0.6, 0.0, 2.3)); key(op, "location", tb_ + 3.8, (0.0, -PT_LAT * LANE_Y, SKY_H))   # 車の左（+y）は世界の −x。道のまん中（+x）へ寄せる
     key(op, "scale", -100.0, (0.001, 0.001, 0.001), "CONSTANT"); key(op, "scale", ta_, (0.001, 0.001, 0.001)); key(op, "scale", ta_ + 0.5, (1.0, 1.0, 1.0))
-    key(op, "scale", tb_ - 0.15, (1.0, 1.0, 1.0)); key(op, "scale", tb_ + 2.5, (22.0, 22.0, 22.0))      # 空では、ほかの点より少し大きく（半径 1.1 m）
+    key(op, "scale", tb_ + 0.3, (1.0, 1.0, 1.0)); key(op, "scale", tb_ + 0.9, (12.0, 12.0, 12.0)); key(op, "scale", tb_ + 3.0, (22.0, 22.0, 22.0))   # 外のカメラでは、屋根の上に出たらすぐ見える大きさに   # 試しの絵：車の中で大きくなり、画面いっぱいの玉になった → 外に出てから大きく      # 空では、ほかの点より少し大きく（半径 1.1 m）
     track("ownpt", op, 0.0)
     ev(ta_ + 0.1, "float", 0.3, "phone"); ev(tb_ + 0.3, "float", 0.25, "owncar")
     # ---------------------------------------------------------------- まるロボ：助手席。12-01 で左の窓へ寄り、見上げる
@@ -371,7 +371,7 @@ def b_jam(par):
     M.hops(wp("15-03", "ぴょんぴょん") - 0.1, n=3, height=0.05)
     M.at(e("15-04") - 0.5, look=28)
     # ---------------------------------------------------------------- 空の地図（板・線・町の網）
-    plate = plane(mat("skyplate", "#1B2A44", rough=1.0, alpha=0.42), (-45.0, 70.0, SKY_H - 0.05), (310.0, 290.0))
+    plate = plane(mat("skyplate", "#22355A", rough=1.0, alpha=0.7), (-45.0, 70.0, SKY_H - 0.05), (310.0, 290.0))   # 試しの絵：0.42 では夕方の空の色がすけて茶色に見えた
     hide_key(plate, -100.0, True); hide_key(plate, t_map, False)
     t_g = wp("14-02", "緑") - 0.1; t_y = wp("14-02", "黄色") - 0.1; t_r = wp("14-03", "赤") - 0.1
     N0 = (t_map, SKY_NEUTRAL); FL = (wp("14-01", "変わって") - 0.2, "#FFFFFF")    # 14-01「変わっていきます」：線が白く光り、色が変わる前ぶれ
@@ -675,7 +675,7 @@ def b_field(par):
     hide_key(fc, -100.0, True); hide_key(fc, t3, False)
     tr_ = wp("16-03", "細い道") - 0.2
     fp = sky_point(fc, tr_, 1.0, d=2.2, z=FZ); track("fpt", fp, 0.0)
-    fpl = plane(mat("skyplate", "#1B2A44", rough=1.0, alpha=0.42), (0.0, 0.0, FZ - 0.05), (220.0, 16.0))
+    fpl = plane(mat("skyplate", "#22355A", rough=1.0, alpha=0.7), (0.0, 0.0, FZ - 0.05), (220.0, 16.0))
     hide_key(fpl, -100.0, True); hide_key(fpl, t3, False)
     sky_line((-110.0, 0.0), (110.0, 0.0), 3.5, [(t3, GREY_C), (tr_ + 2.3, GREEN_C)], "fline", z=FZ, th=0.3)
     ev(tr_ + 0.1, "float", 0.25, "fcar"); ev(tr_ + 2.3, "pop", 0.25, "")
@@ -737,12 +737,12 @@ CUTS = [
     ("A31", b_jam, s("11-01"), C((-8.0, 10.0, 10.0), (-4.0, 62.0, 1.0), 28), "J"),
     ("A31b", b_jam, s("11-02"), CC((1.5, 1.7, 1.25), (0.17, 0.4, 1.05), 30), "J"),
     ("A31c", b_jam, s("11-03"), CC((0.0, 0.0, 1.25), (0.95, 0.0, 1.02), 30, (0.5, 0.0, 1.15), (0.95, 0.0, 1.02), d=4.0), "J"),
-    ("A31d", b_jam, s("11-04"), CC((0.45, 0.12, 1.22), (0.92, 0.0, 1.18), 34), "J"),
-    ("A31e", b_jam, wp("11-04", "上がって") + 0.3, C((-16.0, Y_OWN3 + q_off(wp("11-04", "上がって")) - 6.0, 1.6), (-5.0, Y_OWN3 + q_off(wp("11-04", "上がって")) + 1.0, 9.0), 24), "J"),
-    ("A31f", b_jam, s("11-05"), C((-24.0, Y_OWN3 + q_off(s("11-05")) - 10.0, 4.0), (-4.0, Y_OWN3 + q_off(s("11-05")) + 2.0, 10.0), 22), "J"),
+    ("A31d", b_jam, s("11-04"), CC((0.05, 0.1, 1.22), (0.92, 0.0, 1.22), 34), "J"),
+    ("A31e", b_jam, wp("11-04", "上がって") + 0.3, C((-5.25, Y_OWN3 + q_off(wp("11-04", "上がって")) - 9.0, 4.2), (-5.25, Y_OWN3 + q_off(wp("11-04", "上がって")) + 4.0, 3.0), 22, None, (-5.25, Y_OWN3 + q_off(wp("11-04", "上がって")) + 6.0, 13.0), 22, d=3.0), "J"),   # 点を追って見上げる
+    ("A31f", b_jam, wp("11-05", "いまどこ") - 0.4, C((-3.5, Y_OWN3 + q_off(s("11-05")) - 34.0, 6.0), (-4.0, Y_OWN3 + q_off(s("11-05")), 9.0), 20), "J"),   # 試しの絵：歩道から（x=−8.6）では木に隠れた → 列の上から
     ("A32", b_jam, s("12-01"), CC((0.25, 1.65, 1.3), (0.15, 0.4, 1.3), 30), "J"),
-    ("A32b", b_jam, s("12-02"), C((-17.0, Y_OWN3 + q_off(s("12-02")) - 16.0, 1.3), (-3.0, Y_OWN3 + q_off(s("12-02")) + 6.0, 7.0), 20), "J"),
-    ("A32c", b_jam, s("12-03"), CC((-1.3, 2.3, 1.0), (2.0, 0.3, 7.0), 20), "J"),
+    ("A32b", b_jam, s("12-02"), C((-8.6, Y_OWN3 + q_off(s("12-02")) - 20.0, 1.4), (-3.0, Y_OWN3 + q_off(s("12-02")) + 6.0, 5.0), 20), "J"),
+    ("A32c", b_jam, s("12-03"), CC((-0.6, 2.4, 1.15), (5.0, -0.5, 4.0), 18), "J"),
     ("A32d", b_jam, s("12-04"), CC((0.5, 0.0, 1.15), (0.95, 0.0, 1.02), 44), "J"),
     ("D12", b_jam, s("12-05"), C((-70.0, -50.0, 48.0), (-15.0, 50.0, 18.0), 26), "J"),
     ("D13", b_jam, s("13-01"), C((-50.0, -80.0, 80.0), (-15.0, 40.0, 18.0), 26, (-40.0, -60.0, 50.0), (-15.0, 40.0, 18.0), 26, d=3.6), "J"),
@@ -758,7 +758,7 @@ CUTS = [
     ("D15c", b_jam, s("15-04"), C((own_pt3(s("15-04"))[0] - 8.0, own_pt3(s("15-04"))[1] - 14.0, 34.0), (own_pt3(s("15-04"))[0] - 1.5, own_pt3(s("15-04"))[1] + 1.0, 7.0), 22), "J"),
     ("D15d", b_jam, s("15-05"), C((-40.0, -90.0, 110.0), (-20.0, 60.0, 18.0), 24), "J"),
     ("D16", b_jam, s("16-01"), C((-60.0, -200.0, 260.0), (-40.0, 70.0, 18.0), 24, (-60.0, -380.0, 480.0), (-40.0, 70.0, 0.0), 24, d=10.0), "J"),
-    ("C16", b_field, s("16-03"), C((-14.0, -22.0, 2.0), (4.0, 0.0, 7.0), 24, (-8.0, -24.0, 2.5), (12.0, 0.0, 8.0), 24, d=9.0), "C"),
+    ("C16", b_field, s("16-03"), C((-12.0, -24.0, 3.0), (2.0, 0.0, 6.0), 26, (-4.0, -24.0, 3.0), (14.0, 0.0, 6.0), 26, d=9.0), "C"),
     ("C10d", b_field, s("10-08"), C((-0.2, 3.7, 0.4), (-1.0, 4.6, 0.24), 32), "C"),   # （v1 の確認役 3 回目）画面の 1/6 で小さかった → 寄る
     # 8 秒をこえる同じ絵を、文の切れ目で替える（下書きの最初の点検。決まり：同じ絵を 8 秒以上続けない）
     ("A02a", b_drive, s("02-02"), CC((0.62, -0.22, 1.16), (0.95, 0.02, 1.02), 38), "A"),
@@ -800,5 +800,8 @@ if __name__ == "__main__" or True:
             for o_ in bpy.data.objects:
                 if o_.name.endswith("• torso") or o_.name.startswith(("Antenna light", "Maru body", "Lens maru")): print("BAKE %.2f %s %s %s" % (tq, o_.name, tuple(round(math.degrees(v), 1) for v in o_.matrix_world.to_euler()), tuple(round(v, 3) for v in o_.matrix_world.translation)))
         if cm is not None: cm(t0)
+        for tq in [float(x) for x in os.environ.get("CAM_PROBE", "").split(",") if x]:   # 点検用：その時刻のカメラと、おじさんの車・点の場所
+            bpy.context.scene.frame_set(f(tq)); cmo = bpy.context.scene.camera
+            print("CAMPROBE %.2f cam=%s" % (tq, tuple(round(v, 2) for v in cmo.matrix_world.translation)), " ".join("%s=%s" % (k_, tuple(round(v, 2) for v in TRACK[k_][0].matrix_world.translation)) for k_ in ("owncar", "ownpt") if k_ in TRACK))
         FRS = tuple(int(x) for x in _opt("--frames", 2, ())) or None
         render_clip(CLIPNAME, t0, t1, OUTDIR, SAMPLES, RES, 1 if FRS else STEP, fr=FRS, stills=STILLS or None)
