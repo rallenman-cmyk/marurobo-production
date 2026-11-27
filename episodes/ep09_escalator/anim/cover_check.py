@@ -14,6 +14,7 @@ ORDER = sorted(CL, key=lambda k: CL[k][2])
 LOG = {}
 for nm in CL:
     p = os.path.join(R3, nm, nm + "_log.json")
+    if not os.path.exists(p): p = os.path.join(R3, nm + "_log.json")   # 本番（pc_frames.py の 1 フォルダの置き方）。9本目 v5：これがなく、本番の絵で記録を読めず 0 と出た
     if os.path.exists(p): LOG[nm] = json.load(open(p))
 FPS = 24
 
@@ -56,4 +57,4 @@ for ev in ALL:
     if hit:
         bad += 1
         print("COVER %-9s %7.1f〜%7.1f  まるロボが隠れる %d/%d（%s）" % (kind, t0, t1, hit, n, clip_at(t0)))
-print("COVER_DONE 隠す札 %d" % bad)
+print("COVER_DONE 隠す札 %d 記録を読めた場面 %d" % (bad, len(LOG)))

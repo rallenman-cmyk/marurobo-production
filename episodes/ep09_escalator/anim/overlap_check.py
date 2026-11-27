@@ -14,6 +14,7 @@ ORDER = sorted(CL, key=lambda k: CL[k][2])
 LOG = {}
 for nm in CL:
     p = os.path.join(R3, nm, nm + "_log.json")
+    if not os.path.exists(p): p = os.path.join(R3, nm + "_log.json")   # 本番（pc_frames.py の 1 フォルダの置き方）。9本目 v5：これがなく、本番の絵で記録を読めず 0 と出た
     if os.path.exists(p): LOG[nm] = json.load(open(p))
 FPS = 24
 
@@ -61,4 +62,4 @@ while t < T1:
     t += 0.25
 for (ka, ta, kb, tb), (a, b, n, ar) in sorted(res.items(), key=lambda x: x[1][0]):
     print("OVERLAP %-9s %-9s %7.2f〜%7.2f %d回 %dpx²" % (ka, kb, a, b, n, ar))
-print("OVERLAP_DONE", len(res))
+print("OVERLAP_DONE", len(res), "記録を読めた場面", len(LOG))
