@@ -100,6 +100,7 @@ class MaruR:
         self.cmds.append((t, "hop", dict(sound=sound)))
 
     def lean(self, t0, t1, deg): self.cmds.append((t0, "lean", dict(t1=t1, deg=deg)))
+    def lookup(self, t0, t1, deg=-16.0, gaze=24.0): self.cmds.append((t0, "lookup", dict(t1=t1, deg=deg, gaze=gaze)))   # 12本目 v3：すばやく体ごとそらして見上げ、t1 まで止める
     def tilt(self, t, deg, d=0.3): self.cmds.append((t, "roll", dict(deg=deg, d=d)))
     def glow(self, t, g, d=0.3, g0=None): self.cmds.append((t, "light", dict(v=g, d=d)))
     def blink(self, t, g=0.9, d=0.22): self.cmds.append((t, "blink", {}))
@@ -194,6 +195,10 @@ class MaruR:
             elif kind == "lean":                           # 前へゆっくり傾く（手すりに引っぱられる）→ 戻す
                 t0_, t1_, deg_ = t, a["t1"], a["deg"]
                 p.layer(t0_, t1_ + 0.5, lambda u, t0_=t0_, t1_=t1_, deg_=deg_: {"pitch": deg_ * max(0.0, min(1.0, (u - t0_) / max(0.01, t1_ - t0_))) * (1.0 if u <= t1_ else max(0.0, 1 - (u - t1_) / 0.5))})
+            elif kind == "lookup":                         # 12本目 v3 の点検：lean は t0〜t1 の全部をかけて傾くので、長い区間では動いて見えなかった → 0.6 秒でそらして止め、目も上へ
+                t0_, t1_, dg_, gz_ = t, a["t1"], a["deg"], a["gaze"]; h_ = max(0.1, t1_ - t0_ - 0.6)
+                p.layer(t0_, t1_ + 0.6, lambda u, t0_=t0_, h_=h_, dg_=dg_, gz_=gz_: {"pitch": dg_ * mm.env(u, t0_, 0.6, h_, 0.5), "gaze_pitch": gz_ * mm.env(u, t0_, 0.4, h_ + 0.2, 0.5)})
+                p.no_blink.append((t0_ - 0.2, t1_ + 0.6))
             elif kind == "roll":
                 p.tracks["roll"].set(t, a["d"], -a["deg"])
             elif kind == "light":
