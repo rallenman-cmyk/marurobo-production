@@ -443,10 +443,12 @@ exec(open(os.path.join(KIT_HERE, "scenes_ch8.py"), encoding="utf-8").read())    
 CUTS += CUTS8
 exec(open(os.path.join(KIT_HERE, "scenes_ch9.py"), encoding="utf-8").read())     # 9章（S36〜S38）
 CUTS += CUTS9
+exec(open(os.path.join(KIT_HERE, "scenes_ch10.py"), encoding="utf-8").read())     # まとめ・オチ（S39〜S40）
+CUTS += CUTS10
 for i_, c_ in enumerate(CUTS):
     if len(c_) == 4: CUTS[i_] = c_ + ("B",)
 PIP_ONLY = {"P02", "P09", "P17"}
-END_T = s("39-01") - 0.05      # 9章の終わり（まとめを作るときにのばす）。8章の最後の H35c は、9章の H36a を 0.8 秒前から始めて、終わりを s("36-01") - 0.05 のままにした
+END_T = e("40-05") + 2.0      # 動画の終わり（オチの最後の文のあと 2 秒、得意顔を見せる）。9章の最後の H38g は、まとめの H39a を 0.8 秒前から同じカメラで始めて、終わりを s("39-01") - 0.05 のままにした
 CUTS.sort(key=lambda c: c[2])
 _main = [c for c in CUTS if c[0] not in PIP_ONLY]
 CLIPS = {}

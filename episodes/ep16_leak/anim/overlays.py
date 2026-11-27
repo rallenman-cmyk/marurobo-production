@@ -79,6 +79,8 @@ def ev_list():
     E += OV8.ev_list8()
     import overlays9 as OV9      # 9章（S36〜S38）
     E += OV9.ev_list9()
+    import overlays10 as OV10    # まとめ・オチ（S39〜S40）
+    E += OV10.ev_list10()
     return E
 
 
@@ -106,6 +108,8 @@ def sfx_list():
     L += OV8.sfx_list8()
     import overlays9 as OV9
     L += OV9.sfx_list9()
+    import overlays10 as OV10
+    L += OV10.sfx_list10()
     return L
 
 
@@ -729,6 +733,9 @@ def draw(t, base, where, frame_of=None, fontdir=None):
         elif kind.startswith("c8_"):
             import overlays8 as OV8
             OV8.draw8(kind, t, t0, p, base, where, _paste, k, a, frame_of=frame_of)
+        elif kind.startswith("c10_"):
+            import overlays10 as OV10
+            OV10.draw10(kind, t, t0, p, base, where, _paste, k, a)
         elif kind.startswith("c9_"):
             import overlays9 as OV9
             OV9.draw9(kind, t, t0, p, base, where, _paste, k, a)
