@@ -574,7 +574,7 @@ def gate_bar_lamp():
 
 def gate_grille(t_drop=None, d=0.28):
     """門をふさぐ格子（灰色の縦の棒と横の棒）。アーチの上にたたんであり、t_drop に上から落ちて門をふさぐ（上を軸に z を伸ばす）"""
-    GW, GH = 1.9, 2.4
+    GW, GH = 1.86, 2.4                     # v8 の当たりの点検：1.9 では横の棒が両わきの柱に 1 cm 入った
     top = empty((0, -0.24, GH)); gm = _m("grille", "#8A9099", rough=0.4, metal=0.7)
     for k in range(9):
         cube(gm, (-0.84 + k * 0.21, 0, -GH / 2), (0.05, 0.05, GH), parent=top)
