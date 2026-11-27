@@ -1,0 +1,17 @@
+{
+ "id": "20261127-164410-ep17_v1",
+ "name": "ep17_v1",
+ "kit_branch": "pc-kit/20261127-164410-ep17_v1",
+ "zip": "marurobo_ep17.zip",
+ "ps1": "run_pc_render_ep17.ps1",
+ "only": "",
+ "kind": "full",
+ "order": 17,
+ "frames": 29010,
+ "fresh": false,
+ "out": "render_ep17_v1",
+ "workers": 0,
+ "samples": 24,
+ "session": "\ud83e\udd1617\u30ab\u30fc\u30c9\u3068AI",
+ "created": "2026-11-27T16:44:10Z"
+}
