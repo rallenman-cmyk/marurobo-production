@@ -91,7 +91,7 @@ for a, b, t in L:
 hb = None
 if hearp:
     H = json.load(open(hearp, encoding="utf-8"))
-    hb = [h for h in H if h.get("score") is not None and h["score"] < 0.8]
+    hb = [h for h in H if h.get("score") is not None and h["score"] < 0.8 and not h.get("confirmed")]   # 2026-11-28（16本目 本番。ユーザーの選択「合わない字幕だけ聞き直す」「測りを直してよい」）：選ばせて 3 回中 2 回以上で台本の読みを選んだ字幕（sub_hear の confirmed）は合格
 sha = hashlib.sha256(open(ass, "rb").read()).hexdigest()
 res = dict(ass_sha256=sha, subs=len(L), outside=len(bad), bad=bad, heard=(len(H) if hearp else None), heard_bad=(len(hb) if hb is not None else None),
            heard_bad_list=[dict(at=h["at"], text=h["text"], score=round(h["score"], 2)) for h in (hb or [])])
