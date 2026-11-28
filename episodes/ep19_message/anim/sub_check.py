@@ -22,7 +22,11 @@ else:
 L.sort()
 d = [b - a for a, b, _ in L]; cps = [len(t.replace(" ", "")) / (b - a) for a, b, t in L]
 print("字幕 %d 枚・長さ いちばん短い %.2f 秒・まん中 %.2f 秒" % (len(L), min(d), statistics.median(d)))
-bad = [(a, b - a, len(t.replace(" ", "")) / (b - a), t) for a, b, t in L if b - a < 2.0 or len(t.replace(" ", "")) / (b - a) > 8.0 or len(t.replace(" ", "")) > 25]
+import os as _os
+_TAME = set(json.load(open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "字幕_ため.json"), encoding="utf-8"))) if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "字幕_ため.json")) else set()
+# 19本目：関所（pre_upload_gate）と同じ数え方にする：1 行 25 字（2 行を合わせた字数ではない）・2 秒未満は字幕_ため.json の字幕（1 秒以上）を除く
+bad = [(a, b - a, len(t.replace(" ", "").replace("\\N", "")) / (b - a), t) for a, b, t in L
+       if (b - a < 2.0 and not (t in _TAME and b - a >= 1.0)) or len(t.replace(" ", "").replace("\\N", "")) / (b - a) > 8.0 or any(len(z) > 25 for z in t.split("\\N"))]
 ov = [(round(a, 2), t) for (a, b, t), (a2, b2, t2) in zip(L, L[1:]) if a2 < b - 0.01]
 print("重なる字幕：%d 枚" % len(ov), ov[:5])
 print("2 秒未満・8 字/秒こえ・25 字こえ：%d 枚" % len(bad))

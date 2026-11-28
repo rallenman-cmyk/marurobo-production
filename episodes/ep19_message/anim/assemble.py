@@ -139,7 +139,7 @@ def _min2(S):
             if ch: break
         if not ch: return [tuple(x) for x in S]
 SUBS = _min2(SUBS)
-SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
+SUBS = [(a_, c_, _wrap(t_.strip("　 "))) for a_, c_, t_ in SUBS]   # 文で分けたあとにも頭に空白が残った（19本目 v1 の点検「　絵は、とても…」）→ もう一度取る
 # 17本目 v1：あとの道具（声の切れ目へ合わせる・2 秒に足りない 1 枚をまとめる）が FIX_AT の分け方をまとめ直すので、最後にもう一度 FIX_AT どおりに分ける
 def _refix(S):
     out = []
@@ -161,6 +161,8 @@ for i_ in range(len(SUBS)):
     a_, c_, t_ = SUBS[i_]
     if c_ - a_ < 2.0 and i_ + 1 < len(SUBS) and SUBS[i_ + 1][0] - 0.05 - a_ >= 2.0:   # 2 秒に足りない 1 枚も、次の字幕まで間があれば 2 秒まで出す（05-03：声の頭の「あ」を消して 1.8 秒になった）
         SUBS[i_] = (a_, a_ + 2.05, t_)
+for a_, c_, t_ in SUBS:      # 19本目：「……」で始まるための字幕（「……もう、届いたようです。」1.94 秒）も、1 秒以上なら残す（SKILL 1.5 の 5：ための字幕は 1 秒以上）
+    if t_.startswith("……") and 1.0 <= c_ - a_ < 2.0: TAME.append(t_)
 json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)

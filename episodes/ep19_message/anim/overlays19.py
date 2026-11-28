@@ -248,22 +248,27 @@ def envelope_sprite(t, p):
     else:
         d.polygon([(92, 50), (272, 150), (452, 50)], outline=(200, 180, 140), fill=(250, 242, 222))
         for k in range(2): d.rectangle((300, 190 + k * 26, 430 - k * 40, 202 + k * 26), fill=(120, 130, 150))
+        # 送り主の家（左のすみ）。06-08：封筒から家へ、大きな矢印でもどる（通しの点検：前の小さな矢印では、どこへ返るか分からなかった）
+        d.polygon([(14, 236), (52, 204), (90, 236)], fill=(184, 87, 74)); d.rectangle((22, 236, 82, 286), fill=(242, 217, 181)); d.rectangle((44, 254, 60, 286), fill=(150, 110, 80))
         if t >= p["t_ret"]:
-            u = min(1.0, (t - p["t_ret"]) / 0.8)
-            d.line((470, 150, 470 - 60 * u, 150), fill=TEAL, width=10)
-            d.polygon([(470 - 60 * u - 22, 150), (470 - 60 * u, 136), (470 - 60 * u, 164)], fill=TEAL)
+            u = min(1.0, (t - p["t_ret"]) / 0.8); xe = 300 - (300 - 104) * u
+            d.line((300, 262, xe, 262), fill=TEAL, width=14)
+            d.polygon([(xe - 26, 262), (xe, 244), (xe, 280)], fill=TEAL)
     return _frame(im)
 
 
 def bldg_sprite():
+    """06-05：遠くの大きな建物（屋根と窓のある高いビル。通しの点検：前の形は、ます目の模様にしか見えなかった）"""
     key = ("bldg",)
     if key not in _cache:
         def dr(d, W_, H_, ss, img):
-            x0, y0 = W_ / 2 - 30 * ss, H_ / 2 - 34 * ss
-            d.rectangle((x0, y0, x0 + 60 * ss, y0 + 68 * ss), fill=(140, 150, 170))
+            x0, x1, y0, y1 = W_ / 2 - 26 * ss, W_ / 2 + 26 * ss, H_ / 2 - 30 * ss, H_ / 2 + 40 * ss
+            d.polygon([(x0 - 6 * ss, y0), (W_ / 2, y0 - 20 * ss), (x1 + 6 * ss, y0)], fill=(70, 120, 200))
+            d.rectangle((x0, y0, x1, y1), fill=(150, 160, 178))
             for i in range(3):
-                for j in range(4): d.rectangle((x0 + 8 * ss + i * 17 * ss, y0 + 8 * ss + j * 15 * ss, x0 + 18 * ss + i * 17 * ss, y0 + 16 * ss + j * 15 * ss), fill=(250, 240, 200))
-        _cache[key] = D.card(110, 96, draw=dr)[0]
+                for j in range(4): d.rectangle((x0 + 7 * ss + i * 14 * ss, y0 + 8 * ss + j * 15 * ss, x0 + 15 * ss + i * 14 * ss, y0 + 16 * ss + j * 15 * ss), fill=(255, 238, 170))
+            d.rectangle((W_ / 2 - 6 * ss, y1 - 14 * ss, W_ / 2 + 6 * ss, y1), fill=(90, 96, 110))
+        _cache[key] = D.card(110, 120, draw=dr)[0]
     return _cache[key]
 
 
@@ -315,6 +320,8 @@ def draw(t, base, where, frame_of=None, fontdir=None):
             if q is None or not (-60 <= q[0] <= 1340): continue
             spr, off = bubble_sprite(p["icon"])
             cx = min(max(q[0], spr.width / 2 + 10), 1270 - spr.width / 2); cy = min(max(q[1] - 40 - spr.height / 2, spr.height / 2 + 10), SUB_TOP - spr.height / 2)
+            if cx + spr.width / 2 > 930 and cy - spr.height / 2 < 108 and t >= s("03-04") - 0.05:   # 右上の時計に重ねない（通しの点検：08-10 の「？」が時計に重なった）
+                cy = 108 + spr.height / 2 + 4
             _paste(base, spr, cx, cy, k, a)
         elif kind == "title":
             base.alpha_composite(Image.new("RGBA", base.size, (8, 14, 26, int(110 * a))))
