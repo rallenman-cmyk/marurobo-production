@@ -77,6 +77,23 @@ def _wrap(t_):
         out.append(ln)
     return "\\N".join(out)
 SUBS = [(a_, c_, _wrap(t_)) for a_, c_, t_ in SUBS]
+# 12本目 v3 の点検：「手が\Nかり」と、言葉の途中で行を分けた字幕があった（SKILL の点検表「2 行の字幕の行の切れ目が、言葉の途中でない」の例そのもの）
+#   → 行の切れ目は、句読点・」のあとか、助詞のあとで次が漢字・カタカナの所だけ。そうでなければ、両方の行が 25 字までに収まる句読点・」のうち、まん中に近い所で分け直す
+def _ok_break(x_, y_):
+    if not x_ or not y_: return False
+    if x_[-1] in "、。？！」』…": return True
+    return x_[-1] in "はがをにでとへものて" and (("\u4e00" <= y_[0] <= "\u9fff") or ("\u30a0" <= y_[0] <= "\u30ff") or y_[0] in "「0123456789")
+def _rebreak(t_):
+    if t_.count("\\N") != 1: return t_
+    x_, y_ = t_.split("\\N")
+    if _ok_break(x_, y_): return t_
+    w_ = x_ + y_
+    cut = [i + 1 for i, ch in enumerate(w_[:-1]) if ch in "、。？！」" and i + 1 <= 25 and len(w_) - i - 1 <= 25]
+    if not cut:   # 句読点で分けると 25 字をこえるときは、助詞（て）のあとで次が漢字の所
+        cut = [i for i in range(1, len(w_)) if i <= 25 and len(w_) - i <= 25 and _ok_break(w_[:i], w_[i:])]
+    if not cut: return t_
+    c_ = min(cut, key=lambda i: abs(i - len(w_) / 2)); return w_[:c_] + "\\N" + w_[c_:]
+SUBS = [(a_, c_, _rebreak(t_)) for a_, c_, t_ in SUBS]
 # 16本目 v1：「……」でためたあとの答えは別の字幕にする（台本 v0.2 のコメント「やっぱり以降はテロップ別にして」・SKILL）。
 #   声の切れ目へ合わせる道具（subs_sync）が、短い答えの文（「やっぱり、だめ。」1.0 秒）を前の「……」の字幕にまとめていた。
 #   「……\N」で 2 つの文がつながった字幕は、答えの文の声の頭で分け、答えが 2 秒に足りなければ、次の字幕の上の行にする
@@ -162,6 +179,7 @@ for i_ in range(len(SUBS)):
     if c_ - a_ < 2.0 and i_ + 1 < len(SUBS) and SUBS[i_ + 1][0] - 0.05 - a_ >= 2.0:   # 2 秒に足りない 1 枚も、次の字幕まで間があれば 2 秒まで出す（05-03：声の頭の「あ」を消して 1.8 秒になった）
         SUBS[i_] = (a_, a_ + 2.05, t_)
 json.dump(sorted(set(TAME)), open(os.path.join(HERE, "..", "字幕_ため.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+SUBS = [(a_, c_, _rebreak(t_)) for a_, c_, t_ in SUBS]   # まとめ直したあとの 2 行の字幕も、言葉の切れ目で分ける
 SUB_STARTS = sorted(x[0] for x in SUBS)
 if os.environ.get("SUBS_ONLY"): json.dump(SUBS, open(os.path.join(HERE, "subs_events.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0); sys.exit(0)
 
