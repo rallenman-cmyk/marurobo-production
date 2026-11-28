@@ -43,6 +43,19 @@ def hear(x, sr):
                  {"text": "この音声を、聞こえた音のとおりに、すべてひらがなで書き起こしてください。漢字・カタカナ・英字は使わない（英字の読みもひらがなで）。書き起こしだけを出力。"}]) or "（聞き取り失敗）"
 
 
+def choose(x, sr, yomi, wrong):
+    """台本の読みと、聞き取りの答え（まちがい）を並べて選ばせる。3 回。並べる順は毎回まぜる。台本の読みを選んだ回を True で返す"""
+    import random
+    opts = [yomi] + [w_ for w_ in dict.fromkeys(norm(w) for w in wrong) if w_ and w_ != norm(yomi)][:3]
+    out = []
+    for k in range(3):
+        o = opts[:]; random.Random(k * 7 + len(yomi)).shuffle(o)
+        r = call([{"inline_data": {"mime_type": "audio/wav", "data": base64.b64encode(wav_bytes(x, sr)).decode()}},
+                  {"text": "この音声の言葉は、次のどれですか。1 つだけ選んで、そのまま答えてください（ほかの字は書かない）：" + "／".join(o)}]) or ""
+        out.append(norm(r) == norm(yomi))
+    return out
+
+
 # 声だけの音
 sr = None; tr = None
 for p in P:
@@ -88,8 +101,18 @@ for j, h in zip(jobs, heard):
         if sc is None or sc >= 0.8: break
         h2 = hear(j["seg"], sr); s2 = difflib.SequenceMatcher(None, ref, norm(h2)).ratio()
         if s2 > sc: h, sc = h2, s2
-    res.append(dict(at=j["at"], text=j["text"], yomi=YC[j["text"]], heard=h, score=sc))
-    if sc is not None and sc < 0.8: bad.append(res[-1])
+    r_ = dict(at=j["at"], text=j["text"], yomi=YC[j["text"]], heard=h, score=sc)
+    if sc is not None and sc < 0.8:
+        # 2026-11-28（16本目 本番。ユーザーの選択「合わない字幕だけ聞き直す」）：書き起こしは短い言葉（「え？」「たったったっ」）で
+        #   言葉を足す・数を多く書くので、408 枚を通すたびに毎回ちがう 2 枚ほどが合わないと出た。合わない字幕だけ、
+        #   台本の読みと聞き取りの答えを並べて「どれか」を選ばせ（並べる順は毎回まぜる。位置で答える癖があるため）、
+        #   3 回のうち 2 回以上で台本の読みを選べば合格にする。選んだ結果は choice に残す（score は書き起こしの値のまま）
+        r_["choice"] = choose(j["seg"], sr, YC[j["text"]], [h])
+        r_["confirmed"] = sum(r_["choice"]) >= 2
+    res.append(r_)
+    if sc is not None and sc < 0.8 and not r_.get("confirmed"): bad.append(res[-1])
 print("読みと合わない字幕（似ている度 0.8 未満）：", len(bad), "枚 ／ 比べられない：", sum(1 for r in res if r["score"] is None), "枚")
-for r in bad: print(" ", r["at"], "%.2f" % r["score"], r["text"], "／ 読み", r["yomi"], "／ 聞こえた", r["heard"])
+for r in bad: print(" ", r["at"], "%.2f" % r["score"], r["text"], "／ 読み", r["yomi"], "／ 聞こえた", r["heard"], "／ 選ばせて", r.get("choice"))
+for r in res:
+    if r.get("confirmed"): print("  選ばせて合格", r["at"], r["text"], "／ 書き起こし", r["heard"], "／ 選ばせて", r["choice"])
 json.dump(res, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
