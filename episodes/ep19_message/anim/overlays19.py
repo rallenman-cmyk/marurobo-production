@@ -67,7 +67,7 @@ def ev_list():
     add(s("03-01") - 0.05, e("03-01") + 0.5, "title", {})
     add(s("03-03") + 0.1, s("03-03") + 2.0, "slow", {})
     add(s("03-04") - 0.05, 1e9, "clock", {})
-    add(s("03-05") - 0.05, e("03-05") + 0.3, "tag", dict(text="0.2 秒で届く場合の目安", pos=(1070, 140), size=40))
+    add(s("03-05") - 0.05, e("03-05") + 0.3, "tag", dict(text="0.2 秒で届く場合の目安", pos=(1060, 142), size=44))
     # 1章
     add(s("04-03") + 0.3, s("04-03") + 1.9, "bubble", dict(obj="maru_top", icon="?"))
     add(wp("04-06", "あ") - 0.1, e("04-07") + 0.4, "charnum", dict(t2=wp("04-07", "い") - 0.1, t_num=wp("04-06", "12354") - 0.1))
@@ -75,12 +75,12 @@ def ev_list():
     add(s("04-11") + 0.1, e("04-11") + 0.3, "conv", dict(t_w=wp("04-11", "電波") - 0.1, t_l=wp("04-11", "光") - 0.1))
     add(wp("05-04", "パケット") - 0.1, e("05-04") + 0.4, "tag", dict(text="パケット", obj="packet", dy=-170, size=56, bg=YEL))
     for k_, (lid, wd, tx) in enumerate((("06-02", "あて先", "あて先"), ("06-06", "送り主", "送り主"), ("06-09", "番号", "番号"))):
-        add(wp(lid, wd) - 0.1, e("06-12") + 0.3, "tag", dict(text=tx, pos=(1110, 120 + 78 * k_), size=48, bg=TEAL, fg=WHITE))
-    add(wp("06-05", "大きな建物") - 0.3, e("06-12") + 0.3, "bldg", dict(pos=(960, 120)))
+        add(wp(lid, wd) - 0.1, e("06-12") + 0.3, "tag", dict(text=tx, pos=(1140, 160 + 76 * k_), size=48, bg=TEAL, fg=WHITE))   # 時計（右上）の下へ（下の 2D の点検：時計に重なった）
+    add(wp("06-05", "大きな建物") - 0.3, e("06-12") + 0.3, "bldg", dict(pos=(985, 160)))
     add(s("06-03") - 0.05, e("06-04") + 0.4, "envelope", dict(side="front", t_x=wp("06-04", "ありません") - 0.2))
     add(s("06-07") - 0.05, e("06-08") + 0.4, "envelope", dict(side="back", t_ret=wp("06-08", "送り主") - 0.4))
     add(s("06-10") + 0.3, s("06-10") + 1.9, "bubble", dict(obj="maru_top", icon="?"))
-    add(wp("07-02", "480文字") - 0.2, e("07-04") + 0.3, "tag", dict(text="1 つの包み：日本語で約 480 文字まで", pos=(640, 92), size=48))
+    add(wp("07-02", "480文字") - 0.2, e("07-04") + 0.3, "tag", dict(text="1 つの包み：日本語で約 480 文字まで", pos=(640, 470), size=48))   # 小窓と時計に重なった → 小窓の下（字幕の帯の上）
     add(s("07-03") - 0.05, e("07-03") + 0.4, "genkou", {})
     add(s("08-07") - 0.05, e("08-07") + 0.4, "map", {})
     add(s("08-08") - 0.05, e("08-08") + 0.3, "clockbig", {})
@@ -216,7 +216,7 @@ def pixel_sprite(t, p):
         d.rectangle((330, 100, 430, 200), fill=col, outline=NAVY, width=3)
     fr = _frame(im)
     if t >= p["t_zoom"]:
-        spr, off = tag_sprite("色 → 数字", 44, YEL); fr.alpha_composite(spr, (fr.width - spr.width - 16, 230))
+        spr, off = tag_sprite("色 → 数字", 44, YEL); fr.alpha_composite(spr, (fr.width - spr.width - 16, 24))
     return fr
 
 
@@ -290,7 +290,7 @@ def map_sprite():
     d.polygon([(hx - 22, hy), (hx, hy - 22), (hx + 22, hy)], fill=(184, 87, 74)); d.rectangle((hx - 16, hy, hx + 16, hy + 22), fill=(242, 217, 181))
     d.line((ax, ay + 26, ax, ay - 26), fill=(120, 128, 140), width=6); d.rectangle((ax - 14, ay - 30, ax + 14, ay - 10), fill=(220, 224, 230))
     fr = _frame(im)
-    spr, off = tag_sprite("数百 m〜数 km", 44, YEL); fr.alpha_composite(spr, (int(fr.width / 2 - spr.width / 2), 230))
+    spr, off = tag_sprite("数百 m〜数 km", 44, YEL); fr.alpha_composite(spr, (int(fr.width / 2 - spr.width / 2), 196))
     return fr
 
 

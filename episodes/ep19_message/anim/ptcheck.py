@@ -8,8 +8,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _a = sys.argv[sys.argv.index("--") + 1:]
 name, pts = _a[0], _a[1:]
 sys.argv = sys.argv[:sys.argv.index("--") + 1] + [name, "/tmp/ptcheck_" + name, "--track"]
-g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes.py")}
-exec(open(os.path.join(HERE, "scenes.py"), encoding="utf-8").read(), g)
+g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes19.py")}
+exec(open(os.path.join(HERE, "scenes19.py"), encoding="utf-8").read(), g)
 sc = bpy.context.scene; t0 = g["CLIPS"][name][1]
 for p in pts:
     if "@" in p:

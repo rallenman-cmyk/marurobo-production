@@ -4,7 +4,7 @@
 #   いちばん近い距離を測る。球の半径より 3cm 以上めりこんでいて、その物が画面に映っている間を「突き抜け」と数える。
 #   PEN クリップ 動く物 ぶつかる物 時刻の始め〜終わり 回数 いちばん深いめりこみ(cm)
 import os, sys, math
-P = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scenes.py")
+P = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scenes19.py")
 src = open(P, encoding="utf-8").read().replace("        render_clip(CLIPNAME,", "        CHECK(t0, t1)\n        0 and render_clip(CLIPNAME,")
 TOL = 0.03
 

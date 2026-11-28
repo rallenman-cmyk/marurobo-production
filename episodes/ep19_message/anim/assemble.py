@@ -1,4 +1,4 @@
-# 17本目（16本目から写した）：確認用の通しを組む（3D のクリップ＋2D の札＋字幕＋声・BGM・効果音）
+# 19本目（17本目から写した）：確認用の通しを組む（3D のクリップ＋2D の札＋字幕＋声・BGM・効果音）
 # MARU_WORK=<作業フォルダ> python3 assemble.py <描いたクリップの親フォルダ> <フォントの親フォルダ> <出力.mp4> [--from 秒 --to 秒]
 #   クリップ：<親>/<名前>/<名前>_NNNNN.png（--step で間引いたコマ）と <名前>_log.json（効果音・画面の場所）。clips.json（scenes.py --list）の範囲
 #   つなぎ：切り替わる時刻（＝その文の字幕が出る時刻）から 0.35 秒で溶かす。章の変わり目は 0.6 秒（SKILL §3-5）
@@ -14,7 +14,7 @@ W = os.environ["MARU_WORK"]
 sys.path.insert(0, os.path.join(W, "tools"))
 os.environ.setdefault("MARU_VOICE", os.path.join(W, "stage", "voice", "achernar"))
 import timing as T
-import overlays as OV
+import overlays19 as OV
 import sfx
 import subs_jp as SJ
 # 4章（2026-11-26）：字幕の道具は声のフォルダの placement.json を読む。リポジトリの置き場所の表と食いちがわないよう、組むたびに写す
@@ -27,9 +27,9 @@ FROM = float(sys.argv[sys.argv.index("--from") + 1]) if "--from" in sys.argv els
 TO = float(sys.argv[sys.argv.index("--to") + 1]) if "--to" in sys.argv else T.END
 FPS, SR, WV, HV = 24, 48000, 1280, 720
 CL = json.load(open(os.path.join(HERE, "clips.json")))
-PIP_ONLY = {"P05", "P06", "P07", "P18", "P19", "P21"}      # 小窓だけに使うクリップ（本編の切り替わりに入れない）
+PIP_ONLY = set()      # 小窓だけに使うクリップ（この回の小窓は 2D の絵なので、なし）
 ORDER = sorted([k for k in CL if k not in PIP_ONLY], key=lambda k: CL[k][2])
-CHAPTER = {"A02", "C13", "I14", "C14", "B15", "C16", "A18", "A20", "D21", "A22", "C23", "C26c", "C26f", "C26l", "C26n", "C26p", "C26r", "A28", "A29", "A30", "A30c"}   # 舞台が変わる所（夜 → 朝・家 → お店・想像の場面の出入り。重ねるつなぎ 0.6 秒）
+CHAPTER = {"B04", "C08"}   # 舞台が変わる所（部屋 → スマホの中・スマホの中 → 空）：白い光の中で替わるので 0.6 秒で溶かす
 SEPIA = set()
 # v3（5本目 v2「左上の小窓を出しつつ、メインの映像もそこのシーンを」）：26-05「ぶつかって曲がるだけだった先輩たち」で、
 #   メインの絵も昔の先輩がぶつかって曲がる場面（S06b・セピア）にする：(差しかえるカット, 始め, 使うクリップ, そのクリップの秒)
@@ -44,11 +44,7 @@ for k, p in enumerate(P):
     lines.append((p["start"], min(end, nxt - 0.05), p["text"]))
 # 波形で確かめた切り替わり（文の頭からの秒）。自動で選ぶと外れた所（5本目 v2 のコメント：「これを」が早い・「あれ」が遅い・「ぱっ」がだいぶ早い・改行の位置がおかしい）
 #   ID: (分け方（None＝自動の分け方のまま）, [切り替わりの秒, …])。最後の 1 枚が 1.0 秒未満なら、次の文の前までのばす
-FIX_AT = {
-    # 17本目 v1：08-05 は 1 つの声に 2 つの文。字幕は文をまたいでまとめない（SKILL）。「いったい」の言い始め（3.10 秒）の 0.05 秒前で替える
-    #   （関所の subs_sync_check と subs_mora が同じ所を指す。「……」のためは、前の「使われた。」の字幕を残して見せる）
-    "08-05": (["それなのに、使われた。", "……いったい、どういうことでしょう？"], [3.05]),
-}
+FIX_AT = {}
 ID_OF = {v: k for k, v in T.TEXT.items()}
 NEXT_START = {p["start"]: (P[k + 1]["start"] if k + 1 < len(P) else p["end"] + 1.5) for k, p in enumerate(P)}
 SUBS = []

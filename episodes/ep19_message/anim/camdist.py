@@ -8,8 +8,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _a = sys.argv[sys.argv.index("--") + 1:]
 name = _a[0]
 sys.argv = sys.argv[:sys.argv.index("--") + 1] + [name, "/tmp/camdist_" + name, "--track"]
-g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes.py")}
-exec(open(os.path.join(HERE, "scenes.py"), encoding="utf-8").read(), g)
+g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes19.py")}
+exec(open(os.path.join(HERE, "scenes19.py"), encoding="utf-8").read(), g)
 sc = bpy.context.scene; FPS = sc.render.fps
 M = g["MARU_ALL"][0] if g["MARU_ALL"] else None
 if M is None:

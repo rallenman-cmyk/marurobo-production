@@ -11,8 +11,8 @@ name = _a[0]; WATCH = (_a[1] if len(_a) > 1 else "shadow,maru,door,door2").split
 #   3 つ目に相手の名前（track の名前。その子の形）を渡すと、動いていても相手として数える
 AGAINST = (_a[2].split(",") if len(_a) > 2 else [])
 sys.argv = sys.argv[:sys.argv.index("--") + 1] + [name, "/tmp/hitcheck_" + name, "--track"]
-g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes.py")}
-exec(open(os.path.join(HERE, "scenes.py"), encoding="utf-8").read(), g)
+g = {"__name__": "__main__", "__file__": os.path.join(HERE, "scenes19.py")}
+exec(open(os.path.join(HERE, "scenes19.py"), encoding="utf-8").read(), g)
 sc = bpy.context.scene; FPS = sc.render.fps; TR = g["TRACK"]
 
 
